@@ -111,8 +111,12 @@ mcp-config.json
 test-*.js
 demo-*.js
 
-# Projects (користувацькі дані)
-projects/
+# Projects (користувацькі дані) - включаємо приклади
+projects/5%/5_/*.docx
+projects/HS/*.docx
+projects/RG/*.docx
+# Зберігаємо md файли як приклади шаблонів
+!projects/**/*.md
 
 # Backup files
 *.bak
