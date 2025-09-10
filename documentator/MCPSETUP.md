@@ -140,7 +140,7 @@ Create `.md` files with your templates. Example `weekly-report.md`:
 
 {{#if accomplishments}}
 {{#each accomplishments as item}}
-- ✅ {{item}}
+-  {{item}}
 {{/each}}
 {{#else}}
 No major accomplishments this week.
@@ -150,7 +150,7 @@ No major accomplishments this week.
 
 {{#if upcomingTasks}}
 {{#each upcomingTasks as task}}
-- 🎯 {{task}}
+-  {{task}}
 {{/each}}
 {{#else}}
 Tasks for next week to be determined.
@@ -254,4 +254,4 @@ Enable debug logging:
 3. Build templates for your common reporting needs
 4. Share templates with your team
 
-Happy documenting! 🚀
+Happy documenting! 

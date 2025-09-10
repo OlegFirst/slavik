@@ -66,3 +66,6 @@ export interface AuthToken {
   iat: number;
   exp: number;
 }
+
+// Re-export service types for convenience
+export * from './ServiceInterface';

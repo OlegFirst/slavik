@@ -1,0 +1,27 @@
+{
+  "services": [
+    {
+      "name": "documentator",
+      "enabled": true,
+      "config": {
+        "projectsPath": "./projects",
+        "templatesPath": "./templates",
+        "outputPath": "./output"
+      }
+    },
+    {
+      "name": "pm",
+      "enabled": true,
+      "config": {
+        "outputDirectory": "./output/pm",
+        "defaultModel": "gpt-4",
+        "customPrompts": []
+      }
+    }
+  ],
+  "globalConfig": {
+    "logLevel": "info",
+    "apiPort": 3000,
+    "mcpServerName": "digital-office"
+  }
+}
