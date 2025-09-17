@@ -21,6 +21,12 @@
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "src/core/AgentCoordinator.ts",
+    "src/core/ChatInterface.ts",
+    "src/core/CrossAgentIntelligence.ts",
+    "src/core/MemoryManager.ts",
+    "src/web/**/*",
+    "examples/**/*"
   ]
 }

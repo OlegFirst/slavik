@@ -1,0 +1,89 @@
+{
+  "name": "digital-office-installer",
+  "version": "1.0.0",
+  "description": "Digital Office Hub Installer for Windows",
+  "main": "src/main.js",
+  "author": "Digital Office",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "prebuild": "node scripts/prepare-build.js",
+    "build": "npm run prebuild && electron-builder --win && npm run postbuild",
+    "build:installer": "npm run prebuild && electron-builder --win && npm run postbuild",
+    "build:win32": "npm run prebuild && electron-builder --win --ia32 && npm run postbuild",
+    "build:win64": "npm run prebuild && electron-builder --win --x64 && npm run postbuild",
+    "build:dev": "npm run prebuild && electron-builder --win --publish never",
+    "postbuild": "node scripts/post-build.js",
+    "clean": "rimraf temp-build dist build-info.json",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.digitaloffice.installer",
+    "productName": "Digital Office Hub",
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "forceCodeSigning": false,
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "scripts/**/*",
+      "node_modules/**/*",
+      "!node_modules/*/{README.md,readme.md,README,readme,CHANGELOG.md,changelog.md}",
+      "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/**/*.d.ts"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "publisherName": "Digital Office",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "requireAdministrator",
+      "signAndEditExecutable": false,
+      "signDlls": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Digital Office Hub",
+      "license": "assets/license.txt",
+      "installerSidebar": "assets/sidebar.bmp",
+      "uninstallerSidebar": "assets/sidebar.bmp",
+      "warningsAsErrors": false,
+      "artifactName": "DigitalOfficeHub-Setup-${version}.${ext}",
+      "include": "scripts/installer.nsh",
+      "perMachine": true,
+      "menuCategory": "Digital Office",
+      "differentialPackage": false
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "digital-office",
+        "repo": "digital-office-hub"
+      }
+    ]
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "electron-updater": "^6.1.7",
+    "sudo-prompt": "^9.2.1"
+  }
+}

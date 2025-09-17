@@ -4,9 +4,9 @@ exports.McpServer = void 0;
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
-const ProjectAnalyzer_js_1 = require("../core/ProjectAnalyzer.js");
-const ReportGenerator_js_1 = require("../core/ReportGenerator.js");
-const SimpleProjectManager_js_1 = require("../core/SimpleProjectManager.js");
+const ProjectAnalyzer_1 = require("../core/ProjectAnalyzer");
+const ReportGenerator_1 = require("../core/ReportGenerator");
+const SimpleProjectManager_1 = require("../core/SimpleProjectManager");
 class McpServer {
     constructor() {
         this.projectCache = new Map();
@@ -18,9 +18,9 @@ class McpServer {
                 tools: {},
             },
         });
-        this.projectAnalyzer = new ProjectAnalyzer_js_1.ProjectAnalyzer();
-        this.reportGenerator = new ReportGenerator_js_1.ReportGenerator();
-        this.projectManager = new SimpleProjectManager_js_1.SimpleProjectManager();
+        this.projectAnalyzer = new ProjectAnalyzer_1.ProjectAnalyzer();
+        this.reportGenerator = new ReportGenerator_1.ReportGenerator();
+        this.projectManager = new SimpleProjectManager_1.SimpleProjectManager();
         this.setupToolHandlers();
     }
     setupToolHandlers() {

@@ -1,1 +1,0 @@
-{"version":3,"file":"ProjectInitializer.d.ts","sourceRoot":"","sources":["../../src/utils/ProjectInitializer.ts"],"names":[],"mappings":"AAIA,qBAAa,kBAAkB;IAC7B,OAAO,CAAC,cAAc,CAAiB;IACvC,OAAO,CAAC,WAAW,CAAS;gBAEhB,OAAO,GAAE,MAAa;IAK5B,yBAAyB,IAAI,OAAO,CAAC,IAAI,CAAC;YAmBlC,sBAAsB;YAwOtB,0BAA0B;YA+N1B,qBAAqB;YAqerB,UAAU;YAMV,aAAa;CAI5B"}

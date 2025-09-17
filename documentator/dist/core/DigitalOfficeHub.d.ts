@@ -1,8 +1,21 @@
 import { ServiceRegistry } from './ServiceRegistry';
+import { AgentRegistry } from './AgentRegistry';
+import { AgentScheduler } from './AgentScheduler';
+import { AgentLoader } from './AgentLoader';
+import { BaseAgent } from './BaseAgent';
+import { EventBus } from './EventBus';
+import { DataStore } from './DataStore';
+import { ResourceManager } from './ResourceManager';
 import { DigitalOfficeService } from '../types/ServiceInterface';
 export declare class DigitalOfficeHub {
     private server;
     private serviceRegistry;
+    private agentScheduler;
+    private agentRegistry;
+    private agentLoader;
+    private eventBus;
+    private dataStore;
+    private resourceManager;
     private hubTools;
     constructor();
     private setupHubTools;
@@ -15,9 +28,24 @@ export declare class DigitalOfficeHub {
     private handleStartService;
     private handleStopService;
     private handleHealthCheck;
+    private handleListAgents;
+    private handleAgentStatus;
+    private handleEnableAgent;
+    private handleDisableAgent;
+    private handlePauseAgent;
+    private handleResumeAgent;
+    private handleExecuteAgent;
+    private handleAgentHealthCheck;
     registerService(service: DigitalOfficeService): Promise<void>;
+    registerAgent(agent: BaseAgent): Promise<void>;
     start(): Promise<void>;
     shutdown(): Promise<void>;
     getServiceRegistry(): ServiceRegistry;
+    getAgentRegistry(): AgentRegistry;
+    getAgentScheduler(): AgentScheduler;
+    getAgentLoader(): AgentLoader;
+    getEventBus(): EventBus;
+    getDataStore(): DataStore;
+    getResourceManager(): ResourceManager;
 }
 //# sourceMappingURL=DigitalOfficeHub.d.ts.map

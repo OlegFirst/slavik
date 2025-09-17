@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Office Hub - Installer</title>
+  <link rel="stylesheet" href="installer.css">
+</head>
+<body>
+  <div class="installer-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="title-bar">
+        <div class="app-info">
+          <img src="../assets/icon.png" alt="Digital Office Hub" class="app-icon">
+          <div class="app-title">
+            <h1>Digital Office Hub</h1>
+            <span class="version">Installer v1.0.0</span>
+          </div>
+        </div>
+        <div class="window-controls">
+          <button class="control-btn minimize" onclick="minimizeWindow()">─</button>
+          <button class="control-btn close" onclick="closeWindow()">×</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Welcome Screen -->
+      <div id="welcome-screen" class="screen active">
+        <div class="screen-content">
+          <h2>Ласкаво просимо до Digital Office Hub</h2>
+          <p class="description">
+            Потужна платформа для автоматизації бізнес-процесів та управління проектами
+            з інтелектуальними AI-агентами через Model Context Protocol (MCP).
+          </p>
+
+          <div class="features">
+            <div class="feature">
+              <div class="feature-icon">🤖</div>
+              <h3>Інтелектуальні агенти</h3>
+              <p>Автоматизація задач через спеціалізовані AI-агенти</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">📅</div>
+              <h3>Інтеграція з календарями</h3>
+              <p>Google Calendar, Outlook, Apple Calendar</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">📋</div>
+              <h3>Управління завданнями</h3>
+              <p>Asana, Notion, Jira, Todoist</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🔗</div>
+              <h3>MCP підтримка</h3>
+              <p>Інтеграція з Claude Desktop через MCP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Check Screen -->
+      <div id="system-check-screen" class="screen">
+        <div class="screen-content">
+          <h2>Перевірка системи</h2>
+          <div class="system-info">
+            <div class="info-group">
+              <h3>Системна інформація</h3>
+              <div class="info-item">
+                <span class="label">Операційна система:</span>
+                <span id="os-info" class="value">-</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Архітектура:</span>
+                <span id="arch-info" class="value">-</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Вільне місце:</span>
+                <span id="disk-space" class="value">-</span>
+              </div>
+            </div>
+
+            <div class="info-group">
+              <h3>Залежності</h3>
+              <div class="dependency-item">
+                <div class="dep-status" id="node-status">
+                  <span class="status-icon">⏳</span>
+                  <span class="dep-name">Node.js</span>
+                </div>
+                <span id="node-version" class="dep-version">-</span>
+              </div>
+              <div class="dependency-item">
+                <div class="dep-status" id="git-status">
+                  <span class="status-icon">⏳</span>
+                  <span class="dep-name">Git</span>
+                </div>
+                <span id="git-version" class="dep-version">-</span>
+              </div>
+              <div class="dependency-item">
+                <div class="dep-status" id="claude-status">
+                  <span class="status-icon">⏳</span>
+                  <span class="dep-name">Claude Desktop</span>
+                </div>
+                <span id="claude-path" class="dep-version">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="check-actions">
+            <button id="refresh-check" class="btn btn-secondary" onclick="checkSystem()">
+              🔄 Перевірити знову
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuration Screen -->
+      <div id="config-screen" class="screen">
+        <div class="screen-content">
+          <h2>Налаштування встановлення</h2>
+
+          <div class="config-sections">
+            <div class="config-section">
+              <h3>Шлях встановлення</h3>
+              <div class="path-selector">
+                <input type="text" id="install-path" readonly>
+                <button class="btn btn-secondary" onclick="selectPath()">Обрати папку</button>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <h3>Компоненти</h3>
+              <div class="component-list">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="comp-core" checked disabled>
+                  <span class="checkmark"></span>
+                  <div class="comp-info">
+                    <strong>Основна система</strong>
+                    <small>Ядро Digital Office Hub (обов'язково)</small>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="comp-agents" checked>
+                  <span class="checkmark"></span>
+                  <div class="comp-info">
+                    <strong>Готові агенти</strong>
+                    <small>Набір попередньо налаштованих агентів</small>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="comp-integrations" checked>
+                  <span class="checkmark"></span>
+                  <div class="comp-info">
+                    <strong>Інтеграції</strong>
+                    <small>Сервіси для календарів та завдань</small>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="comp-examples" checked>
+                  <span class="checkmark"></span>
+                  <div class="comp-info">
+                    <strong>Приклади та документація</strong>
+                    <small>Документація та приклади коду</small>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <h3>Додаткові параметри</h3>
+              <div class="option-list">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="opt-desktop" checked>
+                  <span class="checkmark"></span>
+                  <span>Створити ярлик на робочому столі</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="opt-startmenu" checked>
+                  <span class="checkmark"></span>
+                  <span>Додати в меню Пуск</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="opt-claude" checked>
+                  <span class="checkmark"></span>
+                  <span>Автоматично налаштувати Claude Desktop</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" id="opt-nodejs">
+                  <span class="checkmark"></span>
+                  <span>Встановити Node.js (якщо відсутній)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Installation Screen -->
+      <div id="install-screen" class="screen">
+        <div class="screen-content">
+          <h2>Встановлення Digital Office Hub</h2>
+
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div id="progress-text" class="progress-text">Підготовка до встановлення...</div>
+          </div>
+
+          <div class="installation-steps">
+            <div id="step-create-dirs" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Створення директорій</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-copy-files" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Копіювання файлів</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-install-deps" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Встановлення залежностей</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-compile" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Компіляція TypeScript</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-configure-claude" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Налаштування Claude Desktop</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-create-shortcuts" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Створення ярликів</div>
+              <div class="step-status"></div>
+            </div>
+            <div id="step-register" class="install-step">
+              <div class="step-icon">⏳</div>
+              <div class="step-text">Реєстрація в системі</div>
+              <div class="step-status"></div>
+            </div>
+          </div>
+
+          <div class="installation-log">
+            <h4>Журнал встановлення</h4>
+            <div id="log-output" class="log-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Screen -->
+      <div id="complete-screen" class="screen">
+        <div class="screen-content">
+          <div class="completion-icon">🎉</div>
+          <h2>Встановлення завершено!</h2>
+          <p class="completion-message">
+            Digital Office Hub успішно встановлено на ваш комп'ютер.
+          </p>
+
+          <div class="completion-info">
+            <div class="info-item">
+              <span class="label">Встановлено в:</span>
+              <span id="final-path" class="value">-</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Claude Desktop:</span>
+              <span id="claude-configured" class="value">Налаштовано</span>
+            </div>
+          </div>
+
+          <div class="completion-actions">
+            <button class="btn btn-primary" onclick="launchApp()">
+              🚀 Запустити Digital Office Hub
+            </button>
+            <button class="btn btn-secondary" onclick="openFolder()">
+              📁 Відкрити папку встановлення
+            </button>
+          </div>
+
+          <div class="next-steps">
+            <h3>Наступні кроки:</h3>
+            <ol>
+              <li>Перезапустіть Claude Desktop для застосування змін</li>
+              <li>Digital Office Hub буде доступний як MCP сервер в Claude</li>
+              <li>Перегляньте документацію для налаштування агентів</li>
+              <li>Додайте інтеграції з календарями та системами завдань</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer with Navigation -->
+    <div class="footer">
+      <div class="nav-buttons">
+        <button id="back-btn" class="btn btn-secondary" onclick="previousStep()" disabled>
+          ← Назад
+        </button>
+        <button id="next-btn" class="btn btn-primary" onclick="nextStep()">
+          Далі →
+        </button>
+        <button id="install-btn" class="btn btn-success" onclick="startInstallation()" style="display: none;">
+          Встановити
+        </button>
+        <button id="finish-btn" class="btn btn-primary" onclick="closeInstaller()" style="display: none;">
+          Завершити
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="installer.js"></script>
+</body>
+</html>

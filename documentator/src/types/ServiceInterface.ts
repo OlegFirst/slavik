@@ -7,6 +7,8 @@ export interface ServiceMetadata {
   author?: string;
   category?: string;
   dependencies?: string[];
+  tags?: string[];
+  status?: string;
 }
 
 export interface DigitalOfficeService {

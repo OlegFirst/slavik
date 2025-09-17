@@ -73,7 +73,12 @@ export abstract class BaseService implements DigitalOfficeService {
     return this.initialized;
   }
 
-  public abstract getTools(): Tool[];
-  
-  public abstract handleToolCall(toolName: string, args: any): Promise<any>;
+  // Методи для інструментів - можуть бути перевизначені в підкласах
+  public getTools(): Tool[] {
+    return [];
+  }
+
+  public async handleToolCall(toolName: string, args: any): Promise<any> {
+    throw new Error(`Tool ${toolName} not implemented in ${this.metadata.name}`);
+  }
 }

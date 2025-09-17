@@ -3,6 +3,9 @@ import { ReportGenerator } from '../../core/ReportGenerator';
 import { ProjectAnalyzer } from '../../core/ProjectAnalyzer';
 import { AuthenticatedRequest } from '../../auth/middleware';
 import { ReportRequest } from '../../types';
+import * as fs from 'fs-extra';
+import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 export function reportRoutes(reportGenerator: ReportGenerator, projectAnalyzer: ProjectAnalyzer): Router {
   const router = Router();
@@ -128,7 +131,6 @@ export function reportRoutes(reportGenerator: ReportGenerator, projectAnalyzer: 
         });
       }
 
-      const fs = require('fs-extra');
       const templateContent = await fs.readFile(template.filePath, 'utf-8');
       
       let previewContent = templateContent;
@@ -165,8 +167,6 @@ export function reportRoutes(reportGenerator: ReportGenerator, projectAnalyzer: 
 
   router.get('/history', async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const fs = require('fs-extra');
-      const path = require('path');
       
       const historyFile = path.join('./data', 'reports-history.json');
       let history = [];
@@ -195,8 +195,6 @@ export function reportRoutes(reportGenerator: ReportGenerator, projectAnalyzer: 
     try {
       const { templateId, projectPath, outputPath, templateName } = req.body;
       
-      const fs = require('fs-extra');
-      const path = require('path');
       
       const historyFile = path.join('./data', 'reports-history.json');
       let history = [];
@@ -206,7 +204,7 @@ export function reportRoutes(reportGenerator: ReportGenerator, projectAnalyzer: 
       }
 
       const record = {
-        id: require('uuid').v4(),
+        id: uuidv4(),
         userId: req.user?.userId,
         username: req.user?.username,
         templateId,

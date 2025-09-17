@@ -1,0 +1,595 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1e1e1e;
+  color: #ffffff;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+.installer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+.header {
+  background: #2d2d30;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  -webkit-app-region: drag;
+}
+
+.app-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.app-title h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.version {
+  font-size: 12px;
+  color: #cccccc;
+}
+
+.window-controls {
+  display: flex;
+  gap: 1px;
+  -webkit-app-region: no-drag;
+}
+
+.control-btn {
+  width: 46px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.control-btn:hover {
+  background: #404040;
+}
+
+.control-btn.close:hover {
+  background: #e81123;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.screen.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.screen-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.screen-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.screen-content::-webkit-scrollbar-track {
+  background: #2d2d30;
+}
+
+.screen-content::-webkit-scrollbar-thumb {
+  background: #484848;
+  border-radius: 4px;
+}
+
+/* Welcome Screen */
+#welcome-screen h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #4f9cf9;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: #cccccc;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature {
+  background: #2d2d30;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.feature h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.feature p {
+  font-size: 14px;
+  color: #cccccc;
+  line-height: 1.4;
+}
+
+/* System Check Screen */
+.system-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.info-group {
+  background: #2d2d30;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+}
+
+.info-group h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #4f9cf9;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.label {
+  color: #cccccc;
+}
+
+.value {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.dependency-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+
+.dep-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-icon {
+  font-size: 16px;
+}
+
+.dep-name {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.dep-version {
+  color: #cccccc;
+  font-size: 14px;
+}
+
+.check-actions {
+  text-align: center;
+}
+
+/* Configuration Screen */
+.config-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.config-section {
+  background: #2d2d30;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+}
+
+.config-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #4f9cf9;
+}
+
+.path-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.path-selector input {
+  flex: 1;
+  padding: 10px;
+  background: #1e1e1e;
+  border: 1px solid #3e3e42;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.component-list,
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.checkbox-item:hover {
+  background: #3e3e42;
+}
+
+.checkbox-item input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  background: #1e1e1e;
+  border: 2px solid #3e3e42;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.checkbox-item input[type="checkbox"]:checked + .checkmark {
+  background: #4f9cf9;
+  border-color: #4f9cf9;
+}
+
+.checkbox-item input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.comp-info strong {
+  color: #ffffff;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.comp-info small {
+  color: #cccccc;
+  font-size: 12px;
+}
+
+/* Installation Screen */
+.progress-container {
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #2d2d30;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f9cf9, #6bb6ff);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  color: #cccccc;
+  font-size: 14px;
+}
+
+.installation-steps {
+  margin-bottom: 30px;
+}
+
+.install-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.install-step:last-child {
+  border-bottom: none;
+}
+
+.step-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.step-text {
+  flex: 1;
+  color: #ffffff;
+}
+
+.step-status {
+  font-size: 14px;
+  color: #cccccc;
+}
+
+.install-step.running .step-icon {
+  animation: spin 1s linear infinite;
+}
+
+.install-step.completed .step-icon {
+  color: #4caf50;
+}
+
+.install-step.error .step-icon {
+  color: #f44336;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.installation-log {
+  background: #1e1e1e;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+  padding: 15px;
+  max-height: 200px;
+}
+
+.installation-log h4 {
+  margin-bottom: 10px;
+  color: #4f9cf9;
+  font-size: 14px;
+}
+
+.log-content {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  color: #cccccc;
+  height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+/* Completion Screen */
+#complete-screen {
+  text-align: center;
+}
+
+.completion-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+#complete-screen h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #4caf50;
+}
+
+.completion-message {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #cccccc;
+}
+
+.completion-info {
+  background: #2d2d30;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.completion-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.next-steps {
+  background: #2d2d30;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #3e3e42;
+  text-align: left;
+}
+
+.next-steps h3 {
+  color: #4f9cf9;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.next-steps ol {
+  color: #cccccc;
+  padding-left: 20px;
+}
+
+.next-steps li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #4f9cf9;
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #3d8ce6;
+}
+
+.btn-secondary {
+  background: #3e3e42;
+  color: #ffffff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #4a4a4e;
+}
+
+.btn-success {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #45a049;
+}
+
+/* Footer */
+.footer {
+  background: #2d2d30;
+  border-top: 1px solid #3e3e42;
+  padding: 15px 20px;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .system-info {
+    grid-template-columns: 1fr;
+  }
+
+  .completion-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Status Colors */
+.status-ok {
+  color: #4caf50;
+}
+
+.status-warning {
+  color: #ff9800;
+}
+
+.status-error {
+  color: #f44336;
+}
+
+.status-info {
+  color: #2196f3;
+}

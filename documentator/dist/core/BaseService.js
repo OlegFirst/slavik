@@ -64,6 +64,13 @@ class BaseService {
         // За замовчуванням, якщо сервіс ініціалізовано - він здоровий
         return this.initialized;
     }
+    // Методи для інструментів - можуть бути перевизначені в підкласах
+    getTools() {
+        return [];
+    }
+    async handleToolCall(toolName, args) {
+        throw new Error(`Tool ${toolName} not implemented in ${this.metadata.name}`);
+    }
 }
 exports.BaseService = BaseService;
 //# sourceMappingURL=BaseService.js.map

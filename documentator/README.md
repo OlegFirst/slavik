@@ -1,85 +1,196 @@
-# Documentator
+# Digital Office Hub
 
-Система автоматизації створення звітної документації з аналізом проектних папок та інтеграцією з Anthropic через MCP (Model Context Protocol).
+Потужна платформа для автоматизації бізнес-процесів та управління проектами з інтелектуальними AI-агентами.
 
-## Функціональність
+## Основні можливості
 
-- 📁 **Вбудовані проекти**: Система управління проектами з папкою `projects/` - кожна підпапка є окремим проектом
-- 📝 **Аналіз проектів**: Автоматичний пошук та аналіз шаблонів документації в проектних папках  
-- 📊 **Генерація звітів**: Створення звітів на основі знайдених шаблонів з підтримкою змінних та логіки
-- 🔌 **MCP інтеграція**: Підключення до Anthropic Claude через Model Context Protocol з 8 командами
-- 🔐 **Система авторизації**: JWT authentication з ролями користувачів та API ключами
-- 🌐 **REST API**: Повноцінний API для управління проектами, шаблонами та звітами
-- 📤 **Завантаження файлів**: Можливість завантажувати шаблони та документи через API
-- 🎯 **Приклади проектів**: Готові проекти з шаблонами для IT звітів, бізнес-планів та технічної документації
+- **Інтелектуальні агенти** - автоматизація задач через спеціалізовані AI-агенти
+- **API сервер** - RESTful API для інтеграції з зовнішніми системами
+- **MCP інтеграція** - підтримка Model Context Protocol для роботи з AI моделями
+- **Аутентифікація** - JWT-based система з ролями (admin/user)
+- **Генерація контенту** - автоматичне створення документації та текстів
+- **Web scraping** - збір та аналіз даних з веб-ресурсів
 
-## Встановлення
+## Швидкий старт
 
-### Передумови
+### Вимоги
 
 - Node.js 18+
 - npm або yarn
 
-### Кроки встановлення
-
-1. **Клонуйте репозиторій**
-   ```bash
-   git clone <repository-url>
-   cd documentator
-   ```
-
-2. **Встановіть залежності**
-   ```bash
-   npm install
-   ```
-
-3. **Налаштуйте середовище**
-   ```bash
-   cp .env.example .env
-   # Відредагуйте .env файл під ваші потреби
-   ```
-
-4. **Скомпілюйте проект**
-   ```bash
-   npm run build
-   ```
-
-## Використання
-
-### Запуск MCP сервера
-
-Для використання з Anthropic Claude:
+### Встановлення
 
 ```bash
+# Клонувати репозиторій
+git clone <your-repo-url>
+cd documentator
+
+# Встановити залежності
+npm install
+
+# Створити папку для даних
+mkdir data
+```
+
+### Налаштування
+
+1. Створіть файл `.env`:
+
+```env
+# JWT секрет для аутентифікації
+JWT_SECRET=your-secret-key-change-in-production
+
+# Порт API сервера
+API_PORT=4000
+
+# Порт MCP сервера
+MCP_PORT=3000
+```
+
+2. За замовчуванням створюється адміністратор:
+   - Логін: `admin`
+   - Пароль: `admin123`
+
+### Запуск
+
+```bash
+# Збірка TypeScript
+npm run build
+
+# Запуск Digital Office Hub (API + MCP сервери)
 npm start
-# або
+
+# Або для розробки з автоматичною перезбіркою
 npm run dev
 ```
 
-### Запуск API сервера
+## API Endpoints
 
-Для використання через REST API:
+### Аутентифікація
 
-```bash
-npm start api
+- `POST /auth/login` - вхід (username, password)
+- `POST /auth/register` - реєстрація нового користувача
+- `GET /auth/me` - профіль поточного користувача [потребує токен]
+- `POST /auth/change-password` - зміна пароля [потребує токен]
+- `POST /auth/api-key` - генерація API ключа [потребує токен]
+- `PUT /auth/users/:userId/role` - зміна ролі користувача [тільки admin]
+
+### Агенти
+
+- `GET /agents` - список доступних агентів
+- `GET /agents/:id` - інформація про агента
+- `POST /agents/:id/execute` - виконати задачу агента [потребує токен]
+- `GET /agents/:id/status/:taskId` - статус виконання задачі
+
+### Документи
+
+- `POST /documents/generate` - генерація документа за шаблоном [потребує токен]
+- `GET /documents/templates` - список доступних шаблонів
+
+### Проекти
+
+- `GET /projects` - список проектів [потребує токен]
+- `POST /projects` - створити проект [потребує токен]
+- `GET /projects/:id` - деталі проекту [потребує токен]
+- `PUT /projects/:id` - оновити проект [потребує токен]
+
+## Структура проекту
+
+```
+documentator/
+├── src/
+│   ├── agents/           # Інтелектуальні агенти
+│   │   ├── automation/   # Агенти автоматизації
+│   │   └── content/      # Агенти генерації контенту
+│   ├── api/              # API сервер та маршрути
+│   │   ├── routes/       # Express маршрути
+│   │   └── server.ts     # Налаштування сервера
+│   ├── auth/             # Система аутентифікації
+│   │   ├── AuthService.ts
+│   │   └── middleware.ts
+│   ├── core/             # Основні модулі системи
+│   │   ├── DigitalOfficeHub.ts  # Головний хаб
+│   │   ├── BaseAgent.ts         # Базовий клас агентів
+│   │   └── EventBus.ts          # Система подій
+│   ├── services/         # Бізнес-логіка
+│   ├── templates/        # Шаблони документів
+│   └── types/            # TypeScript типи
+├── data/                 # Дані додатку (користувачі, проекти)
+├── dist/                 # Скомпільований код
+└── tests/                # Тести
 ```
 
-### Запуск обох серверів
+## Архітектура агентів
 
-```bash
-npm start both
+Система підтримує інтелектуальні агенти через модульну архітектуру. Агенти можуть бути додані в категорії:
+
+### Категорії агентів
+- **Automation** - агенти автоматизації
+- **Analytics** - агенти аналізу даних
+- **Integration** - агенти інтеграції
+- **Monitoring** - агенти моніторингу
+- **Custom** - кастомні агенти
+
+### Поточний стан
+Система готова до додавання нових агентів. Структура директорій підготовлена для розширення функціональності.
+
+## Розробка
+
+### Додавання нового агента
+
+1. Створіть папку агента в `src/agents/<category>/<agent-name>/`
+2. Додайте файли:
+   - `agent.json` - конфігурація агента
+   - `index.ts` - логіка агента (extends BaseAgent)
+3. Агент автоматично буде доступний через API
+
+### Структура агента
+
+```typescript
+// src/agents/automation/my-agent/index.ts
+import { BaseAgent } from '../../../core/BaseAgent';
+
+export class MyAgent extends BaseAgent {
+  async execute(task: any): Promise<any> {
+    // Логіка виконання задачі
+    return result;
+  }
+}
 ```
+
+```json
+// src/agents/automation/my-agent/agent.json
+{
+  "id": "my-agent",
+  "name": "My Agent",
+  "description": "Опис агента",
+  "category": "automation",
+  "capabilities": ["task1", "task2"]
+}
+```
+
+## MCP Команди
+
+Доступні команди для Claude Desktop:
+
+- `analyze_project` - Аналіз проекту
+- `list_templates` - Список шаблонів
+- `get_template_variables` - Отримання змінних шаблону
+- `generate_report` - Генерація звіту
+- `list_projects` - Список проектів
+- `analyze_project_by_id` - Аналіз проекту за ID
+- `generate_report_by_id` - Генерація звіту за ID
 
 ## Налаштування MCP в Claude Desktop
 
-Додайте до вашого `claude_desktop_config.json`:
+Додайте до `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "documentator": {
+    "digital-office": {
       "command": "node",
-      "args": ["C:\\\\path\\\\to\\\\documentator\\\\dist\\\\index.js"],
+      "args": ["/absolute/path/to/your/documentator/dist/index-new.js"],
       "env": {
         "NODE_ENV": "production"
       }
@@ -88,184 +199,55 @@ npm start both
 }
 ```
 
-## API Документація
-
-### Аутентифікація
-
-**POST** `/api/auth/login`
+**Для Windows:**
 ```json
 {
-  "username": "admin",
-  "password": "admin123"
+  "mcpServers": {
+    "digital-office": {
+      "command": "node",
+      "args": ["C:\\Users\\YourUsername\\documentator\\dist\\index-new.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
 }
 ```
 
-**POST** `/api/auth/register`
+**Для macOS/Linux:**
 ```json
 {
-  "username": "user",
-  "email": "user@example.com",
-  "password": "password123"
+  "mcpServers": {
+    "digital-office": {
+      "command": "node",
+      "args": ["/home/username/documentator/dist/index-new.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
 }
 ```
 
-### Аналіз проектів
+## Скрипти
 
-**POST** `/api/projects/analyze`
-```json
-{
-  "projectPath": "C:\\\\path\\\\to\\\\project",
-  "forceRefresh": false
-}
-```
-
-### Генерація звітів
-
-**POST** `/api/reports/generate`
-```json
-{
-  "projectPath": "C:\\\\path\\\\to\\\\project",
-  "templateId": "template-id",
-  "variables": {
-    "projectName": "Мій проект",
-    "author": "Іван Іванов",
-    "date": "2024-01-01"
-  },
-  "format": "markdown"
-}
-```
-
-## Формат шаблонів
-
-### Базовий синтаксис змінних
-
-```markdown
-# {{title}}
-
-Автор: {{author}}
-Дата: {{date|2024-01-01}}
-
-## Опис
-
-{{description:string|Опис проекту}}
-```
-
-### Умовна логіка
-
-```markdown
-{{#if hasTests}}
-## Тестування
-Проект містить тести.
-{{/if}}
-```
-
-### Цикли
-
-```markdown
-{{#each features as feature}}
-- {{feature.name}}: {{feature.description}}
-{{/each}}
-```
-
-## Структура проектів
-
-Система працює з папкою `projects/`, де кожна підпапка є окремим проектом:
-
-```
-projects/
-├── my-project/            # Ваш проект
-│   ├── template1.md       # Шаблони в корені проекту  
-│   ├── template2.md       # або
-│   └── templates/         # в підпапці templates/
-│       └── report.md
-└── another-project/       # Інший проект
-    └── weekly-report.md
-```
-
-**Як створити проект:**
-1. Створіть папку в `projects/` з назвою вашого проекту
-2. Додайте файли .md з шаблонами
-3. Використайте MCP команди в Claude для роботи з проектом
-
-## MCP Команди
-
-Доступні команди для Anthropic Claude:
-
-**Для зовнішніх проектів:**
-- `analyze_project` - Аналіз проекту за повним шляхом
-- `list_templates` - Отримання списку шаблонів проекту
-- `get_template_variables` - Отримання змінних шаблону
-- `generate_report` - Генерація звіту
-
-**Для проектів з папки projects/:**
-- `list_projects` - Список всіх проектів в папці projects/
-- `analyze_project_by_id` - Аналіз проекту за ID (назвою папки)
-- `generate_report_by_id` - Генерація звіту з проекту
-
-### Приклади використання в Claude
-
-**Робота з проектами з папки projects/:**
-```
-Покажи мені всі проекти в папці projects/
-
-Проаналізуй проект "my-reports" та покажи доступні шаблони
-
-Створи звіт з проекту "my-reports" використовуючи шаблон "weekly-report" з такими даними:
-- title: "Тижневий звіт"
-- author: "Іван Петров"
-- week: "22-28 січня 2024"
-```
-
-**Робота з зовнішніми проектами:**
-```
-Проаналізуй проект в папці C:\\MyProject
-
-Створи звіт на основі шаблону з папки C:\\MyProject з даними:
-- title: "Звіт по проекту"
-- author: "Команда розробки"
-```
-
-## Структура проекту
-
-```
-documentator/
-├── src/
-│   ├── api/          # REST API
-│   ├── auth/         # Система авторизації
-│   ├── core/         # Основна логіка
-│   ├── mcp/          # MCP сервер
-│   ├── types/        # TypeScript типи
-│   └── utils/        # Утиліти
-├── dist/             # Скомпільовані файли
-├── data/             # Дані користувачів
-└── tests/            # Тести
-```
-
-## Розробка
-
-### Скрипти розробки
-
-```bash
-npm run dev          # Запуск в режимі розробки
-npm run build        # Компіляція TypeScript
-npm run test         # Запуск тестів
-npm run lint         # Лінтинг коду
-npm run typecheck    # Перевірка типів
-```
-
-### Додавання нових типів шаблонів
-
-1. Розширте `ProjectAnalyzer.ts` для підтримки нового формату
-2. Додайте логіку обробки в `ReportGenerator.ts`
-3. Оновіть типи в `types/index.ts`
+- `npm start` - запуск продакшн версії
+- `npm run dev` - запуск в режимі розробки
+- `npm run build` - збірка TypeScript
+- `npm test` - запуск тестів
+- `npm run lint` - перевірка коду ESLint
+- `npm run format` - форматування коду Prettier
+- `npm run typecheck` - перевірка типів TypeScript
 
 ## Безпека
 
-- JWT токени для API авторизації
-- Bcrypt для хешування паролів
-- Helmet для безпеки HTTP заголовків
-- Валідація всіх вхідних даних
-- Обмеження розміру файлів
+⚠️ **Важливо для продакшн:**
+
+1. Змініть `JWT_SECRET` на унікальний ключ
+2. Змініть пароль адміністратора після першого входу
+3. Використовуйте HTTPS для API
+4. Налаштуйте CORS для вашого домену
+5. Регулярно оновлюйте залежності
 
 ## Логування
 
@@ -277,4 +259,4 @@ MIT
 
 ## Підтримка
 
-Створюйте issues в GitHub репозиторії для звітування про баги або пропозицій нових функцій.
+Для питань та пропозицій створюйте issue на GitHub.

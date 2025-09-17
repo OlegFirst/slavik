@@ -1,7 +1,43 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reportRoutes = reportRoutes;
 const express_1 = require("express");
+const fs = __importStar(require("fs-extra"));
+const path = __importStar(require("path"));
+const uuid_1 = require("uuid");
 function reportRoutes(reportGenerator, projectAnalyzer) {
     const router = (0, express_1.Router)();
     router.post('/generate', async (req, res) => {
@@ -107,7 +143,6 @@ function reportRoutes(reportGenerator, projectAnalyzer) {
                     error: 'Шаблон не знайдено'
                 });
             }
-            const fs = require('fs-extra');
             const templateContent = await fs.readFile(template.filePath, 'utf-8');
             let previewContent = templateContent;
             const providedVars = variables || {};
@@ -140,8 +175,6 @@ function reportRoutes(reportGenerator, projectAnalyzer) {
     });
     router.get('/history', async (req, res) => {
         try {
-            const fs = require('fs-extra');
-            const path = require('path');
             const historyFile = path.join('./data', 'reports-history.json');
             let history = [];
             if (await fs.pathExists(historyFile)) {
@@ -163,15 +196,13 @@ function reportRoutes(reportGenerator, projectAnalyzer) {
     router.post('/save-to-history', async (req, res) => {
         try {
             const { templateId, projectPath, outputPath, templateName } = req.body;
-            const fs = require('fs-extra');
-            const path = require('path');
             const historyFile = path.join('./data', 'reports-history.json');
             let history = [];
             if (await fs.pathExists(historyFile)) {
                 history = await fs.readJson(historyFile);
             }
             const record = {
-                id: require('uuid').v4(),
+                id: (0, uuid_1.v4)(),
                 userId: req.user?.userId,
                 username: req.user?.username,
                 templateId,

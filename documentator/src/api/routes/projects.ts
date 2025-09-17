@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import { ProjectAnalyzer } from '../../core/ProjectAnalyzer';
 import { AuthenticatedRequest } from '../../auth/middleware';
+import * as fs from 'fs-extra';
 
 export function projectRoutes(projectAnalyzer: ProjectAnalyzer): Router {
   const router = Router();
@@ -99,7 +100,6 @@ export function projectRoutes(projectAnalyzer: ProjectAnalyzer): Router {
         });
       }
 
-      const fs = require('fs-extra');
       const exists = await fs.pathExists(projectPath);
       
       if (!exists) {

@@ -11,7 +11,7 @@ export declare abstract class BaseService implements DigitalOfficeService {
     protected abstract onInitialize(): Promise<void>;
     protected abstract onShutdown(): Promise<void>;
     protected performHealthCheck(): Promise<boolean>;
-    abstract getTools(): Tool[];
-    abstract handleToolCall(toolName: string, args: any): Promise<any>;
+    getTools(): Tool[];
+    handleToolCall(toolName: string, args: any): Promise<any>;
 }
 //# sourceMappingURL=BaseService.d.ts.map

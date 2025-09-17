@@ -5,10 +5,10 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ProjectAnalyzer } from '../core/ProjectAnalyzer.js';
-import { ReportGenerator } from '../core/ReportGenerator.js';
-import { SimpleProjectManager } from '../core/SimpleProjectManager.js';
-import { ProjectAnalysis, Template, ReportRequest } from '../types/index.js';
+import { ProjectAnalyzer } from '../core/ProjectAnalyzer';
+import { ReportGenerator } from '../core/ReportGenerator';
+import { SimpleProjectManager } from '../core/SimpleProjectManager';
+import { ProjectAnalysis, Template, ReportRequest } from '../types';
 
 export class McpServer {
   private server: Server;
