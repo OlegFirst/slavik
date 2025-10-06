@@ -1,0 +1,43 @@
+# API Gateway Requirements
+# Production-grade dependencies for security, performance, and reliability
+
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+starlette==0.27.0
+
+# Authentication & Security
+pyjwt==2.8.0
+cryptography==41.0.7
+
+# Redis (Async)
+redis[hiredis]==5.0.1
+
+# PostgreSQL (Async)
+asyncpg==0.29.0
+
+# HTTP Client
+httpx==0.25.2
+
+# Configuration
+pydantic==2.5.2
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+
+# Logging & Monitoring
+structlog==23.2.0
+prometheus-client==0.19.0
+
+# Performance
+orjson==3.9.10
+uvloop==0.19.0
+
+# Health Checks
+psutil==5.9.6
+
+# Development & Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+faker==20.1.0

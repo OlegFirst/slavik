@@ -105,15 +105,15 @@ CREATE INDEX idx_incidents_search ON response.incidents USING GIN(search_vector)
 CREATE INDEX idx_incidents_active ON response.incidents(status) WHERE status IN ('reported', 'investigating', 'responding');
 
 CREATE TRIGGER update_incidents_updated_at BEFORE UPDATE ON response.incidents
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.incidents ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Incidents visible to org members" ON response.incidents FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Incidents manageable by org admins" ON response.incidents FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE response.incidents IS 'Incident tracking per ISO 22301:2019 Clause 8.4.2';
 
@@ -191,15 +191,15 @@ CREATE INDEX idx_response_teams_type ON response.response_teams(team_type);
 CREATE INDEX idx_response_teams_active ON response.response_teams(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_response_teams_updated_at BEFORE UPDATE ON response.response_teams
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.response_teams ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Response teams visible to org members" ON response.response_teams FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Response teams manageable by org admins" ON response.response_teams FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE response.response_teams IS 'Response teams (IMT, CMT, BRT) per ISO 22301';
 
@@ -270,15 +270,15 @@ CREATE INDEX idx_comm_templates_type ON response.communication_templates(templat
 CREATE INDEX idx_comm_templates_active ON response.communication_templates(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_comm_templates_updated_at BEFORE UPDATE ON response.communication_templates
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.communication_templates ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Comm templates visible to org members" ON response.communication_templates FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Comm templates manageable by org admins" ON response.communication_templates FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE response.communication_templates IS 'Communication templates per ISO 22301:2019 Clause 8.4.3';
 
@@ -348,15 +348,15 @@ CREATE INDEX idx_communications_sent ON response.communications(sent_at DESC);
 CREATE INDEX idx_communications_scheduled ON response.communications(scheduled_at) WHERE status = 'approved';
 
 CREATE TRIGGER update_communications_updated_at BEFORE UPDATE ON response.communications
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.communications ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Communications visible to org members" ON response.communications FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Communications manageable by org admins" ON response.communications FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE response.communications IS 'Communications sent during incidents per ISO 22301 Clause 8.4.3';
 
@@ -418,12 +418,12 @@ CREATE INDEX idx_notifications_unread ON response.notifications(user_id, read_at
 CREATE INDEX idx_notifications_pending_retry ON response.notifications(next_retry_at) WHERE status = 'failed' AND next_retry_at IS NOT NULL;
 
 CREATE TRIGGER update_notifications_updated_at BEFORE UPDATE ON response.notifications
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.notifications ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Notifications visible to org members" ON response.notifications FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Users see their own notifications" ON response.notifications FOR SELECT
     USING (user_id = auth.uid());
@@ -486,15 +486,15 @@ CREATE INDEX idx_escalations_level ON response.escalations(escalation_level);
 CREATE INDEX idx_escalations_pending ON response.escalations(status) WHERE status = 'pending';
 
 CREATE TRIGGER update_escalations_updated_at BEFORE UPDATE ON response.escalations
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE response.escalations ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Escalations visible to org members" ON response.escalations FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Escalations manageable by org admins" ON response.escalations FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE response.escalations IS 'Incident escalation tracking';
 
@@ -548,7 +548,7 @@ CREATE INDEX idx_timeline_milestones ON response.timeline_events(incident_id, is
 ALTER TABLE response.timeline_events ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Timeline events visible to org members" ON response.timeline_events FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Public timeline events visible to all" ON response.timeline_events FOR SELECT
     USING (is_public = TRUE);

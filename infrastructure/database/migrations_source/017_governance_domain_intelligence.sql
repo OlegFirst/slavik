@@ -20,8 +20,8 @@ COMMENT ON SCHEMA domain_intelligence IS 'Industry knowledge and domain classifi
 -- PART 2: EXTEND ORGANIZATIONS TABLE (for domain classification)
 -- =====================================================
 
--- Add domain classification columns to core.organizations
-ALTER TABLE core.organizations
+-- Add domain classification columns to public.organizations
+ALTER TABLE public.organizations
     ADD COLUMN IF NOT EXISTS organizational_type VARCHAR(50) CHECK (
         organizational_type IS NULL OR organizational_type IN (
             'for_profit', 'non_profit', 'government', 'educational',
@@ -41,17 +41,17 @@ ALTER TABLE core.organizations
     ADD COLUMN IF NOT EXISTS domain_classified_by UUID;  -- User ID
 
 -- Create indexes for domain classification
-CREATE INDEX IF NOT EXISTS idx_orgs_org_type ON core.organizations(organizational_type);
-CREATE INDEX IF NOT EXISTS idx_orgs_industry ON core.organizations(industry_domain);
-CREATE INDEX IF NOT EXISTS idx_orgs_subdomain ON core.organizations(sub_domain);
-CREATE INDEX IF NOT EXISTS idx_orgs_company_size ON core.organizations(company_size);
+CREATE INDEX IF NOT EXISTS idx_orgs_org_type ON public.organizations(organizational_type);
+CREATE INDEX IF NOT EXISTS idx_orgs_industry ON public.organizations(industry_domain);
+CREATE INDEX IF NOT EXISTS idx_orgs_subdomain ON public.organizations(sub_domain);
+CREATE INDEX IF NOT EXISTS idx_orgs_company_size ON public.organizations(company_size);
 
 -- Comments
-COMMENT ON COLUMN core.organizations.industry_domain IS 'Primary industry classification (healthcare, financial, manufacturing, etc.)';
-COMMENT ON COLUMN core.organizations.sub_domain IS 'Industry sub-domain (hospital, bank, automotive, etc.)';
-COMMENT ON COLUMN core.organizations.organizational_type IS 'Organization type (for_profit, non_profit, government, etc.)';
-COMMENT ON COLUMN core.organizations.company_size IS 'Organization size (micro, small, medium, large, enterprise)';
-COMMENT ON COLUMN core.organizations.regulatory_requirements IS 'Applicable regulations (HIPAA, SOX, GDPR, etc.)';
+COMMENT ON COLUMN public.organizations.industry_domain IS 'Primary industry classification (healthcare, financial, manufacturing, etc.)';
+COMMENT ON COLUMN public.organizations.sub_domain IS 'Industry sub-domain (hospital, bank, automotive, etc.)';
+COMMENT ON COLUMN public.organizations.organizational_type IS 'Organization type (for_profit, non_profit, government, etc.)';
+COMMENT ON COLUMN public.organizations.company_size IS 'Organization size (micro, small, medium, large, enterprise)';
+COMMENT ON COLUMN public.organizations.regulatory_requirements IS 'Applicable regulations (HIPAA, SOX, GDPR, etc.)';
 
 -- =====================================================
 -- TABLE 1: INDUSTRY KNOWLEDGE
@@ -395,7 +395,7 @@ BEGIN
             ELSE 50.0
         END AS relevance_score
     FROM domain_intelligence.industry_knowledge k
-    INNER JOIN core.organizations o ON
+    INNER JOIN public.organizations o ON
         o.id = p_organization_id
         AND k.industry = o.industry_domain
         AND (k.sub_domain IS NULL OR k.sub_domain = o.sub_domain)

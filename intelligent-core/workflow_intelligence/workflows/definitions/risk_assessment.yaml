@@ -1,0 +1,472 @@
+# Risk Assessment Workflow Definition
+# ISO 22301:2019 Clause 8.2.3
+# Version: 2.0
+
+workflow:
+  id: risk_assessment
+  name: Risk Assessment
+  version: 2.0
+  module: risk
+  description: |
+    Systematic risk identification, analysis, and treatment planning
+    following ISO 22301:2019 clause 8.2.3.
+
+metadata:
+  iso_standard: ISO 22301:2019
+  clause: 8.2.3
+  estimated_duration_days: 10-21
+  triggers:
+    - bia.completed  # Auto-start after BIA
+  required_roles:
+    - risk_manager
+    - bcm_manager
+    - process_owners
+
+constitution:
+  core_principles:
+    - id: const_001
+      principle: "Risk assessment must be evidence-based"
+      rationale: "Decisions require factual foundation"
+
+    - id: const_002
+      principle: "Critical processes require threat-specific analysis"
+      rationale: "Generic risk assessment insufficient for critical assets"
+
+    - id: const_003
+      principle: "Risk treatment mandatory for high/critical risks"
+      rationale: "High risks cannot be ignored"
+
+  forbidden_actions:
+    - "Accept critical risks without management approval"
+    - "Skip threat analysis for Tier 1 processes"
+    - "Ignore regulatory requirements"
+
+stages:
+  # Stage 1: Identify Threats
+  - id: identify_threats
+    name: Identify Threats
+    order: 1
+    type: creative_zone
+
+    description: |
+      Identify potential threats that could disrupt critical business
+      processes identified in BIA.
+
+    objectives:
+      - Identify threats across all categories
+      - Link threats to processes
+      - Document threat sources
+      - Consider industry-specific threats
+
+    entry_criteria:
+      - BIA completed
+      - Critical processes identified
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: risk_cp_001
+      rules:
+        - "Minimum 5 threats identified"
+        - "All threat categories covered"
+        - "All Tier 1 processes have threats mapped"
+
+    creative_zone:
+      creativity_level: high
+      allowed_approaches:
+        - Threat modeling frameworks (STRIDE, PASTA, OCTAVE)
+        - Industry threat intelligence
+        - Historical incident analysis
+        - Scenario brainstorming
+        - What-if analysis
+      guidance: |
+        Be comprehensive in threat identification:
+        - Use multiple frameworks
+        - Consider all categories (natural, technical, human, environmental)
+        - Reference actual incidents from case library
+        - Don't miss obvious threats but also explore edge cases
+        - Think like an attacker/nature/accident
+
+    required_data:
+      - threat_name:
+          type: string
+          required: true
+          min_length: 5
+      - category:
+          type: enum
+          required: true
+          values: [natural, technical, human_malicious, human_accidental, environmental]
+      - description:
+          type: string
+          required: true
+          min_length: 30
+      - affected_processes:
+          type: array
+          required: true
+      - likelihood_factors:
+          type: array
+          description: "Factors affecting probability"
+
+    ai_capabilities:
+      - suggest_threats:
+          description: "Suggest threats based on industry and geography"
+          uses: [threat_intelligence, case_library, historical_data]
+
+      - map_threat_to_process:
+          description: "Identify which processes each threat affects"
+
+      - reference_real_incidents:
+          description: "Show similar incidents from knowledge base"
+
+  # Stage 2: Assess Risks
+  - id: assess_risks
+    name: Assess Risk Levels
+    order: 2
+    type: checkpoint
+
+    description: |
+      Calculate risk scores using likelihood × impact matrix.
+      Use FAIR methodology where quantitative data available.
+
+    objectives:
+      - Assess likelihood (1-5 scale)
+      - Assess impact (1-5 scale)
+      - Calculate risk score
+      - Justify assessments
+
+    entry_criteria:
+      - checkpoint: risk_cp_001 passed
+      - All threats identified
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: risk_cp_002
+      rules:
+        - "All identified threats have risk assessment"
+        - "Critical risks (score > 15) have detailed analysis"
+        - "Impact aligned with BIA findings"
+
+    required_data:
+      - likelihood:
+          type: integer
+          required: true
+          min: 1
+          max: 5
+          description: "1=Rare, 5=Almost Certain"
+      - impact:
+          type: integer
+          required: true
+          min: 1
+          max: 5
+          description: "1=Negligible, 5=Catastrophic"
+      - risk_score:
+          type: integer
+          calculated: true
+          formula: "likelihood × impact"
+      - justification:
+          type: string
+          required: true
+          min_length: 30
+      - evidence:
+          type: array
+          description: "Supporting evidence for assessment"
+
+    validation_rules:
+      - rule: "Impact for Tier 1 process threats ≥ 3"
+        severity: high
+
+      - rule: "Justification required for all scores"
+        severity: critical
+
+    ai_capabilities:
+      - calculate_likelihood:
+          method: "Historical frequency analysis"
+          uses: [incident_database, industry_statistics]
+
+      - estimate_impact:
+          method: "BIA correlation + benchmarks"
+          uses: [bia_results, case_library]
+
+      - suggest_evidence:
+          description: "Find supporting data for assessments"
+
+  # Stage 3: Prioritize Risks
+  - id: prioritize_risks
+    name: Prioritize and Categorize
+    order: 3
+    type: creative_zone
+
+    description: |
+      Prioritize risks for treatment planning considering
+      multiple dimensions beyond risk score.
+
+    objectives:
+      - Rank risks by priority
+      - Group related risks
+      - Identify quick wins
+      - Flag regulatory risks
+
+    entry_criteria:
+      - checkpoint: risk_cp_002 passed
+      - All risks assessed
+
+    exit_criteria:
+      type: validation
+      rules:
+        - "All risks categorized"
+        - "Top 10 risks identified"
+        - "Regulatory risks flagged"
+
+    creative_zone:
+      creativity_level: medium
+      allowed_approaches:
+        - Multi-criteria decision analysis
+        - Risk heat maps
+        - Pareto analysis
+        - Strategic importance weighting
+      guidance: |
+        Consider multiple prioritization dimensions:
+        - Risk score (quantitative baseline)
+        - Strategic importance (qualitative overlay)
+        - Regulatory requirements (compliance mandate)
+        - Stakeholder concerns (political reality)
+        - Treatment feasibility (practical constraints)
+
+    required_data:
+      - priority_rank:
+          type: integer
+          required: true
+      - category:
+          type: enum
+          values: [strategic, operational, financial, compliance, reputational]
+      - regulatory_flag:
+          type: boolean
+      - quick_win:
+          type: boolean
+          description: "High impact, low effort treatment possible"
+
+    ai_capabilities:
+      - recommend_priority:
+          method: "Multi-factor scoring"
+          factors: [risk_score, strategic_value, regulatory, feasibility]
+
+      - identify_risk_clusters:
+          description: "Group related risks for combined treatment"
+
+  # Stage 4: Plan Treatments
+  - id: plan_treatments
+    name: Plan Risk Treatments
+    order: 4
+    type: creative_zone
+
+    description: |
+      Develop risk treatment plans using the Four T's framework:
+      Treat, Tolerate, Transfer, Terminate.
+
+    objectives:
+      - Select treatment strategy for each risk
+      - Design specific controls
+      - Assign ownership
+      - Estimate costs and timelines
+      - Calculate residual risk
+
+    entry_criteria:
+      - Risks prioritized
+      - Top risks identified
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: risk_cp_003
+      rules:
+        - "All high/critical risks (score > 12) have treatment plans"
+        - "Treatment owners assigned"
+        - "Residual risks calculated"
+        - "Cost estimates provided"
+
+    creative_zone:
+      creativity_level: high
+      allowed_approaches:
+        - Four T's framework
+        - Defense in depth (layered controls)
+        - Cost-benefit analysis
+        - Best practices from case library
+        - Innovative solutions
+      guidance: |
+        Be creative in treatment options:
+        - Don't default to "accept" for everything
+        - Consider multiple controls (layered defense)
+        - Reference what worked for similar organizations
+        - Present cost vs benefit analysis
+        - Think prevention AND detection AND response
+        - Explore non-obvious solutions
+
+    required_data:
+      - treatment_type:
+          type: enum
+          required: true
+          values: [avoid, reduce, transfer, accept]
+      - controls:
+          type: array
+          required: true
+          description: "Specific control measures"
+      - owner:
+          type: string
+          required: true
+      - target_date:
+          type: date
+          required: true
+      - estimated_cost:
+          type: number
+      - expected_residual_risk:
+          type: integer
+          min: 1
+          max: 25
+          description: "Expected risk score after treatment"
+      - cost_benefit_ratio:
+          type: number
+          calculated: true
+
+    validation_rules:
+      - rule: "Critical risks (score > 15) cannot be 'accepted' without exec approval"
+        severity: critical
+
+      - rule: "Residual risk < original risk"
+        severity: high
+
+      - rule: "Treatment owner cannot be vacant"
+        severity: critical
+
+    ai_capabilities:
+      - recommend_treatments:
+          description: "Suggest appropriate controls"
+          uses: [benchmarks, case_library, control_frameworks]
+
+      - calculate_cost_benefit:
+          method: "Expected loss reduction vs control cost"
+
+      - estimate_residual_risk:
+          description: "Predict effectiveness of controls"
+
+  # Stage 5: Review and Approval
+  - id: review_approve
+    name: Review and Approval
+    order: 5
+    type: checkpoint
+
+    description: |
+      Comprehensive review and management approval of
+      risk assessment and treatment plans.
+
+    objectives:
+      - Validate completeness
+      - Review with stakeholders
+      - Obtain management approval
+      - Document decisions
+
+    entry_criteria:
+      - checkpoint: risk_cp_003 passed
+      - All treatment plans complete
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: risk_cp_004
+      rules:
+        - "All high/critical risks have approved treatment plans"
+        - "Residual risks within organizational tolerance"
+        - "Management sign-off obtained"
+        - "Treatment schedule approved"
+
+    actions:
+      - Generate risk register
+      - Present to risk committee
+      - Obtain management approval
+      - Create treatment tracking plan
+
+    can_return_to:
+      - identify_threats
+      - assess_risks
+      - plan_treatments
+
+  # Stage 6: Completed
+  - id: completed
+    name: Risk Assessment Completed
+    order: 6
+    type: final
+
+    description: "Risk assessment completed and approved"
+
+    entry_criteria:
+      - checkpoint: risk_cp_004 passed
+      - Management approval
+
+    actions:
+      - Create workflow case for case library
+      - Trigger planning workflow
+      - Update compliance status
+      - Schedule treatment implementation
+
+# AI Advisor Configuration
+ai_advisor:
+  enabled: true
+  proactive: true
+
+  triggers:
+    - event: stage_entered
+      action: provide_stage_guidance
+
+    - event: high_risk_identified
+      threshold: 15
+      action: suggest_immediate_treatments
+
+    - event: validation_failed
+      action: suggest_remediation
+
+  capabilities:
+    - suggest_threats:
+        uses: [threat_intelligence, case_library, incident_database]
+
+    - calculate_risk_score:
+        method: FAIR
+        fallback: likelihood_x_impact
+
+    - recommend_treatments:
+        uses: [benchmarks, cost_benefit, case_library]
+
+    - estimate_residual_risk:
+        method: control_effectiveness_modeling
+
+# Case Library Configuration
+case_library:
+  collect_events: true
+  anonymize: true
+
+  events_to_collect:
+    - workflow.started
+    - threat.identified
+    - risk.assessed
+    - treatment.planned
+    - checkpoint.passed
+    - workflow.completed
+
+  success_criteria:
+    - all_checkpoints_passed: true
+    - residual_risks_acceptable: true
+    - management_approved: true
+
+# Integration Points
+integrations:
+  eventbus:
+    publish_all_events: true
+    subscribe_to:
+      - bia.completed
+      - threat_intelligence.updated
+
+  knowledge_graph:
+    query_standards:
+      - ISO 22301:2019
+      - ISO 31000:2018
+      - NIST SP 800-30
+
+  ml_predictor:
+    predict_on_stages:
+      - assess_risks
+      - plan_treatments

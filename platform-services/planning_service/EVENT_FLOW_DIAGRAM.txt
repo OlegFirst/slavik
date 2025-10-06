@@ -1,0 +1,419 @@
+================================================================================
+              PLANNING SERVICE - EVENT FLOW ARCHITECTURE
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         CLIENT / API REQUEST                             │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                     PLANNING SERVICE API LAYER                           │
+│                   (FastAPI endpoints in main.py)                         │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                  STRATEGY SERVICE (Business Logic)                       │
+│                  services/business_logic.py                              │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  create_strategy()                                              │   │
+│  │  ├─ Generate strategy number                                    │   │
+│  │  ├─ Create strategy in database                                 │   │
+│  │  ├─ ✅ PUBLISH EVENT: planning.strategy.created                │   │
+│  │  │   ├─ strategy_id, tenant_id, strategy_number               │   │
+│  │  │   ├─ name, type, phase, status                             │   │
+│  │  │   └─ created_by, timestamp                                 │   │
+│  │  └─ Return response                                            │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  approve_strategy()                                             │   │
+│  │  ├─ Validate strategy status (must be REVIEW)                  │   │
+│  │  ├─ Update strategy to APPROVED                                │   │
+│  │  ├─ ✅ PUBLISH EVENT: planning.strategy.approved              │   │
+│  │  │   ├─ strategy_id, tenant_id, strategy_number               │   │
+│  │  │   ├─ name, type, status                                    │   │
+│  │  │   ├─ approved_by, approval_notes                           │   │
+│  │  │   └─ approved_at, timestamp                                │   │
+│  │  └─ Return response                                            │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │  calculate_cost_benefit()                                       │   │
+│  │  ├─ Calculate total costs (CAPEX + OPEX + etc)                 │   │
+│  │  ├─ Calculate total benefits                                   │   │
+│  │  ├─ Calculate cost-benefit ratio                               │   │
+│  │  ├─ Calculate ROI, NPV, payback period                         │   │
+│  │  ├─ Update strategy with analysis                              │   │
+│  │  ├─ ✅ PUBLISH EVENT: planning.cost_benefit.completed         │   │
+│  │  │   ├─ strategy_id, tenant_id, strategy_number               │   │
+│  │  │   ├─ total_cost, total_benefits, ratio                     │   │
+│  │  │   ├─ roi_percentage, npv, payback_period                   │   │
+│  │  │   ├─ recommendation, confidence_level                       │   │
+│  │  │   └─ timestamp                                              │   │
+│  │  └─ Return cost-benefit response                               │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    EVENT PUBLISHER (Async)                               │
+│                    events/publishers.py                                  │
+│                                                                          │
+│  async def publish_event(topic, data):                                  │
+│      try:                                                               │
+│          async with httpx.AsyncClient() as client:                      │
+│              await client.post(                                         │
+│                  f"{EVENTBUS_URL}/events/publish",                      │
+│                  json={                                                 │
+│                      "topic": topic,                                    │
+│                      "data": data,                                      │
+│                      "service": "planning_service"                      │
+│                  },                                                     │
+│                  timeout=5.0                                            │
+│              )                                                          │
+│              logger.info(f"✅ Published {topic}")                      │
+│      except Exception as e:                                             │
+│          logger.warning(f"⚠️ Failed to publish {topic}: {e}")         │
+│          # Operation continues - graceful degradation                   │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         EVENTBUS SERVICE                                 │
+│                    (http://localhost:8001)                               │
+│                                                                          │
+│  POST /events/publish                                                   │
+│  ├─ Receive event                                                       │
+│  ├─ Validate event structure                                            │
+│  ├─ Store event in queue                                                │
+│  └─ Distribute to subscribers                                           │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+                         ├──────────────┬──────────────┬──────────────┐
+                         ▼              ▼              ▼              ▼
+              ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+              │ BIA Service │ │Risk Service │ │Audit Service│ │Notification │
+              │             │ │             │ │             │ │  Service    │
+              └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘
+
+================================================================================
+                          EVENT FLOW DETAILS
+================================================================================
+
+EVENT 1: planning.strategy.created
+────────────────────────────────────────────────────────────────────────────
+Trigger:  POST /api/v1/strategies
+Flow:     Client → API → create_strategy() → Database → EventBus → Subscribers
+Timing:   Published AFTER successful database insert
+Payload:  Strategy metadata (id, number, name, type, phase, status)
+Subscribers:
+  • BIA Service       → Link strategy to BIA results
+  • Risk Service      → Update related risks
+  • Audit Service     → Log strategy creation
+  • Notification      → Notify stakeholders
+
+EVENT 2: planning.strategy.approved
+────────────────────────────────────────────────────────────────────────────
+Trigger:  POST /api/v1/strategies/{id}/approve
+Flow:     Client → API → approve_strategy() → Database → EventBus → Subscribers
+Timing:   Published AFTER successful status update to APPROVED
+Payload:  Strategy metadata + approval info (approved_by, notes, timestamp)
+Subscribers:
+  • BIA Service           → Activate related processes
+  • Implementation        → Start planning implementation
+  • Governance            → Update compliance status
+  • Notification          → Notify implementation team
+
+EVENT 3: planning.cost_benefit.completed
+────────────────────────────────────────────────────────────────────────────
+Trigger:  POST /api/v1/strategies/{id}/cost-benefit
+Flow:     Client → API → calculate_cost_benefit() → Database → EventBus → Subs
+Timing:   Published AFTER successful calculation and database update
+Payload:  Financial analysis (costs, benefits, ROI, NPV, recommendation)
+Subscribers:
+  • Finance Service   → Record budget data
+  • Reporting         → Update financial reports
+  • Dashboard         → Update ROI metrics
+  • Analytics         → Store for analysis
+
+================================================================================
+                          ERROR HANDLING FLOW
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Business Operation (e.g., create_strategy)                             │
+│  ├─ Validate input                                                      │
+│  ├─ Execute database operation                                          │
+│  ├─ ✅ Success? Continue...                                            │
+│  │                                                                      │
+│  └─ Try: Publish Event                                                  │
+│     ├─ async with httpx.AsyncClient() as client:                       │
+│     │   └─ await client.post(..., timeout=5.0)                         │
+│     │                                                                   │
+│     ├─ ✅ Success Case:                                                │
+│     │   ├─ Event published to EventBus                                 │
+│     │   ├─ logger.info("Published event...")                           │
+│     │   └─ Continue to return response                                 │
+│     │                                                                   │
+│     └─ ❌ Failure Case (EventBus down, timeout, network error):       │
+│         ├─ Exception caught                                            │
+│         ├─ logger.warning("Failed to publish...")                      │
+│         ├─ NO re-raise (graceful degradation)                          │
+│         └─ Continue to return response                                 │
+│                                                                         │
+│  └─ Return successful response (regardless of event publish status)    │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Key Points:
+  ✅ Database operation MUST succeed first
+  ✅ Event publishing is ASYNCHRONOUS
+  ✅ Event failures are LOGGED but NOT blocking
+  ✅ User receives success response even if event fails
+  ✅ EventBus unavailability does NOT break business logic
+
+================================================================================
+                       SEQUENCE DIAGRAM: create_strategy
+================================================================================
+
+Client          API             Service         Database        EventBus      Subs
+  |              |                |                |               |            |
+  |--POST------->|                |                |               |            |
+  |   /strategies|                |                |               |            |
+  |              |--create------->|                |               |            |
+  |              | strategy()     |                |               |            |
+  |              |                |--INSERT------->|               |            |
+  |              |                |   Strategy     |               |            |
+  |              |                |<--Success------|               |            |
+  |              |                |                |               |            |
+  |              |                |--try: publish_event()--------->|            |
+  |              |                |  topic: planning.strategy.created          |
+  |              |                |                |               |            |
+  |              |                |                |        [EventBus stores]   |
+  |              |                |                |               |            |
+  |              |                |                |               |--notify--->|
+  |              |                |                |               | all subs   |
+  |              |                |<--Success (or graceful fail)---|            |
+  |              |                |                |               |            |
+  |              |<--Response-----|                |               |            |
+  |<--200 OK-----|                |                |               |            |
+  | (Strategy)   |                |                |               |            |
+  |              |                |                |               |            |
+
+Timeline:
+  T+0ms:    Client sends POST request
+  T+50ms:   Service validates input
+  T+100ms:  Database INSERT completes
+  T+110ms:  Event publishing starts (async)
+  T+130ms:  EventBus receives event (or timeout at T+5000ms)
+  T+135ms:  Response returned to client (regardless of event status)
+  T+150ms:  Subscribers receive event (asynchronously)
+
+================================================================================
+                       DATA FLOW: Event Payload Structure
+================================================================================
+
+planning.strategy.created
+────────────────────────────────────────────────────────────────────────────
+{
+  "topic": "planning.strategy.created",
+  "service": "planning_service",
+  "data": {
+    "strategy_id": "550e8400-e29b-41d4-a716-446655440000",
+    "tenant_id": "org123",
+    "strategy_number": "STRAT-2025-ABC123",
+    "name": "Disaster Recovery Strategy",
+    "strategy_type": "backup_restore",
+    "strategy_phase": "response",
+    "status": "draft",
+    "created_by": "user123",
+    "timestamp": "2025-10-03T10:30:00.123Z"
+  }
+}
+
+planning.strategy.approved
+────────────────────────────────────────────────────────────────────────────
+{
+  "topic": "planning.strategy.approved",
+  "service": "planning_service",
+  "data": {
+    "strategy_id": "550e8400-e29b-41d4-a716-446655440000",
+    "tenant_id": "org123",
+    "strategy_number": "STRAT-2025-ABC123",
+    "name": "Disaster Recovery Strategy",
+    "strategy_type": "backup_restore",
+    "status": "approved",
+    "approved_by": "manager123",
+    "approval_notes": "Approved for Q2 2025 implementation",
+    "approved_at": "2025-10-03T10:35:00.456Z",
+    "timestamp": "2025-10-03T10:35:00.456Z"
+  }
+}
+
+planning.cost_benefit.completed
+────────────────────────────────────────────────────────────────────────────
+{
+  "topic": "planning.cost_benefit.completed",
+  "service": "planning_service",
+  "data": {
+    "strategy_id": "550e8400-e29b-41d4-a716-446655440000",
+    "tenant_id": "org123",
+    "strategy_number": "STRAT-2025-ABC123",
+    "total_cost": 75000.0,
+    "total_benefits": 180000.0,
+    "cost_benefit_ratio": 2.4,
+    "roi_percentage": 140.0,
+    "payback_period_months": 15.0,
+    "net_present_value": 95000.0,
+    "recommendation": "proceed",
+    "confidence_level": "high",
+    "timestamp": "2025-10-03T10:40:00.789Z"
+  }
+}
+
+================================================================================
+                       INTEGRATION ARCHITECTURE
+================================================================================
+
+                    ┌─────────────────────────────────┐
+                    │      PLANNING SERVICE           │
+                    │  (Port 8011)                    │
+                    │                                 │
+                    │  ┌───────────────────────────┐  │
+                    │  │  Strategy Service         │  │
+                    │  │  (Business Logic)         │  │
+                    │  │  • create_strategy()      │  │
+                    │  │  • approve_strategy()     │  │
+                    │  │  • calculate_cost_benefit│  │
+                    │  └──────────┬────────────────┘  │
+                    │             │                   │
+                    │  ┌──────────▼────────────────┐  │
+                    │  │  Event Publishers         │  │
+                    │  │  • publish_event()        │  │
+                    │  │  • Error handling         │  │
+                    │  │  • Logging                │  │
+                    │  └──────────┬────────────────┘  │
+                    └─────────────┼───────────────────┘
+                                  │ HTTP POST
+                                  │ (async, timeout 5s)
+                                  │
+                    ┌─────────────▼───────────────────┐
+                    │      EVENTBUS SERVICE           │
+                    │  (Port 8001)                    │
+                    │                                 │
+                    │  • Event routing                │
+                    │  • Topic management             │
+                    │  • Subscription management      │
+                    │  • Event persistence            │
+                    └─────────────┬───────────────────┘
+                                  │
+                    ┌─────────────┴───────────────────┐
+                    │                                 │
+         ┌──────────▼──────────┐         ┌───────────▼─────────┐
+         │  BIA Service        │         │  Risk Service       │
+         │  (Port 8012)        │         │  (Port 8006)        │
+         │                     │         │                     │
+         │  Subscribe to:      │         │  Subscribe to:      │
+         │  • strategy.created │         │  • strategy.created │
+         │  • strategy.approved│         │  • strategy.approved│
+         └─────────────────────┘         └─────────────────────┘
+                    │
+         ┌──────────▼──────────┐         ┌───────────▼─────────┐
+         │  Audit Service      │         │  Notification       │
+         │                     │         │  Service            │
+         │  Subscribe to:      │         │                     │
+         │  • strategy.created │         │  Subscribe to:      │
+         │  • strategy.approved│         │  • All events       │
+         │  • cost_benefit.*   │         │                     │
+         └─────────────────────┘         └─────────────────────┘
+
+================================================================================
+                       CONFIGURATION & DEPLOYMENT
+================================================================================
+
+Environment Variables:
+────────────────────────────────────────────────────────────────────────────
+EVENTBUS_URL=http://localhost:8001     # EventBus service URL
+SERVICE_NAME=planning_service            # Service identifier
+DATABASE_URL=postgresql+asyncpg://...   # Database connection
+LOG_LEVEL=INFO                          # Logging level
+
+Docker Compose:
+────────────────────────────────────────────────────────────────────────────
+services:
+  planning_service:
+    image: bcm/planning-service:latest
+    ports:
+      - "8011:8011"
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+      - DATABASE_URL=postgresql+asyncpg://bcm:bcm@db:5432/bcm
+    depends_on:
+      - eventbus
+      - database
+
+  eventbus:
+    image: bcm/eventbus:latest
+    ports:
+      - "8001:8001"
+
+Kubernetes:
+────────────────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: planning-service
+spec:
+  selector:
+    app: planning-service
+  ports:
+  - port: 8011
+    targetPort: 8011
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planning-service
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: planning-service
+        image: bcm/planning-service:latest
+        env:
+        - name: EVENTBUS_URL
+          value: "http://eventbus:8001"
+
+================================================================================
+                       MONITORING & OBSERVABILITY
+================================================================================
+
+Logs to Monitor:
+────────────────────────────────────────────────────────────────────────────
+✅ INFO:  Published planning.strategy.created event for strategy STRAT-2025-XXX
+✅ INFO:  Published planning.strategy.approved event for strategy STRAT-2025-XXX
+✅ INFO:  Published planning.cost_benefit.completed event for strategy STRAT-2025-XXX
+⚠️  WARNING: Failed to publish planning.strategy.created event: Connection refused
+
+Metrics to Track:
+────────────────────────────────────────────────────────────────────────────
+• planning_events_published_total{topic="planning.strategy.created"}
+• planning_events_failed_total{topic="planning.strategy.created"}
+• planning_event_publish_duration_seconds{topic="planning.strategy.created"}
+• eventbus_connection_errors_total
+
+Alerts:
+────────────────────────────────────────────────────────────────────────────
+• EventPublishFailureRate > 10% for 5 minutes
+• EventBusUnavailable for 1 minute
+• EventPublishLatency > 1000ms
+
+================================================================================
+
+Last Updated: 2025-10-03
+Version: 1.0
+Author: Integration Team
+Status: ✅ PRODUCTION READY

@@ -1,0 +1,1079 @@
+{
+  "dashboard": {
+    "title": "Workflow Intelligence - Platform Dashboard",
+    "tags": ["workflow-intelligence", "bcm", "ai"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Platform Health",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "targets": [{
+          "expr": "workflow_intelligence_service_health",
+          "legendFormat": "{{component}}",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "mappings": [
+            {"type": "value", "value": "1", "text": "Healthy", "color": "green"},
+            {"type": "value", "value": "0", "text": "Unhealthy", "color": "red"}
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Total Cases Collected",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+        "targets": [{
+          "expr": "sum(workflow_intelligence_cases_collected_total)",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 3,
+        "title": "AI Advice Acceptance Rate",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+        "targets": [{
+          "expr": "sum(workflow_intelligence_ai_advice_accepted_total) / sum(workflow_intelligence_ai_advice_total) * 100",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 50, "color": "yellow"},
+                {"value": 75, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+        "targets": [{
+          "expr": "rate(workflow_intelligence_errors_total[5m])",
+          "legendFormat": "{{error_type}} - {{module}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "ops", "label": "Errors/sec"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Workflow Actions - Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+        "targets": [{
+          "expr": "sum(rate(workflow_intelligence_actions_total[5m])) by (module, action)",
+          "legendFormat": "{{module}} - {{action}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "ops", "label": "Actions/sec"},
+          {"show": false}
+        ],
+        "legend": {"show": true, "alignAsTable": true, "rightSide": true}
+      },
+      {
+        "id": 6,
+        "title": "Workflow Action Duration (p50, p95, p99)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, le))",
+            "legendFormat": "{{module}} - p50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, le))",
+            "legendFormat": "{{module}} - p95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, le))",
+            "legendFormat": "{{module}} - p99",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Database Query Performance",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(workflow_intelligence_db_query_duration_seconds_bucket[5m])) by (operation, table, le))",
+            "legendFormat": "{{operation}} - {{table}} (p95)",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Query Duration"},
+          {"show": false}
+        ],
+        "alert": {
+          "name": "Slow Database Queries",
+          "conditions": [{
+            "evaluator": {"params": [0.1], "type": "gt"},
+            "query": {"params": ["A", "5m", "now"]},
+            "type": "query"
+          }],
+          "frequency": "1m",
+          "handler": 1,
+          "message": "Database queries are taking longer than 100ms"
+        }
+      },
+      {
+        "id": 8,
+        "title": "Cache Hit Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+        "targets": [{
+          "expr": "sum(rate(workflow_intelligence_cache_hits_total[5m])) / (sum(rate(workflow_intelligence_cache_hits_total[5m])) + sum(rate(workflow_intelligence_cache_misses_total[5m]))) * 100",
+          "legendFormat": "{{cache_type}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "percent", "label": "Hit Rate", "min": 0, "max": 100},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Cases Collected by Module",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+        "targets": [{
+          "expr": "sum(workflow_intelligence_cases_collected_total) by (module, success)",
+          "legendFormat": "{{module}} - {{success}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "short", "label": "Cases"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Similar Cases Found - Distribution",
+        "type": "heatmap",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+        "targets": [{
+          "expr": "workflow_intelligence_similar_cases_found",
+          "format": "heatmap",
+          "refId": "A"
+        }],
+        "dataFormat": "tsbuckets"
+      },
+      {
+        "id": 11,
+        "title": "Database Connection Pool",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 28},
+        "targets": [
+          {
+            "expr": "workflow_intelligence_db_connections_active",
+            "legendFormat": "Active",
+            "refId": "A"
+          },
+          {
+            "expr": "workflow_intelligence_db_connections_idle",
+            "legendFormat": "Idle",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Connections"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Storage Size by Table",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 28},
+        "targets": [{
+          "expr": "workflow_intelligence_storage_size_bytes",
+          "legendFormat": "{{table}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "bytes", "label": "Size"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Cross-Service Learning Queries",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 28},
+        "targets": [{
+          "expr": "sum(rate(workflow_intelligence_cross_service_queries_total[5m])) by (from_module, to_module)",
+          "legendFormat": "{{from_module}} → {{to_module}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "ops", "label": "Queries/sec"},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 14,
+        "title": "ML Prediction Confidence Distribution",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 34},
+        "targets": [{
+          "expr": "histogram_quantile(0.50, sum(rate(workflow_intelligence_ml_prediction_confidence_bucket[5m])) by (prediction_type, le))",
+          "legendFormat": "{{prediction_type}} - median",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "percentunit", "label": "Confidence", "min": 0, "max": 1},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Top Errors (Last Hour)",
+        "type": "table",
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 34},
+        "targets": [{
+          "expr": "topk(10, sum(increase(workflow_intelligence_errors_total[1h])) by (error_type, module, operation))",
+          "format": "table",
+          "refId": "A"
+        }],
+        "transformations": [{
+          "id": "organize",
+          "options": {
+            "excludeByName": {"Time": true},
+            "indexByName": {},
+            "renameByName": {
+              "error_type": "Error Type",
+              "module": "Module",
+              "operation": "Operation",
+              "Value": "Count"
+            }
+          }
+        }]
+      },
+      {
+        "id": 16,
+        "title": "Benchmark Sample Sizes",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 12, "x": 0, "y": 40},
+        "targets": [{
+          "expr": "workflow_intelligence_benchmark_sample_size",
+          "legendFormat": "{{module}} - {{industry}}",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "none",
+          "orientation": "horizontal"
+        }
+      },
+      {
+        "id": 17,
+        "title": "Learning Coverage",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 12, "x": 12, "y": 40},
+        "targets": [{
+          "expr": "workflow_intelligence_learning_coverage",
+          "legendFormat": "{{module}} - {{industry}} - {{org_size}}",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "orientation": "horizontal"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1
+          }
+        }
+      },
+      {
+        "id": 18,
+        "title": "Platform Overview - All Services Status",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 44},
+        "targets": [{
+          "expr": "up{job=~\"planning-service|plans-service|bia-service|compliance-service|risk-service|response-service|validation-service|documents-service|learning-service|governance-service|file-service|community-service\"}",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "mappings": [
+            {"type": "value", "value": "1", "text": "UP", "color": "green"},
+            {"type": "value", "value": "0", "text": "DOWN", "color": "red"}
+          ]
+        }
+      },
+      {
+        "id": 19,
+        "title": "Planning Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 50},
+        "targets": [{
+          "expr": "up{job=\"planning-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 20,
+        "title": "Plans Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 50},
+        "targets": [{
+          "expr": "up{job=\"plans-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 21,
+        "title": "BIA Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 50},
+        "targets": [{
+          "expr": "up{job=\"bia-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 22,
+        "title": "Compliance Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 50},
+        "targets": [{
+          "expr": "up{job=\"compliance-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 23,
+        "title": "Risk Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 54},
+        "targets": [{
+          "expr": "up{job=\"risk-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 24,
+        "title": "Response Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 54},
+        "targets": [{
+          "expr": "up{job=\"response-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 25,
+        "title": "Validation Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 54},
+        "targets": [{
+          "expr": "up{job=\"validation-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 26,
+        "title": "Documents Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 54},
+        "targets": [{
+          "expr": "up{job=\"documents-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 27,
+        "title": "Learning Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 58},
+        "targets": [{
+          "expr": "up{job=\"learning-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 28,
+        "title": "Governance Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 58},
+        "targets": [{
+          "expr": "up{job=\"governance-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 29,
+        "title": "File Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 58},
+        "targets": [{
+          "expr": "up{job=\"file-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 30,
+        "title": "Community Service - Health",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 58},
+        "targets": [{
+          "expr": "up{job=\"community-service\"}",
+          "refId": "A"
+        }],
+        "options": {
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 31,
+        "title": "Request Rate - All Services",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 62},
+        "targets": [{
+          "expr": "sum(rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service|risk-service|response-service|validation-service|documents-service|learning-service|governance-service|file-service|community-service\"}[5m])) by (job)",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"show": false}
+        ],
+        "legend": {"show": true, "alignAsTable": true, "rightSide": false}
+      },
+      {
+        "id": 32,
+        "title": "Error Rate - All Services",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 62},
+        "targets": [{
+          "expr": "sum(rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service|risk-service|response-service|validation-service|documents-service|learning-service|governance-service|file-service|community-service\", status=~\"5..\"}[5m])) by (job)",
+          "legendFormat": "{{job}} - errors",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "reqps", "label": "Errors/sec"},
+          {"show": false}
+        ],
+        "legend": {"show": true, "alignAsTable": true, "rightSide": false},
+        "seriesOverrides": [
+          {"alias": "/.*/", "color": "red"}
+        ]
+      },
+      {
+        "id": 33,
+        "title": "Planning Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 70},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"planning-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"planning-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 34,
+        "title": "Plans Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 70},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"plans-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"plans-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 35,
+        "title": "BIA Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 70},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"bia-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"bia-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 36,
+        "title": "Compliance Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 76},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"compliance-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"compliance-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 37,
+        "title": "Risk Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 76},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"risk-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"risk-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 38,
+        "title": "Response Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 76},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"response-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"response-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 39,
+        "title": "Validation Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 82},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"validation-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"validation-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 40,
+        "title": "Documents Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 82},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"documents-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"documents-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 41,
+        "title": "Learning Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 82},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"learning-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"learning-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 42,
+        "title": "Governance Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 88},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"governance-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"governance-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 43,
+        "title": "File Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 88},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"file-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"file-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 44,
+        "title": "Community Service - Requests & Latency",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 88},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"community-service\"}[5m])",
+            "legendFormat": "Requests/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"community-service\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "B",
+            "yAxisIndex": 1
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests"},
+          {"format": "s", "label": "Latency"}
+        ]
+      },
+      {
+        "id": 45,
+        "title": "Platform-Wide Error Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 94},
+        "targets": [{
+          "expr": "sum(increase(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service|risk-service|response-service|validation-service|documents-service|learning-service|governance-service|file-service|community-service\", status=~\"5..\"}[1h])) by (job)",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }],
+        "options": {
+          "pieType": "donut",
+          "legend": {"show": true, "placement": "right"}
+        }
+      },
+      {
+        "id": 46,
+        "title": "Service Availability (24h)",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 94},
+        "targets": [{
+          "expr": "avg_over_time(up{job=~\"planning-service|plans-service|bia-service|compliance-service|risk-service|response-service|validation-service|documents-service|learning-service|governance-service|file-service|community-service\"}[24h]) * 100",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "orientation": "horizontal"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 95, "color": "yellow"},
+                {"value": 99, "color": "green"}
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "module",
+          "label": "Module",
+          "type": "query",
+          "query": "label_values(workflow_intelligence_actions_total, module)",
+          "multi": true,
+          "includeAll": true
+        },
+        {
+          "name": "industry",
+          "label": "Industry",
+          "type": "query",
+          "query": "label_values(workflow_intelligence_benchmark_sample_size, industry)",
+          "multi": true,
+          "includeAll": true
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Deployments",
+          "datasource": "Prometheus",
+          "expr": "workflow_intelligence_deployment_timestamp",
+          "tagKeys": "version",
+          "textFormat": "Deployed {{version}}"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║             PROJECT AGENT v1.0 — Установка                  ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📍 Местоположение:
+   /Users/maksymdemchenko/Downloads/project-agent/
+
+⚡ БЫСТРАЯ УСТАНОВКА (3 команды):
+
+   1. cd /Users/maksymdemchenko/Downloads/project-agent
+   2. ./install.sh
+   3. cd test-project && export REPO_PATH=$(pwd) && project-agent scan
+
+📖 Документация:
+
+   START_HERE.md    ← НАЧНИ ОТСЮДА!
+   QUICKSTART.md    ← Быстрый старт за 5 минут
+   README.md        ← Полная документация
+   PACKAGE_INFO.md  ← Структура проекта
+
+🎯 Что это:
+
+   • Domain Detection — авто-определение тематики проекта
+   • Security Module — поиск секретов, уязвимостей
+   • Testing Module — анализ покрытия тестами
+   • Quality Module — complexity, duplication, tech debt
+   • Compliance — ISO 22301/27001, PCI-DSS, HIPAA, GDPR
+
+✅ Готово к использованию!
+
+   Открой START_HERE.md для начала работы.
+
+═════════════════════════════════════════════════════════════════

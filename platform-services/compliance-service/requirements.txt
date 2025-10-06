@@ -1,0 +1,38 @@
+# BCM Compliance Service - Dependencies
+
+# FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database (PostgreSQL async)
+sqlalchemy[asyncio]==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Pydantic Settings
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Redis (for EventBus)
+redis==5.0.1
+aioredis==2.0.1
+
+# HTTP Client
+aiohttp==3.9.1
+
+# Utilities
+python-dateutil==2.8.2
+
+# Logging (optional, already in stdlib)
+# python-json-logger==2.0.7  # If you want structured JSON logging
+
+# Prometheus Monitoring
+prometheus-client==0.19.0
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2  # For testing FastAPI
+black==23.12.0
+flake8==6.1.0

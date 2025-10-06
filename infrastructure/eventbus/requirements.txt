@@ -1,0 +1,10 @@
+# EventBus Requirements
+
+# Core (no dependencies for memory backend)
+
+# Optional: Redis backend
+redis>=4.5.0
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0

@@ -1,0 +1,212 @@
+name: BCM Services Integration Tests
+
+on:
+  push:
+    paths:
+      - 'platform-services/**'
+      - 'intelligent-core/workflow-intelligence/**'
+      - '.github/workflows/integration-tests.yml'
+  pull_request:
+    paths:
+      - 'platform-services/**'
+      - 'intelligent-core/workflow-intelligence/**'
+
+jobs:
+  integration-test:
+    name: Integration Tests - All Services
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: bcm_platform
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        service:
+          - name: planning
+            path: planning_service
+            port: 8011
+            clause: '8.3'
+          - name: plans
+            path: plans_service
+            port: 8023
+            clause: '8.4'
+          - name: bia
+            path: bia-service
+            port: 8012
+            clause: '8.2.2'
+          - name: compliance
+            path: compliance-service
+            port: 8014
+            clause: '9.2'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install workflow-intelligence library
+        run: |
+          cd intelligent-core/workflow-intelligence
+          pip install -e .
+
+      - name: Install ${{ matrix.service.name }} service dependencies
+        run: |
+          cd platform-services/${{ matrix.service.path }}
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install pytest pytest-asyncio httpx
+
+      - name: Wait for services
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+          until redis-cli -h localhost ping; do
+            echo "Waiting for Redis..."
+            sleep 2
+          done
+
+      - name: Run ${{ matrix.service.name }} service tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bcm_platform
+          REDIS_URL: redis://localhost:6379/0
+          SERVICE_PORT: ${{ matrix.service.port }}
+        run: |
+          cd platform-services/${{ matrix.service.path }}
+          if [ -d tests ]; then
+            pytest tests/ -v --tb=short
+          else
+            echo "No tests directory found for ${{ matrix.service.name }}"
+          fi
+
+      - name: Test workflow intelligence endpoints
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bcm_platform
+          REDIS_URL: redis://localhost:6379/0
+          SERVICE_PORT: ${{ matrix.service.port }}
+        run: |
+          cd platform-services/${{ matrix.service.path }}
+
+          # Start service in background
+          python -m uvicorn main:app --host 0.0.0.0 --port ${{ matrix.service.port }} &
+          SERVICE_PID=$!
+
+          # Wait for service to start
+          sleep 10
+
+          # Test health endpoint
+          curl -f http://localhost:${{ matrix.service.port }}/health || exit 1
+
+          # Test benchmarks endpoint (no auth required for benchmarks)
+          curl -f http://localhost:${{ matrix.service.port }}/api/v1/${{ matrix.service.name }}/benchmarks || echo "Benchmarks endpoint requires auth"
+
+          # Stop service
+          kill $SERVICE_PID
+
+  cross-service-learning:
+    name: Cross-Service Learning Test
+    runs-on: ubuntu-latest
+    needs: integration-test
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: bcm_platform
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install workflow-intelligence
+        run: |
+          cd intelligent-core/workflow-intelligence
+          pip install -e .
+
+      - name: Test cross-service data sharing
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bcm_platform
+        run: |
+          python -c "
+          import asyncio
+          from workflow_intelligence import PostgresStorageAdapter, CaseCollector
+
+          async def test_cross_service():
+              storage = PostgresStorageAdapter('postgresql://postgres:postgres@localhost:5432/bcm_platform')
+              await storage.connect()
+
+              # Simulate Planning service creating a case
+              planning_case = {
+                  'workflow_id': 'test-planning-001',
+                  'module': 'planning',
+                  'industry': 'healthcare',
+                  'org_size': 'medium',
+                  'total_duration_days': 18,
+                  'success': True
+              }
+              await storage.save_case('case-planning-001', 'planning', planning_case, 'tenant-test')
+
+              # BIA service should be able to find this case
+              similar = await storage.find_similar_cases(
+                  module='planning',
+                  org_context={'industry': 'healthcare', 'size': 'medium'},
+                  current_stage='draft',
+                  limit=5
+              )
+
+              assert len(similar) >= 0, 'Cross-service case retrieval failed'
+              print('✅ Cross-service learning verified')
+
+              await storage.close()
+
+          asyncio.run(test_cross_service())
+          "

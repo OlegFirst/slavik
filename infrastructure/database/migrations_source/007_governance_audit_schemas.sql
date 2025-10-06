@@ -51,15 +51,15 @@ CREATE INDEX idx_policies_status ON governance.policies(status);
 CREATE INDEX idx_policies_type ON governance.policies(policy_type);
 
 CREATE TRIGGER update_policies_updated_at BEFORE UPDATE ON governance.policies
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE governance.policies ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Policies visible to org members" ON governance.policies FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Policies manageable by org admins" ON governance.policies FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE governance.policies IS 'BCM policies per ISO 22301:2019 Clause 5';
 
@@ -91,10 +91,10 @@ CREATE INDEX idx_roles_assigned_team ON governance.roles(assigned_to_team_id);
 ALTER TABLE governance.roles ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Roles visible to org members" ON governance.roles FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Roles manageable by org admins" ON governance.roles FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE governance.roles IS 'BCM roles and responsibilities per ISO 22301:2019 Clause 5';
 
@@ -132,15 +132,15 @@ CREATE INDEX idx_objectives_status ON governance.objectives(status);
 CREATE INDEX idx_objectives_owner ON governance.objectives(owner_id);
 
 CREATE TRIGGER update_objectives_updated_at BEFORE UPDATE ON governance.objectives
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE governance.objectives ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Objectives visible to org members" ON governance.objectives FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Objectives manageable by org admins" ON governance.objectives FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE governance.objectives IS 'BCM objectives per ISO 22301:2019 Clause 6';
 
@@ -200,8 +200,8 @@ ALTER TABLE audit.logs ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Audit logs visible to org admins" ON audit.logs FOR SELECT
     USING (
-        auth.is_org_admin(organization_id)
-        OR auth.is_platform_admin()
+        public.is_org_admin(organization_id)
+        OR public.is_platform_admin()
     );
 
 -- Only system can insert audit logs
@@ -244,7 +244,7 @@ CREATE INDEX idx_events_org ON audit.domain_events(organization_id, occurred_at 
 ALTER TABLE audit.domain_events ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Domain events visible to org members" ON audit.domain_events FOR SELECT
-    USING (auth.is_org_member(organization_id) OR auth.is_platform_admin());
+    USING (public.is_org_member(organization_id) OR public.is_platform_admin());
 
 -- Only system can insert events
 CREATE POLICY "Domain events insertable by system" ON audit.domain_events FOR INSERT

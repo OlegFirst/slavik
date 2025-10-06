@@ -1,0 +1,58 @@
+# Digital Twin Universal Service - Dependencies
+
+# Core Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy[asyncio]==2.0.25
+asyncpg==0.29.0
+alembic==1.13.1
+
+# Cache
+redis[hiredis]==5.0.1
+
+# HTTP Clients
+httpx==0.26.0
+aiohttp==3.9.1
+
+# Data Collection
+simple-salesforce==1.12.5
+hubspot-api-client==8.2.1
+
+# Data Processing
+python-Levenshtein==0.23.0
+fuzzywuzzy==0.18.0
+
+# Scientific Computing (Monte Carlo + Queue Theory)
+numpy>=1.24.0
+scipy>=1.10.0
+ciw>=3.1.0  # Queue theory simulation (M/M/c queues, Erlang C)
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+python-multipart==0.0.6
+
+# Logging
+structlog==24.1.0
+
+# Date & Time
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Validation
+email-validator==2.1.0
+phonenumbers==8.13.27
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+
+# Development
+black==24.1.1
+ruff==0.1.14
+mypy==1.8.0

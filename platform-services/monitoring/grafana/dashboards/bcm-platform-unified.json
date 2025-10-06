@@ -1,0 +1,393 @@
+{
+  "dashboard": {
+    "title": "BCM Platform - Unified Monitoring Dashboard",
+    "tags": ["bcm", "iso22301", "platform", "unified"],
+    "timezone": "browser",
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "🏥 Service Health Overview",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "bcm_service_up{service_type=\"bcm\"}",
+            "legendFormat": "{{service_name}}"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            },
+            "mappings": [
+              {"type": "value", "value": "0", "text": "DOWN"},
+              {"type": "value", "value": "1", "text": "UP"}
+            ]
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 2,
+        "title": "📊 HTTP Request Rate (All BCM Services)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m])",
+            "legendFormat": "{{service}} - {{method}} {{endpoint}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "🚨 HTTP Error Rate (4xx, 5xx)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service\",status=~\"4..|5..\"}[5m])",
+            "legendFormat": "{{service}} - {{status}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+        "yaxes": [
+          {"format": "reqps", "label": "Errors/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "⚡ Request Latency (p95, p99)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m]))",
+            "legendFormat": "{{service}} - p95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m]))",
+            "legendFormat": "{{service}} - p99"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+        "yaxes": [
+          {"format": "s", "label": "Latency"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "📈 Service Response Time (from Monitoring Service)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "bcm_service_response_time_seconds{service_name=~\"planning_service|plans_service|bia_service|compliance_service\"}",
+            "legendFormat": "{{service_name}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
+        "yaxes": [
+          {"format": "s", "label": "Response Time"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "💼 Business Metrics - Planning Service",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(planning_service_strategies_created_total)",
+            "legendFormat": "Total Strategies"
+          },
+          {
+            "expr": "sum(planning_service_strategies_approved_total)",
+            "legendFormat": "Approved Strategies"
+          },
+          {
+            "expr": "sum(planning_service_cost_benefit_calculations_total)",
+            "legendFormat": "Cost-Benefit Analyses"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 22},
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 7,
+        "title": "📋 Business Metrics - Plans Service",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(plans_service_plans_created_total)",
+            "legendFormat": "Total Plans"
+          },
+          {
+            "expr": "sum(plans_service_plans_approved_total)",
+            "legendFormat": "Approved Plans"
+          },
+          {
+            "expr": "sum(plans_service_procedures_added_total)",
+            "legendFormat": "Total Procedures"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 6, "x": 6, "y": 22},
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 8,
+        "title": "🎯 Business Metrics - BIA Service",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(bcm_bia_total)",
+            "legendFormat": "Total BIA Processes"
+          },
+          {
+            "expr": "avg(bcm_bia_rto_average_hours)",
+            "legendFormat": "Avg RTO (hours)"
+          },
+          {
+            "expr": "avg(bcm_bia_rpo_average_hours)",
+            "legendFormat": "Avg RPO (hours)"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 6, "x": 12, "y": 22},
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 9,
+        "title": "✅ Business Metrics - Compliance Service",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(bcm_compliance_score)",
+            "legendFormat": "Compliance Score"
+          },
+          {
+            "expr": "sum(bcm_incidents_total)",
+            "legendFormat": "Total Incidents"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 6, "x": 18, "y": 22},
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 10,
+        "title": "🗄️ Database Connection Pool",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "database_connections_active{job=~\"planning-service|plans-service|bia-service|compliance-service\"}",
+            "legendFormat": "{{service}} - active"
+          },
+          {
+            "expr": "database_connections_idle{job=~\"planning-service|plans-service|bia-service|compliance-service\"}",
+            "legendFormat": "{{service}} - idle"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 28},
+        "yaxes": [
+          {"format": "short", "label": "Connections"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 11,
+        "title": "📡 EventBus Messages Published",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(eventbus_messages_published_total{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m])",
+            "legendFormat": "{{service}} - {{event_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 28},
+        "yaxes": [
+          {"format": "msg/s", "label": "Messages/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 12,
+        "title": "🔥 Top 10 Slowest Endpoints",
+        "type": "table",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "topk(10, histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m])))",
+            "legendFormat": "{{service}} {{method}} {{endpoint}}",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 36},
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "p95 Latency (s)"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "💥 Error Rate by Endpoint",
+        "type": "table",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "topk(10, rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service\",status=~\"5..\"}[5m]))",
+            "legendFormat": "{{service}} {{method}} {{endpoint}}",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 36},
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Errors/sec"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "📊 ISO 22301 Coverage",
+        "type": "piechart",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(planning_service_strategies_created_total)",
+            "legendFormat": "8.3 Strategies"
+          },
+          {
+            "expr": "sum(plans_service_plans_created_total)",
+            "legendFormat": "8.4 Plans"
+          },
+          {
+            "expr": "sum(bcm_bia_total)",
+            "legendFormat": "8.2.2 BIA"
+          },
+          {
+            "expr": "sum(bcm_incidents_total)",
+            "legendFormat": "9.2/10.1/10.2 Compliance"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 44},
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right"
+          }
+        }
+      },
+      {
+        "id": 15,
+        "title": "⏱️ Average Response Time Trend",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "avg(rate(http_request_duration_seconds_sum{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m])) by (service)",
+            "legendFormat": "{{service}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 44},
+        "yaxes": [
+          {"format": "s", "label": "Avg Response Time"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 16,
+        "title": "🎯 Request Success Rate",
+        "type": "gauge",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "(sum(rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service\",status!~\"5..\"}[5m])) / sum(rate(http_requests_total{job=~\"planning-service|plans-service|bia-service|compliance-service\"}[5m]))) * 100",
+            "legendFormat": "Success Rate %"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 44},
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 95, "color": "yellow"},
+                {"value": 99, "color": "green"}
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "version": 2,
+    "schemaVersion": 36
+  }
+}

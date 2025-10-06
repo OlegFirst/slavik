@@ -1,25 +1,26 @@
 # 🏗️ AI-Powered BCM Platform - Unified Architecture Specification
 
-**Version**: 8.3 Final
+**Version**: 8.4 Final
 **Date**: 2025-10-06
 **Status**: ✅ Production Architecture (V7 Improved + Complete Platform)
 **Author**: Architecture Team
-**Latest Update**: Убрано дублирование digital_twin, обновлён workflow-engine
+**Latest Update**: Добавлен knowledge-system модуль, ISO-22301-Library → data/knowledge/standards/iso/
 
 ---
 
 ## 📋 Executive Summary
 
-This document describes the **complete production architecture** of the AI-Powered BCM Platform, including all 8 major components:
+This document describes the **complete production architecture** of the AI-Powered BCM Platform, including all 9 major components:
 
-1. **intelligent-core/** - AI intelligence layer (workflow + AI foundation + domain expertise)
+1. **intelligent-core/** - AI intelligence layer (workflow + AI foundation + domain expertise + knowledge-system)
 2. **shared/** - Common libraries used across all services
 3. **infrastructure/** - Core infrastructure services
 4. **platform-services/** - 12 production BCM microservices
 5. **human-interface/** - User-facing interfaces (API Gateway + Web App)
-6. **tools/** - Development and operational tools
-7. **tests/** - Testing infrastructure
-8. **ISO-22301-Library/** - BCM knowledge base
+6. **data/** - Centralized data storage (knowledge, cases, cache) ✅ NEW
+7. **tools/** - Development and operational tools
+8. **tests/** - Testing infrastructure
+9. **scripts/** - Operational scripts
 
 **Key Architecture Decision**: V7 Improved with ai-foundation separation + shared libraries layer.
 
@@ -65,6 +66,12 @@ AI-Platform-ISO/
 │   ├── ai-foundation/             # AI Infrastructure (RAG, ML, Learning)
 │   ├── workflow_intelligence/     # Workflow Engine (THE BRAIN)
 │   ├── expertise-center/          # Domain Plugins (BCM, HR, Finance)
+│   ├── knowledge-system/          # 📚 KNOWLEDGE MANAGEMENT SYSTEM ✅ NEW
+│   │   ├── loader/                # Standards & Case loaders
+│   │   ├── updater/               # Auto-update workflows
+│   │   ├── indexer/               # Vector/Graph indexing
+│   │   ├── api/                   # Unified Knowledge API
+│   │   └── config/                # domains.yaml, sources.yaml
 │   │
 │   ├── orchestration/             # 🎯 ORCHESTRATION LAYER
 │   │   ├── coordination-center/   # AI → Tools посредник (port 8004, 2,526 LOC)
@@ -89,7 +96,8 @@ AI-Platform-ISO/
 │   ├── predictive/                # 🔮 PREDICTIVE SERVICES
 │   ├── learning-system/           # 📚 LEARNING SYSTEM
 │   ├── living-docs/               # 📖 LIVING DOCUMENTATION
-│   ├── workflow-engine/           # 🔄 UNIFIED WORKFLOW ENGINE (renamed from platform-core)
+│   ├── platform-core/             # 🔄 PLATFORM CORE (workflow, etc.)
+│   │   └── workflow/              # Unified Workflow Engine (BPMN + AI)
 │   ├── bcm_offices/               # BCM Offices (experimental, → _archive)
 │   └── _archive/                  # Archive
 │
@@ -165,16 +173,33 @@ AI-Platform-ISO/
 │   ├── e2e/
 │   └── performance/
 │
-├── ISO-22301-Library/             # 📖 BCM KNOWLEDGE BASE
-│   ├── BSI-ISO-22301-Implementation-Guide.pdf
-│   ├── ISO-22301-2019-Implementation-Guide.pdf
-│   ├── NQA-ISO-22301-Implementation-Guide.pdf
-│   ├── iso_bci_platform_mapping.md
-│   ├── README.md
-│   └── standards/
+├── data/                          # 📊 CENTRALIZED DATA STORAGE ✅ NEW
+│   ├── knowledge/                 # Domain knowledge (Standards, Research, Regulatory)
+│   │   ├── standards/             # ISO, BCI, WHO, NIST standards
+│   │   │   ├── iso/
+│   │   │   │   └── iso-22301/     # Moved from /ISO-22301-Library
+│   │   │   ├── bci/               # BCI GPG
+│   │   │   ├── who/               # WHO Framework
+│   │   │   └── nist/              # NIST frameworks
+│   │   ├── research/              # Consulting research (Deloitte, McKinsey, etc.)
+│   │   └── regulatory/            # GDPR, HIPAA, SOX
+│   │
+│   ├── cases/                     # Living case library
+│   │   ├── workflow_cases/        # Completed workflows (BIA, Risk, etc.)
+│   │   ├── community_cases/       # Community marketplace cases
+│   │   └── simulation_cases/      # Simulation results
+│   │
+│   ├── external/                  # Auto-updated external sources
+│   │   ├── iso_updates/           # ISO standard updates
+│   │   ├── regulatory_changes/    # Regulatory changes
+│   │   └── threat_intelligence/   # Threat feeds
+│   │
+│   └── cache/                     # Performance cache
+│       ├── embeddings/            # Vector embeddings
+│       ├── parsed/                # Parsed documents
+│       └── indexed/               # Search indexes
 │
 ├── scripts/                       # 🚀 OPERATIONAL SCRIPTS
-├── data/                          # 📊 DATA FILES
 ├── doc-project/                   # 📝 PROJECT DOCUMENTATION
 │
 ├── .env                           # Environment Variables

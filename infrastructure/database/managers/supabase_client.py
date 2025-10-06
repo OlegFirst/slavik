@@ -8,6 +8,7 @@ from typing import Optional, Dict, Any
 from supabase import create_client, Client
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.pool import NullPool
+from sqlalchemy import text
 import logging
 
 logger = logging.getLogger(__name__)
@@ -80,7 +81,7 @@ class SupabaseManager:
 
             # Test connection
             async with self.engine.begin() as conn:
-                await conn.execute("SELECT 1")
+                await conn.execute(text("SELECT 1"))
 
             logger.info("✅ PostgreSQL connection pool initialized")
 
@@ -111,7 +112,7 @@ class SupabaseManager:
         # Check PostgreSQL
         try:
             async with self.engine.begin() as conn:
-                result = await conn.execute("SELECT 1")
+                result = await conn.execute(text("SELECT 1"))
                 health["postgres"] = result.scalar() == 1
         except Exception as e:
             logger.error(f"PostgreSQL health check failed: {e}")
@@ -135,11 +136,11 @@ class SupabaseManager:
 
     # Auth methods
     def sign_up(self, email: str, password: str, user_metadata: Optional[Dict] = None):
-        """Sign up new user"""
+        """Sign up new user (requires email confirmation disabled in Supabase)"""
         return self.client.auth.sign_up({
             "email": email,
             "password": password,
-            "options": {"data": user_metadata} if user_metadata else None
+            "options": {"data": user_metadata} if user_metadata else {}
         })
 
     def sign_in(self, email: str, password: str):

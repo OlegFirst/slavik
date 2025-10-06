@@ -58,15 +58,15 @@ CREATE INDEX idx_bia_processes_criticality ON bia.processes(criticality_level);
 CREATE INDEX idx_bia_processes_owner ON bia.processes(process_owner_id);
 
 CREATE TRIGGER update_bia_processes_updated_at BEFORE UPDATE ON bia.processes
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bia.processes ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "BIA processes visible to org members" ON bia.processes FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "BIA processes manageable by org admins" ON bia.processes FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bia.processes IS 'Business processes with impact analysis per ISO 22301:2019 Clause 8.2.2';
 
@@ -100,7 +100,7 @@ CREATE POLICY "BIA templates visible to org or public" ON bia.templates FOR SELE
     USING (
         is_public = true
         OR organization_id IS NULL
-        OR auth.is_org_member(organization_id)
+        OR public.is_org_member(organization_id)
     );
 
 COMMENT ON TABLE bia.templates IS 'BIA templates for different industries';
@@ -164,15 +164,15 @@ CREATE INDEX idx_risks_category ON risk.risks(risk_category);
 CREATE INDEX idx_risks_owner ON risk.risks(risk_owner_id);
 
 CREATE TRIGGER update_risks_updated_at BEFORE UPDATE ON risk.risks
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE risk.risks ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Risks visible to org members" ON risk.risks FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Risks manageable by org admins" ON risk.risks FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE risk.risks IS 'Risk register per ISO 22301:2019 Clause 8.2.3';
 
@@ -209,15 +209,15 @@ CREATE INDEX idx_controls_org ON risk.controls(organization_id);
 CREATE INDEX idx_controls_status ON risk.controls(implementation_status);
 
 CREATE TRIGGER update_controls_updated_at BEFORE UPDATE ON risk.controls
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE risk.controls ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Controls visible to org members" ON risk.controls FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Controls manageable by org admins" ON risk.controls FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE risk.controls IS 'Risk controls and mitigation measures';
 

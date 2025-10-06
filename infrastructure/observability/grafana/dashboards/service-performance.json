@@ -1,0 +1,861 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "service-performance",
+    "title": "Service Performance Dashboard",
+    "tags": ["services", "performance", "bcm", "monitoring"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "templating": {
+      "list": [
+        {
+          "name": "service_name",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(http_requests_total, job)",
+          "multi": true,
+          "includeAll": true,
+          "refresh": 1,
+          "allValue": ".*"
+        },
+        {
+          "name": "endpoint",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(http_requests_total{job=~\"$service_name\"}, endpoint)",
+          "multi": true,
+          "includeAll": true,
+          "refresh": 1,
+          "allValue": ".*"
+        },
+        {
+          "name": "time_range",
+          "type": "interval",
+          "query": "5m,15m,30m,1h,6h,12h,1d",
+          "auto": false,
+          "current": {
+            "text": "5m",
+            "value": "5m"
+          }
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Service Deployments",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "changes(process_start_time_seconds{job=~\"$service_name\"}[5m]) > 0",
+          "iconColor": "blue",
+          "tagKeys": "deployment"
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Service Health Matrix",
+        "type": "stat",
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=~\"$service_name\"}",
+            "refId": "A",
+            "legendFormat": "{{job}} ({{instance}})"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "DOWN",
+                    "color": "red"
+                  },
+                  "1": {
+                    "text": "UP",
+                    "color": "green"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 2,
+        "title": "HTTP Request Rate by Service",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(rate(http_requests_total{job=~\"$service_name\"}[$time_range])) by (job)",
+            "refId": "A",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Requests/sec",
+              "axisPlacement": "auto"
+            },
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "HTTP Error Rate (4xx, 5xx)",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(rate(http_requests_total{job=~\"$service_name\",status=~\"4..|5..\"}[$time_range])) by (job, status)",
+            "refId": "A",
+            "legendFormat": "{{job}} - {{status}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Errors/sec",
+              "axisPlacement": "auto"
+            },
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Response Time - p95 Latency",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 14
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=~\"$service_name\"}[$time_range])) by (job, le))",
+            "refId": "A",
+            "legendFormat": "{{job}} - p95"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Latency",
+              "axisPlacement": "auto"
+            },
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Response Time - p99 Latency",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 14
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job=~\"$service_name\"}[$time_range])) by (job, le))",
+            "refId": "A",
+            "legendFormat": "{{job}} - p99"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Latency",
+              "axisPlacement": "auto"
+            },
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "BCM Services - Odoo Platform",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 22
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=\"odoo\",instance=\"localhost:8069\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "text": "UP"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 7,
+        "title": "AI Orchestrator",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 22
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=\"ai-orchestrator\",instance=\"localhost:8000\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "text": "UP"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 8,
+        "title": "Notification Service",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 22
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=\"notification-service\",instance=\"localhost:8002\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "text": "UP"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 9,
+        "title": "Document Processor",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 22
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=\"document-processor\",instance=\"localhost:8083\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "text": "UP"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 10,
+        "title": "Service Uptime Over Time",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "up{job=~\"$service_name\"}",
+            "refId": "A",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Status",
+              "axisPlacement": "auto"
+            },
+            "min": 0,
+            "max": 1
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "Planning Service - Strategies Created",
+        "type": "stat",
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 0,
+          "y": 34
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(planning_service_strategies_created_total)",
+            "refId": "A"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(planning_service_strategies_approved_total)",
+            "refId": "B"
+          }
+        ],
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 12,
+        "title": "Plans Service - Plans Created",
+        "type": "stat",
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 6,
+          "y": 34
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(plans_service_plans_created_total)",
+            "refId": "A"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(plans_service_plans_approved_total)",
+            "refId": "B"
+          }
+        ],
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 13,
+        "title": "BIA Service - Processes",
+        "type": "stat",
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 12,
+          "y": 34
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_bia_total)",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 14,
+        "title": "Compliance Service - Score",
+        "type": "gauge",
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 18,
+          "y": 34
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_compliance_score)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 70
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 15,
+        "title": "Database Connection Pool by Service",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 40
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "database_connections_active{job=~\"$service_name\"}",
+            "refId": "A",
+            "legendFormat": "{{job}} - active"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "database_connections_idle{job=~\"$service_name\"}",
+            "refId": "B",
+            "legendFormat": "{{job}} - idle"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Connections",
+              "axisPlacement": "auto"
+            }
+          }
+        }
+      },
+      {
+        "id": 16,
+        "title": "EventBus Messages Published",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "rate(eventbus_messages_published_total{job=~\"$service_name\"}[$time_range])",
+            "refId": "A",
+            "legendFormat": "{{job}} - {{event_type}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Messages/sec",
+              "axisPlacement": "auto"
+            }
+          }
+        }
+      },
+      {
+        "id": 17,
+        "title": "Top 10 Slowest Endpoints",
+        "type": "table",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 48
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "topk(10, histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=~\"$service_name\"}[$time_range])) by (job, endpoint, le)))",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true
+              },
+              "renameByName": {
+                "job": "Service",
+                "endpoint": "Endpoint",
+                "Value": "p95 Latency (s)"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Endpoint Error Rate",
+        "type": "table",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 48
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "topk(10, sum(rate(http_requests_total{job=~\"$service_name\",status=~\"5..\"}[$time_range])) by (job, endpoint, status))",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true
+              },
+              "renameByName": {
+                "job": "Service",
+                "endpoint": "Endpoint",
+                "status": "Status",
+                "Value": "Errors/sec"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Service Success Rate",
+        "type": "gauge",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 56
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "(sum(rate(http_requests_total{job=~\"$service_name\",status!~\"5..\"}[$time_range])) by (job) / sum(rate(http_requests_total{job=~\"$service_name\"}[$time_range])) by (job)) * 100",
+            "refId": "A",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 95
+                },
+                {
+                  "color": "green",
+                  "value": 99
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 20,
+        "title": "Service Throughput",
+        "type": "stat",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 56
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(rate(http_requests_total{job=~\"$service_name\"}[$time_range])) by (job)",
+            "refId": "A",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps"
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 21,
+        "title": "Service Dependencies Graph (Blackbox Monitoring)",
+        "type": "text",
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 64
+        },
+        "options": {
+          "content": "# Service Dependencies\n\n**Core BCM Services:**\n- Odoo BCM Platform (8069) → AI Orchestrator (8000)\n- AI Orchestrator → Planning Service, Plans Service, BIA Service, Compliance Service\n- Notification Service (8002) ← All Services\n- Document Processor (8083) ← Planning Service, Plans Service\n\n**Platform Services:**\n- PostgreSQL (5432) ← All Services\n- Redis (6379) ← All Services\n- EventBus ← All Services\n\n**Monitoring Stack:**\n- Prometheus (9090) → All Services\n- Grafana (3000) → Prometheus\n- Blackbox Exporter (9115) → Endpoint Health Checks"
+        }
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "schemaVersion": 36,
+    "version": 1
+  }
+}

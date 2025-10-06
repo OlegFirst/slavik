@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS compliance.improvement_initiatives (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- Identification
     initiative_code VARCHAR(50) NOT NULL,  -- IMP-2024-001 (unique per organization)
@@ -200,7 +200,7 @@ CREATE POLICY improvement_initiatives_org_access
 ON compliance.improvement_initiatives
 USING (
     organization_id IN (
-        SELECT id FROM core.organizations
+        SELECT id FROM public.organizations
         WHERE tenant_id = current_setting('app.current_tenant_id', true)::text
     )
 );
@@ -220,7 +220,7 @@ USING (
 CREATE TRIGGER update_improvements_updated_at
 BEFORE UPDATE ON compliance.improvement_initiatives
 FOR EACH ROW
-EXECUTE FUNCTION core.update_updated_at_column();
+EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Trigger: Auto-generate initiative_code if not provided
 CREATE OR REPLACE FUNCTION compliance.generate_improvement_code()

@@ -59,7 +59,7 @@ CREATE INDEX idx_policy_versions_status ON governance.policy_versions(status);
 ALTER TABLE governance.policy_versions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Policy versions visible to org members" ON governance.policy_versions FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE governance.policy_versions IS 'Policy version history for audit trail';
 
@@ -154,15 +154,15 @@ CREATE INDEX idx_bcm_resources_critical ON bcm.resources(is_critical_resource) W
 CREATE INDEX idx_bcm_resources_spof ON bcm.resources(single_point_of_failure) WHERE single_point_of_failure = TRUE;
 
 CREATE TRIGGER update_bcm_resources_updated_at BEFORE UPDATE ON bcm.resources
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.resources ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "BCM resources visible to org members" ON bcm.resources FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "BCM resources manageable by org admins" ON bcm.resources FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.resources IS 'BCM resources per ISO 22301:2019 Clause 7.1';
 
@@ -234,12 +234,12 @@ CREATE INDEX idx_competence_records_status ON bcm.competence_records(status);
 CREATE INDEX idx_competence_records_expiring ON bcm.competence_records(certification_expiry_date) WHERE certification_expiry_date IS NOT NULL AND status = 'current';
 
 CREATE TRIGGER update_competence_records_updated_at BEFORE UPDATE ON bcm.competence_records
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.competence_records ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Competence records visible to org members" ON bcm.competence_records FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Users see their own competence records" ON bcm.competence_records FOR SELECT
     USING (user_id = auth.uid());
@@ -322,15 +322,15 @@ CREATE INDEX idx_comm_plans_status ON bcm.communication_plans(status);
 CREATE INDEX idx_comm_plans_active ON bcm.communication_plans(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_comm_plans_updated_at BEFORE UPDATE ON bcm.communication_plans
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.communication_plans ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Communication plans visible to org members" ON bcm.communication_plans FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Communication plans manageable by org admins" ON bcm.communication_plans FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.communication_plans IS 'Communication plans per ISO 22301:2019 Clause 7.4';
 
@@ -432,15 +432,15 @@ CREATE INDEX idx_compliance_requirements_search ON compliance.requirements USING
 CREATE INDEX idx_compliance_requirements_non_compliant ON compliance.requirements(compliance_status) WHERE compliance_status IN ('non_compliant', 'partially_compliant');
 
 CREATE TRIGGER update_compliance_requirements_updated_at BEFORE UPDATE ON compliance.requirements
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE compliance.requirements ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Compliance requirements visible to org members" ON compliance.requirements FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Compliance requirements manageable by org admins" ON compliance.requirements FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE compliance.requirements IS 'Compliance requirements from various frameworks';
 
@@ -511,12 +511,12 @@ CREATE INDEX idx_compliance_evidence_current ON compliance.evidence(is_current) 
 CREATE INDEX idx_compliance_evidence_expiring ON compliance.evidence(valid_until) WHERE is_current = TRUE AND valid_until IS NOT NULL;
 
 CREATE TRIGGER update_compliance_evidence_updated_at BEFORE UPDATE ON compliance.evidence
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE compliance.evidence ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Compliance evidence visible to org members" ON compliance.evidence FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE compliance.evidence IS 'Evidence of compliance with requirements';
 
@@ -580,12 +580,12 @@ CREATE INDEX idx_compliance_assessments_status ON compliance.assessments(complia
 CREATE INDEX idx_compliance_assessments_date ON compliance.assessments(assessment_date DESC);
 
 CREATE TRIGGER update_compliance_assessments_updated_at BEFORE UPDATE ON compliance.assessments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE compliance.assessments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Compliance assessments visible to org members" ON compliance.assessments FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE compliance.assessments IS 'Compliance assessments for requirements';
 
@@ -644,15 +644,15 @@ CREATE INDEX idx_compliance_gaps_org ON compliance.gaps(organization_id);
 CREATE INDEX idx_compliance_gaps_severity ON compliance.gaps(severity);
 CREATE INDEX idx_compliance_gaps_status ON compliance.gaps(status);
 CREATE INDEX idx_compliance_gaps_open ON compliance.gaps(status) WHERE status NOT IN ('closed', 'accepted_risk');
-CREATE INDEX idx_compliance_gaps_overdue ON compliance.gaps(target_closure_date) WHERE status NOT IN ('closed', 'accepted_risk') AND target_closure_date < CURRENT_DATE;
+CREATE INDEX idx_compliance_gaps_overdue ON compliance.gaps(target_closure_date) WHERE status NOT IN ('closed', 'accepted_risk');
 
 CREATE TRIGGER update_compliance_gaps_updated_at BEFORE UPDATE ON compliance.gaps
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE compliance.gaps ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Compliance gaps visible to org members" ON compliance.gaps FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE compliance.gaps IS 'Compliance gaps and remediation tracking';
 

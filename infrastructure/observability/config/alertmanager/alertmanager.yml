@@ -1,0 +1,272 @@
+# AlertManager Configuration for BCM Platform
+global:
+  smtp_smarthost: '${SMTP_HOST:-localhost:587}'
+  smtp_from: '${ALERT_EMAIL_FROM:-alerts@bcm-platform.local}'
+  smtp_auth_username: '${SMTP_USERNAME:-}'
+  smtp_auth_password: '${SMTP_PASSWORD:-}'
+  smtp_require_tls: true
+  
+  # Default routing options
+  resolve_timeout: 5m
+  
+  # Slack webhook URL for team notifications
+  slack_api_url: '${SLACK_WEBHOOK_URL:-}'
+  
+  # PagerDuty integration key
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Notification templates
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Alert routing configuration
+route:
+  group_by: ['alertname', 'service', 'severity']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default'
+  
+  routes:
+    # Critical BCM Platform alerts - immediate response required
+    - match:
+        severity: critical
+      receiver: 'bcm-critical-alerts'
+      group_wait: 5s
+      repeat_interval: 15m
+      routes:
+        # BCM Platform core service issues
+        - match:
+            service: bcm-platform
+            component: core
+          receiver: 'bcm-core-critical'
+          
+        # Database critical issues
+        - match:
+            service: bcm-platform
+            component: database
+          receiver: 'bcm-database-critical'
+          
+        # Critical business continuity incidents
+        - match:
+            component: incident-management
+          receiver: 'bcm-incident-critical'
+          
+        # Integration service failures
+        - match_re:
+            component: '(thehive-integration|moodle-integration)'
+          receiver: 'bcm-integration-critical'
+
+    # Warning level alerts
+    - match:
+        severity: warning
+      receiver: 'bcm-warning-alerts'
+      group_wait: 30s
+      repeat_interval: 4h
+      
+    # Business continuity specific alerts
+    - match_re:
+        component: '(incident-management|plan-management|training)'
+      receiver: 'bcm-business-alerts'
+      group_wait: 15s
+      repeat_interval: 2h
+      
+    # System resource alerts
+    - match:
+        component: system
+      receiver: 'system-alerts'
+      group_wait: 1m
+      repeat_interval: 6h
+      
+    # SSL certificate alerts
+    - match:
+        component: ssl
+      receiver: 'ssl-alerts'
+      repeat_interval: 24h
+      
+    # Endpoint monitoring alerts
+    - match:
+        component: endpoint
+      receiver: 'endpoint-alerts'
+      repeat_interval: 1h
+
+# Alert receivers
+receivers:
+  # Default receiver
+  - name: 'default'
+    email_configs:
+      - to: '${DEFAULT_ALERT_EMAIL:-admin@bcm-platform.local}'
+        subject: '[BCM Platform] Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Service: {{ .Labels.service }}
+          Component: {{ .Labels.component }}
+          Severity: {{ .Labels.severity }}
+          Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+          {{ end }}
+
+  # Critical BCM Platform alerts
+  - name: 'bcm-critical-alerts'
+    pagerduty_configs:
+      - routing_key: '${PAGERDUTY_BCM_CRITICAL_KEY:-}'
+        description: '[CRITICAL] BCM Platform: {{ .GroupLabels.alertname }}'
+        details:
+          service: '{{ .GroupLabels.service }}'
+          component: '{{ .GroupLabels.component }}'
+          severity: '{{ .GroupLabels.severity }}'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL:-}'
+        channel: '#bcm-alerts-critical'
+        color: 'danger'
+        title: '[CRITICAL] BCM Platform Alert'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Service:* {{ .Labels.service }}
+          *Component:* {{ .Labels.component }}
+          *Started:* {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+          {{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+          {{ end }}
+    email_configs:
+      - to: '${BCM_CRITICAL_EMAIL:-bcm-team@company.com}'
+        subject: '[CRITICAL] BCM Platform Alert: {{ .GroupLabels.alertname }}'
+        headers:
+          X-Priority: '1'
+        body: |
+          CRITICAL ALERT - Immediate attention required
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Service: {{ .Labels.service }}
+          Component: {{ .Labels.component }}
+          Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+          {{ if .Annotations.runbook_url }}
+          Runbook: {{ .Annotations.runbook_url }}
+          {{ end }}
+          
+          {{ end }}
+
+  # BCM Core service critical alerts
+  - name: 'bcm-core-critical'
+    pagerduty_configs:
+      - routing_key: '${PAGERDUTY_BCM_CORE_KEY:-}'
+        description: '[CRITICAL] BCM Platform Core: {{ .GroupLabels.alertname }}'
+    email_configs:
+      - to: '${BCM_CORE_EMAIL:-platform-team@company.com}'
+        subject: '[CRITICAL] BCM Platform Core: {{ .GroupLabels.alertname }}'
+        body: |
+          CRITICAL: BCM Platform core service issue detected
+          
+          This requires immediate attention as it affects business continuity operations.
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+          {{ end }}
+
+  # Database critical alerts
+  - name: 'bcm-database-critical'
+    pagerduty_configs:
+      - routing_key: '${PAGERDUTY_DATABASE_KEY:-}'
+        description: '[CRITICAL] BCM Platform Database: {{ .GroupLabels.alertname }}'
+    email_configs:
+      - to: '${DATABASE_TEAM_EMAIL:-dba@company.com}'
+        subject: '[CRITICAL] BCM Platform Database: {{ .GroupLabels.alertname }}'
+
+  # Business continuity incident alerts
+  - name: 'bcm-incident-critical'
+    pagerduty_configs:
+      - routing_key: '${PAGERDUTY_BCM_INCIDENT_KEY:-}'
+        description: '[CRITICAL] BCM Incident: {{ .GroupLabels.alertname }}'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL:-}'
+        channel: '#bcm-incidents'
+        color: 'danger'
+        title: '[CRITICAL] BCM Incident Alert'
+    email_configs:
+      - to: '${BCM_INCIDENT_TEAM_EMAIL:-incident-response@company.com}'
+        subject: '[CRITICAL] BCM Incident Alert: {{ .GroupLabels.alertname }}'
+
+  # Integration service critical alerts
+  - name: 'bcm-integration-critical'
+    email_configs:
+      - to: '${INTEGRATION_TEAM_EMAIL:-integrations@company.com}'
+        subject: '[CRITICAL] BCM Integration Service: {{ .GroupLabels.alertname }}'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL:-}'
+        channel: '#bcm-integrations'
+        color: 'danger'
+
+  # Warning level alerts
+  - name: 'bcm-warning-alerts'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL:-}'
+        channel: '#bcm-alerts-warning'
+        color: 'warning'
+        title: '[WARNING] BCM Platform Alert'
+    email_configs:
+      - to: '${BCM_WARNING_EMAIL:-ops@company.com}'
+        subject: '[WARNING] BCM Platform: {{ .GroupLabels.alertname }}'
+
+  # Business continuity alerts
+  - name: 'bcm-business-alerts'
+    email_configs:
+      - to: '${BCM_BUSINESS_EMAIL:-bcm-coordinators@company.com}'
+        subject: '[BCM] Business Continuity Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          Business Continuity Management Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Component: {{ .Labels.component }}
+          Started: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+          {{ end }}
+          
+          Please review and take appropriate action according to BCM procedures.
+
+  # System resource alerts
+  - name: 'system-alerts'
+    email_configs:
+      - to: '${SYSTEM_ADMIN_EMAIL:-sysadmin@company.com}'
+        subject: '[SYSTEM] Resource Alert: {{ .GroupLabels.alertname }}'
+
+  # SSL certificate alerts
+  - name: 'ssl-alerts'
+    email_configs:
+      - to: '${SSL_ADMIN_EMAIL:-security@company.com}'
+        subject: '[SSL] Certificate Alert: {{ .GroupLabels.alertname }}'
+
+  # Endpoint monitoring alerts
+  - name: 'endpoint-alerts'
+    email_configs:
+      - to: '${ENDPOINT_ADMIN_EMAIL:-monitoring@company.com}'
+        subject: '[ENDPOINT] Monitoring Alert: {{ .GroupLabels.alertname }}'
+
+# Inhibition rules - suppress certain alerts when others are active
+inhibit_rules:
+  # Suppress endpoint alerts if the service is down
+  - source_match:
+      alertname: 'BCMPlatformDown'
+    target_match_re:
+      alertname: '(EndpointDown|SlowEndpointResponse)'
+    equal: ['instance']
+    
+  # Suppress integration alerts if main service is down
+  - source_match_re:
+      alertname: '(BCMPlatformDown|BCMDatabaseDown)'
+    target_match_re:
+      alertname: '(TheHiveIntegrationDown|MoodleIntegrationDown)'
+    equal: ['instance']
+    
+  # Suppress memory alerts if service is down
+  - source_match_re:
+      alertname: '.*Down'
+    target_match_re:
+      alertname: '.*HighMemoryUsage'
+    equal: ['instance']

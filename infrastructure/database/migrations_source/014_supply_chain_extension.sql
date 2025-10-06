@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS bia.suppliers (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- Basic Information
     supplier_code VARCHAR(50) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS bia.suppliers (
     notes TEXT,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
-    created_by UUID REFERENCES core.users(id),
+    created_by UUID REFERENCES auth.users(id),
 
     -- Constraints
     CONSTRAINT uq_supplier_code_per_org UNIQUE (organization_id, supplier_code),
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS bia.supplier_disruptions (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- Foreign Key
     supplier_id UUID NOT NULL REFERENCES bia.suppliers(id) ON DELETE CASCADE,
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS bia.supplier_disruptions (
     -- Audit Trail
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
-    created_by UUID REFERENCES core.users(id),
+    created_by UUID REFERENCES auth.users(id),
 
     -- Constraints
     CONSTRAINT chk_disruption_resolution_time CHECK (
@@ -278,7 +278,7 @@ CREATE POLICY suppliers_org_access
     USING (
         organization_id IN (
             SELECT organization_id
-            FROM core.organization_users
+            FROM public.organization_users
             WHERE user_id = current_setting('app.current_user_id', true)::uuid
         )
     );
@@ -298,7 +298,7 @@ CREATE POLICY supplier_disruptions_org_access
     USING (
         organization_id IN (
             SELECT organization_id
-            FROM core.organization_users
+            FROM public.organization_users
             WHERE user_id = current_setting('app.current_user_id', true)::uuid
         )
     );

@@ -1,0 +1,470 @@
+# BC Strategy & Planning Workflow Definition
+# ISO 22301:2019 Clause 8.3, 8.4
+# Version: 2.0
+
+workflow:
+  id: planning_process
+  name: BC Strategy & Planning
+  version: 2.0
+  module: planning
+  description: |
+    Develop business continuity strategies and plans based on
+    BIA and risk assessment results.
+
+metadata:
+  iso_standard: ISO 22301:2019
+  clause: 8.3, 8.4
+  estimated_duration_days: 21-45
+  prerequisites:
+    - bia.completed
+    - risk_assessment.completed
+  required_roles:
+    - bcm_manager
+    - process_owners
+    - technical_leads
+    - senior_management
+
+constitution:
+  core_principles:
+    - id: const_001
+      principle: "Strategies must address identified critical processes"
+      rationale: "Plans must be grounded in BIA findings"
+
+    - id: const_002
+      principle: "Plans must be actionable and testable"
+      rationale: "Untested plans are worthless in crisis"
+
+    - id: const_003
+      principle: "Recovery strategies within RTO/RPO requirements"
+      rationale: "Plans must meet documented objectives"
+
+  forbidden_actions:
+    - "Create plans without BIA/risk assessment basis"
+    - "Skip testing requirements"
+    - "Ignore resource constraints"
+
+stages:
+  # Stage 1: Develop BC Strategies
+  - id: develop_strategies
+    name: Develop BC Strategies
+    order: 1
+    type: creative_zone
+
+    description: |
+      Develop strategies to maintain/recover critical processes
+      within RTO requirements.
+
+    objectives:
+      - Strategy for each critical process
+      - Alternative recovery options
+      - Resource requirements
+      - Cost analysis
+      - Feasibility assessment
+
+    entry_criteria:
+      - BIA completed
+      - Risk assessment completed
+      - RTO/RPO defined
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: plan_cp_001
+      rules:
+        - "All Tier 1-2 processes have recovery strategies"
+        - "Strategies meet RTO requirements"
+        - "Resource requirements documented"
+        - "Cost estimates provided"
+
+    creative_zone:
+      creativity_level: high
+      allowed_approaches:
+        - Multiple recovery options per process
+        - Hot/warm/cold site analysis
+        - Work area recovery solutions
+        - Technology redundancy options
+        - Supply chain alternatives
+        - Manual workarounds
+        - Reciprocal arrangements
+      guidance: |
+        Be innovative in strategy development:
+        - Don't just suggest "backup everything"
+        - Consider hot/warm/cold site trade-offs
+        - Explore work-from-home options
+        - Manual workarounds for tech failures
+        - Cloud vs on-premise alternatives
+        - Third-party recovery services
+        - Reference creative solutions from case library
+        - Present multiple options with pros/cons
+
+    required_data:
+      - strategy_type:
+          type: enum
+          required: true
+          values: [preventive, detective, recovery, alternative_site, workaround]
+      - target_processes:
+          type: array
+          required: true
+          description: "Processes this strategy covers"
+      - recovery_capability:
+          type: string
+          required: true
+          description: "What capability this provides"
+      - rto_compliance:
+          type: boolean
+          required: true
+      - rpo_compliance:
+          type: boolean
+          required: true
+      - resources_required:
+          type: object
+          properties:
+            people:
+              type: array
+            technology:
+              type: array
+            facilities:
+              type: array
+            budget:
+              type: number
+      - cost_estimate:
+          type: number
+          required: true
+      - implementation_time:
+          type: integer
+          description: "Days to implement"
+      - pros_cons:
+          type: object
+          properties:
+            advantages:
+              type: array
+            disadvantages:
+              type: array
+
+    validation_rules:
+      - rule: "Strategy RTO ≤ Process RTO"
+        severity: critical
+
+      - rule: "At least 2 alternative strategies for Tier 1"
+        severity: high
+
+    ai_capabilities:
+      - suggest_strategies:
+          description: "Recommend strategies based on process type"
+          uses: [bia_results, benchmarks, case_library]
+
+      - analyze_tradeoffs:
+          description: "Compare strategy options"
+          factors: [cost, rto, complexity, risk]
+
+      - estimate_costs:
+          description: "Predict implementation costs"
+          uses: [benchmarks, industry_data]
+
+  # Stage 2: Document Procedures
+  - id: document_procedures
+    name: Document BC Procedures
+    order: 2
+    type: creative_zone
+
+    description: |
+      Create detailed, actionable procedures for implementing
+      BC strategies during disruption.
+
+    objectives:
+      - Step-by-step recovery procedures
+      - Decision trees for scenarios
+      - Contact lists and escalation
+      - Resource location guides
+      - Communication templates
+
+    entry_criteria:
+      - checkpoint: plan_cp_001 passed
+      - Strategies approved
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: plan_cp_002
+      rules:
+        - "All strategies have documented procedures"
+        - "Contact lists complete and current"
+        - "Decision criteria clear"
+        - "Procedures peer-reviewed"
+
+    creative_zone:
+      creativity_level: medium
+      allowed_approaches:
+        - Standard operating procedures
+        - Decision trees and flowcharts
+        - Checklists and runbooks
+        - Scenario-based playbooks
+        - Quick reference guides
+      guidance: |
+        Create clear, actionable procedures:
+        - Step-by-step instructions (numbered)
+        - Decision trees for scenarios ("If X, then Y")
+        - Contact lists with escalation paths
+        - Visual aids (diagrams, maps)
+        - AI can suggest structure and content
+        - Reference proven templates from case library
+        - Include "what not to do" warnings
+
+    required_data:
+      - procedure_name:
+          type: string
+          required: true
+      - strategy_id:
+          type: string
+          required: true
+          description: "Links to strategy from Stage 1"
+      - trigger_conditions:
+          type: array
+          required: true
+          description: "When to activate this procedure"
+      - steps:
+          type: array
+          required: true
+          items:
+            step_number:
+              type: integer
+            action:
+              type: string
+            responsible_role:
+              type: string
+            duration_estimate:
+              type: string
+            decision_point:
+              type: boolean
+      - contacts:
+          type: array
+          items:
+            role:
+              type: string
+            name:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+            alternate:
+              type: object
+      - resources_needed:
+          type: array
+      - success_criteria:
+          type: array
+          description: "How to know procedure succeeded"
+
+    validation_rules:
+      - rule: "All steps have responsible roles assigned"
+        severity: critical
+
+      - rule: "Contact information current (< 90 days old)"
+        severity: high
+
+      - rule: "Procedure tested or peer-reviewed"
+        severity: high
+
+    ai_capabilities:
+      - generate_procedure_template:
+          description: "Create procedure outline"
+          based_on: [process_type, recovery_strategy]
+
+      - suggest_steps:
+          description: "Recommend procedure steps"
+          uses: [case_library, industry_standards]
+
+      - identify_gaps:
+          description: "Find missing elements in procedure"
+
+  # Stage 3: Plan Testing & Exercising
+  - id: plan_testing
+    name: Plan Testing & Exercising
+    order: 3
+    type: checkpoint
+
+    description: |
+      Develop comprehensive testing and exercising program
+      to validate plans work as intended.
+
+    objectives:
+      - Define test scenarios
+      - Schedule exercises
+      - Assign roles
+      - Define success criteria
+      - Plan for continuous improvement
+
+    entry_criteria:
+      - checkpoint: plan_cp_002 passed
+      - Procedures documented
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: plan_cp_003
+      rules:
+        - "Test plan covers all critical processes"
+        - "Minimum annual exercise scheduled"
+        - "Success criteria defined"
+        - "Improvement process documented"
+
+    required_data:
+      - test_type:
+          type: enum
+          required: true
+          values: [tabletop, walkthrough, simulation, full_interruption]
+      - scope:
+          type: array
+          required: true
+          description: "Which procedures/strategies to test"
+      - participants:
+          type: array
+          required: true
+      - schedule:
+          type: object
+          properties:
+            frequency:
+              type: string
+            next_test_date:
+              type: date
+      - success_criteria:
+          type: array
+          required: true
+      - improvement_process:
+          type: string
+          description: "How to incorporate lessons learned"
+
+    validation_rules:
+      - rule: "Tier 1 processes tested at least annually"
+        severity: critical
+
+      - rule: "Full plan tested within 12 months of approval"
+        severity: high
+
+  # Stage 4: Review and Approval
+  - id: review_approve
+    name: Review and Approve Plans
+    order: 4
+    type: checkpoint
+
+    description: |
+      Final review and approval of complete BC plans.
+
+    objectives:
+      - Validate completeness
+      - Stakeholder review
+      - Management approval
+      - ISO compliance check
+
+    entry_criteria:
+      - checkpoint: plan_cp_003 passed
+      - All components complete
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: plan_cp_004
+      rules:
+        - "All Tier 1-2 processes have complete plans"
+        - "Plans meet ISO 22301 requirements"
+        - "Stakeholder sign-off obtained"
+        - "Management approved"
+        - "Test schedule approved"
+
+    actions:
+      - Generate complete BC plan document
+      - ISO 22301 compliance check
+      - Stakeholder review session
+      - Management presentation
+      - Obtain formal approval
+
+    can_return_to:
+      - develop_strategies
+      - document_procedures
+      - plan_testing
+
+  # Stage 5: Completed
+  - id: completed
+    name: Planning Completed
+    order: 5
+    type: final
+
+    description: "BC planning completed and approved"
+
+    entry_criteria:
+      - checkpoint: plan_cp_004 passed
+      - Management approval
+
+    actions:
+      - Publish approved plans
+      - Schedule first exercise
+      - Create workflow case for case library
+      - Trigger validation workflow
+      - Update compliance dashboard
+
+# AI Advisor Configuration
+ai_advisor:
+  enabled: true
+  proactive: true
+
+  triggers:
+    - event: stage_entered
+      action: provide_stage_guidance
+
+    - event: strategy_insufficient
+      condition: "rto_compliance == false"
+      action: suggest_alternative_strategies
+
+    - event: procedure_incomplete
+      action: identify_gaps
+
+  capabilities:
+    - suggest_strategies:
+        uses: [bia_results, benchmarks, case_library]
+
+    - generate_procedure_template:
+        based_on: [process_type, recovery_strategy]
+
+    - simulate_scenario:
+        description: "AI-powered scenario simulation"
+        method: "Monte Carlo + case history"
+
+    - estimate_recovery_time:
+        description: "Predict actual recovery time"
+        uses: [benchmarks, similar_exercises]
+
+# Case Library Configuration
+case_library:
+  collect_events: true
+  anonymize: true
+
+  events_to_collect:
+    - workflow.started
+    - strategy.developed
+    - procedure.documented
+    - test.scheduled
+    - checkpoint.passed
+    - workflow.completed
+
+  success_criteria:
+    - all_checkpoints_passed: true
+    - management_approved: true
+    - test_scheduled: true
+
+# Integration Points
+integrations:
+  eventbus:
+    publish_all_events: true
+    subscribe_to:
+      - bia.completed
+      - risk_assessment.completed
+
+  knowledge_graph:
+    query_standards:
+      - ISO 22301:2019
+      - BCI GPG 2018
+      - ISO 27031
+
+  ml_predictor:
+    predict_on_stages:
+      - develop_strategies
+      - plan_testing
+    predictions:
+      - strategy_effectiveness
+      - exercise_success_probability

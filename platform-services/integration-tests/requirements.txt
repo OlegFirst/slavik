@@ -1,0 +1,49 @@
+# Integration Testing Requirements
+# Python 3.11+
+
+# Core testing framework
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-xdist==3.5.0
+pytest-timeout==2.2.0
+pytest-retry==1.6.1
+
+# HTTP client for async requests
+httpx==0.25.2
+
+# Docker integration
+docker==7.0.0
+pytest-docker==2.0.1
+
+# Async support
+asyncio==3.4.3
+aiofiles==23.2.1
+
+# JWT for auth testing
+PyJWT==2.8.0
+cryptography==41.0.7
+
+# Database testing
+asyncpg==0.29.0
+aiosqlite==0.19.0
+sqlalchemy==2.0.23
+
+# Redis testing
+redis==5.0.1
+fakeredis==2.20.1
+
+# Data validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Performance testing
+locust==2.20.0
+
+# Utilities
+python-dotenv==1.0.0
+tenacity==8.2.3
+faker==22.0.0
+freezegun==1.4.0
+
+# Monitoring
+prometheus-client==0.19.0

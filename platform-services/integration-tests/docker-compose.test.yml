@@ -1,0 +1,209 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database - Test Configuration
+  postgres-test:
+    image: postgres:15-alpine
+    container_name: bcm-postgres-test
+    environment:
+      POSTGRES_DB: bcm_test
+      POSTGRES_USER: bcm_test_user
+      POSTGRES_PASSWORD: bcm_test_password
+      POSTGRES_MULTIPLE_DATABASES: planning_test,plans_test,bia_test,compliance_test
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    volumes:
+      - ../scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bcm_test_user -d bcm_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - bcm-test-network
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c max_connections=200
+      -c fsync=off
+      -c synchronous_commit=off
+      -c full_page_writes=off
+
+  # Redis - Test Configuration (in-memory, no persistence)
+  redis-test:
+    image: redis:7-alpine
+    container_name: bcm-redis-test
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 5
+    networks:
+      - bcm-test-network
+    command: >
+      redis-server
+      --save ""
+      --appendonly no
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+
+  # EventBus - Simple Test EventBus
+  eventbus-test:
+    image: python:3.11-slim
+    container_name: bcm-eventbus-test
+    working_dir: /app
+    command: python -m http.server 8001
+    ports:
+      - "8002:8001"  # Different external port
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8001 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - bcm-test-network
+
+  # BIA Service - Test Configuration
+  bia-service-test:
+    build:
+      context: ../bia-service
+      dockerfile: Dockerfile
+    container_name: bia-service-test
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_test_user:bcm_test_password@postgres-test:5432/bcm_test
+      EVENTBUS_URL: amqp://guest:guest@rabbitmq-test:5672/
+      JWT_SECRET: test-secret-DO-NOT-USE-IN-PRODUCTION
+      SERVICE_PORT: 8012
+      LOG_LEVEL: INFO
+      # Test-specific settings
+      DB_ECHO: "false"
+      DB_POOL_SIZE: 5
+      FEATURE_EVENTBUS: "false"
+    ports:
+      - "8012:8012"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8012/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - bcm-test-network
+
+  # Planning Service - Test Configuration
+  planning-service-test:
+    build:
+      context: ../planning_service
+      dockerfile: Dockerfile
+    container_name: planning-service-test
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_test_user:bcm_test_password@postgres-test:5432/bcm_test
+      REDIS_URL: redis://redis-test:6379/0
+      EVENTBUS_URL: http://eventbus-test:8001
+      SERVICE_NAME: planning_service
+      SERVICE_PORT: 8011
+      JWT_SECRET: test-secret-DO-NOT-USE-IN-PRODUCTION
+      JWT_ALGORITHM: HS256
+      # Test-specific settings
+      ORCHESTRATOR_URL: http://eventbus-test:8001
+    ports:
+      - "8011:8011"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+      eventbus-test:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8011/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - bcm-test-network
+
+  # Plans Service - Test Configuration
+  plans-service-test:
+    build:
+      context: ../plans_service
+      dockerfile: Dockerfile
+    container_name: plans-service-test
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_test_user:bcm_test_password@postgres-test:5432/bcm_test
+      REDIS_URL: redis://redis-test:6379/1
+      EVENTBUS_URL: http://eventbus-test:8001
+      SERVICE_NAME: plans_service
+      SERVICE_PORT: 8023
+      JWT_SECRET: test-secret-DO-NOT-USE-IN-PRODUCTION
+      JWT_ALGORITHM: HS256
+      PLANNING_SERVICE_URL: http://planning-service-test:8011
+      # Test-specific settings
+      ORCHESTRATOR_URL: http://eventbus-test:8001
+    ports:
+      - "8023:8023"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+      eventbus-test:
+        condition: service_healthy
+      planning-service-test:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8023/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - bcm-test-network
+
+  # Compliance Service - Test Configuration
+  compliance-service-test:
+    build:
+      context: ../compliance-service
+      dockerfile: Dockerfile
+    container_name: compliance-service-test
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_test_user:bcm_test_password@postgres-test:5432/bcm_test
+      EVENTBUS_URL: amqp://guest:guest@rabbitmq-test:5672/
+      JWT_SECRET: test-secret-DO-NOT-USE-IN-PRODUCTION
+      SERVICE_PORT: 8014
+      LOG_LEVEL: INFO
+      # Test-specific settings
+      AI_ENABLED: "false"
+      EVENTS_ENABLED: "false"
+    ports:
+      - "8014:8014"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8014/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - bcm-test-network
+
+networks:
+  bcm-test-network:
+    driver: bridge
+    name: bcm-test-network
+
+volumes:
+  postgres-test-data:
+  redis-test-data:

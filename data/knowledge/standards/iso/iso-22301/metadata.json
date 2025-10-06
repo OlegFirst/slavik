@@ -1,0 +1,60 @@
+{
+  "standard": "iso-22301",
+  "title": "Business Continuity Management Systems - Requirements",
+  "version": "2019",
+  "amendment": "2024",
+  "last_updated": "2024-01-15",
+  "description": "International standard for Business Continuity Management Systems (BCMS)",
+  "scope": "Organizations of any size and sector",
+  "sources": {
+    "official": "https://www.iso.org/standard/75106.html",
+    "guides": [
+      {
+        "name": "BSI Implementation Guide",
+        "file": "BSI-ISO-22301-Implementation-Guide.pdf",
+        "size_mb": 10.6,
+        "organization": "British Standards Institution"
+      },
+      {
+        "name": "ISO 22301:2019 Implementation Guide",
+        "file": "ISO-22301-2019-Implementation-Guide.pdf",
+        "size_mb": 0.9,
+        "organization": "ISO"
+      },
+      {
+        "name": "NQA Implementation Guide",
+        "file": "NQA-ISO-22301-Implementation-Guide.pdf",
+        "size_mb": 3.5,
+        "organization": "NQA - Certification Body"
+      }
+    ]
+  },
+  "clauses": {
+    "file": "standards/clauses_breakdown.md",
+    "count": 10,
+    "sections": [
+      "Context of the organization",
+      "Leadership",
+      "Planning",
+      "Support",
+      "Operation",
+      "Performance evaluation",
+      "Improvement"
+    ]
+  },
+  "mappings": {
+    "bci_gpg": "iso_bci_platform_mapping.md"
+  },
+  "research": {
+    "deloitte": "40% cost savings on recovery",
+    "ey": "20% faster recovery",
+    "mckinsey": "PDCA iterative approach recommended"
+  },
+  "certifications": {
+    "nqa": "400+ successful certifications",
+    "bsi": "Leading certification body",
+    "sgs": "Global certification provider"
+  },
+  "imported_at": "2025-10-01",
+  "migrated_at": "2025-10-06"
+}

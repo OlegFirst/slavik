@@ -1,0 +1,28 @@
+# Grafana Dashboard Provisioning for BCM Platform
+# Updated: 2025-10-03 - Consolidated from 9 dashboards to 4 organized dashboards
+apiVersion: 1
+
+providers:
+  # Consolidated BCM Platform Dashboards
+  - name: 'BCM Platform - Consolidated'
+    orgId: 1
+    folder: 'BCM Platform'
+    type: file
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    disableDeletion: false
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false
+
+  # Backup of Original Dashboards (Read-Only)
+  - name: 'BCM Platform - Archive'
+    orgId: 1
+    folder: 'Archive'
+    type: file
+    updateIntervalSeconds: 300
+    allowUiUpdates: false
+    disableDeletion: true
+    options:
+      path: /var/lib/grafana/dashboards/dashboards.backup.20251003
+      foldersFromFilesStructure: false

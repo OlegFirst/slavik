@@ -79,15 +79,15 @@ CREATE INDEX idx_impact_assessments_timeframe ON bia.impact_assessments(time_per
 CREATE INDEX idx_impact_assessments_critical ON bia.impact_assessments(is_critical_timeframe) WHERE is_critical_timeframe = TRUE;
 
 CREATE TRIGGER update_impact_assessments_updated_at BEFORE UPDATE ON bia.impact_assessments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bia.impact_assessments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Impact assessments visible to org members" ON bia.impact_assessments FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Impact assessments manageable by org admins" ON bia.impact_assessments FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bia.impact_assessments IS 'Time-based impact assessments per ISO 22301 Clause 8.2.2';
 
@@ -169,15 +169,15 @@ CREATE INDEX idx_dependencies_criticality ON bia.dependencies(criticality);
 CREATE INDEX idx_dependencies_spof ON bia.dependencies(single_point_of_failure) WHERE single_point_of_failure = TRUE;
 
 CREATE TRIGGER update_dependencies_updated_at BEFORE UPDATE ON bia.dependencies
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bia.dependencies ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Dependencies visible to org members" ON bia.dependencies FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Dependencies manageable by org admins" ON bia.dependencies FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bia.dependencies IS 'Process dependencies per ISO 22301 Clause 8.2.2';
 
@@ -224,7 +224,7 @@ CREATE INDEX idx_bia_workflow_logs_actor ON bia.workflow_logs(actor_id);
 ALTER TABLE bia.workflow_logs ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "BIA workflow logs visible to org members" ON bia.workflow_logs FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE bia.workflow_logs IS 'Audit trail for BIA workflow events';
 
@@ -278,7 +278,7 @@ CREATE INDEX idx_bia_exports_generated_by ON bia.exports(generated_by, created_a
 ALTER TABLE bia.exports ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "BIA exports visible to org members" ON bia.exports FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE bia.exports IS 'BIA report exports and downloads';
 
@@ -366,15 +366,15 @@ CREATE INDEX idx_risk_assessments_level ON risk.assessments(risk_level);
 CREATE INDEX idx_risk_assessments_date ON risk.assessments(assessment_date DESC);
 
 CREATE TRIGGER update_risk_assessments_updated_at BEFORE UPDATE ON risk.assessments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE risk.assessments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Risk assessments visible to org members" ON risk.assessments FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Risk assessments manageable by org admins" ON risk.assessments FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE risk.assessments IS 'Risk assessments per ISO 22301:2019 Clause 8.2.3';
 
@@ -448,18 +448,18 @@ CREATE INDEX idx_risk_treatments_risk ON risk.treatments(risk_id);
 CREATE INDEX idx_risk_treatments_org ON risk.treatments(organization_id);
 CREATE INDEX idx_risk_treatments_owner ON risk.treatments(owner_id, status);
 CREATE INDEX idx_risk_treatments_status ON risk.treatments(status);
-CREATE INDEX idx_risk_treatments_overdue ON risk.treatments(planned_completion_date) WHERE status NOT IN ('implemented', 'verified', 'cancelled') AND planned_completion_date < CURRENT_DATE;
+CREATE INDEX idx_risk_treatments_overdue ON risk.treatments(planned_completion_date) WHERE status NOT IN ('implemented', 'verified', 'cancelled');
 
 CREATE TRIGGER update_risk_treatments_updated_at BEFORE UPDATE ON risk.treatments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE risk.treatments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Risk treatments visible to org members" ON risk.treatments FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Risk treatments manageable by org admins" ON risk.treatments FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE risk.treatments IS 'Risk treatment plans per ISO 22301 Clause 8.2.3';
 
@@ -522,15 +522,15 @@ CREATE INDEX idx_risk_templates_category ON risk.templates(category);
 CREATE INDEX idx_risk_templates_active ON risk.templates(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_risk_templates_updated_at BEFORE UPDATE ON risk.templates
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE risk.templates ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Risk templates visible to org members" ON risk.templates FOR SELECT
-    USING (organization_id IS NULL OR auth.is_org_member(organization_id));
+    USING (organization_id IS NULL OR public.is_org_member(organization_id));
 
 CREATE POLICY "Risk templates manageable by org admins" ON risk.templates FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE risk.templates IS 'Risk and control templates for standardization';
 
@@ -579,7 +579,7 @@ CREATE INDEX idx_risk_workflow_logs_actor ON risk.workflow_logs(actor_id);
 ALTER TABLE risk.workflow_logs ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Risk workflow logs visible to org members" ON risk.workflow_logs FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE risk.workflow_logs IS 'Audit trail for risk management workflow events';
 

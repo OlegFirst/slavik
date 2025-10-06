@@ -1,0 +1,16 @@
+[project]
+name = "bcm-eventbus"
+version = "0.1.0"
+description = "Pluggable event bus for BCM Platform"
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = []
+
+[project.optional-dependencies]
+redis = ["redis>=4.5.0"]
+dev = ["pytest>=7.0.0", "pytest-asyncio>=0.21.0"]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"

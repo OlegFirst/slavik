@@ -125,15 +125,15 @@ CREATE INDEX idx_exercises_scheduled ON validation.exercises(scheduled_start);
 CREATE INDEX idx_exercises_search ON validation.exercises USING GIN(search_vector);
 
 CREATE TRIGGER update_exercises_updated_at BEFORE UPDATE ON validation.exercises
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.exercises ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Exercises visible to org members" ON validation.exercises FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Exercises manageable by org admins" ON validation.exercises FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.exercises IS 'BCM exercises per ISO 22301:2019 Clause 8.5';
 
@@ -212,15 +212,15 @@ CREATE INDEX idx_scenarios_type ON validation.exercise_scenarios(scenario_type);
 CREATE INDEX idx_scenarios_active ON validation.exercise_scenarios(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_scenarios_updated_at BEFORE UPDATE ON validation.exercise_scenarios
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.exercise_scenarios ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Scenarios visible to org members" ON validation.exercise_scenarios FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Scenarios manageable by org admins" ON validation.exercise_scenarios FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.exercise_scenarios IS 'Exercise scenarios and templates per ISO 22301 Clause 8.5';
 
@@ -287,12 +287,12 @@ CREATE INDEX idx_observations_severity ON validation.exercise_observations(sever
 CREATE INDEX idx_observations_status ON validation.exercise_observations(status);
 
 CREATE TRIGGER update_observations_updated_at BEFORE UPDATE ON validation.exercise_observations
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.exercise_observations ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Observations visible to org members" ON validation.exercise_observations FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE validation.exercise_observations IS 'Observations during exercises';
 
@@ -356,18 +356,18 @@ CREATE INDEX idx_exercise_actions_exercise ON validation.exercise_actions(exerci
 CREATE INDEX idx_exercise_actions_org ON validation.exercise_actions(organization_id);
 CREATE INDEX idx_exercise_actions_assigned ON validation.exercise_actions(assigned_to_id, status);
 CREATE INDEX idx_exercise_actions_status ON validation.exercise_actions(status);
-CREATE INDEX idx_exercise_actions_overdue ON validation.exercise_actions(due_date) WHERE status != 'completed' AND due_date < CURRENT_DATE;
+CREATE INDEX idx_exercise_actions_overdue ON validation.exercise_actions(due_date) WHERE status != 'completed';
 
 CREATE TRIGGER update_exercise_actions_updated_at BEFORE UPDATE ON validation.exercise_actions
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.exercise_actions ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Exercise actions visible to org members" ON validation.exercise_actions FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Exercise actions manageable by org admins" ON validation.exercise_actions FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.exercise_actions IS 'Actions from exercise observations per ISO 22301 Clause 10';
 
@@ -447,15 +447,15 @@ CREATE INDEX idx_kpis_status ON validation.kpis(status);
 CREATE INDEX idx_kpis_active ON validation.kpis(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_kpis_updated_at BEFORE UPDATE ON validation.kpis
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.kpis ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "KPIs visible to org members" ON validation.kpis FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "KPIs manageable by org admins" ON validation.kpis FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.kpis IS 'Key Performance Indicators per ISO 22301:2019 Clause 9.1';
 
@@ -505,7 +505,7 @@ CREATE INDEX idx_kpi_measurements_status ON validation.kpi_measurements(status);
 ALTER TABLE validation.kpi_measurements ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "KPI measurements visible to org members" ON validation.kpi_measurements FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 COMMENT ON TABLE validation.kpi_measurements IS 'Historical KPI measurements per ISO 22301 Clause 9.1';
 
@@ -550,15 +550,15 @@ CREATE INDEX idx_kpi_dashboards_org ON validation.kpi_dashboards(organization_id
 CREATE INDEX idx_kpi_dashboards_active ON validation.kpi_dashboards(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_kpi_dashboards_updated_at BEFORE UPDATE ON validation.kpi_dashboards
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.kpi_dashboards ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Dashboards visible to org members" ON validation.kpi_dashboards FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Dashboards manageable by org admins" ON validation.kpi_dashboards FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.kpi_dashboards IS 'KPI dashboards for monitoring and reporting';
 
@@ -650,15 +650,15 @@ CREATE INDEX idx_audit_plans_type ON validation.audit_plans(audit_type);
 CREATE INDEX idx_audit_plans_dates ON validation.audit_plans(planned_start_date, planned_end_date);
 
 CREATE TRIGGER update_audit_plans_updated_at BEFORE UPDATE ON validation.audit_plans
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.audit_plans ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Audit plans visible to org members" ON validation.audit_plans FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Audit plans manageable by org admins" ON validation.audit_plans FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.audit_plans IS 'Internal audit plans per ISO 22301:2019 Clause 9.2';
 
@@ -732,15 +732,15 @@ CREATE INDEX idx_audit_findings_status ON validation.audit_findings(status);
 CREATE INDEX idx_audit_findings_open ON validation.audit_findings(status) WHERE status != 'closed';
 
 CREATE TRIGGER update_audit_findings_updated_at BEFORE UPDATE ON validation.audit_findings
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.audit_findings ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Audit findings visible to org members" ON validation.audit_findings FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Audit findings manageable by org admins" ON validation.audit_findings FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.audit_findings IS 'Audit findings per ISO 22301 Clause 9.2';
 
@@ -838,18 +838,18 @@ CREATE INDEX idx_capa_type ON validation.capa(capa_type);
 CREATE INDEX idx_capa_status ON validation.capa(status);
 CREATE INDEX idx_capa_priority ON validation.capa(priority);
 CREATE INDEX idx_capa_assigned ON validation.capa(assigned_to_id, status);
-CREATE INDEX idx_capa_overdue ON validation.capa(target_completion_date) WHERE status NOT IN ('verified', 'closed') AND target_completion_date < CURRENT_DATE;
+CREATE INDEX idx_capa_overdue ON validation.capa(target_completion_date) WHERE status NOT IN ('verified', 'closed');
 
 CREATE TRIGGER update_capa_updated_at BEFORE UPDATE ON validation.capa
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.capa ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "CAPA visible to org members" ON validation.capa FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "CAPA manageable by org admins" ON validation.capa FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.capa IS 'Corrective and Preventive Actions per ISO 22301:2019 Clause 10';
 
@@ -952,15 +952,15 @@ CREATE INDEX idx_mgmt_reviews_status ON validation.management_reviews(status);
 CREATE INDEX idx_mgmt_reviews_date ON validation.management_reviews(scheduled_date DESC);
 
 CREATE TRIGGER update_mgmt_reviews_updated_at BEFORE UPDATE ON validation.management_reviews
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE validation.management_reviews ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Management reviews visible to org members" ON validation.management_reviews FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Management reviews manageable by org admins" ON validation.management_reviews FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE validation.management_reviews IS 'Management reviews per ISO 22301:2019 Clause 9.3';
 

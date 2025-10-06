@@ -1,12 +1,12 @@
 """
 LLM Router
 
-Routes LLM queries to best available provider
+Routes LLM queries to best available provider with async support
 """
 
 import os
 import logging
-from typing import Optional
+from typing import Optional, Dict, Any
 from enum import Enum
 
 
@@ -22,7 +22,13 @@ class LLMProvider(str, Enum):
 
 class LLMRouter:
     """
-    Routes LLM queries to available providers
+    Routes LLM queries to available providers with task-specific routing
+
+    Task Routing:
+    - strategic_analysis: Claude Opus (complex reasoning)
+    - content_generation: Claude Sonnet (balanced)
+    - quick_tasks: Claude Haiku or GPT-3.5 (fast)
+    - embeddings: OpenAI text-embedding-3-large
 
     Priority:
     1. Anthropic Claude (if API key available)
@@ -31,68 +37,89 @@ class LLMRouter:
     """
 
     def __init__(self):
-        self.provider = self._detect_provider()
-        self.client = self._initialize_client()
+        self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+        self.openai_key = os.getenv("OPENAI_API_KEY")
 
-        logger.info(f"LLM Router initialized with provider: {self.provider}")
+        self.anthropic_client = None
+        self.openai_client = None
 
-    def _detect_provider(self) -> LLMProvider:
-        """Detect which LLM provider to use"""
+        self._initialize_clients()
 
-        # Check for Anthropic API key
-        if os.getenv("ANTHROPIC_API_KEY"):
-            return LLMProvider.ANTHROPIC
+        logger.info(f"LLM Router initialized - Anthropic: {bool(self.anthropic_client)}, OpenAI: {bool(self.openai_client)}")
 
-        # Check for OpenAI API key
-        if os.getenv("OPENAI_API_KEY"):
-            return LLMProvider.OPENAI
+    def _initialize_clients(self):
+        """Initialize all available LLM clients"""
 
-        # Default to Ollama (local)
-        return LLMProvider.OLLAMA
-
-    def _initialize_client(self):
-        """Initialize LLM client based on provider"""
-
-        if self.provider == LLMProvider.ANTHROPIC:
+        # Initialize Anthropic if key available
+        if self.anthropic_key:
             try:
-                import anthropic
-                return anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+                from anthropic import AsyncAnthropic
+                self.anthropic_client = AsyncAnthropic(api_key=self.anthropic_key)
+                logger.info("Anthropic client initialized")
             except ImportError:
-                logger.warning("Anthropic package not installed. Falling back to OpenAI.")
-                self.provider = LLMProvider.OPENAI
+                logger.warning("anthropic package not installed. Install with: pip install anthropic")
 
-        if self.provider == LLMProvider.OPENAI:
+        # Initialize OpenAI if key available
+        if self.openai_key:
             try:
-                import openai
-                openai.api_key = os.getenv("OPENAI_API_KEY")
-                return openai
+                from openai import AsyncOpenAI
+                self.openai_client = AsyncOpenAI(api_key=self.openai_key)
+                logger.info("OpenAI client initialized")
             except ImportError:
-                logger.warning("OpenAI package not installed. Falling back to Ollama.")
-                self.provider = LLMProvider.OLLAMA
+                logger.warning("openai package not installed. Install with: pip install openai")
 
-        if self.provider == LLMProvider.OLLAMA:
-            try:
-                import httpx
-                return httpx.AsyncClient(base_url="http://localhost:11434")
-            except ImportError:
-                logger.error("httpx not available for Ollama. LLM queries will fail.")
-                return None
+    def _select_model(self, task_type: str = "general") -> tuple[str, Any]:
+        """
+        Select best model for task type
 
-        return None
+        Returns: (model_name, client)
+        """
+
+        # Strategic analysis: Claude Opus (most powerful)
+        if task_type == "strategic_analysis":
+            if self.anthropic_client:
+                return ("claude-opus-4-20250514", self.anthropic_client)
+            elif self.openai_client:
+                return ("gpt-4-turbo-preview", self.openai_client)
+
+        # Content generation: Claude Sonnet (balanced)
+        elif task_type == "content_generation":
+            if self.anthropic_client:
+                return ("claude-3-5-sonnet-20241022", self.anthropic_client)
+            elif self.openai_client:
+                return ("gpt-4-turbo-preview", self.openai_client)
+
+        # Quick tasks: Claude Haiku (fast)
+        elif task_type == "quick_tasks":
+            if self.anthropic_client:
+                return ("claude-3-5-haiku-20241022", self.anthropic_client)
+            elif self.openai_client:
+                return ("gpt-3.5-turbo", self.openai_client)
+
+        # Default: Best available
+        else:
+            if self.anthropic_client:
+                return ("claude-3-5-sonnet-20241022", self.anthropic_client)
+            elif self.openai_client:
+                return ("gpt-4-turbo-preview", self.openai_client)
+
+        raise RuntimeError("No LLM provider available. Set ANTHROPIC_API_KEY or OPENAI_API_KEY")
 
     async def query(
         self,
         system_prompt: str,
         user_prompt: str,
+        task_type: str = "general",
         temperature: float = 0.7,
         max_tokens: int = 2000
     ) -> str:
         """
-        Query LLM with system and user prompts
+        Query LLM with automatic model selection
 
         Args:
             system_prompt: System instruction
             user_prompt: User query
+            task_type: Type of task (strategic_analysis, content_generation, quick_tasks, general)
             temperature: Creativity (0.0-1.0)
             max_tokens: Maximum response length
 
@@ -100,22 +127,20 @@ class LLMRouter:
             LLM response text
         """
 
-        if not self.client:
-            return "[ERROR] No LLM provider available"
-
         try:
-            if self.provider == LLMProvider.ANTHROPIC:
-                return await self._query_anthropic(system_prompt, user_prompt, temperature, max_tokens)
-            elif self.provider == LLMProvider.OPENAI:
-                return await self._query_openai(system_prompt, user_prompt, temperature, max_tokens)
-            elif self.provider == LLMProvider.OLLAMA:
-                return await self._query_ollama(system_prompt, user_prompt, temperature, max_tokens)
+            model_name, client = self._select_model(task_type)
+
+            if isinstance(client, type(self.anthropic_client)):
+                return await self._query_anthropic(model_name, system_prompt, user_prompt, temperature, max_tokens)
+            else:
+                return await self._query_openai(model_name, system_prompt, user_prompt, temperature, max_tokens)
         except Exception as e:
             logger.error(f"LLM query failed: {e}")
             return f"[ERROR] LLM query failed: {str(e)}"
 
     async def _query_anthropic(
         self,
+        model: str,
         system_prompt: str,
         user_prompt: str,
         temperature: float,
@@ -123,8 +148,8 @@ class LLMRouter:
     ) -> str:
         """Query Anthropic Claude"""
 
-        response = self.client.messages.create(
-            model="claude-3-5-sonnet-20241022",  # Latest Claude model
+        response = await self.anthropic_client.messages.create(
+            model=model,
             max_tokens=max_tokens,
             temperature=temperature,
             system=system_prompt,
@@ -137,6 +162,7 @@ class LLMRouter:
 
     async def _query_openai(
         self,
+        model: str,
         system_prompt: str,
         user_prompt: str,
         temperature: float,
@@ -144,8 +170,8 @@ class LLMRouter:
     ) -> str:
         """Query OpenAI GPT"""
 
-        response = self.client.chat.completions.create(
-            model="gpt-4-turbo-preview",  # Latest GPT-4 model
+        response = await self.openai_client.chat.completions.create(
+            model=model,
             max_tokens=max_tokens,
             temperature=temperature,
             messages=[
@@ -156,49 +182,36 @@ class LLMRouter:
 
         return response.choices[0].message.content
 
-    async def _query_ollama(
-        self,
-        system_prompt: str,
-        user_prompt: str,
-        temperature: float,
-        max_tokens: int
-    ) -> str:
-        """Query Ollama (local LLM)"""
+    async def generate_embeddings(self, texts: list[str]) -> list[list[float]]:
+        """
+        Generate embeddings using OpenAI
 
-        # Combine system and user prompts for Ollama
-        full_prompt = f"{system_prompt}\n\n{user_prompt}"
+        Args:
+            texts: List of texts to embed
 
-        response = await self.client.post(
-            "/api/generate",
-            json={
-                "model": "llama3.2",  # Default Ollama model
-                "prompt": full_prompt,
-                "temperature": temperature,
-                "stream": False
-            },
-            timeout=60.0
+        Returns:
+            List of embedding vectors
+        """
+
+        if not self.openai_client:
+            raise RuntimeError("OpenAI client required for embeddings. Set OPENAI_API_KEY")
+
+        response = await self.openai_client.embeddings.create(
+            model="text-embedding-3-large",
+            input=texts
         )
 
-        if response.status_code == 200:
-            result = response.json()
-            return result.get("response", "[ERROR] Empty response from Ollama")
-        else:
-            return f"[ERROR] Ollama returned status {response.status_code}"
+        return [item.embedding for item in response.data]
 
-    def get_provider_info(self) -> dict:
-        """Get information about current LLM provider"""
+    def get_provider_info(self) -> Dict[str, Any]:
+        """Get information about available LLM providers"""
         return {
-            "provider": self.provider.value,
-            "available": self.client is not None,
-            "model": self._get_model_name()
+            "anthropic": {
+                "available": self.anthropic_client is not None,
+                "models": ["claude-opus-4-20250514", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"]
+            },
+            "openai": {
+                "available": self.openai_client is not None,
+                "models": ["gpt-4-turbo-preview", "gpt-3.5-turbo", "text-embedding-3-large"]
+            }
         }
-
-    def _get_model_name(self) -> str:
-        """Get model name based on provider"""
-        if self.provider == LLMProvider.ANTHROPIC:
-            return "claude-3-5-sonnet-20241022"
-        elif self.provider == LLMProvider.OPENAI:
-            return "gpt-4-turbo-preview"
-        elif self.provider == LLMProvider.OLLAMA:
-            return "llama3.2"
-        return "unknown"

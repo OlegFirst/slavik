@@ -1,0 +1,11 @@
+# Authentication Dependencies for Learning Service
+# These packages are required for JWT authentication
+
+# JWT handling
+python-jose[cryptography]>=3.3.0
+
+# Password hashing (for future user authentication)
+passlib[bcrypt]>=1.7.4
+
+# Form data support for login endpoints
+python-multipart>=0.0.6

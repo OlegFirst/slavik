@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS validation.kpi_alerts (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- KPI Reference (FK to validation.kpis)
     kpi_id UUID NOT NULL REFERENCES validation.kpis(id) ON DELETE CASCADE,
@@ -130,7 +130,7 @@ CREATE POLICY kpi_alerts_org_access
 ON validation.kpi_alerts
 USING (
     organization_id IN (
-        SELECT id FROM core.organizations
+        SELECT id FROM public.organizations
         WHERE tenant_id = current_setting('app.current_tenant_id', true)::text
     )
 );
@@ -150,7 +150,7 @@ USING (
 CREATE TRIGGER update_kpi_alerts_updated_at
 BEFORE UPDATE ON validation.kpi_alerts
 FOR EACH ROW
-EXECUTE FUNCTION core.update_updated_at_column();
+EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Trigger: Auto-generate alert_code if not provided
 CREATE OR REPLACE FUNCTION validation.generate_alert_code()
@@ -208,8 +208,8 @@ SELECT
     -- KPI details
     k.kpi_code,
     k.kpi_name,
-    k.category,
-    k.owner,
+    k.kpi_category,
+    k.owner_id,
 
     -- Alert details
     a.alert_title,
@@ -245,7 +245,7 @@ SELECT
     k.kpi_code,
     k.kpi_name,
     k.organization_id,
-    k.tenant_id,
+    a.tenant_id,
 
     COUNT(*) AS total_alerts,
     COUNT(*) FILTER (WHERE a.severity = 'critical') AS critical_alerts,
@@ -267,7 +267,7 @@ SELECT
     MAX(a.triggered_at) AS last_alert_triggered
 FROM validation.kpi_alerts a
 INNER JOIN validation.kpis k ON k.id = a.kpi_id
-GROUP BY a.kpi_id, k.kpi_code, k.kpi_name, k.organization_id, k.tenant_id
+GROUP BY a.kpi_id, k.kpi_code, k.kpi_name, k.organization_id, a.tenant_id
 ORDER BY total_alerts DESC;
 
 -- View: Unacknowledged critical alerts
@@ -282,7 +282,7 @@ SELECT
     -- KPI details
     k.kpi_code,
     k.kpi_name,
-    k.owner,
+    k.owner_id,
 
     -- Alert details
     a.alert_title,

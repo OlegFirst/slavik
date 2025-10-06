@@ -1,0 +1,26 @@
+apiVersion: 1
+
+providers:
+  # Consolidated BCM Platform Dashboards (Primary)
+  - name: 'BCM Platform - Consolidated'
+    orgId: 1
+    folder: 'BCM Platform'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false
+
+  # Backup of Original Dashboards (Archive)
+  - name: 'BCM Platform - Archive'
+    orgId: 1
+    folder: 'Archive'
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 300
+    allowUiUpdates: false
+    options:
+      path: /etc/grafana/provisioning/dashboards/dashboards.backup.20251003
+      foldersFromFilesStructure: false

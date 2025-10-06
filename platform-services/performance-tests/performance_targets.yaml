@@ -1,0 +1,352 @@
+# Performance Targets and SLA Definitions
+# ========================================
+# BCM Platform Performance Targets - ISO 22301 Requirements
+
+platform_name: "BCM Platform - ISO 22301"
+version: "1.0.0"
+last_updated: "2025-10-03"
+
+# =============================================================================
+# API Endpoint Performance Targets
+# =============================================================================
+
+api_endpoints:
+  # BIA Service (Port 8012)
+  bia_list_processes:
+    endpoint: "GET /api/bia/processes"
+    p50_latency_ms: 50
+    p95_latency_ms: 150
+    p99_latency_ms: 300
+    throughput_rps: 200
+    max_error_rate_percent: 1
+
+  bia_get_process:
+    endpoint: "GET /api/bia/processes/{id}"
+    p50_latency_ms: 30
+    p95_latency_ms: 100
+    p99_latency_ms: 200
+    throughput_rps: 300
+    max_error_rate_percent: 0.5
+
+  bia_create_process:
+    endpoint: "POST /api/bia/processes"
+    p50_latency_ms: 100
+    p95_latency_ms: 250
+    p99_latency_ms: 500
+    throughput_rps: 100
+    max_error_rate_percent: 2
+
+  bia_update_process:
+    endpoint: "PUT /api/bia/processes/{id}"
+    p50_latency_ms: 80
+    p95_latency_ms: 200
+    p99_latency_ms: 400
+    throughput_rps: 150
+    max_error_rate_percent: 1.5
+
+  bia_bulk_create:
+    endpoint: "POST /api/bia/processes/bulk"
+    p50_latency_ms: 500
+    p95_latency_ms: 2000
+    p99_latency_ms: 5000
+    throughput_rps: 20
+    max_error_rate_percent: 5
+
+  bia_ai_suggest:
+    endpoint: "POST /api/bia/processes/{id}/suggest-rto"
+    p50_latency_ms: 200
+    p95_latency_ms: 500
+    p99_latency_ms: 1000
+    throughput_rps: 30
+    max_error_rate_percent: 3
+
+  # Compliance Service (Port 8014)
+  compliance_list_audits:
+    endpoint: "GET /api/v1/audits"
+    p50_latency_ms: 50
+    p95_latency_ms: 150
+    p99_latency_ms: 300
+    throughput_rps: 150
+    max_error_rate_percent: 1
+
+  compliance_create_audit:
+    endpoint: "POST /api/v1/audits"
+    p50_latency_ms: 100
+    p95_latency_ms: 250
+    p99_latency_ms: 500
+    throughput_rps: 80
+    max_error_rate_percent: 2
+
+  compliance_create_nc:
+    endpoint: "POST /api/v1/nonconformities"
+    p50_latency_ms: 120
+    p95_latency_ms: 300
+    p99_latency_ms: 600
+    throughput_rps: 60
+    max_error_rate_percent: 2
+
+  # Planning Service (Port 8011)
+  planning_list_strategies:
+    endpoint: "GET /api/v1/strategies"
+    p50_latency_ms: 50
+    p95_latency_ms: 150
+    p99_latency_ms: 300
+    throughput_rps: 150
+    max_error_rate_percent: 1
+
+  planning_create_strategy:
+    endpoint: "POST /api/v1/strategies"
+    p50_latency_ms: 100
+    p95_latency_ms: 250
+    p99_latency_ms: 500
+    throughput_rps: 80
+    max_error_rate_percent: 2
+
+  planning_cost_benefit:
+    endpoint: "POST /api/v1/cost-benefit"
+    p50_latency_ms: 150
+    p95_latency_ms: 400
+    p99_latency_ms: 800
+    throughput_rps: 50
+    max_error_rate_percent: 3
+
+  # Plans Service (Port 8023)
+  plans_list_plans:
+    endpoint: "GET /api/v1/plans"
+    p50_latency_ms: 60
+    p95_latency_ms: 200
+    p99_latency_ms: 400
+    throughput_rps: 150
+    max_error_rate_percent: 1
+
+  plans_get_plan:
+    endpoint: "GET /api/v1/plans/{id}"
+    p50_latency_ms: 50
+    p95_latency_ms: 150
+    p99_latency_ms: 300
+    throughput_rps: 200
+    max_error_rate_percent: 0.5
+
+  plans_create_plan:
+    endpoint: "POST /api/v1/plans"
+    p50_latency_ms: 120
+    p95_latency_ms: 300
+    p99_latency_ms: 600
+    throughput_rps: 80
+    max_error_rate_percent: 2
+
+# =============================================================================
+# Database Performance Targets
+# =============================================================================
+
+database:
+  connection_pool:
+    min_size: 5
+    max_size: 20
+    max_overflow: 10
+    pool_timeout_sec: 30
+
+  query_performance:
+    simple_select_ms: 10
+    indexed_lookup_ms: 20
+    complex_join_ms: 100
+    aggregate_query_ms: 150
+    max_query_time_ms: 1000
+
+  bulk_operations:
+    insert_10_records_ms: 50
+    insert_100_records_ms: 500
+    insert_1000_records_ms: 5000
+    update_10_records_ms: 40
+    update_100_records_ms: 400
+
+  connection_metrics:
+    max_connection_time_ms: 100
+    max_idle_connections: 5
+    connection_timeout_sec: 30
+
+# =============================================================================
+# Cache Performance Targets (Redis)
+# =============================================================================
+
+cache:
+  hit_rate:
+    minimum_percent: 80
+    target_percent: 90
+    warning_threshold_percent: 70
+
+  latency:
+    get_operation_ms: 5
+    set_operation_ms: 10
+    delete_operation_ms: 5
+    bulk_get_10_ms: 20
+    bulk_set_10_ms: 30
+
+  memory:
+    max_memory_mb: 512
+    eviction_policy: "allkeys-lru"
+    max_keys: 100000
+
+  connection:
+    max_clients: 100
+    timeout_sec: 5
+
+# =============================================================================
+# System Resource Targets
+# =============================================================================
+
+resources:
+  cpu:
+    target_utilization_percent: 60
+    warning_threshold_percent: 75
+    critical_threshold_percent: 85
+
+  memory:
+    target_utilization_percent: 70
+    warning_threshold_percent: 80
+    critical_threshold_percent: 90
+    max_heap_size_mb: 2048
+
+  disk:
+    target_io_utilization_percent: 50
+    warning_threshold_percent: 70
+    critical_threshold_percent: 85
+    min_free_space_gb: 10
+
+  network:
+    max_latency_ms: 10
+    max_packet_loss_percent: 0.1
+    min_bandwidth_mbps: 100
+
+# =============================================================================
+# Load Test Targets
+# =============================================================================
+
+load_tests:
+  light_load:
+    concurrent_users: 10
+    duration_minutes: 5
+    expected_requests: 1000
+    max_error_rate_percent: 1
+    p95_latency_ms: 200
+
+  medium_load:
+    concurrent_users: 50
+    duration_minutes: 10
+    expected_requests: 10000
+    max_error_rate_percent: 2
+    p95_latency_ms: 500
+
+  heavy_load:
+    concurrent_users: 100
+    duration_minutes: 15
+    expected_requests: 50000
+    max_error_rate_percent: 3
+    p95_latency_ms: 1000
+
+  stress_test:
+    max_concurrent_users: 200
+    duration_minutes: 20
+    breaking_point_error_rate_percent: 10
+    acceptable_degradation_percent: 50
+
+# =============================================================================
+# Business Continuity Requirements (ISO 22301)
+# =============================================================================
+
+iso_22301_requirements:
+  availability:
+    target_uptime_percent: 99.9  # 8.76 hours downtime/year
+    max_unplanned_downtime_minutes: 30
+    planned_maintenance_window_hours: 4
+
+  recovery_objectives:
+    rto_minutes: 60  # Recovery Time Objective for platform
+    rpo_minutes: 15  # Recovery Point Objective for platform
+    mtpd_hours: 4    # Maximum Tolerable Period of Disruption
+
+  data_integrity:
+    backup_frequency_hours: 24
+    backup_retention_days: 90
+    transaction_rollback_capability: true
+    data_consistency_checks: true
+
+  performance_during_incident:
+    degraded_mode_capacity_percent: 70
+    max_response_time_degradation_percent: 200
+    max_concurrent_users_degraded: 50
+
+# =============================================================================
+# Benchmark Targets
+# =============================================================================
+
+benchmarks:
+  api_response_time:
+    excellent_ms: 100
+    good_ms: 250
+    acceptable_ms: 500
+    poor_ms: 1000
+
+  throughput:
+    excellent_rps: 200
+    good_rps: 100
+    acceptable_rps: 50
+    poor_rps: 20
+
+  resource_efficiency:
+    requests_per_cpu_percent: 200
+    requests_per_mb_memory: 100
+    db_queries_per_request: 5
+    cache_operations_per_request: 3
+
+# =============================================================================
+# Monitoring and Alerting Thresholds
+# =============================================================================
+
+monitoring:
+  metrics_collection:
+    interval_seconds: 10
+    retention_hours: 168  # 7 days
+    aggregation_interval_minutes: 5
+
+  alerts:
+    p95_latency_warning_ms: 500
+    p95_latency_critical_ms: 1000
+    error_rate_warning_percent: 2
+    error_rate_critical_percent: 5
+    throughput_degradation_warning_percent: 30
+    throughput_degradation_critical_percent: 50
+
+  health_checks:
+    interval_seconds: 30
+    timeout_seconds: 5
+    consecutive_failures_before_alert: 3
+
+# =============================================================================
+# Performance Testing Configuration
+# =============================================================================
+
+testing:
+  environments:
+    local:
+      base_url: "http://localhost"
+      expected_capacity_percent: 50
+
+    staging:
+      base_url: "https://staging.bcm-platform.example.com"
+      expected_capacity_percent: 75
+
+    production:
+      base_url: "https://bcm-platform.example.com"
+      expected_capacity_percent: 100
+
+  regression_detection:
+    max_acceptable_degradation_percent: 10
+    comparison_window_days: 7
+    minimum_sample_size: 100
+
+  report_generation:
+    format: ["html", "json", "csv"]
+    include_charts: true
+    include_recommendations: true
+    retention_days: 90

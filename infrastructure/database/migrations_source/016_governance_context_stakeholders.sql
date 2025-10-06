@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS governance.stakeholders (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- Identification
     stakeholder_name VARCHAR(255) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS governance.context_analysis (
 
     -- Multi-tenancy
     tenant_id VARCHAR(100) NOT NULL,
-    organization_id UUID NOT NULL REFERENCES core.organizations(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
 
     -- Analysis Type & Identification
     analysis_type VARCHAR(50) NOT NULL CHECK (analysis_type IN ('PESTLE', 'SWOT', 'PORTER', 'VUCA', 'OTHER')),
@@ -196,7 +196,7 @@ CREATE POLICY stakeholders_org_access
 ON governance.stakeholders
 USING (
     organization_id IN (
-        SELECT id FROM core.organizations
+        SELECT id FROM public.organizations
         WHERE tenant_id = current_setting('app.current_tenant_id', true)::text
     )
 );
@@ -226,7 +226,7 @@ CREATE POLICY context_analysis_org_access
 ON governance.context_analysis
 USING (
     organization_id IN (
-        SELECT id FROM core.organizations
+        SELECT id FROM public.organizations
         WHERE tenant_id = current_setting('app.current_tenant_id', true)::text
     )
 );
@@ -246,13 +246,13 @@ USING (
 CREATE TRIGGER update_stakeholders_updated_at
 BEFORE UPDATE ON governance.stakeholders
 FOR EACH ROW
-EXECUTE FUNCTION core.update_updated_at_column();
+EXECUTE FUNCTION public.update_updated_at_column();
 
 -- Trigger: Auto-update updated_at timestamp for context_analysis
 CREATE TRIGGER update_context_analysis_updated_at
 BEFORE UPDATE ON governance.context_analysis
 FOR EACH ROW
-EXECUTE FUNCTION core.update_updated_at_column();
+EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =====================================================
 -- ANALYTICAL VIEWS

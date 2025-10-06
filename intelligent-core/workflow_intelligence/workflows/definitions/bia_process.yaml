@@ -1,0 +1,493 @@
+# BIA Workflow Definition
+# ISO 22301:2019 Clause 8.2.2
+# Version: 2.0
+
+workflow:
+  id: bia_process
+  name: Business Impact Analysis
+  version: 2.0
+  module: bia
+  description: |
+    Complete BIA workflow following ISO 22301:2019 clause 8.2.2 requirements.
+    Includes managed autonomy - checkpoints for validation, creative zones for AI.
+
+metadata:
+  iso_standard: ISO 22301:2019
+  clause: 8.2.2
+  estimated_duration_days: 14-30
+  required_roles:
+    - bcm_manager
+    - process_owners
+    - senior_management
+
+constitution:
+  # Level 1: Неизменяемые принципы
+  core_principles:
+    - id: const_001
+      principle: "Never recommend RTO < 1 hour without explicit justification"
+      rationale: "Immediate recovery is technically and financially challenging"
+
+    - id: const_002
+      principle: "Always validate financial impact with quantitative data"
+      rationale: "Financial justification critical for resource allocation"
+
+    - id: const_003
+      principle: "Mandatory dependency mapping for Tier 1-2 processes"
+      rationale: "Critical processes require full understanding of dependencies"
+
+  forbidden_actions:
+    - "Modify user data without explicit permission"
+    - "Create processes without user confirmation"
+    - "Override regulatory requirements"
+    - "Bypass mandatory checkpoints"
+    - "Delete audit trail"
+
+stages:
+  # Stage 1: Identify Processes
+  - id: identify_processes
+    name: Identify Business Processes
+    order: 1
+    type: creative_zone
+
+    description: |
+      Identify and document critical business processes that support
+      organization's key products and services.
+
+    objectives:
+      - Identify minimum 3 business processes
+      - Ensure at least one Tier 1 (critical) process
+      - Document process owners
+      - Initial tier assignment
+
+    entry_criteria:
+      - BIA initiated
+      - Organization context available
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: bia_cp_001
+      rules:
+        - bia_mand_001  # Minimum 3 processes
+        - bia_mand_002  # At least one Tier 1
+        - bia_bp_001    # Process owners documented
+
+    creative_zone:
+      creativity_level: medium
+      allowed_approaches:
+        - Industry benchmarking
+        - Similar organization analysis
+        - Regulatory requirement mapping
+        - Best practice templates
+      guidance: |
+        You can suggest typical processes for this industry, but:
+        - Base on real industry patterns from case library
+        - Explain WHY each process is relevant
+        - Allow user to accept/reject
+        - Adapt to organization size and maturity
+      examples:
+        - "Healthcare: Emergency Department, Patient Records, Pharmacy"
+        - "Finance: Transaction Processing, Accounts, Compliance"
+
+    required_data:
+      - process_name:
+          type: string
+          required: true
+          min_length: 3
+          description: "Business process name"
+
+      - process_description:
+          type: string
+          required: true
+          min_length: 20
+          description: "What the process does"
+
+      - process_owner:
+          type: string
+          required: true
+          description: "Person responsible for process"
+
+      - tier:
+          type: enum
+          required: true
+          values: [tier_1, tier_2, tier_3, tier_4]
+          description: "Initial criticality assessment"
+
+    ai_capabilities:
+      - suggest_processes:
+          description: "Suggest typical processes for industry"
+          parameters:
+            - industry
+            - size
+            - regulatory_requirements
+
+      - assess_initial_tier:
+          description: "Recommend initial tier based on description"
+          parameters:
+            - process_description
+            - industry
+
+  # Stage 2: Analyze Dependencies
+  - id: analyze_dependencies
+    name: Analyze Dependencies
+    order: 2
+    type: creative_zone
+
+    description: |
+      Map dependencies for each process - people, technology,
+      facilities, suppliers, and information.
+
+    objectives:
+      - Map all dependency types
+      - Identify single points of failure
+      - Document criticality
+
+    entry_criteria:
+      - Minimum 3 processes identified
+      - checkpoint: bia_cp_001 passed
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: bia_cp_002
+      rules:
+        - bia_const_003
+        - bia_bp_002
+
+    creative_zone:
+      creativity_level: high
+      allowed_approaches:
+        - Probing questions
+        - Typical dependency suggestions
+        - Dependency chain mapping
+        - Hidden interdependency identification
+      guidance: |
+        Be a detective - help discover what user might miss:
+        - Ask: "Who needs to be available?", "What systems critical?"
+        - Suggest typical: "Most similar processes depend on X, Y"
+        - Explore chains: "If A fails, what else affected?"
+        - Non-obvious: "Vendor dependencies? Backup power?"
+
+    required_data:
+      - dependency_type:
+          type: enum
+          required: true
+          values: [people, technology, facility, supplier, information]
+
+      - dependency_name:
+          type: string
+          required: true
+          description: "Specific dependency"
+
+      - criticality:
+          type: enum
+          required: true
+          values: [critical, important, normal]
+
+      - single_point_of_failure:
+          type: boolean
+          required: true
+
+    validation_rules:
+      - rule: "Tier 1 processes need min 2 dependencies"
+        severity: critical
+
+      - rule: "Tier 1 must have people + technology dependencies"
+        severity: high
+
+  # Stage 3: Assess Impact
+  - id: assess_impact
+    name: Assess Business Impact
+    order: 3
+    type: creative_zone
+
+    description: |
+      Assess impact of process disruption over time across
+      financial, operational, reputational, and regulatory dimensions.
+
+    objectives:
+      - Quantify financial impact (hourly, daily, weekly)
+      - Assess operational impact
+      - Evaluate reputational damage
+      - Identify regulatory consequences
+
+    entry_criteria:
+      - Dependencies mapped
+      - checkpoint: bia_cp_002 passed
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: bia_cp_003
+      rules:
+        - bia_const_002
+        - bia_mand_003
+
+    creative_zone:
+      creativity_level: high
+      allowed_approaches:
+        - Multiple frameworks (quantitative + qualitative)
+        - Scenario analysis
+        - Comparative analysis
+        - Cascading impact modeling
+        - Analogies from similar cases
+      guidance: |
+        HIGH creative freedom in analysis:
+        - Use multiple frameworks
+        - Consider direct AND indirect impacts
+        - Explore cascading effects
+        - Use case studies and analogies
+        BUT distinguish:
+        - Data-driven conclusions (when you have data)
+        - Educated estimates (when inferring)
+        - Hypothetical scenarios (when exploring)
+
+    required_data:
+      - financial_impact:
+          hourly_loss:
+            type: number
+            required: true
+          daily_loss:
+            type: number
+            required: true
+          weekly_loss:
+            type: number
+            required: false
+          calculation_method:
+            type: string
+            required: true
+
+      - operational_impact:
+          severity:
+            type: enum
+            values: [low, medium, high, critical]
+          description:
+            type: string
+            min_length: 30
+          affected_areas:
+            type: array
+
+      - reputational_impact:
+          severity:
+            type: enum
+            values: [low, medium, high, critical]
+          stakeholders_affected:
+            type: array
+
+      - regulatory_impact:
+          compliance_requirements:
+            type: array
+          penalties:
+            type: string
+
+    ai_capabilities:
+      - calculate_financial_impact:
+          description: "Estimate financial impact from industry data"
+          uses: [case_library, benchmarks]
+
+      - identify_cascading_effects:
+          description: "Map indirect impacts"
+
+      - compare_to_similar_incidents:
+          description: "Reference real incidents from case library"
+
+  # Stage 4: Determine Recovery Objectives
+  - id: determine_rto
+    name: Determine Recovery Objectives
+    order: 4
+    type: creative_zone
+
+    description: |
+      Determine RTO (Recovery Time Objective), RPO (Recovery Point Objective),
+      and MTPD (Maximum Tolerable Period of Disruption) for each process.
+
+    objectives:
+      - Set realistic RTO based on impact
+      - Determine RPO for data recovery
+      - Define MTPD limits
+      - Provide detailed rationale
+
+    entry_criteria:
+      - All impacts assessed
+      - checkpoint: bia_cp_003 passed
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: bia_cp_004
+      rules:
+        - bia_const_001
+        - bia_mand_004
+        - bia_bp_003
+
+    creative_zone:
+      creativity_level: medium
+      allowed_approaches:
+        - Industry benchmarks
+        - Impact-based calculation
+        - Cost-benefit analysis
+        - Regulatory requirements
+        - Similar case analysis
+      guidance: |
+        Balance creativity with data:
+        - Start with calculation (impact + industry norm)
+        - Explain step-by-step reasoning
+        - Present alternatives with trade-offs
+        - Reference similar organizations
+        - Acknowledge uncertainty
+
+    required_data:
+      - rto_hours:
+          type: number
+          required: true
+          min: 0
+      - rpo_hours:
+          type: number
+          required: true
+          min: 0
+      - mtpd_hours:
+          type: number
+          required: true
+      - rationale:
+          type: string
+          required: true
+          min_length: 50
+      - alternatives_considered:
+          type: array
+
+    validation_rules:
+      - rule: "RTO ≤ MTPD"
+        severity: critical
+
+      - rule: "RPO ≤ RTO for consistency"
+        severity: medium
+
+      - rule: "Tier 1: RTO ≤ 4h recommended"
+        severity: high
+
+  # Stage 5: Review Results
+  - id: review_results
+    name: Review and Validate Results
+    order: 5
+    type: checkpoint
+
+    description: |
+      Comprehensive review of BIA results before finalization.
+
+    objectives:
+      - Validate all requirements met
+      - Review with stakeholders
+      - Finalize documentation
+
+    entry_criteria:
+      - All RTOs determined
+      - checkpoint: bia_cp_004 passed
+
+    exit_criteria:
+      type: checkpoint
+      checkpoint_id: bia_cp_005
+      rules:
+        - bia_const_001
+        - bia_const_002
+        - bia_const_003
+        - bia_mand_001
+        - bia_mand_002
+        - bia_mand_003
+        - bia_mand_004
+
+    actions:
+      - Generate BIA report
+      - Stakeholder review
+      - Management approval
+
+    can_return_to:
+      - identify_processes
+      - analyze_dependencies
+      - assess_impact
+      - determine_rto
+
+  # Stage 6: Completed
+  - id: completed
+    name: BIA Completed
+    order: 6
+    type: final
+
+    description: "BIA successfully completed and approved"
+
+    entry_criteria:
+      - checkpoint: bia_cp_005 passed
+      - Management approval obtained
+
+    actions:
+      - Create workflow case for case library
+      - Trigger risk assessment workflow
+      - Update compliance status
+      - Generate completion certificate
+
+# AI Advisor Configuration
+ai_advisor:
+  enabled: true
+  proactive: true
+
+  triggers:
+    - event: stage_entered
+      action: provide_stage_guidance
+
+    - event: validation_failed
+      action: suggest_remediation
+
+    - event: time_in_stage_exceeded
+      threshold_hours: 48
+      action: check_if_stuck
+
+    - event: user_inactive
+      threshold_hours: 24
+      action: send_reminder
+
+  context_sources:
+    - workflow_state
+    - case_library
+    - benchmarks
+    - knowledge_graph
+    - trending_patterns
+
+# Case Library Configuration
+case_library:
+  collect_events: true
+  anonymize: true
+
+  events_to_collect:
+    - workflow.started
+    - stage.changed
+    - action.taken
+    - challenge.encountered
+    - challenge.resolved
+    - ai.intervention
+    - checkpoint.failed
+    - checkpoint.passed
+    - workflow.completed
+
+  success_criteria:
+    - all_checkpoints_passed: true
+    - stakeholder_approval: true
+    - within_time_budget:
+        max_days: 45
+
+# Integration Points
+integrations:
+  eventbus:
+    publish_all_events: true
+    subscribe_to:
+      - governance.organization.created
+      - governance.org_context.updated
+
+  knowledge_graph:
+    query_standards:
+      - ISO 22301:2019
+      - BCI GPG 2018
+
+  ml_predictor:
+    predict_on_stages:
+      - identify_processes
+      - determine_rto
+    features:
+      - industry
+      - size
+      - maturity
+      - current_progress

@@ -1,0 +1,53 @@
+{
+  "secrets": [
+    {
+      "file": "src/index.js",
+      "line": 6,
+      "type": "Secret Key/Token",
+      "snippet": "ent variables const SECRET_TOKEN = \"Bearer sk_live_xyz789_secret_key\";  // Secur"
+    },
+    {
+      "file": "src/risk_assessment.py",
+      "line": 8,
+      "type": "Password",
+      "snippet": "config         self.password = \"admin123\"  # Security issue  "
+    },
+    {
+      "file": "src/app.py",
+      "line": 9,
+      "type": "API Key",
+      "snippet": "this to config file API_KEY = \"sk_test_abc123_secret\"  # Security issue: "
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "file": "src/index.js",
+      "line": 23,
+      "type": "eval() usage (code injection risk)",
+      "snippet": "     const result = eval(command);  // DANGER"
+    },
+    {
+      "file": "src/incident_manager.py",
+      "line": 17,
+      "type": "pickle usage (deserialization risk)",
+      "snippet": "   self.incidents = pickle.load(f)         except Fi"
+    }
+  ],
+  "dependencies": {
+    "python": {
+      "checked": false,
+      "vulnerabilities": []
+    },
+    "nodejs": {
+      "checked": false,
+      "vulnerabilities": []
+    },
+    "note": "Dependency scanning requires Safety (Python) or npm audit (Node.js)"
+  },
+  "summary": {
+    "secrets_found": 3,
+    "vulnerabilities_found": 2,
+    "high_risk": 1,
+    "status": "FAIL"
+  }
+}

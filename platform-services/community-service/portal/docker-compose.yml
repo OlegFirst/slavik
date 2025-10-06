@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bcm-portal-service
+    ports:
+      - "8031:8031"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://bcm_user:bcm_password@postgres:5432/bcm_platform
+      - CLIENTS_SERVICE_URL=http://clients:8030
+      - VALIDATION_SERVICE_URL=http://validation:8022
+      - AI_ORCHESTRATOR_URL=http://ai-orchestrator:8000
+      - PORT=8031
+      - DEBUG=true
+      - CORS_ORIGINS=*
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: bcm-postgres
+    environment:
+      - POSTGRES_USER=bcm_user
+      - POSTGRES_PASSWORD=bcm_password
+      - POSTGRES_DB=bcm_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  bcm-network:
+    driver: bridge

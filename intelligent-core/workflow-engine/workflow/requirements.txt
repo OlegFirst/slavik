@@ -1,0 +1,28 @@
+# Unified Workflow Engine Dependencies
+
+# BPMN XML parsing
+lxml>=4.9.0
+
+# Database
+asyncpg>=0.29.0
+sqlalchemy>=2.0.0
+alembic>=1.12.0
+
+# Redis
+redis>=5.0.0
+aioredis>=2.0.0
+
+# FastAPI (optional - для API endpoints)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# Pydantic
+pydantic>=2.4.0
+
+# Workflow Intelligence (from our platform)
+# Импортируется из ../workflow_intelligence
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx>=0.25.0

@@ -1,0 +1,11 @@
+# FastAPI
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart
+
+# Monitoring
+prometheus-client>=0.18.0
+
+# Async
+aiofiles
+httpx

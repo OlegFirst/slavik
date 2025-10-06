@@ -1,0 +1,914 @@
+{
+  "info": {
+    "name": "BCM Platform API - Complete Collection",
+    "description": "Complete API collection for BCM Platform services (BIA, Compliance, Planning, Plans)\n\nISO 22301:2019 Compliant Business Continuity Management Platform\n\n**Services:**\n- BIA Service (Port 8012) - ISO 22301 Clause 8.2.2\n- Compliance Service (Port 8014) - ISO 22301 Clauses 9.2, 10.1, 10.2\n- Planning Service (Port 8011) - ISO 22301 Clause 8.3\n- Plans Service (Port 8023) - ISO 22301 Clause 8.4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "bia_port",
+      "value": "8012",
+      "type": "string"
+    },
+    {
+      "key": "compliance_port",
+      "value": "8014",
+      "type": "string"
+    },
+    {
+      "key": "planning_port",
+      "value": "8011",
+      "type": "string"
+    },
+    {
+      "key": "plans_port",
+      "value": "8023",
+      "type": "string"
+    },
+    {
+      "key": "tenant_id",
+      "value": "tenant-123",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "user-456",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "BIA Service (Port 8012)",
+      "item": [
+        {
+          "name": "Process Management",
+          "item": [
+            {
+              "name": "Create BIA Process",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_CREATE\"]}",
+                    "type": "text",
+                    "description": "Development mode authentication"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"{{tenant_id}}\",\n  \"name\": \"Payment Processing System\",\n  \"description\": \"Core payment processing for customer transactions\",\n  \"department\": \"Finance Operations\",\n  \"process_owner\": \"jane.smith@company.com\",\n  \"criticality\": \"CRITICAL\",\n  \"rto_hours\": 2,\n  \"rpo_hours\": 1,\n  \"mtpd_hours\": 4,\n  \"financial_impact\": {\n    \"1_hour\": 50000,\n    \"4_hours\": 200000,\n    \"24_hours\": 1200000\n  },\n  \"dependencies\": [\n    {\n      \"type\": \"technology\",\n      \"name\": \"Payment Gateway API\",\n      \"criticality\": 5,\n      \"required\": true\n    }\n  ],\n  \"industry\": \"FINANCIAL_SERVICES\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "List BIA Processes",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes?tenant_id={{tenant_id}}&criticality=CRITICAL",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    },
+                    {
+                      "key": "criticality",
+                      "value": "CRITICAL",
+                      "description": "Filter by criticality (CRITICAL, HIGH, MEDIUM, LOW)"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get BIA Process by ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/1?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "1"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update BIA Process",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_UPDATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rto_hours\": 1,\n  \"description\": \"Updated description with stricter RTO\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/1?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "1"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Complete BIA Process",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_COMPLETE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/1/complete?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "1", "complete"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "AI Analysis",
+          "item": [
+            {
+              "name": "AI RTO Suggestion",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_AI_SUGGEST\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/1/suggest-rto?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "1", "suggest-rto"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "AI Dependency Discovery",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_AI_SUGGEST\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/1/discover-dependencies?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "1", "discover-dependencies"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Bulk Operations",
+          "item": [
+            {
+              "name": "Bulk Create Processes",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"processes\": [\n    {\n      \"tenant_id\": \"{{tenant_id}}\",\n      \"name\": \"Email System\",\n      \"criticality\": \"HIGH\",\n      \"rto_hours\": 8,\n      \"rpo_hours\": 4,\n      \"mtpd_hours\": 24\n    },\n    {\n      \"tenant_id\": \"{{tenant_id}}\",\n      \"name\": \"CRM System\",\n      \"criticality\": \"MEDIUM\",\n      \"rto_hours\": 24,\n      \"rpo_hours\": 12,\n      \"mtpd_hours\": 72\n    }\n  ],\n  \"max_concurrency\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/bulk?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "bulk"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bulk Validate Processes",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"processes\": [\n    {\n      \"tenant_id\": \"{{tenant_id}}\",\n      \"name\": \"Test Process\",\n      \"criticality\": \"HIGH\",\n      \"rto_hours\": 8,\n      \"rpo_hours\": 4,\n      \"mtpd_hours\": 24\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/processes/bulk/validate",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "processes", "bulk", "validate"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reports",
+          "item": [
+            {
+              "name": "Summary Report",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/reports/summary?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "reports", "summary"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Critical Processes Report",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/reports/critical-processes?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "reports", "critical-processes"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Dependencies Report",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"BIA_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{bia_port}}/api/bia/reports/dependencies?tenant_id={{tenant_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{bia_port}}",
+                  "path": ["api", "bia", "reports", "dependencies"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Compliance Service (Port 8014)",
+      "item": [
+        {
+          "name": "Nonconformity & RCA",
+          "item": [
+            {
+              "name": "Start RCA Process (5 Whys)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"NC_MANAGE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rca_method\": \"5_whys\",\n  \"rca_lead\": \"john.doe@company.com\",\n  \"rca_team\": [\"jane.smith@company.com\", \"bob.johnson@company.com\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{compliance_port}}/api/nonconformities/nc-uuid-123/rca/start?tenant_id={{tenant_id}}&rca_method=5_whys&rca_lead=john.doe@company.com",
+                  "host": ["{{base_url}}"],
+                  "port": "{{compliance_port}}",
+                  "path": ["api", "nonconformities", "nc-uuid-123", "rca", "start"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    },
+                    {
+                      "key": "rca_method",
+                      "value": "5_whys"
+                    },
+                    {
+                      "key": "rca_lead",
+                      "value": "john.doe@company.com"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Complete RCA (5 Whys)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"NC_MANAGE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completed_template\": {\n    \"problem_statement\": \"BC plan test failed - team unable to access recovery site\",\n    \"why_1\": \"VPN credentials were not available\",\n    \"why_2\": \"Credentials stored in office safe, not accessible remotely\",\n    \"why_3\": \"No secure cloud-based credential management\",\n    \"why_4\": \"Security team concerns about cloud storage\",\n    \"why_5\": \"No approved secure credential management solution\",\n    \"root_cause\": \"Lack of approved secure remote credential access solution\"\n  },\n  \"actor_id\": \"john.doe@company.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{compliance_port}}/api/nonconformities/nc-uuid-123/rca/complete?tenant_id={{tenant_id}}&actor_id={{user_id}}",
+                  "host": ["{{base_url}}"],
+                  "port": "{{compliance_port}}",
+                  "path": ["api", "nonconformities", "nc-uuid-123", "rca", "complete"],
+                  "query": [
+                    {
+                      "key": "tenant_id",
+                      "value": "{{tenant_id}}"
+                    },
+                    {
+                      "key": "actor_id",
+                      "value": "{{user_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get RCA Template",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}:{{compliance_port}}/api/rca/templates/5_whys?problem_statement=BC plan test failed",
+                  "host": ["{{base_url}}"],
+                  "port": "{{compliance_port}}",
+                  "path": ["api", "rca", "templates", "5_whys"],
+                  "query": [
+                    {
+                      "key": "problem_statement",
+                      "value": "BC plan test failed"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "List RCA Methods",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}:{{compliance_port}}/api/rca/methods",
+                  "host": ["{{base_url}}"],
+                  "port": "{{compliance_port}}",
+                  "path": ["api", "rca", "methods"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Planning Service (Port 8011)",
+      "item": [
+        {
+          "name": "Strategy Management",
+          "item": [
+            {
+              "name": "Create Strategy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"STRATEGY_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"{{tenant_id}}\",\n  \"name\": \"Payment System Recovery Strategy\",\n  \"strategy_type\": \"FAST_RECOVERY\",\n  \"description\": \"Hot standby for payment processing with 2-hour RTO\",\n  \"target_rto_hours\": 2,\n  \"target_rpo_hours\": 1,\n  \"estimated_cost\": 500000,\n  \"implementation_timeline_days\": 90\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{planning_port}}/api/strategies",
+                  "host": ["{{base_url}}"],
+                  "port": "{{planning_port}}",
+                  "path": ["api", "strategies"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "List Strategies",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"STRATEGY_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{planning_port}}/api/strategies?status=DRAFT",
+                  "host": ["{{base_url}}"],
+                  "port": "{{planning_port}}",
+                  "path": ["api", "strategies"],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "DRAFT"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cost-Benefit Analysis",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"STRATEGY_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"analysis_period_years\": 3,\n  \"discount_rate\": 0.08,\n  \"implementation_cost\": 500000,\n  \"annual_operating_cost\": 150000,\n  \"annual_benefit\": 800000,\n  \"one_time_costs\": [\n    {\"description\": \"Infrastructure\", \"amount\": 300000},\n    {\"description\": \"Training\", \"amount\": 50000}\n  ],\n  \"recurring_costs\": [\n    {\"description\": \"Maintenance\", \"annual_amount\": 100000},\n    {\"description\": \"Support\", \"annual_amount\": 50000}\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{planning_port}}/api/strategies/strategy-uuid-123/cost-benefit",
+                  "host": ["{{base_url}}"],
+                  "port": "{{planning_port}}",
+                  "path": ["api", "strategies", "strategy-uuid-123", "cost-benefit"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Submit for Review",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"STRATEGY_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{planning_port}}/api/strategies/strategy-uuid-123/submit-review",
+                  "host": ["{{base_url}}"],
+                  "port": "{{planning_port}}",
+                  "path": ["api", "strategies", "strategy-uuid-123", "submit-review"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve Strategy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"STRATEGY_APPROVE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"approval_notes\": \"Strategy approved based on positive NPV and alignment with RTO requirements\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{planning_port}}/api/strategies/strategy-uuid-123/approve",
+                  "host": ["{{base_url}}"],
+                  "port": "{{planning_port}}",
+                  "path": ["api", "strategies", "strategy-uuid-123", "approve"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Plans Service (Port 8023)",
+      "item": [
+        {
+          "name": "Plan Management",
+          "item": [
+            {
+              "name": "Create Plan",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"PLAN_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"{{tenant_id}}\",\n  \"name\": \"Payment System Recovery Plan\",\n  \"plan_type\": \"IT_RECOVERY\",\n  \"description\": \"Recovery procedures for payment processing system\",\n  \"scope\": \"Payment processing infrastructure and applications\",\n  \"objectives\": \"Restore payment processing within 2 hours RTO\",\n  \"owner_id\": \"{{user_id}}\",\n  \"priority\": \"CRITICAL\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{plans_port}}/api/plans/plans",
+                  "host": ["{{base_url}}"],
+                  "port": "{{plans_port}}",
+                  "path": ["api", "plans", "plans"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "List Plans",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"PLAN_VIEW\"]}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}:{{plans_port}}/api/plans/plans?plan_type=IT_RECOVERY&status=ACTIVE",
+                  "host": ["{{base_url}}"],
+                  "port": "{{plans_port}}",
+                  "path": ["api", "plans", "plans"],
+                  "query": [
+                    {
+                      "key": "plan_type",
+                      "value": "IT_RECOVERY"
+                    },
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Procedure",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"PLAN_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Restore Database Server\",\n  \"description\": \"Restore primary database from backup\",\n  \"step_number\": 3,\n  \"estimated_duration_minutes\": 45,\n  \"responsible_role\": \"DBA\",\n  \"instructions\": \"1. Mount backup volume\\n2. Run restore script\\n3. Verify data integrity\",\n  \"dependencies\": [2],\n  \"required_resources\": [\"backup_storage\", \"dba_team\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{plans_port}}/api/plans/plans/1/procedures",
+                  "host": ["{{base_url}}"],
+                  "port": "{{plans_port}}",
+                  "path": ["api", "plans", "plans", "1", "procedures"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Activate Plan for Incident",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"PLAN_ACTIVATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"activation_type\": \"REAL_INCIDENT\",\n  \"incident_description\": \"Payment gateway outage - unable to process transactions\",\n  \"severity\": \"CRITICAL\",\n  \"activated_by\": \"{{user_id}}\",\n  \"incident_start_time\": \"2024-01-15T10:30:00Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{plans_port}}/api/plans/plans/1/activate-real",
+                  "host": ["{{base_url}}"],
+                  "port": "{{plans_port}}",
+                  "path": ["api", "plans", "plans", "1", "activate-real"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Contact List",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Dev-User",
+                    "value": "{\"sub\":\"{{user_id}}\",\"tenant_id\":\"{{tenant_id}}\",\"permissions\":[\"PLAN_CREATE\"]}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"plan_id\": 1,\n  \"name\": \"IT Recovery Team\",\n  \"description\": \"Primary IT recovery team contacts\",\n  \"contacts\": [\n    {\n      \"name\": \"John Doe\",\n      \"role\": \"INCIDENT_MANAGER\",\n      \"email\": \"john.doe@company.com\",\n      \"phone\": \"+1-555-0100\",\n      \"is_primary\": true\n    },\n    {\n      \"name\": \"Jane Smith\",\n      \"role\": \"TECHNICAL_LEAD\",\n      \"email\": \"jane.smith@company.com\",\n      \"phone\": \"+1-555-0101\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}:{{plans_port}}/api/plans/contact-lists",
+                  "host": ["{{base_url}}"],
+                  "port": "{{plans_port}}",
+                  "path": ["api", "plans", "contact-lists"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "BIA Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{bia_port}}/health",
+              "host": ["{{base_url}}"],
+              "port": "{{bia_port}}",
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Compliance Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{compliance_port}}/health",
+              "host": ["{{base_url}}"],
+              "port": "{{compliance_port}}",
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Planning Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{planning_port}}/health",
+              "host": ["{{base_url}}"],
+              "port": "{{planning_port}}",
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Plans Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{plans_port}}/health",
+              "host": ["{{base_url}}"],
+              "port": "{{plans_port}}",
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

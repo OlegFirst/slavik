@@ -1,0 +1,366 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'bcm-platform'
+    environment: 'production'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
+
+# Load rules once and periodically evaluate them
+# rule_files:
+#   - "alerts/*.yml"
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Planning Service (ISO 22301 Clause 8.3)
+  - job_name: 'planning-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['planning-service:8011']
+        labels:
+          service: 'planning-service'
+          iso_clause: '8.3'
+          component: 'bcm-strategy'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'planning-service'
+
+  # Plans Service (ISO 22301 Clause 8.4)
+  - job_name: 'plans-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['plans-service:8023']
+        labels:
+          service: 'plans-service'
+          iso_clause: '8.4'
+          component: 'bcm-plans'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'plans-service'
+
+  # PostgreSQL monitoring (if postgres_exporter is added)
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+
+  # Redis monitoring (if redis_exporter is added)
+  # - job_name: 'redis'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+
+  # BIA Service (ISO 22301 Clause 8.2.2)
+  - job_name: 'bia-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['bia-service:8012']
+        labels:
+          service: 'bia-service'
+          iso_clause: '8.2.2'
+          component: 'bcm-bia'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'bia-service'
+
+  # Compliance Service (ISO 22301 Clauses 9.2, 10.1, 10.2)
+  - job_name: 'compliance-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['compliance-service:8014']
+        labels:
+          service: 'compliance-service'
+          iso_clause: '9.2,10.1,10.2'
+          component: 'bcm-compliance'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'compliance-service'
+
+  # Centralized Monitoring Service (aggregates all platform metrics)
+  - job_name: 'monitoring-service'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['monitoring-service:8045']
+        labels:
+          service: 'monitoring-service'
+          component: 'observability'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'monitoring-service'
+
+  # EventBus monitoring
+  - job_name: 'eventbus'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['eventbus:8001']
+        labels:
+          service: 'eventbus'
+          component: 'messaging'
+
+  # ============================================================================
+  # NEW SERVICES - Learning & Governance & Community
+  # ============================================================================
+
+  # Learning Service (ISO 22301 Clause 7.2 - Competence)
+  - job_name: 'learning-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['learning-service:8021']
+        labels:
+          service: 'learning-service'
+          iso_clause: '7.2'
+          component: 'bcm-competence'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'learning-service'
+
+  # Governance Service (ISO 22301 Clause 5.3, 7.1, 7.3)
+  - job_name: 'governance-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['governance-service:8022']
+        labels:
+          service: 'governance-service'
+          iso_clause: '5.3,7.1,7.3'
+          component: 'bcm-governance'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'governance-service'
+
+  # Community Service - Portal (ISO 22301 Clause 7.4 - Communication)
+  - job_name: 'community-portal'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['community-portal:8031']
+        labels:
+          service: 'community-portal'
+          iso_clause: '7.4'
+          component: 'bcm-communication'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'community-portal'
+
+  # Community Service - Marketplace (Resource Management)
+  - job_name: 'community-marketplace'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['community-marketplace:8024']
+        labels:
+          service: 'community-marketplace'
+          iso_clause: '7.1'
+          component: 'bcm-resources'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'community-marketplace'
+
+  # ============================================================================
+  # PLATFORM CORE SERVICES
+  # ============================================================================
+
+  # Intelligent Gateway
+  - job_name: 'intelligent-gateway'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['intelligent-gateway:8000']
+        labels:
+          service: 'intelligent-gateway'
+          component: 'gateway'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'intelligent-gateway'
+
+  # AI Orchestration Service
+  - job_name: 'ai-orchestration'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['ai-orchestration:8002']
+        labels:
+          service: 'ai-orchestration'
+          component: 'platform'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'ai-orchestration'
+
+  # BPMN Workflow Service
+  - job_name: 'bpmn-workflow'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['bpmn-workflow:8003']
+        labels:
+          service: 'bpmn-workflow'
+          component: 'platform'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'bpmn-workflow'
+
+  # Coordination Center
+  - job_name: 'coordination-center'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['coordination-center:8004']
+        labels:
+          service: 'coordination-center'
+          component: 'platform'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'coordination-center'
+
+  # Project Intelligence Service
+  - job_name: 'project-intelligence'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['project-intelligence:8025']
+        labels:
+          service: 'project-intelligence'
+          component: 'intelligence'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'project-intelligence'
+
+  # AI Intelligence Service
+  - job_name: 'ai-intelligence'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['ai-intelligence:8032']
+        labels:
+          service: 'ai-intelligence'
+          component: 'intelligence'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'ai-intelligence'
+
+  # Notification Service
+  - job_name: 'notification-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['notification-service:8035']
+        labels:
+          service: 'notification-service'
+          component: 'platform'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'notification-service'
+
+  # Process Mining Service
+  - job_name: 'process-mining'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['process-mining:8040']
+        labels:
+          service: 'process-mining'
+          component: 'analytics'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'process-mining'
+
+  # ============================================================================
+  # ADDITIONAL BCM SERVICES
+  # ============================================================================
+
+  # Validation Service (ISO 22301 Clause 8.5 - Exercising & Testing)
+  - job_name: 'validation-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['validation-service:8025']
+        labels:
+          service: 'validation-service'
+          iso_clause: '8.5'
+          component: 'bcm-validation'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'validation-service'
+
+  # Documents Service (ISO 22301 Clause 7.5 - Documented Information)
+  - job_name: 'documents-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['documents-service:8024']
+        labels:
+          service: 'documents-service'
+          iso_clause: '7.5'
+          component: 'bcm-documents'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'documents-service'
+
+  # Response Service (ISO 22301 Clause 8.4 - Incident Response)
+  - job_name: 'response-service'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['response-service:8041']
+        labels:
+          service: 'response-service'
+          iso_clause: '8.4'
+          component: 'bcm-response'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'response-service'

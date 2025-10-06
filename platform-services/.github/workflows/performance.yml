@@ -1,0 +1,208 @@
+name: Performance Testing
+
+on:
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_scenario:
+        description: 'Test scenario to run'
+        required: true
+        default: 'light'
+        type: choice
+        options:
+          - light
+          - medium
+          - heavy
+          - stress
+
+jobs:
+  performance-tests:
+    name: Run Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: bcm_platform
+          POSTGRES_USER: bcm_user
+          POSTGRES_PASSWORD: bcm_test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd performance-tests
+          pip install -r requirements.txt
+
+      - name: Start services
+        run: |
+          docker-compose up -d bia-service compliance-service planning-service plans-service
+          sleep 30
+
+      - name: Wait for services
+        run: |
+          timeout 120 bash -c 'until curl -f http://localhost:8012/health; do sleep 5; done'
+          timeout 120 bash -c 'until curl -f http://localhost:8014/health; do sleep 5; done'
+          timeout 120 bash -c 'until curl -f http://localhost:8011/health; do sleep 5; done'
+          timeout 120 bash -c 'until curl -f http://localhost:8023/health; do sleep 5; done'
+
+      - name: Run baseline benchmarks
+        continue-on-error: true
+        run: |
+          cd performance-tests
+          pytest benchmark_tests/test_api_benchmarks.py --benchmark-only \
+            --benchmark-json=reports/benchmark_api.json \
+            --benchmark-min-rounds=5
+
+      - name: Determine test scenario
+        id: scenario
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "scenario=${{ github.event.inputs.test_scenario }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event_name }}" == "schedule" ]; then
+            echo "scenario=medium" >> $GITHUB_OUTPUT
+          else
+            echo "scenario=light" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run load tests
+        run: |
+          cd performance-tests
+          ./run_load_test.sh ${{ steps.scenario.outputs.scenario }}
+
+      - name: Collect metrics
+        continue-on-error: true
+        run: |
+          cd performance-tests
+          python metrics_collector.py --duration 60 --interval 10 --output reports/metrics.json
+
+      - name: Generate performance report
+        if: always()
+        run: |
+          cd performance-tests
+          python generate_report.py \
+            --locust-stats reports/locust_${{ steps.scenario.outputs.scenario }}_stats.csv \
+            --benchmark reports/benchmark_api.json \
+            --metrics reports/metrics.json \
+            --output reports/performance_report.html
+
+      - name: Check for performance regression
+        id: regression_check
+        continue-on-error: true
+        run: |
+          cd performance-tests
+          python performance_regression.py \
+            --current reports/locust_${{ steps.scenario.outputs.scenario }}_stats.csv \
+            --threshold 10
+
+      - name: Upload performance reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-reports-${{ steps.scenario.outputs.scenario }}
+          path: |
+            performance-tests/reports/*.html
+            performance-tests/reports/*.json
+            performance-tests/reports/*.csv
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const statsFile = 'performance-tests/reports/locust_${{ steps.scenario.outputs.scenario }}_stats.csv';
+
+            let comment = '## 🚀 Performance Test Results\\n\\n';
+            comment += '**Scenario:** ${{ steps.scenario.outputs.scenario }}\\n\\n';
+
+            try {
+              // Read CSV and parse stats
+              const stats = fs.readFileSync(statsFile, 'utf8');
+              const lines = stats.split('\\n');
+
+              if (lines.length > 1) {
+                const headers = lines[0].split(',');
+                const aggregated = lines.find(l => l.includes('Aggregated'));
+
+                if (aggregated) {
+                  const values = aggregated.split(',');
+                  const requests = values[1];
+                  const failures = values[2];
+                  const avgRT = values[5];
+                  const p95 = values[10];
+                  const rps = values[13];
+
+                  comment += '| Metric | Value |\\n';
+                  comment += '|--------|-------|\\n';
+                  comment += `| Total Requests | ${requests} |\\n`;
+                  comment += `| Failures | ${failures} |\\n`;
+                  comment += `| Avg Response Time | ${avgRT} ms |\\n`;
+                  comment += `| P95 | ${p95} ms |\\n`;
+                  comment += `| Requests/sec | ${rps} |\\n\\n`;
+
+                  // Performance assessment
+                  const p95Value = parseFloat(p95);
+                  if (p95Value < 500) {
+                    comment += '✅ **Performance: EXCELLENT** (P95 < 500ms)\\n';
+                  } else if (p95Value < 1000) {
+                    comment += '⚠️ **Performance: ACCEPTABLE** (P95 < 1000ms)\\n';
+                  } else {
+                    comment += '❌ **Performance: NEEDS ATTENTION** (P95 > 1000ms)\\n';
+                  }
+                }
+              }
+            } catch (error) {
+              comment += `⚠️ Could not parse stats: ${error.message}\\n`;
+            }
+
+            comment += '\\n📊 [Download detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Fail if regression detected
+        if: steps.regression_check.outcome == 'failure'
+        run: |
+          echo "❌ Performance regression detected!"
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker-compose down -v

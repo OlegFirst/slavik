@@ -102,15 +102,15 @@ CREATE INDEX idx_documents_iso_clause ON bcm.documents(iso_clause) WHERE iso_cla
 CREATE INDEX idx_documents_review_date ON bcm.documents(next_review_date) WHERE status = 'published';
 
 CREATE TRIGGER update_documents_updated_at BEFORE UPDATE ON bcm.documents
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.documents ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Documents visible to org members" ON bcm.documents FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Documents manageable by org admins" ON bcm.documents FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.documents IS 'Document management per ISO 22301:2019 Clause 7.5';
 
@@ -141,7 +141,7 @@ CREATE INDEX idx_document_access_type ON bcm.document_access(access_type);
 ALTER TABLE bcm.document_access ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Document access visible to org admins" ON bcm.document_access FOR SELECT
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.document_access IS 'Audit trail for document access';
 
@@ -232,7 +232,7 @@ CREATE TABLE bcm.document_retention_policies (
 CREATE INDEX idx_retention_policies_org ON bcm.document_retention_policies(organization_id);
 
 CREATE TRIGGER update_retention_policies_updated_at BEFORE UPDATE ON bcm.document_retention_policies
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.document_retention_policies ENABLE ROW LEVEL SECURITY;
 

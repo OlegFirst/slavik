@@ -1,0 +1,476 @@
+version: '3.8'
+
+# Production Docker Compose Configuration
+# This configuration includes production-ready settings:
+# - Resource limits
+# - Health checks
+# - Security hardening
+# - Logging configuration
+# - Restart policies
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: bcm-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bcm_platform}
+      POSTGRES_USER: ${POSTGRES_USER:-bcm_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD required}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_MULTIPLE_DATABASES:-planning,plans,governance,risk,response,learning}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "127.0.0.1:5432:5432"  # Only localhost access
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bcm_user} -d ${POSTGRES_DB:-bcm_platform}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: bcm-redis
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD required}
+      --maxmemory ${REDIS_MAXMEMORY:-1gb}
+      --maxmemory-policy ${REDIS_MAXMEMORY_POLICY:-allkeys-lru}
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --appendonly yes
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1.5G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # EventBus
+  eventbus:
+    image: python:3.11-slim
+    container_name: bcm-eventbus
+    working_dir: /app
+    command: python -m http.server 8001
+    ports:
+      - "127.0.0.1:8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  # Planning Service
+  planning-service:
+    image: ${DOCKER_REGISTRY:-bcm}/planning-service:${VERSION:-latest}
+    build:
+      context: ./planning_service
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE}
+        VCS_REF: ${VCS_REF}
+        VERSION: ${VERSION:-1.0.0}
+    container_name: planning-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bcm_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bcm_platform}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      EVENTBUS_URL: ${EVENTBUS_URL:-http://eventbus:8001}
+      SERVICE_NAME: planning_service
+      SERVICE_PORT: 8011
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:?JWT_PUBLIC_KEY required}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-RS256}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    ports:
+      - "127.0.0.1:8011:8011"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Plans Service
+  plans-service:
+    image: ${DOCKER_REGISTRY:-bcm}/plans-service:${VERSION:-latest}
+    build:
+      context: ./plans_service
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE}
+        VCS_REF: ${VCS_REF}
+        VERSION: ${VERSION:-1.0.0}
+    container_name: plans-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bcm_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bcm_platform}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/1
+      EVENTBUS_URL: ${EVENTBUS_URL:-http://eventbus:8001}
+      SERVICE_NAME: plans_service
+      SERVICE_PORT: 8023
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-RS256}
+      PLANNING_SERVICE_URL: http://planning-service:8011
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    ports:
+      - "127.0.0.1:8023:8023"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      planning-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8023/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # BIA Service
+  bia-service:
+    image: ${DOCKER_REGISTRY:-bcm}/bia-service:${VERSION:-latest}
+    build:
+      context: ./bia-service
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE}
+        VCS_REF: ${VCS_REF}
+        VERSION: ${VERSION:-1.0.0}
+    container_name: bia-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bcm_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bcm_platform}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET required}
+      SERVICE_PORT: 8012
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    ports:
+      - "127.0.0.1:8012:8012"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Compliance Service
+  compliance-service:
+    image: ${DOCKER_REGISTRY:-bcm}/compliance-service:${VERSION:-latest}
+    build:
+      context: ./compliance-service
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE}
+        VCS_REF: ${VCS_REF}
+        VERSION: ${VERSION:-1.0.0}
+    container_name: compliance-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bcm_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bcm_platform}
+      JWT_SECRET: ${JWT_SECRET}
+      SERVICE_PORT: 8014
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    ports:
+      - "127.0.0.1:8014:8014"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: bcm-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-30d}'
+      - '--web.enable-lifecycle'
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts:/etc/prometheus/alerts:ro
+      - prometheus_data:/prometheus
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Grafana Visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bcm-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD required}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3000}
+      GF_SMTP_ENABLED: ${SMTP_ENABLED:-false}
+      GF_SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com:587}
+      GF_SMTP_USER: ${SMTP_USERNAME}
+      GF_SMTP_PASSWORD: ${SMTP_PASSWORD}
+      GF_INSTALL_PLUGINS: ${GRAFANA_PLUGINS:-}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Monitoring Service
+  monitoring-service:
+    build:
+      context: ../infrastructure/monitoring
+      dockerfile: Dockerfile
+    container_name: monitoring-service
+    environment:
+      LOG_DIR: ${LOG_DIR:-/var/log/bcm}
+      CHECK_INTERVAL_SECONDS: ${CHECK_INTERVAL:-30}
+      METRICS_RETENTION_HOURS: ${METRICS_RETENTION:-24}
+      ALERT_EMAIL: ${ALERT_EMAIL}
+      NOTIFICATION_SERVICE_URL: ${NOTIFICATION_SERVICE_URL}
+      PORT: 8045
+    ports:
+      - "127.0.0.1:8045:8045"
+    volumes:
+      - monitoring_logs:/var/log/bcm
+    depends_on:
+      planning-service:
+        condition: service_healthy
+      plans-service:
+        condition: service_healthy
+    networks:
+      - bcm-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8045/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  bcm-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  monitoring_logs:
+    driver: local

@@ -1,0 +1,130 @@
+{
+  "dashboard": {
+    "title": "BCM Platform - Services Overview",
+    "tags": ["bcm", "iso22301", "overview"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "HTTP Request Rate",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=~\"planning-service|plans-service\"}[5m])",
+            "legendFormat": "{{service}} - {{method}} {{endpoint}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "HTTP Error Rate",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=~\"planning-service|plans-service\",status=~\"4..|5..\"}[5m])",
+            "legendFormat": "{{service}} - {{status}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Request Latency (p95)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=~\"planning-service|plans-service\"}[5m]))",
+            "legendFormat": "{{service}} - p95"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Active Strategies (Planning Service)",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(planning_service_strategies_created_total)"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Active Plans (Plans Service)",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "sum(plans_service_plans_created_total)"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Cost-Benefit Calculations",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(planning_service_cost_benefit_calculations_total[5m])",
+            "legendFormat": "Calculations/sec"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 12}
+      },
+      {
+        "id": 7,
+        "title": "Procedure Validations",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(plans_service_procedure_validations_total[5m])",
+            "legendFormat": "Validations/sec"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 12}
+      },
+      {
+        "id": 8,
+        "title": "Database Connection Pool",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "database_connections_active{job=~\"planning-service|plans-service\"}",
+            "legendFormat": "{{service}} - active"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 9,
+        "title": "EventBus Messages Published",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(eventbus_messages_published_total{job=~\"planning-service|plans-service\"}[5m])",
+            "legendFormat": "{{service}} - {{event_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ],
+    "refresh": "10s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "version": 1
+  }
+}

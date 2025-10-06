@@ -1,0 +1,645 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "iso-22301-compliance",
+    "title": "ISO 22301 Compliance Dashboard",
+    "tags": ["iso22301", "compliance", "bcm", "audit"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "templating": {
+      "list": [
+        {
+          "name": "iso_clause",
+          "type": "custom",
+          "query": "8.2,8.3,8.4,9.2,10.1,10.2",
+          "multi": true,
+          "includeAll": true,
+          "allValue": ".*"
+        },
+        {
+          "name": "time_range",
+          "type": "interval",
+          "query": "5m,15m,30m,1h,6h,12h,1d",
+          "auto": false,
+          "current": {
+            "text": "5m",
+            "value": "5m"
+          }
+        },
+        {
+          "name": "service_name",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(bcm_compliance_score, service)",
+          "multi": true,
+          "includeAll": true,
+          "refresh": 1,
+          "allValue": ".*"
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Audit Events",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "bcm_audit_events_total",
+          "iconColor": "purple",
+          "tagKeys": "audit"
+        },
+        {
+          "name": "Nonconformity Events",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "bcm_nonconformity_total",
+          "iconColor": "orange",
+          "tagKeys": "nonconformity"
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Overall ISO 22301 Compliance Score",
+        "type": "gauge",
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "avg(bcm_compliance_score)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 70
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 2,
+        "title": "Compliance Status by ISO Clause",
+        "type": "stat",
+        "gridPos": {
+          "h": 8,
+          "w": 16,
+          "x": 8,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"8.2\"}",
+            "refId": "A",
+            "legendFormat": "8.2 - BIA"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"8.3\"}",
+            "refId": "B",
+            "legendFormat": "8.3 - BC Strategy"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"8.4\"}",
+            "refId": "C",
+            "legendFormat": "8.4 - BC Plans"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"9.2\"}",
+            "refId": "D",
+            "legendFormat": "9.2 - Internal Audit"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"10.1\"}",
+            "refId": "E",
+            "legendFormat": "10.1 - Nonconformity"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=\"10.2\"}",
+            "refId": "F",
+            "legendFormat": "10.2 - Improvement"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 70
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 3,
+        "title": "RTO Compliance Metrics",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_rto_adherence_percentage",
+            "refId": "A",
+            "legendFormat": "RTO Adherence %"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "avg(bcm_bia_rto_average_hours)",
+            "refId": "B",
+            "legendFormat": "Average RTO (hours)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "RTO Metrics",
+              "axisPlacement": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RTO Adherence %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Average RTO (hours)"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "h"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "RPO Compliance Metrics",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_rpo_adherence_percentage",
+            "refId": "A",
+            "legendFormat": "RPO Adherence %"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "avg(bcm_bia_rpo_average_hours)",
+            "refId": "B",
+            "legendFormat": "Average RPO (hours)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "RPO Metrics",
+              "axisPlacement": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RPO Adherence %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Average RPO (hours)"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "h"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "title": "BIA Process Completion Status",
+        "type": "piechart",
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 16
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_bia_total)",
+            "refId": "A",
+            "legendFormat": "Total BIA Processes"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_bia_completed_total)",
+            "refId": "B",
+            "legendFormat": "Completed"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_bia_in_progress_total)",
+            "refId": "C",
+            "legendFormat": "In Progress"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_bia_pending_total)",
+            "refId": "D",
+            "legendFormat": "Pending"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "values": ["value", "percent"]
+          },
+          "pieType": "pie"
+        }
+      },
+      {
+        "id": 6,
+        "title": "Audit Trail Activity",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 16
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "rate(bcm_audit_events_total[$time_range])",
+            "refId": "A",
+            "legendFormat": "{{event_type}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Events/sec",
+              "axisPlacement": "auto"
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Nonconformity Tracking",
+        "type": "stat",
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 16
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_nonconformity_total)",
+            "refId": "A",
+            "legendFormat": "Total Nonconformities"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_nonconformity_open)",
+            "refId": "B",
+            "legendFormat": "Open"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "sum(bcm_nonconformity_resolved)",
+            "refId": "C",
+            "legendFormat": "Resolved"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 10
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "orientation": "vertical",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 8,
+        "title": "Compliance Trends Over Time",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_by_clause{clause=~\"$iso_clause\"}",
+            "refId": "A",
+            "legendFormat": "Clause {{clause}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Compliance %",
+              "axisPlacement": "auto"
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "ISO 22301 Coverage by Service",
+        "type": "table",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 32
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_compliance_score{service=~\"$service_name\"}",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true
+              },
+              "renameByName": {
+                "service": "Service",
+                "Value": "Compliance Score (%)"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Incident Response Time",
+        "type": "gauge",
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 12,
+          "y": 32
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_incident_response_time_seconds",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 14400,
+            "unit": "s",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 3600
+                },
+                {
+                  "color": "red",
+                  "value": 7200
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 11,
+        "title": "Training Completion (ISO Clause 7.2)",
+        "type": "gauge",
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 18,
+          "y": 32
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "bcm_training_completion_percentage",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 70
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 12,
+        "title": "Recent Audit Events",
+        "type": "logs",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 40
+        },
+        "targets": [
+          {
+            "datasource": "Loki",
+            "expr": "{job=~\"compliance.*\"} |= \"audit\"",
+            "refId": "A"
+          }
+        ]
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "schemaVersion": 36,
+    "version": 1
+  }
+}

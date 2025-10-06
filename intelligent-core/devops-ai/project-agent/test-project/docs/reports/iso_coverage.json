@@ -1,0 +1,75 @@
+{
+  "Context of the organization": {
+    "hints": [
+      "CONCEPT.md",
+      "TECH_SPEC.md"
+    ],
+    "evidence": []
+  },
+  "Leadership & Policy": {
+    "hints": [
+      "policy",
+      "policies",
+      "docs/policies",
+      "governance"
+    ],
+    "evidence": []
+  },
+  "Planning (BIA/Risk)": {
+    "hints": [
+      "BIA",
+      "risk",
+      "risk_service",
+      "risk_model"
+    ],
+    "evidence": [
+      "/Users/maksymdemchenko/Downloads/bv/test-project/docs/BIA.md",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/src/risk_assessment.py",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/tests/__pycache__/test_risk.cpython-313-pytest-8.3.5.pyc",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/tests/test_risk.py"
+    ]
+  },
+  "Support (Docs/Training)": {
+    "hints": [
+      "docs/",
+      "Training",
+      "LMS",
+      "awareness"
+    ],
+    "evidence": [
+      "/Users/maksymdemchenko/Downloads/bv/test-project/docs/BIA.md",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/docs/POLICY.md",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/docs/reports"
+    ]
+  },
+  "Operation (Incident/Crisis)": {
+    "hints": [
+      "incident",
+      "crisis",
+      "thehive",
+      "playbook"
+    ],
+    "evidence": [
+      "/Users/maksymdemchenko/Downloads/bv/test-project/src/incident_manager.py",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/tests/__pycache__/test_incident.cpython-313-pytest-8.3.5.pyc",
+      "/Users/maksymdemchenko/Downloads/bv/test-project/tests/test_incident.py"
+    ]
+  },
+  "Performance evaluation (Audit/Monitoring)": {
+    "hints": [
+      "audit",
+      "evidence",
+      "dashboard",
+      "metrics"
+    ],
+    "evidence": []
+  },
+  "Improvement (PDCA/Corrective actions)": {
+    "hints": [
+      "PDCA",
+      "roadmap",
+      "CHANGELOG.md"
+    ],
+    "evidence": []
+  }
+}

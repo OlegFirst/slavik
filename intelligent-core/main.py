@@ -10,6 +10,15 @@ from typing import Optional, List, Dict, Any
 import os
 from datetime import datetime
 
+# Import Workflow Intelligence Engine
+from workflow_intelligence import (
+    WorkflowEngine,
+    ContextAdvisor,
+    CaseCollector,
+    WorkflowContext,
+    event_bus
+)
+
 app = FastAPI(
     title="BCM Intelligent Core",
     description="AI-powered decision engine, knowledge system, and digital twin",
@@ -79,7 +88,8 @@ async def root():
             "decision_engine",
             "digital_twin",
             "knowledge_system",
-            "predictive_models"
+            "predictive_models",
+            "workflow_intelligence"  # NEW
         ]
     }
 
@@ -397,6 +407,35 @@ async def find_incident_patterns(org_id: int):
             "Add network redundancy to prevent EHR cascading failure"
         ]
     }
+
+# ============================================
+# WORKFLOW INTELLIGENCE INTEGRATION
+# ============================================
+
+from workflow_intelligence_api import router as workflow_router, initialize_workflow_intelligence
+
+# Include workflow intelligence routes
+app.include_router(workflow_router)
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize services on startup"""
+    print("🚀 Starting BCM Intelligent Core...")
+
+    # TODO: Initialize with real storage adapter and LLM config from env
+    # For now, use demo setup
+    await initialize_workflow_intelligence(
+        storage_adapter=None,  # Will use InMemoryStorageAdapter
+        case_repository=None,
+        case_library=None,
+        llm_config={
+            "provider": "anthropic",
+            "api_key": os.getenv("ANTHROPIC_API_KEY"),
+            "model": "claude-3-5-sonnet-20241022"
+        }
+    )
+
+    print("✅ Intelligent Core ready!")
 
 if __name__ == "__main__":
     import uvicorn

@@ -109,15 +109,15 @@ CREATE INDEX idx_training_programs_active ON learning.training_programs(is_activ
 CREATE INDEX idx_training_programs_search ON learning.training_programs USING GIN(search_vector);
 
 CREATE TRIGGER update_training_programs_updated_at BEFORE UPDATE ON learning.training_programs
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE learning.training_programs ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Training programs visible to org members" ON learning.training_programs FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Training programs manageable by org admins" ON learning.training_programs FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE learning.training_programs IS 'Training programs per ISO 22301:2019 Clauses 7.2, 7.3';
 
@@ -190,16 +190,16 @@ CREATE INDEX idx_enrollments_program ON learning.enrollments(program_id);
 CREATE INDEX idx_enrollments_org ON learning.enrollments(organization_id);
 CREATE INDEX idx_enrollments_user ON learning.enrollments(user_id, status);
 CREATE INDEX idx_enrollments_status ON learning.enrollments(status);
-CREATE INDEX idx_enrollments_overdue ON learning.enrollments(due_date) WHERE status NOT IN ('completed', 'dropped') AND due_date < CURRENT_DATE;
+CREATE INDEX idx_enrollments_overdue ON learning.enrollments(due_date) WHERE status NOT IN ('completed', 'dropped');
 CREATE INDEX idx_enrollments_expiring_cert ON learning.enrollments(certification_expiry_date) WHERE passed = TRUE AND certification_expiry_date IS NOT NULL;
 
 CREATE TRIGGER update_enrollments_updated_at BEFORE UPDATE ON learning.enrollments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE learning.enrollments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Enrollments visible to org members" ON learning.enrollments FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Users see their own enrollments" ON learning.enrollments FOR SELECT
     USING (user_id = auth.uid());
@@ -273,12 +273,12 @@ CREATE INDEX idx_competency_assessments_area ON learning.competency_assessments(
 CREATE INDEX idx_competency_assessments_date ON learning.competency_assessments(assessment_date DESC);
 
 CREATE TRIGGER update_competency_assessments_updated_at BEFORE UPDATE ON learning.competency_assessments
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE learning.competency_assessments ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Competency assessments visible to org admins" ON learning.competency_assessments FOR SELECT
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 CREATE POLICY "Users see their own competency assessments" ON learning.competency_assessments FOR SELECT
     USING (user_id = auth.uid());
@@ -361,15 +361,15 @@ CREATE INDEX idx_awareness_campaigns_status ON learning.awareness_campaigns(stat
 CREATE INDEX idx_awareness_campaigns_active ON learning.awareness_campaigns(status, start_date, end_date) WHERE status = 'active';
 
 CREATE TRIGGER update_awareness_campaigns_updated_at BEFORE UPDATE ON learning.awareness_campaigns
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE learning.awareness_campaigns ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Awareness campaigns visible to org members" ON learning.awareness_campaigns FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Awareness campaigns manageable by org admins" ON learning.awareness_campaigns FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE learning.awareness_campaigns IS 'Awareness campaigns per ISO 22301:2019 Clause 7.3';
 
@@ -419,12 +419,12 @@ CREATE INDEX idx_training_templates_type ON learning.training_templates(template
 CREATE INDEX idx_training_templates_active ON learning.training_templates(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_training_templates_updated_at BEFORE UPDATE ON learning.training_templates
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE learning.training_templates ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Training templates visible to all org members" ON learning.training_templates FOR SELECT
-    USING (organization_id IS NULL OR auth.is_org_member(organization_id));
+    USING (organization_id IS NULL OR public.is_org_member(organization_id));
 
 COMMENT ON TABLE learning.training_templates IS 'Training and course templates';
 
@@ -471,7 +471,7 @@ CREATE INDEX idx_user_achievements_type ON learning.user_achievements(achievemen
 ALTER TABLE learning.user_achievements ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Achievements visible to org members" ON learning.user_achievements FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Users see their own achievements" ON learning.user_achievements FOR SELECT
     USING (user_id = auth.uid());
@@ -598,15 +598,15 @@ CREATE INDEX idx_plans_search ON bcm.plans USING GIN(search_vector);
 CREATE INDEX idx_plans_review_due ON bcm.plans(next_review_date) WHERE status = 'active';
 
 CREATE TRIGGER update_plans_updated_at BEFORE UPDATE ON bcm.plans
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.plans ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Plans visible to org members" ON bcm.plans FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Plans manageable by org admins" ON bcm.plans FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.plans IS 'Business continuity plans and procedures per ISO 22301:2019 Clause 8.4';
 
@@ -691,15 +691,15 @@ CREATE INDEX idx_procedures_type ON bcm.procedures(procedure_type);
 CREATE INDEX idx_procedures_active ON bcm.procedures(is_active) WHERE is_active = TRUE;
 
 CREATE TRIGGER update_procedures_updated_at BEFORE UPDATE ON bcm.procedures
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 ALTER TABLE bcm.procedures ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Procedures visible to org members" ON bcm.procedures FOR SELECT
-    USING (auth.is_org_member(organization_id));
+    USING (public.is_org_member(organization_id));
 
 CREATE POLICY "Procedures manageable by org admins" ON bcm.procedures FOR ALL
-    USING (auth.is_org_admin(organization_id));
+    USING (public.is_org_admin(organization_id));
 
 COMMENT ON TABLE bcm.procedures IS 'Detailed procedures for BCM plans per ISO 22301 Clause 8.4';
 

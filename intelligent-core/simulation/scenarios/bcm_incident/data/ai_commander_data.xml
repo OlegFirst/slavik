@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- AI Commander Configuration Templates -->
+        
+        <!-- AI Response Templates by Incident Type -->
+        <record id="ai_template_cyber_response" model="bcm.ai.response.template">
+            <field name="name">Cyber Security AI Response</field>
+            <field name="incident_type">cyber</field>
+            <field name="priority_level">critical</field>
+            <field name="response_checklist">
+1. IMMEDIATE ACTIONS (0-15 minutes):
+   ☐ Isolate affected systems immediately
+   ☐ Preserve evidence and system logs
+   ☐ Activate cyber incident response team
+   ☐ Notify CISO and security team
+   ☐ Document initial findings
+
+2. ASSESSMENT PHASE (15-60 minutes):
+   ☐ Determine scope of compromise
+   ☐ Identify attack vectors and methods
+   ☐ Assess data exposure risk
+   ☐ Check backup systems integrity
+   ☐ Contact external security experts if needed
+
+3. CONTAINMENT (1-4 hours):
+   ☐ Block malicious network traffic
+   ☐ Reset compromised credentials
+   ☐ Apply security patches if applicable
+   ☐ Implement additional monitoring
+   ☐ Prepare communication plan
+
+4. RECOVERY PLANNING:
+   ☐ Develop system restoration timeline
+   ☐ Test backup systems
+   ☐ Plan phased service restoration
+   ☐ Coordinate with business units
+   ☐ Schedule security validation
+            </field>
+            <field name="escalation_triggers">
+                [
+                    {"condition": "no_containment_4h", "action": "escalate_to_exec"},
+                    {"condition": "data_breach_confirmed", "action": "notify_authorities"},
+                    {"condition": "financial_loss_100k", "action": "activate_crisis_team"}
+                ]
+            </field>
+            <field name="ai_confidence_threshold">85.0</field>
+        </record>
+        
+        <record id="ai_template_operational_response" model="bcm.ai.response.template">
+            <field name="name">Operational Disruption AI Response</field>
+            <field name="incident_type">operational</field>
+            <field name="priority_level">high</field>
+            <field name="response_checklist">
+1. INITIAL RESPONSE (0-30 minutes):
+   ☐ Assess service impact and affected users
+   ☐ Check system monitoring and alerts
+   ☐ Contact technical teams
+   ☐ Activate backup systems if available
+   ☐ Document service disruption timeline
+
+2. DIAGNOSIS (30-90 minutes):
+   ☐ Identify root cause of disruption
+   ☐ Check infrastructure dependencies
+   ☐ Review recent changes or deployments
+   ☐ Test alternative service paths
+   ☐ Estimate recovery time
+
+3. MITIGATION ACTIONS:
+   ☐ Implement workaround solutions
+   ☐ Redirect traffic to backup systems
+   ☐ Communication to affected users
+   ☐ Update stakeholders on status
+   ☐ Monitor system performance
+
+4. RECOVERY EXECUTION:
+   ☐ Execute planned recovery steps
+   ☐ Test service functionality
+   ☐ Gradually restore full service
+   ☐ Monitor for recurring issues
+   ☐ Document lessons learned
+            </field>
+            <field name="escalation_triggers">
+                [
+                    {"condition": "service_down_2h", "action": "notify_management"},
+                    {"condition": "customer_impact_major", "action": "activate_comms_team"},
+                    {"condition": "revenue_impact_detected", "action": "escalate_to_exec"}
+                ]
+            </field>
+            <field name="ai_confidence_threshold">90.0</field>
+        </record>
+        
+        <record id="ai_template_natural_disaster_response" model="bcm.ai.response.template">
+            <field name="name">Natural Disaster AI Response</field>
+            <field name="incident_type">natural</field>
+            <field name="priority_level">critical</field>
+            <field name="response_checklist">
+1. SAFETY FIRST (0-10 minutes):
+   ☐ Ensure personnel safety and evacuation if needed
+   ☐ Contact emergency services if required
+   ☐ Account for all staff and visitors
+   ☐ Secure hazardous materials
+   ☐ Activate emergency communication systems
+
+2. SITUATION ASSESSMENT (10-45 minutes):
+   ☐ Assess facility damage and accessibility
+   ☐ Check critical infrastructure status
+   ☐ Evaluate IT systems and data center
+   ☐ Contact utility providers
+   ☐ Document initial damage assessment
+
+3. BUSINESS CONTINUITY ACTIVATION:
+   ☐ Activate alternate work locations
+   ☐ Switch to backup IT systems
+   ☐ Notify key customers and suppliers
+   ☐ Implement emergency procedures
+   ☐ Coordinate with local authorities
+
+4. RECOVERY COORDINATION:
+   ☐ Plan facility restoration timeline
+   ☐ Arrange temporary accommodation
+   ☐ Coordinate with insurance providers
+   ☐ Manage supply chain disruptions
+   ☐ Plan phased return to normal operations
+            </field>
+            <field name="escalation_triggers">
+                [
+                    {"condition": "personnel_injury", "action": "notify_authorities_immediate"},
+                    {"condition": "facility_inaccessible", "action": "activate_alternate_site"},
+                    {"condition": "supply_chain_broken", "action": "emergency_procurement"}
+                ]
+            </field>
+            <field name="ai_confidence_threshold">95.0</field>
+        </record>
+        
+        <!-- AI Classification Rules -->
+        <record id="ai_rule_cyber_keywords" model="bcm.ai.classification.rule">
+            <field name="name">Cyber Security Keywords</field>
+            <field name="rule_type">keyword_match</field>
+            <field name="incident_type">cyber</field>
+            <field name="keywords">hack,breach,malware,ransomware,phishing,ddos,unauthorized,credential,password,virus,trojan,suspicious,intrusion,firewall,vulnerability</field>
+            <field name="confidence_weight">80.0</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="ai_rule_operational_keywords" model="bcm.ai.classification.rule">
+            <field name="name">Operational Disruption Keywords</field>
+            <field name="rule_type">keyword_match</field>
+            <field name="incident_type">operational</field>
+            <field name="keywords">outage,failure,down,unavailable,performance,slow,timeout,error,crash,system,service,network,database,server,application</field>
+            <field name="confidence_weight">75.0</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="ai_rule_natural_keywords" model="bcm.ai.classification.rule">
+            <field name="name">Natural Disaster Keywords</field>
+            <field name="rule_type">keyword_match</field>
+            <field name="incident_type">natural</field>
+            <field name="keywords">earthquake,flood,fire,storm,hurricane,tornado,tsunami,lightning,power,evacuation,emergency,disaster,weather,building,facility</field>
+            <field name="confidence_weight">90.0</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- AI Escalation Rules -->
+        <record id="ai_escalation_critical_timeouts" model="bcm.ai.escalation.rule">
+            <field name="name">Critical Incident Timeout Escalation</field>
+            <field name="trigger_condition">severity == 'critical' and status in ['detected', 'assessing'] and hours_since_detected > 0.5</field>
+            <field name="action_type">auto_escalate</field>
+            <field name="escalation_level">1</field>
+            <field name="notification_template">Critical incident {{incident_number}} requires immediate attention. Current status: {{status}}. Time elapsed: {{hours_since_detected}} hours.</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="ai_escalation_high_priority_timeout" model="bcm.ai.escalation.rule">
+            <field name="name">High Priority Timeout Escalation</field>
+            <field name="trigger_condition">severity == 'high' and status in ['detected', 'assessing'] and hours_since_detected > 2</field>
+            <field name="action_type">auto_escalate</field>
+            <field name="escalation_level">1</field>
+            <field name="notification_template">High priority incident {{incident_number}} requires escalation. Current status: {{status}}. Time elapsed: {{hours_since_detected}} hours.</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- AI Learning Patterns -->
+        <record id="ai_pattern_cyber_recovery_times" model="bcm.ai.learning.pattern">
+            <field name="name">Cyber Incident Recovery Patterns</field>
+            <field name="pattern_type">recovery_time_analysis</field>
+            <field name="incident_type">cyber</field>
+            <field name="pattern_data">
+                {
+                    "average_detection_time": 0.75,
+                    "average_containment_time": 3.2,
+                    "average_recovery_time": 8.5,
+                    "success_factors": [
+                        "early_detection",
+                        "automated_isolation",
+                        "experienced_team_response",
+                        "backup_system_availability"
+                    ],
+                    "failure_factors": [
+                        "delayed_notification",
+                        "inadequate_backup",
+                        "poor_documentation",
+                        "insufficient_team_training"
+                    ]
+                }
+            </field>
+            <field name="confidence_level">85.0</field>
+            <field name="last_updated" eval="datetime.now()"/>
+        </record>
+        
+    </data>
+</odoo>

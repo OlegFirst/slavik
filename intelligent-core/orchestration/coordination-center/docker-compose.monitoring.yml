@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: coordination-prometheus
+    ports:
+      - "9091:9090"  # Using 9091 to avoid conflict with PLATFORM Prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - coordination-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: coordination-grafana
+    ports:
+      - "3002:3000"  # Using 3002 to avoid conflict with PLATFORM Grafana (3001)
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - coordination-network
+
+  loki:
+    image: grafana/loki:latest
+    container_name: coordination-loki
+    ports:
+      - "3101:3100"  # Using 3101 to avoid conflict
+    volumes:
+      - ./monitoring/loki-config.yml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - coordination-network
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  loki-data:
+
+networks:
+  coordination-network:
+    driver: bridge

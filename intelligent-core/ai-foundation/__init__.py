@@ -17,10 +17,12 @@ to avoid tight coupling and allow independent scaling/versioning.
 __version__ = "1.0.0"
 
 # RAG Module
-from .rag.pipeline import RAGPipeline
+from .rag.pipeline import RAGPipeline, KnowledgeSourceManager
 from .rag.embeddings import EmbeddingService
 from .rag.retrieval import HybridRetriever
 from .rag.reranking import Reranker
+from .rag.qdrant_client import QdrantVectorStore
+from .rag.setup_collections import QdrantCollectionSetup
 
 # ML Module
 from .ml.predictive_models import PredictiveModel
@@ -41,9 +43,12 @@ from .llm.llm_router import LLMRouter
 __all__ = [
     # RAG
     "RAGPipeline",
+    "KnowledgeSourceManager",
     "EmbeddingService",
     "HybridRetriever",
     "Reranker",
+    "QdrantVectorStore",
+    "QdrantCollectionSetup",
     # ML
     "PredictiveModel",
     "MLTrainer",

@@ -9,7 +9,8 @@ from typing import List, Dict, Any, Optional
 import logging
 
 from .embeddings import EmbeddingGenerator, DocumentChunker
-from .retrieval import HybridRetriever, VectorStore
+from .retrieval import HybridRetriever
+from .qdrant_client import QdrantVectorStore  # Real vector DB!
 from .reranking import Reranker, DiversityReranker
 
 logger = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ class RAGPipeline:
         # Initialize components
         self.embedding_generator = EmbeddingGenerator(provider=embedding_provider)
         self.chunker = DocumentChunker(chunk_size=chunk_size)
-        self.vector_store = VectorStore(self.embedding_generator)
+        self.vector_store = QdrantVectorStore(collection_name="bcm_knowledge")
         self.retriever = HybridRetriever(self.embedding_generator)
         self.reranker = Reranker()
         self.diversity_reranker = DiversityReranker()

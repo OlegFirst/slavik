@@ -1,0 +1,335 @@
+groups:
+  # ============================================================================
+  # PERFORMANCE ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_performance
+    interval: 30s
+    rules:
+      - alert: WorkflowActionSlowP95
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, action, le)
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          component: workflow_intelligence
+        annotations:
+          summary: "Slow workflow action detected ({{ $labels.module }} - {{ $labels.action }})"
+          description: "P95 latency is {{ $value }}s (threshold: 1s)"
+
+      - alert: WorkflowActionSlowP99
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, action, le)
+          ) > 2.0
+        for: 5m
+        labels:
+          severity: critical
+          component: workflow_intelligence
+        annotations:
+          summary: "Very slow workflow action ({{ $labels.module }} - {{ $labels.action }})"
+          description: "P99 latency is {{ $value }}s (threshold: 2s)"
+
+      - alert: DatabaseQuerySlow
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(workflow_intelligence_db_query_duration_seconds_bucket[5m])) by (operation, table, le)
+          ) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Slow database query: {{ $labels.operation }} on {{ $labels.table }}"
+          description: "P95 query time is {{ $value }}s (threshold: 100ms)"
+
+      - alert: DatabaseQueryVerySlow
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(workflow_intelligence_db_query_duration_seconds_bucket[5m])) by (operation, table, le)
+          ) > 0.5
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "CRITICAL: Very slow database query"
+          description: "{{ $labels.operation }} on {{ $labels.table }} taking {{ $value }}s"
+
+      - alert: LowCacheHitRate
+        expr: |
+          sum(rate(workflow_intelligence_cache_hits_total[5m])) /
+          (sum(rate(workflow_intelligence_cache_hits_total[5m])) +
+           sum(rate(workflow_intelligence_cache_misses_total[5m]))) < 0.7
+        for: 10m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Low cache hit rate for {{ $labels.cache_type }}"
+          description: "Cache hit rate is {{ $value | humanizePercentage }} (threshold: 70%)"
+
+  # ============================================================================
+  # ERROR ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_errors
+    interval: 30s
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(workflow_intelligence_errors_total[5m])) by (module, operation) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          component: workflow_intelligence
+        annotations:
+          summary: "High error rate in {{ $labels.module }} - {{ $labels.operation }}"
+          description: "Error rate is {{ $value }} errors/sec"
+
+      - alert: CriticalErrorRate
+        expr: |
+          sum(rate(workflow_intelligence_errors_total[5m])) by (module) > 0.2
+        for: 2m
+        labels:
+          severity: critical
+          component: workflow_intelligence
+        annotations:
+          summary: "CRITICAL: Very high error rate in {{ $labels.module }}"
+          description: "Error rate is {{ $value }} errors/sec (threshold: 0.2/sec)"
+
+      - alert: DatabaseConnectionErrors
+        expr: |
+          sum(rate(workflow_intelligence_errors_total{error_type="DatabaseError"}[5m])) > 0.01
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection errors detected"
+          description: "Database errors at {{ $value }} errors/sec"
+
+      - alert: CaseCollectionFailures
+        expr: |
+          sum(rate(workflow_intelligence_cases_collected_total{success="failed"}[10m])) /
+          sum(rate(workflow_intelligence_cases_collected_total[10m])) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          component: case_collector
+        annotations:
+          summary: "High case collection failure rate"
+          description: "{{ $value | humanizePercentage }} of case collections are failing"
+
+  # ============================================================================
+  # HEALTH ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_health
+    interval: 30s
+    rules:
+      - alert: ServiceUnhealthy
+        expr: workflow_intelligence_service_health == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: workflow_intelligence
+        annotations:
+          summary: "Workflow Intelligence component unhealthy: {{ $labels.component }}"
+          description: "Component {{ $labels.component }} is reporting unhealthy status"
+
+      - alert: DatabaseConnectionPoolExhausted
+        expr: |
+          workflow_intelligence_db_connections_active /
+          (workflow_intelligence_db_connections_active + workflow_intelligence_db_connections_idle) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Database connection pool near capacity"
+          description: "{{ $value | humanizePercentage }} of connections in use"
+
+      - alert: DatabaseConnectionPoolFull
+        expr: |
+          workflow_intelligence_db_connections_idle == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "CRITICAL: Database connection pool exhausted"
+          description: "No idle database connections available"
+
+  # ============================================================================
+  # QUALITY ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_quality
+    interval: 1m
+    rules:
+      - alert: LowAIAdviceAcceptance
+        expr: |
+          sum(increase(workflow_intelligence_ai_advice_accepted_total[1h])) /
+          sum(increase(workflow_intelligence_ai_advice_total{status="success"}[1h])) < 0.3
+        for: 1h
+        labels:
+          severity: warning
+          component: ai_advisor
+        annotations:
+          summary: "Low AI advice acceptance rate in {{ $labels.module }}"
+          description: "Only {{ $value | humanizePercentage }} of AI advice is accepted (threshold: 30%)"
+
+      - alert: LowSimilarCasesRelevance
+        expr: workflow_intelligence_similar_cases_relevance < 0.5
+        for: 30m
+        labels:
+          severity: warning
+          component: case_library
+        annotations:
+          summary: "Low similar cases relevance for {{ $labels.module }}"
+          description: "Average relevance score is {{ $value }} (threshold: 0.5)"
+
+      - alert: SmallBenchmarkSample
+        expr: workflow_intelligence_benchmark_sample_size < 5
+        for: 1h
+        labels:
+          severity: info
+          component: benchmarks
+        annotations:
+          summary: "Small benchmark sample for {{ $labels.module }} - {{ $labels.industry }}"
+          description: "Only {{ $value }} cases available for benchmark (recommended: 10+)"
+
+      - alert: LowMLPredictionConfidence
+        expr: |
+          histogram_quantile(0.50,
+            sum(rate(workflow_intelligence_ml_prediction_confidence_bucket[10m])) by (prediction_type, le)
+          ) < 0.6
+        for: 30m
+        labels:
+          severity: warning
+          component: ml_engine
+        annotations:
+          summary: "Low ML prediction confidence for {{ $labels.prediction_type }}"
+          description: "Median confidence is {{ $value }} (threshold: 0.6)"
+
+  # ============================================================================
+  # CAPACITY ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_capacity
+    interval: 5m
+    rules:
+      - alert: HighStorageGrowth
+        expr: |
+          sum(rate(workflow_intelligence_storage_size_bytes[1d])) by (table) > 100000000
+        for: 1h
+        labels:
+          severity: warning
+          component: storage
+        annotations:
+          summary: "High storage growth in {{ $labels.table }}"
+          description: "Growing at {{ $value | humanize }}B/day"
+
+      - alert: LowLearningCoverage
+        expr: |
+          count(workflow_intelligence_learning_coverage) by (module) < 3
+        for: 1d
+        labels:
+          severity: info
+          component: case_library
+        annotations:
+          summary: "Low learning coverage for {{ $labels.module }}"
+          description: "Only {{ $value }} industry/size combinations covered"
+
+  # ============================================================================
+  # BUSINESS METRIC ALERTS
+  # ============================================================================
+
+  - name: workflow_intelligence_business
+    interval: 5m
+    rules:
+      - alert: NoCasesCollected
+        expr: |
+          sum(increase(workflow_intelligence_cases_collected_total[1h])) by (module) == 0
+        for: 4h
+        labels:
+          severity: warning
+          component: case_collector
+        annotations:
+          summary: "No cases collected for {{ $labels.module }} in 4 hours"
+          description: "Learning may be stalling"
+
+      - alert: LowCrossServiceLearning
+        expr: |
+          sum(rate(workflow_intelligence_cross_service_queries_total[1h])) < 0.01
+        for: 6h
+        labels:
+          severity: info
+          component: cross_service
+        annotations:
+          summary: "Low cross-service learning activity"
+          description: "{{ $value }} queries/sec (indicating modules may be isolated)"
+
+# ============================================================================
+# RECORDING RULES (Pre-computed metrics for dashboard performance)
+# ============================================================================
+
+  - name: workflow_intelligence_recording
+    interval: 30s
+    rules:
+      # Action rate by module
+      - record: workflow_intelligence:action_rate:5m
+        expr: |
+          sum(rate(workflow_intelligence_actions_total[5m])) by (module, action)
+
+      # Overall success rate
+      - record: workflow_intelligence:success_rate:5m
+        expr: |
+          sum(rate(workflow_intelligence_actions_total{status="success"}[5m])) /
+          sum(rate(workflow_intelligence_actions_total[5m]))
+
+      # Cache hit rate
+      - record: workflow_intelligence:cache_hit_rate:5m
+        expr: |
+          sum(rate(workflow_intelligence_cache_hits_total[5m])) /
+          (sum(rate(workflow_intelligence_cache_hits_total[5m])) +
+           sum(rate(workflow_intelligence_cache_misses_total[5m])))
+
+      # AI advice acceptance rate
+      - record: workflow_intelligence:ai_acceptance_rate:1h
+        expr: |
+          sum(increase(workflow_intelligence_ai_advice_accepted_total[1h])) /
+          sum(increase(workflow_intelligence_ai_advice_total{status="success"}[1h]))
+
+      # Cases collection rate
+      - record: workflow_intelligence:cases_per_hour:1h
+        expr: |
+          sum(increase(workflow_intelligence_cases_collected_total{success="success"}[1h]))
+
+      # Database query P95 latency
+      - record: workflow_intelligence:db_query_p95:5m
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(workflow_intelligence_db_query_duration_seconds_bucket[5m])) by (operation, le)
+          )
+
+      # Workflow action P95 latency
+      - record: workflow_intelligence:action_p95:5m
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(workflow_intelligence_action_duration_seconds_bucket[5m])) by (module, le)
+          )
+
+      # Total cases in library
+      - record: workflow_intelligence:total_cases:now
+        expr: |
+          sum(workflow_intelligence_total_cases) by (module)
+
+      # Learning coverage percentage
+      - record: workflow_intelligence:coverage_percentage:now
+        expr: |
+          count(workflow_intelligence_learning_coverage > 0) /
+          count(workflow_intelligence_learning_coverage)

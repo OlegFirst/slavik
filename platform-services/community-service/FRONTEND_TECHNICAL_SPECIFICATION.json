@@ -1,0 +1,1943 @@
+{
+  "document_info": {
+    "title": "Frontend Technical Specification - Portal & Marketplace Services",
+    "version": "2.0.0",
+    "generated_date": "2025-10-02",
+    "last_updated": "2025-10-02",
+    "services_analyzed": [
+      "Portal Service (Port 8031)",
+      "Marketplace Service (Port 8032)"
+    ],
+    "purpose": "Comprehensive API specification for frontend development - COMPLETE EDITION",
+    "completeness_note": "This specification now includes ALL features: Knowledge Center, Case Studies (Portfolio), Scenarios, Simulations (planned), and full cross-service integration flows"
+  },
+
+  "portal": {
+    "service_info": {
+      "name": "Portal Service",
+      "description": "Knowledge Hub, Scenario Marketplace & Community Forum for BCM Platform",
+      "base_url": "http://localhost:8031",
+      "version": "1.0.0",
+      "port": 8031
+    },
+
+    "endpoints": {
+      "knowledge_hub": [
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/articles",
+          "purpose": "Create a new knowledge article",
+          "request_body": {
+            "title": "string (max 500 chars)",
+            "summary": "string (max 1000 chars)",
+            "content": "string (Markdown)",
+            "category": "string (max 100 chars)",
+            "tags": "array of strings (max 10)",
+            "iso_clause": "string (optional, max 20)"
+          },
+          "response": "ArticleResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201,
+          "notes": "Article created as draft (not published) by default"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/knowledge/articles",
+          "purpose": "Get paginated list of knowledge articles with filtering",
+          "query_params": {
+            "category": "string (optional)",
+            "tags": "comma-separated string (optional)",
+            "verified_only": "boolean (default: false)",
+            "published_only": "boolean (default: true)",
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 20)"
+          },
+          "response": "ArticleListResponse (paginated)",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Returns articles visible to user (public + tenant articles)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/knowledge/articles/{article_id}",
+          "purpose": "Get article by ID with full details",
+          "response": "ArticleResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Increments view count. Returns user-specific fields (is_bookmarked, user_vote) if authenticated"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/portal/knowledge/articles/{article_id}",
+          "purpose": "Update an existing article",
+          "request_body": "ArticleUpdate (partial)",
+          "response": "ArticleResponse",
+          "auth_required": true,
+          "user_roles": ["author", "admin"],
+          "notes": "Only article author or admin can update"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/articles/{article_id}/vote",
+          "purpose": "Vote on an article (upvote/downvote)",
+          "request_body": {
+            "vote": "integer (1 for upvote, -1 for downvote)"
+          },
+          "response": "success message",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "notes": "Updates existing vote if user already voted"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/portal/knowledge/articles/{article_id}/vote",
+          "purpose": "Remove user's vote from article",
+          "response": "success message",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"]
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/articles/{article_id}/bookmark",
+          "purpose": "Bookmark article for later reading",
+          "response": "BookmarkResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/portal/knowledge/articles/{article_id}/bookmark",
+          "purpose": "Remove bookmark from article",
+          "response": "success message",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/knowledge/bookmarks",
+          "purpose": "Get current user's bookmarked articles",
+          "query_params": {
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 20)"
+          },
+          "response": "ArticleListResponse (paginated)",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/knowledge/search",
+          "purpose": "Full-text search for articles",
+          "query_params": {
+            "query": "string (min 2 chars, required)",
+            "category": "string (optional)",
+            "tags": "comma-separated string (optional)",
+            "verified_only": "boolean (default: false)",
+            "published_only": "boolean (default: true)",
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 20)"
+          },
+          "response": "SearchResponse with relevance scores",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Uses PostgreSQL ts_rank for relevance scoring"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/ai-generate",
+          "purpose": "Generate knowledge article from exercise using AI",
+          "request_body": {
+            "exercise_id": "integer (required)",
+            "category": "string (optional override)",
+            "tags": "array of strings (optional override)"
+          },
+          "response": "AIGenerateResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201,
+          "notes": "Generated article is draft with 'pending' verification status. Requires expert verification before publishing"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/articles/{article_id}/verify",
+          "purpose": "Verify or reject an article (typically AI-generated)",
+          "request_body": {
+            "status": "string ('verified' or 'rejected')",
+            "notes": "string (optional)"
+          },
+          "response": "VerifyArticleResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"],
+          "notes": "Only specialists and admins can verify articles"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/knowledge/articles/{article_id}/discuss",
+          "purpose": "Create a forum topic to discuss an article",
+          "response": {
+            "message": "string",
+            "topic_id": "integer",
+            "topic_url": "string"
+          },
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "notes": "Automatically creates topic in 'Knowledge Hub' category linked to article"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/knowledge/articles/{article_id}/discussion",
+          "purpose": "Get forum discussion for an article",
+          "response": {
+            "has_discussion": "boolean",
+            "topic_id": "integer (if exists)",
+            "topic_title": "string",
+            "post_count": "integer",
+            "last_post_at": "datetime",
+            "topic_url": "string"
+          },
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        }
+      ],
+
+      "forum": [
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/categories",
+          "purpose": "Get forum categories",
+          "query_params": {
+            "parent_id": "integer (optional, filter by parent)"
+          },
+          "response": "array of CategoryResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Returns top-level categories by default. Use parent_id to get subcategories"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/topics",
+          "purpose": "Create a new forum topic",
+          "request_body": {
+            "category_id": "integer (required)",
+            "title": "string (max 500 chars)",
+            "content": "string (Markdown)",
+            "tags": "array of strings (max 10)",
+            "linked_article_id": "integer (optional)",
+            "linked_scenario_id": "integer (optional)"
+          },
+          "response": "TopicResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201,
+          "notes": "Awards reputation points to author"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/topics",
+          "purpose": "Get list of forum topics with filtering",
+          "query_params": {
+            "category_id": "integer (optional)",
+            "status": "string (default: 'active')",
+            "linked_article_id": "integer (optional)",
+            "linked_scenario_id": "integer (optional)",
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 20)"
+          },
+          "response": "TopicListResponse (paginated)",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Pinned topics appear first"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/topics/{topic_id}",
+          "purpose": "Get topic details",
+          "response": "TopicResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Increments view count. Returns user_vote if authenticated"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/portal/forum/topics/{topic_id}",
+          "purpose": "Update a topic",
+          "request_body": "TopicUpdate (partial)",
+          "response": "TopicResponse",
+          "auth_required": true,
+          "user_roles": ["author", "admin"],
+          "notes": "Only topic author or admin can update"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/topics/{topic_id}/posts",
+          "purpose": "Create a post (reply to topic)",
+          "request_body": {
+            "content": "string (Markdown)",
+            "parent_post_id": "integer (optional, for nested replies)"
+          },
+          "response": "PostResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201,
+          "notes": "Cannot post if topic is locked. Awards reputation points"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/topics/{topic_id}/posts",
+          "purpose": "Get posts for a topic",
+          "query_params": {
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 50)"
+          },
+          "response": "array of PostResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Returns posts in chronological order with user_vote if authenticated"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/portal/forum/posts/{post_id}",
+          "purpose": "Update a post",
+          "request_body": {
+            "content": "string (Markdown)"
+          },
+          "response": "PostResponse",
+          "auth_required": true,
+          "user_roles": ["author"],
+          "notes": "Only post author can update"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/topics/{topic_id}/vote",
+          "purpose": "Vote on a topic",
+          "request_body": {
+            "vote": "integer (1 or -1)"
+          },
+          "response": {
+            "message": "string",
+            "vote": "integer"
+          },
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "notes": "Updates existing vote if already voted. Awards/deducts reputation to topic author"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/posts/{post_id}/vote",
+          "purpose": "Vote on a post",
+          "request_body": {
+            "vote": "integer (1 or -1)"
+          },
+          "response": {
+            "message": "string",
+            "vote": "integer"
+          },
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "notes": "Awards/deducts reputation to post author"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/posts/{post_id}/mark-solution",
+          "purpose": "Mark a post as solution (for questions)",
+          "response": {
+            "message": "string"
+          },
+          "auth_required": true,
+          "user_roles": ["topic_author"],
+          "notes": "Only topic author can mark solution. Awards reputation to post author"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/topics/{topic_id}/flag",
+          "purpose": "Report a topic for moderation",
+          "request_body": {
+            "reason": "string (spam|inappropriate|offensive|other)",
+            "description": "string (optional)"
+          },
+          "response": "FlagResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"]
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/posts/{post_id}/flag",
+          "purpose": "Report a post for moderation",
+          "request_body": {
+            "reason": "string (spam|inappropriate|offensive|other)",
+            "description": "string (optional)"
+          },
+          "response": "FlagResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/moderation/queue",
+          "purpose": "Get moderation queue",
+          "query_params": {
+            "status": "string (default: 'pending')",
+            "limit": "integer (1-100, default: 50)"
+          },
+          "response": "array of FlagResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"],
+          "notes": "Returns flags that need review"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/forum/moderation/flags/{flag_id}/resolve",
+          "purpose": "Resolve a moderation flag",
+          "request_body": {
+            "action": "string (approved|rejected|hidden|deleted)",
+            "notes": "string (optional)"
+          },
+          "response": "FlagResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/reputation/{user_id}",
+          "purpose": "Get user's reputation details",
+          "response": "ReputationResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/leaderboard",
+          "purpose": "Get reputation leaderboard",
+          "query_params": {
+            "period": "string (all_time|monthly|weekly, default: all_time)",
+            "limit": "integer (1-100, default: 50)"
+          },
+          "response": "LeaderboardResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Shows top users by reputation score"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/badges",
+          "purpose": "Get all available badges",
+          "query_params": {
+            "badge_type": "string (optional: certification|achievement|special)"
+          },
+          "response": "array of BadgeResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/users/{user_id}/badges",
+          "purpose": "Get badges earned by user",
+          "response": "array of UserBadgeResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/forum/stats",
+          "purpose": "Get overall forum statistics",
+          "response": "ForumStatsResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        }
+      ],
+
+      "scenarios": [
+        {
+          "method": "GET",
+          "path": "/api/portal/scenarios",
+          "purpose": "Get catalog of available BCM scenarios",
+          "query_params": {
+            "scenario_type": "string (optional: tabletop|functional|full_scale)",
+            "industry": "string (optional)",
+            "threat_type": "string (optional)",
+            "page": "integer (default: 1)",
+            "page_size": "integer (1-100, default: 20)"
+          },
+          "response": "ScenarioListResponse (paginated)",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Sorted by average rating and deployment count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/scenarios/{scenario_id}",
+          "purpose": "Get scenario details",
+          "response": "ScenarioResponse (full details including injects, objectives, ISO mapping)",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"]
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/scenarios/{scenario_id}/deploy",
+          "purpose": "Deploy scenario as an exercise in Validation module",
+          "request_body": {
+            "tenant_id": "string (required)",
+            "exercise_name_override": "string (optional)"
+          },
+          "response": "ScenarioDeployResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "notes": "Creates exercise in Validation module with scenario's injects and objectives"
+        },
+        {
+          "method": "POST",
+          "path": "/api/portal/scenarios/{scenario_id}/reviews",
+          "purpose": "Create or update a scenario review",
+          "request_body": {
+            "rating": "integer (1-5)",
+            "review_text": "string (optional)",
+            "exercise_id": "integer (optional)"
+          },
+          "response": "ScenarioReviewResponse",
+          "auth_required": true,
+          "user_roles": ["user", "specialist", "admin"],
+          "status_code": 201,
+          "notes": "Users can only have one review per scenario. Updates if already reviewed"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/scenarios/{scenario_id}/reviews",
+          "purpose": "Get reviews for a scenario",
+          "query_params": {
+            "limit": "integer (1-100, default: 20)"
+          },
+          "response": "array of ScenarioReviewResponse",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Returns most recent reviews sorted by creation date"
+        },
+        {
+          "method": "GET",
+          "path": "/api/portal/scenarios/featured/popular",
+          "purpose": "Get most popular scenarios",
+          "query_params": {
+            "limit": "integer (1-50, default: 10)"
+          },
+          "response": "array of ScenarioListItem",
+          "auth_required": false,
+          "user_roles": ["public", "user", "specialist", "admin"],
+          "notes": "Sorted by deployment count and average rating. Great for homepage"
+        }
+      ]
+    },
+
+    "features": [
+      "Knowledge Center (Центр знаний) - Complete BCM knowledge base with AI generation",
+      "AI Article Generation - Generate articles from exercise results with verification workflow",
+      "Article Verification - Expert review for AI-generated content (pending/verified/rejected)",
+      "Full-text Search - PostgreSQL ts_rank search with relevance scoring",
+      "Bookmarking System - Save articles for later reading",
+      "Voting System - Upvote/downvote articles (usefulness score calculation)",
+      "Community Forum - Discussion topics, nested replies, voting, moderation",
+      "Reputation & Gamification - Points, 5 levels (newbie→legend), badges, leaderboards",
+      "Moderation System - Content flagging and moderation queue for specialists/admins",
+      "Scenario Marketplace (Сценарии) - Browse, filter, deploy BCM exercise scenarios",
+      "Scenario Deployment - Deploy scenarios to Validation module as exercises",
+      "Scenario Reviews - Rate and review scenarios after deployment",
+      "Forum-Knowledge Integration - Create discussions about articles",
+      "ISO 22301 Mapping - Articles and scenarios mapped to ISO clauses",
+      "Multi-tenancy - Tenant-specific and public content with RLS",
+      "Cross-Service Integration - Links to Marketplace projects and Validation exercises"
+    ],
+
+    "user_flows": [
+      {
+        "flow": "Knowledge Discovery",
+        "steps": [
+          "User searches for BCM topic",
+          "System returns relevant articles with scores",
+          "User reads article (view count incremented)",
+          "User bookmarks article for later",
+          "User upvotes helpful article",
+          "User starts forum discussion about article"
+        ]
+      },
+      {
+        "flow": "Expert Content Creation",
+        "steps": [
+          "Specialist creates knowledge article",
+          "Article saved as draft",
+          "Specialist publishes article",
+          "Community votes and comments",
+          "Article gains reputation score",
+          "Article appears in search results"
+        ]
+      },
+      {
+        "flow": "AI Content Generation",
+        "steps": [
+          "User completes exercise in Validation module",
+          "User requests AI article generation",
+          "AI analyzes exercise and generates article",
+          "Article created as draft with 'pending' status",
+          "Specialist verifies article quality",
+          "Article published to knowledge base"
+        ]
+      },
+      {
+        "flow": "Scenario Deployment",
+        "steps": [
+          "User browses scenario marketplace",
+          "User filters by industry/threat type",
+          "User views scenario details",
+          "User deploys scenario to Validation module",
+          "Exercise created with scenario template",
+          "User runs exercise",
+          "User reviews scenario after completion"
+        ]
+      },
+      {
+        "flow": "Forum Participation",
+        "steps": [
+          "User browses forum categories",
+          "User creates new topic or replies to existing",
+          "Community votes on posts",
+          "Topic author marks best answer as solution",
+          "Users earn reputation points",
+          "Users unlock badges and levels"
+        ]
+      },
+      {
+        "flow": "Community Moderation",
+        "steps": [
+          "User flags inappropriate content",
+          "Flag added to moderation queue",
+          "Specialist/Admin reviews flag",
+          "Moderator takes action (approve/hide/delete)",
+          "Action logged and user notified"
+        ]
+      },
+      {
+        "flow": "Knowledge Discovery Journey",
+        "steps": [
+          "User searches for BCM topic (e.g., 'BIA best practices')",
+          "System returns ranked articles with relevance scores",
+          "User filters by category, verified_only, or ISO clause",
+          "User reads article, view count increments",
+          "User upvotes helpful article (usefulness score increases)",
+          "User bookmarks for later reference",
+          "User starts forum discussion about article",
+          "Community engages in discussion, earns reputation"
+        ]
+      },
+      {
+        "flow": "Scenario to Exercise Deployment",
+        "steps": [
+          "User browses scenario marketplace",
+          "User filters by scenario type (tabletop/functional/full_scale)",
+          "User filters by industry and threat type",
+          "User views scenario details (injects, objectives, ISO mapping)",
+          "User deploys scenario to Validation module",
+          "System creates exercise with scenario template",
+          "Exercise includes injects and learning objectives",
+          "User runs exercise in Validation module",
+          "After completion, user reviews scenario with rating",
+          "Review updates scenario's average rating"
+        ]
+      }
+    ],
+
+    "data_models": {
+      "ArticleResponse": {
+        "id": "integer",
+        "tenant_id": "string (nullable)",
+        "title": "string",
+        "slug": "string",
+        "summary": "string",
+        "content": "string (Markdown)",
+        "content_html": "string (rendered HTML)",
+        "category": "string",
+        "tags": "array of strings",
+        "iso_clause": "string (nullable)",
+        "author_id": "string",
+        "author_type": "string",
+        "published": "boolean",
+        "published_at": "datetime (nullable)",
+        "ai_generated": "boolean",
+        "ai_confidence_score": "float (nullable)",
+        "source_exercise_id": "integer (nullable)",
+        "verification_status": "string (pending|verified|rejected)",
+        "verified_by": "string (nullable)",
+        "verified_at": "datetime (nullable)",
+        "view_count": "integer",
+        "usefulness_score": "float",
+        "upvotes": "integer",
+        "downvotes": "integer",
+        "is_bookmarked": "boolean (user-specific)",
+        "user_vote": "integer (1|-1|null, user-specific)",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "TopicResponse": {
+        "id": "integer",
+        "category_id": "integer",
+        "tenant_id": "string (nullable)",
+        "title": "string",
+        "content": "string (Markdown)",
+        "content_html": "string",
+        "author_id": "string",
+        "author_type": "string",
+        "status": "string (active|closed|archived)",
+        "is_pinned": "boolean",
+        "is_locked": "boolean",
+        "is_solved": "boolean",
+        "solution_post_id": "integer (nullable)",
+        "linked_article_id": "integer (nullable)",
+        "linked_scenario_id": "integer (nullable)",
+        "view_count": "integer",
+        "post_count": "integer",
+        "vote_score": "integer",
+        "tags": "array of strings",
+        "last_post_at": "datetime",
+        "last_post_by": "string (nullable)",
+        "user_vote": "integer (1|-1|null, user-specific)",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "PostResponse": {
+        "id": "integer",
+        "topic_id": "integer",
+        "parent_post_id": "integer (nullable)",
+        "content": "string (Markdown)",
+        "content_html": "string",
+        "author_id": "string",
+        "author_type": "string",
+        "is_deleted": "boolean",
+        "is_hidden": "boolean",
+        "vote_score": "integer",
+        "is_solution": "boolean",
+        "user_vote": "integer (1|-1|null, user-specific)",
+        "created_at": "datetime",
+        "updated_at": "datetime",
+        "edited_at": "datetime (nullable)"
+      },
+      "ScenarioResponse": {
+        "id": "integer",
+        "scenario_code": "string",
+        "scenario_name": "string",
+        "description": "string",
+        "scenario_type": "string (tabletop|functional|full_scale)",
+        "industry": "string (nullable)",
+        "threat_type": "string (nullable)",
+        "full_scenario": "string",
+        "injects": "array of objects",
+        "learning_objectives": "array of strings",
+        "duration_minutes": "integer",
+        "iso_clauses": "array of strings",
+        "published": "boolean",
+        "published_at": "datetime (nullable)",
+        "created_by": "string",
+        "author_type": "string",
+        "view_count": "integer",
+        "deployment_count": "integer",
+        "average_rating": "float",
+        "review_count": "integer",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "ReputationResponse": {
+        "user_id": "string",
+        "reputation_score": "integer",
+        "reputation_level": "string (newbie|contributor|expert|guru|legend)",
+        "topics_created": "integer",
+        "posts_created": "integer",
+        "solutions_marked": "integer",
+        "upvotes_received": "integer",
+        "downvotes_received": "integer",
+        "badges_earned": "integer",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      }
+    }
+  },
+
+  "marketplace": {
+    "service_info": {
+      "name": "Marketplace Service",
+      "description": "Professional Marketplace for BCM Consultants (Uber for BCM)",
+      "base_url": "http://localhost:8032",
+      "version": "1.0.0",
+      "port": 8032
+    },
+
+    "endpoints": {
+      "specialists": [
+        {
+          "method": "POST",
+          "path": "/api/marketplace/specialists",
+          "purpose": "Create new specialist profile",
+          "request_body": "SpecialistCreate",
+          "response": "SpecialistResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"],
+          "status_code": 201,
+          "notes": "One active profile per user. Starts as unverified. Profile completion calculated automatically"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/specialists",
+          "purpose": "Search specialists with filters",
+          "query_params": {
+            "skills": "comma-separated string (optional)",
+            "specializations": "comma-separated string (optional)",
+            "industries": "comma-separated string (optional)",
+            "min_rating": "float 0-5 (optional)",
+            "verified_only": "boolean (default: true)",
+            "availability_status": "string (optional: available|busy|unavailable)",
+            "min_hourly_rate": "float (optional)",
+            "max_hourly_rate": "float (optional)",
+            "country": "string (optional)",
+            "city": "string (optional)",
+            "search": "string (optional, searches name/title/bio)",
+            "offset": "integer (default: 0)",
+            "limit": "integer (1-100, default: 20)"
+          },
+          "response": "array of SpecialistResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Public endpoint. Results sorted by rating DESC"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/specialists/me",
+          "purpose": "Get current user's specialist profile",
+          "response": "SpecialistResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/specialists/{specialist_id}",
+          "purpose": "Get specialist profile by ID",
+          "response": "SpecialistResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Full profile with certifications and portfolio"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/marketplace/specialists/{specialist_id}",
+          "purpose": "Update specialist profile",
+          "request_body": "SpecialistUpdate (partial)",
+          "response": "SpecialistResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Can only update own profile unless admin. Profile completion recalculated"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/marketplace/specialists/{specialist_id}",
+          "purpose": "Deactivate specialist profile (soft delete)",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "status_code": 204,
+          "notes": "Sets active=false, doesn't delete record"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/specialists/{specialist_id}/verify",
+          "purpose": "Verify or unverify specialist (admin only)",
+          "request_body": {
+            "verified": "boolean",
+            "verification_notes": "string (optional)"
+          },
+          "response": "SpecialistResponse",
+          "auth_required": true,
+          "user_roles": ["admin"],
+          "notes": "Verification affects proposal eligibility"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/specialists/{specialist_id}/certifications",
+          "purpose": "Add certification to specialist profile",
+          "request_body": "CertificationCreate",
+          "response": "CertificationResponse",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "status_code": 201,
+          "notes": "Updates profile completion. Starts as unverified"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/marketplace/specialists/{specialist_id}/certifications/{cert_id}",
+          "purpose": "Delete certification",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "status_code": 204
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/specialists/{specialist_id}/portfolio",
+          "purpose": "Add portfolio item",
+          "request_body": "PortfolioItemCreate",
+          "response": "PortfolioItemResponse",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "status_code": 201,
+          "notes": "Updates profile completion"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/marketplace/specialists/{specialist_id}/portfolio/{portfolio_id}",
+          "purpose": "Delete portfolio item",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "status_code": 204
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/specialists/{specialist_id}/knowledge-articles",
+          "purpose": "Get related knowledge articles from Portal",
+          "query_params": {
+            "limit": "integer (1-20, default: 5)"
+          },
+          "response": {
+            "specialist_id": "integer",
+            "specializations": "array of strings",
+            "articles": "array of article objects"
+          },
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Integration with Portal Service - shows relevant BCM knowledge"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/specialists/{specialist_id}/community-reputation",
+          "purpose": "Get specialist's Portal community reputation",
+          "response": {
+            "specialist_id": "integer",
+            "user_id": "string",
+            "portal_reputation": "object (forum reputation, badges, contributions)"
+          },
+          "auth_required": true,
+          "user_roles": ["client", "specialist", "admin"],
+          "notes": "Integration with Portal Service - shows forum activity"
+        }
+      ],
+
+      "projects": [
+        {
+          "method": "POST",
+          "path": "/api/marketplace/projects",
+          "purpose": "Create new project (client posts a job)",
+          "request_body": "ProjectCreate",
+          "response": "ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["client", "admin"],
+          "status_code": 201,
+          "notes": "Status starts as 'draft'. Must specify service_type"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects",
+          "purpose": "Search projects with filters",
+          "query_params": {
+            "service_type": "string (optional: bia|bcm_plan|risk_assessment|iso_22301|training|exercise|consulting)",
+            "status": "string (optional: draft|open|in_progress|completed|cancelled)",
+            "urgency_level": "string (optional: low|medium|high|urgent)",
+            "budget_type": "string (optional: hourly|fixed|retainer)",
+            "work_location": "string (optional: remote|onsite|hybrid)",
+            "required_skills": "comma-separated string (optional)",
+            "min_budget": "float (optional)",
+            "max_budget": "float (optional)",
+            "country": "string (optional)",
+            "city": "string (optional)",
+            "search": "string (optional, searches title/description)",
+            "offset": "integer (default: 0)",
+            "limit": "integer (1-100, default: 20)"
+          },
+          "response": "array of ProjectResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Public endpoint. Sorted by created_at DESC"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects/my",
+          "purpose": "Get current user's projects",
+          "query_params": {
+            "status": "string (optional)"
+          },
+          "response": "array of ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["client", "admin"]
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects/{project_id}",
+          "purpose": "Get project by ID",
+          "response": "ProjectResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Full project details with proposals count"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/marketplace/projects/{project_id}",
+          "purpose": "Update project",
+          "request_body": "ProjectUpdate (partial)",
+          "response": "ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Cannot update completed/cancelled projects. Cannot change status via this endpoint"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/projects/{project_id}/publish",
+          "purpose": "Publish project (draft → open)",
+          "response": "ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Makes project visible to specialists. Emits project.published event. Gets Portal scenarios for recommendations"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/projects/{project_id}/complete",
+          "purpose": "Mark project as complete",
+          "request_body": {
+            "completion_notes": "string (optional)"
+          },
+          "response": "ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Can only complete in_progress projects. Triggers review request. Creates Portal article from case study"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/projects/{project_id}/cancel",
+          "purpose": "Cancel project",
+          "request_body": {
+            "cancellation_reason": "string (optional)"
+          },
+          "response": "ProjectResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Can cancel draft/open/in_progress projects. May trigger dispute resolution if in_progress"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/marketplace/projects/{project_id}",
+          "purpose": "Delete project (hard delete)",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "status_code": 204,
+          "notes": "Can only delete draft projects with no proposals. Use cancel for published projects"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects/{project_id}/proposals",
+          "purpose": "Get all proposals for a project",
+          "query_params": {
+            "status": "string (optional: pending|accepted|rejected|withdrawn)"
+          },
+          "response": "array of proposal objects with specialist details",
+          "auth_required": true,
+          "user_roles": ["owner", "admin"],
+          "notes": "Only project owner can see all proposals"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects/{project_id}/scenarios",
+          "purpose": "Get related BCM scenarios from Portal",
+          "query_params": {
+            "limit": "integer (1-20, default: 5)"
+          },
+          "response": {
+            "project_id": "integer",
+            "service_type": "string",
+            "scenarios": "array of scenario objects"
+          },
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Integration with Portal Service - shows relevant scenario templates"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/projects/stats/overview",
+          "purpose": "Get project statistics",
+          "response": {
+            "by_status": "object",
+            "by_service_type": "object",
+            "average_budget": "float",
+            "total_proposals": "integer"
+          },
+          "auth_required": true,
+          "user_roles": ["client", "admin"],
+          "notes": "Clients see own projects. Admins see all in tenant"
+        }
+      ],
+
+      "proposals": [
+        {
+          "method": "POST",
+          "path": "/api/marketplace/proposals",
+          "purpose": "Submit proposal to project (specialist action)",
+          "request_body": "ProposalCreate",
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["verified_specialist"],
+          "status_code": 201,
+          "notes": "Can only propose to open projects. One proposal per specialist per project. Must be verified specialist"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/proposals",
+          "purpose": "Get my proposals (specialist view)",
+          "query_params": {
+            "status": "string (optional: pending|accepted|rejected|withdrawn)",
+            "limit": "integer (1-100, default: 50)"
+          },
+          "response": "array of ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["specialist", "admin"],
+          "notes": "All proposals submitted by current specialist"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/proposals/{proposal_id}",
+          "purpose": "Get proposal by ID",
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["owner", "project_owner", "admin"],
+          "notes": "Specialist can view own proposals. Client can view proposals for own projects"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/marketplace/proposals/{proposal_id}",
+          "purpose": "Update proposal (specialist action)",
+          "request_body": "ProposalUpdate (partial)",
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "notes": "Can only update pending proposals"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/marketplace/proposals/{proposal_id}",
+          "purpose": "Delete proposal (specialist action)",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "status_code": 204,
+          "notes": "Can only delete pending proposals. Use withdraw for soft withdrawal"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/proposals/{proposal_id}/accept",
+          "purpose": "Accept proposal (client action) - CRITICAL TRANSACTION",
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["project_owner"],
+          "notes": "Accepts proposal, rejects all others, assigns specialist to project (open → in_progress). Emits events"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/proposals/{proposal_id}/reject",
+          "purpose": "Reject proposal (client action)",
+          "query_params": {
+            "reason": "string (optional)"
+          },
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["project_owner"],
+          "notes": "Can only reject pending proposals. Optional reason provides feedback to specialist"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/proposals/{proposal_id}/withdraw",
+          "purpose": "Withdraw proposal (specialist action)",
+          "query_params": {
+            "reason": "string (optional)"
+          },
+          "response": "ProposalResponse",
+          "auth_required": true,
+          "user_roles": ["owner"],
+          "notes": "Can only withdraw pending proposals. Changes status to withdrawn"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/proposals/stats/my",
+          "purpose": "Get my proposal statistics (specialist view)",
+          "response": {
+            "total_proposals": "integer",
+            "by_status": "object",
+            "acceptance_rate": "float",
+            "pending_count": "integer"
+          },
+          "auth_required": true,
+          "user_roles": ["specialist"],
+          "notes": "Track specialist performance and success rate"
+        }
+      ],
+
+      "reviews": [
+        {
+          "method": "POST",
+          "path": "/api/marketplace/reviews",
+          "purpose": "Create review for specialist (client action)",
+          "request_body": "ReviewCreate",
+          "response": "ReviewResponse",
+          "auth_required": true,
+          "user_roles": ["client"],
+          "status_code": 201,
+          "notes": "Can only review after project completion. One review per project-specialist pair. Updates specialist rating"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/reviews",
+          "purpose": "List reviews with filters",
+          "query_params": {
+            "specialist_id": "integer (optional)",
+            "project_id": "integer (optional)",
+            "min_rating": "integer 1-5 (optional)",
+            "verified_only": "boolean (default: false)",
+            "limit": "integer (1-100, default: 20)"
+          },
+          "response": "array of ReviewResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Public reviews only (is_public=true)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/reviews/{review_id}",
+          "purpose": "Get review by ID",
+          "response": "ReviewResponse",
+          "auth_required": false,
+          "user_roles": ["public", "reviewer", "specialist", "admin"],
+          "notes": "Public reviews accessible to all. Private reviews only to reviewer/specialist/admin"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/reviews/{review_id}/respond",
+          "purpose": "Specialist responds to review",
+          "request_body": {
+            "specialist_response": "string"
+          },
+          "response": "ReviewResponse",
+          "auth_required": true,
+          "user_roles": ["reviewed_specialist"],
+          "notes": "Only reviewed specialist can respond. Can respond only once"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/reviews/specialists/{specialist_id}/reviews",
+          "purpose": "Get all reviews for a specialist",
+          "query_params": {
+            "limit": "integer (1-100, default: 50)"
+          },
+          "response": "array of ReviewResponse",
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Public reviews sorted by created_at DESC"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/reviews/specialists/{specialist_id}/stats",
+          "purpose": "Get review statistics for specialist",
+          "response": {
+            "overall_rating": "float",
+            "total_reviews": "integer",
+            "rating_distribution": "object (5-1 stars)",
+            "category_averages": "object (communication, quality, professionalism, timeliness)",
+            "response_rate": "float (percentage)"
+          },
+          "auth_required": false,
+          "user_roles": ["public", "client", "specialist", "admin"],
+          "notes": "Used for specialist profile page and client decision-making"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/reviews/{review_id}/hide",
+          "purpose": "Hide review (admin action)",
+          "query_params": {
+            "reason": "string (required)"
+          },
+          "response": "ReviewResponse",
+          "auth_required": true,
+          "user_roles": ["admin"],
+          "notes": "Sets is_public=false. Doesn't delete. Recalculates specialist rating"
+        },
+        {
+          "method": "POST",
+          "path": "/api/marketplace/reviews/{review_id}/verify",
+          "purpose": "Verify or unverify review (admin action)",
+          "query_params": {
+            "verified": "boolean (required)"
+          },
+          "response": "ReviewResponse",
+          "auth_required": true,
+          "user_roles": ["admin"],
+          "notes": "Most reviews auto-verified. Use for quality control"
+        },
+        {
+          "method": "GET",
+          "path": "/api/marketplace/reviews/my/written",
+          "purpose": "Get reviews written by me (client view)",
+          "query_params": {
+            "limit": "integer (1-100, default: 50)"
+          },
+          "response": "array of ReviewResponse",
+          "auth_required": true,
+          "user_roles": ["client"],
+          "notes": "All reviews written by current user"
+        }
+      ]
+    },
+
+    "features": [
+      "Specialist Profiles - Comprehensive profiles with skills, certifications, portfolio",
+      "Profile Verification - Admin verification for trust and quality",
+      "Profile Completion - Automatic calculation of profile completion percentage",
+      "Project Posting - Clients post BCM consulting projects",
+      "Advanced Search - Filter specialists by skills, location, rating, rate",
+      "Proposal System - Specialists submit proposals with budget and timeline",
+      "Project Lifecycle - draft → open → in_progress → completed/cancelled",
+      "Review & Rating System - Clients review specialists after project completion",
+      "Multi-dimensional Ratings - Overall, communication, quality, professionalism, timeliness",
+      "Specialist Response - Specialists can respond to reviews",
+      "Case Studies (Кейсы) - Portfolio items as case studies from completed projects",
+      "Portfolio Management - Showcase past work with deliverables, outcomes, and media",
+      "Certification Management - Add and verify professional certifications",
+      "Portal Integration - Knowledge articles and scenarios linked to marketplace",
+      "Community Reputation - Display forum reputation and badges",
+      "Project→Portal Flow - Completed projects can become Knowledge articles",
+      "EventBus Integration - Event-driven architecture for system integration",
+      "Multi-tenancy - Tenant isolation with Row Level Security"
+    ],
+
+    "user_flows": [
+      {
+        "flow": "Specialist Onboarding",
+        "steps": [
+          "User creates specialist profile",
+          "Specialist adds skills, certifications, portfolio",
+          "Profile completion percentage calculated",
+          "Admin verifies specialist profile",
+          "Specialist becomes eligible for proposals",
+          "Specialist appears in search results"
+        ]
+      },
+      {
+        "flow": "Client Posts Project",
+        "steps": [
+          "Client creates project as draft",
+          "Client fills project details (service type, budget, timeline)",
+          "Client adds required skills and certifications",
+          "Client publishes project (draft → open)",
+          "Project visible to specialists",
+          "System suggests related Portal scenarios"
+        ]
+      },
+      {
+        "flow": "Specialist Submits Proposal",
+        "steps": [
+          "Specialist searches open projects",
+          "Specialist views project details",
+          "Specialist writes cover letter and proposes budget/timeline",
+          "Specialist submits proposal",
+          "Client receives notification",
+          "Proposal appears in client's dashboard"
+        ]
+      },
+      {
+        "flow": "Client Hires Specialist (CRITICAL FLOW)",
+        "steps": [
+          "Client reviews multiple proposals",
+          "Client compares specialists (rating, reviews, proposals)",
+          "Client accepts best proposal",
+          "System auto-rejects all other proposals",
+          "Project status changes to in_progress",
+          "Specialist assigned to project",
+          "Both parties receive notifications",
+          "Work begins"
+        ]
+      },
+      {
+        "flow": "Project Completion & Review",
+        "steps": [
+          "Specialist completes project work",
+          "Client marks project as complete",
+          "System creates case study article in Portal",
+          "Client writes review for specialist",
+          "Review updates specialist rating",
+          "Specialist responds to review",
+          "Review published on specialist profile"
+        ]
+      },
+      {
+        "flow": "Specialist Profile Discovery",
+        "steps": [
+          "Client searches for specialists",
+          "Client filters by skills/location/rating",
+          "Client views specialist profile",
+          "Client sees certifications and portfolio",
+          "Client views related Portal knowledge articles",
+          "Client checks community reputation from forum",
+          "Client reviews past client feedback",
+          "Client contacts specialist or invites to project"
+        ]
+      },
+      {
+        "flow": "Specialist Shares Case Study from Completed Project",
+        "steps": [
+          "Specialist completes project successfully",
+          "Client marks project as complete",
+          "Specialist adds project to portfolio as case study",
+          "Specialist fills: title, description, deliverables, outcomes",
+          "Specialist adds industry, project type, timeline",
+          "Specialist optionally adds images/documents",
+          "Case study appears on specialist profile",
+          "OPTIONALLY: Specialist converts case study to Portal knowledge article",
+          "Knowledge article tagged with marketplace project reference",
+          "Community can learn from real project experience",
+          "Case study increases specialist credibility"
+        ]
+      },
+      {
+        "flow": "Project→Case Study→Knowledge Article Flow",
+        "steps": [
+          "Project completed in Marketplace",
+          "Specialist adds to portfolio as case study",
+          "Specialist chooses 'Share as Knowledge Article'",
+          "System calls Portal API to create article",
+          "Article auto-tagged with 'marketplace', project_id, specialist_id",
+          "Article categorized by project service type",
+          "Article requires verification (if AI-enhanced)",
+          "Once verified, article published in Knowledge Center",
+          "Community discovers article through search",
+          "Article links back to specialist profile",
+          "Specialist gains reputation from article votes"
+        ]
+      },
+      {
+        "flow": "Community Learns from Real Cases",
+        "steps": [
+          "User searches Knowledge Center for practical examples",
+          "User finds articles tagged 'marketplace' or 'case study'",
+          "User reads real-world BCM implementation story",
+          "User sees outcomes and lessons learned",
+          "User views linked specialist profile",
+          "User checks specialist's other case studies",
+          "User may contact specialist for similar work",
+          "User upvotes helpful case study",
+          "User bookmarks for future reference"
+        ]
+      }
+    ],
+
+    "data_models": {
+      "SpecialistResponse": {
+        "id": "integer",
+        "user_id": "UUID",
+        "tenant_id": "UUID",
+        "name": "string",
+        "title": "string (nullable)",
+        "bio": "string (nullable)",
+        "years_experience": "integer",
+        "hourly_rate": "decimal (nullable)",
+        "currency": "string (default: USD)",
+        "specializations": "array of strings",
+        "industries": "array of strings",
+        "skills": "array of strings",
+        "availability_status": "enum (available|busy|unavailable)",
+        "availability_hours": "object (nullable)",
+        "timezone": "string (default: UTC)",
+        "country": "string (nullable)",
+        "state": "string (nullable)",
+        "city": "string (nullable)",
+        "remote_available": "boolean",
+        "onsite_available": "boolean",
+        "languages": "array of strings",
+        "rating": "decimal",
+        "total_reviews": "integer",
+        "completed_projects": "integer",
+        "response_time_hours": "decimal (nullable)",
+        "acceptance_rate": "decimal (nullable)",
+        "is_verified": "boolean",
+        "verified_at": "datetime (nullable)",
+        "profile_completion": "integer (percentage)",
+        "active": "boolean",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "ProjectResponse": {
+        "id": "integer",
+        "client_id": "UUID",
+        "tenant_id": "UUID",
+        "client_name": "string (nullable)",
+        "company_name": "string (nullable)",
+        "industry": "string (nullable)",
+        "company_size": "string (nullable)",
+        "title": "string",
+        "description": "string",
+        "service_type": "enum (bia|bcm_plan|risk_assessment|iso_22301|training|exercise|consulting)",
+        "urgency": "enum (low|medium|high|urgent)",
+        "scope_of_work": "string (nullable)",
+        "deliverables": "string (nullable)",
+        "start_date": "date (nullable)",
+        "end_date": "date (nullable)",
+        "duration_estimate_hours": "decimal (nullable)",
+        "budget_type": "enum (hourly|fixed|retainer|negotiable)",
+        "budget_min": "decimal (nullable)",
+        "budget_max": "decimal (nullable)",
+        "currency": "string (default: USD)",
+        "required_certifications": "string (nullable)",
+        "required_experience_years": "integer (nullable)",
+        "required_skills": "array of strings",
+        "work_location": "enum (remote|onsite|hybrid)",
+        "location_country": "string (nullable)",
+        "location_state": "string (nullable)",
+        "location_city": "string (nullable)",
+        "status": "enum (draft|open|in_progress|completed|cancelled)",
+        "published_at": "datetime (nullable)",
+        "selected_proposal_id": "integer (nullable)",
+        "selected_specialist_id": "integer (nullable)",
+        "view_count": "integer",
+        "proposal_count": "integer",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "ProposalResponse": {
+        "id": "integer",
+        "project_id": "integer",
+        "specialist_id": "integer",
+        "status": "enum (pending|accepted|rejected|withdrawn)",
+        "cover_letter": "string",
+        "proposed_rate": "decimal (nullable)",
+        "estimated_duration_hours": "decimal (nullable)",
+        "estimated_total_cost": "decimal (nullable)",
+        "currency": "string (default: USD)",
+        "proposed_start_date": "date (nullable)",
+        "proposed_end_date": "date (nullable)",
+        "deliverables": "string (nullable)",
+        "methodology": "string (nullable)",
+        "attachments": "array of strings",
+        "viewed_by_client": "boolean",
+        "viewed_at": "datetime (nullable)",
+        "responded_at": "datetime (nullable)",
+        "response_notes": "string (nullable)",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "ReviewResponse": {
+        "id": "integer",
+        "project_id": "integer",
+        "specialist_id": "integer",
+        "reviewer_id": "UUID",
+        "rating": "integer (1-5)",
+        "title": "string (nullable)",
+        "review_text": "string (nullable)",
+        "communication_rating": "integer 1-5 (nullable)",
+        "quality_rating": "integer 1-5 (nullable)",
+        "professionalism_rating": "integer 1-5 (nullable)",
+        "timeliness_rating": "integer 1-5 (nullable)",
+        "specialist_response": "string (nullable)",
+        "responded_at": "datetime (nullable)",
+        "is_public": "boolean",
+        "is_verified": "boolean",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "PortfolioItemResponse": {
+        "id": "integer",
+        "specialist_id": "integer",
+        "title": "string",
+        "description": "string (case study content)",
+        "client_name": "string (nullable, anonymized if needed)",
+        "industry": "string (Finance, Healthcare, etc.)",
+        "project_type": "string (consulting, bia, bcm_plan, etc.)",
+        "start_date": "date (nullable)",
+        "end_date": "date (nullable)",
+        "duration_months": "integer (nullable)",
+        "deliverables": "string (what was delivered)",
+        "outcomes": "string (results achieved)",
+        "images": "array of strings (image URLs)",
+        "documents": "array of strings (document URLs)",
+        "is_public": "boolean",
+        "display_order": "integer",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      },
+      "CertificationResponse": {
+        "id": "integer",
+        "specialist_id": "integer",
+        "name": "string (certification name)",
+        "issuing_organization": "string",
+        "issue_date": "date (nullable)",
+        "expiry_date": "date (nullable)",
+        "credential_id": "string (nullable)",
+        "credential_url": "string (nullable)",
+        "is_verified": "boolean",
+        "verified_at": "datetime (nullable)",
+        "verified_by": "UUID (nullable)",
+        "documents": "array of strings",
+        "created_at": "datetime",
+        "updated_at": "datetime"
+      }
+    }
+  },
+
+  "integrations": {
+    "portal_to_marketplace": [
+      "Marketplace displays specialist's forum reputation and badges from Portal",
+      "Marketplace shows related knowledge articles based on specialist's expertise",
+      "Completed projects can be shared as Portfolio case studies",
+      "Portfolio case studies can be converted to Portal knowledge articles",
+      "Specialists gain credibility through Portal community participation",
+      "Specialist profiles show community reputation level (newbie→legend)"
+    ],
+    "marketplace_to_portal": [
+      "Portal shows related marketplace projects when browsing scenarios",
+      "Scenario deployment tracked for marketplace recommendations",
+      "Portal forum can discuss marketplace projects and specialists",
+      "Knowledge articles tagged with marketplace project references",
+      "Case study articles link back to specialist profiles",
+      "Project completion triggers option to create knowledge article"
+    ],
+    "complete_data_flow_project_to_knowledge": {
+      "step_1": "Client posts project in Marketplace (draft)",
+      "step_2": "Client publishes project (draft → open)",
+      "step_3": "Specialist submits proposal",
+      "step_4": "Client accepts proposal (open → in_progress)",
+      "step_5": "Specialist completes work",
+      "step_6": "Client marks project complete (in_progress → completed)",
+      "step_7": "Specialist adds to portfolio as case study",
+      "step_8": "Specialist optionally shares case study as Portal article",
+      "step_9": "Article created with metadata: source=marketplace_project",
+      "step_10": "Article tagged: ['marketplace', 'case_study', 'project_ID']",
+      "step_11": "Article categorized by service_type",
+      "step_12": "Article published in Knowledge Center",
+      "step_13": "Community discovers and votes on article",
+      "step_14": "Specialist gains reputation from article engagement",
+      "step_15": "Article links back to specialist profile",
+      "step_16": "Future clients see case study in both portfolio AND knowledge base"
+    },
+    "complete_data_flow_scenario_to_exercise": {
+      "step_1": "User browses Scenario Marketplace in Portal",
+      "step_2": "User filters by scenario_type, industry, threat_type",
+      "step_3": "User views scenario with injects and objectives",
+      "step_4": "User clicks 'Deploy Scenario'",
+      "step_5": "Portal calls Validation Module API",
+      "step_6": "Validation creates Exercise from Scenario template",
+      "step_7": "Exercise includes: scenario text, injects, objectives",
+      "step_8": "Scenario deployment_count incremented",
+      "step_9": "EventBus publishes 'scenario.deployed' event",
+      "step_10": "User runs exercise in Validation module",
+      "step_11": "User completes exercise, sees results",
+      "step_12": "User returns to Portal to review scenario",
+      "step_13": "User rates scenario (1-5 stars) with optional review text",
+      "step_14": "Scenario average_rating updated",
+      "step_15": "OPTIONALLY: User generates knowledge article from exercise insights",
+      "step_16": "AI analyzes exercise results and creates article draft",
+      "step_17": "Specialist verifies article (pending → verified)",
+      "step_18": "Article published and linked to original scenario"
+    },
+    "shared_data": [
+      "User authentication via Clients Service (shared JWT tokens)",
+      "Tenant ID for multi-tenancy isolation",
+      "User profiles (user_id, user_type, tenant_id)",
+      "Cross-service user reputation and credibility",
+      "Shared EventBus for inter-service communication"
+    ],
+    "eventbus_events": {
+      "marketplace_events": [
+        "specialist.created",
+        "specialist.verified",
+        "project.created",
+        "project.published",
+        "project.assigned",
+        "project.completed",
+        "project.cancelled",
+        "proposal.created",
+        "proposal.accepted",
+        "proposal.rejected",
+        "review.created"
+      ],
+      "portal_events": [
+        "article.created",
+        "article.verified",
+        "article.published",
+        "scenario.deployed",
+        "topic.created",
+        "reputation.updated",
+        "badge.earned"
+      ]
+    }
+  },
+
+  "authentication": {
+    "method": "JWT Bearer Token",
+    "header": "Authorization: Bearer <token>",
+    "token_validation": "Via Clients Service",
+    "user_data_structure": {
+      "user_id": "string (UUID)",
+      "tenant_id": "string (UUID)",
+      "user_type": "string (user|client|specialist|admin)",
+      "role": "string",
+      "email": "string",
+      "name": "string"
+    },
+    "authorization_levels": {
+      "public": "No authentication required",
+      "user": "Basic authenticated user",
+      "client": "Can post projects and hire specialists",
+      "specialist": "Can create profile and submit proposals",
+      "verified_specialist": "Can submit proposals (verified profile required)",
+      "admin": "Full access to all resources and moderation"
+    }
+  },
+
+  "frontend_implementation_notes": {
+    "pagination": {
+      "standard_pattern": "page and page_size query parameters",
+      "default_page": 1,
+      "default_page_size": 20,
+      "max_page_size": 100,
+      "response_structure": {
+        "items": "array of results",
+        "total": "total count",
+        "page": "current page",
+        "page_size": "items per page",
+        "total_pages": "calculated total pages"
+      }
+    },
+    "filtering": {
+      "comma_separated_values": "Use for arrays (tags, skills, etc.)",
+      "boolean_filters": "true/false or 0/1",
+      "enum_filters": "Exact string match from defined enum values",
+      "range_filters": "Use min_* and max_* for numeric ranges"
+    },
+    "markdown_content": {
+      "input_fields": "content, bio, description, review_text",
+      "rendered_fields": "content_html (server-rendered)",
+      "frontend_recommendation": "Use markdown editor component (e.g., react-markdown-editor)"
+    },
+    "user_specific_data": {
+      "conditional_fields": "Only returned when user is authenticated",
+      "examples": "is_bookmarked, user_vote, is_owner",
+      "handling": "Check for null/undefined in frontend"
+    },
+    "error_handling": {
+      "400": "Bad Request - validation error, check request body/params",
+      "401": "Unauthorized - missing or invalid token",
+      "403": "Forbidden - insufficient permissions",
+      "404": "Not Found - resource doesn't exist",
+      "422": "Unprocessable Entity - business logic validation failed",
+      "500": "Internal Server Error - contact support"
+    },
+    "recommended_frontend_structure": {
+      "portal_pages": [
+        "/knowledge - Knowledge Hub home",
+        "/knowledge/articles - Article list",
+        "/knowledge/articles/:slug - Article detail",
+        "/knowledge/search - Search results",
+        "/forum - Forum home",
+        "/forum/categories/:id - Category topics",
+        "/forum/topics/:id - Topic detail",
+        "/scenarios - Scenario marketplace",
+        "/scenarios/:id - Scenario detail",
+        "/leaderboard - Community leaderboard",
+        "/profile/:userId - User profile with reputation"
+      ],
+      "marketplace_pages": [
+        "/marketplace - Marketplace home",
+        "/projects - Browse projects",
+        "/projects/create - Create project (client)",
+        "/projects/:id - Project detail",
+        "/projects/my - My projects (client)",
+        "/specialists - Browse specialists",
+        "/specialists/:id - Specialist profile with portfolio/case studies",
+        "/specialists/:id/portfolio - Specialist's case studies",
+        "/specialists/:id/certifications - Specialist's certifications",
+        "/specialists/:id/reviews - Specialist's reviews",
+        "/specialists/:id/community - Specialist's community reputation",
+        "/specialists/profile - My profile (specialist)",
+        "/specialists/profile/portfolio - Manage my portfolio",
+        "/specialists/profile/certifications - Manage my certifications",
+        "/proposals - My proposals (specialist)",
+        "/reviews/my - My reviews (client)"
+      ]
+    },
+    "state_management": {
+      "authentication_state": "user token, user profile, permissions",
+      "current_tenant": "tenant_id for multi-tenancy",
+      "user_preferences": "bookmarks, votes, notification settings",
+      "cached_data": "categories, badges, enum values",
+      "real_time_updates": "Consider WebSocket for notifications (future)"
+    }
+  },
+
+  "enum_values": {
+    "service_types": ["bia", "bcm_plan", "risk_assessment", "iso_22301", "training", "exercise", "consulting"],
+    "urgency_levels": ["low", "medium", "high", "urgent"],
+    "budget_types": ["hourly", "fixed", "retainer", "negotiable"],
+    "work_locations": ["remote", "onsite", "hybrid"],
+    "project_statuses": ["draft", "open", "in_progress", "completed", "cancelled"],
+    "proposal_statuses": ["pending", "accepted", "rejected", "withdrawn"],
+    "availability_statuses": ["available", "busy", "unavailable"],
+    "verification_statuses": ["pending", "verified", "rejected"],
+    "reputation_levels": ["newbie", "contributor", "expert", "guru", "legend"],
+    "badge_types": ["certification", "achievement", "special"],
+    "badge_tiers": ["bronze", "silver", "gold"],
+    "moderation_reasons": ["spam", "inappropriate", "offensive", "other"],
+    "moderation_actions": ["approved", "rejected", "hidden", "deleted"],
+    "topic_statuses": ["active", "closed", "archived"],
+    "scenario_types": ["tabletop", "functional", "full_scale"]
+  },
+
+  "missing_features_and_future_development": {
+    "simulations": {
+      "status": "NOT IMPLEMENTED - PLANNED",
+      "russian_name": "Симуляции",
+      "description": "Interactive BCM simulations for training and practice",
+      "planned_features": [
+        "Interactive crisis scenarios with branching decisions",
+        "Real-time simulation of business disruptions",
+        "Team-based simulation exercises",
+        "Simulation scoring and performance metrics",
+        "Integration with Scenario Marketplace",
+        "Simulation results → Knowledge articles",
+        "Multi-user collaborative simulations",
+        "Simulation replay and analysis"
+      ],
+      "integration_points": [
+        "Scenarios can be deployed as Simulations (in addition to Exercises)",
+        "Simulation results feed into Knowledge Center",
+        "Simulation performance contributes to user reputation",
+        "Marketplace specialists can create custom simulations"
+      ],
+      "frontend_requirements": [
+        "Real-time WebSocket connection for simulation state",
+        "Interactive decision tree UI",
+        "Timer and countdown displays",
+        "Team collaboration interface",
+        "Results dashboard with charts",
+        "Simulation replay viewer"
+      ],
+      "backend_requirements": [
+        "Simulation engine service (new microservice)",
+        "WebSocket server for real-time updates",
+        "State management for simulation progress",
+        "Scoring algorithm implementation",
+        "Integration with Validation and Portal services"
+      ]
+    },
+    "additional_planned_features": {
+      "knowledge_center_enhancements": [
+        "AI-powered article recommendations",
+        "Article version history and change tracking",
+        "Collaborative article editing",
+        "Article translation to multiple languages",
+        "Video and multimedia content support",
+        "Learning paths (curated article sequences)"
+      ],
+      "case_study_enhancements": [
+        "Case study templates for different project types",
+        "Anonymous case study sharing option",
+        "Case study metrics and impact tracking",
+        "PDF export of case studies",
+        "Case study collections/portfolios",
+        "Client testimonials linked to case studies"
+      ],
+      "scenario_enhancements": [
+        "Scenario builder/editor for specialists",
+        "Scenario variations and difficulty levels",
+        "Scenario collaboration and community contributions",
+        "Scenario impact analysis and effectiveness tracking",
+        "Industry-specific scenario libraries",
+        "Scenario localization for different regions"
+      ],
+      "forum_enhancements": [
+        "Direct messaging between users",
+        "Forum notifications and subscriptions",
+        "Rich media support (images, videos, attachments)",
+        "Polls and surveys in topics",
+        "Topic templates for common questions",
+        "Forum analytics and trending topics"
+      ]
+    }
+  },
+
+  "complete_feature_matrix": {
+    "knowledge_center": {
+      "status": "✅ FULLY IMPLEMENTED",
+      "features": {
+        "article_crud": "✅ Create, Read, Update, Delete articles",
+        "ai_generation": "✅ Generate from exercises with AI",
+        "verification_workflow": "✅ pending → verified/rejected",
+        "search": "✅ Full-text search with ts_rank",
+        "bookmarking": "✅ Save for later reading",
+        "voting": "✅ Upvote/downvote with usefulness score",
+        "discussion": "✅ Create forum topics for articles",
+        "iso_mapping": "✅ Map to ISO 22301 clauses",
+        "multi_tenancy": "✅ Public + tenant articles"
+      }
+    },
+    "case_studies": {
+      "status": "✅ IMPLEMENTED (as Portfolio Items)",
+      "features": {
+        "portfolio_management": "✅ Add/edit/delete portfolio items",
+        "case_study_content": "✅ Title, description, deliverables, outcomes",
+        "media_support": "✅ Images and documents",
+        "visibility_control": "✅ Public/private flag",
+        "marketplace_integration": "✅ From completed projects",
+        "portal_sharing": "✅ Convert to knowledge articles",
+        "specialist_credibility": "✅ Visible on specialist profiles"
+      }
+    },
+    "scenarios": {
+      "status": "✅ FULLY IMPLEMENTED",
+      "features": {
+        "scenario_catalog": "✅ Browse and search scenarios",
+        "filtering": "✅ By type, industry, threat",
+        "deployment": "✅ Deploy to Validation module",
+        "reviews": "✅ Rate and review scenarios",
+        "iso_mapping": "✅ Map to ISO clauses",
+        "injects": "✅ Scenario injects and objectives",
+        "exercise_integration": "✅ Create exercises from scenarios"
+      }
+    },
+    "simulations": {
+      "status": "❌ NOT IMPLEMENTED - PLANNED",
+      "priority": "HIGH",
+      "required_for": "Complete BCM training platform",
+      "features": {
+        "interactive_scenarios": "❌ Planned",
+        "real_time_collaboration": "❌ Planned",
+        "branching_decisions": "❌ Planned",
+        "performance_metrics": "❌ Planned",
+        "replay_analysis": "❌ Planned"
+      }
+    },
+    "forum": {
+      "status": "✅ FULLY IMPLEMENTED",
+      "features": {
+        "topics_and_posts": "✅ Create, reply, nested comments",
+        "voting": "✅ Upvote/downvote topics and posts",
+        "moderation": "✅ Flag, review, moderate content",
+        "gamification": "✅ Reputation, levels, badges",
+        "solution_marking": "✅ Mark best answers",
+        "categories": "✅ Organize by ISO clauses"
+      }
+    },
+    "marketplace": {
+      "status": "✅ FULLY IMPLEMENTED",
+      "features": {
+        "specialist_profiles": "✅ Complete with verification",
+        "project_posting": "✅ Full lifecycle management",
+        "proposals": "✅ Submit, accept, reject",
+        "reviews": "✅ Multi-dimensional ratings",
+        "certifications": "✅ Add and verify",
+        "portfolio": "✅ Case studies from projects",
+        "community_integration": "✅ Show reputation and articles"
+      }
+    }
+  }
+}

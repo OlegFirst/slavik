@@ -1,0 +1,79 @@
+version: '3.8'
+
+# Community Service Docker Compose
+# Standalone configuration for Portal + Marketplace services
+# Uses Supabase for database (from .env)
+
+services:
+  # ============================================
+  # PORTAL SERVICE
+  # ============================================
+
+  portal:
+    build:
+      context: ./portal
+      dockerfile: Dockerfile
+    container_name: bcm-portal
+    environment:
+      # Supabase Database
+      DATABASE_URL: ${DATABASE_URL}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+
+      # Service URLs
+      MARKETPLACE_URL: http://marketplace:8032
+      EVENTBUS_URL: ${EVENTBUS_URL:-http://localhost:8001}
+
+      # Application
+      PORT: 8031
+      DEBUG: ${DEBUG:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8031:8031"
+    volumes:
+      - ./portal:/app
+      - ./shared:/app/shared  # Mount shared modules
+    restart: unless-stopped
+    networks:
+      - community
+
+  # ============================================
+  # MARKETPLACE SERVICE
+  # ============================================
+
+  marketplace:
+    build:
+      context: ./marketplace
+      dockerfile: Dockerfile
+    container_name: bcm-marketplace
+    environment:
+      # Supabase Database
+      DATABASE_URL: ${DATABASE_URL}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+
+      # Service URLs
+      PORTAL_URL: http://portal:8031
+      CLIENTS_SERVICE_URL: ${CLIENTS_SERVICE_URL:-http://localhost:8030}
+      EVENTBUS_URL: ${EVENTBUS_URL:-http://localhost:8001}
+
+      # Application
+      PORT: 8032
+      DEBUG: ${DEBUG:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8032:8032"
+    volumes:
+      - ./marketplace:/app
+      - ./shared:/app/shared  # Mount shared modules
+    restart: unless-stopped
+    networks:
+      - community
+    depends_on:
+      - portal
+
+networks:
+  community:
+    driver: bridge
+
+# Note: No volumes needed - using Supabase (external database)
