@@ -74,13 +74,78 @@ __all__ = [
     # Storage
     "StorageAdapter",
     "PostgresStorageAdapter",
+
+    # Initialization
+    "initialize",
+    "quick_start",
 ]
 
 
-# Quick start helper
+# Production initialization helper
+async def initialize(
+    module: str,
+    existing_state_machine,
+    db_manager,
+    vector_db_client=None
+):
+    """
+    Production initialization для workflow intelligence
+
+    Args:
+        module: Module name (bia, risk, planning, etc)
+        existing_state_machine: Existing state machine instance
+        db_manager: DatabaseManager from shared.database
+        vector_db_client: Optional Qdrant client for semantic search
+
+    Example:
+        from workflow_intelligence import initialize
+        from shared.database import get_db_manager
+        from bia.workflows.state_machine import BIAWorkflowEngine
+
+        db_manager = get_db_manager()
+        workflow, advisor = await initialize("bia", BIAWorkflowEngine, db_manager)
+
+    Returns:
+        tuple: (WorkflowEngine, ContextAdvisor)
+    """
+    from .storage.postgres_adapter import PostgresStorageAdapter
+    from .case_library.repository import CaseRepository
+
+    # Real PostgreSQL storage
+    storage = PostgresStorageAdapter(db_manager)
+    await storage.connect()
+
+    # Create workflow engine
+    workflow = WorkflowEngine(
+        module=module,
+        state_machine=existing_state_machine,
+        storage_adapter=storage
+    )
+
+    # Real case repository with optional vector search
+    async for session in db_manager.get_session():
+        case_repository = CaseRepository(
+            db_session=session,
+            vector_db_client=vector_db_client
+        )
+        break
+
+    # Real context advisor
+    advisor = ContextAdvisor(
+        workflow_engine=workflow,
+        case_library=case_repository
+    )
+
+    return workflow, advisor
+
+
+# Quick start helper (DEPRECATED - for development/testing only)
 def quick_start(module: str, existing_state_machine):
     """
     Quick start для интеграции с существующим state machine
+
+    ⚠️ DEPRECATED: Use `initialize()` for production!
+    This uses in-memory storage and demo case library.
 
     Example:
         from workflow_intelligence import quick_start
@@ -88,11 +153,18 @@ def quick_start(module: str, existing_state_machine):
 
         workflow, advisor = quick_start("bia", BIAWorkflowEngine)
     """
+    import warnings
+    warnings.warn(
+        "quick_start() is deprecated. Use initialize() with DatabaseManager for production.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+
     from .core.workflow_engine import InMemoryStorageAdapter
 
     storage = InMemoryStorageAdapter()
 
-    workflow = WorkflowEngine.from_existing_state_machine(
+    workflow = WorkflowEngine(
         module=module,
         state_machine=existing_state_machine,
         storage_adapter=storage

@@ -4,11 +4,31 @@ Row Level Security (RLS) Context Manager
 """
 
 from contextlib import asynccontextmanager
-from typing import Optional
-import asyncpg
+from typing import Optional, TYPE_CHECKING
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
+if TYPE_CHECKING:
+    from shared.database import DatabaseManager
+
 logger = structlog.get_logger(__name__)
+
+
+async def set_rls_context(session: AsyncSession, tenant_id: str) -> None:
+    """
+    Set RLS context for SQLAlchemy session
+
+    Args:
+        session: SQLAlchemy AsyncSession
+        tenant_id: Tenant ID for RLS isolation
+    """
+    await session.execute(
+        text("SET LOCAL app.current_tenant_id = :tenant_id"),
+        {"tenant_id": tenant_id}
+    )
+
+    logger.debug("rls.context.set", tenant_id=tenant_id)
 
 
 class RLSContext:
@@ -221,7 +241,7 @@ async def rls_pool_context(
         yield conn
 
 
-async def verify_rls_enabled(connection: asyncpg.Connection) -> dict:
+async def verify_rls_enabled(session: AsyncSession) -> dict:
     """
     Проверить что RLS включен на всех таблицах
 
@@ -232,7 +252,7 @@ async def verify_rls_enabled(connection: asyncpg.Connection) -> dict:
             ...
         }
     """
-    rows = await connection.fetch("""
+    result_obj = await session.execute(text("""
         SELECT
             c.relname::text AS table_name,
             c.relrowsecurity AS rls_enabled,
@@ -242,20 +262,22 @@ async def verify_rls_enabled(connection: asyncpg.Connection) -> dict:
         WHERE n.nspname = 'workflow_intelligence'
           AND c.relkind = 'r'
         ORDER BY c.relname
-    """)
+    """))
+
+    rows = result_obj.fetchall()
 
     result = {}
     for row in rows:
-        result[row['table_name']] = {
-            'enabled': row['rls_enabled'],
-            'forced': row['rls_forced']
+        result[row[0]] = {
+            'enabled': row[1],
+            'forced': row[2]
         }
 
     return result
 
 
 async def test_rls_isolation(
-    pool: asyncpg.Pool,
+    db_manager: "DatabaseManager",
     tenant1: str = "tenant_test_1",
     tenant2: str = "tenant_test_2"
 ) -> dict:
@@ -275,50 +297,68 @@ async def test_rls_isolation(
     """
 
     # 1. Создать тестовые данные для двух tenant'ов
-    async with rls_pool_context(pool, tenant1) as conn:
-        await conn.execute("""
-            INSERT INTO workflow_intelligence.workflow_contexts
-                (workflow_id, module, tenant_id, context)
-            VALUES ($1, 'test', $2, '{"test": 1}')
-            ON CONFLICT (workflow_id, tenant_id) DO NOTHING
-        """, f"test_wf_{tenant1}", tenant1)
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant1)
+        await session.execute(
+            text("""
+                INSERT INTO workflow_intelligence.workflow_contexts
+                    (workflow_id, module, tenant_id, context)
+                VALUES (:workflow_id, 'test', :tenant_id, '{"test": 1}')
+                ON CONFLICT (workflow_id, tenant_id) DO NOTHING
+            """),
+            {"workflow_id": f"test_wf_{tenant1}", "tenant_id": tenant1}
+        )
+        await session.commit()
+        break
 
-    async with rls_pool_context(pool, tenant2) as conn:
-        await conn.execute("""
-            INSERT INTO workflow_intelligence.workflow_contexts
-                (workflow_id, module, tenant_id, context)
-            VALUES ($1, 'test', $2, '{"test": 2}')
-            ON CONFLICT (workflow_id, tenant_id) DO NOTHING
-        """, f"test_wf_{tenant2}", tenant2)
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant2)
+        await session.execute(
+            text("""
+                INSERT INTO workflow_intelligence.workflow_contexts
+                    (workflow_id, module, tenant_id, context)
+                VALUES (:workflow_id, 'test', :tenant_id, '{"test": 2}')
+                ON CONFLICT (workflow_id, tenant_id) DO NOTHING
+            """),
+            {"workflow_id": f"test_wf_{tenant2}", "tenant_id": tenant2}
+        )
+        await session.commit()
+        break
 
     # 2. Проверить изоляцию
-    async with rls_pool_context(pool, tenant1) as conn:
-        rows_tenant1 = await conn.fetch("""
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant1)
+        result1 = await session.execute(text("""
             SELECT workflow_id, tenant_id
             FROM workflow_intelligence.workflow_contexts
             WHERE workflow_id LIKE 'test_wf_%'
-        """)
+        """))
+        rows_tenant1 = result1.fetchall()
+        break
 
-    async with rls_pool_context(pool, tenant2) as conn:
-        rows_tenant2 = await conn.fetch("""
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant2)
+        result2 = await session.execute(text("""
             SELECT workflow_id, tenant_id
             FROM workflow_intelligence.workflow_contexts
             WHERE workflow_id LIKE 'test_wf_%'
-        """)
+        """))
+        rows_tenant2 = result2.fetchall()
+        break
 
     # 3. Проверить результаты
     tenant1_sees_only_own = all(
-        row['tenant_id'] == tenant1
+        row[1] == tenant1
         for row in rows_tenant1
     )
 
     tenant2_sees_only_own = all(
-        row['tenant_id'] == tenant2
+        row[1] == tenant2
         for row in rows_tenant2
     )
 
     tenant1_cannot_see_tenant2 = not any(
-        row['tenant_id'] == tenant2
+        row[1] == tenant2
         for row in rows_tenant1
     )
 
@@ -329,17 +369,29 @@ async def test_rls_isolation(
     )
 
     # 4. Cleanup
-    async with rls_pool_context(pool, tenant1) as conn:
-        await conn.execute("""
-            DELETE FROM workflow_intelligence.workflow_contexts
-            WHERE workflow_id = $1
-        """, f"test_wf_{tenant1}")
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant1)
+        await session.execute(
+            text("""
+                DELETE FROM workflow_intelligence.workflow_contexts
+                WHERE workflow_id = :workflow_id
+            """),
+            {"workflow_id": f"test_wf_{tenant1}"}
+        )
+        await session.commit()
+        break
 
-    async with rls_pool_context(pool, tenant2) as conn:
-        await conn.execute("""
-            DELETE FROM workflow_intelligence.workflow_contexts
-            WHERE workflow_id = $1
-        """, f"test_wf_{tenant2}")
+    async for session in db_manager.get_session():
+        await set_rls_context(session, tenant2)
+        await session.execute(
+            text("""
+                DELETE FROM workflow_intelligence.workflow_contexts
+                WHERE workflow_id = :workflow_id
+            """),
+            {"workflow_id": f"test_wf_{tenant2}"}
+        )
+        await session.commit()
+        break
 
     return {
         "success": success,
