@@ -1,0 +1,18 @@
+# Extracted Module Paths
+# Quick reference for new module locations
+
+## Intelligent Core
+/Users/MD/AI-Platform-ISO/intelligent-core/agent-router/
+/Users/MD/AI-Platform-ISO/intelligent-core/claude-integration/
+/Users/MD/AI-Platform-ISO/intelligent-core/bcm-intelligence/
+/Users/MD/AI-Platform-ISO/intelligent-core/ai-devops/
+
+## Infrastructure
+/Users/MD/AI-Platform-ISO/infrastructure/docker-management/
+/Users/MD/AI-Platform-ISO/infrastructure/service-discovery/
+
+## Shared
+/Users/MD/AI-Platform-ISO/shared/orchestration-patterns/
+
+## Report
+/Users/MD/AI-Platform-ISO/ORCHESTRATOR_EXTRACTION_COMPLETE.md
