@@ -1,0 +1,814 @@
+{
+  "module_name": "bia-service",
+  "path": "platform-services/bia-service",
+  "structure": {
+    ".": [
+      "EXAMPLE_ISO_22301_USAGE.md",
+      ".DS_Store",
+      "config.py",
+      "pytest.ini",
+      "requirements.txt",
+      "Dockerfile",
+      "supply_chain_api.py",
+      "__init__.py",
+      "README.md",
+      "supply_chain_schemas.py",
+      "ISO_22301_ENHANCEMENT_SUMMARY.md",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    "database": [
+      "__init__.py",
+      "connection.py"
+    ],
+    "tests": [
+      "conftest.py",
+      "test_services.py",
+      "test_repositories.py",
+      "test_business_validators.py",
+      "test_models.py",
+      "test_api.py"
+    ],
+    "utils": [
+      "__init__.py",
+      "calculations.py"
+    ],
+    "repositories": [
+      "bia_repository.py",
+      "__init__.py"
+    ],
+    "models": [
+      "enums.py",
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "routes.py",
+      "history.py"
+    ],
+    "services": [
+      "ai_service.py",
+      "__init__.py",
+      "report_service.py",
+      "bia_service.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "ai_service",
+    "api",
+    "api.workflow_ai",
+    "asyncio",
+    "auth.dependencies",
+    "bia_repository",
+    "bia_service",
+    "calculations",
+    "config",
+    "connection",
+    "contextlib",
+    "database",
+    "database.connection",
+    "database/postgresql",
+    "datetime",
+    "domain",
+    "enum",
+    "enums",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "httpx",
+    "jwt",
+    "logging",
+    "main",
+    "models.database",
+    "models.domain",
+    "models.enums",
+    "numpy",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "pytest",
+    "report_service",
+    "repositories.bia_repository",
+    "routes",
+    "runtime/eventbus",
+    "services.ai_service",
+    "services.bia_service",
+    "services.report_service",
+    "shared/audit",
+    "shared/auth",
+    "shared/cache",
+    "shared/config",
+    "shared/database",
+    "shared/exceptions",
+    "shared/history",
+    "shared/middleware",
+    "shared/utils",
+    "supply_chain_api",
+    "supply_chain_schemas",
+    "sys",
+    "typing",
+    "unittest.mock",
+    "utils.calculations",
+    "uuid",
+    "uvicorn",
+    "validators.business_rules",
+    "workflow_integration"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/suppliers",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{supplier_id}",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/suppliers/{supplier_id}",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{supplier_id}/risk-profile",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/single-points-of-failure",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/disruptions",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/what-if-analysis",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/summary",
+      "file": "supply_chain_api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics/cache",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes",
+      "file": "connection.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes/{process_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/processes/{process_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/processes/{process_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes/{process_id}/complete",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes/{process_id}/suggest-rto",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes/{process_id}/discover-dependencies",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/summary",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/critical-processes",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/dependencies",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes/bulk",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/processes/bulk",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/processes/bulk",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes/bulk/validate",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes/{process_id}/fields/{field_name}",
+      "file": "history.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes/{process_id}/snapshot/{version}",
+      "file": "history.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "BIASettings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierCriticalityLevel",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierStatus",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "FinancialStability",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "DependencyLevel",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "DisruptionType",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "DisruptionSeverity",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceProvided",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ProductSupplied",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "AlternativeSupplier",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "GeographicRisk",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "CorrectiveAction",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierBase",
+      "file": "supply_chain_schemas.py",
+      "methods": 1
+    },
+    {
+      "name": "SupplierCreate",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierUpdate",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierResponse",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierDisruptionBase",
+      "file": "supply_chain_schemas.py",
+      "methods": 1
+    },
+    {
+      "name": "SupplierDisruptionCreate",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierDisruptionUpdate",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierDisruptionResponse",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierRiskProfile",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SPOFSupplier",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplyChainRiskMap",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMAssessment",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "WhatIfScenario",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "WhatIfResult",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplierListResponse",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "DisruptionListResponse",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "SupplyChainSummary",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "supply_chain_schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "TestBIAServiceCreate",
+      "file": "test_services.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIAServiceRead",
+      "file": "test_services.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIAServiceUpdate",
+      "file": "test_services.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIAServiceDelete",
+      "file": "test_services.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIAServiceComplete",
+      "file": "test_services.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIARepository",
+      "file": "test_repositories.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRecoveryObjectivesValidation",
+      "file": "test_business_validators.py",
+      "methods": 5
+    },
+    {
+      "name": "TestFinancialImpactTimelineValidation",
+      "file": "test_business_validators.py",
+      "methods": 2
+    },
+    {
+      "name": "TestNonSelfDependencyValidation",
+      "file": "test_business_validators.py",
+      "methods": 2
+    },
+    {
+      "name": "TestCriticalProcessRequirementsValidation",
+      "file": "test_business_validators.py",
+      "methods": 2
+    },
+    {
+      "name": "TestWorkaroundCapacityValidation",
+      "file": "test_business_validators.py",
+      "methods": 3
+    },
+    {
+      "name": "TestWHOTierConsistencyValidation",
+      "file": "test_business_validators.py",
+      "methods": 2
+    },
+    {
+      "name": "TestMinimumStaffRequirementsValidation",
+      "file": "test_business_validators.py",
+      "methods": 1
+    },
+    {
+      "name": "TestDependencyCriticalityValidation",
+      "file": "test_business_validators.py",
+      "methods": 2
+    },
+    {
+      "name": "TestDependencyModel",
+      "file": "test_models.py",
+      "methods": 3
+    },
+    {
+      "name": "TestBIAProcessModel",
+      "file": "test_models.py",
+      "methods": 14
+    },
+    {
+      "name": "TestBIAProcessCreateModel",
+      "file": "test_models.py",
+      "methods": 3
+    },
+    {
+      "name": "TestBIAAPIEndpoints",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIABulkOperations",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "BIARepository",
+      "file": "bia_repository.py",
+      "methods": 3
+    },
+    {
+      "name": "CriticalityLevel",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessStatus",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationalImpact",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "RegulatoryImpact",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "PatientSafetyImpact",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "WHOTier",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "GeographicalScope",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "IndustryType",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "Dependency",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ImpactAssessment",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAProcess",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "BIAProcessCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AIRTOSuggestion",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "BIASummaryReport",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAProcessModel",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkCreateRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkUpdateRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkDeleteRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AIService",
+      "file": "ai_service.py",
+      "methods": 1
+    },
+    {
+      "name": "ReportService",
+      "file": "report_service.py",
+      "methods": 1
+    },
+    {
+      "name": "BIAService",
+      "file": "bia_service.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "tenant_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "user_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_cache",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_eventbus",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_audit_logger",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_dependencies",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_financial_impact",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_operational_impact",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_personnel_requirements",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_recovery_strategies",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_bia_create_data",
+      "file": "conftest.py",
+      "params": 6
+    },
+    {
+      "name": "sample_healthcare_bia_create",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_bulk_bia_processes",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "invalid_time_objectives_data",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "invalid_mtpd_data",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "invalid_financial_impact_timeline",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_critical_process_data",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_criticality_score",
+      "file": "calculations.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_financial_impact_timeline",
+      "file": "calculations.py",
+      "params": 2
+    },
+    {
+      "name": "determine_who_tier",
+      "file": "calculations.py",
+      "params": 3
+    },
+    {
+      "name": "get_bia_repository",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_bia_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_ai_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_report_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "verify_tenant_access",
+      "file": "routes.py",
+      "params": 2
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/bia-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 6919,
+    "python_files": 30,
+    "classes": 77,
+    "functions": 26,
+    "endpoints": 31,
+    "dependencies": 60
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 7111,
+    "lines": 294,
+    "content": "# BIA Service - Business Impact Analysis\n\n**ISO 22301 Clause 8.2.2**\n\nUnified architecture microservice for comprehensive Business Impact Analysis.\n\n---\n\n## \u2705 MIGRATION STATUS\n\n**Source:** `/Users/MD/ISO-22301\u2014\u043a\u043e\u043f\u0438\u044f/services/SERVICES/BCM/bia/main.py` (695 lines)\n**Target:** `/Users/MD/AI-Platform-ISO/services/bcm/bia/` (unified architecture)\n**Status:** \u2705 **COMPLETE - NO FUNCTIONALITY LOST**\n\n### What Was Preserved:\n- \u2705 All 8 Enums (CriticalityLevel, ProcessStatus, etc.)\n- \u2705 All 6 Models (BIAProcess, AIRTOSuggestion, etc.)\n- \u2705 All 12 BIA endpoints\n- \u2705 All 8 Supply Chain endpoints (supply_chain_api.py)\n- \u2705 All helper functions (calculate_criticality_score, etc.)\n- \u2705 Event publishing (bcm.bia.started, bcm.bia.completed, etc.)\n- \u2705 AI integration (RTO suggestions, dependency discovery)\n- \u2705 WHO Essential Services tiers (healthcare)\n- \u2705 In-memory storage (original behavior)\n\n---\n\n## \ud83d\udcc1 Structure\n\n```\nbia/\n\u251c\u2500\u2500 __init__.py\n\u251c\u2500\u2500 main.py                      # FastAPI app with lifespan\n\u251c\u2500\u2500 config."
+  }
+}

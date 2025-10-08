@@ -1,0 +1,275 @@
+# Project Agent Configuration for AI-Platform-ISO
+# BCM (Business Continuity Management) Platform - ISO 22301 Compliant
+# Version: 1.0
+# Generated: 2025-10-08
+
+domain: iso22301
+
+# Documentation settings - PROFESSIONAL STANDARDS
+documentation:
+  language: en  # English only, no Russian
+  style: professional  # No emojis, formal technical writing
+  standards:
+    - ISO/IEC/IEEE 26514:2022  # Software and systems engineering - Design and development of information for users
+    - ISO/IEC/IEEE 42010:2011  # Systems and software engineering - Architecture description
+    - ISO 22301:2019  # Security and resilience - Business continuity management systems
+
+  templates:
+    readme:
+      format: markdown
+      sections:
+        - overview
+        - architecture
+        - api_reference
+        - installation
+        - configuration
+        - usage
+        - testing
+        - contributing
+        - license
+      include_diagrams: true
+      diagram_format: mermaid
+
+    api_docs:
+      format: markdown
+      include_examples: true
+      include_schemas: true
+      openapi_version: "3.0.3"
+
+    architecture:
+      format: markdown
+      include_c4_diagrams: true
+      include_dependency_graphs: true
+      include_sequence_diagrams: true
+
+# Modules configuration
+modules:
+  architecture:
+    enabled: true
+    analyzers:
+      - module_scanner
+      - dependency_validator
+      - api_mapper
+      - business_logic_mapper
+    output_formats:
+      - markdown
+      - json
+      - mermaid
+
+  security:
+    enabled: true
+    checks:
+      - secrets
+      - vulnerabilities
+      - dependencies
+      - sql_injection
+      - xss
+      - csrf
+    severity_threshold: medium
+
+  testing:
+    enabled: true
+    coverage_threshold: 80  # ISO 22301 recommended
+    frameworks:
+      - pytest
+      - jest
+      - unittest
+    generate_tests: true
+
+  quality:
+    enabled: true
+    checks:
+      - complexity
+      - duplication
+      - maintainability
+      - tech-debt
+    thresholds:
+      cyclomatic_complexity: 10
+      maintainability_index: 70
+      duplication_percentage: 3
+
+  compliance:
+    enabled: true
+    standards:
+      - ISO22301:2019  # Business Continuity Management
+      - ISO27001:2022  # Information Security Management
+      - ISO/IEC 20000  # IT Service Management
+    audit_trail: true
+
+  documentation:
+    enabled: true
+    auto_generate: true
+    formats:
+      - markdown
+      - html
+      - pdf  # For audit reports
+    update_on_change: true
+
+# Report configuration
+reports:
+  output_dir: docs/reports
+  formats:
+    - markdown
+    - html
+    - json
+  audiences:
+    - technical  # Developers, architects
+    - management  # CTO, Project managers
+    - audit  # Auditors, compliance officers
+
+  sections:
+    technical:
+      - architecture_overview
+      - api_documentation
+      - dependency_analysis
+      - test_coverage
+      - code_quality_metrics
+
+    management:
+      - executive_summary
+      - project_health_score
+      - risk_assessment
+      - resource_allocation
+      - timeline_compliance
+
+    audit:
+      - compliance_status
+      - security_assessment
+      - change_log
+      - test_evidence
+      - documentation_completeness
+
+# Automation settings
+automation:
+  enabled: true
+
+  triggers:
+    on_commit: true
+    on_pr: true
+    on_deploy: true
+    scheduled:
+      daily: "00:00"  # UTC
+      weekly: "Sunday 02:00"
+
+  actions:
+    - generate_tests
+    - run_security_scan
+    - update_documentation
+    - validate_architecture
+    - generate_reports
+
+# Integration settings
+integrations:
+  github:
+    enabled: true
+    actions: true
+    pr_comments: true
+
+  documentation:
+    enabled: true
+    sync_with_code: true
+    versioning: true
+
+  monitoring:
+    enabled: true
+    prometheus: true
+    grafana: true
+
+# Quality gates
+quality_gates:
+  critical:
+    - security_vulnerabilities: 0  # Zero critical vulnerabilities
+    - test_coverage: 80  # Minimum 80%
+    - complexity: 15  # Max cyclomatic complexity
+
+  blocking:
+    - security_secrets_found: false
+    - architecture_violations: 0
+    - compliance_failures: 0
+
+# Exclude patterns (don't scan these)
+exclude:
+  - "**/__pycache__/**"
+  - "**/.git/**"
+  - "**/node_modules/**"
+  - "**/.venv/**"
+  - "**/.pytest_cache/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/*.pyc"
+  - "**/.DS_Store"
+
+# Professional standards compliance
+professional_standards:
+  iso_26514:  # Design and development of information for users
+    enabled: true
+    requirements:
+      - user_needs_analysis
+      - content_planning
+      - content_development
+      - content_review
+      - usability_testing
+
+  iso_42010:  # Architecture description
+    enabled: true
+    requirements:
+      - architecture_stakeholders
+      - architecture_concerns
+      - architecture_viewpoints
+      - architecture_views
+      - architecture_rationale
+
+  writing_style:
+    tone: formal
+    person: third_person  # "The system provides..." not "We provide..."
+    active_voice: true
+    technical_accuracy: strict
+    consistency: enforced
+
+  terminology:
+    use_glossary: true
+    define_acronyms: first_use
+    consistent_naming: true
+
+  formatting:
+    line_length: 100
+    heading_levels: 4  # Max depth
+    code_blocks: fenced  # ```language
+    links: reference_style
+    tables: grid_format
+
+# Module-specific settings
+module_settings:
+  intelligent-core:
+    priority: high
+    documentation_depth: comprehensive
+    api_documentation: openapi_3
+
+  platform-services:
+    priority: high
+    documentation_depth: comprehensive
+    api_documentation: openapi_3
+
+  infrastructure:
+    priority: medium
+    documentation_depth: detailed
+    include_deployment_guides: true
+
+# Versioning
+versioning:
+  enabled: true
+  scheme: semantic  # major.minor.patch
+  changelog: auto_generate
+  release_notes: auto_generate
+
+# Metadata
+metadata:
+  project_name: AI-Platform-ISO
+  project_type: BCM Platform
+  primary_domain: iso22301
+  version: "1.0.0"
+  last_updated: "2025-10-08"
+  maintainers:
+    - role: technical_lead
+    - role: documentation_manager
+    - role: compliance_officer

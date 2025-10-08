@@ -1,0 +1,1205 @@
+{
+  "module_name": "validation-service",
+  "path": "platform-services/validation-service",
+  "structure": {
+    ".": [
+      "IMPLEMENTATION_REPORT.md",
+      "API.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "METHOD_SUMMARY.md",
+      "README.md",
+      "requirements-dev.txt",
+      "USAGE_EXAMPLES.md",
+      ".env.example",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    "tasks": [
+      "kpi_collector.py",
+      "celery_app.py",
+      "__init__.py",
+      "kpi_alerting.py"
+    ],
+    "workflows": [
+      "kpi_calculations.py",
+      "__init__.py",
+      "capa_workflow.py",
+      "audit_workflow.py",
+      "exercise_workflow.py"
+    ],
+    "repositories": [
+      "__init__.py",
+      "repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "schemas.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "publishers.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "review_service.py",
+      "exercise_service.py",
+      "kpi_service.py",
+      "__init__.py",
+      "scenario_service.py",
+      "capa_service.py",
+      "{kpi_service.py,audit_service.py,capa_service.py,review_service.py}",
+      "audit_service.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "api",
+    "api.schemas",
+    "api.workflow_ai",
+    "asyncio",
+    "audit_service",
+    "audit_workflow",
+    "capa_service",
+    "capa_workflow",
+    "celery",
+    "celery.schedules",
+    "config",
+    "contextlib",
+    "database",
+    "database/postgresql",
+    "datetime",
+    "domain",
+    "email.mime.multipart",
+    "email.mime.text",
+    "enum",
+    "events.subscribers",
+    "exercise_service",
+    "exercise_workflow",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "httpx",
+    "integrations.bcm_client",
+    "jwt",
+    "kpi_calculations",
+    "kpi_service",
+    "logging",
+    "main",
+    "models.database",
+    "models.domain",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "publishers",
+    "pydantic",
+    "pydantic_settings",
+    "repositories.repository",
+    "repository",
+    "scenario_service",
+    "services.audit_service",
+    "services.capa_service",
+    "services.exercise_service",
+    "services.kpi_service",
+    "services.scenario_service",
+    "shared/database",
+    "smtplib",
+    "subscribers",
+    "sys",
+    "typing",
+    "uvicorn",
+    "workflow_integration",
+    "workflows",
+    "workflows.audit_workflow",
+    "workflows.capa_workflow",
+    "workflows.kpi_calculations"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/events/webhook",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/insights",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/search",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/similar",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/timeline",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/patterns",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/performance",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/exercises/effectiveness",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audits/findings-analysis",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/capa/effectiveness",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercises",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/exercises",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/exercises/{exercise_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercises/{exercise_id}/start",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercises/{exercise_id}/complete",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercises/{exercise_id}/observations",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/exercises/{exercise_id}/report",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scenarios",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kpis",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kpis",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kpis/{kpi_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/kpis/{kpi_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kpis/{kpi_id}/measure",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kpis/{kpi_id}/trend",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kpis/dashboard",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kpi/collect-now",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kpi/alerts",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kpi/alerts/{alert_id}/acknowledge",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/audits",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audits",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audits/{audit_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/audits/{audit_id}/findings",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audits/{audit_id}/report",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/audits/{audit_id}/close",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/capa",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/capa",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/capa/{capa_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/capa/{capa_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/capa/{capa_id}/verify",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/management-reviews",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/management-reviews",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/management-reviews/{review_id}/prepare",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/performance-summary",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/compliance-status",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "PerformanceStatus",
+      "file": "kpi_calculations.py",
+      "methods": 0
+    },
+    {
+      "name": "TrendDirection",
+      "file": "kpi_calculations.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAWorkflowState",
+      "file": "capa_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAWorkflowAction",
+      "file": "capa_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditWorkflowState",
+      "file": "audit_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditWorkflowAction",
+      "file": "audit_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseWorkflowState",
+      "file": "exercise_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseWorkflowAction",
+      "file": "exercise_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ValidationRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ExerciseType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationSeverity",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PerformanceDirection",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "MeasurementFrequency",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PerformanceStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TrendDirection",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DataQuality",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectionMethod",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "FindingType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "FindingSeverity",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPASource",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Exercise",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseScenario",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseObservation",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "KPI",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIMeasurement",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditPlan",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditFinding",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPA",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ManagementReview",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationSeverity",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PerformanceDirection",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "MeasurementFrequency",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PerformanceStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "TrendDirection",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "DataQuality",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectionMethod",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "FindingType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "FindingSeverity",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPASource",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "Exercise",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseScenario",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseObservation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseAction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KPICategory",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KPI",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIMeasurement",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIDashboard",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditPlan",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditFinding",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPA",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ManagementReview",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AlertSeverity",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AlertStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIAlert",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseUpdate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "KPICreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIUpdate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "KPIResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "MeasurementCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditUpdate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "FindingCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPACreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAUpdate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "CAPAResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ManagementReviewCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ManagementReviewResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "EventPublisher",
+      "file": "publishers.py",
+      "methods": 1
+    },
+    {
+      "name": "EventSubscriber",
+      "file": "subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseService",
+      "file": "exercise_service.py",
+      "methods": 1
+    },
+    {
+      "name": "KPIService",
+      "file": "kpi_service.py",
+      "methods": 3
+    },
+    {
+      "name": "ScenarioService",
+      "file": "scenario_service.py",
+      "methods": 1
+    },
+    {
+      "name": "CAPAService",
+      "file": "capa_service.py",
+      "methods": 1
+    },
+    {
+      "name": "AuditService",
+      "file": "audit_service.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "collect_plan_currency_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_rto_achievement_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_exercise_completion_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_training_completion_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_audit_finding_closure_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_capa_effectiveness_rate",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_incident_response_time",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "collect_all_kpis",
+      "file": "kpi_collector.py",
+      "params": 0
+    },
+    {
+      "name": "collect_kpis_for_tenant",
+      "file": "kpi_collector.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_kpi_status",
+      "file": "kpi_alerting.py",
+      "params": 2
+    },
+    {
+      "name": "send_email_alert",
+      "file": "kpi_alerting.py",
+      "params": 4
+    },
+    {
+      "name": "create_alert_record",
+      "file": "kpi_alerting.py",
+      "params": 8
+    },
+    {
+      "name": "check_kpi_thresholds",
+      "file": "kpi_alerting.py",
+      "params": 2
+    },
+    {
+      "name": "check_kpi_thresholds_hourly",
+      "file": "kpi_alerting.py",
+      "params": 0
+    },
+    {
+      "name": "send_kpi_alert",
+      "file": "kpi_alerting.py",
+      "params": 1
+    },
+    {
+      "name": "auto_resolve_alerts",
+      "file": "kpi_alerting.py",
+      "params": 0
+    },
+    {
+      "name": "send_daily_kpi_summary",
+      "file": "kpi_alerting.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_kpi_status",
+      "file": "kpi_calculations.py",
+      "params": 5
+    },
+    {
+      "name": "calculate_kpi_trend",
+      "file": "kpi_calculations.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_performance_threshold",
+      "file": "kpi_calculations.py",
+      "params": 2
+    },
+    {
+      "name": "aggregate_measurements",
+      "file": "kpi_calculations.py",
+      "params": 2
+    },
+    {
+      "name": "get_kpi_summary",
+      "file": "kpi_calculations.py",
+      "params": 2
+    },
+    {
+      "name": "can_transition_capa",
+      "file": "capa_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_capa_state",
+      "file": "capa_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_capa_transition",
+      "file": "capa_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_implement_capa",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_verify_capa",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_close_capa",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "validate_root_cause_analysis",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_capa_state_entry_actions",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_capa_due_date_days",
+      "file": "capa_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_transition_audit",
+      "file": "audit_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_audit_state",
+      "file": "audit_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_audit_transition",
+      "file": "audit_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_start_audit",
+      "file": "audit_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_complete_fieldwork",
+      "file": "audit_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_issue_report",
+      "file": "audit_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_audit_state_entry_actions",
+      "file": "audit_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_transition_exercise",
+      "file": "exercise_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_exercise_state",
+      "file": "exercise_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_exercise_transition",
+      "file": "exercise_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_start_exercise",
+      "file": "exercise_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_complete_exercise",
+      "file": "exercise_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_review_exercise",
+      "file": "exercise_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_exercise_state_entry_actions",
+      "file": "exercise_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_workflow_engine",
+      "file": "workflow_ai.py",
+      "params": 0
+    },
+    {
+      "name": "get_case_collector",
+      "file": "workflow_ai.py",
+      "params": 0
+    },
+    {
+      "name": "get_validation_repository",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_kpi_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_audit_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_exercise_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_scenario_service",
+      "file": "routes.py",
+      "params": 1
+    },
+    {
+      "name": "get_capa_service",
+      "file": "routes.py",
+      "params": 1
+    }
+  ],
+  "config": {
+    ".env.example": "platform-services/validation-service/.env.example",
+    "requirements.txt": "platform-services/validation-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 7567,
+    "python_files": 32,
+    "classes": 109,
+    "functions": 53,
+    "endpoints": 49,
+    "dependencies": 60
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1950,
+    "lines": 119,
+    "content": "# validation-service\n\n> \ud83c\udf10 API Service \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 7,568 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 32 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 109 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 53 |\n| **API Endpoints** | 50 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 60 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (32)\n\n- `/analytics/patterns`\n- `/analytics/performance`\n- `/api/compliance/check`\n- `/audits`\n- `/audits/findings-analysis`\n\n### POST (15)\n\n- `/api/events/webhook`\n- `/audits`\n- `/audits/{audit_id}/findings`\n- `/capa`\n- `/capa/{capa_id}/verify`\n\n### PATCH (3)\n\n- `/audits/{audit_id}/close`\n- `/capa/{capa_id}`\n- `/kpis/{kpi_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **KPIService** (3 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `kpi_service.py`\n- **WorkflowSecurityMiddleware** (1 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `workflow_integration.py`\n- **ValidationRepository** (1 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `repository.py`\n- **EventPublisher** (1 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `publi"
+  }
+}

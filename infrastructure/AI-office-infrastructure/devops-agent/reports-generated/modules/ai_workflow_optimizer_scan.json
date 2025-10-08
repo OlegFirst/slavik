@@ -1,0 +1,189 @@
+{
+  "module_name": "ai_workflow_optimizer",
+  "path": "intelligent-core/ai_workflow_optimizer",
+  "structure": {
+    ".": [
+      "API.md",
+      "requirements.txt",
+      "Dockerfile",
+      "README.md",
+      "main.py"
+    ],
+    "integrations": [
+      "event_intelligence_integration.py"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "base64",
+    "contextlib",
+    "database/postgresql",
+    "datetime",
+    "event_intelligence.event_intelligence_system",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "joblib",
+    "json",
+    "logging",
+    "numpy",
+    "os",
+    "pandas",
+    "pathlib",
+    "pickle",
+    "prometheus_client",
+    "pydantic",
+    "shared/platform_client",
+    "sklearn.cluster",
+    "sklearn.ensemble",
+    "sklearn.metrics",
+    "sklearn.model_selection",
+    "sklearn.preprocessing",
+    "subprocess",
+    "sys",
+    "typing",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/optimize/performance",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analyze/bottlenecks/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/optimize/resources/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/detect/anomalies/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/models/retrain",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models/status",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/analyze/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/recommendations",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/learn",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/health",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "ProcessExecution",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OptimizationPrediction",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "MLModel",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessOptimizationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OptimizationPredictionResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "BottleneckAnalysisResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceOptimizationResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "AnomalyDetectionResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowOptimizerService",
+      "file": "main.py",
+      "methods": 17
+    },
+    {
+      "name": "EventIntelligenceIntegration",
+      "file": "event_intelligence_integration.py",
+      "methods": 7
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "intelligent-core/ai_workflow_optimizer/requirements.txt"
+  },
+  "metrics": {
+    "loc": 1701,
+    "python_files": 2,
+    "classes": 10,
+    "functions": 2,
+    "endpoints": 12,
+    "dependencies": 28
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 14722,
+    "lines": 602,
+    "content": "# AI Workflow Optimizer\n\n## Overview\nAI Workflow Optimizer is an ML-powered service that provides intelligent optimization and prediction capabilities for business process workflows. It uses machine learning models to predict execution times, detect bottlenecks, identify anomalies, and optimize resource allocation for business continuity and incident response processes.\n\n## Features\n\n- **Performance Prediction**: ML-based prediction of process execution times\n- **Bottleneck Detection**: Identifies potential workflow bottlenecks before they occur\n- **Anomaly Detection**: Detects unusual patterns in process execution using Isolation Forest\n- **Resource Optimization**: Recommends optimal resource allocation for processes\n- **Self-Learning Models**: Continuously improves predictions based on historical data\n- **Platform Integration**: Integrates with AI Foundation, Expertise Center, and Workflow Intelligence\n- **Real-time Analysis**: Provides instant AI-powered analysis and recommendations"
+  }
+}

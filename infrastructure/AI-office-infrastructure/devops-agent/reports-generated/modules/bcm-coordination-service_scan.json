@@ -1,0 +1,105 @@
+{
+  "module_name": "bcm-coordination-service",
+  "path": "platform-services/bcm-coordination-service",
+  "structure": {
+    ".": [
+      "requirements.txt",
+      "Dockerfile",
+      ".env.example",
+      "main.py",
+      "bcm_executor.py"
+    ]
+  },
+  "dependencies": [
+    "analyzer_coordinator",
+    "contextlib",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "httpx",
+    "logging",
+    "orchestration.bcm_services_orchestrator.analyzer_coordinator",
+    "pathlib",
+    "pydantic",
+    "sys",
+    "typing",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analyzers",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze/batch",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze/compliance",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze/risk",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze/impact",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analyze/iso_clause",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "AnalysisRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "BatchAnalysisRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMExecutor",
+      "file": "bcm_executor.py",
+      "methods": 1
+    }
+  ],
+  "functions": [],
+  "config": {
+    ".env.example": "platform-services/bcm-coordination-service/.env.example",
+    "requirements.txt": "platform-services/bcm-coordination-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 1023,
+    "python_files": 2,
+    "classes": 3,
+    "functions": 0,
+    "endpoints": 9,
+    "dependencies": 12
+  },
+  "readme": null
+}

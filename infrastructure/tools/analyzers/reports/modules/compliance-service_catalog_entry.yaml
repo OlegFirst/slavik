@@ -1,0 +1,36 @@
+
+  compliance_service:
+    type: business-service
+    location: platform-services/compliance-service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/audit
+        - shared/auth
+        - shared/cache
+        - shared/config
+        - shared/database
+        - shared/exceptions
+        - shared/middleware
+        - shared/utils
+    endpoints:
+      - GET /api/compliance/check
+      - GET /health
+      - GET /items
+      - GET /{item_id}/ai-advice
+      - GET /benchmarks
+    metrics:
+      loc: 17481
+      files: 55
+      classes: 136
+      functions: 41
+    status: discovered

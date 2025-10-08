@@ -1,0 +1,928 @@
+{
+  "service": "Governance",
+  "resources": {
+    "api": {
+      "screens": [
+        {
+          "name": "Api List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/api/compliance/check"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Api"
+            }
+          ]
+        }
+      ]
+    },
+    "health": {
+      "screens": [
+        {
+          "name": "Health List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/health"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Health"
+            }
+          ]
+        }
+      ]
+    },
+    "default": {
+      "screens": [
+        {
+          "name": "Default List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Default"
+            }
+          ]
+        }
+      ]
+    },
+    "auth": {
+      "screens": [
+        {
+          "name": "Create Auth",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/auth/token",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "ai-advice": {
+      "screens": [
+        {
+          "name": "Ai-Advice Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{item_id}/ai-advice"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "benchmarks": {
+      "screens": [
+        {
+          "name": "Benchmarks List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/benchmarks"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Benchmarks"
+            }
+          ]
+        },
+        {
+          "name": "Benchmarks Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/benchmarks/{metric_name}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "policies": {
+      "screens": [
+        {
+          "name": "Policies List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/policies"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Policies"
+            }
+          ]
+        },
+        {
+          "name": "Create Policies",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/policies",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Policies Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/policies/{policy_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Policy",
+          "type": "action",
+          "endpoint": "/policies/{policy_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Approve Policy",
+          "type": "action",
+          "endpoint": "/policies/{policy_id}/approve",
+          "method": "POST"
+        },
+        {
+          "name": "Publish Policy",
+          "type": "action",
+          "endpoint": "/policies/{policy_id}/publish",
+          "method": "POST"
+        }
+      ]
+    },
+    "roles": {
+      "screens": [
+        {
+          "name": "Roles List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/roles"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Roles"
+            }
+          ]
+        },
+        {
+          "name": "Create Roles",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/roles",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Roles Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/roles/{role_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Role",
+          "type": "action",
+          "endpoint": "/roles/{role_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Assign Role",
+          "type": "action",
+          "endpoint": "/roles/{role_id}/assign",
+          "method": "POST"
+        }
+      ]
+    },
+    "resources": {
+      "screens": [
+        {
+          "name": "Resources List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/resources"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Resources"
+            }
+          ]
+        },
+        {
+          "name": "Create Resources",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/resources",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Resources Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/resources/{resource_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Resource",
+          "type": "action",
+          "endpoint": "/resources/{resource_id}",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "competence": {
+      "screens": [
+        {
+          "name": "Competence List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/competence"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Competence"
+            }
+          ]
+        },
+        {
+          "name": "Create Competence",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/competence",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "objectives": {
+      "screens": [
+        {
+          "name": "Objectives List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/objectives"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Objectives"
+            }
+          ]
+        },
+        {
+          "name": "Create Objectives",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/objectives",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Objectives Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/objectives/{objective_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Objective",
+          "type": "action",
+          "endpoint": "/objectives/{objective_id}",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "communication-plans": {
+      "screens": [
+        {
+          "name": "Communication-Plans List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/communication-plans"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Communication-Plans"
+            }
+          ]
+        },
+        {
+          "name": "Create Communication-Plans",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/communication-plans",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "stakeholders": {
+      "screens": [
+        {
+          "name": "Stakeholders List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/stakeholders"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Stakeholders"
+            }
+          ]
+        },
+        {
+          "name": "Create Stakeholders",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/stakeholders",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Stakeholders Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/stakeholders/{stakeholder_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Stakeholder",
+          "type": "action",
+          "endpoint": "/stakeholders/{stakeholder_id}",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "context-analysis": {
+      "screens": [
+        {
+          "name": "Context-Analysis List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/context-analysis"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Context-Analysis"
+            }
+          ]
+        },
+        {
+          "name": "Create Context-Analysis",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/context-analysis",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Context-Analysis Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/context-analysis/{analysis_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "tenant": {
+      "screens": [
+        {
+          "name": "Tenant List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/tenant"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Tenant"
+            }
+          ]
+        },
+        {
+          "name": "Classify Tenant Domain",
+          "type": "action",
+          "endpoint": "/tenant/classify",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "knowledge": {
+      "screens": [
+        {
+          "name": "Knowledge List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/knowledge"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Knowledge"
+            }
+          ]
+        }
+      ]
+    },
+    "templates": {
+      "screens": [
+        {
+          "name": "Templates List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/templates"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Templates"
+            }
+          ]
+        }
+      ]
+    },
+    "recommendations": {
+      "screens": [
+        {
+          "name": "Recommendations List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/recommendations"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Recommendations"
+            }
+          ]
+        }
+      ]
+    },
+    "industries": {
+      "screens": [
+        {
+          "name": "Industries List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/industries"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Industries"
+            }
+          ]
+        }
+      ]
+    },
+    "organizational-types": {
+      "screens": [
+        {
+          "name": "Organizational-Types List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/organizational-types"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Organizational-Types"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

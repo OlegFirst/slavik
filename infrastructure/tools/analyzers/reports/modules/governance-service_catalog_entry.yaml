@@ -1,0 +1,33 @@
+
+  governance_service:
+    type: business-service
+    location: platform-services/governance-service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/auth
+        - shared/config
+        - shared/database
+        - shared/models
+        - shared/utils
+    endpoints:
+      - GET /api/compliance/check
+      - GET /health
+      - GET /
+      - POST /auth/token
+      - GET /{item_id}/ai-advice
+    metrics:
+      loc: 7225
+      files: 27
+      classes: 90
+      functions: 4
+    status: discovered

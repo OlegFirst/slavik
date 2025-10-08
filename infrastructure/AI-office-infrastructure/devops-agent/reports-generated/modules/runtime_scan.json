@@ -1,0 +1,223 @@
+{
+  "module_name": "runtime",
+  "path": "infrastructure/runtime",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "RUNTIME_ACTUAL_STATUS.md",
+      "README.md",
+      "SERVICE_SPEC.md"
+    ],
+    "realtime-websocket": [
+      "MIGRATION_CHECKLIST.md",
+      "requirements.txt",
+      "README.md",
+      ".env.example",
+      "main.py"
+    ],
+    "message-queue": [
+      "requirements.txt",
+      "rabbitmq_manager.py",
+      "README.md"
+    ],
+    "service-discovery": [
+      "iso_service_map.py",
+      "__init__.py",
+      "health_monitor.py",
+      "service_registry.py",
+      "README.md"
+    ]
+  },
+  "dependencies": [
+    "aio_pika",
+    "aio_pika.abc",
+    "asyncio",
+    "contextlib",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "health_monitor",
+    "httpx",
+    "iso_service_map",
+    "json",
+    "logging",
+    "os",
+    "pydantic",
+    "runtime/eventbus",
+    "service_registry",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/notifications/broadcast",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/channels/{channel_id}/users",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/channels/{channel_id}/messages",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "MessageType",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ChannelType",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserStatus",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ChatMessage",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserSession",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationLog",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WebSocketMessage",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "ChatMessageRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserStatusUpdate",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ConnectionManager",
+      "file": "main.py",
+      "methods": 3
+    },
+    {
+      "name": "RabbitMQManager",
+      "file": "rabbitmq_manager.py",
+      "methods": 1
+    },
+    {
+      "name": "HealthStatus",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResult",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "HealthCheck",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthMonitor",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "Service",
+      "file": "service_registry.py",
+      "methods": 1
+    },
+    {
+      "name": "ServiceRegistry",
+      "file": "service_registry.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "get_services_by_component",
+      "file": "iso_service_map.py",
+      "params": 1
+    },
+    {
+      "name": "get_services_with_workflow_intelligence",
+      "file": "iso_service_map.py",
+      "params": 0
+    },
+    {
+      "name": "get_services_by_iso_clause",
+      "file": "iso_service_map.py",
+      "params": 1
+    },
+    {
+      "name": "get_service_count_by_category",
+      "file": "iso_service_map.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 2107,
+    "python_files": 6,
+    "classes": 18,
+    "functions": 5,
+    "endpoints": 6,
+    "dependencies": 23
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 10548,
+    "lines": 474,
+    "content": "# Runtime Infrastructure\n\n**Status:** \u2705 Production Ready\n**Last Updated:** 2025-10-07\n**Coverage:** 100%\n\n---\n\n## Overview\n\nRuntime layer provides messaging (RabbitMQ), real-time communication (WebSocket), event-driven architecture (EventBus), and service discovery.\n\n### Components Status\n\n| Component | Status | Port | Details |\n|-----------|--------|------|---------|\n| **RabbitMQ** | \u2705 Running | 5673 | Message queue, Management UI on 15673 |\n| **WebSocket** | \u2705 Running | 8050 | Real-time bidirectional communication |\n| **EventBus** | \u2705 Ready | - | Event-driven architecture library |\n| **Service Discovery** | \u2705 Ready | - | Service registry with health checks |\n\n---\n\n## Quick Start\n\n### 1. Start RabbitMQ (Already Running)\n\n```bash\ndocker ps | grep rabbitmq\n# intelligent-core-rabbitmq is running\n```\n\nManagement UI: http://localhost:15673 (guest/guest)\n\n### 2. Start WebSocket Service\n\n```bash\ncd /Users/MD/AI-Platform-ISO/infrastructure/runtime/realtime-websocket\npython3 main.py\n```\n\nWebSo"
+  }
+}

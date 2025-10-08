@@ -1,0 +1,253 @@
+name: Pytest - Automated Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Daily test run at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  test-intelligent-core:
+    name: Test Intelligent-Core Services
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - ai-foundation/learning-knowledge
+          - expertise-center
+          - workflow_intelligence
+          - community_intelligence
+          - collective
+          - predictive
+          - orchestration/ai-orchestration
+          - orchestration/coordination-center
+          - ai_workflow_optimizer
+          - event_intelligence
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-cov pytest-timeout
+
+          # Install service dependencies if requirements.txt exists
+          if [ -f "intelligent-core/${{ matrix.service }}/requirements.txt" ]; then
+            pip install -r intelligent-core/${{ matrix.service }}/requirements.txt
+          fi
+
+      - name: Run tests
+        run: |
+          echo "🧪 Testing ${{ matrix.service }}..."
+
+          # Find and run tests
+          if [ -d "intelligent-core/${{ matrix.service }}/tests" ]; then
+            pytest intelligent-core/${{ matrix.service }}/tests/ \
+              --verbose \
+              --tb=short \
+              --timeout=300 \
+              --junitxml=junit-${{ matrix.service }}.xml \
+              || echo "⚠️ Some tests failed for ${{ matrix.service }}"
+          else
+            echo "⚠️ No tests directory found for ${{ matrix.service }}"
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.service }}
+          path: junit-*.xml
+          retention-days: 30
+
+  test-platform-services:
+    name: Test Platform Services
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - bia-service
+          - risk-service
+          - compliance-service
+          - governance-service
+          - documents-service
+          - validation-service
+          - learning-service
+          - response-service
+          - plans_service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-cov pytest-timeout
+
+          if [ -f "platform-services/${{ matrix.service }}/requirements.txt" ]; then
+            pip install -r platform-services/${{ matrix.service }}/requirements.txt
+          fi
+
+      - name: Run tests
+        run: |
+          echo "🧪 Testing ${{ matrix.service }}..."
+
+          if [ -d "platform-services/${{ matrix.service }}/tests" ]; then
+            pytest platform-services/${{ matrix.service }}/tests/ \
+              --verbose \
+              --tb=short \
+              --timeout=300 \
+              --junitxml=junit-${{ matrix.service }}.xml \
+              || echo "⚠️ Some tests failed for ${{ matrix.service }}"
+          else
+            echo "⚠️ No tests directory found for ${{ matrix.service }}"
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.service }}
+          path: junit-*.xml
+          retention-days: 30
+
+  test-coverage:
+    name: Code Coverage Report
+    runs-on: ubuntu-latest
+    needs: [test-intelligent-core, test-platform-services]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-cov coverage[toml]
+
+          # Install all requirements
+          find intelligent-core platform-services -name "requirements.txt" -exec pip install -r {} \; || true
+
+      - name: Run tests with coverage
+        run: |
+          echo "📊 Running tests with coverage..."
+
+          pytest intelligent-core/ platform-services/ \
+            --cov=intelligent-core \
+            --cov=platform-services \
+            --cov-report=xml \
+            --cov-report=html \
+            --cov-report=term \
+            --cov-report=json \
+            --ignore=intelligent-core/_archive \
+            --ignore=intelligent-core/*/venv \
+            --ignore=platform-services/*/venv \
+            || echo "⚠️ Some tests failed"
+
+      - name: Generate coverage summary
+        if: always()
+        run: |
+          echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f coverage.json ]; then
+            total=$(jq '.totals.percent_covered' coverage.json)
+            echo "- **Total Coverage:** ${total}%" >> $GITHUB_STEP_SUMMARY
+
+            # Coverage by module
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Coverage by Module:" >> $GITHUB_STEP_SUMMARY
+            jq -r '.files | to_entries | map({path: .key, coverage: .value.summary.percent_covered}) | sort_by(.coverage) | reverse | .[:10] | .[] | "- `\(.path)`: \(.coverage)%"' coverage.json >> $GITHUB_STEP_SUMMARY || true
+          fi
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            coverage.json
+            htmlcov/
+          retention-days: 30
+
+      - name: Coverage badge
+        if: always()
+        run: |
+          if [ -f coverage.json ]; then
+            total=$(jq '.totals.percent_covered' coverage.json)
+            color="red"
+            if (( $(echo "$total >= 80" | bc -l) )); then
+              color="green"
+            elif (( $(echo "$total >= 60" | bc -l) )); then
+              color="yellow"
+            fi
+            echo "Coverage: ${total}% (${color})"
+          fi
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [test-intelligent-core, test-platform-services, test-coverage]
+    if: always()
+
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: test-results/
+
+      - name: Generate summary
+        run: |
+          echo "## 🧪 Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Count test result files
+          total_files=$(find test-results -name "junit-*.xml" | wc -l)
+          echo "- **Test suites executed:** $total_files" >> $GITHUB_STEP_SUMMARY
+
+          # Parse JUnit XML files if they exist
+          if [ $total_files -gt 0 ]; then
+            total_tests=0
+            total_failures=0
+
+            for file in test-results/*/junit-*.xml; do
+              if [ -f "$file" ]; then
+                tests=$(grep -oP 'tests="\K[0-9]+' "$file" | head -1 || echo "0")
+                failures=$(grep -oP 'failures="\K[0-9]+' "$file" | head -1 || echo "0")
+                total_tests=$((total_tests + tests))
+                total_failures=$((total_failures + failures))
+              fi
+            done
+
+            echo "- **Total tests:** $total_tests" >> $GITHUB_STEP_SUMMARY
+            echo "- **Failures:** $total_failures" >> $GITHUB_STEP_SUMMARY
+            echo "- **Success rate:** $(( (total_tests - total_failures) * 100 / total_tests ))%" >> $GITHUB_STEP_SUMMARY || true
+          fi

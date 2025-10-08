@@ -1,0 +1,23 @@
+
+  performance_tests:
+    type: service
+    location: platform-services/performance-tests
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+
+    metrics:
+      loc: 4248
+      files: 12
+      classes: 12
+      functions: 86
+    status: discovered

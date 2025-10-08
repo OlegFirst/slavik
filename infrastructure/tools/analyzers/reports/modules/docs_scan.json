@@ -1,0 +1,107 @@
+{
+  "module_name": "docs",
+  "path": "platform-services/docs",
+  "structure": {
+    ".": [
+      "WORKFLOW_INTELLIGENCE_INTEGRATION.md"
+    ],
+    "deployment": [
+      "ENVIRONMENT_CONFIGURATION.md",
+      "PRODUCTION_CHECKLIST.md",
+      "README.md",
+      "CICD_PIPELINE.md",
+      "TROUBLESHOOTING_GUIDE.md",
+      "DEPLOYMENT_GUIDE.md",
+      "SECURITY_GUIDE.md",
+      "DOCKER_DEPLOYMENT.md",
+      "DATABASE_SETUP.md",
+      "QUICK_START.md"
+    ],
+    "deployment/scripts": [
+      "health_check.sh",
+      "restore.sh",
+      "backup.sh",
+      "deploy.sh"
+    ],
+    "api": [
+      "authentication.md",
+      "workflows.md",
+      "postman_collection.json",
+      "index.html",
+      "README.md"
+    ],
+    "api/examples/python": [
+      "complete_audit_lifecycle.py",
+      "create_bia_process.py"
+    ],
+    "api/examples/curl": [
+      "bia_examples.sh"
+    ]
+  },
+  "dependencies": [
+    "datetime",
+    "json",
+    "requests",
+    "typing",
+    "uuid"
+  ],
+  "endpoints": [],
+  "classes": [],
+  "functions": [
+    {
+      "name": "create_internal_audit",
+      "file": "complete_audit_lifecycle.py",
+      "params": 1
+    },
+    {
+      "name": "add_audit_finding",
+      "file": "complete_audit_lifecycle.py",
+      "params": 2
+    },
+    {
+      "name": "create_nonconformity",
+      "file": "complete_audit_lifecycle.py",
+      "params": 1
+    },
+    {
+      "name": "start_rca",
+      "file": "complete_audit_lifecycle.py",
+      "params": 2
+    },
+    {
+      "name": "complete_rca",
+      "file": "complete_audit_lifecycle.py",
+      "params": 2
+    },
+    {
+      "name": "main",
+      "file": "complete_audit_lifecycle.py",
+      "params": 0
+    },
+    {
+      "name": "create_bia_process",
+      "file": "create_bia_process.py",
+      "params": 1
+    },
+    {
+      "name": "get_bia_process",
+      "file": "create_bia_process.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "create_bia_process.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 560,
+    "python_files": 2,
+    "classes": 0,
+    "functions": 9,
+    "endpoints": 0,
+    "dependencies": 5
+  },
+  "readme": null
+}

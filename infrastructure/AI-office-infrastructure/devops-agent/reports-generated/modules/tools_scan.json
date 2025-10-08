@@ -1,0 +1,500 @@
+{
+  "module_name": "tools",
+  "path": "infrastructure/tools",
+  "structure": {
+    ".": [
+      "batch-update-docs.sh",
+      "archive-old-docs.sh",
+      ".DS_Store",
+      "WEB_UI_GUIDE.md",
+      "requirements.txt",
+      "update-docs.sh",
+      "TOOLS_INTEGRATION_COMPLETE.md",
+      "batch-update-platform-services.sh",
+      "generate-module-docs.py",
+      "GITHUB_ACTIONS_CONSTRAINTS.md",
+      "AUTOMATION_PLAN.md",
+      "check-docs-freshness.sh",
+      "generate-service-docs.py",
+      "README.md",
+      "TOOLS_CATALOG_INDEX.md",
+      "TOOLS_COMPREHENSIVE_CATALOG.md",
+      "batch-update-all-platform-services.sh",
+      "TOOLS_QUICK_REFERENCE.md"
+    ],
+    "analyzers": [
+      "dependency_validator.py",
+      "dependency_mapper.py",
+      ".DS_Store",
+      "dependency_reconciler.py",
+      "discover_services.py",
+      "README.md",
+      "business_logic_mapper.py",
+      "ast_analyzer.py",
+      "api_mapper.py",
+      "metrics_discovery.py",
+      "module_scanner.py",
+      "INTEGRATION_GUIDE.md",
+      "generate_improved_compose.py"
+    ],
+    "analyzers/config": [
+      "analysis_config.yaml"
+    ],
+    "analyzers/reports": [
+      "dependencies.json",
+      "business_logic.json",
+      "business_logic.md",
+      "circular_dependencies.json",
+      ".DS_Store",
+      "dependency_graph.png.zip",
+      "dependencies_v2.json",
+      "ast_errors.log",
+      "dependencies.md",
+      "endpoint_map.html",
+      "ast_analysis.json",
+      "PLATFORM_ANALYSIS_FOR_ADMIN_PANEL.md",
+      "ast_analysis.md",
+      "dashboard.html",
+      "dependency_reconciliation.md",
+      "dependency_validation.json",
+      "api_map.json",
+      "pylint_report.json",
+      "dependency_graph.graphml",
+      "FIXES_SUMMARY.txt",
+      "dependency_graph.png",
+      "api_map.md"
+    ],
+    "analyzers/reports/modules": [
+      "_archive_catalog_entry.yaml",
+      "scripts_scan.md",
+      "tools_catalog_entry.yaml",
+      "simulation_scan.md",
+      "response-service_scan.json",
+      "collective_catalog_entry.yaml",
+      "documents-service_scan.md",
+      "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f_scan.md",
+      "expertise-center_catalog_entry.yaml",
+      "workflow_intelligence_catalog_entry.yaml",
+      "community-service_catalog_entry.yaml",
+      "compliance-service_scan.json",
+      "monitoring_scan.md",
+      "ai-foundation_catalog_entry.yaml",
+      "living-docs_scan.json",
+      "docs_scan.json",
+      "risk-service_scan.md",
+      "orchestration_scan.md",
+      "performance-tests_scan.json",
+      "gateway_catalog_entry.yaml",
+      "_archive_scan.json",
+      "planning_service_scan.md",
+      "response-service_scan.md",
+      "monitoring_scan.json",
+      "plans_service_catalog_entry.yaml",
+      "orchestration_catalog_entry.yaml",
+      "expertise-center_scan.json",
+      "bia-service_catalog_entry.yaml",
+      "ai_workflow_optimizer_scan.json",
+      "plans_service_scan.json",
+      "runtime_catalog_entry.yaml",
+      "expertise-center_scan.md",
+      "governance-service_catalog_entry.yaml",
+      "database_catalog_entry.yaml",
+      "collective_scan.json",
+      "ai_workflow_optimizer_catalog_entry.yaml",
+      "scripts_scan.json",
+      "planning_service_scan.json",
+      "tools_scan.json",
+      "performance-tests_scan.md",
+      "performance-tests_catalog_entry.yaml",
+      "plans_service_scan.md",
+      "governance-service_scan.json",
+      "validation-service_scan.json",
+      "predictive_scan.json",
+      "workflow_intelligence_scan.md",
+      "integration-tests_catalog_entry.yaml",
+      "documents-service_catalog_entry.yaml",
+      "compliance-service_scan.md",
+      "community-service_scan.md",
+      "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f_catalog_entry.yaml",
+      "community_intelligence_scan.md",
+      "documents-service_scan.json",
+      "runtime_scan.md",
+      "integration-tests_scan.json",
+      "predictive_catalog_entry.yaml",
+      "bia-service_scan.json",
+      "gateway_scan.json",
+      "living-docs_scan.md",
+      "community_intelligence_catalog_entry.yaml",
+      "learning-service_scan.json",
+      "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f_scan.json",
+      "orchestration_scan.json",
+      "planning_service_catalog_entry.yaml",
+      "predictive_scan.md",
+      "collective_scan.md",
+      "community-service_scan.json",
+      "_archive_scan.md",
+      "bia-service_scan.md",
+      "database_scan.json",
+      "docs_scan.md",
+      "monitoring_catalog_entry.yaml",
+      "learning-service_scan.md",
+      "governance-service_scan.md",
+      "ai-foundation_scan.json",
+      "workflow-engine_scan.json",
+      "integration-tests_scan.md",
+      "database_scan.md",
+      "living-docs_catalog_entry.yaml",
+      "ai_workflow_optimizer_scan.md",
+      "learning-service_catalog_entry.yaml",
+      "community_intelligence_scan.json",
+      "simulation_catalog_entry.yaml",
+      "response-service_catalog_entry.yaml",
+      "workflow_intelligence_scan.json",
+      "workflow-engine_catalog_entry.yaml",
+      "ai-foundation_scan.md",
+      "docs_catalog_entry.yaml",
+      "risk-service_scan.json",
+      "simulation_scan.json",
+      "tools_scan.md",
+      "validation-service_catalog_entry.yaml",
+      "scripts_catalog_entry.yaml",
+      "runtime_scan.json",
+      "gateway_scan.md",
+      "risk-service_catalog_entry.yaml",
+      "workflow-engine_scan.md",
+      "validation-service_scan.md",
+      "compliance-service_catalog_entry.yaml"
+    ],
+    "auto-generated": [
+      "prometheus.auto.yml",
+      "docker-compose.auto.yml",
+      "DOCKER_COMPOSE_USAGE.md",
+      "gateway-routes.auto.json",
+      "service-catalog.json",
+      "docker-compose.improved.yml"
+    ],
+    "config": [
+      "analysis_config.yaml"
+    ],
+    "docker-management": [
+      "__init__.py",
+      "README.md",
+      "docker_manager.py"
+    ],
+    "doc-generators": [
+      "documentation_generator.py",
+      "event_catalog_generator.py",
+      "test_generator.py",
+      "ui_blueprint_gen.py",
+      "prometheus_config_generator.py",
+      "api_docs_generator.py",
+      "ai_documentation_generator.py"
+    ],
+    "dashboards": [
+      "module_dashboard.py"
+    ],
+    "vscode-extension": [
+      "README.md",
+      "package.json",
+      "extension.js"
+    ],
+    "docker-generated": [
+      "docker-compose.gateway.yml",
+      "docker-compose.observability.yml",
+      "docker-compose.integration.yml",
+      ".env.template",
+      "docker-compose.full.yml",
+      "check_health.sh",
+      "start_infrastructure.sh",
+      "service-catalog.json",
+      "stop_infrastructure.sh",
+      "docker-compose.runtime.yml"
+    ],
+    "reports/modules": [
+      "wrappers_scan.json",
+      "_archive_scan.json",
+      "expertise-center_scan.json",
+      "ai_workflow_optimizer_scan.json",
+      "collective_scan.json",
+      "event_intelligence_scan.json",
+      "predictive_scan.json",
+      "orchestration_scan.json",
+      "shared_scan.json",
+      "ai-foundation_scan.json",
+      "workflow-engine_scan.json",
+      "community_intelligence_scan.json",
+      "workflow_intelligence_scan.json"
+    ]
+  },
+  "dependencies": [
+    "argparse",
+    "ast",
+    "asyncio",
+    "collections",
+    "dataclasses",
+    "datetime",
+    "docker",
+    "docker_manager",
+    "external/anthropic",
+    "httpx",
+    "jinja2",
+    "json",
+    "logging",
+    "math",
+    "matplotlib.pyplot",
+    "networkx",
+    "os",
+    "pathlib",
+    "plotly.express",
+    "plotly.graph_objects",
+    "plotly.subplots",
+    "re",
+    "subprocess",
+    "sys",
+    "typing",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/path",
+      "file": "api_mapper.py"
+    },
+    {
+      "method": "POST",
+      "path": "[^)]*?",
+      "file": "api_mapper.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "metrics_discovery.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "DependencyValidator",
+      "file": "dependency_validator.py",
+      "methods": 15
+    },
+    {
+      "name": "DependencyMapper",
+      "file": "dependency_mapper.py",
+      "methods": 12
+    },
+    {
+      "name": "DependencyReconciler",
+      "file": "dependency_reconciler.py",
+      "methods": 6
+    },
+    {
+      "name": "ServiceDiscovery",
+      "file": "discover_services.py",
+      "methods": 16
+    },
+    {
+      "name": "BusinessLogicMapper",
+      "file": "business_logic_mapper.py",
+      "methods": 5
+    },
+    {
+      "name": "FunctionInfo",
+      "file": "ast_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "ClassInfo",
+      "file": "ast_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "EndpointInfo",
+      "file": "ast_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "ASTAnalyzer",
+      "file": "ast_analyzer.py",
+      "methods": 12
+    },
+    {
+      "name": "APIMapper",
+      "file": "api_mapper.py",
+      "methods": 12
+    },
+    {
+      "name": "MetricsInfo",
+      "file": "metrics_discovery.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricsDiscovery",
+      "file": "metrics_discovery.py",
+      "methods": 15
+    },
+    {
+      "name": "ModuleScanner",
+      "file": "module_scanner.py",
+      "methods": 13
+    },
+    {
+      "name": "ImprovedComposeGenerator",
+      "file": "generate_improved_compose.py",
+      "methods": 11
+    },
+    {
+      "name": "ContainerStatus",
+      "file": "docker_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "DockerManager",
+      "file": "docker_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "DocumentationGenerator",
+      "file": "documentation_generator.py",
+      "methods": 17
+    },
+    {
+      "name": "EventCatalogGenerator",
+      "file": "event_catalog_generator.py",
+      "methods": 10
+    },
+    {
+      "name": "TestGenerator",
+      "file": "test_generator.py",
+      "methods": 9
+    },
+    {
+      "name": "UIBlueprintGenerator",
+      "file": "ui_blueprint_gen.py",
+      "methods": 8
+    },
+    {
+      "name": "APIDocsGenerator",
+      "file": "api_docs_generator.py",
+      "methods": 5
+    },
+    {
+      "name": "AIDocumentationGenerator",
+      "file": "ai_documentation_generator.py",
+      "methods": 7
+    },
+    {
+      "name": "ModuleDashboard",
+      "file": "module_dashboard.py",
+      "methods": 6
+    }
+  ],
+  "functions": [
+    {
+      "name": "generate_readme",
+      "file": "generate-module-docs.py",
+      "params": 2
+    },
+    {
+      "name": "main",
+      "file": "generate-module-docs.py",
+      "params": 0
+    },
+    {
+      "name": "generate_service_readme",
+      "file": "generate-service-docs.py",
+      "params": 2
+    },
+    {
+      "name": "main",
+      "file": "generate-service-docs.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "discover_services.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "business_logic_mapper.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "api_mapper.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "metrics_discovery.py",
+      "params": 0
+    },
+    {
+      "name": "scan_section",
+      "file": "module_scanner.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "generate_improved_compose.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "documentation_generator.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "event_catalog_generator.py",
+      "params": 0
+    },
+    {
+      "name": "load_api_map",
+      "file": "prometheus_config_generator.py",
+      "params": 0
+    },
+    {
+      "name": "extract_services_from_api_map",
+      "file": "prometheus_config_generator.py",
+      "params": 1
+    },
+    {
+      "name": "extract_service_name",
+      "file": "prometheus_config_generator.py",
+      "params": 1
+    },
+    {
+      "name": "generate_prometheus_config",
+      "file": "prometheus_config_generator.py",
+      "params": 1
+    },
+    {
+      "name": "generate_service_discovery_config",
+      "file": "prometheus_config_generator.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "prometheus_config_generator.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "infrastructure/tools/requirements.txt"
+  },
+  "metrics": {
+    "loc": 7749,
+    "python_files": 22,
+    "classes": 23,
+    "functions": 18,
+    "endpoints": 3,
+    "dependencies": 26
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 12150,
+    "lines": 518,
+    "content": "# AI-Platform-ISO: Automation & Analysis Toolkit\n\n> **\u041f\u043e\u043b\u043d\u0430\u044f \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0437\u0430\u0446\u0438\u044f \u0430\u043d\u0430\u043b\u0438\u0437\u0430, \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u0438 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438 \u043c\u0438\u043a\u0440\u043e\u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432**\n\n## \ud83d\udccb \u0421\u043e\u0434\u0435\u0440\u0436\u0430\u043d\u0438\u0435\n\n- [\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0441\u0442\u0430\u0440\u0442](#\u0431\u044b\u0441\u0442\u0440\u044b\u0439-\u0441\u0442\u0430\u0440\u0442)\n- [\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b](#\u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b)\n- [\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435](#\u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435)\n- [\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b](#\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b)\n- [\u041b\u0438\u0446\u0435\u043d\u0437\u0438\u0438](#\u043b\u0438\u0446\u0435\u043d\u0437\u0438\u0438)\n\n---\n\n## \ud83d\ude80 \u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0441\u0442\u0430\u0440\u0442\n\n### 1. \u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 (5 \u043c\u0438\u043d\u0443\u0442)\n\n```bash\ncd /Users/MD/AI-Platform-ISO\nchmod +x tools/setup.sh\n./tools/setup.sh\n```\n\n\u0421\u043a\u0440\u0438\u043f\u0442 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442 \u0432\u0441\u0435 \u043d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u044b\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b \u0438 \u0441\u043e\u0437\u0434\u0430\u0441\u0442 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0434\u0438\u0440\u0435\u043a\u0442\u043e\u0440\u0438\u0439.\n\n### 2. \u0417\u0430\u043f\u0443\u0441\u043a \u043f\u043e\u043b\u043d\u043e\u0433\u043e \u0430\u043d\u0430\u043b\u0438\u0437\u0430 (5 \u043c\u0438\u043d\u0443\u0442)\n\n```bash\nchmod +x tools/run_analysis.sh\n./tools/run_analysis.sh\n```\n\n\u042d\u0442\u043e\u0442 \u0441\u043a\u0440\u0438\u043f\u0442 \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0442:\n- \u2705 AST-\u0430\u043d\u0430\u043b\u0438\u0437 (\u0444\u0443\u043d\u043a\u0446\u0438\u0438, \u043a\u043b\u0430\u0441\u0441\u044b, \u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u044b)\n- \u2705 \u041a\u0430\u0440\u0442\u0443 \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439 \u043c\u0435\u0436\u0434\u0443 \u043c\u043e\u0434\u0443\u043b\u044f\u043c\u0438\n- \u2705 \u0410\u043d\u0430\u043b\u0438\u0437 \u0441\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u043a\u043e\u0434\u0430 (Cyclomatic, Cognitive)\n- \u2705 \u0421\u043a\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u0431\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e\u0441\u0442\u0438 (Bandit OWASP)\n- \u2705 \u0410\u043d\u0430\u043b\u0438\u0437 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0430 \u043a\u043e\u0434\u0430 (Pylint)\n- \u2705 \u0418\u043d\u0442\u0435\u0440\u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0435 \u0434\u0430\u0448\u0431\u043e\u0440\u0434\u044b\n\n### 3. \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432\n\n```bash\n# \u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0433\u043b\u0430\u0432\u043d\u044b\u0439 \u0434\u0430\u0448\u0431\u043e\u0440\u0434\nopen tools/reports/dashboard.html\n\n# \u041e\u0442\u043a\u0440\u044b\u0442\u044c UI blue"
+  }
+}

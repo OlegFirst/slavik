@@ -1,0 +1,33 @@
+{
+  "case_id": "bia_ef6ce0cbf24e",
+  "workflow_id": "demo-workflow-123",
+  "module": "bia",
+  "outcome": "success",
+  "organization_context": {
+    "industry": "healthcare",
+    "size": "medium",
+    "employees": 500
+  },
+  "metrics": {
+    "duration_days": 14,
+    "total_tasks": 8,
+    "completion_rate": 1.0
+  },
+  "decisions": [
+    {
+      "step": "rto_definition",
+      "value": "4 hours",
+      "rationale": "Critical patient care systems require fast recovery"
+    }
+  ],
+  "final_variables": {
+    "rto": "4 hours",
+    "rpo": "1 hour",
+    "critical_processes": [
+      "Patient Care",
+      "Lab Systems"
+    ]
+  },
+  "collected_at": "2025-10-06T09:43:13.015243",
+  "source": "workflow"
+}

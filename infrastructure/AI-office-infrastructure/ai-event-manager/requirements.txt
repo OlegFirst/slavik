@@ -1,0 +1,17 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-multipart==0.0.6
+pyyaml==6.0.1
+
+# HTTP client for integrations
+httpx==0.25.0
+
+# Prometheus metrics
+prometheus-client==0.19.0
+
+# Redis support (for EventBus)
+redis==5.0.1
+
+# Additional dependencies
+aiofiles==23.2.1

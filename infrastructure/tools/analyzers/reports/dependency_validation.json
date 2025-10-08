@@ -1,0 +1,1015 @@
+{
+  "real_dependencies": {
+    "main.py": [
+      "ai_foundation/workflow_intelligence"
+    ],
+    "workflow-engine": [
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "runtime/eventbus",
+      "shared/cache"
+    ],
+    "predictive": [
+      "database/postgresql",
+      "ai_foundation/workflow_intelligence",
+      "ai_services/predictive"
+    ],
+    "expertise-center": [
+      "shared/base",
+      "ai_foundation/expertise_center"
+    ],
+    "collective": [
+      "database/postgresql",
+      "ai_services/collective",
+      "ai_services/community_intelligence",
+      "shared/database"
+    ],
+    "ai_workflow_optimizer": [
+      "database/postgresql"
+    ],
+    "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "workflow_intelligence": [
+      "external/temporal-cloud",
+      "runtime/eventbus",
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "ai_foundation/workflow_engine"
+    ],
+    "ai-foundation": [
+      "ai_foundation/workflow_intelligence",
+      "ai_services/predictive",
+      "database/vector-db",
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "community_intelligence": [
+      "shared/database",
+      "ai_services/predictive",
+      "shared/auth",
+      "database/postgresql",
+      "ai_services/living_docs",
+      "runtime/eventbus",
+      "ai_services/community_intelligence"
+    ],
+    "orchestration": [
+      "external/temporal-cloud",
+      "shared/database",
+      "database/postgresql",
+      "runtime/eventbus",
+      "shared/cache"
+    ],
+    "_archive": [
+      "ai_foundation/workflow_engine",
+      "ai_foundation/workflow_intelligence",
+      "ai_services/predictive",
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "validation_service": [
+      "database/postgresql",
+      "ai_foundation/workflow_intelligence",
+      "shared/database"
+    ],
+    "compliance_service": [
+      "shared/exceptions",
+      "shared/middleware",
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "shared/utils",
+      "shared/cache",
+      "shared/auth",
+      "runtime/eventbus",
+      "shared/config",
+      "shared/audit"
+    ],
+    "governance_service": [
+      "shared/models",
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "shared/utils",
+      "shared/auth",
+      "runtime/eventbus",
+      "shared/config"
+    ],
+    "plans_service": [
+      "database/postgresql",
+      "ai_foundation/workflow_intelligence",
+      "shared/utils"
+    ],
+    "planning_service": [
+      "ai_foundation/workflow_intelligence",
+      "database/postgresql",
+      "shared/utils",
+      "runtime/eventbus",
+      "shared/cache"
+    ],
+    "living_docs": [
+      "database/postgresql",
+      "shared/database"
+    ],
+    "risk_service": [
+      "database/postgresql",
+      "ai_foundation/workflow_intelligence"
+    ],
+    "simulation": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "community_service": [
+      "shared/auth",
+      "database/postgresql",
+      "runtime/eventbus",
+      "shared/database"
+    ],
+    "response_service": [
+      "database/postgresql",
+      "ai_foundation/workflow_intelligence"
+    ],
+    "learning_service": [
+      "shared/models",
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "shared/utils",
+      "shared/auth",
+      "runtime/eventbus",
+      "shared/config"
+    ],
+    "bia_service": [
+      "shared/exceptions",
+      "shared/middleware",
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "shared/utils",
+      "shared/history",
+      "shared/cache",
+      "shared/auth",
+      "runtime/eventbus",
+      "shared/config",
+      "shared/audit"
+    ],
+    "documents_service": [
+      "ai_foundation/workflow_intelligence",
+      "shared/database",
+      "database/postgresql",
+      "shared/auth",
+      "runtime/eventbus"
+    ],
+    "database_postgresql": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "database_vector-db": [
+      "database/vector-db"
+    ],
+    "\u0430\u0440\u0445\u0438\u0432_eventbus": [
+      "runtime/eventbus"
+    ],
+    "\u0430\u0440\u0445\u0438\u0432_event-bus": [
+      "runtime/eventbus"
+    ],
+    "security_auth": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "integration_process_mining_service": [
+      "database/postgresql"
+    ],
+    "integration_github-integration": [
+      "runtime/eventbus"
+    ],
+    "runtime_eventbus": [
+      "runtime/eventbus"
+    ],
+    "runtime_realtime-websocket": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "observability_notification-service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "observability_mio-manager": [
+      "database/postgresql",
+      "ai_foundation/workflow_engine",
+      "ai_foundation/workflow_intelligence"
+    ],
+    "deployment_deployment-service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "gateway_api-gateway": [
+      "runtime/eventbus"
+    ],
+    "gateway_agent-router": [
+      "runtime/eventbus"
+    ],
+    "gateway_unified_database_gateway": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ]
+  },
+  "documented_dependencies": {
+    "workflow_intelligence": [
+      "external/temporal-cloud",
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "ai_workflow_optimizer": [
+      "database/postgresql"
+    ],
+    "workflow_engine": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "expertise_center": [],
+    "expertise-center": [],
+    "workflow-engine": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "orchestration": [
+      "database/postgresql",
+      "runtime/eventbus",
+      "external/external/temporal-cloud"
+    ],
+    "community_intelligence": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "collective": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "predictive": [
+      "database/postgresql"
+    ],
+    "learning_system": [
+      "database/postgresql"
+    ],
+    "living_docs": [
+      "database/postgresql",
+      "database/vector-db"
+    ],
+    "bia_service": [
+      "database/postgresql",
+      "runtime/eventbus",
+      "ai_foundation/workflow_intelligence"
+    ],
+    "risk_service": [
+      "database/postgresql"
+    ],
+    "compliance_service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "governance_service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "incident_service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "validation_service": [
+      "database/postgresql"
+    ],
+    "documents_service": [
+      "database/postgresql",
+      "ai_services/living_docs",
+      "runtime/eventbus"
+    ],
+    "response_service": [
+      "database/postgresql"
+    ],
+    "recovery_service": [
+      "database/postgresql"
+    ],
+    "planning_service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "stakeholder_service": [
+      "database/postgresql"
+    ],
+    "learning_service": [
+      "database/postgresql",
+      "runtime/eventbus",
+      "ai_services/learning_system"
+    ],
+    "integration_process_mining_service": [
+      "database/postgresql"
+    ],
+    "plans_service": [
+      "database/postgresql"
+    ],
+    "community_service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "observability_notification-service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ],
+    "deployment_deployment-service": [
+      "database/postgresql",
+      "runtime/eventbus"
+    ]
+  },
+  "errors": [
+    {
+      "type": "undocumented_dependency",
+      "service": "observability_mio-manager",
+      "missing_dependencies": [
+        "database/postgresql",
+        "ai_foundation/workflow_engine",
+        "ai_foundation/workflow_intelligence"
+      ],
+      "severity": "HIGH",
+      "message": "observability_mio-manager has undocumented dependencies: database/postgresql, ai_foundation/workflow_engine, ai_foundation/workflow_intelligence"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "collective",
+      "missing_dependencies": [
+        "ai_services/collective",
+        "ai_services/community_intelligence",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "collective has undocumented dependencies: ai_services/collective, ai_services/community_intelligence, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "\u0430\u0440\u0445\u0438\u0432_event-bus",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "\u0430\u0440\u0445\u0438\u0432_event-bus has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "workflow_intelligence",
+      "missing_dependencies": [
+        "ai_foundation/workflow_engine",
+        "ai_foundation/workflow_intelligence",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "workflow_intelligence has undocumented dependencies: ai_foundation/workflow_engine, ai_foundation/workflow_intelligence, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "compliance_service",
+      "missing_dependencies": [
+        "shared/exceptions",
+        "shared/middleware",
+        "ai_foundation/workflow_intelligence",
+        "shared/database",
+        "shared/config",
+        "shared/utils",
+        "shared/auth",
+        "shared/cache",
+        "shared/audit"
+      ],
+      "severity": "HIGH",
+      "message": "compliance_service has undocumented dependencies: shared/exceptions, shared/middleware, ai_foundation/workflow_intelligence, shared/database, shared/config, shared/utils, shared/auth, shared/cache, shared/audit"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "validation_service",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "validation_service has undocumented dependencies: ai_foundation/workflow_intelligence, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "learning_service",
+      "missing_dependencies": [
+        "shared/models",
+        "ai_foundation/workflow_intelligence",
+        "shared/database",
+        "shared/utils",
+        "shared/auth",
+        "shared/config"
+      ],
+      "severity": "HIGH",
+      "message": "learning_service has undocumented dependencies: shared/models, ai_foundation/workflow_intelligence, shared/database, shared/utils, shared/auth, shared/config"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "bia_service",
+      "missing_dependencies": [
+        "shared/exceptions",
+        "shared/middleware",
+        "shared/database",
+        "shared/config",
+        "shared/utils",
+        "shared/history",
+        "shared/auth",
+        "shared/cache",
+        "shared/audit"
+      ],
+      "severity": "HIGH",
+      "message": "bia_service has undocumented dependencies: shared/exceptions, shared/middleware, shared/database, shared/config, shared/utils, shared/history, shared/auth, shared/cache, shared/audit"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "gateway_api-gateway",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "gateway_api-gateway has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "gateway_agent-router",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "gateway_agent-router has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "runtime_realtime-websocket",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "runtime_realtime-websocket has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "_archive",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus",
+        "ai_foundation/workflow_engine",
+        "ai_foundation/workflow_intelligence",
+        "ai_services/predictive"
+      ],
+      "severity": "HIGH",
+      "message": "_archive has undocumented dependencies: database/postgresql, runtime/eventbus, ai_foundation/workflow_engine, ai_foundation/workflow_intelligence, ai_services/predictive"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "orchestration",
+      "missing_dependencies": [
+        "external/temporal-cloud",
+        "shared/cache",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "orchestration has undocumented dependencies: external/temporal-cloud, shared/cache, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "community_intelligence",
+      "missing_dependencies": [
+        "ai_services/predictive",
+        "shared/database",
+        "shared/auth",
+        "ai_services/living_docs",
+        "ai_services/community_intelligence"
+      ],
+      "severity": "HIGH",
+      "message": "community_intelligence has undocumented dependencies: ai_services/predictive, shared/database, shared/auth, ai_services/living_docs, ai_services/community_intelligence"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "community_service",
+      "missing_dependencies": [
+        "shared/auth",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "community_service has undocumented dependencies: shared/auth, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "database_vector-db",
+      "missing_dependencies": [
+        "database/vector-db"
+      ],
+      "severity": "HIGH",
+      "message": "database_vector-db has undocumented dependencies: database/vector-db"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "workflow-engine",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence",
+        "shared/database",
+        "shared/cache"
+      ],
+      "severity": "HIGH",
+      "message": "workflow-engine has undocumented dependencies: ai_foundation/workflow_intelligence, shared/database, shared/cache"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "governance_service",
+      "missing_dependencies": [
+        "shared/models",
+        "ai_foundation/workflow_intelligence",
+        "shared/database",
+        "shared/utils",
+        "shared/auth",
+        "shared/config"
+      ],
+      "severity": "HIGH",
+      "message": "governance_service has undocumented dependencies: shared/models, ai_foundation/workflow_intelligence, shared/database, shared/utils, shared/auth, shared/config"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "documents_service",
+      "missing_dependencies": [
+        "shared/auth",
+        "ai_foundation/workflow_intelligence",
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "documents_service has undocumented dependencies: shared/auth, ai_foundation/workflow_intelligence, shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "integration_github-integration",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "integration_github-integration has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "database_postgresql",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "database_postgresql has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "living_docs",
+      "missing_dependencies": [
+        "shared/database"
+      ],
+      "severity": "HIGH",
+      "message": "living_docs has undocumented dependencies: shared/database"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "plans_service",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence",
+        "shared/utils"
+      ],
+      "severity": "HIGH",
+      "message": "plans_service has undocumented dependencies: ai_foundation/workflow_intelligence, shared/utils"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "planning_service",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence",
+        "shared/utils",
+        "shared/cache"
+      ],
+      "severity": "HIGH",
+      "message": "planning_service has undocumented dependencies: ai_foundation/workflow_intelligence, shared/utils, shared/cache"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "ai-foundation",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus",
+        "database/vector-db",
+        "ai_foundation/workflow_intelligence",
+        "ai_services/predictive"
+      ],
+      "severity": "HIGH",
+      "message": "ai-foundation has undocumented dependencies: database/postgresql, runtime/eventbus, database/vector-db, ai_foundation/workflow_intelligence, ai_services/predictive"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "risk_service",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence"
+      ],
+      "severity": "HIGH",
+      "message": "risk_service has undocumented dependencies: ai_foundation/workflow_intelligence"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "simulation",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "simulation has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "main.py",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence"
+      ],
+      "severity": "HIGH",
+      "message": "main.py has undocumented dependencies: ai_foundation/workflow_intelligence"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "\u0430\u0440\u0445\u0438\u0432_eventbus",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "\u0430\u0440\u0445\u0438\u0432_eventbus has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "gateway_unified_database_gateway",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "gateway_unified_database_gateway has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "response_service",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence"
+      ],
+      "severity": "HIGH",
+      "message": "response_service has undocumented dependencies: ai_foundation/workflow_intelligence"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "runtime_eventbus",
+      "missing_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "runtime_eventbus has undocumented dependencies: runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "security_auth",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "security_auth has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f",
+      "missing_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "HIGH",
+      "message": "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f has undocumented dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "predictive",
+      "missing_dependencies": [
+        "ai_foundation/workflow_intelligence",
+        "ai_services/predictive"
+      ],
+      "severity": "HIGH",
+      "message": "predictive has undocumented dependencies: ai_foundation/workflow_intelligence, ai_services/predictive"
+    },
+    {
+      "type": "undocumented_dependency",
+      "service": "expertise-center",
+      "missing_dependencies": [
+        "shared/base",
+        "ai_foundation/expertise_center"
+      ],
+      "severity": "HIGH",
+      "message": "expertise-center has undocumented dependencies: shared/base, ai_foundation/expertise_center"
+    },
+    {
+      "type": "service_not_found",
+      "service": "learning_system",
+      "location": "intelligent-core/learning-system",
+      "severity": "CRITICAL",
+      "message": "learning_system location does not exist: intelligent-core/learning-system"
+    },
+    {
+      "type": "service_not_found",
+      "service": "living_docs",
+      "location": "intelligent-core/living-docs",
+      "severity": "CRITICAL",
+      "message": "living_docs location does not exist: intelligent-core/living-docs"
+    },
+    {
+      "type": "service_not_found",
+      "service": "incident_service",
+      "location": "platform-services/incident-service",
+      "severity": "CRITICAL",
+      "message": "incident_service location does not exist: platform-services/incident-service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "recovery_service",
+      "location": "platform-services/recovery-service",
+      "severity": "CRITICAL",
+      "message": "recovery_service location does not exist: platform-services/recovery-service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "planning_service",
+      "location": "platform-services/planning-service",
+      "severity": "CRITICAL",
+      "message": "planning_service location does not exist: platform-services/planning-service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "stakeholder_service",
+      "location": "platform-services/stakeholder-service",
+      "severity": "CRITICAL",
+      "message": "stakeholder_service location does not exist: platform-services/stakeholder-service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "integration_process_mining_service",
+      "location": "unknown/integration_process_mining_service",
+      "severity": "CRITICAL",
+      "message": "integration_process_mining_service location does not exist: unknown/integration_process_mining_service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "community_service",
+      "location": "unknown/community_service",
+      "severity": "CRITICAL",
+      "message": "community_service location does not exist: unknown/community_service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "observability_notification-service",
+      "location": "unknown/observability_notification-service",
+      "severity": "CRITICAL",
+      "message": "observability_notification-service location does not exist: unknown/observability_notification-service"
+    },
+    {
+      "type": "service_not_found",
+      "service": "deployment_deployment-service",
+      "location": "unknown/deployment_deployment-service",
+      "severity": "CRITICAL",
+      "message": "deployment_deployment-service location does not exist: unknown/deployment_deployment-service"
+    }
+  ],
+  "warnings": [
+    {
+      "type": "unused_dependency",
+      "service": "collective",
+      "unused_dependencies": [
+        "runtime/eventbus"
+      ],
+      "severity": "MEDIUM",
+      "message": "collective has documented but unused dependencies: runtime/eventbus"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "workflow_engine",
+      "unused_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "MEDIUM",
+      "message": "workflow_engine has documented but unused dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "learning_service",
+      "unused_dependencies": [
+        "ai_services/learning_system"
+      ],
+      "severity": "MEDIUM",
+      "message": "learning_service has documented but unused dependencies: ai_services/learning_system"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "orchestration",
+      "unused_dependencies": [
+        "external/external/temporal-cloud"
+      ],
+      "severity": "MEDIUM",
+      "message": "orchestration has documented but unused dependencies: external/external/temporal-cloud"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "documents_service",
+      "unused_dependencies": [
+        "ai_services/living_docs"
+      ],
+      "severity": "MEDIUM",
+      "message": "documents_service has documented but unused dependencies: ai_services/living_docs"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "living_docs",
+      "unused_dependencies": [
+        "database/vector-db"
+      ],
+      "severity": "MEDIUM",
+      "message": "living_docs has documented but unused dependencies: database/vector-db"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "recovery_service",
+      "unused_dependencies": [
+        "database/postgresql"
+      ],
+      "severity": "MEDIUM",
+      "message": "recovery_service has documented but unused dependencies: database/postgresql"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "incident_service",
+      "unused_dependencies": [
+        "database/postgresql",
+        "runtime/eventbus"
+      ],
+      "severity": "MEDIUM",
+      "message": "incident_service has documented but unused dependencies: database/postgresql, runtime/eventbus"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "stakeholder_service",
+      "unused_dependencies": [
+        "database/postgresql"
+      ],
+      "severity": "MEDIUM",
+      "message": "stakeholder_service has documented but unused dependencies: database/postgresql"
+    },
+    {
+      "type": "unused_dependency",
+      "service": "learning_system",
+      "unused_dependencies": [
+        "database/postgresql"
+      ],
+      "severity": "MEDIUM",
+      "message": "learning_system has documented but unused dependencies: database/postgresql"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "recovery_service",
+      "documented_port": 8018,
+      "severity": "LOW",
+      "message": "recovery_service has documented port 8018 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "collective",
+      "documented_port": 8032,
+      "severity": "LOW",
+      "message": "collective has documented port 8032 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "planning_service",
+      "documented_port": 8019,
+      "severity": "LOW",
+      "message": "planning_service has documented port 8019 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "workflow_engine",
+      "documented_port": 8002,
+      "severity": "LOW",
+      "message": "workflow_engine has documented port 8002 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "risk_service",
+      "documented_port": 8011,
+      "severity": "LOW",
+      "message": "risk_service has documented port 8011 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "incident_service",
+      "documented_port": 8014,
+      "severity": "LOW",
+      "message": "incident_service has documented port 8014 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "stakeholder_service",
+      "documented_port": 8020,
+      "severity": "LOW",
+      "message": "stakeholder_service has documented port 8020 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "workflow_intelligence",
+      "documented_port": 8001,
+      "severity": "LOW",
+      "message": "workflow_intelligence has documented port 8001 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "bia_service",
+      "documented_port": 8010,
+      "severity": "LOW",
+      "message": "bia_service has documented port 8010 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "compliance_service",
+      "documented_port": 8012,
+      "severity": "LOW",
+      "message": "compliance_service has documented port 8012 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "validation_service",
+      "documented_port": 8015,
+      "severity": "LOW",
+      "message": "validation_service has documented port 8015 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "learning_service",
+      "documented_port": 8021,
+      "severity": "LOW",
+      "message": "learning_service has documented port 8021 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "response_service",
+      "documented_port": 8017,
+      "severity": "LOW",
+      "message": "response_service has documented port 8017 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "learning_system",
+      "documented_port": 8033,
+      "severity": "LOW",
+      "message": "learning_system has documented port 8033 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "community_intelligence",
+      "documented_port": 8030,
+      "severity": "LOW",
+      "message": "community_intelligence has documented port 8030 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "governance_service",
+      "documented_port": 8013,
+      "severity": "LOW",
+      "message": "governance_service has documented port 8013 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "documents_service",
+      "documented_port": 8016,
+      "severity": "LOW",
+      "message": "documents_service has documented port 8016 but not found in code"
+    },
+    {
+      "type": "port_not_found_in_code",
+      "service": "living_docs",
+      "documented_port": 8034,
+      "severity": "LOW",
+      "message": "living_docs has documented port 8034 but not found in code"
+    }
+  ],
+  "stats": {
+    "total_services_documented": 29,
+    "total_services_in_code": 40,
+    "total_errors": 46,
+    "total_warnings": 28,
+    "critical_errors": 10,
+    "high_errors": 36,
+    "accuracy": 26.53061224489796
+  }
+}

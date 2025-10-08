@@ -1,0 +1,30 @@
+
+  community_service:
+    type: business-service
+    location: platform-services/community-service
+    port: 8031
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_client
+        - shared/auth
+        - shared/database
+    endpoints:
+      - GET /health
+      - GET /
+      - GET /{scenario_id}
+      - POST /{scenario_id}/deploy
+      - POST /{scenario_id}/reviews
+    metrics:
+      loc: 18334
+      files: 70
+      classes: 170
+      functions: 8
+    status: discovered

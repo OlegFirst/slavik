@@ -1,0 +1,27 @@
+
+  integration:
+    type: service
+    location: infrastructure/integration
+    port: 8001
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /
+      - POST /github/webhook
+      - POST /auth/token-exchange
+      - POST /claude/analyze-changes
+      - POST /claude/generate-config
+    metrics:
+      loc: 1839
+      files: 8
+      classes: 19
+      functions: 0
+    status: discovered

@@ -1,0 +1,44 @@
+
+  _archive:
+    type: service
+    location: intelligent-core/_archive
+    port: 8032
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+        - external/anthropic
+      internal:
+        - ai_experts.api
+        - ai_experts.base.expert_agent
+        - ai_experts.learning
+        - ai_experts.ml
+        - ai_experts.rag
+        - ai_experts.rag.pipeline
+        - ai_experts.specialists.bcm_advisor
+        - ai_experts.specialists.compliance_auditor
+        - ai_experts.specialists.strategic_planner
+        - ai_experts.tools
+        - ai_experts.tools.case_library_tool
+        - ai_foundation/core
+        - ai_foundation/workflow_intelligence
+        - ai_services/ai_experts
+        - ai_services/ml
+        - ai_services/predictive_analytics
+        - ai_services/predictive_models
+    endpoints:
+      - GET /health
+      - GET /
+      - POST /api/v1/projects
+      - GET /api/v1/projects/{project_id}
+      - GET /api/v1/projects
+    metrics:
+      loc: 31643
+      files: 167
+      classes: 204
+      functions: 40
+    status: discovered

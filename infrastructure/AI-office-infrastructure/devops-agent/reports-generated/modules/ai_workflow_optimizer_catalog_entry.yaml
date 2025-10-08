@@ -1,0 +1,27 @@
+
+  ai_workflow_optimizer:
+    type: ai-service
+    location: intelligent-core/ai_workflow_optimizer
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - shared/platform_client
+    endpoints:
+      - GET /health
+      - GET /metrics
+      - POST /api/v1/optimize/performance
+      - GET /api/v1/analyze/bottlenecks/{process_id}
+      - GET /api/v1/optimize/resources/{process_id}
+    metrics:
+      loc: 1701
+      files: 2
+      classes: 10
+      functions: 2
+    status: discovered

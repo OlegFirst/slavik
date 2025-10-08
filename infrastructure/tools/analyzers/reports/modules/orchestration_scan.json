@@ -1,0 +1,1569 @@
+{
+  "module_name": "orchestration",
+  "path": "intelligent-core/orchestration",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "__init__.py",
+      "pdca_assistant.py"
+    ],
+    "bcm-services-orchestrator": [
+      "bcm_orchestrator.py",
+      "__init__.py",
+      "analyzer_coordinator.py",
+      "service_registry.py",
+      "README.md"
+    ],
+    "ai-orchestration": [
+      "ARCHITECTURE.md",
+      ".DS_Store",
+      "models.py",
+      "requirements.txt",
+      "CODE_INVENTORY.md",
+      "Dockerfile",
+      "test_imports.py",
+      "INTEGRATION_SPEC.md",
+      "__init__.py",
+      "README.md",
+      "DEPLOYMENT_GUIDE.md",
+      "orchestrator.py",
+      "AI_OFFICE_INTEGRATION.md",
+      "CONSOLIDATION_COMPLETE.md",
+      "docker-compose.yml",
+      "BUILD_STATUS.md",
+      "test_quick.py",
+      "MODULE_SUMMARY.md",
+      "COMPLETE_VERIFICATION.md",
+      "main.py",
+      "INTEGRATION_SUMMARY.md"
+    ],
+    "ai-orchestration/control_center": [
+      "__init__.py",
+      "unified_controller.py"
+    ],
+    "ai-orchestration/core": [
+      "base_orchestrator.py",
+      "__init__.py",
+      "health_monitor.py",
+      "service_registry.py",
+      "docker_manager.py",
+      "event_coordinator.py"
+    ],
+    "ai-orchestration/memory": [
+      "working_memory.py",
+      "procedural_memory.py",
+      "short_term_memory.py",
+      "__init__.py",
+      "distributed_memory.py",
+      "long_term_memory.py"
+    ],
+    "ai-orchestration/config": [
+      "__init__.py"
+    ],
+    "ai-orchestration/platform": [
+      "deployment_manager.py",
+      "__init__.py",
+      "platform_orchestrator.py",
+      "service_groups.py"
+    ],
+    "ai-orchestration/tests": [
+      "test_decision_center.py",
+      "test_safety.py",
+      "__init__.py",
+      "test_orchestrator.py",
+      "test_memory.py",
+      "test_evolution.py"
+    ],
+    "ai-orchestration/decision_center": [
+      "context_aggregator.py",
+      "__init__.py",
+      "priority_engine.py",
+      "delegation_manager.py",
+      "strategy_selector.py"
+    ],
+    "ai-orchestration/tentacles": [
+      "knowledge_orchestrator.py",
+      "__init__.py",
+      "ai_office_connector.py"
+    ],
+    "ai-orchestration/muscles": [
+      ".DS_Store",
+      "__init__.py",
+      "agent_router.py",
+      "model_selector.py"
+    ],
+    "ai-orchestration/muscles/llm_clients": [
+      "anthropic_client.py"
+    ],
+    "ai-orchestration/muscles/ai_organs": [
+      "compliance_guardian.py",
+      "risk_advisor.py",
+      "plan_generator.py",
+      "impact_oracle.py",
+      "__init__.py",
+      "base_organ.py",
+      "emergency_response.py",
+      "learning_coach.py",
+      "lifecycle_monitor.py",
+      "scenario_creator.py",
+      "governance_brain.py",
+      "performance_analyst.py"
+    ],
+    "ai-orchestration/models": [
+      "scenario_models.py",
+      "platform_models.py",
+      "__init__.py",
+      "ai_models.py",
+      "deployment_models.py"
+    ],
+    "ai-orchestration/safety": [
+      "control_monitor.py",
+      "hallucination_detector.py",
+      "__init__.py",
+      "safety_monitor.py",
+      "constitution_enforcer.py",
+      "loop_detector.py"
+    ],
+    "ai-orchestration/integrations": [
+      "__init__.py",
+      "github_client.py"
+    ],
+    "ai-orchestration/scenario": [
+      "learning_engine.py",
+      "scenario_orchestrator.py",
+      "__init__.py"
+    ],
+    "ai-orchestration/ai": [
+      "claude_engine.py",
+      "intelligence_engine.py",
+      "__init__.py",
+      "devops_engine.py",
+      "agent_router.py",
+      "ai_orchestrator.py"
+    ],
+    "ai-orchestration/examples": [
+      "basic_usage.py",
+      "safety_demo.py"
+    ],
+    "ai-orchestration/evolution": [
+      "data_evolution.py",
+      "code_evolution.py",
+      "__init__.py",
+      "evolution_engine.py",
+      "model_evolution.py"
+    ],
+    "ai-orchestration/workflow": [
+      "__init__.py"
+    ],
+    "ai-orchestration/api": [
+      "__init__.py",
+      "monitoring_routes.py"
+    ],
+    "coordination-center": [
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "docker-compose.monitoring.yml",
+      "QUICKSTART.md",
+      "README.md",
+      "PHASE2_SUMMARY.md",
+      "MIGRATION_STRATEGY.md",
+      "docker-compose.yml",
+      ".env.example",
+      "main.py"
+    ],
+    "coordination-center/core": [
+      "service_aggregator.py",
+      "tool_registry.py",
+      "__init__.py",
+      "execution_tracker.py",
+      "command_interpreter.py",
+      "security_layer.py"
+    ],
+    "coordination-center/claude-integration": [
+      "__init__.py",
+      "README.md",
+      "governance_brain.py"
+    ],
+    "coordination-center/tests": [
+      "__init__.py",
+      "test_e2e_bia_creation.py"
+    ],
+    "coordination-center/models": [
+      "__init__.py",
+      "schemas.py"
+    ],
+    "coordination-center/api": [
+      "__init__.py",
+      "routes.py"
+    ],
+    "coordination-center/monitoring": [
+      "loki-config.yml",
+      "prometheus.yml"
+    ],
+    "coordination-center/monitoring/grafana/datasources": [
+      "datasource.yml"
+    ],
+    "coordination-center/monitoring/grafana/dashboards": [
+      "dashboard.yml"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "agent_router",
+    "ai",
+    "ai.agent_router",
+    "ai.ai_orchestrator",
+    "ai.devops_engine",
+    "ai.intelligence_engine",
+    "ai_models",
+    "ai_office_connector",
+    "ai_orchestrator",
+    "analyzer_coordinator",
+    "api.routes",
+    "asyncio",
+    "asyncpg",
+    "base64",
+    "base_orchestrator",
+    "base_organ",
+    "bcm_orchestrator",
+    "collections",
+    "compliance_guardian",
+    "contextlib",
+    "control_center",
+    "control_center.unified_controller",
+    "core",
+    "core.base_orchestrator",
+    "core.command_interpreter",
+    "core.docker_manager",
+    "core.event_coordinator",
+    "core.execution_tracker",
+    "core.health_monitor",
+    "core.security_layer",
+    "core.service_registry",
+    "core.tool_registry",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "deployment_manager",
+    "deployment_models",
+    "devops_engine",
+    "docker",
+    "docker_manager",
+    "emergency_response",
+    "enum",
+    "event_coordinator",
+    "external/anthropic",
+    "external/temporal-cloud",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "github_client",
+    "governance_brain",
+    "health_monitor",
+    "httpx",
+    "impact_oracle",
+    "importlib.util",
+    "integrations",
+    "integrations.github_client",
+    "intelligence_engine",
+    "intelligent_core.ai_orchestration",
+    "intelligent_core.ai_orchestration.decision_center",
+    "intelligent_core.ai_orchestration.decision_center.context_aggregator",
+    "intelligent_core.ai_orchestration.decision_center.delegation_manager",
+    "intelligent_core.ai_orchestration.decision_center.priority_engine",
+    "intelligent_core.ai_orchestration.decision_center.strategy_selector",
+    "intelligent_core.ai_orchestration.evolution",
+    "intelligent_core.ai_orchestration.evolution.code_evolution",
+    "intelligent_core.ai_orchestration.evolution.data_evolution",
+    "intelligent_core.ai_orchestration.evolution.evolution_engine",
+    "intelligent_core.ai_orchestration.evolution.model_evolution",
+    "intelligent_core.ai_orchestration.memory",
+    "intelligent_core.ai_orchestration.memory.distributed_memory",
+    "intelligent_core.ai_orchestration.memory.long_term_memory",
+    "intelligent_core.ai_orchestration.memory.procedural_memory",
+    "intelligent_core.ai_orchestration.memory.short_term_memory",
+    "intelligent_core.ai_orchestration.memory.working_memory",
+    "intelligent_core.ai_orchestration.models",
+    "intelligent_core.ai_orchestration.orchestrator",
+    "intelligent_core.ai_orchestration.safety",
+    "intelligent_core.ai_orchestration.safety.constitution_enforcer",
+    "intelligent_core.ai_orchestration.safety.control_monitor",
+    "intelligent_core.ai_orchestration.safety.hallucination_detector",
+    "intelligent_core.ai_orchestration.safety.loop_detector",
+    "intelligent_core.ai_orchestration.safety.safety_monitor",
+    "json",
+    "knowledge_orchestrator",
+    "learning_coach",
+    "learning_engine",
+    "lifecycle_monitor",
+    "logging",
+    "model_selector",
+    "models",
+    "models.ai_models",
+    "models.deployment_models",
+    "models.platform_models",
+    "models.scenario_models",
+    "models.schemas",
+    "monitoring.health",
+    "monitoring.metrics",
+    "os",
+    "pathlib",
+    "performance_analyst",
+    "plan_generator",
+    "platform",
+    "platform.deployment_manager",
+    "platform.platform_orchestrator",
+    "platform.service_groups",
+    "platform_models",
+    "platform_orchestrator",
+    "prometheus_client",
+    "prometheus_fastapi_instrumentator",
+    "pydantic",
+    "pytest",
+    "random",
+    "re",
+    "risk_advisor",
+    "runtime/eventbus",
+    "scenario",
+    "scenario.learning_engine",
+    "scenario.scenario_orchestrator",
+    "scenario_creator",
+    "scenario_models",
+    "scenario_orchestrator",
+    "service_groups",
+    "service_registry",
+    "shared/cache",
+    "shared/database",
+    "subprocess",
+    "sys",
+    "time",
+    "tool_registry",
+    "traceback",
+    "typing",
+    "unified_controller",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "pdca_assistant.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/message",
+      "file": "pdca_assistant.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/actions",
+      "file": "pdca_assistant.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/actions/{action_id}/execute",
+      "file": "pdca_assistant.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/phase/update",
+      "file": "pdca_assistant.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/system/restart",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/system/orchestrator/{orchestrator}/restart",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/platform/services/{service}/start",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/platform/services/{service}/stop",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/platform/services/{service}/restart",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/services/{service}/status",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/services",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/status",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/rules",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/rules/{rule_name}/enable",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/rules/{rule_name}/disable",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/decisions",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/decisions/{decision_id}/approve",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/decisions/{decision_id}/reject",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenario/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/scenario/generate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenario/{scenario_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenario/{scenario_id}/learning",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenario/learning/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/publish",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/start",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/bcm/bia/start",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/bcm/incident/report",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/bcm/audit/start",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/analyze/process-risk",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/analyze/incident",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/nlp/query",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/claude/analyze-changes",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/claude/generate-config",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/claude/create-pr",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/agent/process",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/agents/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/agents/analytics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/token-exchange",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh-token",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/deployment/orchestrate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/deployment/history",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks/all",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/search",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/platform",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/cross-service-learning",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/sync-benchmarks",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/clear-cache",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/stats",
+      "file": "knowledge_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/live",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/performance",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/quality",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/business",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/errors",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/active",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/history",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/storage/size",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/storage/capacity",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/performance/slow-queries",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/performance/bottlenecks",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/trends/usage",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/trends/learning",
+      "file": "monitoring_routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/execute",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/executions/{execution_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/executions",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/executions/{execution_id}/approve",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/executions/{execution_id}/rollback",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/tools",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/tools/{tool_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audit",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "PDCAPhase",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "AssistantContext",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionType",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "NextBestAction",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "PDCAScenario",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "AssistantMessage",
+      "file": "pdca_assistant.py",
+      "methods": 0
+    },
+    {
+      "name": "PDCAAssistant",
+      "file": "pdca_assistant.py",
+      "methods": 3
+    },
+    {
+      "name": "ExecutionStrategy",
+      "file": "bcm_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMServicesOrchestrator",
+      "file": "bcm_orchestrator.py",
+      "methods": 4
+    },
+    {
+      "name": "AnalyzerType",
+      "file": "analyzer_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzerCoordinator",
+      "file": "analyzer_coordinator.py",
+      "methods": 4
+    },
+    {
+      "name": "ISO22301Clause",
+      "file": "service_registry.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMServiceType",
+      "file": "service_registry.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMServiceRegistry",
+      "file": "service_registry.py",
+      "methods": 7
+    },
+    {
+      "name": "PriorityLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "MemoryType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Priority",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "Strategy",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Decision",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "FullContext",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SafetyConcern",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SafetyResult",
+      "file": "models.py",
+      "methods": 2
+    },
+    {
+      "name": "Memory",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Loop",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HallucinationScore",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "AIOrchestrator",
+      "file": "orchestrator.py",
+      "methods": 5
+    },
+    {
+      "name": "UnifiedController",
+      "file": "unified_controller.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseOrchestrator",
+      "file": "base_orchestrator.py",
+      "methods": 2
+    },
+    {
+      "name": "HealthStatus",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResult",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "HealthCheck",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthMonitor",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "Service",
+      "file": "service_registry.py",
+      "methods": 1
+    },
+    {
+      "name": "ServiceRegistry",
+      "file": "service_registry.py",
+      "methods": 1
+    },
+    {
+      "name": "ContainerStatus",
+      "file": "docker_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "DockerManager",
+      "file": "docker_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "Event",
+      "file": "event_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "EventCoordinator",
+      "file": "event_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "WorkingMemory",
+      "file": "working_memory.py",
+      "methods": 4
+    },
+    {
+      "name": "ProceduralMemory",
+      "file": "procedural_memory.py",
+      "methods": 2
+    },
+    {
+      "name": "ShortTermMemory",
+      "file": "short_term_memory.py",
+      "methods": 2
+    },
+    {
+      "name": "DistributedMemory",
+      "file": "distributed_memory.py",
+      "methods": 3
+    },
+    {
+      "name": "LongTermMemory",
+      "file": "long_term_memory.py",
+      "methods": 2
+    },
+    {
+      "name": "DeploymentManager",
+      "file": "deployment_manager.py",
+      "methods": 1
+    },
+    {
+      "name": "PlatformOrchestrator",
+      "file": "platform_orchestrator.py",
+      "methods": 1
+    },
+    {
+      "name": "ServiceGroup",
+      "file": "service_groups.py",
+      "methods": 2
+    },
+    {
+      "name": "ContextAggregator",
+      "file": "context_aggregator.py",
+      "methods": 1
+    },
+    {
+      "name": "PriorityEngine",
+      "file": "priority_engine.py",
+      "methods": 6
+    },
+    {
+      "name": "DelegationManager",
+      "file": "delegation_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "StrategySelector",
+      "file": "strategy_selector.py",
+      "methods": 4
+    },
+    {
+      "name": "ServiceHealth",
+      "file": "knowledge_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "GlobalBenchmarks",
+      "file": "knowledge_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "CrossServiceStats",
+      "file": "knowledge_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "AIColleague",
+      "file": "ai_office_connector.py",
+      "methods": 0
+    },
+    {
+      "name": "PDCAPhase",
+      "file": "ai_office_connector.py",
+      "methods": 0
+    },
+    {
+      "name": "AssistantContext",
+      "file": "ai_office_connector.py",
+      "methods": 0
+    },
+    {
+      "name": "AIOfficeConnector",
+      "file": "ai_office_connector.py",
+      "methods": 1
+    },
+    {
+      "name": "AgentCapability",
+      "file": "agent_router.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentRole",
+      "file": "agent_router.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAgent",
+      "file": "agent_router.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAgentRouter",
+      "file": "agent_router.py",
+      "methods": 5
+    },
+    {
+      "name": "TaskComplexity",
+      "file": "model_selector.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMModelRouter",
+      "file": "model_selector.py",
+      "methods": 7
+    },
+    {
+      "name": "AnthropicGovernanceBrain",
+      "file": "anthropic_client.py",
+      "methods": 1
+    },
+    {
+      "name": "ComplianceGuardian",
+      "file": "compliance_guardian.py",
+      "methods": 8
+    },
+    {
+      "name": "RiskAdvisor",
+      "file": "risk_advisor.py",
+      "methods": 5
+    },
+    {
+      "name": "ImpactOracle",
+      "file": "impact_oracle.py",
+      "methods": 5
+    },
+    {
+      "name": "BaseAIOrgan",
+      "file": "base_organ.py",
+      "methods": 4
+    },
+    {
+      "name": "EmergencyResponse",
+      "file": "emergency_response.py",
+      "methods": 6
+    },
+    {
+      "name": "LearningCoach",
+      "file": "learning_coach.py",
+      "methods": 10
+    },
+    {
+      "name": "LifecycleMonitor",
+      "file": "lifecycle_monitor.py",
+      "methods": 7
+    },
+    {
+      "name": "ScenarioCreator",
+      "file": "scenario_creator.py",
+      "methods": 7
+    },
+    {
+      "name": "GovernanceBrain",
+      "file": "governance_brain.py",
+      "methods": 7
+    },
+    {
+      "name": "PerformanceAnalyst",
+      "file": "performance_analyst.py",
+      "methods": 7
+    },
+    {
+      "name": "ScenarioGenerationRequest",
+      "file": "scenario_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "scenario_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioLearning",
+      "file": "scenario_models.py",
+      "methods": 0
+    },
+    {
+      "name": "EventPublishRequest",
+      "file": "platform_models.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowStartRequest",
+      "file": "platform_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAStartRequest",
+      "file": "platform_models.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentReportRequest",
+      "file": "platform_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditStartRequest",
+      "file": "platform_models.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskLevel",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentCategory",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionType",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BusinessProcess",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Incident",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "NaturalLanguageQuery",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AIDecision",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Decision",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "OrchestratorRule",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationRequest",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationResponse",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditSummaryRequest",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditSummaryResponse",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionApprovalRequest",
+      "file": "ai_models.py",
+      "methods": 0
+    },
+    {
+      "name": "DeploymentPlan",
+      "file": "deployment_models.py",
+      "methods": 0
+    },
+    {
+      "name": "DeploymentResult",
+      "file": "deployment_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ControlMonitor",
+      "file": "control_monitor.py",
+      "methods": 7
+    },
+    {
+      "name": "HallucinationDetector",
+      "file": "hallucination_detector.py",
+      "methods": 2
+    },
+    {
+      "name": "SafetyMonitor",
+      "file": "safety_monitor.py",
+      "methods": 2
+    },
+    {
+      "name": "ConstitutionEnforcer",
+      "file": "constitution_enforcer.py",
+      "methods": 5
+    },
+    {
+      "name": "LoopDetector",
+      "file": "loop_detector.py",
+      "methods": 6
+    },
+    {
+      "name": "GitHubTokenManager",
+      "file": "github_client.py",
+      "methods": 6
+    },
+    {
+      "name": "LearningEngine",
+      "file": "learning_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "ScenarioOrchestrator",
+      "file": "scenario_orchestrator.py",
+      "methods": 4
+    },
+    {
+      "name": "ClaudeProEngine",
+      "file": "claude_engine.py",
+      "methods": 2
+    },
+    {
+      "name": "IntelligenceEngine",
+      "file": "intelligence_engine.py",
+      "methods": 5
+    },
+    {
+      "name": "DevOpsEngine",
+      "file": "devops_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "AgentCapability",
+      "file": "agent_router.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentStatus",
+      "file": "agent_router.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAgentRouter",
+      "file": "agent_router.py",
+      "methods": 4
+    },
+    {
+      "name": "AIOrchestrator",
+      "file": "ai_orchestrator.py",
+      "methods": 1
+    },
+    {
+      "name": "DataEvolution",
+      "file": "data_evolution.py",
+      "methods": 1
+    },
+    {
+      "name": "CodeEvolution",
+      "file": "code_evolution.py",
+      "methods": 1
+    },
+    {
+      "name": "EvolutionEngine",
+      "file": "evolution_engine.py",
+      "methods": 5
+    },
+    {
+      "name": "ModelEvolution",
+      "file": "model_evolution.py",
+      "methods": 1
+    },
+    {
+      "name": "AggregationStrategy",
+      "file": "service_aggregator.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceAggregator",
+      "file": "service_aggregator.py",
+      "methods": 6
+    },
+    {
+      "name": "ToolRegistry",
+      "file": "tool_registry.py",
+      "methods": 7
+    },
+    {
+      "name": "ExecutionTracker",
+      "file": "execution_tracker.py",
+      "methods": 1
+    },
+    {
+      "name": "CommandInterpreter",
+      "file": "command_interpreter.py",
+      "methods": 10
+    },
+    {
+      "name": "Permission",
+      "file": "security_layer.py",
+      "methods": 0
+    },
+    {
+      "name": "AIPermissions",
+      "file": "security_layer.py",
+      "methods": 2
+    },
+    {
+      "name": "RateLimiter",
+      "file": "security_layer.py",
+      "methods": 3
+    },
+    {
+      "name": "AuditLogger",
+      "file": "security_layer.py",
+      "methods": 3
+    },
+    {
+      "name": "SecurityLayer",
+      "file": "security_layer.py",
+      "methods": 2
+    },
+    {
+      "name": "AnthropicGovernanceBrain",
+      "file": "governance_brain.py",
+      "methods": 1
+    },
+    {
+      "name": "ExecutionStatus",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolCategory",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionType",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "IntentContext",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "Intent",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolParameter",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolDefinition",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExecutionStep",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExecutionCreate",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExecutionResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ExecutionListResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalRequest",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "RollbackRequest",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditLogEntry",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolListResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResponse",
+      "file": "schemas.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "test_core_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_model_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_platform_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_ai_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_scenario_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_control_center_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_integration_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_main_imports",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "test_imports.py",
+      "params": 0
+    },
+    {
+      "name": "test_imports",
+      "file": "test_quick.py",
+      "params": 0
+    },
+    {
+      "name": "get_startup_order",
+      "file": "service_groups.py",
+      "params": 0
+    },
+    {
+      "name": "get_parallel_groups",
+      "file": "service_groups.py",
+      "params": 0
+    },
+    {
+      "name": "validate_service_groups",
+      "file": "service_groups.py",
+      "params": 0
+    },
+    {
+      "name": "get_ai_office_connector",
+      "file": "ai_office_connector.py",
+      "params": 1
+    },
+    {
+      "name": "create_app",
+      "file": "main.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 22120,
+    "python_files": 108,
+    "classes": 146,
+    "functions": 15,
+    "endpoints": 80,
+    "dependencies": 135
+  },
+  "readme": null
+}

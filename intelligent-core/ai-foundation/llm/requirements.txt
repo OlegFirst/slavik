@@ -1,0 +1,16 @@
+# LiteLLM - Multi-provider LLM orchestration
+litellm==1.17.9
+
+# LLM Providers
+anthropic==0.18.1
+openai==1.12.0
+
+# Optional: Local models
+# ollama==0.1.6
+
+# Caching
+redis==5.0.1
+
+# Async support
+aiohttp==3.9.1
+httpx==0.26.0

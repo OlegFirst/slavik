@@ -1,0 +1,871 @@
+{
+  "module_name": "plans_service",
+  "path": "platform-services/plans_service",
+  "structure": {
+    ".": [
+      "API.md",
+      "config.py",
+      "pytest.ini",
+      "requirements.txt",
+      "IMPLEMENTATION_COMPLETE.md",
+      "Dockerfile",
+      ".coverage",
+      "ENDPOINT_AUTH_SUMMARY.md",
+      "database.py",
+      "__init__.py",
+      "EVENTBUS_SUMMARY.md",
+      "JWT_AUTH_IMPLEMENTATION_REPORT.md",
+      "README.md",
+      "verify_implementation.sh",
+      "test_jwt_auth.py",
+      "requirements-dev.txt",
+      "TEST_RESULTS.md",
+      "AUTH_QUICK_REFERENCE.txt",
+      ".env.example",
+      "main.py",
+      "EVENTBUS_INTEGRATION.md",
+      "test_eventbus_integration.py",
+      "workflow_integration.py",
+      "dependencies.py"
+    ],
+    ".pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    ".pytest_cache/v/cache": [
+      "nodeids",
+      "lastfailed",
+      "stepwise"
+    ],
+    "auth": [
+      "models.py",
+      "__init__.py",
+      "dependencies.py"
+    ],
+    "tests": [
+      "test_repository.py",
+      "test_workflows.py",
+      "test_cache_integration.py",
+      "conftest.py",
+      "test_validation.py",
+      "test_auth.py",
+      "__init__.py",
+      "test_procedure_validator.py"
+    ],
+    "workflows": [
+      "review_workflow.py",
+      "plan_lifecycle.py",
+      "__init__.py"
+    ],
+    "repositories": [
+      "plan_repository.py",
+      "__init__.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "metrics.py",
+      "health.py",
+      "__init__.py",
+      "rate_limit.py",
+      "error_handlers.py",
+      "bulk_operations.py",
+      "routes.py"
+    ],
+    "services": [
+      "procedure_validator.py",
+      "__init__.py",
+      "plan_service.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "api.error_handlers",
+    "api.health",
+    "api.metrics",
+    "api.rate_limit",
+    "api.routes",
+    "api.workflow_ai",
+    "asyncio",
+    "auth",
+    "auth.dependencies",
+    "config",
+    "contextlib",
+    "database",
+    "database/postgresql",
+    "datetime",
+    "dependencies",
+    "domain",
+    "enum",
+    "fastapi",
+    "fastapi.exceptions",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "fastapi.security",
+    "fastapi.testclient",
+    "functools",
+    "httpx",
+    "json",
+    "jwt",
+    "logging",
+    "main",
+    "models",
+    "models.database",
+    "models.domain",
+    "pathlib",
+    "plan_lifecycle",
+    "plan_repository",
+    "plan_service",
+    "plans_service.auth.dependencies",
+    "plans_service.auth.models",
+    "plans_service.config",
+    "plans_service.models.database",
+    "plans_service.models.domain",
+    "plans_service.repositories.plan_repository",
+    "plans_service.services.procedure_validator",
+    "plans_service.workflows.plan_lifecycle",
+    "procedure_validator",
+    "prometheus_client",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "repositories.plan_repository",
+    "review_workflow",
+    "services.plan_service",
+    "shared/cache",
+    "shared/utils",
+    "sys",
+    "time",
+    "typing",
+    "unittest.mock",
+    "uuid",
+    "uvicorn",
+    "workflow_integration",
+    "workflows.plan_lifecycle",
+    "workflows.review_workflow"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/detailed",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/live",
+      "file": "health.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/procedures/validate",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercises/schedule",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/{plan_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/{plan_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/submit-review",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/approve",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/activate",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/workflow",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/procedures",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/procedures",
+      "file": "routes.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/{plan_id}/procedures/{procedure_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/{plan_id}/procedures/{procedure_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/resources",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/resources",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/contact-lists",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/contact-lists",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/activate-real",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/activations",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/reviews",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/reviews",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "UserContext",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TestPlanRepository",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestPlanWorkflow",
+      "file": "test_workflows.py",
+      "methods": 23
+    },
+    {
+      "name": "TestCacheIntegration",
+      "file": "test_cache_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "TestProcedureTreeOptimization",
+      "file": "test_cache_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBulkOperations",
+      "file": "test_cache_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "TestPaginationEnhancements",
+      "file": "test_cache_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "TestPlanValidation",
+      "file": "test_validation.py",
+      "methods": 12
+    },
+    {
+      "name": "TestProcedureValidation",
+      "file": "test_validation.py",
+      "methods": 8
+    },
+    {
+      "name": "TestResourceValidation",
+      "file": "test_validation.py",
+      "methods": 4
+    },
+    {
+      "name": "TestContactValidation",
+      "file": "test_validation.py",
+      "methods": 8
+    },
+    {
+      "name": "TestRecoveryPriorityValidation",
+      "file": "test_validation.py",
+      "methods": 6
+    },
+    {
+      "name": "TestContactListValidation",
+      "file": "test_validation.py",
+      "methods": 3
+    },
+    {
+      "name": "TestActivationValidation",
+      "file": "test_validation.py",
+      "methods": 3
+    },
+    {
+      "name": "TestUserContextModel",
+      "file": "test_auth.py",
+      "methods": 4
+    },
+    {
+      "name": "TestGetCurrentUser",
+      "file": "test_auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TestGetOptionalUser",
+      "file": "test_auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TestProcedureDependencyValidator",
+      "file": "test_procedure_validator.py",
+      "methods": 19
+    },
+    {
+      "name": "ReviewTriggerType",
+      "file": "review_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewWorkflowAction",
+      "file": "review_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanWorkflowAction",
+      "file": "plan_lifecycle.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanRepository",
+      "file": "plan_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "PlanType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanPriority",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcedureType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceCriticality",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AvailabilityRequirement",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewFrequency",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ContactListType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ActivationType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EffectivenessRating",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Contact",
+      "file": "domain.py",
+      "methods": 4
+    },
+    {
+      "name": "ActivationTrigger",
+      "file": "domain.py",
+      "methods": 2
+    },
+    {
+      "name": "RecoveryPriority",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "PlanCreate",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "PlanUpdate",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "PlanResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcedureCreate",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "ProcedureUpdate",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "ProcedureResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceCreate",
+      "file": "domain.py",
+      "methods": 2
+    },
+    {
+      "name": "ResourceUpdate",
+      "file": "domain.py",
+      "methods": 2
+    },
+    {
+      "name": "ResourceResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ContactListCreate",
+      "file": "domain.py",
+      "methods": 2
+    },
+    {
+      "name": "ContactListResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ActivationCreate",
+      "file": "domain.py",
+      "methods": 3
+    },
+    {
+      "name": "ActivationResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewCreate",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "ReviewResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Plan",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "Procedure",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanResource",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ContactList",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationTemplate",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanActivation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanReview",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PlanTemplate",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkPlanCreateRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcedureDependency",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkProcedureValidationRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseScheduleRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkExerciseScheduleRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcedureDependencyValidator",
+      "file": "procedure_validator.py",
+      "methods": 4
+    },
+    {
+      "name": "PlanService",
+      "file": "plan_service.py",
+      "methods": 7
+    }
+  ],
+  "functions": [
+    {
+      "name": "create_test_token",
+      "file": "test_jwt_auth.py",
+      "params": 6
+    },
+    {
+      "name": "test_all_endpoints_require_auth",
+      "file": "test_jwt_auth.py",
+      "params": 0
+    },
+    {
+      "name": "test_dev_mode_bypass",
+      "file": "test_jwt_auth.py",
+      "params": 0
+    },
+    {
+      "name": "test_tenant_isolation",
+      "file": "test_jwt_auth.py",
+      "params": 0
+    },
+    {
+      "name": "test_error_responses",
+      "file": "test_jwt_auth.py",
+      "params": 0
+    },
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_plan_data",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_procedure_data",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_resource_data",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_contact_list_data",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_procedures_with_dependencies",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_procedures_with_cycle",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "calculate_next_review_date",
+      "file": "review_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "is_review_due",
+      "file": "review_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_review_status",
+      "file": "review_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "should_trigger_review",
+      "file": "review_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "execute_review_transition",
+      "file": "review_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "generate_review_checklist",
+      "file": "review_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_review_priority",
+      "file": "review_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "execute_plan_transition",
+      "file": "plan_lifecycle.py",
+      "params": 3
+    },
+    {
+      "name": "get_workflow_summary",
+      "file": "plan_lifecycle.py",
+      "params": 1
+    },
+    {
+      "name": "track_request",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_plan_created",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_plan_approved",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_plan_activated",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_procedure_created",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_circular_dependency_detected",
+      "file": "metrics.py",
+      "params": 0
+    },
+    {
+      "name": "track_eventbus_publish",
+      "file": "metrics.py",
+      "params": 2
+    }
+  ],
+  "config": {
+    ".env.example": "platform-services/plans_service/.env.example",
+    "requirements.txt": "platform-services/plans_service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 8612,
+    "python_files": 38,
+    "classes": 79,
+    "functions": 28,
+    "endpoints": 32,
+    "dependencies": 64
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1996,
+    "lines": 122,
+    "content": "# plans_service\n\n> \ud83c\udf10 API Service \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 8,609 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 37 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 79 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 28 |\n| **API Endpoints** | 34 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 51 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (18)\n\n- `/`\n- `/activations`\n- `/api/compliance/check`\n- `/benchmarks`\n- `/contact-lists`\n\n### POST (12)\n\n- `/contact-lists`\n- `/exercises/schedule`\n- `/plans`\n- `/plans`\n- `/plans/{plan_id}/activate`\n\n### PUT (2)\n\n- `/plans/{plan_id}`\n- `/plans/{plan_id}/procedures/{procedure_id}`\n\n### DELETE (2)\n\n- `/plans/{plan_id}`\n- `/plans/{plan_id}/procedures/{procedure_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **TestPlanWorkflow** (23 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `test_workflows.py`\n- **TestProcedureDependencyValidator** (19 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `test_procedure_validator.py`\n- **TestPlanValidation** (12 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `test"
+  }
+}

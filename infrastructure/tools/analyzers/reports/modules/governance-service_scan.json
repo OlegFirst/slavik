@@ -1,0 +1,817 @@
+{
+  "module_name": "governance-service",
+  "path": "platform-services/governance-service",
+  "structure": {
+    ".": [
+      "config.py",
+      "requirements.txt",
+      "__init__.py",
+      "main.py",
+      "workflow_integration.py",
+      "requirements-auth.txt"
+    ],
+    "workflows": [
+      "role_workflow.py",
+      "policy_workflow.py",
+      "__init__.py",
+      "resource_workflow.py"
+    ],
+    "repositories": [
+      "resource_repository.py",
+      "__init__.py",
+      "objective_repository.py",
+      "role_repository.py",
+      "policy_repository.py",
+      "competence_repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "publishers.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "domain_intelligence_service.py",
+      "ai_domain_integration.py",
+      "governance_service.py",
+      "__init__.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "api.routes",
+    "api.workflow_ai",
+    "audit_logger",
+    "config",
+    "contextlib",
+    "database",
+    "database.domain_models",
+    "database/postgresql",
+    "datetime",
+    "domain_schemas",
+    "enum",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "jwt",
+    "logging",
+    "main",
+    "models.database",
+    "pathlib",
+    "policy_workflow",
+    "prometheus_client",
+    "publishers",
+    "pydantic",
+    "re",
+    "repositories.competence_repository",
+    "repositories.policy_repository",
+    "repositories.resource_repository",
+    "repositories.role_repository",
+    "resource_workflow",
+    "role_workflow",
+    "runtime/eventbus",
+    "services.governance_service",
+    "shared/auth",
+    "shared/config",
+    "shared/database",
+    "shared/models",
+    "shared/utils",
+    "subscribers",
+    "sys",
+    "typing",
+    "uuid",
+    "uvicorn",
+    "workflow_integration",
+    "workflows.policy_workflow",
+    "workflows.resource_workflow",
+    "workflows.role_workflow"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/token",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "POST",
+      "path": "/policies",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/policies",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/policies/{policy_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/policies/{policy_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/policies/{policy_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/policies/{policy_id}/approve",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/policies/{policy_id}/publish",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/roles",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{role_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/roles/{role_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/roles/{role_id}/assign",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/resources",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/resources",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/resources/{resource_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/resources/{resource_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/competence",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/competence",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/objectives",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/objectives",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/objectives/{objective_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/objectives/{objective_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/communication-plans",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/communication-plans",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/stakeholders",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stakeholders",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stakeholders/{stakeholder_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/stakeholders/{stakeholder_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/context-analysis",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/context-analysis",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/context-analysis/{analysis_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/tenant/classify",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/tenant",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks/{metric_name}",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/industries",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/organizational-types",
+      "file": "domain_intelligence_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bia/processes/{process_id}/suggest-rto",
+      "file": "ai_domain_integration.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "GovernanceServiceSettings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "RoleState",
+      "file": "role_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleAction",
+      "file": "role_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleWorkflowEngine",
+      "file": "role_workflow.py",
+      "methods": 4
+    },
+    {
+      "name": "RoleValidator",
+      "file": "role_workflow.py",
+      "methods": 4
+    },
+    {
+      "name": "PolicyState",
+      "file": "policy_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyAction",
+      "file": "policy_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyWorkflowEngine",
+      "file": "policy_workflow.py",
+      "methods": 8
+    },
+    {
+      "name": "PolicyValidator",
+      "file": "policy_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "ResourceAvailability",
+      "file": "resource_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceAction",
+      "file": "resource_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceWorkflowEngine",
+      "file": "resource_workflow.py",
+      "methods": 4
+    },
+    {
+      "name": "ResourceValidator",
+      "file": "resource_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "ResourceRepository",
+      "file": "resource_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ObjectiveRepository",
+      "file": "objective_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "RoleRepository",
+      "file": "role_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "PolicyRepository",
+      "file": "policy_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "PolicyVersionRepository",
+      "file": "policy_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "CompetenceRepository",
+      "file": "competence_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganizationalType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CompanySize",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IndustryDomain",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TenantDomainClassification",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TenantDomainResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "BenchmarkResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DomainRecommendation",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationsResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IndustryInfo",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AvailableIndustriesResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceAvailability",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetenceLevel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMPolicy",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "PolicyVersion",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationalRole",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "BCMResource",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "CompetenceRecord",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "BCMObjective",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "CommunicationPlan",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "Stakeholder",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "ContextAnalysis",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyUpdate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PolicyResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleUpdate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceUpdate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ObjectiveCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ObjectiveUpdate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ObjectiveResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetenceCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetenceResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationPlanCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationPlanResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "StakeholderCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "StakeholderResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ContextAnalysisCreate",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ContextAnalysisResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "GovernanceEventPublisher",
+      "file": "publishers.py",
+      "methods": 0
+    },
+    {
+      "name": "GovernanceEventSubscriber",
+      "file": "subscribers.py",
+      "methods": 1
+    },
+    {
+      "name": "PolicyService",
+      "file": "governance_service.py",
+      "methods": 3
+    },
+    {
+      "name": "RoleService",
+      "file": "governance_service.py",
+      "methods": 2
+    },
+    {
+      "name": "ResourceService",
+      "file": "governance_service.py",
+      "methods": 2
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_subscriber",
+      "file": "subscribers.py",
+      "params": 0
+    },
+    {
+      "name": "_build_enhanced_prompt",
+      "file": "ai_domain_integration.py",
+      "params": 4
+    },
+    {
+      "name": "format_recommendations_summary",
+      "file": "ai_domain_integration.py",
+      "params": 1
+    },
+    {
+      "name": "validate_context_type",
+      "file": "ai_domain_integration.py",
+      "params": 1
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/governance-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 7225,
+    "python_files": 27,
+    "classes": 90,
+    "functions": 4,
+    "endpoints": 46,
+    "dependencies": 48
+  },
+  "readme": null
+}

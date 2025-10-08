@@ -1,0 +1,1223 @@
+{
+  "module_name": "\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f",
+  "path": "intelligent-core/\u043c\u043e\u0436\u0435\u0442\u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u0441\u044f",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "README\u00a0\u2014 \u043a\u043e\u043f\u0438\u044f.md",
+      "eventbus_integration.py",
+      "README.md",
+      "collective_intelligence_pattern.py",
+      "consultation_session_pattern.py",
+      "EXTRACTED_CONCEPTS.md",
+      "ai_control_dashboard.py"
+    ],
+    "bpmn_service": [
+      "requirements.txt",
+      "Dockerfile",
+      "mock_data.py",
+      "main.py"
+    ],
+    "notification_service": [
+      "requirements.txt",
+      "main.py"
+    ],
+    "scenario_orchestrator": [
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ],
+    "scenario_orchestrator/app/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "scenario_orchestrator/app/schemas": [
+      "scenario.py"
+    ],
+    "scenario_orchestrator/app/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "scenario_orchestrator/generated_scenarios": [
+      "scenario_ai_20250914_181500.json",
+      "scenario_ai_20250914_175757.json",
+      "scenario_ai_20250914_181510.json",
+      "scenario_ai_20250915_131305.json",
+      "scenario_ai_20250914_181509.json",
+      "scenario_ai_20250914_181518.json"
+    ],
+    "scenario_orchestrator/src/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "scenario_orchestrator/src/schemas": [
+      "scenario.py"
+    ],
+    "scenario_orchestrator/src/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "thehive_adapter": [
+      "requirements.txt",
+      "Dockerfile",
+      "mock_data.py",
+      "main.py"
+    ],
+    "auth_service": [
+      "db.py",
+      "models.py",
+      "requirements.txt",
+      "utils.py",
+      "main.py",
+      "crud.py"
+    ],
+    "compliance_checker": [
+      "requirements.txt",
+      "Dockerfile",
+      "app.py"
+    ],
+    "lms_adapter": [
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "mock_data.py",
+      "anthropic_integration.py",
+      "main.py",
+      "anthropic_client.py"
+    ]
+  },
+  "dependencies": [
+    "__future__",
+    "abc",
+    "app.api.v1.endpoints.scenarios",
+    "app.core.ai_engine",
+    "app.core.database",
+    "app.core.security",
+    "app.models",
+    "app.schemas.scenario",
+    "asyncio",
+    "bcrypt",
+    "contextlib",
+    "crud",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "db",
+    "email.mime.multipart",
+    "email.mime.text",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "httpx",
+    "json",
+    "jwt",
+    "logging",
+    "main",
+    "mock_data",
+    "models",
+    "odoo",
+    "odoo.exceptions",
+    "os",
+    "pydantic",
+    "requests",
+    "runtime/eventbus",
+    "scenario",
+    "smtplib",
+    "sys",
+    "typing",
+    "utils",
+    "uuid",
+    "uvicorn",
+    "xml.etree.ElementTree"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bpmn/processes",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/processes",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/processes/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bpmn/processes/{process_id}/start",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/instances",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/instances/{instance_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bpmn/tasks/{task_id}/complete",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bpmn/instances/{instance_id}/terminate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/mock/processes",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/mock/instances",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/mock/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/bpmn/mock/templates",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/bpmn/mock/deploy-demo-process",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/notifications/send",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/notifications/rules",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/notifications/rules",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/notifications/test",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scenarios/generate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios/available",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/exercise-result",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/scenario/{scenario_id}/insights",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/dashboard",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenarios/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/generate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/optimize",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/recommend",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/test/simulate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/hub/catalog",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/hub/submit",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/generate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/optimize",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/recommend",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/test/simulate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/hub/catalog",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/hub/submit",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/cases/{case_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/thehive/{config_id}/cases/{case_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/alerts/{alert_id}/promote",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/cases/{case_id}/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/bcm/incident",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/observables",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/templates",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/mock/setup-demo-config",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/logout",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/users",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/users",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/tenants",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/validate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/requirements/{standard}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/evidence",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/evidence/{requirement_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/assess",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{assessment_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/compliance-trends",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/verify-evidence/{requirement_id}/{evidence_index}",
+      "file": "app.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/evidence/{requirement_id}/{evidence_index}",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/lms/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/{config_id}/courses",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/{config_id}/courses/{course_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/lms/{config_id}/courses/{course_id}/enroll",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/{config_id}/users/{user_email}/enrollments",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/{config_id}/courses/{course_id}/progress/{user_email}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/{config_id}/courses/{course_id}/launch",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/lms/{config_id}/sync/progress",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/courses",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/enrollments",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/training-paths",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/competency-matrix",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/lms/mock/analytics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/lms/mock/setup-demo-config",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "BCMEventBusIntegration",
+      "file": "eventbus_integration.py",
+      "methods": 3
+    },
+    {
+      "name": "OrganLifecycleState",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionContext",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "AIOrganInfo",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganInput",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveDecision",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganCommunicationChannels",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 1
+    },
+    {
+      "name": "AIOrganRegistry",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 6
+    },
+    {
+      "name": "OrganSelectionStrategy",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 1
+    },
+    {
+      "name": "WeightedConfidenceScorer",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectiveDecisionSynthesizer",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 3
+    },
+    {
+      "name": "CollectiveWisdomTracker",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 5
+    },
+    {
+      "name": "OrganismEvolution",
+      "file": "collective_intelligence_pattern.py",
+      "methods": 2
+    },
+    {
+      "name": "SessionState",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "MessageType",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "ContextType",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "ExportFormat",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "ConsultationMessage",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "ConsultationSession",
+      "file": "consultation_session_pattern.py",
+      "methods": 0
+    },
+    {
+      "name": "ConsultationSessionManager",
+      "file": "consultation_session_pattern.py",
+      "methods": 9
+    },
+    {
+      "name": "SessionContextBuilder",
+      "file": "consultation_session_pattern.py",
+      "methods": 3
+    },
+    {
+      "name": "SessionAnalytics",
+      "file": "consultation_session_pattern.py",
+      "methods": 2
+    },
+    {
+      "name": "SessionExporter",
+      "file": "consultation_session_pattern.py",
+      "methods": 2
+    },
+    {
+      "name": "BCMAIControlDashboard",
+      "file": "ai_control_dashboard.py",
+      "methods": 8
+    },
+    {
+      "name": "BCMAIOrganStatus",
+      "file": "ai_control_dashboard.py",
+      "methods": 2
+    },
+    {
+      "name": "BPMNProcess",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessInstance",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Task",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "BPMNEngine",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "NotificationRule",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationHistory",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioLearning",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveConfig",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Case",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Observable",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Task",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Alert",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveAdapter",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "TheHiveManager",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "Tenant",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "User",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "LoginRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserInfo",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TenantInfo",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "CreateUserRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStandard",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStatus",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "Severity",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "RequirementCategory",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirement",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceEvidence",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceAssessment",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceGap",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "IntelligentComplianceChecker",
+      "file": "app.py",
+      "methods": 6
+    },
+    {
+      "name": "BCMAnthropicIntegration",
+      "file": "anthropic_integration.py",
+      "methods": 7
+    },
+    {
+      "name": "LMSConfig",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Course",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Enrollment",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "LMSAdapter",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "MoodleAdapter",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OpenEdXAdapter",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "CanvasAdapter",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "LMSFactory",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "LMSManager",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "AnthropicGovernanceBrain",
+      "file": "anthropic_client.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "example_consultation_session",
+      "file": "consultation_session_pattern.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_processes",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_instances",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_tasks",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_workflow_templates",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "_format_ai_response_to_markdown",
+      "file": "main.py",
+      "params": 2
+    },
+    {
+      "name": "_generate_jaamsim_config",
+      "file": "main.py",
+      "params": 1
+    },
+    {
+      "name": "get_mock_thehive_configs",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_cases",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_alerts",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_observables",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_tasks",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_case_templates",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_incident_metrics",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "validate_jwt_secret",
+      "file": "utils.py",
+      "params": 0
+    },
+    {
+      "name": "create_access_token",
+      "file": "main.py",
+      "params": 1
+    },
+    {
+      "name": "verify_password",
+      "file": "main.py",
+      "params": 2
+    },
+    {
+      "name": "health",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_lms_configs",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_courses",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_enrollments",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_training_paths",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_competency_matrix",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_learning_analytics",
+      "file": "mock_data.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 8234,
+    "python_files": 28,
+    "classes": 91,
+    "functions": 24,
+    "endpoints": 99,
+    "dependencies": 43
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 852,
+    "lines": 31,
+    "content": "# \u041c\u043e\u0436\u0435\u0442 \u041f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u044c\u0441\u044f - \u041f\u043e\u043b\u0435\u0437\u043d\u044b\u0439 \u041a\u043e\u0434\n\n\u0417\u0434\u0435\u0441\u044c \u0445\u0440\u0430\u043d\u0438\u0442\u0441\u044f \u043a\u043e\u0434 \u043a\u043e\u0442\u043e\u0440\u044b\u0439 \u0431\u044b\u043b \u0443\u0431\u0440\u0430\u043d \u0438\u0437 \u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u043a\u043e\u0434\u043e\u0432\u043e\u0439 \u0431\u0430\u0437\u044b, \u043d\u043e \u043c\u043e\u0436\u0435\u0442 \u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u044c\u0441\u044f \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043c.\n\n## llm_clients/\n\n**\u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a**: `orchestration/ai-orchestration/muscles/llm_clients/`\n\n**\u0427\u0442\u043e**: \u0421\u0442\u0430\u0440\u044b\u0439 Anthropic client \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e \u0434\u043b\u044f governance \u0430\u043d\u0430\u043b\u0438\u0437\u0430\n\n**\u0424\u0430\u0439\u043b\u044b**:\n- `anthropic_client.py` - AnthropicGovernanceBrain \u043a\u043b\u0430\u0441\u0441\n\n**\u041f\u043e\u0447\u0435\u043c\u0443 \u0441\u043e\u0445\u0440\u0430\u043d\u0438\u043b\u0438**:\n- \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0435\u0442 claude-3-sonnet-20240229 (\u0441\u0442\u0430\u0440\u0430\u044f \u043c\u043e\u0434\u0435\u043b\u044c)\n- \u0421\u043f\u0435\u0446\u0438\u0430\u043b\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 governance prompts\n- \u041c\u043e\u0436\u0435\u0442 \u043f\u0440\u0438\u0433\u043e\u0434\u0438\u0442\u044c\u0441\u044f \u0434\u043b\u044f \u043b\u0435\u0433\u0430\u0441\u0438 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0439\n- \u041d\u0415 \u0414\u0423\u0411\u041b\u0418\u041a\u0410\u0422 ai-foundation/llm/llm_router.py (\u044d\u0442\u043e \u0434\u0440\u0443\u0433\u043e\u0435!)\n\n**\u041a\u043e\u0433\u0434\u0430 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c**:\n- \u0415\u0441\u043b\u0438 \u043d\u0443\u0436\u0435\u043d \u0441\u043f\u0435\u0446\u0438\u0444\u0438\u0447\u043d\u044b\u0439 governance-\u0430\u043d\u0430\u043b\u0438\u0437\n- \u0415\u0441\u043b\u0438 \u043d\u0443\u0436\u043d\u0430 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u0430\u044f \u0432\u0435\u0440\u0441\u0438\u044f Claude \u043c\u043e\u0434\u0435\u043b\u0438\n- \u0414\u043b\u044f \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438 \u0441\u0442\u0430\u0440\u043e\u0433\u043e \u043a\u043e\u0434\u0430\n\n**\u0422\u0430\u043a\u0436\u0435 \u0434\u043e\u0441\u0442\u0443\u043f\u0435\u043d \u0432**: `workflow_intelligence/integration/legacy_anthropic_client.py`\n\n---\n\n**\u0414\u0430\u0442\u0430**: 2025-10-06\n**\u041a\u043e\u043c\u0430\u043d\u0434\u0430**: Claude + MD\n"
+  }
+}

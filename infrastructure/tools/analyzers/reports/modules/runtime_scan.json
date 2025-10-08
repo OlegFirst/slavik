@@ -1,0 +1,389 @@
+{
+  "module_name": "runtime",
+  "path": "infrastructure/runtime",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "SERVICE_SPEC.md"
+    ],
+    "eventbus": [
+      "ARCHITECTURE.md",
+      "config.py",
+      "requirements.txt",
+      "SUMMARY.md",
+      "pyproject.toml",
+      "QUICKSTART.md",
+      "__init__.py",
+      "factory.py",
+      "README.md"
+    ],
+    "eventbus/core": [
+      "events.py",
+      "interface.py",
+      "__init__.py"
+    ],
+    "eventbus/.pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    "eventbus/.pytest_cache/v/cache": [
+      "nodeids",
+      "lastfailed"
+    ],
+    "eventbus/backends": [
+      "memory.py",
+      "__init__.py",
+      "redis_streams.py"
+    ],
+    "eventbus/tests": [
+      "test_memory_backend.py",
+      "__init__.py",
+      "test_events.py"
+    ],
+    "eventbus/examples": [
+      "basic_usage.py",
+      "redis_example.py",
+      "subscriber_example.py",
+      "fastapi_integration.py"
+    ],
+    "eventbus/subscribers": [
+      "__init__.py",
+      "base.py"
+    ],
+    "realtime-websocket": [
+      "MIGRATION_CHECKLIST.md",
+      "requirements.txt",
+      "README.md",
+      ".env.example",
+      "main.py"
+    ],
+    "message-queue": [
+      "requirements.txt",
+      "rabbitmq_manager.py",
+      "README.md"
+    ],
+    "service-discovery": [
+      "iso_service_map.py",
+      "__init__.py",
+      "health_monitor.py",
+      "service_registry.py",
+      "README.md"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "aio_pika",
+    "aio_pika.abc",
+    "asyncio",
+    "base",
+    "contextlib",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "health_monitor",
+    "httpx",
+    "iso_service_map",
+    "json",
+    "logging",
+    "os",
+    "pydantic",
+    "pytest",
+    "re",
+    "runtime/eventbus",
+    "service_registry",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/workflows",
+      "file": "fastapi_integration.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "fastapi_integration.py"
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/{workflow_id}/complete",
+      "file": "fastapi_integration.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "file": "fastapi_integration.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/notifications/broadcast",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/channels/{channel_id}/users",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/channels/{channel_id}/messages",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "EventBusConfig",
+      "file": "config.py",
+      "methods": 2
+    },
+    {
+      "name": "EventPriority",
+      "file": "events.py",
+      "methods": 0
+    },
+    {
+      "name": "Event",
+      "file": "events.py",
+      "methods": 3
+    },
+    {
+      "name": "IEventBus",
+      "file": "interface.py",
+      "methods": 0
+    },
+    {
+      "name": "InMemoryEventBus",
+      "file": "memory.py",
+      "methods": 3
+    },
+    {
+      "name": "RedisStreamEventBus",
+      "file": "redis_streams.py",
+      "methods": 2
+    },
+    {
+      "name": "CaseCollectorSubscriber",
+      "file": "subscriber_example.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAdvisorSubscriber",
+      "file": "subscriber_example.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyticsSubscriber",
+      "file": "subscriber_example.py",
+      "methods": 1
+    },
+    {
+      "name": "NotificationSubscriber",
+      "file": "subscriber_example.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditSubscriber",
+      "file": "subscriber_example.py",
+      "methods": 1
+    },
+    {
+      "name": "WorkflowSubscriber",
+      "file": "fastapi_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationSubscriber",
+      "file": "fastapi_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditSubscriber",
+      "file": "fastapi_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "BaseSubscriber",
+      "file": "base.py",
+      "methods": 2
+    },
+    {
+      "name": "MessageType",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ChannelType",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserStatus",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ChatMessage",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserSession",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationLog",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WebSocketMessage",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "ChatMessageRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "UserStatusUpdate",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ConnectionManager",
+      "file": "main.py",
+      "methods": 3
+    },
+    {
+      "name": "RabbitMQManager",
+      "file": "rabbitmq_manager.py",
+      "methods": 1
+    },
+    {
+      "name": "HealthStatus",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResult",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "HealthCheck",
+      "file": "health_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthMonitor",
+      "file": "health_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "Service",
+      "file": "service_registry.py",
+      "methods": 1
+    },
+    {
+      "name": "ServiceRegistry",
+      "file": "service_registry.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "create_eventbus",
+      "file": "factory.py",
+      "params": 1
+    },
+    {
+      "name": "create_eventbus_from_env",
+      "file": "factory.py",
+      "params": 0
+    },
+    {
+      "name": "test_event_create",
+      "file": "test_events.py",
+      "params": 0
+    },
+    {
+      "name": "test_event_with_priority",
+      "file": "test_events.py",
+      "params": 0
+    },
+    {
+      "name": "test_event_serialization",
+      "file": "test_events.py",
+      "params": 0
+    },
+    {
+      "name": "test_event_priorities",
+      "file": "test_events.py",
+      "params": 0
+    },
+    {
+      "name": "get_eventbus",
+      "file": "fastapi_integration.py",
+      "params": 0
+    },
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "get_services_by_component",
+      "file": "iso_service_map.py",
+      "params": 1
+    },
+    {
+      "name": "get_services_with_workflow_intelligence",
+      "file": "iso_service_map.py",
+      "params": 0
+    },
+    {
+      "name": "get_services_by_iso_clause",
+      "file": "iso_service_map.py",
+      "params": 1
+    },
+    {
+      "name": "get_service_count_by_category",
+      "file": "iso_service_map.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 4689,
+    "python_files": 24,
+    "classes": 33,
+    "functions": 12,
+    "endpoints": 9,
+    "dependencies": 27
+  },
+  "readme": null
+}

@@ -1,0 +1,33 @@
+{
+  "module_name": "wrappers",
+  "path": "intelligent-core/wrappers",
+  "structure": {
+    ".": [
+      "run_expertise_center.sh",
+      "run_ai_workflow_optimizer.sh",
+      "run_workflow_engine.sh",
+      "run_ai_orchestration.sh",
+      "run_coordination_center.sh",
+      "run_event_intelligence.sh",
+      "run_community_intelligence.sh",
+      "run_ai_foundation.sh",
+      "run_predictive.sh",
+      "run_collective.sh",
+      "run_workflow_intelligence.sh"
+    ]
+  },
+  "dependencies": [],
+  "endpoints": [],
+  "classes": [],
+  "functions": [],
+  "config": {},
+  "metrics": {
+    "loc": 0,
+    "python_files": 0,
+    "classes": 0,
+    "functions": 0,
+    "endpoints": 0,
+    "dependencies": 0
+  },
+  "readme": null
+}

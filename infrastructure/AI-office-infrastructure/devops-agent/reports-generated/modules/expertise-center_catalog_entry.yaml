@@ -1,0 +1,30 @@
+
+  expertise_center:
+    type: service
+    location: intelligent-core/expertise-center
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+
+      internal:
+        - ai_foundation
+        - ai_foundation/expertise_center
+        - ai_foundation/intelligent_core
+        - shared/base
+    endpoints:
+      - GET /health
+      - GET /metrics
+      - GET /info
+      - POST /query
+      - GET /
+    metrics:
+      loc: 11846
+      files: 63
+      classes: 58
+      functions: 27
+    status: discovered

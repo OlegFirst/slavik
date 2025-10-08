@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Migration Script Record -->
+        <record id="migration_script_bcm_incident" model="ir.actions.server">
+            <field name="name">BCM Incident Module Migration</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">code</field>
+            <field name="code">
+# BCM Incident Module Migration Script
+# Migrates data from old bcm_incident + bcm_incident_management to unified bcm_incident
+
+import logging
+_logger = logging.getLogger(__name__)
+
+def migrate_incident_data():
+    """Migrate incident data from old structure to unified structure"""
+    try:
+        # Check if old tables exist
+        env.cr.execute("""
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = 'bcm_incident_old'
+            );
+        """)
+        old_incident_exists = env.cr.fetchone()[0]
+
+        env.cr.execute("""
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = 'bcm_incident_management'
+            );
+        """)
+        old_management_exists = env.cr.fetchone()[0]
+
+        _logger.info(f"Migration check: bcm_incident_old={old_incident_exists}, bcm_incident_management={old_management_exists}")
+
+        if not (old_incident_exists or old_management_exists):
+            _logger.info("No old incident tables found, skipping migration")
+            return
+
+        # Migrate basic incident data
+        if old_incident_exists:
+            env.cr.execute("""
+                INSERT INTO bcm_incident (
+                    name, incident_number, description, incident_type, severity,
+                    status, create_date, write_date, create_uid, write_uid,
+                    company_id, active
+                )
+                SELECT
+                    name, incident_number, description, incident_type, severity,
+                    status, create_date, write_date, create_uid, write_uid,
+                    COALESCE(company_id, 1), COALESCE(active, true)
+                FROM bcm_incident_old
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM bcm_incident
+                    WHERE bcm_incident.incident_number = bcm_incident_old.incident_number
+                );
+            """)
+            migrated_count = env.cr.rowcount
+            _logger.info(f"Migrated {migrated_count} basic incident records")
+
+        # Migrate incident management data
+        if old_management_exists:
+            env.cr.execute("""
+                UPDATE bcm_incident
+                SET
+                    response_team_activated = COALESCE(im.response_team_activated, false),
+                    escalation_level = COALESCE(im.escalation_level, 1),
+                    communication_plan = im.communication_plan,
+                    stakeholder_notification = COALESCE(im.stakeholder_notification, false)
+                FROM bcm_incident_management im
+                WHERE bcm_incident.incident_number = im.incident_number;
+            """)
+            updated_count = env.cr.rowcount
+            _logger.info(f"Updated {updated_count} incidents with management data")
+
+        # Set default values for new fields
+        env.cr.execute("""
+            UPDATE bcm_incident
+            SET
+                ai_classification_confidence = 75.0,
+                ai_risk_score = 50.0,
+                digital_twin_sync = false
+            WHERE ai_classification_confidence IS NULL
+               OR ai_risk_score IS NULL
+               OR digital_twin_sync IS NULL;
+        """)
+
+        _logger.info("BCM Incident migration completed successfully")
+
+    except Exception as e:
+        _logger.error(f"Migration failed: {str(e)}")
+        raise
+
+# Execute migration
+migrate_incident_data()
+            </field>
+        </record>
+
+        <!-- Migration Menu Item -->
+        <record id="action_bcm_incident_migration" model="ir.actions.server">
+            <field name="name">Run BCM Incident Migration</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">code</field>
+            <field name="code">action = env.ref('bcm_incident.migration_script_bcm_incident').run()</field>
+        </record>
+
+        <menuitem id="menu_bcm_incident_migration"
+                  name="Run Migration"
+                  parent="bcm_incident.menu_bcm_incident_config"
+                  action="action_bcm_incident_migration"
+                  sequence="100"/>
+
+    </data>
+</odoo>

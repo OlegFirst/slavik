@@ -1,0 +1,39 @@
+{
+  "module_name": "monitoring",
+  "path": "platform-services/monitoring",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "prometheus.yml"
+    ],
+    "grafana": [
+      ".DS_Store"
+    ],
+    "grafana/datasources": [
+      "prometheus.yml"
+    ],
+    "grafana/dashboards": [
+      "bcm-services-overview.json",
+      "bcm-platform-unified.json",
+      "dashboard.yml"
+    ],
+    "grafana/dashboards/dashboards.backup.20251003": [
+      "bcm-services-overview.json",
+      "bcm-platform-unified.json"
+    ]
+  },
+  "dependencies": [],
+  "endpoints": [],
+  "classes": [],
+  "functions": [],
+  "config": {},
+  "metrics": {
+    "loc": 0,
+    "python_files": 0,
+    "classes": 0,
+    "functions": 0,
+    "endpoints": 0,
+    "dependencies": 0
+  },
+  "readme": null
+}

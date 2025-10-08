@@ -1,0 +1,16 @@
+# Analysis Configuration
+project_root: /Users/MD/AI-Platform-ISO
+exclude_patterns:
+  - "*/node_modules/*"
+  - "*/.venv/*"
+  - "*/venv/*"
+  - "*/__pycache__/*"
+  - "*/.git/*"
+  - "*/можетпригодится/*"
+
+analysis_targets:
+  - intelligent-core
+  - infrastructure/AI-office-infrastructure
+  - infrastructure/observability
+
+output_dir: infrastructure/tools/reports

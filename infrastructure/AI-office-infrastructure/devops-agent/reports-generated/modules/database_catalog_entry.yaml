@@ -1,0 +1,25 @@
+
+  database:
+    type: service
+    location: infrastructure/database
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - database/vector-db
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /data
+    metrics:
+      loc: 3830
+      files: 21
+      classes: 17
+      functions: 13
+    status: discovered

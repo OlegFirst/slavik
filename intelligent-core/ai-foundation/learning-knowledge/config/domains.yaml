@@ -1,0 +1,146 @@
+# Knowledge Domains Configuration
+
+domains:
+  standards:
+    iso:
+      path: data/knowledge/standards/iso
+      enabled: true
+      standards:
+        - id: iso-22301
+          version: "2019"
+          amendment: "2024"
+          priority: high
+          auto_update: true
+
+        - id: iso-27001
+          version: "2022"
+          priority: high
+          auto_update: true
+
+        - id: iso-27005
+          version: "2022"
+          priority: medium
+          auto_update: false
+
+        - id: iso-31000
+          version: "2018"
+          priority: medium
+          auto_update: false
+
+    bci:
+      path: data/knowledge/standards/bci
+      enabled: true
+      frameworks:
+        - id: gpg-2018
+          title: "BCI Good Practice Guidelines 2018"
+          priority: high
+          auto_update: false
+
+    who:
+      path: data/knowledge/standards/who
+      enabled: true
+      frameworks:
+        - id: who-framework
+          title: "WHO Emergency Response Framework"
+          priority: medium
+          auto_update: false
+
+    nist:
+      path: data/knowledge/standards/nist
+      enabled: false  # Not yet collected
+      frameworks:
+        - id: nist-csf
+          title: "NIST Cybersecurity Framework"
+          priority: low
+
+  research:
+    path: data/knowledge/research
+    enabled: true
+    sources:
+      - deloitte
+      - mckinsey
+      - ey
+      - pwc
+      - bcg
+      - bain
+
+  regulatory:
+    path: data/knowledge/regulatory
+    enabled: true
+    regions:
+      eu:
+        - gdpr
+      us:
+        - hipaa
+        - sox
+      global:
+        - basel-iii
+
+  cases:
+    workflow_cases:
+      path: data/cases/workflow_cases
+      enabled: true
+      modules:
+        - bia
+        - risk
+        - compliance
+        - drp
+        - bcm
+      retention_days: 365
+      auto_collect: true
+
+    community_cases:
+      path: data/cases/community_cases
+      enabled: true
+      sources:
+        - marketplace
+        - templates
+        - best_practices
+      moderation: true
+
+    simulation_cases:
+      path: data/cases/simulation_cases
+      enabled: true
+      scenario_types:
+        - bcm_incident
+        - cyber_attack
+        - natural_disaster
+      retention_days: 180
+
+# Cache configuration
+cache:
+  enabled: true
+  path: data/cache
+  layers:
+    memory:
+      enabled: true
+      ttl_seconds: 3600  # 1 hour
+
+    file:
+      enabled: true
+      path: data/cache/parsed
+      ttl_days: 30
+
+    vector_db:
+      enabled: true
+      provider: qdrant  # or weaviate
+      collection_prefix: knowledge_
+
+# Indexing configuration
+indexing:
+  vector_db:
+    enabled: true
+    provider: qdrant
+    url: ${QDRANT_URL:-http://localhost:6333}
+    batch_size: 100
+
+  knowledge_graph:
+    enabled: true
+    provider: neo4j
+    url: ${NEO4J_URL:-bolt://localhost:7687}
+    database: knowledge
+
+  full_text:
+    enabled: false  # Future: Elasticsearch
+    provider: elasticsearch
+    url: ${ELASTICSEARCH_URL}

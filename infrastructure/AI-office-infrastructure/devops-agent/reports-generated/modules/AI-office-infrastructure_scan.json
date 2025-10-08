@@ -1,0 +1,2640 @@
+{
+  "module_name": "AI-office-infrastructure",
+  "path": "infrastructure/AI-office-infrastructure",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "COMPREHENSIVE_INTEGRATION_STRATEGY.md",
+      "CONTEXT_RECOVERY_MEMO.md"
+    ],
+    "db-intelligence": [
+      "verify_implementation.py",
+      ".DS_Store",
+      "requirements.txt",
+      "command_handler.py",
+      "db_intelligence_service.py",
+      "__init__.py",
+      "README.md",
+      "api.py",
+      "orchestrator_integration.py",
+      "security_monitor.py",
+      "main.py",
+      "ai_integration.py"
+    ],
+    "ai-event-manager": [
+      "requirements.txt",
+      "test_continuous_monitoring.py",
+      "test_quick_stability.py",
+      "config.yaml",
+      "requirements_fixed.txt",
+      "README.md",
+      "integration_with_mio.py",
+      "test_system.py",
+      "TASK_COMPLETION_SUMMARY.md",
+      "docker-compose.yml",
+      "PRODUCTION_READINESS_REPORT.md",
+      "main.py",
+      "INTEGRATION_SUMMARY.md",
+      "INTEGRATION_GUIDE.md",
+      "start.sh"
+    ],
+    "ai-event-manager/integrations": [
+      "event_intelligence_integration.py",
+      "github_integration_client.py",
+      "__init__.py",
+      "eventbus_integration.py",
+      "mio_manager_integration.py",
+      "devops_agent_integration.py",
+      "continuous_monitor.py"
+    ],
+    "devops-agent": [
+      ".DS_Store",
+      "DEVOPS_AGENT_SPECIFICATION.md",
+      "README.md",
+      "agent.py",
+      "TOOL_USAGE_FIX.md"
+    ],
+    "devops-agent/auto_remediation": [
+      "__init__.py",
+      "dockerfile_generator.py",
+      "event_fixer.py"
+    ],
+    "devops-agent/metrics": [
+      "prometheus_exporter.py",
+      "__init__.py"
+    ],
+    "devops-agent/analyzers": [
+      "event_analyzer.py",
+      "dockerfile_analyzer.py",
+      "__init__.py",
+      "deployment_analyzer.py"
+    ],
+    "devops-agent/workflows": [
+      "devops_workflow.py"
+    ],
+    "devops-agent/integrations": [
+      "__init__.py",
+      "workflow_intelligence.py"
+    ],
+    "devops-agent/api": [
+      "main.py"
+    ],
+    "devops-agent/reports-generated": [
+      "business_logic.json",
+      "business_logic.md",
+      ".DS_Store",
+      "dependency_validation.json",
+      "api_map.json",
+      "api_map.md"
+    ],
+    "devops-agent/reports-generated/modules": [
+      "_archive_catalog_entry.yaml",
+      "scripts_scan.md",
+      "tools_catalog_entry.yaml",
+      "eventbus_scan.md",
+      "shared_catalog_entry.yaml",
+      "simulation_scan.md",
+      "response-service_scan.json",
+      "integration_catalog_entry.yaml",
+      "collective_catalog_entry.yaml",
+      "wrappers_catalog_entry.yaml",
+      "documents-service_scan.md",
+      "expertise-center_catalog_entry.yaml",
+      "workflow_intelligence_catalog_entry.yaml",
+      "community-service_catalog_entry.yaml",
+      "compliance-service_scan.json",
+      "logs_scan.json",
+      "security_scan.json",
+      "monitoring_scan.md",
+      "bcm-coordination-service_catalog_entry.yaml",
+      "wrappers_scan.json",
+      "ai-foundation_catalog_entry.yaml",
+      "living-docs_scan.json",
+      "docs_scan.json",
+      "bcm-coordination-service_scan.md",
+      "risk-service_scan.md",
+      "orchestration_scan.md",
+      "wrappers_scan.md",
+      "logs_scan.md",
+      "performance-tests_scan.json",
+      "_archive_scan.json",
+      "security_scan.md",
+      "\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433_scan.json",
+      "planning_service_scan.md",
+      "response-service_scan.md",
+      "monitoring_scan.json",
+      "plans_service_catalog_entry.yaml",
+      "orchestration_catalog_entry.yaml",
+      "expertise-center_scan.json",
+      "bia-service_catalog_entry.yaml",
+      "ai_workflow_optimizer_scan.json",
+      "plans_service_scan.json",
+      "runtime_catalog_entry.yaml",
+      "expertise-center_scan.md",
+      "governance-service_catalog_entry.yaml",
+      "database_catalog_entry.yaml",
+      "collective_scan.json",
+      "ai_workflow_optimizer_catalog_entry.yaml",
+      "scripts_scan.json",
+      "planning_service_scan.json",
+      "tools_scan.json",
+      "performance-tests_scan.md",
+      "performance-tests_catalog_entry.yaml",
+      "plans_service_scan.md",
+      "event_intelligence_scan.json",
+      "governance-service_scan.json",
+      "validation-service_scan.json",
+      "predictive_scan.json",
+      "workflow_intelligence_scan.md",
+      "integration-tests_catalog_entry.yaml",
+      "documents-service_catalog_entry.yaml",
+      "\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433_scan.md",
+      "observability_scan.md",
+      "compliance-service_scan.md",
+      "\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433_catalog_entry.yaml",
+      "community-service_scan.md",
+      "community_intelligence_scan.md",
+      "eventbus_scan.json",
+      "documents-service_scan.json",
+      "runtime_scan.md",
+      "integration-tests_scan.json",
+      "predictive_catalog_entry.yaml",
+      "bia-service_scan.json",
+      "integration_scan.md",
+      "living-docs_scan.md",
+      "event_intelligence_scan.md",
+      "community_intelligence_catalog_entry.yaml",
+      "learning-service_scan.json",
+      "orchestration_scan.json",
+      "planning_service_catalog_entry.yaml",
+      "predictive_scan.md",
+      "eventbus_catalog_entry.yaml",
+      "collective_scan.md",
+      "event_intelligence_catalog_entry.yaml",
+      "community-service_scan.json",
+      "shared_scan.md",
+      "bcm-coordination-service_scan.json",
+      "_archive_scan.md",
+      "bia-service_scan.md",
+      "integration_scan.json",
+      "database_scan.json",
+      "shared_scan.json",
+      "docs_scan.md",
+      "monitoring_catalog_entry.yaml",
+      "learning-service_scan.md",
+      "governance-service_scan.md",
+      "ai-foundation_scan.json",
+      "workflow-engine_scan.json",
+      "observability_catalog_entry.yaml",
+      "integration-tests_scan.md",
+      "database_scan.md",
+      "living-docs_catalog_entry.yaml",
+      "ai_workflow_optimizer_scan.md",
+      "learning-service_catalog_entry.yaml",
+      "community_intelligence_scan.json",
+      "simulation_catalog_entry.yaml",
+      "logs_catalog_entry.yaml",
+      "response-service_catalog_entry.yaml",
+      "workflow_intelligence_scan.json",
+      "workflow-engine_catalog_entry.yaml",
+      "ai-foundation_scan.md",
+      "docs_catalog_entry.yaml",
+      "risk-service_scan.json",
+      "simulation_scan.json",
+      "tools_scan.md",
+      "validation-service_catalog_entry.yaml",
+      "security_catalog_entry.yaml",
+      "scripts_catalog_entry.yaml",
+      "runtime_scan.json",
+      "risk-service_catalog_entry.yaml",
+      "workflow-engine_scan.md",
+      "observability_scan.json",
+      "validation-service_scan.md",
+      "compliance-service_catalog_entry.yaml"
+    ],
+    "devops-agent/monitoring": [
+      "continuous_monitor.py"
+    ],
+    "devops-agent/reports": [
+      "__init__.py",
+      "report_manager.py"
+    ],
+    "analytics-specialist": [
+      ".DS_Store",
+      "test_platform_integration.py",
+      "requirements.txt",
+      "Dockerfile",
+      "README.md",
+      "WORKFLOWS_AND_ML_STRATEGY.md",
+      ".env.example",
+      "main.py"
+    ],
+    "analytics-specialist/clients": [
+      "community_intelligence_client.py",
+      "ai_orchestrator_client.py",
+      "__init__.py",
+      "mio_manager_client.py",
+      "collective_client.py",
+      "predictive_client.py",
+      "process_analytics_client.py"
+    ],
+    "analytics-specialist/tools": [
+      "dependency_validator_tool.py",
+      "__init__.py",
+      "module_scanner_tool.py",
+      "ast_analyzer_tool.py",
+      "security_scanner_tool.py",
+      "api_mapper_tool.py",
+      "dependency_mapper_tool.py",
+      "metrics_discovery_tool.py"
+    ],
+    "analytics-specialist/core": [
+      "analytics_core.py",
+      "__init__.py"
+    ],
+    "analytics-specialist/config": [
+      "__init__.py",
+      "settings.py"
+    ],
+    "analytics-specialist/workflows": [
+      "daily_health_check.py",
+      "__init__.py",
+      "incident_investigation.py"
+    ],
+    "analytics-specialist/models": [
+      "analytics_models.py",
+      "__init__.py"
+    ],
+    "analytics-specialist/api": [
+      "tools_ui_routes.py",
+      "__init__.py",
+      "routes.py"
+    ],
+    "agent-router": [
+      "example_integration.py",
+      "metrics.py",
+      "Dockerfile.metrics",
+      ".DS_Store",
+      "requirements.txt",
+      "temporal_workflows.py",
+      "WORKFLOW_SPECIFICATION.md",
+      "__init__.py",
+      "README.md",
+      "circuit_breaker.py",
+      "docker-compose.yml",
+      "router.py",
+      "prometheus.yml",
+      "health_daemon.py",
+      "metrics_server.py"
+    ],
+    "project-agent": [
+      ".DS_Store",
+      "LICENSE",
+      "requirements.txt",
+      "START_HERE.md",
+      "install.sh",
+      "QUICKSTART.md",
+      "INSTALL.txt",
+      "MANIFEST.in",
+      "README.md",
+      "watcher_config.json",
+      "setup.py",
+      ".gitignore",
+      "VERSION",
+      "PACKAGE_INFO.md",
+      "code_watcher.py",
+      "setup.cfg",
+      "setup_automation.sh"
+    ],
+    "project-agent/agent": [
+      "bpmn_yaml.py",
+      "config.py",
+      "doc_sync.py",
+      "compliance.py",
+      "__init__.py",
+      "changelog.py",
+      "cli.py",
+      "indexer.py",
+      "domain_detector.py",
+      "report.py"
+    ],
+    "project-agent/agent/modules": [
+      "test_generator.py",
+      "security.py",
+      "__init__.py",
+      "architecture.py",
+      "testing.py",
+      "quality.py"
+    ],
+    "project-agent/test-project": [
+      "requirements.txt",
+      "README.md",
+      ".project-agent.yml",
+      "package.json",
+      ".env.example"
+    ],
+    "project-agent/test-project/tests": [
+      "test_incident.py",
+      "test_risk.py"
+    ],
+    "project-agent/test-project/docs": [
+      "BIA.md",
+      "POLICY.md"
+    ],
+    "project-agent/test-project/docs/reports": [
+      "quality_report.json",
+      "iso_coverage.json",
+      "testing_report.md",
+      "quality_report.md",
+      "security_report.md",
+      "security_report.json",
+      "testing_report.json"
+    ],
+    "project-agent/test-project/src": [
+      "index.js",
+      "risk_assessment.py",
+      "app.py",
+      "incident_manager.py"
+    ],
+    "mio-manager": [
+      ".DS_Store",
+      "config.py",
+      "requirements.txt",
+      "WORKFLOW_SPECIFICATION.md",
+      "database.py",
+      "__init__.py",
+      "start_worker.sh",
+      "README.md",
+      "INDEX.md",
+      "client_provider.py",
+      "main.py",
+      "run_worker.py",
+      "test_mio_manager.sh"
+    ],
+    "mio-manager/temporal_workflows": [
+      "control_workflow.py",
+      "reporting_workflow.py",
+      "__init__.py",
+      "reaction_workflow.py",
+      "observation_workflow.py"
+    ],
+    "mio-manager/reaction": [
+      "reaction_rules_engine.py",
+      "escalation_manager.py",
+      "__init__.py",
+      "action_executor.py"
+    ],
+    "mio-manager/intelligence": [
+      "__init__.py",
+      "ai_coordinator.py",
+      "decision_engine.py",
+      "learning_tracker.py"
+    ],
+    "mio-manager/tests": [
+      "test_database.py",
+      "__init__.py",
+      "README.md"
+    ],
+    "mio-manager/workflows": [
+      "__init__.py",
+      "automated_response_engine.py"
+    ],
+    "mio-manager/scheduler": [
+      "automation_jobs.py",
+      "__init__.py",
+      "smart_scheduler.py"
+    ],
+    "mio-manager/repositories": [
+      "__init__.py",
+      "actions_repository.py",
+      "reports_repository.py"
+    ],
+    "mio-manager/models": [
+      "database.py",
+      "__init__.py"
+    ],
+    "mio-manager/docs": [
+      "INTEGRATION_COMPLETE.md",
+      "WORKFLOW_INTEGRATION.md",
+      "DATABASE_INTEGRATION.md",
+      "AUTOMATION_TOOLKIT_MONITORING_INTEGRATION.md",
+      "SERVICE_DOCUMENTATION.md",
+      "AI_MIO_MANAGER_ARCHITECTURE.md"
+    ],
+    "mio-manager/integrations": [
+      "notification_client.py",
+      "compliance_monitoring_client.py",
+      "eventbus_client.py",
+      "orchestration_client.py",
+      "event_manager_client.py",
+      "automation_toolkit.py",
+      "workflow_intelligence_client.py",
+      "__init__.py",
+      "devops_agent_client.py",
+      "gateway_manager.py",
+      "orchestrator_client.py",
+      "bcm_orchestrator_client.py",
+      "ai_event_manager_client.py",
+      "workflow_optimizer_client.py",
+      "coordination_center_client.py",
+      "predictive_client.py",
+      "agent_router_client.py"
+    ],
+    "mio-manager/api": [
+      "__init__.py",
+      "routes.py"
+    ],
+    "orchestrator": [
+      "FINAL_STATUS.md",
+      "QUICK_FIX_SUMMARY.md",
+      ".DS_Store",
+      "unified_orchestrator.py",
+      "requirements.txt",
+      "__init__.py",
+      "PRODUCTION_READY_REPORT.md",
+      "infrastructure_builder.py",
+      "test_orchestrator.py",
+      "README.md",
+      "docker_compose_generator.py",
+      "infrastructure_orchestrator.py",
+      "verify_health.py",
+      "adaptive_metrics.py",
+      "ADAPTIVE_METRICS_INTEGRATION.md",
+      "FIX_REPORT.md"
+    ],
+    "orchestrator/.pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    "orchestrator/.pytest_cache/v/cache": [
+      "nodeids"
+    ],
+    "orchestrator/executors": [
+      "infrastructure_executor.py",
+      "__init__.py",
+      "event_executor.py"
+    ]
+  },
+  "dependencies": [
+    "__future__",
+    "action_executor",
+    "actions_repository",
+    "adaptive_metrics",
+    "agent",
+    "agent_router_client",
+    "ai_coordinator",
+    "ai_foundation",
+    "ai_foundation/integrations",
+    "ai_foundation/workflow_engine",
+    "ai_integration",
+    "ai_orchestrator_client",
+    "ai_services/collective_client",
+    "ai_services/community_intelligence_client",
+    "ai_services/integrations",
+    "ai_services/predictive_client",
+    "analytics_core",
+    "analytics_models",
+    "analyzers.ast_analyzer",
+    "analyzers.dependency_mapper",
+    "analyzers.deployment_analyzer",
+    "analyzers.dockerfile_analyzer",
+    "analyzers.event_analyzer",
+    "api",
+    "api.tools_ui_routes",
+    "api_mapper",
+    "api_mapper_tool",
+    "apscheduler.schedulers.asyncio",
+    "apscheduler.triggers.cron",
+    "apscheduler.triggers.interval",
+    "argparse",
+    "ast",
+    "ast_analyzer",
+    "ast_analyzer_tool",
+    "astor",
+    "asyncio",
+    "auto_remediation.dockerfile_generator",
+    "auto_remediation.event_fixer",
+    "automation_jobs",
+    "bcm_executor",
+    "circuit_breaker",
+    "click",
+    "client_provider",
+    "clients",
+    "collections",
+    "command_handler",
+    "complexity_workflow",
+    "config",
+    "contextlib",
+    "continuous_monitor",
+    "control_workflow",
+    "core",
+    "core.analytics_core",
+    "daily_health_check",
+    "database",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "dateutil",
+    "db_intelligence_service",
+    "decision_engine",
+    "dependency_mapper",
+    "dependency_mapper_tool",
+    "dependency_validator",
+    "dependency_validator_tool",
+    "dependency_workflow",
+    "devops_agent_integration",
+    "discover_services",
+    "docker_compose_generator",
+    "docker_manager",
+    "domain_detector",
+    "dotenv",
+    "enum",
+    "escalation_manager",
+    "event_executor",
+    "event_intelligence_integration",
+    "executors",
+    "executors.event_executor",
+    "executors.infrastructure_executor",
+    "external/temporal-cloud",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "flask",
+    "generators.test_generator",
+    "git",
+    "github_integration_client",
+    "health_daemon",
+    "httpx",
+    "incident_investigation",
+    "incident_manager",
+    "infrastructure.database",
+    "infrastructure.database.intelligence.api",
+    "infrastructure.database.intelligence.db_intelligence_service",
+    "infrastructure.discover_services",
+    "infrastructure.docker_compose_generator",
+    "infrastructure_executor",
+    "integrations",
+    "integrations.ai_event_manager_client",
+    "integrations.automation_toolkit",
+    "integrations.compliance_monitoring_client",
+    "integrations.coordination_center_client",
+    "integrations.devops_agent_client",
+    "integrations.gateway_manager",
+    "integrations.notification_client",
+    "integrations.orchestrator_client",
+    "integrations.workflow_optimizer_client",
+    "intelligence.ai_coordinator",
+    "intelligence.decision_engine",
+    "intelligence.learning_tracker",
+    "intelligent_core.event_intelligence",
+    "json",
+    "learning_tracker",
+    "llm.llm_router",
+    "logging",
+    "main",
+    "metrics",
+    "metrics_discovery",
+    "metrics_discovery_tool",
+    "mio_manager_client",
+    "mio_manager_integration",
+    "models",
+    "models.database",
+    "module_scanner",
+    "module_scanner_tool",
+    "modules.architecture",
+    "modules.quality",
+    "modules.security",
+    "modules.test_generator",
+    "modules.testing",
+    "observation_workflow",
+    "orchestrator_integration",
+    "os",
+    "pathlib",
+    "pickle",
+    "process_analytics_client",
+    "prometheus_client",
+    "psutil",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "rag.pipeline",
+    "random",
+    "re",
+    "reaction.action_executor",
+    "reaction.escalation_manager",
+    "reaction_rules_engine",
+    "reaction_workflow",
+    "reporting_workflow",
+    "reports.report_manager",
+    "reports_repository",
+    "repositories",
+    "requests",
+    "rich.console",
+    "rich.panel",
+    "rich.table",
+    "risk_assessment",
+    "router",
+    "routes",
+    "runtime/eventbus",
+    "scheduler.automation_jobs",
+    "scheduler.smart_scheduler",
+    "security_monitor",
+    "security_scanner",
+    "security_scanner_tool",
+    "security_workflow",
+    "service_down_workflow",
+    "service_registry",
+    "settings",
+    "setuptools",
+    "shared/platform_client",
+    "smart_scheduler",
+    "statistics",
+    "subprocess",
+    "sys",
+    "time",
+    "tools",
+    "tools.devops_agent.agent",
+    "traceback",
+    "typing",
+    "unified_orchestrator",
+    "uuid",
+    "uvicorn",
+    "watchdog.events",
+    "watchdog.observers",
+    "workflows",
+    "xml.etree.ElementTree",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/query-metrics",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/slow-queries",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/suggestions",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/tables",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/config",
+      "file": "api.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/config",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics/prometheus",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/execute",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/running-queries",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/locks",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze/event",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/predictions/future",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/report",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/summary",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/scan/trigger",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/analyze/full",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/eventbus/publish",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/github/issue",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/monitor/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scan",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/latest",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports/history",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/discover",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze/dependencies",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze/complexity",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/security/scan",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/tests/generate",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/monitoring/setup",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/monitoring/prometheus/config",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/monitoring/grafana/dashboard",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/delegate",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/gateway/register",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gateway/health/{service_name}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/events/analyze",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/events/recommendations",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/events/architecture/insights",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/events/learning/stats",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/events/feedback",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/status",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/discover",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/generate",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/deploy",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/build-and-deploy",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tasks/execute",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/fix-gap",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/fix-gaps",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/add-publisher",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/add-subscriber",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/create-pr",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events/rollback",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/current",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/queue/stats",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queue/add",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/queue/next",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monitoring/start",
+      "file": "unified_orchestrator.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monitoring/stop",
+      "file": "unified_orchestrator.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "CommandHandler",
+      "file": "command_handler.py",
+      "methods": 1
+    },
+    {
+      "name": "QueryMetrics",
+      "file": "db_intelligence_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ConnectionPoolStats",
+      "file": "db_intelligence_service.py",
+      "methods": 0
+    },
+    {
+      "name": "DatabaseHealth",
+      "file": "db_intelligence_service.py",
+      "methods": 0
+    },
+    {
+      "name": "OptimizationSuggestion",
+      "file": "db_intelligence_service.py",
+      "methods": 0
+    },
+    {
+      "name": "DatabaseIntelligenceService",
+      "file": "db_intelligence_service.py",
+      "methods": 1
+    },
+    {
+      "name": "QueryAnalysisRequest",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthResponse",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "AdminCommand",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "OrchestratorCommand",
+      "file": "orchestrator_integration.py",
+      "methods": 0
+    },
+    {
+      "name": "CommandResult",
+      "file": "orchestrator_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "OrchestratorClient",
+      "file": "orchestrator_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "SecurityAlert",
+      "file": "security_monitor.py",
+      "methods": 0
+    },
+    {
+      "name": "SecurityMonitor",
+      "file": "security_monitor.py",
+      "methods": 3
+    },
+    {
+      "name": "AIIntegration",
+      "file": "ai_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "MioIntegration",
+      "file": "integration_with_mio.py",
+      "methods": 3
+    },
+    {
+      "name": "EventAnalysisRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "FeedbackRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "EventAnalyzer",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "EventLearner",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "EventPredictor",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "Analysis",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "EventIntelligenceIntegration",
+      "file": "event_intelligence_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "GitHubIntegrationClient",
+      "file": "github_integration_client.py",
+      "methods": 1
+    },
+    {
+      "name": "IntegrationManager",
+      "file": "__init__.py",
+      "methods": 3
+    },
+    {
+      "name": "EventBusIntegration",
+      "file": "eventbus_integration.py",
+      "methods": 2
+    },
+    {
+      "name": "MioManagerIntegration",
+      "file": "mio_manager_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "DevOpsAgentIntegration",
+      "file": "devops_agent_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "ContinuousMonitor",
+      "file": "continuous_monitor.py",
+      "methods": 2
+    },
+    {
+      "name": "DevOpsAgent",
+      "file": "agent.py",
+      "methods": 4
+    },
+    {
+      "name": "DockerfileGenerator",
+      "file": "dockerfile_generator.py",
+      "methods": 2
+    },
+    {
+      "name": "CodeFix",
+      "file": "event_fixer.py",
+      "methods": 0
+    },
+    {
+      "name": "EventAutoFixer",
+      "file": "event_fixer.py",
+      "methods": 11
+    },
+    {
+      "name": "PrometheusExporter",
+      "file": "prometheus_exporter.py",
+      "methods": 6
+    },
+    {
+      "name": "EventDefinition",
+      "file": "event_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "EventGap",
+      "file": "event_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "PotentialEvent",
+      "file": "event_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "EventIntelligenceSystem",
+      "file": "event_analyzer.py",
+      "methods": 16
+    },
+    {
+      "name": "ServiceMetadata",
+      "file": "dockerfile_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "DockerfileAnalyzer",
+      "file": "dockerfile_analyzer.py",
+      "methods": 11
+    },
+    {
+      "name": "PortConflict",
+      "file": "deployment_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceStatus",
+      "file": "deployment_analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "DeploymentAnalyzer",
+      "file": "deployment_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "DevOpsAgentWorkflow",
+      "file": "devops_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "DevOpsWeeklyDeepScan",
+      "file": "devops_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowIntelligenceClient",
+      "file": "workflow_intelligence.py",
+      "methods": 1
+    },
+    {
+      "name": "ScanRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "EventIntelligenceMonitor",
+      "file": "continuous_monitor.py",
+      "methods": 10
+    },
+    {
+      "name": "ReportManager",
+      "file": "report_manager.py",
+      "methods": 7
+    },
+    {
+      "name": "CommunityIntelligenceClient",
+      "file": "community_intelligence_client.py",
+      "methods": 1
+    },
+    {
+      "name": "AIOrchestratorClient",
+      "file": "ai_orchestrator_client.py",
+      "methods": 1
+    },
+    {
+      "name": "MIOManagerClient",
+      "file": "mio_manager_client.py",
+      "methods": 1
+    },
+    {
+      "name": "CollectiveClient",
+      "file": "collective_client.py",
+      "methods": 1
+    },
+    {
+      "name": "PredictiveClient",
+      "file": "predictive_client.py",
+      "methods": 4
+    },
+    {
+      "name": "ProcessAnalyticsClient",
+      "file": "process_analytics_client.py",
+      "methods": 2
+    },
+    {
+      "name": "DependencyValidatorTool",
+      "file": "dependency_validator_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "ModuleScannerTool",
+      "file": "module_scanner_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "ASTAnalyzerTool",
+      "file": "ast_analyzer_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "SecurityScannerTool",
+      "file": "security_scanner_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "APIMapperTool",
+      "file": "api_mapper_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "DependencyMapperTool",
+      "file": "dependency_mapper_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "MetricsDiscoveryTool",
+      "file": "metrics_discovery_tool.py",
+      "methods": 1
+    },
+    {
+      "name": "AnalyticsCore",
+      "file": "analytics_core.py",
+      "methods": 4
+    },
+    {
+      "name": "Settings",
+      "file": "settings.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "settings.py",
+      "methods": 0
+    },
+    {
+      "name": "SeverityLevel",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyLevel",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalysisType",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "InsightCategory",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyticsInsight",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyticsRecommendation",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyticsReport",
+      "file": "analytics_models.py",
+      "methods": 2
+    },
+    {
+      "name": "AnalysisRequest",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResponse",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "InsightsResponse",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "MIOEventInsight",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "MIOTaskDelegation",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolMetadata",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "PlatformHealthMetrics",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessMiningMetrics",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "DependencyAnalysisResult",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "analytics_models.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolExecutionRequest",
+      "file": "tools_ui_routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ToolScheduleRequest",
+      "file": "tools_ui_routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentHealthMonitoringWorkflow",
+      "file": "temporal_workflows.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitBreakerRecoveryWorkflow",
+      "file": "temporal_workflows.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceDiscoverySyncWorkflow",
+      "file": "temporal_workflows.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricsExportWorkflow",
+      "file": "temporal_workflows.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitState",
+      "file": "circuit_breaker.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitBreakerConfig",
+      "file": "circuit_breaker.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitBreakerStats",
+      "file": "circuit_breaker.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitBreaker",
+      "file": "circuit_breaker.py",
+      "methods": 2
+    },
+    {
+      "name": "CircuitBreakerOpenError",
+      "file": "circuit_breaker.py",
+      "methods": 0
+    },
+    {
+      "name": "CircuitBreakerManager",
+      "file": "circuit_breaker.py",
+      "methods": 2
+    },
+    {
+      "name": "AgentCapability",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentRole",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAgent",
+      "file": "router.py",
+      "methods": 1
+    },
+    {
+      "name": "RateLimiter",
+      "file": "router.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAgentRouter",
+      "file": "router.py",
+      "methods": 7
+    },
+    {
+      "name": "HealthCheckDaemon",
+      "file": "health_daemon.py",
+      "methods": 2
+    },
+    {
+      "name": "CodeChangeHandler",
+      "file": "code_watcher.py",
+      "methods": 7
+    },
+    {
+      "name": "CodeWatcher",
+      "file": "code_watcher.py",
+      "methods": 4
+    },
+    {
+      "name": "FunctionInfo",
+      "file": "test_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "ClassInfo",
+      "file": "test_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "CodeAnalyzer",
+      "file": "test_generator.py",
+      "methods": 7
+    },
+    {
+      "name": "TemplateTestGenerator",
+      "file": "test_generator.py",
+      "methods": 8
+    },
+    {
+      "name": "RiskAssessor",
+      "file": "risk_assessment.py",
+      "methods": 6
+    },
+    {
+      "name": "IncidentManager",
+      "file": "incident_manager.py",
+      "methods": 7
+    },
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "ControlWorkflow",
+      "file": "control_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ReportingWorkflow",
+      "file": "reporting_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ReactionWorkflow",
+      "file": "reaction_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionResult",
+      "file": "reaction_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservationWorkflow",
+      "file": "observation_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ReactionLevel",
+      "file": "reaction_rules_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "ProblemSeverity",
+      "file": "reaction_rules_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskLevel",
+      "file": "reaction_rules_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "ProblemClassification",
+      "file": "reaction_rules_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "ReactionRulesEngine",
+      "file": "reaction_rules_engine.py",
+      "methods": 15
+    },
+    {
+      "name": "EscalationRequest",
+      "file": "escalation_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "EscalationManager",
+      "file": "escalation_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "ActionResult",
+      "file": "action_executor.py",
+      "methods": 2
+    },
+    {
+      "name": "ActionExecutor",
+      "file": "action_executor.py",
+      "methods": 5
+    },
+    {
+      "name": "AICoordinator",
+      "file": "ai_coordinator.py",
+      "methods": 12
+    },
+    {
+      "name": "DecisionPriority",
+      "file": "decision_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionType",
+      "file": "decision_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionEngine",
+      "file": "decision_engine.py",
+      "methods": 8
+    },
+    {
+      "name": "LearningTracker",
+      "file": "learning_tracker.py",
+      "methods": 10
+    },
+    {
+      "name": "AutomatedResponseEngine",
+      "file": "automated_response_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "SmartScheduler",
+      "file": "smart_scheduler.py",
+      "methods": 15
+    },
+    {
+      "name": "ActionsRepository",
+      "file": "actions_repository.py",
+      "methods": 10
+    },
+    {
+      "name": "ReportsRepository",
+      "file": "reports_repository.py",
+      "methods": 7
+    },
+    {
+      "name": "AnalysisType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "IssueSeverity",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalysisReport",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceDiscovery",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SecurityScanResult",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CodeComplexityResult",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "DependencyAnalysisResult",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "MIOAction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskDelegation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "IssueTracking",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricsSnapshot",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "NotificationClient",
+      "file": "notification_client.py",
+      "methods": 9
+    },
+    {
+      "name": "ComplianceMonitoringClient",
+      "file": "compliance_monitoring_client.py",
+      "methods": 1
+    },
+    {
+      "name": "EventBusClient",
+      "file": "eventbus_client.py",
+      "methods": 2
+    },
+    {
+      "name": "DefaultEventHandlers",
+      "file": "eventbus_client.py",
+      "methods": 1
+    },
+    {
+      "name": "OrchestrationClient",
+      "file": "orchestration_client.py",
+      "methods": 1
+    },
+    {
+      "name": "EventManagerClient",
+      "file": "event_manager_client.py",
+      "methods": 1
+    },
+    {
+      "name": "AutomationToolkitManager",
+      "file": "automation_toolkit.py",
+      "methods": 4
+    },
+    {
+      "name": "WorkflowIntelligenceClient",
+      "file": "workflow_intelligence_client.py",
+      "methods": 1
+    },
+    {
+      "name": "DevOpsAgentClient",
+      "file": "devops_agent_client.py",
+      "methods": 1
+    },
+    {
+      "name": "GatewayManager",
+      "file": "gateway_manager.py",
+      "methods": 1
+    },
+    {
+      "name": "OrchestratorClient",
+      "file": "orchestrator_client.py",
+      "methods": 1
+    },
+    {
+      "name": "BCMOrchestratorClient",
+      "file": "bcm_orchestrator_client.py",
+      "methods": 1
+    },
+    {
+      "name": "AIEventManagerClient",
+      "file": "ai_event_manager_client.py",
+      "methods": 1
+    },
+    {
+      "name": "WorkflowOptimizerClient",
+      "file": "workflow_optimizer_client.py",
+      "methods": 1
+    },
+    {
+      "name": "CoordinationCenterClient",
+      "file": "coordination_center_client.py",
+      "methods": 1
+    },
+    {
+      "name": "PredictiveClient",
+      "file": "predictive_client.py",
+      "methods": 2
+    },
+    {
+      "name": "AgentRouterClient",
+      "file": "agent_router_client.py",
+      "methods": 3
+    },
+    {
+      "name": "ServiceDiscoveryRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "DependencyAnalysisRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplexityAnalysisRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskDelegateRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "EventAnalysisRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "EventFeedbackRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "DeploymentRequest",
+      "file": "unified_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskRequest",
+      "file": "unified_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "EventGapRequest",
+      "file": "unified_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "UnifiedOrchestrator",
+      "file": "unified_orchestrator.py",
+      "methods": 1
+    },
+    {
+      "name": "AdaptiveOrchestratorMixin",
+      "file": "unified_orchestrator.py",
+      "methods": 0
+    },
+    {
+      "name": "InfrastructureBuilder",
+      "file": "infrastructure_builder.py",
+      "methods": 14
+    },
+    {
+      "name": "OrchestratorTester",
+      "file": "test_orchestrator.py",
+      "methods": 6
+    },
+    {
+      "name": "DockerComposeGenerator",
+      "file": "docker_compose_generator.py",
+      "methods": 11
+    },
+    {
+      "name": "InfrastructureOrchestrator",
+      "file": "infrastructure_orchestrator.py",
+      "methods": 11
+    },
+    {
+      "name": "TaskPriority",
+      "file": "adaptive_metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricThreshold",
+      "file": "adaptive_metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "OrchestratorMetrics",
+      "file": "adaptive_metrics.py",
+      "methods": 2
+    },
+    {
+      "name": "TaskContext",
+      "file": "adaptive_metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "AdaptiveMetricsCollector",
+      "file": "adaptive_metrics.py",
+      "methods": 4
+    },
+    {
+      "name": "PriorityEngine",
+      "file": "adaptive_metrics.py",
+      "methods": 7
+    },
+    {
+      "name": "AdaptiveOrchestratorMixin",
+      "file": "adaptive_metrics.py",
+      "methods": 1
+    },
+    {
+      "name": "InfrastructureExecutor",
+      "file": "infrastructure_executor.py",
+      "methods": 1
+    },
+    {
+      "name": "FileChange",
+      "file": "event_executor.py",
+      "methods": 0
+    },
+    {
+      "name": "EventGap",
+      "file": "event_executor.py",
+      "methods": 0
+    },
+    {
+      "name": "EventExecutor",
+      "file": "event_executor.py",
+      "methods": 10
+    }
+  ],
+  "functions": [
+    {
+      "name": "check_file",
+      "file": "verify_implementation.py",
+      "params": 2
+    },
+    {
+      "name": "check_imports",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "check_features",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "check_api_endpoints",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "check_orchestrator_client",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "check_command_handler",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "verify_implementation.py",
+      "params": 0
+    },
+    {
+      "name": "get_db_intelligence",
+      "file": "db_intelligence_service.py",
+      "params": 0
+    },
+    {
+      "name": "get_orchestrator_client",
+      "file": "orchestrator_integration.py",
+      "params": 0
+    },
+    {
+      "name": "get_ai_integration",
+      "file": "ai_integration.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "event_fixer.py",
+      "params": 0
+    },
+    {
+      "name": "get_exporter",
+      "file": "prometheus_exporter.py",
+      "params": 0
+    },
+    {
+      "name": "export_scan_metrics",
+      "file": "prometheus_exporter.py",
+      "params": 1
+    },
+    {
+      "name": "export_fix_metrics",
+      "file": "prometheus_exporter.py",
+      "params": 1
+    },
+    {
+      "name": "export_dockerfile_metrics",
+      "file": "prometheus_exporter.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "event_analyzer.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "continuous_monitor.py",
+      "params": 0
+    },
+    {
+      "name": "record_request",
+      "file": "metrics.py",
+      "params": 4
+    },
+    {
+      "name": "record_agent_health",
+      "file": "metrics.py",
+      "params": 4
+    },
+    {
+      "name": "record_fallback",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "record_error",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "record_no_agents",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "update_agent_load",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "record_redis_operation",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "set_router_info",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "update_capability_success_rate",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "run_server",
+      "file": "metrics_server.py",
+      "params": 2
+    },
+    {
+      "name": "main",
+      "file": "code_watcher.py",
+      "params": 0
+    },
+    {
+      "name": "_norm_token",
+      "file": "bpmn_yaml.py",
+      "params": 1
+    },
+    {
+      "name": "_scan_code_hits",
+      "file": "bpmn_yaml.py",
+      "params": 2
+    },
+    {
+      "name": "_parse_bpmn_file",
+      "file": "bpmn_yaml.py",
+      "params": 2
+    },
+    {
+      "name": "_parse_yaml_json_file",
+      "file": "bpmn_yaml.py",
+      "params": 2
+    },
+    {
+      "name": "build_process_map",
+      "file": "bpmn_yaml.py",
+      "params": 0
+    },
+    {
+      "name": "get_repo_path",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "get_reports_dir",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "get_config_path",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "load_config",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "save_config",
+      "file": "config.py",
+      "params": 1
+    },
+    {
+      "name": "get_default_config",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "_read",
+      "file": "doc_sync.py",
+      "params": 1
+    },
+    {
+      "name": "extract_features",
+      "file": "doc_sync.py",
+      "params": 1
+    },
+    {
+      "name": "check_consistency",
+      "file": "doc_sync.py",
+      "params": 0
+    },
+    {
+      "name": "run_iso_coverage",
+      "file": "compliance.py",
+      "params": 0
+    },
+    {
+      "name": "generate_changelog",
+      "file": "changelog.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "init_cmd",
+      "file": "cli.py",
+      "params": 2
+    },
+    {
+      "name": "scan_cmd",
+      "file": "cli.py",
+      "params": 1
+    },
+    {
+      "name": "status_cmd",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "index_cmd",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "processmap_cmd",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "consistency_cmd",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "iso_cmd",
+      "file": "cli.py",
+      "params": 0
+    },
+    {
+      "name": "changelog_cmd",
+      "file": "cli.py",
+      "params": 1
+    },
+    {
+      "name": "report_cmd",
+      "file": "cli.py",
+      "params": 1
+    },
+    {
+      "name": "generate_tests_cmd",
+      "file": "cli.py",
+      "params": 2
+    },
+    {
+      "name": "analyze_architecture_cmd",
+      "file": "cli.py",
+      "params": 2
+    },
+    {
+      "name": "run",
+      "file": "indexer.py",
+      "params": 0
+    },
+    {
+      "name": "detect_domain",
+      "file": "domain_detector.py",
+      "params": 1
+    },
+    {
+      "name": "_scan_files",
+      "file": "domain_detector.py",
+      "params": 2
+    },
+    {
+      "name": "_scan_docs",
+      "file": "domain_detector.py",
+      "params": 2
+    },
+    {
+      "name": "_scan_dependencies",
+      "file": "domain_detector.py",
+      "params": 2
+    },
+    {
+      "name": "get_domain_config",
+      "file": "domain_detector.py",
+      "params": 1
+    },
+    {
+      "name": "_read_json",
+      "file": "report.py",
+      "params": 1
+    },
+    {
+      "name": "_write",
+      "file": "report.py",
+      "params": 2
+    },
+    {
+      "name": "_count_commits",
+      "file": "report.py",
+      "params": 2
+    },
+    {
+      "name": "build_daily_report",
+      "file": "report.py",
+      "params": 0
+    },
+    {
+      "name": "build_donor_summary",
+      "file": "report.py",
+      "params": 0
+    },
+    {
+      "name": "generate_tests_for_module",
+      "file": "test_generator.py",
+      "params": 4
+    },
+    {
+      "name": "analyze_file",
+      "file": "test_generator.py",
+      "params": 1
+    },
+    {
+      "name": "run_test_generation",
+      "file": "test_generator.py",
+      "params": 3
+    },
+    {
+      "name": "run_security_checks",
+      "file": "security.py",
+      "params": 1
+    },
+    {
+      "name": "_scan_secrets",
+      "file": "security.py",
+      "params": 1
+    },
+    {
+      "name": "_scan_vulnerabilities",
+      "file": "security.py",
+      "params": 1
+    },
+    {
+      "name": "_check_dependencies",
+      "file": "security.py",
+      "params": 1
+    },
+    {
+      "name": "_save_security_report",
+      "file": "security.py",
+      "params": 1
+    },
+    {
+      "name": "run_architecture_analysis",
+      "file": "architecture.py",
+      "params": 2
+    },
+    {
+      "name": "_scan_modules",
+      "file": "architecture.py",
+      "params": 2
+    },
+    {
+      "name": "_analyze_dependencies",
+      "file": "architecture.py",
+      "params": 2
+    },
+    {
+      "name": "_map_api_endpoints",
+      "file": "architecture.py",
+      "params": 2
+    },
+    {
+      "name": "_extract_business_logic",
+      "file": "architecture.py",
+      "params": 2
+    },
+    {
+      "name": "_detect_architecture_issues",
+      "file": "architecture.py",
+      "params": 1
+    },
+    {
+      "name": "_generate_architecture_summary",
+      "file": "architecture.py",
+      "params": 1
+    },
+    {
+      "name": "_save_architecture_report",
+      "file": "architecture.py",
+      "params": 1
+    },
+    {
+      "name": "run_testing_checks",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_detect_test_frameworks",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_find_test_files",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_run_pytest_coverage",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_run_jest_coverage",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_run_go_coverage",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_calculate_average_coverage",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "_save_testing_report",
+      "file": "testing.py",
+      "params": 1
+    },
+    {
+      "name": "run_quality_checks",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "_check_complexity",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "_calculate_complexity",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "_check_duplication",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "_check_tech_debt",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "_save_quality_report",
+      "file": "quality.py",
+      "params": 1
+    },
+    {
+      "name": "test_create_incident",
+      "file": "test_incident.py",
+      "params": 0
+    },
+    {
+      "name": "test_list_incidents",
+      "file": "test_incident.py",
+      "params": 0
+    },
+    {
+      "name": "test_has_active_incidents",
+      "file": "test_incident.py",
+      "params": 0
+    },
+    {
+      "name": "test_risk_assessment",
+      "file": "test_risk.py",
+      "params": 0
+    },
+    {
+      "name": "test_risk_level",
+      "file": "test_risk.py",
+      "params": 0
+    },
+    {
+      "name": "_calculate_fair_score_v2",
+      "file": "risk_assessment.py",
+      "params": 2
+    },
+    {
+      "name": "_get_risk_level_v2",
+      "file": "risk_assessment.py",
+      "params": 1
+    },
+    {
+      "name": "incidents",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "assess_risk",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "health_check",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "init_database",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_db",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_db_session",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "inject_dependencies",
+      "file": "control_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "inject_dependencies",
+      "file": "reporting_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "inject_dependencies",
+      "file": "reaction_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "inject_dependencies",
+      "file": "observation_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "setup_database",
+      "file": "test_database.py",
+      "params": 0
+    },
+    {
+      "name": "test_database_initialization",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "test_save_security_scan",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "test_create_action",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "test_create_issue",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "test_get_open_issues",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "test_action_stats",
+      "file": "test_database.py",
+      "params": 1
+    },
+    {
+      "name": "start_scheduler",
+      "file": "automation_jobs.py",
+      "params": 3
+    },
+    {
+      "name": "stop_scheduler",
+      "file": "automation_jobs.py",
+      "params": 0
+    },
+    {
+      "name": "get_compliance_client",
+      "file": "compliance_monitoring_client.py",
+      "params": 1
+    },
+    {
+      "name": "get_ai_event_manager_client",
+      "file": "ai_event_manager_client.py",
+      "params": 1
+    },
+    {
+      "name": "get_coordination_client",
+      "file": "coordination_center_client.py",
+      "params": 1
+    },
+    {
+      "name": "get_predictive_client",
+      "file": "predictive_client.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "infrastructure_builder.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "docker_compose_generator.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "infrastructure_orchestrator.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "verify_health.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 41605,
+    "python_files": 159,
+    "classes": 194,
+    "functions": 131,
+    "endpoints": 66,
+    "dependencies": 188
+  },
+  "readme": null
+}

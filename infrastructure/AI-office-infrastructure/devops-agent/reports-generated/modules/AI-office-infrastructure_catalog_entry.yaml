@@ -1,0 +1,38 @@
+
+  AI_office_infrastructure:
+    type: service
+    location: infrastructure/AI-office-infrastructure
+    port: 8050
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+        - external/temporal-cloud
+      internal:
+        - ai_coordinator
+        - ai_foundation
+        - ai_foundation/integrations
+        - ai_foundation/workflow_engine
+        - ai_integration
+        - ai_orchestrator_client
+        - ai_services/collective_client
+        - ai_services/community_intelligence_client
+        - ai_services/integrations
+        - ai_services/predictive_client
+        - shared/platform_client
+    endpoints:
+      - GET /
+      - GET /health
+      - GET /metrics
+      - GET /query-metrics
+      - GET /slow-queries
+    metrics:
+      loc: 41605
+      files: 159
+      classes: 194
+      functions: 131
+    status: discovered

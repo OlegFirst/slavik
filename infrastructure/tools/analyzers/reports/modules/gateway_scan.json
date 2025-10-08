@@ -1,0 +1,376 @@
+{
+  "module_name": "gateway",
+  "path": "infrastructure/gateway",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "SERVICE_SPEC.md"
+    ],
+    "api-gateway": [
+      "IMPLEMENTATION_STATUS.md",
+      "ACHIEVEMENT_SUMMARY.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "QUICK_RECOVERY_GUIDE.md",
+      "README.md",
+      ".env.example",
+      "main.py",
+      "IMPLEMENTATION_PLAN.md",
+      "FINAL_VICTORY.md"
+    ],
+    "api-gateway/middleware": [
+      "auth.py",
+      "audit.py",
+      "__init__.py",
+      "authorization.py",
+      "rate_limit.py"
+    ],
+    "api-gateway/tests": [
+      "test_auth.py",
+      "test_rate_limit.py",
+      "test_routing.py"
+    ],
+    "api-gateway/utils": [
+      "jwt_handler.py",
+      "__init__.py",
+      "redis_client.py"
+    ],
+    "api-gateway/models": [
+      "__init__.py",
+      "schemas.py"
+    ],
+    "api-gateway/routing": [
+      "load_balancer.py",
+      "__init__.py",
+      "health_checker.py",
+      "router.py"
+    ],
+    "agent-router": [
+      "__init__.py",
+      "README.md",
+      "router.py"
+    ],
+    "intelligent-gateway": [
+      ".DS_Store",
+      "README.md"
+    ],
+    "unified_database_gateway": [
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ]
+  },
+  "dependencies": [
+    "aio_pika",
+    "asyncio",
+    "asyncpg",
+    "collections",
+    "config",
+    "contextlib",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "fastapi.security",
+    "hashlib",
+    "httpx",
+    "json",
+    "jwt",
+    "jwt.exceptions",
+    "logging",
+    "middleware.audit",
+    "middleware.auth",
+    "middleware.rate_limit",
+    "motor.motor_asyncio",
+    "os",
+    "prometheus_fastapi_instrumentator",
+    "pydantic",
+    "pydantic_settings",
+    "random",
+    "re",
+    "router",
+    "routing.health_checker",
+    "routing.load_balancer",
+    "routing.router",
+    "runtime/eventbus",
+    "secrets",
+    "starlette.middleware.base",
+    "structlog",
+    "sys",
+    "time",
+    "typing",
+    "utils.jwt_handler",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gateway/ai/analyze",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gateway/ai/optimize",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/gateway/services",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/databases",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/query",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/odoo",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/odoo/session/{session_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/auth/odoo/session/{session_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "SecurityHeadersMiddleware",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "RequestIDMiddleware",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "AuthenticationMiddleware",
+      "file": "auth.py",
+      "methods": 4
+    },
+    {
+      "name": "OptionalAuthenticationMiddleware",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditLogMiddleware",
+      "file": "audit.py",
+      "methods": 2
+    },
+    {
+      "name": "RateLimitMiddleware",
+      "file": "rate_limit.py",
+      "methods": 6
+    },
+    {
+      "name": "AdaptiveRateLimiter",
+      "file": "rate_limit.py",
+      "methods": 1
+    },
+    {
+      "name": "JWTError",
+      "file": "jwt_handler.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenExpiredError",
+      "file": "jwt_handler.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenInvalidError",
+      "file": "jwt_handler.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenMissingClaimsError",
+      "file": "jwt_handler.py",
+      "methods": 0
+    },
+    {
+      "name": "JWTHandler",
+      "file": "jwt_handler.py",
+      "methods": 7
+    },
+    {
+      "name": "RedisClient",
+      "file": "redis_client.py",
+      "methods": 3
+    },
+    {
+      "name": "LoadBalancingAlgorithm",
+      "file": "load_balancer.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceInstance",
+      "file": "load_balancer.py",
+      "methods": 1
+    },
+    {
+      "name": "LoadBalancer",
+      "file": "load_balancer.py",
+      "methods": 6
+    },
+    {
+      "name": "HealthStatus",
+      "file": "health_checker.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthChecker",
+      "file": "health_checker.py",
+      "methods": 9
+    },
+    {
+      "name": "RouteConfig",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceRouter",
+      "file": "router.py",
+      "methods": 5
+    },
+    {
+      "name": "AgentCapability",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentRole",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAgent",
+      "file": "router.py",
+      "methods": 0
+    },
+    {
+      "name": "AIAgentRouter",
+      "file": "router.py",
+      "methods": 5
+    },
+    {
+      "name": "DatabaseConfig",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "DatabaseOperation",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OdooAuthRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OdooAuthResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthStatus",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "DatabaseConnections",
+      "file": "main.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "validate_settings",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "get_current_user",
+      "file": "auth.py",
+      "params": 1
+    },
+    {
+      "name": "require_role",
+      "file": "auth.py",
+      "params": 2
+    },
+    {
+      "name": "require_any_role",
+      "file": "auth.py",
+      "params": 2
+    },
+    {
+      "name": "get_jwt_handler",
+      "file": "jwt_handler.py",
+      "params": 0
+    },
+    {
+      "name": "get_load_balancer",
+      "file": "load_balancer.py",
+      "params": 1
+    },
+    {
+      "name": "get_health_checker",
+      "file": "health_checker.py",
+      "params": 0
+    },
+    {
+      "name": "get_service_router",
+      "file": "router.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 5335,
+    "python_files": 22,
+    "classes": 32,
+    "functions": 8,
+    "endpoints": 10,
+    "dependencies": 44
+  },
+  "readme": null
+}

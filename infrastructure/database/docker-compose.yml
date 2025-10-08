@@ -1,0 +1,86 @@
+version: '3.8'
+
+# ============================================================================
+# DATABASE INFRASTRUCTURE
+# Centralized data layer for entire platform
+# ============================================================================
+
+services:
+  # ==========================================================================
+  # REDIS - Cache, Sessions, Rate Limiting
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: platform-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save ""
+    labels:
+      - "com.ai-platform.service=redis"
+      - "com.ai-platform.layer=infrastructure"
+      - "description=Platform-wide Redis for cache, sessions, rate limiting"
+
+  # ==========================================================================
+  # RABBITMQ - Message Queue, Event Bus
+  # ==========================================================================
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: platform-rabbitmq
+    ports:
+      - "5673:5672"    # AMQP (using 5673 to avoid port conflict)
+      - "15673:15672"  # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=platform
+      - RABBITMQ_DEFAULT_PASS=platform_secure_2024
+      - RABBITMQ_DEFAULT_VHOST=/
+    networks:
+      - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "com.ai-platform.service=rabbitmq"
+      - "com.ai-platform.layer=infrastructure"
+      - "description=Message broker for event-driven architecture"
+
+  # ==========================================================================
+  # QDRANT - Vector Database (optional local instance)
+  # ==========================================================================
+  # qdrant:
+  #   image: qdrant/qdrant:latest
+  #   container_name: platform-qdrant
+  #   ports:
+  #     - "6333:6333"
+  #     - "6334:6334"
+  #   volumes:
+  #     - qdrant-data:/qdrant/storage
+  #   networks:
+  #     - platform-network
+  #   restart: unless-stopped
+  #   labels:
+  #     - "com.ai-platform.service=qdrant"
+  #     - "com.ai-platform.layer=infrastructure"
+
+networks:
+  platform-network:
+    external: true
+    name: platform-network
+
+# volumes:
+#   qdrant-data:
+#     name: platform-qdrant-data

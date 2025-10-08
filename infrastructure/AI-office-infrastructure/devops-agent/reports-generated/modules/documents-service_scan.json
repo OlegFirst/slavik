@@ -1,0 +1,926 @@
+{
+  "module_name": "documents-service",
+  "path": "platform-services/documents-service",
+  "structure": {
+    ".": [
+      "API.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "requirements-dev.txt",
+      ".env.example",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    "core": [
+      "classifier.py",
+      "comparator.py",
+      "analyzer.py",
+      "__init__.py",
+      "extractor.py"
+    ],
+    "workflows": [
+      "retention_workflow.py",
+      "__init__.py",
+      "lifecycle_workflow.py",
+      "approval_workflow.py"
+    ],
+    "repositories": [
+      "__init__.py",
+      "repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "integrations": [
+      "__init__.py",
+      "plans.py",
+      "governance.py",
+      "validation.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "schemas.py",
+      "routes.py"
+    ],
+    "events": [
+      "handlers.py",
+      "__init__.py",
+      "eventbus.py",
+      "publishers.py"
+    ],
+    "services": [
+      "document_service.py",
+      "__init__.py"
+    ]
+  },
+  "dependencies": [
+    "PIL",
+    "ai_foundation/workflow_intelligence",
+    "aio_pika",
+    "analyzer",
+    "api.routes",
+    "api.workflow_ai",
+    "approval_workflow",
+    "asyncio",
+    "classifier",
+    "collections",
+    "comparator",
+    "config",
+    "contextlib",
+    "core.analyzer",
+    "core.classifier",
+    "core.comparator",
+    "core.extractor",
+    "database",
+    "database.models",
+    "database/postgresql",
+    "datetime",
+    "difflib",
+    "document_service",
+    "docx",
+    "domain",
+    "enum",
+    "events.handlers",
+    "extractor",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "fastapi.security",
+    "fitz",
+    "governance",
+    "handlers",
+    "hashlib",
+    "httpx",
+    "integrations",
+    "json",
+    "jwt",
+    "lifecycle_workflow",
+    "logging",
+    "main",
+    "mimetypes",
+    "models.database",
+    "models.domain",
+    "openai",
+    "openpyxl",
+    "os",
+    "pandas",
+    "pathlib",
+    "pdfplumber",
+    "plans",
+    "prometheus_client",
+    "publishers",
+    "pydantic",
+    "pydantic_settings",
+    "pytesseract",
+    "re",
+    "repositories.repository",
+    "repository",
+    "retention_workflow",
+    "routes",
+    "runtime/eventbus",
+    "services.document_service",
+    "shared/auth",
+    "shared/database",
+    "sklearn.feature_extraction.text",
+    "spacy",
+    "sys",
+    "typing",
+    "uuid",
+    "uvicorn",
+    "validation",
+    "workflow_integration",
+    "workflows.approval_workflow",
+    "workflows.lifecycle_workflow",
+    "workflows.retention_workflow"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/{document_id}/upload",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/download",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/documents/{document_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/documents/{document_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/{document_id}/workflow/{action}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/workflow/status",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/{document_id}/version",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/versions",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/compare",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/{document_id}/share",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/shares",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/{document_id}/approvals",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/approvals/{approval_id}/respond",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/approvals",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/retention-policies",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/retention-policies",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/retention",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/documents",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/iso-coverage",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/documents/{document_id}/access-log",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/compliance",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentTypePattern",
+      "file": "classifier.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentClassifier",
+      "file": "classifier.py",
+      "methods": 8
+    },
+    {
+      "name": "DocumentComparator",
+      "file": "comparator.py",
+      "methods": 8
+    },
+    {
+      "name": "DocumentAnalyzer",
+      "file": "analyzer.py",
+      "methods": 10
+    },
+    {
+      "name": "DocumentExtractor",
+      "file": "extractor.py",
+      "methods": 8
+    },
+    {
+      "name": "RetentionPhase",
+      "file": "retention_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "RetentionAction",
+      "file": "retention_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "DestructionStatus",
+      "file": "retention_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentLifecycleState",
+      "file": "lifecycle_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentLifecycleAction",
+      "file": "lifecycle_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalWorkflowState",
+      "file": "approval_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalWorkflowAction",
+      "file": "approval_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalPriority",
+      "file": "approval_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ApproverRole",
+      "file": "approval_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentAccessRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentShareRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentApprovalRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentTagRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentComparisonRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "RetentionPolicyRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentDetailResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentShareCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentShareResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalRequestCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RetentionPolicyCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RetentionPolicyResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TagCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TagResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowActionRequest",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowStatusResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentComparisonRequest",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentComparisonResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentListResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "PaginationParams",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentClassification",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AccessAction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SharePermission",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ApprovalStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "TagType",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "RetentionTrigger",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "Document",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentAccess",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentShare",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentApproval",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentTag",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentTagAssociation",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentComparison",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentRetentionPolicy",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "ErrorResponse",
+      "file": "schemas.py",
+      "methods": 0
+    },
+    {
+      "name": "EventBus",
+      "file": "eventbus.py",
+      "methods": 1
+    },
+    {
+      "name": "DocumentEvents",
+      "file": "eventbus.py",
+      "methods": 0
+    },
+    {
+      "name": "DocumentService",
+      "file": "document_service.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "batch_classify_documents",
+      "file": "classifier.py",
+      "params": 2
+    },
+    {
+      "name": "quick_similarity",
+      "file": "comparator.py",
+      "params": 2
+    },
+    {
+      "name": "analyze_iso_compliance",
+      "file": "analyzer.py",
+      "params": 2
+    },
+    {
+      "name": "clean_extracted_text",
+      "file": "extractor.py",
+      "params": 1
+    },
+    {
+      "name": "extract_document_sections",
+      "file": "extractor.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_retention_period",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_expiration_date",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "is_retention_expired",
+      "file": "retention_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "days_until_expiration",
+      "file": "retention_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "should_archive_document",
+      "file": "retention_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "can_schedule_destruction",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_destruction_date",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_place_legal_hold",
+      "file": "retention_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "can_release_legal_hold",
+      "file": "retention_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "execute_retention_action",
+      "file": "retention_workflow.py",
+      "params": 4
+    },
+    {
+      "name": "get_retention_status",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_documents_pending_retention_action",
+      "file": "retention_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_submit_for_review",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_approve",
+      "file": "lifecycle_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_publish",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_archive",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_supersede",
+      "file": "lifecycle_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_mark_obsolete",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_restore",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_revise",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_transition",
+      "file": "lifecycle_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_state",
+      "file": "lifecycle_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_available_actions",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "execute_transition",
+      "file": "lifecycle_workflow.py",
+      "params": 4
+    },
+    {
+      "name": "get_workflow_summary",
+      "file": "lifecycle_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_standard_approval_chain",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_request_approval",
+      "file": "approval_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "can_approve_request",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_reject_request",
+      "file": "approval_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "can_recall_request",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_escalate_request",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "is_approval_chain_complete",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_current_approval_stage",
+      "file": "approval_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_next_approvers",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_approval_priority",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_approval_due_date",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "execute_approval_transition",
+      "file": "approval_workflow.py",
+      "params": 4
+    },
+    {
+      "name": "get_approval_workflow_summary",
+      "file": "approval_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_expiration_date",
+      "file": "database.py",
+      "params": 2
+    },
+    {
+      "name": "get_applicable_retention_policy",
+      "file": "database.py",
+      "params": 3
+    },
+    {
+      "name": "get_plan_template_documents",
+      "file": "plans.py",
+      "params": 1
+    },
+    {
+      "name": "get_policy_documentation_requirements",
+      "file": "governance.py",
+      "params": 1
+    },
+    {
+      "name": "get_handler",
+      "file": "handlers.py",
+      "params": 1
+    },
+    {
+      "name": "get_eventbus",
+      "file": "eventbus.py",
+      "params": 0
+    },
+    {
+      "name": "initialize_eventbus",
+      "file": "eventbus.py",
+      "params": 1
+    },
+    {
+      "name": "should_publish_event",
+      "file": "publishers.py",
+      "params": 2
+    }
+  ],
+  "config": {
+    ".env.example": "platform-services/documents-service/.env.example",
+    "requirements.txt": "platform-services/documents-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 10136,
+    "python_files": 32,
+    "classes": 71,
+    "functions": 51,
+    "endpoints": 30,
+    "dependencies": 78
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 2026,
+    "lines": 124,
+    "content": "# documents-service\n\n> \ud83c\udf10 API Service \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 10,132 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 32 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 71 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 51 |\n| **API Endpoints** | 30 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 78 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (19)\n\n- `/`\n- `/analytics/compliance`\n- `/api/compliance/check`\n- `/benchmarks`\n- `/documents`\n\n### POST (9)\n\n- `/approvals/{approval_id}/respond`\n- `/documents`\n- `/documents/compare`\n- `/documents/{document_id}/approvals`\n- `/documents/{document_id}/share`\n\n### DELETE (1)\n\n- `/documents/{document_id}`\n\n### PATCH (1)\n\n- `/documents/{document_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **DocumentAnalyzer** (10 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `analyzer.py`\n- **DocumentClassifier** (8 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `classifier.py`\n- **DocumentComparator** (8 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `comparator.py`\n- **DocumentExtractor** (8 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - "
+  }
+}

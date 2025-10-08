@@ -1,0 +1,339 @@
+{
+  "module_name": "database",
+  "path": "infrastructure/database",
+  "structure": {
+    ".": [
+      "CENTRALIZED_INFRASTRUCTURE.md",
+      ".DS_Store",
+      "__init__.py",
+      "DATABASE_SCHEMA_ACTUAL.md",
+      "README.md",
+      "docker-compose.yml",
+      "SERVICE_SPEC.md",
+      "GATEWAY_COMPARISON.md"
+    ],
+    "postgresql": [
+      "DB_CONFIG.md",
+      "apply_migration_036.py",
+      ".DS_Store",
+      "apply_remaining_migrations.sh",
+      "auto_apply_migrations.py",
+      "test_redis_managers.py",
+      "apply_community_intelligence.sh",
+      "apply_community_migrations.py",
+      "README.md",
+      "apply_via_supabase_cli.sh",
+      "apply_migrations_simple.py",
+      "apply_all_auto.py",
+      "test_db_managers.py",
+      "apply_security_fixes.py",
+      "apply_migrations.sh",
+      "apply_community_migration.py"
+    ],
+    "postgresql/migrations": [
+      "BATCH_1_migrations_006-009.sql",
+      "BATCH_3_migrations_014-018.sql",
+      "COMBINED_MIGRATIONS_006-018.sql",
+      "BATCH_2_migrations_010-013.sql"
+    ],
+    "postgresql/migrations_source": [
+      "024_individual_users.sql",
+      "010_validation_schema.sql.bak2",
+      "007_governance_audit_schemas.sql.bak",
+      "034_fix_remaining_lints_v2.sql",
+      "036_unified_workflow.sql",
+      "020_community_specialists.sql",
+      "019_rls_security_hardening.sql",
+      "006_bia_risk_schemas.sql",
+      "008_documents_schema.sql",
+      "038_add_gateway_state.sql",
+      "012_governance_compliance.sql.bak",
+      "014_supply_chain_extension.sql",
+      "036_optimize_remaining_policies.sql",
+      "031_fix_auth_rls_initplan.sql",
+      "037_community_intelligence.sql",
+      "005_intelligence_schema.sql",
+      "013_learning_planning.sql",
+      "029_fix_security_definer_view.sql",
+      "017_governance_domain_intelligence.sql",
+      "041_collective_agents.sql",
+      "023_consolidate_rls_policies_bcm.sql",
+      "025_platform_administrators.sql",
+      "022_fix_auth_rls_initplan.sql",
+      "README.md",
+      "009_response_schema.sql",
+      "028_fix_remaining_lints.sql",
+      "026_user_relationships.sql",
+      "032_add_foreign_key_indexes.sql",
+      "006_bia_risk_schemas.sql.bak",
+      "034_fix_remaining_lints.sql",
+      "016_governance_context_stakeholders.sql",
+      "021_performance_security_fixes.sql",
+      "004_community_schema.sql",
+      "042_predictive_service.sql",
+      "043_learning_system_enhancements.sql",
+      "033_consolidate_permissive_policies.sql",
+      "003_core_tables.sql",
+      "030_fix_function_search_path.sql",
+      "012_governance_compliance.sql",
+      "015_compliance_improvements.sql",
+      "001_schemas_and_extensions.sql",
+      "037_final_policy_cleanup.sql",
+      "010_validation_schema.sql.bak",
+      "002_rls_functions.sql",
+      "013_learning_planning.sql.bak",
+      "018_validation_kpi_alerts.sql",
+      "008_documents_schema.sql.bak",
+      "009_response_schema.sql.bak",
+      "011_bia_risk_extensions.sql.bak",
+      "011_bia_risk_extensions.sql",
+      "040_community_intelligence.sql",
+      "035_final_lint_fixes.sql",
+      "007_governance_audit_schemas.sql",
+      "027_admin_policies.sql",
+      "010_validation_schema.sql"
+    ],
+    "postgresql/managers": [
+      "db_manager.py",
+      "cache_manager.py",
+      "rate_limiter.py",
+      "redis_client.py",
+      "supabase_client.py",
+      "session_store.py"
+    ],
+    "migrations_source": [
+      "044_outbox_events.sql"
+    ],
+    "redis": [
+      "README.md",
+      "docker-compose.yml"
+    ],
+    "vector-db": [
+      ".DS_Store",
+      "requirements.txt",
+      "SETUP_COMPLETE.md",
+      "test_connection.py",
+      "QUICKSTART.md",
+      "README.md",
+      "docker-compose.yml"
+    ],
+    "vector-db/qdrant": [
+      "config.py",
+      "client.py",
+      "__init__.py",
+      "init_collections.py"
+    ]
+  },
+  "dependencies": [
+    "argparse",
+    "asyncio",
+    "asyncpg",
+    "client",
+    "config",
+    "contextlib",
+    "database/postgresql",
+    "database/vector-db",
+    "datetime",
+    "dotenv",
+    "enum",
+    "fastapi",
+    "functools",
+    "glob",
+    "hashlib",
+    "infrastructure.database.postgresql.managers.db_manager",
+    "json",
+    "logging",
+    "managers.cache_manager",
+    "managers.db_manager",
+    "managers.rate_limiter",
+    "managers.session_store",
+    "os",
+    "pathlib",
+    "pydantic_settings",
+    "runtime/eventbus",
+    "secrets",
+    "subprocess",
+    "sys",
+    "time",
+    "traceback",
+    "typing",
+    "urllib.parse",
+    "uuid"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/data",
+      "file": "__init__.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "DatabaseManager",
+      "file": "db_manager.py",
+      "methods": 8
+    },
+    {
+      "name": "SystemDBManager",
+      "file": "db_manager.py",
+      "methods": 3
+    },
+    {
+      "name": "PlatformDBManager",
+      "file": "db_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "BusinessDBManager",
+      "file": "db_manager.py",
+      "methods": 3
+    },
+    {
+      "name": "RLSManager",
+      "file": "db_manager.py",
+      "methods": 2
+    },
+    {
+      "name": "MigrationRunner",
+      "file": "db_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "CacheManager",
+      "file": "cache_manager.py",
+      "methods": 5
+    },
+    {
+      "name": "CacheStrategies",
+      "file": "cache_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "RateLimitStrategy",
+      "file": "rate_limiter.py",
+      "methods": 0
+    },
+    {
+      "name": "RateLimiter",
+      "file": "rate_limiter.py",
+      "methods": 2
+    },
+    {
+      "name": "RateLimitProfiles",
+      "file": "rate_limiter.py",
+      "methods": 0
+    },
+    {
+      "name": "RedisManager",
+      "file": "redis_client.py",
+      "methods": 2
+    },
+    {
+      "name": "SupabaseManager",
+      "file": "supabase_client.py",
+      "methods": 8
+    },
+    {
+      "name": "SessionStore",
+      "file": "session_store.py",
+      "methods": 4
+    },
+    {
+      "name": "QdrantConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "QdrantVectorDB",
+      "file": "client.py",
+      "methods": 7
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_system_db",
+      "file": "__init__.py",
+      "params": 0
+    },
+    {
+      "name": "get_platform_db",
+      "file": "__init__.py",
+      "params": 0
+    },
+    {
+      "name": "get_business_db",
+      "file": "__init__.py",
+      "params": 0
+    },
+    {
+      "name": "execute_sql",
+      "file": "auto_apply_migrations.py",
+      "params": 1
+    },
+    {
+      "name": "apply_via_psycopg",
+      "file": "auto_apply_migrations.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "auto_apply_migrations.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "apply_migrations_simple.py",
+      "params": 0
+    },
+    {
+      "name": "apply_migration",
+      "file": "apply_community_migration.py",
+      "params": 0
+    },
+    {
+      "name": "cache_user",
+      "file": "cache_manager.py",
+      "params": 1
+    },
+    {
+      "name": "cache_org",
+      "file": "cache_manager.py",
+      "params": 1
+    },
+    {
+      "name": "cache_query",
+      "file": "cache_manager.py",
+      "params": 1
+    },
+    {
+      "name": "rate_limit",
+      "file": "rate_limiter.py",
+      "params": 5
+    },
+    {
+      "name": "test_connection",
+      "file": "test_connection.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 3830,
+    "python_files": 21,
+    "classes": 17,
+    "functions": 13,
+    "endpoints": 1,
+    "dependencies": 34
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 11293,
+    "lines": 496,
+    "content": "# Database Infrastructure \ud83e\udde0\n\n**Status:** \u2705 Production Ready with AI Intelligence\n**Last Updated:** 2025-10-08\n**Coverage:** 100%\n\n---\n\n## Overview\n\nCentralized infrastructure layer providing PostgreSQL, Vector DB (Qdrant), Redis, and RabbitMQ for the entire AI Platform.\n\n**All services are centralized and shared across the platform.**\n\n### \ud83c\udd95 Database Intelligence Specialist \u2705 PRODUCTION READY\n\n**MOVED TO:** `/infrastructure/AI-office-infrastructure/db-intelligence/`\n\nDatabase Intelligence Specialist \u0442\u0435\u043f\u0435\u0440\u044c \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f **AI colleague** \u0432 Infrastructure Management Office.\n\nAI-powered autonomous monitoring and optimization service with **dual integration**:\n\n**Capabilities:**\n- Real-time query performance monitoring (pg_stat_statements)\n- Slow query detection and AI-powered optimization suggestions\n- Security monitoring (RLS, SQL injection, DOS protection)\n- Health monitoring and alerting\n- CLI admin access via REST API\n- Prometheus metrics export\n\n**Integration Architecture:**\n- **EventBus*"
+  }
+}

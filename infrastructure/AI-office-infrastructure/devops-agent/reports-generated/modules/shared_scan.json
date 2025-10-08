@@ -1,0 +1,78 @@
+{
+  "module_name": "shared",
+  "path": "platform-services/shared",
+  "structure": {
+    ".": [
+      "logging_config.py",
+      "USAGE_EXAMPLE.py",
+      "__init__.py",
+      "healthcheck.py",
+      "README.md",
+      "QUICK_START.md"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "datetime",
+    "fastapi",
+    "healthcheck",
+    "logging",
+    "logging_config",
+    "shared",
+    "shared/healthcheck",
+    "shared/logging_config",
+    "sys",
+    "typing",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "USAGE_EXAMPLE.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/simple",
+      "file": "USAGE_EXAMPLE.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/database",
+      "file": "USAGE_EXAMPLE.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/example",
+      "file": "USAGE_EXAMPLE.py"
+    }
+  ],
+  "classes": [],
+  "functions": [
+    {
+      "name": "setup_logging",
+      "file": "logging_config.py",
+      "params": 2
+    },
+    {
+      "name": "setup_file_logging",
+      "file": "logging_config.py",
+      "params": 3
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 513,
+    "python_files": 4,
+    "classes": 0,
+    "functions": 2,
+    "endpoints": 4,
+    "dependencies": 12
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 4145,
+    "lines": 190,
+    "content": "# Shared Utilities for Platform Services\n\nCommon utilities and helpers used across all platform services.\n\n## Installation\n\nThe shared module is automatically available when you're in the `platform-services` directory:\n\n```python\nfrom shared import setup_logging, comprehensive_healthcheck\n```\n\n## Modules\n\n### 1. Logging Configuration (`logging_config.py`)\n\nStandardized logging setup for all services.\n\n#### Basic Usage:\n\n```python\nfrom shared import setup_logging\n\nlogger = setup_logging(\"my-service\", \"INFO\")\nlogger.info(\"Service started\")\n```\n\n#### With File Output:\n\n```python\nfrom shared.logging_config import setup_file_logging\n\nlogger = setup_file_logging(\n    service_name=\"my-service\",\n    log_level=\"DEBUG\",\n    log_file=\"/var/log/my-service.log\"\n)\n```\n\n#### Log Format:\n\n```\n2025-10-08 09:36:45,123 - my-service - module_name - INFO - Log message\n```\n\n### 2. Health Check System (`healthcheck.py`)\n\nComprehensive health monitoring with dependency tracking.\n\n#### Full Health Check:\n\n```p"
+  }
+}

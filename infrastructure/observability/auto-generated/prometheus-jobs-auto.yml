@@ -1,0 +1,51 @@
+scrape_configs:
+- job_name: expertise-center-monitoring
+  metrics_path: /metrics
+  scrape_interval: 10s
+  scrape_timeout: 5s
+  static_configs:
+  - labels:
+      component: intelligent-core
+      service: expertise-center-monitoring
+    targets:
+    - host.docker.internal:8031
+- job_name: workflow_intelligence-monitoring
+  metrics_path: /metrics
+  scrape_interval: 10s
+  scrape_timeout: 5s
+  static_configs:
+  - labels:
+      component: intelligent-core
+      service: workflow_intelligence-monitoring
+    targets:
+    - host.docker.internal:8031
+- job_name: ai-foundation-llm
+  metrics_path: /metrics
+  scrape_interval: 10s
+  scrape_timeout: 5s
+  static_configs:
+  - labels:
+      component: intelligent-core
+      service: ai-foundation-llm
+    targets:
+    - host.docker.internal:8031
+- job_name: ai-foundation-learning-knowledge
+  metrics_path: /metrics
+  scrape_interval: 10s
+  scrape_timeout: 5s
+  static_configs:
+  - labels:
+      component: intelligent-core
+      service: ai-foundation-learning-knowledge
+    targets:
+    - host.docker.internal:8031
+- job_name: ai-foundation-rag
+  metrics_path: /metrics
+  scrape_interval: 10s
+  scrape_timeout: 5s
+  static_configs:
+  - labels:
+      component: intelligent-core
+      service: ai-foundation-rag
+    targets:
+    - host.docker.internal:8031

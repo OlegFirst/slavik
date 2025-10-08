@@ -1,0 +1,9 @@
+# Qdrant Vector Database
+qdrant-client==1.15.5
+
+# Configuration
+pydantic-settings==2.0.3
+pydantic==2.4.2
+
+# Python standard
+typing-extensions==4.8.0

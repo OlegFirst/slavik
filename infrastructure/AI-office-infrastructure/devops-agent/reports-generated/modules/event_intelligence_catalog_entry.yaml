@@ -1,0 +1,27 @@
+
+  event_intelligence:
+    type: ai-service
+    location: intelligent-core/event_intelligence
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /health
+      - POST /analyze
+      - POST /analyze/domain
+      - POST /learning/suggest
+      - POST /learning/feedback
+    metrics:
+      loc: 3545
+      files: 11
+      classes: 31
+      functions: 0
+    status: discovered

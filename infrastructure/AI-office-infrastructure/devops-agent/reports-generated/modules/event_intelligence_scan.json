@@ -1,0 +1,317 @@
+{
+  "module_name": "event_intelligence",
+  "path": "intelligent-core/event_intelligence",
+  "structure": {
+    ".": [
+      "predictor.py",
+      "knowledge_base.py",
+      "Dockerfile",
+      "analyzer.py",
+      "__init__.py",
+      "README.md",
+      "api.py",
+      "main.py",
+      "code_healer.py",
+      "learner.py"
+    ],
+    "api": [
+      "__init__.py",
+      "routes.py"
+    ],
+    "services": [
+      "ai_foundation_integration.py"
+    ]
+  },
+  "dependencies": [
+    "analyzer",
+    "api",
+    "argparse",
+    "ast",
+    "asyncio",
+    "collections",
+    "contextlib",
+    "dataclasses",
+    "datetime",
+    "event_intelligence.api",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "json",
+    "knowledge_base",
+    "learner",
+    "learning.engines.knowledge_base_connector",
+    "llm.llm_router",
+    "logging",
+    "os",
+    "pathlib",
+    "predictor",
+    "prometheus_client",
+    "pydantic",
+    "rag.pipeline",
+    "routes",
+    "services.ai_foundation_integration",
+    "subprocess",
+    "sys",
+    "typing",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze/domain",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/suggest",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/feedback",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/stats",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/report",
+      "file": "api.py"
+    },
+    {
+      "method": "POST",
+      "path": "/predict/gaps",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge/similar/{event_name}",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge/patterns/{event_name}",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge/stats",
+      "file": "api.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze/bulk",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/predict/recommendations/{event_name}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge/export",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "EventPrediction",
+      "file": "predictor.py",
+      "methods": 0
+    },
+    {
+      "name": "EventPredictor",
+      "file": "predictor.py",
+      "methods": 1
+    },
+    {
+      "name": "EventKnowledgeBase",
+      "file": "knowledge_base.py",
+      "methods": 3
+    },
+    {
+      "name": "StubKnowledgeBase",
+      "file": "knowledge_base.py",
+      "methods": 1
+    },
+    {
+      "name": "EventAnalysis",
+      "file": "analyzer.py",
+      "methods": 0
+    },
+    {
+      "name": "EventAnalyzer",
+      "file": "analyzer.py",
+      "methods": 6
+    },
+    {
+      "name": "AnalyzeEventRequest",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzeEventResponse",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordSuggestionRequest",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordFeedbackRequest",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictGapsRequest",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictGapsResponse",
+      "file": "api.py",
+      "methods": 0
+    },
+    {
+      "name": "CodeIssue",
+      "file": "code_healer.py",
+      "methods": 0
+    },
+    {
+      "name": "HealingResult",
+      "file": "code_healer.py",
+      "methods": 0
+    },
+    {
+      "name": "CodeHealer",
+      "file": "code_healer.py",
+      "methods": 11
+    },
+    {
+      "name": "LearningExample",
+      "file": "learner.py",
+      "methods": 1
+    },
+    {
+      "name": "Pattern",
+      "file": "learner.py",
+      "methods": 0
+    },
+    {
+      "name": "EventLearner",
+      "file": "learner.py",
+      "methods": 6
+    },
+    {
+      "name": "AnalyzeEventRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzeEventResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzeDomainRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzeDomainResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordSuggestionRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordSuggestionResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordFeedbackRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "RecordFeedbackResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictGapsRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictGapsResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "LearningStatsResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeStatsResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "EventIntelligenceAIFoundation",
+      "file": "ai_foundation_integration.py",
+      "methods": 5
+    }
+  ],
+  "functions": [],
+  "config": {},
+  "metrics": {
+    "loc": 3545,
+    "python_files": 11,
+    "classes": 31,
+    "functions": 0,
+    "endpoints": 17,
+    "dependencies": 30
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 8131,
+    "lines": 322,
+    "content": "# Event Intelligence\n\n## Overview\nEvent Intelligence is an AI-powered layer that provides intelligent analysis, learning, and prediction capabilities for event-driven architecture. It analyzes event patterns, learns from historical data, predicts future gaps, and accumulates knowledge to continuously improve the event-based system.\n\n## Features\n- **Event Analysis**: Deep analysis of events and patterns with importance scoring\n- **ML-Powered Learning**: Learns from historical event data and developer feedback\n- **Gap Prediction**: Predicts missing event handlers and publishers using machine learning\n- **Knowledge Base**: Accumulates and retrieves event-related knowledge\n- **Pattern Detection**: Identifies common event patterns and anti-patterns\n- **AI-Powered Recommendations**: Generates actionable insights based on event analysis\n- **Real-time Feedback Loop**: Records developer decisions and outcomes for continuous improvement\n\n## Architecture\n\n### Key Components\n\n#### EventAnalyzer (`"
+  }
+}

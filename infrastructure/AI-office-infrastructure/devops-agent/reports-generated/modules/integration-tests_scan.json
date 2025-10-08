@@ -1,0 +1,125 @@
+{
+  "module_name": "integration-tests",
+  "path": "platform-services/integration-tests",
+  "structure": {
+    ".": [
+      "conftest.py",
+      "wait-for-services.sh",
+      "pytest.ini",
+      "requirements.txt",
+      "test_auth_integration.py",
+      "run_integration_tests.sh",
+      "test_api_integration.py",
+      "test_planning_to_plans_workflow.py",
+      ".env.test",
+      "README.md",
+      "test_performance_integration.py",
+      "test_bia_to_planning_workflow.py",
+      "test_compliance_audit_workflow.py",
+      "test_resilience_integration.py",
+      "test_data_consistency.py",
+      "INTEGRATION_TESTS_SUMMARY.md",
+      "docker-compose.test.yml",
+      "test_eventbus_integration.py",
+      "QUICK_REFERENCE.md"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "datetime",
+    "dotenv",
+    "httpx",
+    "jwt",
+    "os",
+    "pytest",
+    "time",
+    "typing"
+  ],
+  "endpoints": [],
+  "classes": [
+    {
+      "name": "EventBusHelper",
+      "file": "conftest.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "service_urls",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "jwt_secret",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "jwt_algorithm",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "create_jwt_token",
+      "file": "conftest.py",
+      "params": 2
+    },
+    {
+      "name": "auth_headers",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "auth_headers_tenant_a",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "auth_headers_tenant_b",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "admin_auth_headers",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "retry_async",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "pytest_configure",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "pytest_collection_modifyitems",
+      "file": "conftest.py",
+      "params": 2
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/integration-tests/requirements.txt"
+  },
+  "metrics": {
+    "loc": 4441,
+    "python_files": 10,
+    "classes": 1,
+    "functions": 12,
+    "endpoints": 0,
+    "dependencies": 9
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 980,
+    "lines": 66,
+    "content": "# integration-tests\n\n> \ud83d\udd27 Utility Module \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 4,441 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 10 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 1 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 12 |\n| **API Endpoints** | 0 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 9 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83d\udd27 Utility Module\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **EventBusHelper** (1 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `conftest.py`\n\n### \u0424\u0443\u043d\u043a\u0446\u0438\u0438\n\n\u0412\u0441\u0435\u0433\u043e \u043f\u0443\u0431\u043b\u0438\u0447\u043d\u044b\u0445 \u0444\u0443\u043d\u043a\u0446\u0438\u0439: 12\n\n---\n\n## \ud83d\udd17 \u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438\n\n---\n\n## \ud83d\udcbb \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435\n\n### \u0418\u043c\u043f\u043e\u0440\u0442\n\n```python\nfrom integration_tests import ...\n```\n\n---\n\n## \u2699\ufe0f \u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f\n\n**\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u0444\u0430\u0439\u043b\u044b:**\n\n- `requirements.txt`\n\n---\n\n\n---\n\n## \ud83d\udcda \u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b\n\n- [\u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b](../../doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md)\n- [API Reference](./API.md) \u26a0\ufe0f \u041d\u0435\u0442 API\n- [\u0422\u0435\u0441\u0442\u044b](./tests/) \u26a0\ufe0f \u0422\u0435\u0441\u0442\u044b \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0442\n\n**\u0421\u0433\u0435\u043d\u0435\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438:** 2025-10-07 05:07\n**\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442:** `tools/generators/documentation_generator.py`\n"
+  }
+}

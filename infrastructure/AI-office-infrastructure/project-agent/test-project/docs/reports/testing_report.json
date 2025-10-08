@@ -1,0 +1,32 @@
+{
+  "coverage": {
+    "python": {
+      "available": true,
+      "coverage": 23.529411764705884,
+      "note": ""
+    },
+    "javascript": {
+      "available": false,
+      "coverage": 0,
+      "note": "Jest coverage parsing not implemented yet"
+    }
+  },
+  "test_files": [
+    "tests/test_incident.py",
+    "tests/test_risk.py"
+  ],
+  "frameworks": [
+    "pytest",
+    "jest"
+  ],
+  "summary": {
+    "test_files_count": 2,
+    "frameworks_detected": [
+      "pytest",
+      "jest"
+    ],
+    "average_coverage": 23.53,
+    "threshold": 70,
+    "status": "BELOW_THRESHOLD"
+  }
+}

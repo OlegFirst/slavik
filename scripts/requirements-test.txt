@@ -1,0 +1,62 @@
+# ==============================================================================
+# Testing Dependencies for AI-Powered BCM Platform
+# ==============================================================================
+
+# Core Testing Framework
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+pytest-mock==3.11.0
+pytest-xdist==3.5.0              # Parallel test execution
+
+# Database Testing
+pytest-postgresql==5.0.0
+fakeredis==2.21.0
+factory-boy==3.3.0
+
+# HTTP/API Testing
+httpx==0.26.0
+respx==0.20.2
+aioresponses==0.7.6
+
+# AI/ML Mocking
+vcrpy==5.1.0                     # Record/replay HTTP interactions
+faker==22.0.0                    # Fake data generation
+hypothesis==6.98.0               # Property-based testing
+
+# Time/Scheduling
+freezegun==1.4.0
+pytest-freezegun==0.4.2
+
+# Performance Testing
+pytest-benchmark==4.0.0
+locust==2.20.0
+
+# Security Testing
+bandit==1.7.6
+safety==3.0.1
+
+# Code Quality
+ruff==0.1.15
+mypy==1.8.0
+black==24.1.0
+
+# Reporting
+pytest-html==4.1.1
+pytest-json-report==1.5.0
+allure-pytest==2.13.2
+
+# Coverage Analysis
+coverage[toml]==7.4.0
+diff-cover==8.0.2
+
+# Additional Testing Utilities
+pytest-timeout==2.2.0            # Test timeout management
+pytest-env==1.1.3                # Environment variable management
+pytest-order==1.2.0              # Test execution order
+pytest-repeat==0.9.3             # Repeat flaky tests
+pytest-randomly==3.15.0          # Random test order
+
+# Mocking & Stubbing
+responses==0.24.1                # HTTP response mocking
+freezegun==1.4.0                 # Time/date mocking

@@ -1,0 +1,25 @@
+
+  tools:
+    type: service
+    location: infrastructure/tools
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+        - external/anthropic
+      internal:
+
+    endpoints:
+      - POST /path
+      - POST [^)]*?
+      - GET /metrics
+    metrics:
+      loc: 7749
+      files: 22
+      classes: 23
+      functions: 18
+    status: discovered

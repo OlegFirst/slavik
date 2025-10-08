@@ -1,0 +1,33 @@
+{
+  "debounce_seconds": 5,
+  "check_interval": 1,
+  "auto_generate_tests": true,
+  "auto_run_security": true,
+  "auto_run_quality": false,
+  "watch_directories": [
+    "intelligent-core",
+    "platform-services",
+    "infrastructure"
+  ],
+  "ignore_patterns": [
+    "__pycache__",
+    ".pytest_cache",
+    ".git",
+    "node_modules",
+    "venv",
+    "env",
+    ".venv",
+    "tests/generated"
+  ],
+  "notifications": {
+    "enabled": false,
+    "slack_webhook": "",
+    "discord_webhook": ""
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "code_watcher.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  }
+}

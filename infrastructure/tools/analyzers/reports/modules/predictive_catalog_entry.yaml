@@ -1,0 +1,28 @@
+
+  predictive:
+    type: service
+    location: intelligent-core/predictive
+    port: 8031
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - ai_services/predictive
+    endpoints:
+      - GET /health
+      - GET /
+      - GET /journey/{org_id}
+      - GET /certification/{org_id}
+      - GET /recommendations/{org_id}
+    metrics:
+      loc: 2995
+      files: 12
+      classes: 18
+      functions: 3
+    status: discovered

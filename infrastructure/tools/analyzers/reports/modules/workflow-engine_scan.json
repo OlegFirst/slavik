@@ -1,0 +1,361 @@
+{
+  "module_name": "workflow-engine",
+  "path": "intelligent-core/workflow-engine",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "__init__.py",
+      "README.md"
+    ],
+    "workflow": [
+      "PHASE_2_COMPLETE.md.archive",
+      "DEVELOPMENT_ROADMAP.md",
+      ".DS_Store",
+      "requirements.txt",
+      "__init__.py",
+      "README.md"
+    ],
+    "workflow/visualization": [
+      "__init__.py"
+    ],
+    "workflow/core": [
+      "unified_engine.py",
+      "__init__.py"
+    ],
+    "workflow/tests": [
+      "test_unified_engine.py"
+    ],
+    "workflow/examples": [
+      "basic_usage.py",
+      "production_usage.py"
+    ],
+    "workflow/bpmn": [
+      "models.py",
+      "engine_persistent.py",
+      "expression_evaluator.py",
+      "gateway_evaluator.py",
+      "__init__.py",
+      "parser.py",
+      "engine.py"
+    ],
+    "workflow/persistence": [
+      "database.py",
+      "__init__.py"
+    ],
+    "workflow/persistence/repositories": [
+      "instance_repository.py",
+      "__init__.py",
+      "process_repository.py",
+      "task_repository.py"
+    ],
+    "workflow/api": [
+      "requirements.txt",
+      "README.md",
+      "main.py"
+    ],
+    "workflow/_archive": [
+      "DEVELOPMENT_PLAN.md",
+      "REST_API_IMPLEMENTED.md",
+      "CRITICAL_GAPS_ANALYSIS.md",
+      "GATEWAY_SUPPORT_IMPLEMENTED.md",
+      "WORKFLOW_INTELLIGENCE_INTEGRATED.md",
+      "QUICK_START.md"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "asyncio",
+    "bpmn.engine_persistent",
+    "bpmn.models",
+    "bpmn.parser",
+    "collections",
+    "core.unified_engine",
+    "database/postgresql",
+    "datetime",
+    "engine_persistent",
+    "enum",
+    "expression_evaluator",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "gateway_evaluator",
+    "instance_repository",
+    "intelligent_core.platform_core.workflow.bpmn.models",
+    "intelligent_core.platform_core.workflow.core.unified_engine",
+    "intelligent_core.platform_core.workflow.persistence.database",
+    "intelligent_core.unified_workflow",
+    "json",
+    "loader.case_loader",
+    "logging",
+    "models",
+    "os",
+    "parser",
+    "pathlib",
+    "persistence.database",
+    "persistence.repositories",
+    "process_repository",
+    "prometheus_client",
+    "pydantic",
+    "pytest",
+    "re",
+    "runtime/eventbus",
+    "shared/cache",
+    "shared/database",
+    "sys",
+    "task_repository",
+    "typing",
+    "unified_engine",
+    "unified_workflow.bpmn.models",
+    "unified_workflow.core.unified_engine",
+    "uuid",
+    "uvicorn",
+    "workflow",
+    "xml.etree.ElementTree"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/processes",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/instances/{instance_id}/visual-state",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/complete",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/{task_id}/assign",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_email}/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/instances",
+      "file": "main.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/instances/{instance_id}",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "UnifiedWorkflowEngine",
+      "file": "unified_engine.py",
+      "methods": 2
+    },
+    {
+      "name": "BPMNWorkflowEngineWrapper",
+      "file": "unified_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "ProcessStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BPMNProcess",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessInstance",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Task",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessDeployRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessStartRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskCompleteRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "VisualState",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BPMNEnginePersistent",
+      "file": "engine_persistent.py",
+      "methods": 2
+    },
+    {
+      "name": "ExpressionEvaluator",
+      "file": "expression_evaluator.py",
+      "methods": 4
+    },
+    {
+      "name": "GatewayEvaluator",
+      "file": "gateway_evaluator.py",
+      "methods": 5
+    },
+    {
+      "name": "BPMNParser",
+      "file": "parser.py",
+      "methods": 15
+    },
+    {
+      "name": "BPMNEngine",
+      "file": "engine.py",
+      "methods": 2
+    },
+    {
+      "name": "DatabaseManager",
+      "file": "database.py",
+      "methods": 2
+    },
+    {
+      "name": "InstanceRepository",
+      "file": "instance_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ProcessRepository",
+      "file": "process_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "TaskRepository",
+      "file": "task_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "StartProcessRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "CompleteTaskRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "AssignTaskRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "VisualStateResponse",
+      "file": "main.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "workflow_engine",
+      "file": "test_unified_engine.py",
+      "params": 0
+    },
+    {
+      "name": "evaluate",
+      "file": "expression_evaluator.py",
+      "params": 2
+    },
+    {
+      "name": "validate_bpmn",
+      "file": "parser.py",
+      "params": 1
+    },
+    {
+      "name": "extract_process_metadata",
+      "file": "parser.py",
+      "params": 1
+    },
+    {
+      "name": "get_db_manager",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_tenant_id_from_header",
+      "file": "main.py",
+      "params": 1
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 6309,
+    "python_files": 22,
+    "classes": 29,
+    "functions": 6,
+    "endpoints": 10,
+    "dependencies": 48
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1914,
+    "lines": 95,
+    "content": "# Platform Core - Layer 1\n\n**Purpose:** Domain-agnostic system functions\n**Version:** 1.0.0\n**Created:** 2025-10-05\n\n---\n\n## \ud83c\udfaf What is Platform Core?\n\n**Platform Core** contains foundational system services that work independently of business domain.\n\nThese modules can be used for **ANY domain** - not just BCM (Business Continuity Management).\n\n---\n\n## \ud83d\udce6 Modules\n\n### 1. workflow/\n**Unified Workflow Engine** - BPMN orchestration + AI recommendations\n\n- BPMN 2.0 visual modeling\n- PostgreSQL persistence\n- AI-powered recommendations\n- Event-driven architecture\n- Multi-tenancy support\n\n**Status:** \u2705 Production-ready (v2.0)\n\n**Location:** `platform-core/workflow/` (formerly `unified-workflow/`)\n\n**Documentation:** See `workflow/PHASE_2_COMPLETE.md`\n\n---\n\n### 2. coordination/ (Future)\n**Coordination Center** - Multi-agent coordination\n\n---\n\n### 3. learning/ (Future)\n**Learning Systems** - Platform-wide learning\n\n---\n\n### 4. community/ (Future)\n**Community Intelligence** - Collective intellige"
+  }
+}

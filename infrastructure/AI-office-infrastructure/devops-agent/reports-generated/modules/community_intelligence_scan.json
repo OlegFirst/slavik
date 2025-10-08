@@ -1,0 +1,636 @@
+{
+  "module_name": "community_intelligence",
+  "path": "intelligent-core/community_intelligence",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "main.py"
+    ],
+    "archive/docs": [
+      "COMPLETE.md",
+      "ARCHITECTURE.md",
+      "INTEGRATION_COMPLETE.md",
+      "IMPLEMENTATION_SUMMARY.md",
+      "UNIFIED_API_IMPLEMENTATION.md",
+      "README_OLD.md",
+      "MODULE_SUMMARY.md",
+      "INTEGRATION_GUIDE.md"
+    ],
+    "tests": [
+      "__init__.py",
+      "test_anonymizer.py",
+      "test_contribution_service.py"
+    ],
+    "models": [
+      "database.py",
+      "__init__.py"
+    ],
+    "docs": [
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "TECHNICAL_SPECIFICATION.md",
+      "README.md"
+    ],
+    "examples": [
+      "__init__.py",
+      "basic_workflow.py"
+    ],
+    "scripts": [
+      "generate_openapi.py"
+    ],
+    "api": [
+      "reviews.py",
+      "reputation.py",
+      "__init__.py",
+      "cases.py",
+      "contributions.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "living_docs.py",
+      "workflow_integration_service.py",
+      "ml_predictor.py",
+      "peer_review_service.py",
+      "anonymizer.py",
+      "contribution_service.py",
+      "ai_foundation_integration.py",
+      "__init__.py",
+      "unified_ai_context.py",
+      "reputation_engine.py",
+      "predictive_timeline.py",
+      "case_library_bridge.py",
+      "workflow_completion_handler.py"
+    ]
+  },
+  "dependencies": [
+    "ai_services/community_intelligence",
+    "ai_services/intelligent_core",
+    "ai_services/living_docs",
+    "ai_services/predictive_timeline",
+    "ai_services/services",
+    "anonymizer",
+    "api",
+    "asyncio",
+    "collections",
+    "config",
+    "contextlib",
+    "contribution_service",
+    "database",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "hashlib",
+    "httpx",
+    "joblib",
+    "json",
+    "llm.llm_router",
+    "logging",
+    "models.database",
+    "numpy",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "rag.pipeline",
+    "re",
+    "routes",
+    "runtime/eventbus",
+    "services.ai_foundation_integration",
+    "services.anonymizer",
+    "services.case_library_bridge",
+    "services.contribution_service",
+    "services.peer_review_service",
+    "services.reputation_engine",
+    "services.workflow_completion_handler",
+    "services.workflow_integration_service",
+    "shared/auth",
+    "shared/database",
+    "sklearn.ensemble",
+    "sklearn.model_selection",
+    "sklearn.preprocessing",
+    "sys",
+    "typing",
+    "unittest.mock",
+    "uuid",
+    "uvicorn",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": ", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)\nasync def submit_review(\n    request: ReviewSubmit,\n    current_user: dict = Depends(get_current_user),\n    service: PeerReviewService = Depends(get_peer_review_service),\n    db: AsyncSession = Depends(get_db)\n):\n    ",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/pending",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/my",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{user_id}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{user_id}/expertise/{module}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/global",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/{module}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{user_id}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{case_id}",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/similar/for-workflow",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/overview",
+      "file": "cases.py"
+    },
+    {
+      "method": "POST",
+      "path": ", response_model=ContributionResponse, status_code=status.HTTP_201_CREATED)\nasync def create_contribution(\n    request: ContributionCreate,\n    current_user: dict = Depends(get_current_user),\n    service: ContributionService = Depends(get_contribution_service)\n):\n    ",
+      "file": "contributions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{contribution_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{contribution_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/preview-anonymization",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/from-workflow/{workflow_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/contributions",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/contributions/{contribution_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/contributions/pending-reviews",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/contributions/{contribution_id}/review",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reputation/{user_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reputation/leaderboard",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/annotations",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/guidance/{clause_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/annotations/{annotation_id}/vote",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/timeline/predict",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/insights/similar-orgs/{org_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/timeline/{org_id}/next-steps",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/demand-forecast",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/clauses/search",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/community",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/impact",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "CommunityIntelligenceConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseContribution",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReview",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserReputation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationTransaction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunityAnnotation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SynthesizedGuidance",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewSubmit",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewResponse",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewDetail",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "PendingReviewItem",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationProfile",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardEntry",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "TransactionItem",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertiseLevelResponse",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSearchRequest",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseResponse",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseDetail",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionCreate",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionResponse",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionDetail",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "AnonymizationPreview",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSubmissionRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSubmissionResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReviewRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReviewResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnnotationRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnnotationResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "TimelineRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "TimelineResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "MockUser",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "LivingDocumentationService",
+      "file": "living_docs.py",
+      "methods": 9
+    },
+    {
+      "name": "WorkflowIntegrationService",
+      "file": "workflow_integration_service.py",
+      "methods": 1
+    },
+    {
+      "name": "MLPredictor",
+      "file": "ml_predictor.py",
+      "methods": 7
+    },
+    {
+      "name": "PeerReviewService",
+      "file": "peer_review_service.py",
+      "methods": 2
+    },
+    {
+      "name": "AnonymizationResult",
+      "file": "anonymizer.py",
+      "methods": 0
+    },
+    {
+      "name": "SmartAnonymizer",
+      "file": "anonymizer.py",
+      "methods": 9
+    },
+    {
+      "name": "ContributionService",
+      "file": "contribution_service.py",
+      "methods": 4
+    },
+    {
+      "name": "CommunityAIFoundation",
+      "file": "ai_foundation_integration.py",
+      "methods": 7
+    },
+    {
+      "name": "UnifiedAIContextBuilder",
+      "file": "unified_ai_context.py",
+      "methods": 6
+    },
+    {
+      "name": "ReputationEngine",
+      "file": "reputation_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "PredictedEvent",
+      "file": "predictive_timeline.py",
+      "methods": 1
+    },
+    {
+      "name": "PredictiveTimelineService",
+      "file": "predictive_timeline.py",
+      "methods": 5
+    },
+    {
+      "name": "CaseLibraryBridge",
+      "file": "case_library_bridge.py",
+      "methods": 3
+    },
+    {
+      "name": "WorkflowCompletionHandler",
+      "file": "workflow_completion_handler.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "anonymizer",
+      "file": "test_anonymizer.py",
+      "params": 0
+    },
+    {
+      "name": "sample_case",
+      "file": "test_anonymizer.py",
+      "params": 0
+    },
+    {
+      "name": "mock_db",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "mock_anonymizer",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "mock_case_library",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "service",
+      "file": "test_contribution_service.py",
+      "params": 3
+    },
+    {
+      "name": "generate_openapi_spec",
+      "file": "generate_openapi.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "intelligent-core/community_intelligence/requirements.txt"
+  },
+  "metrics": {
+    "loc": 8116,
+    "python_files": 32,
+    "classes": 52,
+    "functions": 7,
+    "endpoints": 37,
+    "dependencies": 57
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 2084,
+    "lines": 122,
+    "content": "# community_intelligence\n\n> \u0421\u043e\u043e\u0431\u0449\u0435\u0441\u0442\u0432\u043e \u0438 \u043e\u0431\u043c\u0435\u043d \u0437\u043d\u0430\u043d\u0438\u044f\u043c\u0438\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 7,408 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 31 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 51 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 7 |\n| **API Endpoints** | 36 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 53 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (28)\n\n- `/`\n- `/clauses/search`\n- `/contributions/pending-reviews`\n- `/contributions/{contribution_id}`\n- `/guidance/{clause_id}`\n\n### POST (7)\n\n- `/annotations`\n- `/annotations/{annotation_id}/vote`\n- `/contributions`\n- `/contributions/{contribution_id}/review`\n- `/from-workflow/{workflow_id}`\n\n### DELETE (1)\n\n- `/{contribution_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **LivingDocumentationService** (9 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `living_docs.py`\n- **SmartAnonymizer** (9 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `anonymizer.py`\n- **MLPredictor** (7 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `ml_predictor.py`\n- **UnifiedAIContextBuilder** (6 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `uni"
+  }
+}

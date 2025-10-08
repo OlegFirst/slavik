@@ -1,0 +1,186 @@
+# Auto-generated Docker Compose configuration
+# Generated: 2025-10-07T09:57:59.667300
+# Total services: 6
+
+version: '3.8'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: infrastructure/gateway
+      dockerfile: Dockerfile
+    ports:
+    - 8500:8500
+    environment:
+    - SERVICE_NAME=gateway
+    - SERVICE_PORT=8500
+    - RABBITMQ_URL=${{var_name}}
+    - ODOO_API_URL=${{var_name}}
+    - SUPABASE_URL=${{var_name}}
+    - MONGODB_URL=${{var_name}}
+    - SUPABASE_KEY=${{var_name}}
+    - REDIS_URL=${{var_name}}
+    - DATABASE_URL=${{var_name}}
+    - ODOO_DB_NAME=${{var_name}}
+    - ODOO_DB_URL=${{var_name}}
+    - REDIS_PASSWORD=${{var_name}}
+    - JWT_SECRET=${{var_name}}
+    - POSTGRES_URL=${{var_name}}
+    networks:
+    - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8500/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  runtime:
+    container_name: runtime
+    build:
+      context: infrastructure/runtime
+      dockerfile: Dockerfile
+    ports:
+    - 8500:8500
+    environment:
+    - SERVICE_NAME=runtime
+    - SERVICE_PORT=8500
+    - RABBITMQ_URL=${{var_name}}
+    - REDIS_URL=${{var_name}}
+    - MESSAGE_RETENTION_HOURS=${{var_name}}
+    - EVENTBUS_EXCHANGE=${{var_name}}
+    - UPSTASH_REDIS_URL=${{var_name}}
+    - EVENTBUS_BACKEND=${{var_name}}
+    - MAX_CONNECTIONS_PER_USER=${{var_name}}
+    - DATABASE_URL=${{var_name}}
+    - PORT=${{var_name}}
+    networks:
+    - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8500/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    depends_on:
+      infrastructure-services:
+        condition: service_healthy
+  observability:
+    container_name: observability
+    build:
+      context: infrastructure/observability
+      dockerfile: Dockerfile
+    ports:
+    - 8035:8035
+    environment:
+    - SERVICE_NAME=observability
+    - SERVICE_PORT=8035
+    - SCRAPE_INTERVAL=${{var_name}}
+    - REDIS_URL=${{var_name}}
+    - NOTIFICATION_SERVICE_URL=${{var_name}}
+    - SMTP_PORT=${{var_name}}
+    - SLACK_BOT_TOKEN=${{var_name}}
+    - SLACK_CHANNEL_ALERTS=${{var_name}}
+    - PAGERDUTY_INTEGRATION_KEY=${{var_name}}
+    - COMPLIANCE_DATA_DIR=${{var_name}}
+    - SUPABASE_URL=${{var_name}}
+    - SUPABASE_SERVICE_ROLE_KEY=${{var_name}}
+    - SMTP_USER=${{var_name}}
+    - QDRANT_EXPORTER_PORT=${{var_name}}
+    - LOG_LEVEL=${{var_name}}
+    - ALERT_EMAIL=${{var_name}}
+    - TEAMS_ENABLED=${{var_name}}
+    - PAGERDUTY_ENABLED=${{var_name}}
+    - SLACK_WEBHOOK_URL=${{var_name}}
+    - SMS_ENABLED=${{var_name}}
+    - SMTP_PASSWORD=${{var_name}}
+    - RABBITMQ_URL=${{var_name}}
+    networks:
+    - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8035/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  integration:
+    container_name: integration
+    build:
+      context: infrastructure/integration
+      dockerfile: Dockerfile
+    ports:
+    - 8003:8003
+    environment:
+    - SERVICE_NAME=integration
+    - SERVICE_PORT=8003
+    - GITHUB_APP_ID=${{var_name}}
+    - DATABASE_URL=${{var_name}}
+    networks:
+    - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8003/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    depends_on:
+      infrastructure-services:
+        condition: service_healthy
+  postgres:
+    image: postgres:15-alpine
+    container_name: ai-platform-postgres
+    environment:
+    - POSTGRES_DB=${POSTGRES_DB:-ai_platform}
+    - POSTGRES_USER=${POSTGRES_USER:-postgres}
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    ports:
+    - 5432:5432
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    networks:
+    - platform-network
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: ai-platform-redis
+    ports:
+    - 6379:6379
+    networks:
+    - platform-network
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+networks:
+  platform-network:
+    driver: bridge
+    name: ai-platform-network
+volumes: {}

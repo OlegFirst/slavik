@@ -1,0 +1,136 @@
+{
+  "module_name": "ai_workflow_optimizer",
+  "path": "intelligent-core/ai_workflow_optimizer",
+  "structure": {
+    ".": [
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "database/postgresql",
+    "datetime",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "joblib",
+    "json",
+    "logging",
+    "numpy",
+    "os",
+    "pandas",
+    "pickle",
+    "pydantic",
+    "sklearn.cluster",
+    "sklearn.ensemble",
+    "sklearn.metrics",
+    "sklearn.model_selection",
+    "sklearn.preprocessing",
+    "typing",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/optimize/performance",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analyze/bottlenecks/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/optimize/resources/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/detect/anomalies/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/models/retrain",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models/status",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "ProcessExecution",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OptimizationPrediction",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "MLModel",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessOptimizationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "OptimizationPredictionResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "BottleneckAnalysisResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ResourceOptimizationResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "AnomalyDetectionResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowOptimizerService",
+      "file": "main.py",
+      "methods": 17
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "intelligent-core/ai_workflow_optimizer/requirements.txt"
+  },
+  "metrics": {
+    "loc": 946,
+    "python_files": 1,
+    "classes": 9,
+    "functions": 1,
+    "endpoints": 7,
+    "dependencies": 20
+  },
+  "readme": null
+}

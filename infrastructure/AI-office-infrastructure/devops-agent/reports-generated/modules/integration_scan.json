@@ -1,0 +1,209 @@
+{
+  "module_name": "integration",
+  "path": "infrastructure/integration",
+  "structure": {
+    ".": [
+      ".DS_Store"
+    ],
+    "mcp-server": [
+      "bcm_collective_mcp.py",
+      "requirements.txt",
+      "README.md"
+    ],
+    "github-integration": [
+      "auth.py",
+      "metrics.py",
+      "requirements_improved.txt",
+      "config.py",
+      "models.py",
+      "requirements.txt",
+      "Dockerfile",
+      "webhook_handler.py",
+      "README.md",
+      "IMPROVEMENTS.md",
+      "main.py",
+      "github_client.py"
+    ],
+    "partisia-contracts": [
+      "README.md",
+      "collective_intelligence.pbc"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "auth",
+    "config",
+    "datetime",
+    "enum",
+    "fastapi",
+    "hashlib",
+    "hmac",
+    "httpx",
+    "json",
+    "jwt",
+    "logging",
+    "mcp.server",
+    "mcp.server.stdio",
+    "mcp.types",
+    "models",
+    "os",
+    "prometheus_client",
+    "pydantic",
+    "runtime/eventbus",
+    "tenacity",
+    "time",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/github/webhook",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/token-exchange",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/claude/analyze-changes",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/claude/generate-config",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/deployment/history",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/claude/analyze-deployment",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/deployment/orchestrate",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "PartisiaClient",
+      "file": "bcm_collective_mcp.py",
+      "methods": 1
+    },
+    {
+      "name": "GitHubAuth",
+      "file": "auth.py",
+      "methods": 3
+    },
+    {
+      "name": "GitHubConfig",
+      "file": "config.py",
+      "methods": 3
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubEventType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "WebhookEvent",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PRWebhookPayload",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "IssueWebhookPayload",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PushWebhookPayload",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubInstallation",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubPullRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubIssue",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "WebhookProcessingResult",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "InstallationToken",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubAPIRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "WebhookHandler",
+      "file": "webhook_handler.py",
+      "methods": 2
+    },
+    {
+      "name": "GitHubAPIError",
+      "file": "github_client.py",
+      "methods": 0
+    },
+    {
+      "name": "RateLimitExceeded",
+      "file": "github_client.py",
+      "methods": 0
+    },
+    {
+      "name": "GitHubClient",
+      "file": "github_client.py",
+      "methods": 2
+    }
+  ],
+  "functions": [],
+  "config": {},
+  "metrics": {
+    "loc": 1839,
+    "python_files": 8,
+    "classes": 19,
+    "functions": 0,
+    "endpoints": 8,
+    "dependencies": 25
+  },
+  "readme": null
+}

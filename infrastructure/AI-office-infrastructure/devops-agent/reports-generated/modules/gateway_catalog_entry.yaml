@@ -1,0 +1,28 @@
+
+  gateway:
+    type: gateway
+    location: infrastructure/gateway
+    port: 8888
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /health
+      - POST /api/v1/gateway/ai/analyze
+      - POST /api/v1/gateway/ai/optimize
+      - GET /api/v1/gateway/services
+      - GET /health/databases
+    metrics:
+      loc: 5036
+      files: 20
+      classes: 28
+      functions: 8
+    status: discovered

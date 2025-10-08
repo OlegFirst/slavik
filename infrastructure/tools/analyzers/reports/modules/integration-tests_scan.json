@@ -1,0 +1,125 @@
+{
+  "module_name": "integration-tests",
+  "path": "platform-services/integration-tests",
+  "structure": {
+    ".": [
+      "conftest.py",
+      "wait-for-services.sh",
+      "pytest.ini",
+      "requirements.txt",
+      "test_auth_integration.py",
+      "run_integration_tests.sh",
+      "test_api_integration.py",
+      "test_planning_to_plans_workflow.py",
+      ".env.test",
+      "README.md",
+      "test_performance_integration.py",
+      "test_bia_to_planning_workflow.py",
+      "test_compliance_audit_workflow.py",
+      "test_resilience_integration.py",
+      "test_data_consistency.py",
+      "INTEGRATION_TESTS_SUMMARY.md",
+      "docker-compose.test.yml",
+      "test_eventbus_integration.py",
+      "QUICK_REFERENCE.md"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "datetime",
+    "dotenv",
+    "httpx",
+    "jwt",
+    "os",
+    "pytest",
+    "time",
+    "typing"
+  ],
+  "endpoints": [],
+  "classes": [
+    {
+      "name": "EventBusHelper",
+      "file": "conftest.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "service_urls",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "jwt_secret",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "jwt_algorithm",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "create_jwt_token",
+      "file": "conftest.py",
+      "params": 2
+    },
+    {
+      "name": "auth_headers",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "auth_headers_tenant_a",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "auth_headers_tenant_b",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "admin_auth_headers",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "retry_async",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "pytest_configure",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "pytest_collection_modifyitems",
+      "file": "conftest.py",
+      "params": 2
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/integration-tests/requirements.txt"
+  },
+  "metrics": {
+    "loc": 4441,
+    "python_files": 10,
+    "classes": 1,
+    "functions": 12,
+    "endpoints": 0,
+    "dependencies": 9
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 9341,
+    "lines": 376,
+    "content": "# BCM Platform Integration Tests\n\nComprehensive integration tests for inter-service communication in the BCM platform.\n\n## Overview\n\nThis directory contains end-to-end integration tests that verify:\n- Cross-service workflows (BIA \u2192 Planning \u2192 Plans \u2192 Compliance)\n- API integration and data flow\n- EventBus event publishing and consumption\n- Authentication and authorization across services\n- Data consistency and referential integrity\n- Performance benchmarks\n- Error handling and resilience\n\n## Directory Structure\n\n```\nintegration-tests/\n\u251c\u2500\u2500 README.md                           # This file\n\u251c\u2500\u2500 pytest.ini                          # Pytest configuration\n\u251c\u2500\u2500 requirements.txt                    # Test dependencies\n\u251c\u2500\u2500 conftest.py                         # Shared fixtures\n\u251c\u2500\u2500 .env.test                           # Test environment variables\n\u251c\u2500\u2500 docker-compose.test.yml             # Test service configuration\n\u251c\u2500\u2500 run_integration_tests.sh            # Main test runner script\n\u251c\u2500\u2500 wait-for-services.s"
+  }
+}

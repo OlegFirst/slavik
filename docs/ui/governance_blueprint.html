@@ -1,0 +1,948 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Governance Service - UI Blueprint</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; background: #f5f5f5; }
+        h1 { color: #333; }
+        .resource { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .resource h2 { margin-top: 0; color: #0066cc; }
+        .screen { border-left: 4px solid #0066cc; padding-left: 15px; margin: 15px 0; }
+        .screen h3 { margin: 5px 0; color: #333; }
+        .components { margin: 10px 0; }
+        .component { background: #f8f9fa; padding: 8px 12px; margin: 5px 0; border-radius: 4px; display: inline-block; margin-right: 10px; }
+        .endpoint { font-family: monospace; background: #e9ecef; padding: 3px 8px; border-radius: 3px; font-size: 0.9em; }
+        .method { display: inline-block; padding: 2px 8px; border-radius: 3px; color: white; font-size: 0.8em; margin-right: 5px; }
+        .get { background: #28a745; }
+        .post { background: #007bff; }
+        .put { background: #ffc107; }
+        .delete { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>Governance Service - UI Blueprint</h1>
+    <p>Автоматически сгенерированные схемы UI на основе API эндпоинтов</p>
+
+    
+    <div class="resource">
+        <h2>Api</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/api/compliance/check</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Health</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/health</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Default</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Auth</h2>
+
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/auth/token</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Ai-Advice</h2>
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/{item_id}/ai-advice</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Benchmarks</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/benchmarks</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/benchmarks/{metric_name}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Policies</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/policies</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/policies</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/policies/{policy_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/policies/{policy_id}</span> - update_policy</p>
+            
+            <p><span class="method post">POST</span> <span class="endpoint">/policies/{policy_id}/approve</span> - approve_policy</p>
+            
+            <p><span class="method post">POST</span> <span class="endpoint">/policies/{policy_id}/publish</span> - publish_policy</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Roles</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/roles</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/roles</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/roles/{role_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/roles/{role_id}</span> - update_role</p>
+            
+            <p><span class="method post">POST</span> <span class="endpoint">/roles/{role_id}/assign</span> - assign_role</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Resources</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/resources</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/resources</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/resources/{resource_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/resources/{resource_id}</span> - update_resource</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Competence</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/competence</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/competence</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Objectives</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/objectives</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/objectives</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/objectives/{objective_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/objectives/{objective_id}</span> - update_objective</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Communication-Plans</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/communication-plans</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/communication-plans</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Stakeholders</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/stakeholders</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/stakeholders</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/stakeholders/{stakeholder_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/stakeholders/{stakeholder_id}</span> - update_stakeholder</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Context-Analysis</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/context-analysis</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>➕ Create Screen</h3>
+            <p><span class="method post">POST</span> <span class="endpoint">/context-analysis</span></p>
+            <div class="components">
+                <span class="component">📝 Form</span>
+                <span class="component">💾 Submit Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>👁️ Detail Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/context-analysis/{analysis_id}</span></p>
+            <div class="components">
+                <span class="component">📄 Detail View</span>
+                <span class="component">✏️ Edit Button</span>
+                <span class="component">🗑️ Delete Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Tenant</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/tenant</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+        <div class="screen">
+            <h3>⚡ Custom Actions</h3>
+            
+            <p><span class="method patch">PATCH</span> <span class="endpoint">/tenant/classify</span> - classify_tenant_domain</p>
+            
+        </div>
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Knowledge</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/knowledge</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Templates</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/templates</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Recommendations</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/recommendations</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Industries</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/industries</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="resource">
+        <h2>Organizational-Types</h2>
+
+        
+        <div class="screen">
+            <h3>📋 List Screen</h3>
+            <p><span class="method get">GET</span> <span class="endpoint">/organizational-types</span></p>
+            <div class="components">
+                <span class="component">📊 Data Table</span>
+                <span class="component">🔍 Search Bar</span>
+                <span class="component">🔧 Filters</span>
+                <span class="component">📄 Pagination</span>
+                <span class="component">➕ Create Button</span>
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+        <div class="screen">
+            <h3>✏️ Edit Screen</h3>
+            <p><span class="method put"></span> <span class="endpoint"></span></p>
+            <div class="components">
+                <span class="component">📝 Form (Pre-filled)</span>
+                <span class="component">💾 Save Button</span>
+                <span class="component">❌ Cancel Button</span>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666;">
+        <p>🤖 Автоматически сгенерировано UI Blueprint Generator</p>
+    </footer>
+</body>
+</html>
+        

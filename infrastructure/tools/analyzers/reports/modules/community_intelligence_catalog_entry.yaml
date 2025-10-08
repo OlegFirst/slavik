@@ -1,0 +1,34 @@
+
+  community_intelligence:
+    type: ai-service
+    location: intelligent-core/community_intelligence
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_services/community_intelligence
+        - ai_services/intelligent_core
+        - ai_services/living_docs
+        - ai_services/predictive_timeline
+        - ai_services/services
+        - shared/auth
+        - shared/database
+    endpoints:
+      - GET /health
+      - GET /
+      - GET /pending
+      - GET /my
+      - GET /{review_id}
+    metrics:
+      loc: 7408
+      files: 31
+      classes: 51
+      functions: 7
+    status: discovered

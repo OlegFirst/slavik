@@ -1,0 +1,921 @@
+asyncapi: 3.0.0
+info:
+  title: BCM Platform Event Architecture
+  version: 1.0.0
+  description: |
+    Event-driven architecture for BCM Platform.
+    All events flow through RabbitMQ EventBus with topic exchange pattern.
+  contact:
+    name: BCM Platform Team
+    url: https://github.com/your-org/bcm-platform
+
+servers:
+  production:
+    host: rabbitmq.production.bcm-platform.com:5672
+    protocol: amqp
+    description: Production RabbitMQ server
+
+  development:
+    host: localhost:5672
+    protocol: amqp
+    description: Local development RabbitMQ
+
+channels:
+  # ============================================================================
+  # BIA (Business Impact Analysis) Events
+  # ============================================================================
+
+  bcm.bia.started:
+    address: bcm.bia.started
+    messages:
+      BIAStarted:
+        $ref: '#/components/messages/BIAStarted'
+    description: Triggered when BIA process is initiated
+
+  bcm.bia.completed:
+    address: bcm.bia.completed
+    messages:
+      BIACompleted:
+        $ref: '#/components/messages/BIACompleted'
+    description: Triggered when BIA analysis is completed
+
+  bcm.bia.rto_updated:
+    address: bcm.bia.rto_updated
+    messages:
+      BIARTOUpdated:
+        $ref: '#/components/messages/BIARTOUpdated'
+    description: Triggered when RTO (Recovery Time Objective) is updated
+
+  # ============================================================================
+  # Risk Assessment Events
+  # ============================================================================
+
+  bcm.risk.identified:
+    address: bcm.risk.identified
+    messages:
+      RiskIdentified:
+        $ref: '#/components/messages/RiskIdentified'
+    description: Triggered when new risk is identified
+
+  bcm.risk.assessed:
+    address: bcm.risk.assessed
+    messages:
+      RiskAssessed:
+        $ref: '#/components/messages/RiskAssessed'
+    description: Triggered when risk assessment is completed
+
+  bcm.risk.mitigation_planned:
+    address: bcm.risk.mitigation_planned
+    messages:
+      RiskMitigationPlanned:
+        $ref: '#/components/messages/RiskMitigationPlanned'
+    description: Triggered when mitigation plan is created
+
+  # ============================================================================
+  # Incident Response Events
+  # ============================================================================
+
+  bcm.incident.opened:
+    address: bcm.incident.opened
+    messages:
+      IncidentOpened:
+        $ref: '#/components/messages/IncidentOpened'
+    description: Triggered when incident is reported
+
+  bcm.incident.escalated:
+    address: bcm.incident.escalated
+    messages:
+      IncidentEscalated:
+        $ref: '#/components/messages/IncidentEscalated'
+    description: Triggered when incident severity increases
+
+  bcm.incident.resolved:
+    address: bcm.incident.resolved
+    messages:
+      IncidentResolved:
+        $ref: '#/components/messages/IncidentResolved'
+    description: Triggered when incident is resolved
+
+  # ============================================================================
+  # Compliance & Audit Events
+  # ============================================================================
+
+  bcm.audit.started:
+    address: bcm.audit.started
+    messages:
+      AuditStarted:
+        $ref: '#/components/messages/AuditStarted'
+    description: Triggered when audit process begins
+
+  bcm.compliance.gap_found:
+    address: bcm.compliance.gap_found
+    messages:
+      ComplianceGapFound:
+        $ref: '#/components/messages/ComplianceGapFound'
+    description: Triggered when compliance gap is identified
+
+  bcm.compliance.capa_created:
+    address: bcm.compliance.capa_created
+    messages:
+      CAPACreated:
+        $ref: '#/components/messages/CAPACreated'
+    description: Triggered when Corrective Action is created
+
+  # ============================================================================
+  # Exercise & Validation Events
+  # ============================================================================
+
+  bcm.exercise.scheduled:
+    address: bcm.exercise.scheduled
+    messages:
+      ExerciseScheduled:
+        $ref: '#/components/messages/ExerciseScheduled'
+    description: Triggered when exercise is scheduled
+
+  bcm.exercise.completed:
+    address: bcm.exercise.completed
+    messages:
+      ExerciseCompleted:
+        $ref: '#/components/messages/ExerciseCompleted'
+    description: Triggered when exercise is finished
+
+  bcm.exercise.lesson_learned:
+    address: bcm.exercise.lesson_learned
+    messages:
+      ExerciseLessonLearned:
+        $ref: '#/components/messages/ExerciseLessonLearned'
+    description: Triggered when lesson is documented
+
+  # ============================================================================
+  # Document Management Events
+  # ============================================================================
+
+  bcm.document.created:
+    address: bcm.document.created
+    messages:
+      DocumentCreated:
+        $ref: '#/components/messages/DocumentCreated'
+    description: Triggered when document is created
+
+  bcm.document.approved:
+    address: bcm.document.approved
+    messages:
+      DocumentApproved:
+        $ref: '#/components/messages/DocumentApproved'
+    description: Triggered when document is approved
+
+  bcm.document.version_created:
+    address: bcm.document.version_created
+    messages:
+      DocumentVersionCreated:
+        $ref: '#/components/messages/DocumentVersionCreated'
+    description: Triggered when new document version is created
+
+  # ============================================================================
+  # Workflow Intelligence Events
+  # ============================================================================
+
+  workflow.started:
+    address: workflow.started
+    messages:
+      WorkflowStarted:
+        $ref: '#/components/messages/WorkflowStarted'
+    description: Triggered when Temporal workflow starts
+
+  workflow.completed:
+    address: workflow.completed
+    messages:
+      WorkflowCompleted:
+        $ref: '#/components/messages/WorkflowCompleted'
+    description: Triggered when Temporal workflow completes
+
+  workflow.failed:
+    address: workflow.failed
+    messages:
+      WorkflowFailed:
+        $ref: '#/components/messages/WorkflowFailed'
+    description: Triggered when Temporal workflow fails
+
+operations:
+  # Publishers
+  publishBIAStarted:
+    action: send
+    channel:
+      $ref: '#/channels/bcm.bia.started'
+    summary: BIA Service publishes when analysis starts
+
+  publishIncidentOpened:
+    action: send
+    channel:
+      $ref: '#/channels/bcm.incident.opened'
+    summary: Response Service publishes when incident occurs
+
+  publishDocumentApproved:
+    action: send
+    channel:
+      $ref: '#/channels/bcm.document.approved'
+    summary: Documents Service publishes when document approved
+
+  # Subscribers
+  subscribeToIncidents:
+    action: receive
+    channel:
+      $ref: '#/channels/bcm.incident.opened'
+    summary: AI Orchestrator subscribes to incidents for automated response
+
+  subscribeToAudits:
+    action: receive
+    channel:
+      $ref: '#/channels/bcm.audit.started'
+    summary: Compliance Service subscribes to audit events
+
+components:
+  messages:
+    # ========================================================================
+    # BIA Messages
+    # ========================================================================
+
+    BIAStarted:
+      name: BIAStarted
+      title: BIA Analysis Started
+      summary: Business Impact Analysis process has been initiated
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/BIAStartedPayload'
+
+    BIACompleted:
+      name: BIACompleted
+      title: BIA Analysis Completed
+      summary: Business Impact Analysis has been completed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/BIACompletedPayload'
+
+    BIARTOUpdated:
+      name: BIARTOUpdated
+      title: RTO Updated
+      summary: Recovery Time Objective has been updated
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/BIARTOUpdatedPayload'
+
+    # ========================================================================
+    # Risk Messages
+    # ========================================================================
+
+    RiskIdentified:
+      name: RiskIdentified
+      title: Risk Identified
+      summary: New risk has been identified
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RiskIdentifiedPayload'
+
+    RiskAssessed:
+      name: RiskAssessed
+      title: Risk Assessed
+      summary: Risk assessment completed with score
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RiskAssessedPayload'
+
+    RiskMitigationPlanned:
+      name: RiskMitigationPlanned
+      title: Mitigation Plan Created
+      summary: Mitigation plan has been created for risk
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/RiskMitigationPlannedPayload'
+
+    # ========================================================================
+    # Incident Messages
+    # ========================================================================
+
+    IncidentOpened:
+      name: IncidentOpened
+      title: Incident Opened
+      summary: New incident has been reported
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/IncidentOpenedPayload'
+
+    IncidentEscalated:
+      name: IncidentEscalated
+      title: Incident Escalated
+      summary: Incident severity has increased
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/IncidentEscalatedPayload'
+
+    IncidentResolved:
+      name: IncidentResolved
+      title: Incident Resolved
+      summary: Incident has been resolved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/IncidentResolvedPayload'
+
+    # ========================================================================
+    # Compliance Messages
+    # ========================================================================
+
+    AuditStarted:
+      name: AuditStarted
+      title: Audit Started
+      summary: Audit process has begun
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/AuditStartedPayload'
+
+    ComplianceGapFound:
+      name: ComplianceGapFound
+      title: Compliance Gap Found
+      summary: Gap in compliance detected
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ComplianceGapFoundPayload'
+
+    CAPACreated:
+      name: CAPACreated
+      title: CAPA Created
+      summary: Corrective and Preventive Action created
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/CAPACreatedPayload'
+
+    # ========================================================================
+    # Exercise Messages
+    # ========================================================================
+
+    ExerciseScheduled:
+      name: ExerciseScheduled
+      title: Exercise Scheduled
+      summary: BCM exercise has been scheduled
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ExerciseScheduledPayload'
+
+    ExerciseCompleted:
+      name: ExerciseCompleted
+      title: Exercise Completed
+      summary: BCM exercise has finished
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ExerciseCompletedPayload'
+
+    ExerciseLessonLearned:
+      name: ExerciseLessonLearned
+      title: Lesson Learned
+      summary: Lesson learned documented from exercise
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ExerciseLessonLearnedPayload'
+
+    # ========================================================================
+    # Document Messages
+    # ========================================================================
+
+    DocumentCreated:
+      name: DocumentCreated
+      title: Document Created
+      summary: New document has been created
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DocumentCreatedPayload'
+
+    DocumentApproved:
+      name: DocumentApproved
+      title: Document Approved
+      summary: Document has been approved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DocumentApprovedPayload'
+
+    DocumentVersionCreated:
+      name: DocumentVersionCreated
+      title: Document Version Created
+      summary: New version of document created
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DocumentVersionCreatedPayload'
+
+    # ========================================================================
+    # Workflow Messages
+    # ========================================================================
+
+    WorkflowStarted:
+      name: WorkflowStarted
+      title: Workflow Started
+      summary: Temporal workflow execution started
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/WorkflowStartedPayload'
+
+    WorkflowCompleted:
+      name: WorkflowCompleted
+      title: Workflow Completed
+      summary: Temporal workflow execution completed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/WorkflowCompletedPayload'
+
+    WorkflowFailed:
+      name: WorkflowFailed
+      title: Workflow Failed
+      summary: Temporal workflow execution failed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/WorkflowFailedPayload'
+
+  schemas:
+    # ========================================================================
+    # Common Schemas
+    # ========================================================================
+
+    BaseEvent:
+      type: object
+      required:
+        - event_id
+        - tenant_id
+        - timestamp
+      properties:
+        event_id:
+          type: string
+          format: uuid
+          description: Unique event identifier
+        tenant_id:
+          type: string
+          format: uuid
+          description: Tenant/Organization identifier
+        timestamp:
+          type: string
+          format: date-time
+          description: Event timestamp (ISO 8601)
+        user_id:
+          type: string
+          format: uuid
+          description: User who triggered the event
+
+    # ========================================================================
+    # BIA Schemas
+    # ========================================================================
+
+    BIAStartedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - bia_id
+            - process_name
+          properties:
+            bia_id:
+              type: string
+              format: uuid
+            process_name:
+              type: string
+            scope:
+              type: string
+              enum: [department, organization, critical_process]
+
+    BIACompletedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - bia_id
+            - rto_hours
+            - rpo_hours
+            - mtpd_hours
+          properties:
+            bia_id:
+              type: string
+              format: uuid
+            rto_hours:
+              type: number
+              description: Recovery Time Objective in hours
+            rpo_hours:
+              type: number
+              description: Recovery Point Objective in hours
+            mtpd_hours:
+              type: number
+              description: Maximum Tolerable Period of Disruption
+            impact_score:
+              type: number
+              minimum: 1
+              maximum: 5
+
+    BIARTOUpdatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - bia_id
+            - old_rto_hours
+            - new_rto_hours
+          properties:
+            bia_id:
+              type: string
+              format: uuid
+            old_rto_hours:
+              type: number
+            new_rto_hours:
+              type: number
+            reason:
+              type: string
+
+    # ========================================================================
+    # Risk Schemas
+    # ========================================================================
+
+    RiskIdentifiedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - risk_id
+            - risk_title
+            - category
+          properties:
+            risk_id:
+              type: string
+              format: uuid
+            risk_title:
+              type: string
+            category:
+              type: string
+              enum: [operational, financial, strategic, compliance, reputational]
+            description:
+              type: string
+
+    RiskAssessedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - risk_id
+            - likelihood
+            - impact
+            - risk_score
+          properties:
+            risk_id:
+              type: string
+              format: uuid
+            likelihood:
+              type: integer
+              minimum: 1
+              maximum: 5
+            impact:
+              type: integer
+              minimum: 1
+              maximum: 5
+            risk_score:
+              type: number
+              description: Calculated risk score (likelihood * impact)
+            risk_level:
+              type: string
+              enum: [low, medium, high, critical]
+
+    RiskMitigationPlannedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - risk_id
+            - mitigation_plan_id
+          properties:
+            risk_id:
+              type: string
+              format: uuid
+            mitigation_plan_id:
+              type: string
+              format: uuid
+            actions:
+              type: array
+              items:
+                type: object
+                properties:
+                  action:
+                    type: string
+                  responsible:
+                    type: string
+                  deadline:
+                    type: string
+                    format: date
+
+    # ========================================================================
+    # Incident Schemas
+    # ========================================================================
+
+    IncidentOpenedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - incident_id
+            - title
+            - severity
+          properties:
+            incident_id:
+              type: string
+              format: uuid
+            title:
+              type: string
+            severity:
+              type: string
+              enum: [low, medium, high, critical]
+            description:
+              type: string
+            affected_systems:
+              type: array
+              items:
+                type: string
+
+    IncidentEscalatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - incident_id
+            - old_severity
+            - new_severity
+          properties:
+            incident_id:
+              type: string
+              format: uuid
+            old_severity:
+              type: string
+            new_severity:
+              type: string
+            escalation_reason:
+              type: string
+
+    IncidentResolvedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - incident_id
+            - resolution
+          properties:
+            incident_id:
+              type: string
+              format: uuid
+            resolution:
+              type: string
+            duration_minutes:
+              type: integer
+            lessons_learned:
+              type: string
+
+    # ========================================================================
+    # Compliance Schemas
+    # ========================================================================
+
+    AuditStartedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - audit_id
+            - audit_type
+          properties:
+            audit_id:
+              type: string
+              format: uuid
+            audit_type:
+              type: string
+              enum: [internal, external, iso22301, iso27001]
+            scope:
+              type: string
+            auditor:
+              type: string
+
+    ComplianceGapFoundPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - gap_id
+            - iso_clause
+            - severity
+          properties:
+            gap_id:
+              type: string
+              format: uuid
+            iso_clause:
+              type: string
+              description: ISO 22301 clause (e.g., "8.2.2")
+            severity:
+              type: string
+              enum: [minor, major, critical]
+            description:
+              type: string
+
+    CAPACreatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - capa_id
+            - gap_id
+          properties:
+            capa_id:
+              type: string
+              format: uuid
+            gap_id:
+              type: string
+              format: uuid
+            corrective_action:
+              type: string
+            preventive_action:
+              type: string
+            responsible:
+              type: string
+            deadline:
+              type: string
+              format: date
+
+    # ========================================================================
+    # Exercise Schemas
+    # ========================================================================
+
+    ExerciseScheduledPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - exercise_id
+            - exercise_type
+            - scheduled_date
+          properties:
+            exercise_id:
+              type: string
+              format: uuid
+            exercise_type:
+              type: string
+              enum: [tabletop, walkthrough, simulation, full_scale]
+            scheduled_date:
+              type: string
+              format: date-time
+            participants:
+              type: array
+              items:
+                type: string
+
+    ExerciseCompletedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - exercise_id
+            - success_rate
+          properties:
+            exercise_id:
+              type: string
+              format: uuid
+            success_rate:
+              type: number
+              minimum: 0
+              maximum: 100
+            duration_minutes:
+              type: integer
+            participants_count:
+              type: integer
+
+    ExerciseLessonLearnedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - exercise_id
+            - lesson
+          properties:
+            exercise_id:
+              type: string
+              format: uuid
+            lesson:
+              type: string
+            category:
+              type: string
+              enum: [process, communication, technology, training]
+            action_item:
+              type: string
+
+    # ========================================================================
+    # Document Schemas
+    # ========================================================================
+
+    DocumentCreatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - document_id
+            - title
+            - document_type
+          properties:
+            document_id:
+              type: string
+              format: uuid
+            title:
+              type: string
+            document_type:
+              type: string
+              enum: [policy, procedure, plan, report]
+            version:
+              type: string
+              default: "1.0"
+
+    DocumentApprovedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - document_id
+            - approver_id
+          properties:
+            document_id:
+              type: string
+              format: uuid
+            approver_id:
+              type: string
+              format: uuid
+            approval_date:
+              type: string
+              format: date-time
+            comments:
+              type: string
+
+    DocumentVersionCreatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - document_id
+            - old_version
+            - new_version
+          properties:
+            document_id:
+              type: string
+              format: uuid
+            old_version:
+              type: string
+            new_version:
+              type: string
+            changes:
+              type: string
+
+    # ========================================================================
+    # Workflow Schemas
+    # ========================================================================
+
+    WorkflowStartedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - workflow_id
+            - workflow_type
+          properties:
+            workflow_id:
+              type: string
+            workflow_type:
+              type: string
+              enum: [bia, risk_assessment, incident_response, audit, exercise]
+            input:
+              type: object
+
+    WorkflowCompletedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - workflow_id
+            - status
+          properties:
+            workflow_id:
+              type: string
+            status:
+              type: string
+              enum: [completed, canceled]
+            result:
+              type: object
+            duration_seconds:
+              type: integer
+
+    WorkflowFailedPayload:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - workflow_id
+            - error
+          properties:
+            workflow_id:
+              type: string
+            error:
+              type: string
+            stack_trace:
+              type: string
+            retry_count:
+              type: integer

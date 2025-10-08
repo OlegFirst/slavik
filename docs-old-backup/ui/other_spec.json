@@ -1,0 +1,4242 @@
+{
+  "service": "Other",
+  "resources": {
+    "distutils.command.bdist_rpm.bdist_rpm": {
+      "screens": [
+        {
+          "name": "Test Bdist Rpm Warning",
+          "type": "action",
+          "endpoint": "distutils.command.bdist_rpm.bdist_rpm",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "setuptools.command.build_clib.newer_pairwise_group": {
+      "screens": [
+        {
+          "name": "Test Build Libraries",
+          "type": "action",
+          "endpoint": "setuptools.command.build_clib.newer_pairwise_group",
+          "method": "PATCH"
+        },
+        {
+          "name": "Test Build Libraries Reproducible",
+          "type": "action",
+          "endpoint": "setuptools.command.build_clib.newer_pairwise_group",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "platform.python_version": {
+      "screens": [
+        {
+          "name": "Test Ordering",
+          "type": "action",
+          "endpoint": "platform.python_version",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "health": {
+      "screens": [
+        {
+          "name": "Health List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/health"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Health"
+            }
+          ]
+        },
+        {
+          "name": "Health Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/health/{service_name}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "api": {
+      "screens": [
+        {
+          "name": "Api List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/api/v1/stats"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Api"
+            }
+          ]
+        },
+        {
+          "name": "Create Api",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/api/v1/notifications/broadcast",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Api Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/api/v1/channels/{channel_id}/messages"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "metrics": {
+      "screens": [
+        {
+          "name": "Metrics List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/metrics"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Metrics"
+            }
+          ]
+        }
+      ]
+    },
+    "processes": {
+      "screens": [
+        {
+          "name": "Processes List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/processes"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Processes"
+            }
+          ]
+        },
+        {
+          "name": "Create Processes",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/processes/bulk/validate",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Processes Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/processes/{process_id}/snapshot/{version}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Complete Bia Process",
+          "type": "action",
+          "endpoint": "/processes/{process_id}/complete",
+          "method": "POST"
+        },
+        {
+          "name": "Suggest Rto",
+          "type": "action",
+          "endpoint": "/processes/{process_id}/suggest-rto",
+          "method": "POST"
+        },
+        {
+          "name": "Discover Dependencies",
+          "type": "action",
+          "endpoint": "/processes/{process_id}/discover-dependencies",
+          "method": "POST"
+        },
+        {
+          "name": "Bulk Update Processes",
+          "type": "action",
+          "endpoint": "/processes/bulk",
+          "method": "PATCH"
+        },
+        {
+          "name": "Bulk Delete Processes",
+          "type": "action",
+          "endpoint": "/processes/bulk",
+          "method": "DELETE"
+        }
+      ]
+    },
+    "instances": {
+      "screens": [
+        {
+          "name": "Instances List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/instances"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Instances"
+            }
+          ]
+        },
+        {
+          "name": "Instances Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/instances/{instance_id}/visual-state"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "tasks": {
+      "screens": [
+        {
+          "name": "Create Tasks",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/tasks/delegate",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Tasks Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/tasks/{task_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Complete Task",
+          "type": "action",
+          "endpoint": "/tasks/{task_id}/complete",
+          "method": "POST"
+        },
+        {
+          "name": "Assign Task",
+          "type": "action",
+          "endpoint": "/tasks/{task_id}/assign",
+          "method": "POST"
+        }
+      ]
+    },
+    "users": {
+      "screens": [
+        {
+          "name": "Users Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/users/{user_email}/tasks"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "default": {
+      "screens": [
+        {
+          "name": "Default List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Default"
+            }
+          ]
+        },
+        {
+          "name": "Create Default",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Default Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{review_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Gap",
+          "type": "action",
+          "endpoint": "/{gap_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Update Evidence",
+          "type": "action",
+          "endpoint": "/{evidence_id}",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "pending": {
+      "screens": [
+        {
+          "name": "Pending List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/pending"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Pending"
+            }
+          ]
+        }
+      ]
+    },
+    "my": {
+      "screens": [
+        {
+          "name": "My List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/my"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New My"
+            }
+          ]
+        }
+      ]
+    },
+    "expertise": {
+      "screens": [
+        {
+          "name": "Expertise Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{user_id}/expertise/{module}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "leaderboard": {
+      "screens": [
+        {
+          "name": "Leaderboard List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/leaderboard"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Leaderboard"
+            }
+          ]
+        },
+        {
+          "name": "Leaderboard Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/leaderboard/{module}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "transactions": {
+      "screens": [
+        {
+          "name": "Transactions Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/transactions/{user_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "search": {
+      "screens": [
+        {
+          "name": "Search List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/search"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Search"
+            }
+          ]
+        }
+      ]
+    },
+    "similar": {
+      "screens": [
+        {
+          "name": "Similar List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/similar/for-workflow"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Similar"
+            }
+          ]
+        }
+      ]
+    },
+    "stats": {
+      "screens": [
+        {
+          "name": "Stats List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/stats"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Stats"
+            }
+          ]
+        }
+      ]
+    },
+    "preview-anonymization": {
+      "screens": [
+        {
+          "name": "Create Preview-Anonymization",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/preview-anonymization",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "from-workflow": {
+      "screens": [
+        {
+          "name": "Create Contribution From Workflow",
+          "type": "action",
+          "endpoint": "/from-workflow/{workflow_id}",
+          "method": "POST"
+        }
+      ]
+    },
+    "contributions": {
+      "screens": [
+        {
+          "name": "Contributions List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/contributions/pending-reviews"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Contributions"
+            }
+          ]
+        },
+        {
+          "name": "Create Contributions",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/contributions",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Contributions Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/contributions/{contribution_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Submit Review",
+          "type": "action",
+          "endpoint": "/contributions/{contribution_id}/review",
+          "method": "POST"
+        }
+      ]
+    },
+    "reputation": {
+      "screens": [
+        {
+          "name": "Reputation List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/reputation/leaderboard"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Reputation"
+            }
+          ]
+        },
+        {
+          "name": "Reputation Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/reputation/{user_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "annotations": {
+      "screens": [
+        {
+          "name": "Create Annotations",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/annotations",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Vote Annotation",
+          "type": "action",
+          "endpoint": "/annotations/{annotation_id}/vote",
+          "method": "POST"
+        }
+      ]
+    },
+    "guidance": {
+      "screens": [
+        {
+          "name": "Guidance Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/guidance/{clause_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "timeline": {
+      "screens": [
+        {
+          "name": "Create Timeline",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/timeline/predict",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Timeline Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/timeline/{org_id}/next-steps"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "insights": {
+      "screens": [
+        {
+          "name": "Insights List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/insights"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Insights"
+            }
+          ]
+        },
+        {
+          "name": "Insights Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/insights/similar-orgs/{org_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "marketplace": {
+      "screens": [
+        {
+          "name": "Marketplace List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/marketplace/demand-forecast"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Marketplace"
+            }
+          ]
+        }
+      ]
+    },
+    "clauses": {
+      "screens": [
+        {
+          "name": "Clauses List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/clauses/search"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Clauses"
+            }
+          ]
+        }
+      ]
+    },
+    "check": {
+      "screens": [
+        {
+          "name": "Check List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/check"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Check"
+            }
+          ]
+        }
+      ]
+    },
+    "accept-help": {
+      "screens": [
+        {
+          "name": "Create Accept-Help",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/accept-help",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "screens": [
+        {
+          "name": "Create Create",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/create",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "chat": {
+      "screens": [
+        {
+          "name": "Chat With Agent",
+          "type": "action",
+          "endpoint": "/{agent_id}/chat",
+          "method": "POST"
+        }
+      ]
+    },
+    "active": {
+      "screens": [
+        {
+          "name": "Active List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/active"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Active"
+            }
+          ]
+        }
+      ]
+    },
+    "history": {
+      "screens": [
+        {
+          "name": "History Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{evidence_id}/history"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "journey": {
+      "screens": [
+        {
+          "name": "Journey Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/journey/{org_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "certification": {
+      "screens": [
+        {
+          "name": "Certification Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/certification/{org_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "recommendations": {
+      "screens": [
+        {
+          "name": "Recommendations List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/recommendations"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Recommendations"
+            }
+          ]
+        },
+        {
+          "name": "Recommendations Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/recommendations/{org_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "expert-demand": {
+      "screens": [
+        {
+          "name": "Expert-Demand List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/expert-demand"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Expert-Demand"
+            }
+          ]
+        }
+      ]
+    },
+    "similar-organizations": {
+      "screens": [
+        {
+          "name": "Similar-Organizations Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/similar-organizations/{org_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "suppliers": {
+      "screens": [
+        {
+          "name": "Suppliers List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/suppliers"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Suppliers"
+            }
+          ]
+        },
+        {
+          "name": "Create Suppliers",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/suppliers",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Suppliers Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/suppliers/{supplier_id}/risk-profile"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Supplier",
+          "type": "action",
+          "endpoint": "/suppliers/{supplier_id}",
+          "method": "PATCH"
+        }
+      ]
+    },
+    "single-points-of-failure": {
+      "screens": [
+        {
+          "name": "Single-Points-Of-Failure List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/single-points-of-failure"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Single-Points-Of-Failure"
+            }
+          ]
+        }
+      ]
+    },
+    "disruptions": {
+      "screens": [
+        {
+          "name": "Create Disruptions",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/disruptions",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "what-if-analysis": {
+      "screens": [
+        {
+          "name": "Create What-If-Analysis",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/what-if-analysis",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "summary": {
+      "screens": [
+        {
+          "name": "Summary List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/summary"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Summary"
+            }
+          ]
+        }
+      ]
+    },
+    "ai-advice": {
+      "screens": [
+        {
+          "name": "Ai-Advice Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{item_id}/ai-advice"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "benchmarks": {
+      "screens": [
+        {
+          "name": "Benchmarks List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/benchmarks"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Benchmarks"
+            }
+          ]
+        }
+      ]
+    },
+    "reports": {
+      "screens": [
+        {
+          "name": "Reports List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/reports"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Reports"
+            }
+          ]
+        }
+      ]
+    },
+    "cases": {
+      "screens": [
+        {
+          "name": "Cases List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/cases/search"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Cases"
+            }
+          ]
+        },
+        {
+          "name": "Cases Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/cases/{case_id}/timeline"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "analytics": {
+      "screens": [
+        {
+          "name": "Analytics List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/analytics/performance"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Analytics"
+            }
+          ]
+        }
+      ]
+    },
+    "assessments": {
+      "screens": [
+        {
+          "name": "Assessments List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/assessments"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Assessments"
+            }
+          ]
+        },
+        {
+          "name": "Create Assessments",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/assessments",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Assessments Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/assessments/{risk_id}/matrix-position"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Perform Fair Analysis",
+          "type": "action",
+          "endpoint": "/assessments/{risk_id}/fair-analysis",
+          "method": "POST"
+        },
+        {
+          "name": "Run Monte Carlo Simulation",
+          "type": "action",
+          "endpoint": "/assessments/{risk_id}/monte-carlo",
+          "method": "POST"
+        },
+        {
+          "name": "Create Treatment Plan",
+          "type": "action",
+          "endpoint": "/assessments/{risk_id}/treatment-plans",
+          "method": "POST"
+        }
+      ]
+    },
+    "treatment-plans": {
+      "screens": []
+    },
+    "risk-heat-map": {
+      "screens": [
+        {
+          "name": "Risk-Heat-Map List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/risk-heat-map"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Risk-Heat-Map"
+            }
+          ]
+        }
+      ]
+    },
+    "risk-trends": {
+      "screens": [
+        {
+          "name": "Risk-Trends List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/risk-trends"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Risk-Trends"
+            }
+          ]
+        }
+      ]
+    },
+    "guides": {
+      "screens": [
+        {
+          "name": "Guides List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/guides"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Guides"
+            }
+          ]
+        },
+        {
+          "name": "Guides Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/guides/{guide_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "research": {
+      "screens": [
+        {
+          "name": "Research List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/research"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Research"
+            }
+          ]
+        },
+        {
+          "name": "Research Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/research/{source}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "best-practices": {
+      "screens": [
+        {
+          "name": "Best-Practices List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/best-practices"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Best-Practices"
+            }
+          ]
+        }
+      ]
+    },
+    "case-studies": {
+      "screens": [
+        {
+          "name": "Case-Studies List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/case-studies"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Case-Studies"
+            }
+          ]
+        }
+      ]
+    },
+    "programs": {
+      "screens": [
+        {
+          "name": "Programs List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/programs"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Programs"
+            }
+          ]
+        },
+        {
+          "name": "Create Programs",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/programs",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Programs Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/programs/{program_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Schedule Audit",
+          "type": "action",
+          "endpoint": "/programs/{program_id}/audits",
+          "method": "POST"
+        },
+        {
+          "name": "Update Program",
+          "type": "action",
+          "endpoint": "/programs/{program_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Publish Program",
+          "type": "action",
+          "endpoint": "/programs/{program_id}/publish",
+          "method": "POST"
+        },
+        {
+          "name": "Archive Program",
+          "type": "action",
+          "endpoint": "/programs/{program_id}/archive",
+          "method": "POST"
+        }
+      ]
+    },
+    "audits": {
+      "screens": [
+        {
+          "name": "Audits List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/audits"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Audits"
+            }
+          ]
+        }
+      ]
+    },
+    "checklist": {
+      "screens": [
+        {
+          "name": "Checklist Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{audit_id}/checklist"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "findings": {
+      "screens": [
+        {
+          "name": "Findings Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{audit_id}/findings"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Create Audit Finding",
+          "type": "action",
+          "endpoint": "/{audit_id}/findings",
+          "method": "POST"
+        }
+      ]
+    },
+    "start": {
+      "screens": [
+        {
+          "name": "Start Audit",
+          "type": "action",
+          "endpoint": "/{audit_id}/start",
+          "method": "POST"
+        },
+        {
+          "name": "Start Review",
+          "type": "action",
+          "endpoint": "/{review_id}/start",
+          "method": "POST"
+        }
+      ]
+    },
+    "complete": {
+      "screens": [
+        {
+          "name": "Complete Audit",
+          "type": "action",
+          "endpoint": "/{audit_id}/complete",
+          "method": "POST"
+        },
+        {
+          "name": "Complete Review",
+          "type": "action",
+          "endpoint": "/{review_id}/complete",
+          "method": "POST"
+        }
+      ]
+    },
+    "report": {
+      "screens": [
+        {
+          "name": "Report Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{review_id}/report"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "standards": {
+      "screens": [
+        {
+          "name": "Standards List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/standards"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Standards"
+            }
+          ]
+        }
+      ]
+    },
+    "iso22301": {
+      "screens": [
+        {
+          "name": "Iso22301 List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/iso22301/clauses"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Iso22301"
+            }
+          ]
+        },
+        {
+          "name": "Iso22301 Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/iso22301/{clause}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "bci": {
+      "screens": [
+        {
+          "name": "Bci List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/bci/practices"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Bci"
+            }
+          ]
+        }
+      ]
+    },
+    "who": {
+      "screens": [
+        {
+          "name": "Who List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/who/framework"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Who"
+            }
+          ]
+        }
+      ]
+    },
+    "mapping": {
+      "screens": [
+        {
+          "name": "Mapping List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/mapping"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Mapping"
+            }
+          ]
+        }
+      ]
+    },
+    "improvements": {
+      "screens": [
+        {
+          "name": "Improvements List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/improvements/roi-analysis"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Improvements"
+            }
+          ]
+        },
+        {
+          "name": "Create Improvements",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/improvements",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Improvements Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/improvements/{initiative_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Update Improvement Initiative",
+          "type": "action",
+          "endpoint": "/improvements/{initiative_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Update Initiative Progress",
+          "type": "action",
+          "endpoint": "/improvements/{initiative_id}/progress",
+          "method": "PATCH"
+        },
+        {
+          "name": "Verify Improvement",
+          "type": "action",
+          "endpoint": "/improvements/{initiative_id}/verify",
+          "method": "POST"
+        }
+      ]
+    },
+    "overview": {
+      "screens": [
+        {
+          "name": "Overview List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/overview"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Overview"
+            }
+          ]
+        }
+      ]
+    },
+    "requirements-matrix": {
+      "screens": [
+        {
+          "name": "Requirements-Matrix List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/requirements-matrix"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Requirements-Matrix"
+            }
+          ]
+        }
+      ]
+    },
+    "roadmap": {
+      "screens": [
+        {
+          "name": "Roadmap List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/roadmap"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Roadmap"
+            }
+          ]
+        }
+      ]
+    },
+    "templates": {
+      "screens": [
+        {
+          "name": "Templates List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/templates"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Templates"
+            }
+          ]
+        },
+        {
+          "name": "Create Templates",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/templates/generate",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Templates Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/templates/{template_id}/usage-stats"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Render Template",
+          "type": "action",
+          "endpoint": "/templates/{template_id}/render",
+          "method": "POST"
+        },
+        {
+          "name": "Verify Template Integrity",
+          "type": "action",
+          "endpoint": "/templates/{template_id}/verify",
+          "method": "POST"
+        }
+      ]
+    },
+    "nonconformities": {
+      "screens": [
+        {
+          "name": "Create Nonconformities",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/nonconformities/bulk",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Start Rca Process",
+          "type": "action",
+          "endpoint": "/nonconformities/{nc_id}/rca/start",
+          "method": "POST"
+        },
+        {
+          "name": "Complete Rca Process",
+          "type": "action",
+          "endpoint": "/nonconformities/{nc_id}/rca/complete",
+          "method": "POST"
+        }
+      ]
+    },
+    "rca": {
+      "screens": [
+        {
+          "name": "Rca List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/rca/methods"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Rca"
+            }
+          ]
+        },
+        {
+          "name": "Create Rca",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/rca/bulk-validate",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Rca Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{gap_id}/rca"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Create Root Cause Analysis",
+          "type": "action",
+          "endpoint": "/{gap_id}/rca",
+          "method": "POST"
+        }
+      ]
+    },
+    "registry": {
+      "screens": [
+        {
+          "name": "Registry List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/registry"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Registry"
+            }
+          ]
+        },
+        {
+          "name": "Create Registry",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/registry",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "start-remediation": {
+      "screens": [
+        {
+          "name": "Start Remediation",
+          "type": "action",
+          "endpoint": "/{gap_id}/start-remediation",
+          "method": "POST"
+        }
+      ]
+    },
+    "update-progress": {
+      "screens": [
+        {
+          "name": "Update Remediation Progress",
+          "type": "action",
+          "endpoint": "/{gap_id}/update-progress",
+          "method": "POST"
+        }
+      ]
+    },
+    "resolve": {
+      "screens": [
+        {
+          "name": "Resolve Gap",
+          "type": "action",
+          "endpoint": "/{gap_id}/resolve",
+          "method": "POST"
+        }
+      ]
+    },
+    "verify": {
+      "screens": [
+        {
+          "name": "Verify Gap Resolution",
+          "type": "action",
+          "endpoint": "/{gap_id}/verify",
+          "method": "POST"
+        }
+      ]
+    },
+    "reopen": {
+      "screens": [
+        {
+          "name": "Reopen Gap",
+          "type": "action",
+          "endpoint": "/{gap_id}/reopen",
+          "method": "POST"
+        }
+      ]
+    },
+    "severity": {
+      "screens": [
+        {
+          "name": "Severity Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/severity/{severity}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "effectiveness-review": {
+      "screens": [
+        {
+          "name": "Create Effectiveness Review",
+          "type": "action",
+          "endpoint": "/{gap_id}/effectiveness-review",
+          "method": "POST"
+        }
+      ]
+    },
+    "effectiveness-reviews": {
+      "screens": [
+        {
+          "name": "Effectiveness-Reviews Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{gap_id}/effectiveness-reviews"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "run": {
+      "screens": [
+        {
+          "name": "Run Assessment",
+          "type": "action",
+          "endpoint": "/{assessment_id}/run",
+          "method": "POST"
+        }
+      ]
+    },
+    "results": {
+      "screens": [
+        {
+          "name": "Results Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{assessment_id}/results"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "batch-ai-scan": {
+      "screens": [
+        {
+          "name": "Create Batch-Ai-Scan",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/batch-ai-scan",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "screens": [
+        {
+          "name": "Create Evidence",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/evidence/bulk",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "corrective-actions": {
+      "screens": [
+        {
+          "name": "Create Corrective-Actions",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/corrective-actions/bulk",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "transition": {
+      "screens": [
+        {
+          "name": "Transition Evidence",
+          "type": "action",
+          "endpoint": "/{evidence_id}/transition",
+          "method": "POST"
+        }
+      ]
+    },
+    "inputs": {
+      "screens": [
+        {
+          "name": "Inputs Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{review_id}/inputs"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "decisions": {
+      "screens": [
+        {
+          "name": "Record Decisions",
+          "type": "action",
+          "endpoint": "/{review_id}/decisions",
+          "method": "POST"
+        }
+      ]
+    },
+    "playbooks": {
+      "screens": [
+        {
+          "name": "Playbooks List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/playbooks/recommend"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Playbooks"
+            }
+          ]
+        }
+      ]
+    },
+    "incidents": {
+      "screens": [
+        {
+          "name": "Incidents List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/incidents"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Incidents"
+            }
+          ]
+        },
+        {
+          "name": "Create Incidents",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/incidents",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Incidents Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/incidents/{incident_id}/report"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Change Incident Status",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/status",
+          "method": "PATCH"
+        },
+        {
+          "name": "Resolve Incident",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/resolve",
+          "method": "POST"
+        },
+        {
+          "name": "Escalate Incident",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/escalate",
+          "method": "POST"
+        },
+        {
+          "name": "Add Response Action",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/actions",
+          "method": "POST"
+        },
+        {
+          "name": "Assign Response Team",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/team",
+          "method": "POST"
+        },
+        {
+          "name": "Log Communication",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/communications",
+          "method": "POST"
+        },
+        {
+          "name": "Add Recovery Metrics",
+          "type": "action",
+          "endpoint": "/incidents/{incident_id}/metrics",
+          "method": "POST"
+        }
+      ]
+    },
+    "actions": {
+      "screens": []
+    },
+    "teams": {
+      "screens": [
+        {
+          "name": "Teams List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/teams"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Teams"
+            }
+          ]
+        },
+        {
+          "name": "Create Teams",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/teams",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "dashboard": {
+      "screens": [
+        {
+          "name": "Dashboard List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/dashboard"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Dashboard"
+            }
+          ]
+        }
+      ]
+    },
+    "auth": {
+      "screens": [
+        {
+          "name": "Create Auth",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/auth/odoo",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Auth Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/auth/odoo/session/{session_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "departments": {
+      "screens": [
+        {
+          "name": "Departments List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/departments/metrics"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Departments"
+            }
+          ]
+        }
+      ]
+    },
+    "learners": {
+      "screens": [
+        {
+          "name": "Learners Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/learners/{person_id}/profile"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "certifications": {
+      "screens": [
+        {
+          "name": "Certifications List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/certifications/expiring"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Certifications"
+            }
+          ]
+        }
+      ]
+    },
+    "gamification": {
+      "screens": [
+        {
+          "name": "Gamification List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/gamification/metrics"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Gamification"
+            }
+          ]
+        }
+      ]
+    },
+    "enrollments": {
+      "screens": [
+        {
+          "name": "Create Enrollments",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/enrollments",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Enrollments Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/enrollments/{enrollment_id}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Submit Enrollment",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/submit",
+          "method": "POST"
+        },
+        {
+          "name": "Approve Enrollment",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/approve",
+          "method": "POST"
+        },
+        {
+          "name": "Start Training",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/start",
+          "method": "POST"
+        },
+        {
+          "name": "Update Progress",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/progress",
+          "method": "PATCH"
+        },
+        {
+          "name": "Complete Training",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/complete",
+          "method": "POST"
+        },
+        {
+          "name": "Submit Assessment",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/assess",
+          "method": "POST"
+        },
+        {
+          "name": "Issue Certification",
+          "type": "action",
+          "endpoint": "/enrollments/{enrollment_id}/certify",
+          "method": "POST"
+        }
+      ]
+    },
+    "persons": {
+      "screens": [
+        {
+          "name": "Persons Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/persons/{person_id}/rank"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "query": {
+      "screens": [
+        {
+          "name": "Create Query",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/query",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "workflows": {
+      "screens": [
+        {
+          "name": "Create Workflows",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/workflows",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Complete Workflow",
+          "type": "action",
+          "endpoint": "/workflows/{workflow_id}/complete",
+          "method": "POST"
+        }
+      ]
+    },
+    "email": {
+      "screens": [
+        {
+          "name": "Create Email",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/email/send",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "sms": {
+      "screens": [
+        {
+          "name": "Create Sms",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/sms/send",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "push": {
+      "screens": [
+        {
+          "name": "Create Push",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/push/send",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "webhook": {
+      "screens": [
+        {
+          "name": "Create Webhook",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/webhook/send",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "notifications": {
+      "screens": [
+        {
+          "name": "Notifications List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/notifications/stats"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Notifications"
+            }
+          ]
+        }
+      ]
+    },
+    "compliance": {
+      "screens": [
+        {
+          "name": "Compliance List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/compliance/audit-requirements"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Compliance"
+            }
+          ]
+        },
+        {
+          "name": "Create Compliance",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/compliance/metrics",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Compliance Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/compliance/metrics/{service}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "register-service": {
+      "screens": [
+        {
+          "name": "Create Register-Service",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/register-service",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "deregister-service": {
+      "screens": []
+    },
+    "automation": {
+      "screens": [
+        {
+          "name": "Automation List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/automation/metrics"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Automation"
+            }
+          ]
+        },
+        {
+          "name": "Create Automation",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/automation/security-scan",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Automation Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/automation/code-complexity/{service_name}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Automation Find Root Cause",
+          "type": "action",
+          "endpoint": "/automation/root-cause/{failed_service}",
+          "method": "POST"
+        }
+      ]
+    },
+    "discover": {
+      "screens": [
+        {
+          "name": "Create Discover",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/discover",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "analyze": {
+      "screens": [
+        {
+          "name": "Create Analyze",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/analyze/complexity",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "security": {
+      "screens": [
+        {
+          "name": "Create Security",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/security/scan",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "tests": {
+      "screens": [
+        {
+          "name": "Create Tests",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/tests/generate",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "gateway": {
+      "screens": [
+        {
+          "name": "Create Gateway",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/gateway/register",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Gateway Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/gateway/health/{service_name}"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "status": {
+      "screens": [
+        {
+          "name": "Status List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/status"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Status"
+            }
+          ]
+        }
+      ]
+    },
+    "signup": {
+      "screens": [
+        {
+          "name": "Create Signup",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/signup",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "login": {
+      "screens": [
+        {
+          "name": "Create Login",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/login",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "logout": {
+      "screens": [
+        {
+          "name": "Create Logout",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/logout",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "me": {
+      "screens": [
+        {
+          "name": "Me List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/me"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Me"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

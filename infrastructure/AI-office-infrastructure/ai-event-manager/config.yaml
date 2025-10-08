@@ -1,0 +1,82 @@
+# AI Event Manager - Configuration
+# ===================================
+
+service:
+  name: "AI Event Manager"
+  version: "2.0.0"
+  port: 8055
+  host: "0.0.0.0"
+
+# Integration Configuration
+integrations:
+  # EventBus
+  eventbus:
+    enabled: true
+    backend: "memory"  # or "redis" for production
+    redis_url: "redis://localhost:6379"
+
+  # Event Intelligence
+  event_intelligence:
+    enabled: true
+    url: "http://localhost:8039"
+    timeout: 60
+
+  # DevOps Agent
+  devops_agent:
+    enabled: true
+    url: "http://localhost:8050"
+    timeout: 120
+    project_root: "/Users/MD/AI-Platform-ISO"
+
+  # GitHub Integration
+  github:
+    enabled: true
+    url: "http://localhost:8051"
+    timeout: 30
+
+  # MIO Manager
+  mio_manager:
+    enabled: true
+    url: "http://localhost:8046"
+    timeout: 30
+
+# Continuous Monitoring
+monitoring:
+  enabled: true
+  interval_seconds: 300  # 5 minutes
+  auto_fix: false  # Set to true to enable automatic fixes
+  alert_on_critical: true
+
+# Auto-fix Configuration
+auto_fix:
+  enabled: false  # Enable with caution
+  safe_only: true  # Only apply fixes marked as safe
+  require_approval: true  # Require MIO Manager approval
+  max_fixes_per_cycle: 5
+
+# Alerts Configuration
+alerts:
+  enabled: true
+  critical_threshold: 3  # Number of critical gaps to trigger alert
+  channels:
+    - eventbus  # Publish to EventBus
+    - github    # Create GitHub issues
+    - mio       # Report to MIO Manager
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null  # Set path to enable file logging
+
+# Prometheus Metrics
+metrics:
+  enabled: true
+  endpoint: "/metrics"
+
+# Advanced Settings
+advanced:
+  max_concurrent_scans: 1
+  scan_timeout: 300  # 5 minutes
+  github_issue_limit: 5  # Max issues created per cycle
+  eventbus_batch_size: 100

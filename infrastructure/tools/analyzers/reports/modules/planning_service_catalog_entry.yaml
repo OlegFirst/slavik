@@ -1,0 +1,29 @@
+
+  planning_service:
+    type: business-service
+    location: platform-services/planning_service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/cache
+        - shared/utils
+    endpoints:
+      - GET /health
+      - GET /api/compliance/check
+      - GET /
+      - GET /strategies/{strategy_id}/ai-advice
+      - POST /strategies/{strategy_id}/complete-case
+    metrics:
+      loc: 6197
+      files: 34
+      classes: 50
+      functions: 10
+    status: discovered

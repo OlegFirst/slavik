@@ -1,0 +1,33 @@
+
+  learning_service:
+    type: business-service
+    location: platform-services/learning-service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/auth
+        - shared/config
+        - shared/database
+        - shared/models
+        - shared/utils
+    endpoints:
+      - GET /api/compliance/check
+      - GET /health
+      - GET /
+      - POST /auth/token
+      - GET /api/learning/programs
+    metrics:
+      loc: 6267
+      files: 33
+      classes: 83
+      functions: 45
+    status: discovered

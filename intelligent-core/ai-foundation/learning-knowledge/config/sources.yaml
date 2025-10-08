@@ -1,0 +1,187 @@
+# External Sources Configuration
+# Auto-update sources for living knowledge library
+
+sources:
+  # ISO Standards Updates
+  iso_updates:
+    type: rss
+    url: https://www.iso.org/rss/updates.xml
+    frequency: daily
+    schedule: "0 2 * * *"  # 2 AM daily
+    enabled: true
+    filters:
+      standards:
+        - iso-22301
+        - iso-27001
+        - iso-27005
+        - iso-31000
+    notifications:
+      email: admin@platform.com
+      slack: true
+
+  # Regulatory Updates
+  regulatory:
+    gdpr:
+      type: scraper
+      url: https://gdpr.eu/updates/
+      frequency: weekly
+      schedule: "0 9 * * 1"  # 9 AM Mondays
+      enabled: true
+      selectors:
+        title: ".update-title"
+        date: ".update-date"
+        content: ".update-content"
+
+    hipaa:
+      type: api
+      url: https://www.hhs.gov/hipaa/api/updates
+      api_key: ${HIPAA_API_KEY}
+      frequency: weekly
+      schedule: "0 9 * * 1"
+      enabled: false  # Requires API key
+
+    sox:
+      type: scraper
+      url: https://www.sox-online.com/updates
+      frequency: monthly
+      schedule: "0 10 1 * *"  # 10 AM 1st of month
+      enabled: false
+
+  # Threat Intelligence
+  threat_intelligence:
+    mitre_attack:
+      type: api
+      url: https://attack.mitre.org/api/v2
+      frequency: daily
+      schedule: "0 3 * * *"
+      enabled: true
+      collections:
+        - enterprise
+        - mobile
+        - ics
+
+    cve_feed:
+      type: rss
+      url: https://nvd.nist.gov/feeds/xml/cve/misc/nvd-rss.xml
+      frequency: hourly
+      schedule: "0 */1 * * *"  # Every hour
+      enabled: true
+      severity_filter: HIGH
+
+    cisa_advisories:
+      type: rss
+      url: https://www.cisa.gov/cybersecurity-advisories/all.xml
+      frequency: daily
+      schedule: "0 6 * * *"
+      enabled: true
+
+  # Consulting Research
+  consulting_research:
+    deloitte:
+      type: scraper
+      url: https://www2.deloitte.com/us/en/pages/risk/solutions/business-continuity-management.html
+      frequency: monthly
+      schedule: "0 11 1 * *"
+      enabled: true
+      content_type: reports
+
+    mckinsey:
+      type: scraper
+      url: https://www.mckinsey.com/capabilities/risk-and-resilience
+      frequency: monthly
+      schedule: "0 11 2 * *"
+      enabled: true
+      content_type: articles
+
+    ey:
+      type: scraper
+      url: https://www.ey.com/en_gl/risk
+      frequency: monthly
+      schedule: "0 11 3 * *"
+      enabled: false  # Requires proxy
+
+    pwc:
+      type: scraper
+      url: https://www.pwc.com/gx/en/services/risk-assurance.html
+      frequency: monthly
+      schedule: "0 11 4 * *"
+      enabled: false
+
+  # Industry News
+  industry_news:
+    bcm_today:
+      type: rss
+      url: https://continuitycentral.com/feed/
+      frequency: daily
+      schedule: "0 8 * * *"
+      enabled: true
+
+    disaster_recovery_journal:
+      type: rss
+      url: https://drj.com/feed/
+      frequency: daily
+      schedule: "0 8 * * *"
+      enabled: true
+
+# Scraper Configuration
+scraper:
+  user_agent: "KnowledgeSystem/1.0 (BCM Platform)"
+  timeout_seconds: 30
+  retry_count: 3
+  rate_limit:
+    requests_per_minute: 10
+    requests_per_hour: 100
+  proxy:
+    enabled: false
+    url: ${PROXY_URL}
+
+# Notification Configuration
+notifications:
+  email:
+    enabled: false
+    smtp_host: ${SMTP_HOST}
+    smtp_port: ${SMTP_PORT}
+    from_address: knowledge-system@platform.com
+    to_addresses:
+      - admin@platform.com
+
+  slack:
+    enabled: false
+    webhook_url: ${SLACK_WEBHOOK_URL}
+    channel: "#knowledge-updates"
+
+  discord:
+    enabled: false
+    webhook_url: ${DISCORD_WEBHOOK_URL}
+
+# Storage for external data
+storage:
+  path: data/external
+  subdirs:
+    iso_updates: data/external/iso_updates
+    regulatory_changes: data/external/regulatory_changes
+    threat_intelligence: data/external/threat_intelligence
+    consulting_research: data/external/consulting_research
+    industry_news: data/external/industry_news
+
+# Retention policy
+retention:
+  iso_updates:
+    keep_days: 730  # 2 years
+  regulatory_changes:
+    keep_days: 1825  # 5 years
+  threat_intelligence:
+    keep_days: 365  # 1 year
+  consulting_research:
+    keep_days: 1095  # 3 years
+  industry_news:
+    keep_days: 180  # 6 months
+
+# Quality checks
+quality:
+  min_content_length: 100
+  language: en
+  detect_duplicates: true
+  validate_urls: true
+  check_freshness: true
+  freshness_days: 90  # Flag content older than 90 days

@@ -1,0 +1,13 @@
+Archive Created: Wed Oct  8 20:45:40 EEST 2025
+Module: AI-office-infrastructure
+Section: infrastructure
+Original Path: /Users/MD/AI-Platform-ISO/infrastructure/AI-office-infrastructure
+
+Archived Files:
+total 24
+drwxr-xr-x@ 4 MD  staff    128 Oct  8 20:45 .
+drwxr-xr-x@ 3 MD  staff     96 Oct  8 20:45 ..
+-rw-------@ 1 MD  staff  11910 Oct  8 20:45 README.md
+-rw-r--r--@ 1 MD  staff      0 Oct  8 20:45 _ARCHIVE_INFO.txt
+
+Reason: Documentation update - Professional ISO standards compliance

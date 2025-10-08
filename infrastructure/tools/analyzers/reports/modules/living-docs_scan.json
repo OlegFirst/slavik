@@ -1,0 +1,250 @@
+{
+  "module_name": "living-docs",
+  "path": "platform-services/living-docs",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "config.py",
+      "requirements.txt",
+      "__init__.py",
+      "README.md",
+      "main.py",
+      "dependencies.py"
+    ],
+    "models": [
+      "database.py"
+    ],
+    "docs": [
+      "ARCHITECTURE.md",
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "INTEGRATION_COMPLETE.md",
+      "README.md"
+    ],
+    "api": [
+      "documentation.py"
+    ],
+    "services": [
+      "ai_example_generator.py",
+      "documentation_evolution_engine.py",
+      "personalization_service.py"
+    ]
+  },
+  "dependencies": [
+    "api",
+    "asyncio",
+    "collections",
+    "config",
+    "contextlib",
+    "database/postgresql",
+    "datetime",
+    "external/anthropic",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "hashlib",
+    "httpx",
+    "json",
+    "logging",
+    "os",
+    "pydantic",
+    "pydantic_settings",
+    "services.ai_example_generator",
+    "services.documentation_evolution_engine",
+    "services.personalization_service",
+    "shared/database",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}",
+      "file": "documentation.py"
+    },
+    {
+      "method": "POST",
+      "path": "/examples/generate",
+      "file": "documentation.py"
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/journey/{goal}",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gaps",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements",
+      "file": "documentation.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "LivingDocsConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "MockAIClient",
+      "file": "dependencies.py",
+      "methods": 0
+    },
+    {
+      "name": "MockDatabase",
+      "file": "dependencies.py",
+      "methods": 0
+    },
+    {
+      "name": "MockResponse",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "MockContent",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "MockResult",
+      "file": "dependencies.py",
+      "methods": 2
+    },
+    {
+      "name": "DocumentationPage",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PageVersion",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserInteraction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeGap",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ImprovementQueue",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserProfile",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchQuery",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "GetDocRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "GenerateExampleRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "FeedbackRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "AIExampleGenerator",
+      "file": "ai_example_generator.py",
+      "methods": 8
+    },
+    {
+      "name": "ExampleLibrary",
+      "file": "ai_example_generator.py",
+      "methods": 1
+    },
+    {
+      "name": "InteractiveExampleRunner",
+      "file": "ai_example_generator.py",
+      "methods": 3
+    },
+    {
+      "name": "DocumentationEvolutionEngine",
+      "file": "documentation_evolution_engine.py",
+      "methods": 6
+    },
+    {
+      "name": "PersonalizationService",
+      "file": "personalization_service.py",
+      "methods": 2
+    },
+    {
+      "name": "UserJourneyPersonalizer",
+      "file": "personalization_service.py",
+      "methods": 2
+    }
+  ],
+  "functions": [],
+  "config": {
+    "requirements.txt": "platform-services/living-docs/requirements.txt"
+  },
+  "metrics": {
+    "loc": 3255,
+    "python_files": 9,
+    "classes": 24,
+    "functions": 0,
+    "endpoints": 10,
+    "dependencies": 24
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 15423,
+    "lines": 689,
+    "content": "# \ud83d\udcda Living Documentation\n\n**Innovation Level:** \ud83e\udd2f\ud83e\udd2f\ud83e\udd2f\ud83e\udd2f\ud83e\udd2f\n**Port:** 8034\n**Purpose:** Documentation that Lives, Learns, and Evolves\n\n## \ud83d\udcda Documentation\n\n\u0412\u0441\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f \u043d\u0430\u0445\u043e\u0434\u0438\u0442\u0441\u044f \u0432 \u043f\u0430\u043f\u043a\u0435 [`docs/`](docs/):\n- **[\u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430](docs/ARCHITECTURE.md)** - \u0434\u0435\u0442\u0430\u043b\u044c\u043d\u0430\u044f \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u044b\n- **[\u0418\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f](docs/INTEGRATION_COMPLETE.md)** - \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f \u0441 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u043e\u0439\n- **[\u0410\u043d\u0430\u043b\u0438\u0437 \u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f](docs/ANALYSIS_AND_IMPROVEMENTS.md)** - \u26a0\ufe0f \u043a\u0440\u0438\u0442\u0438\u0447\u043d\u044b\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b \u0438 \u043f\u043b\u0430\u043d \u0440\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438\n\n---\n\n## \ud83c\udfaf THE BREAKTHROUGH\n\n**Problem with Traditional Documentation:**\n```\n\u274c Static - Written once, becomes outdated\n\u274c Generic - Same for everyone\n\u274c Boring - Text walls, no interactivity\n\u274c Disconnected - Separate from real usage\n\u274c Manual - Requires constant updates\n```\n\n**Living Documentation Solution:**\n```\n\u2705 Dynamic - Updates itself from usage\n\u2705 Personalized - Adapts to each user\n\u2705 Interactive - AI Q&A, examples on demand\n\u2705 Connected - Learns from every interaction\n\u2705 Autonomous - Self-evolving knowledge base\n```\n\n**Think:** Netflix rec"
+  }
+}

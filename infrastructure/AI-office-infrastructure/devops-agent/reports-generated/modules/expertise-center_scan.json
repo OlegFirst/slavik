@@ -1,0 +1,771 @@
+{
+  "module_name": "expertise-center",
+  "path": "intelligent-core/expertise-center",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "MODULE_ANALYSIS.md",
+      "README.md.bak2",
+      "README.md.bak4",
+      "README.md.bak3",
+      "__init__.py",
+      "update_assistants.py",
+      "metrics_exporter.py",
+      "README.md",
+      "README.md.bak",
+      "INFRASTRUCTURE_COMPLETE.md",
+      "update_specialists.py",
+      "fix_indentation.py"
+    ],
+    "domains": [
+      "HOW_TO_CREATE_NEW_DOMAIN.md",
+      ".DS_Store",
+      "__init__.py"
+    ],
+    "domains/bcm": [
+      ".DS_Store",
+      "__init__.py",
+      "KNOWLEDGE_INTEGRATION_EXAMPLE.md"
+    ],
+    "domains/bcm/analyzers": [
+      "lifecycle_analyzer.py",
+      "impact_analyzer.py",
+      "performance_analyzer.py",
+      "plan_analyzer.py",
+      "scenario_analyzer.py",
+      "__init__.py",
+      "emergency_analyzer.py",
+      "governance_analyzer.py",
+      "risk_analyzer.py",
+      "compliance_analyzer.py",
+      "learning_analyzer.py"
+    ],
+    "domains/bcm/tactical_assistants": [
+      "community_specialist.py",
+      "incident_advisor.py",
+      "plan_generator.py",
+      "__init__.py",
+      "documents_specialist.py",
+      "bia_specialist.py",
+      "README.md",
+      "risk_analyst.py",
+      "exercise_designer.py",
+      "governance_specialist.py",
+      "learning_specialist.py",
+      "project_manager.py",
+      "compliance_copilot.py",
+      "validation_specialist.py"
+    ],
+    "domains/bcm/specialists": [
+      "compliance_auditor.py",
+      "bcm_advisor.py",
+      "__init__.py",
+      "strategic_planner.py"
+    ],
+    "core": [
+      "expert_registry.py",
+      "__init__.py",
+      "chief_executive.py",
+      "domain_loader.py",
+      "organism_coordinator.py"
+    ],
+    "shared": [
+      "learning_knowledge_adapter.py"
+    ],
+    "shared/base": [
+      "base_tactical_assistant.py",
+      "assistant_context.py",
+      "base_colleague.py",
+      "__init__.py",
+      "base_specialist.py",
+      "base_analyzer.py"
+    ],
+    "service": [
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "DEPLOYMENT_GUIDE.md",
+      "docker-compose.yml",
+      "standalone_main.py",
+      ".env.example",
+      "main.py",
+      "QUICK_START.md"
+    ],
+    "service/tests": [
+      "conftest.py",
+      "pytest.ini",
+      "requirements.txt",
+      "__init__.py",
+      "test_analyzers.py",
+      "test_health.py",
+      "test_integration.py",
+      "test_tactical.py"
+    ],
+    "service/tests/.pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    "service/tests/.pytest_cache/v/cache": [
+      "nodeids",
+      "lastfailed"
+    ],
+    "service/api": [
+      "analyzers.py",
+      "__init__.py",
+      "tactical.py",
+      "routes.py"
+    ],
+    "monitoring": [
+      "metrics.py",
+      "__init__.py"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "ai_foundation",
+    "ai_foundation/expertise_center",
+    "ai_foundation/intelligent_core",
+    "aiohttp",
+    "argparse",
+    "asyncio",
+    "base_analyzer",
+    "base_organ",
+    "base_specialist",
+    "base_tactical_assistant",
+    "bia_specialist",
+    "chief_executive",
+    "community_specialist",
+    "compliance_copilot",
+    "contextlib",
+    "core",
+    "dataclasses",
+    "datetime",
+    "documents_specialist",
+    "domain_loader",
+    "enum",
+    "exercise_designer",
+    "expert_registry",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "functools",
+    "governance_specialist",
+    "httpx",
+    "importlib",
+    "incident_advisor",
+    "json",
+    "learning_specialist",
+    "logging",
+    "metrics",
+    "os",
+    "pathlib",
+    "plan_generator",
+    "project_manager",
+    "prometheus_client",
+    "pydantic",
+    "pytest",
+    "re",
+    "risk_analyst",
+    "service",
+    "service.api.analyzers",
+    "service.api.routes",
+    "service.api.tactical",
+    "shared/base",
+    "sys",
+    "tactical",
+    "time",
+    "typing",
+    "uvicorn",
+    "validation_specialist",
+    "werkzeug.middleware.dispatcher",
+    "werkzeug.serving"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "standalone_main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "standalone_main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/info",
+      "file": "standalone_main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/query",
+      "file": "standalone_main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "standalone_main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/risk/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/governance/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/lifecycle/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/performance/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/emergency/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/impact/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plan/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scenario/analyze",
+      "file": "analyzers.py"
+    },
+    {
+      "method": "POST",
+      "path": "/bia/analyze",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/risk/assess",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/check",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/incident/advise",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/plan/generate",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/exercise/design",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/project/manage",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/documents/create",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/design",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/validation/validate",
+      "file": "tactical.py"
+    },
+    {
+      "method": "POST",
+      "path": "/community/engage",
+      "file": "tactical.py"
+    },
+    {
+      "method": "GET",
+      "path": "/experts",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/experts/{expert_id}",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "LifecycleMonitor",
+      "file": "lifecycle_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "ImpactOracle",
+      "file": "impact_analyzer.py",
+      "methods": 5
+    },
+    {
+      "name": "PerformanceAnalyst",
+      "file": "performance_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "PlanGenerator",
+      "file": "plan_analyzer.py",
+      "methods": 8
+    },
+    {
+      "name": "ScenarioCreator",
+      "file": "scenario_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "EmergencyResponse",
+      "file": "emergency_analyzer.py",
+      "methods": 6
+    },
+    {
+      "name": "GovernanceBrain",
+      "file": "governance_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "RiskAdvisor",
+      "file": "risk_analyzer.py",
+      "methods": 5
+    },
+    {
+      "name": "ComplianceGuardian",
+      "file": "compliance_analyzer.py",
+      "methods": 8
+    },
+    {
+      "name": "LearningCoach",
+      "file": "learning_analyzer.py",
+      "methods": 10
+    },
+    {
+      "name": "CommunitySpecialistAI",
+      "file": "community_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "IncidentAdvisorAI",
+      "file": "incident_advisor.py",
+      "methods": 4
+    },
+    {
+      "name": "PlanGeneratorAI",
+      "file": "plan_generator.py",
+      "methods": 4
+    },
+    {
+      "name": "DocumentsSpecialistAI",
+      "file": "documents_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BIASpecialistAI",
+      "file": "bia_specialist.py",
+      "methods": 4
+    },
+    {
+      "name": "RiskAnalystAI",
+      "file": "risk_analyst.py",
+      "methods": 4
+    },
+    {
+      "name": "ExerciseDesignerAI",
+      "file": "exercise_designer.py",
+      "methods": 4
+    },
+    {
+      "name": "GovernanceSpecialistAI",
+      "file": "governance_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "LearningSpecialistAI",
+      "file": "learning_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BCMProjectType",
+      "file": "project_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthStatus",
+      "file": "project_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectManagerAI",
+      "file": "project_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "ComplianceCopilot",
+      "file": "compliance_copilot.py",
+      "methods": 3
+    },
+    {
+      "name": "ValidationSpecialistAI",
+      "file": "validation_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "ComplianceAuditor",
+      "file": "compliance_auditor.py",
+      "methods": 1
+    },
+    {
+      "name": "BCMAdvisor",
+      "file": "bcm_advisor.py",
+      "methods": 1
+    },
+    {
+      "name": "StrategicPlanner",
+      "file": "strategic_planner.py",
+      "methods": 1
+    },
+    {
+      "name": "ExpertRegistry",
+      "file": "expert_registry.py",
+      "methods": 9
+    },
+    {
+      "name": "ChiefExecutive",
+      "file": "chief_executive.py",
+      "methods": 2
+    },
+    {
+      "name": "DomainLoader",
+      "file": "domain_loader.py",
+      "methods": 4
+    },
+    {
+      "name": "ExpertLifecycleState",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganismPersonality",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionContext",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertInfo",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertInput",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveDecision",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertCommunicationChannels",
+      "file": "organism_coordinator.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganismCoordinator",
+      "file": "organism_coordinator.py",
+      "methods": 10
+    },
+    {
+      "name": "ExpertRegistry",
+      "file": "organism_coordinator.py",
+      "methods": 6
+    },
+    {
+      "name": "ExpertSelectionStrategy",
+      "file": "organism_coordinator.py",
+      "methods": 1
+    },
+    {
+      "name": "WeightedConfidenceScorer",
+      "file": "organism_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectiveWisdomTracker",
+      "file": "organism_coordinator.py",
+      "methods": 5
+    },
+    {
+      "name": "OrganismEvolution",
+      "file": "organism_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "LearningKnowledgeAdapter",
+      "file": "learning_knowledge_adapter.py",
+      "methods": 1
+    },
+    {
+      "name": "BaseTacticalAssistant",
+      "file": "base_tactical_assistant.py",
+      "methods": 3
+    },
+    {
+      "name": "AssistantContext",
+      "file": "assistant_context.py",
+      "methods": 4
+    },
+    {
+      "name": "BaseColleague",
+      "file": "base_colleague.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseSpecialist",
+      "file": "base_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseAnalyzer",
+      "file": "base_analyzer.py",
+      "methods": 2
+    },
+    {
+      "name": "ExpertQueryRequest",
+      "file": "standalone_main.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertQueryResponse",
+      "file": "standalone_main.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzerRequest",
+      "file": "analyzers.py",
+      "methods": 0
+    },
+    {
+      "name": "AnalyzerResponse",
+      "file": "analyzers.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertRequest",
+      "file": "tactical.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertResponse",
+      "file": "tactical.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertInfo",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertQueryRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertQueryResponse",
+      "file": "routes.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "update_imports",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "update_class_declaration",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "update_init_method",
+      "file": "update_assistants.py",
+      "params": 3
+    },
+    {
+      "name": "process_file",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "update_assistants.py",
+      "params": 0
+    },
+    {
+      "name": "create_app",
+      "file": "metrics_exporter.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "metrics_exporter.py",
+      "params": 0
+    },
+    {
+      "name": "update_file",
+      "file": "update_specialists.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "update_specialists.py",
+      "params": 0
+    },
+    {
+      "name": "get_learning_knowledge_adapter",
+      "file": "learning_knowledge_adapter.py",
+      "params": 1
+    },
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "base_url",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_context",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_expert_request",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "get_sample_request",
+      "file": "test_analyzers.py",
+      "params": 2
+    },
+    {
+      "name": "get_sample_request",
+      "file": "test_tactical.py",
+      "params": 2
+    },
+    {
+      "name": "get_analyzer",
+      "file": "analyzers.py",
+      "params": 1
+    },
+    {
+      "name": "get_expert",
+      "file": "tactical.py",
+      "params": 1
+    },
+    {
+      "name": "track_analyzer_call",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_specialist_call",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_http_call",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "track_strategic_plan_generation",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "update_circuit_breaker_state",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "track_cache_access",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "update_cache_size",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "set_analyzer_health",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "init_expertise_metrics",
+      "file": "metrics.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 11846,
+    "python_files": 63,
+    "classes": 58,
+    "functions": 27,
+    "endpoints": 28,
+    "dependencies": 57
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1246,
+    "lines": 67,
+    "content": "# expertise-center\n\n> \u0414\u043e\u043c\u0435\u043d\u043d\u044b\u0435 \u044d\u043a\u0441\u043f\u0435\u0440\u0442\u044b \u0438 \u0442\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0435 \u0430\u0441\u0441\u0438\u0441\u0442\u0435\u043d\u0442\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 7,932 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 45 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 47 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 8 |\n| **API Endpoints** | 0 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 36 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83d\udcda Library\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **LearningCoach** (10 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `learning_analyzer.py`\n- **OrganismCoordinator** (10 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `organism_coordinator.py`\n- **ExpertRegistry** (9 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `expert_registry.py`\n- **ComplianceGuardian** (8 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `compliance_analyzer.py`\n- **LifecycleMonitor** (7 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `lifecycle_analyzer.py`\n\n### \u0424\u0443\u043d\u043a\u0446\u0438\u0438\n\n\u0412\u0441\u0435\u0433\u043e \u043f\u0443\u0431\u043b\u0438\u0447\u043d\u044b\u0445 \u0444\u0443\u043d\u043a\u0446\u0438\u0439: 8\n\n---\n\n## \ud83d\udd17 \u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438\n\n### \u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0438\u0435\n- `ai_foundation`\n- `ai_foundation/expertise_center`\n- `shared/base`\n\n---\n\n## \ud83d\udcbb \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435\n\n### \u0418\u043c\u043f\u043e\u0440\u0442\n\n```python\nfrom expertise_center import ...\n```\n\n---\n\n\n---\n\n## \ud83d\udcda \u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b\n\n- [\u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b](../../doc-"
+  }
+}

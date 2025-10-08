@@ -1,0 +1,28 @@
+
+  runtime:
+    type: service
+    location: infrastructure/runtime
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /health
+      - POST /api/v1/notifications/broadcast
+      - GET /api/v1/channels/{channel_id}/users
+      - GET /api/v1/channels/{channel_id}/messages
+      - GET /api/v1/stats
+    metrics:
+      loc: 2107
+      files: 6
+      classes: 18
+      functions: 5
+    status: discovered

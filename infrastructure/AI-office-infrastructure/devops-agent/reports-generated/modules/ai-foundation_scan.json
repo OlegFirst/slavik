@@ -1,0 +1,1675 @@
+{
+  "module_name": "ai-foundation",
+  "path": "intelligent-core/ai-foundation",
+  "structure": {
+    ".": [
+      "USAGE_PATTERNS.md",
+      ".DS_Store",
+      "API.md",
+      "requirements.txt",
+      "MODULE_ANALYSIS.md",
+      "__init__.py",
+      "README.md",
+      "DEEP_TECHNICAL_ANALYSIS.md",
+      "main.py"
+    ],
+    "llm": [
+      "metrics.py",
+      "requirements.txt",
+      "llm_router.py",
+      "__init__.py",
+      "litellm_router.py"
+    ],
+    "context": [
+      "context_builder.py",
+      "__init__.py"
+    ],
+    "learning": [
+      "rule_generator.py",
+      "self_learning_engine.py",
+      "__init__.py",
+      "pattern_extractor.py"
+    ],
+    "learning-knowledge": [
+      "ai-foundation-created-summary.md",
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md"
+    ],
+    "learning-knowledge/config": [
+      "sources.yaml",
+      "domains.yaml"
+    ],
+    "learning-knowledge/learning": [
+      ".DS_Store",
+      "__init__.py"
+    ],
+    "learning-knowledge/learning/engines": [
+      "ml_predictor.py",
+      "self_learning_engine.py",
+      "__init__.py",
+      "gamification_engine.py",
+      "knowledge_base_connector.py",
+      "process_gap_analyzer.py",
+      "pattern_detector.py",
+      "knowledge_base_connector_integrated.py",
+      "learning_needs_collector.py",
+      "competency_tracker.py",
+      "ml_predictor_integrated.py",
+      "knowledge_integrator.py"
+    ],
+    "learning-knowledge/training": [
+      ".DS_Store"
+    ],
+    "learning-knowledge/training/gamification": [
+      "gamification_service.py"
+    ],
+    "learning-knowledge/training/programs": [
+      "training_service.py",
+      "ai_coach.py"
+    ],
+    "learning-knowledge/tests": [
+      "test_basic.py",
+      "requirements.txt",
+      "__init__.py",
+      "test_integration.py"
+    ],
+    "learning-knowledge/shared": [
+      "database.py",
+      "__init__.py"
+    ],
+    "learning-knowledge/integrations": [
+      "workflow_intelligence_adapter.py",
+      "__init__.py"
+    ],
+    "learning-knowledge/creation/synthesis": [
+      "virtuous_cycle.py"
+    ],
+    "learning-knowledge/creation/creators": [
+      "lesson_creator.py",
+      "article_creator.py"
+    ],
+    "learning-knowledge/knowledge": [
+      ".DS_Store",
+      "__init__.py"
+    ],
+    "learning-knowledge/knowledge/updater": [
+      "requirements.txt",
+      "__init__.py",
+      "standards_monitor.py"
+    ],
+    "learning-knowledge/knowledge/models": [
+      "__init__.py",
+      "analytics.py",
+      "article.py"
+    ],
+    "learning-knowledge/knowledge/loader": [
+      "standards_loader.py",
+      "__init__.py",
+      "case_loader.py"
+    ],
+    "learning-knowledge/knowledge/indexer": [
+      "requirements.txt",
+      "__init__.py",
+      "vector_indexer.py"
+    ],
+    "learning-knowledge/api": [
+      "requirements.txt",
+      "__init__.py",
+      "main.py"
+    ],
+    "learning-knowledge/api/learning": [
+      "ml_router.py",
+      "recommendation_router.py",
+      "platform_integration_router.py",
+      "learning_router.py",
+      "gamification_router.py",
+      "process_gap_router.py",
+      "__init__.py",
+      "self_learning_router.py",
+      "analytics_router.py",
+      "competency_router.py",
+      "knowledge_router.py",
+      "pattern_router.py"
+    ],
+    "learning-knowledge/monitoring": [
+      "metrics.py",
+      "requirements.txt",
+      "__init__.py"
+    ],
+    "learning-knowledge/events": [
+      "REACTIVE_LEARNING_ARCHITECTURE.md",
+      "IMPLEMENTATION_SUMMARY.md",
+      "__init__.py",
+      "README.md",
+      "test_subscribers.py",
+      "subscribers.py"
+    ],
+    "rag": [
+      "setup_collections.py",
+      "metrics.py",
+      "__init__.py",
+      "embeddings.py",
+      "reranking.py",
+      "pipeline.py",
+      "retrieval.py",
+      "qdrant_client.py"
+    ],
+    "ml": [
+      "training_pipeline.py",
+      "__init__.py",
+      "predictive_models.py",
+      "anomaly_detection.py"
+    ],
+    "examples": [
+      "rag_llm_integration.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation",
+    "ai_foundation/workflow_intelligence",
+    "ai_foundation/workflow_intelligence_adapter",
+    "ai_services/ml",
+    "ai_services/predictive_models",
+    "aiohttp",
+    "analytics",
+    "anomaly_detection",
+    "api.main",
+    "article",
+    "asyncio",
+    "bs4",
+    "case_loader",
+    "collections",
+    "context.context_builder",
+    "context_builder",
+    "creators.article_creator",
+    "creators.lesson_creator",
+    "database",
+    "database.base",
+    "database/postgresql",
+    "database/vector-db",
+    "dataclasses",
+    "datetime",
+    "embeddings",
+    "engines.competency_tracker",
+    "engines.gamification_engine",
+    "engines.knowledge_base_connector",
+    "engines.knowledge_integrator",
+    "engines.learning_needs_collector",
+    "engines.ml_predictor",
+    "engines.pattern_detector",
+    "engines.process_gap_analyzer",
+    "engines.self_learning_engine",
+    "enum",
+    "events.subscribers",
+    "external/anthropic",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "feedparser",
+    "functools",
+    "hashlib",
+    "httpx",
+    "indexer",
+    "indexer.vector_indexer",
+    "integrations",
+    "integrations.knowledge_client",
+    "integrations.ml_platform_client",
+    "integrations.rag_connector",
+    "json",
+    "knowledge.indexer",
+    "knowledge.indexer.vector_indexer",
+    "knowledge.loader",
+    "knowledge.loader.case_loader",
+    "knowledge.updater",
+    "knowledge_base_connector_integrated",
+    "knowledge_system.loader.case_loader",
+    "knowledge_system.loader.standards_loader",
+    "learning.analytics_router",
+    "learning.competency_router",
+    "learning.engines",
+    "learning.engines.competency_tracker",
+    "learning.engines.ml_predictor",
+    "learning.engines.pattern_detector",
+    "learning.engines.self_learning_engine",
+    "learning.gamification_router",
+    "learning.knowledge_router",
+    "learning.learning_router",
+    "learning.ml_router",
+    "learning.pattern_extractor",
+    "learning.pattern_router",
+    "learning.platform_integration_router",
+    "learning.process_gap_router",
+    "learning.recommendation_router",
+    "learning.rule_generator",
+    "learning.self_learning_engine",
+    "learning.self_learning_router",
+    "learning_knowledge.monitoring.metrics",
+    "learning_models",
+    "litellm",
+    "litellm.caching",
+    "llm.llm_router",
+    "loader",
+    "loader.case_loader",
+    "loader.standards_loader",
+    "logging",
+    "main",
+    "managers.cache_manager",
+    "managers.db_manager",
+    "metrics",
+    "ml.anomaly_detection",
+    "ml.training_pipeline",
+    "ml_predictor_integrated",
+    "models.database",
+    "models.domain",
+    "numpy",
+    "openai",
+    "os",
+    "pathlib",
+    "pattern_detector",
+    "pattern_extractor",
+    "pickle",
+    "pipeline",
+    "prometheus_client",
+    "pydantic",
+    "pytest",
+    "rag.embeddings",
+    "rag.pipeline",
+    "rag.reranking",
+    "rag.retrieval",
+    "rag.setup_collections",
+    "random",
+    "re",
+    "repositories.gamification_repository",
+    "repositories.training_repository",
+    "reranking",
+    "retrieval",
+    "rule_generator",
+    "runtime/eventbus",
+    "self_learning_engine",
+    "sentence_transformers",
+    "sklearn.ensemble",
+    "sklearn.feature_extraction.text",
+    "sklearn.metrics",
+    "sklearn.model_selection",
+    "standards_loader",
+    "standards_monitor",
+    "statistics",
+    "structlog",
+    "subscribers",
+    "synthesis.virtuous_cycle",
+    "sys",
+    "time",
+    "training_pipeline",
+    "typing",
+    "updater",
+    "updater.standards_monitor",
+    "uuid",
+    "uvicorn",
+    "vector_indexer",
+    "voyageai",
+    "workflows.gamification_workflow",
+    "workflows.training_workflow",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/...",
+      "file": "database.py"
+    },
+    {
+      "method": "GET",
+      "path": "/standards",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/standards/{standard_id:path}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/standards/{standard_id:path}/metadata",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/cases/search",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cross-learning/virtuous-cycle/workflow",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cross-learning/virtuous-cycle/pattern",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/cross-learning/virtuous-cycle/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reactive-learning/statistics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reactive-learning/subscribers",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/predict/success",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/difficulty/adjust",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/recommend/learning-path",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/detect/anomalies",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/optimal-challenge",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenario-complexity",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulate/performance",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/ml/model-info",
+      "file": "ml_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/training",
+      "file": "recommendation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/next-exercise",
+      "file": "recommendation_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/rag/search",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/rag/add-knowledge",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ml/predict-success",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ml/submit-feedback",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/ml/performance",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/ml/feature-importance",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kb/create-learning-path",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kb/auto-create-from-pattern",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kb/sync-external",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/unified/predict-and-recommend",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "platform_integration_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/results",
+      "file": "learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/results",
+      "file": "learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios/{scenario_type}",
+      "file": "learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios",
+      "file": "learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "file": "learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/profile/calculate",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/profile/{user_id}",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/badges/check",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/badges/definitions",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/points/award",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/levels",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/global",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/monthly",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/scenario/{scenario_type}",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/streaks/{user_id}",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/achievements/check",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/summary",
+      "file": "gamification_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/coverage/analyze",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/matrix/generate",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/processes/{process_id}",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gaps/critical",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/coverage/summary",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/coverage/save",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/iso-mapping",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/priorities/generate",
+      "file": "process_gap_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/needs/collect",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/needs/training-plan",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/kb/search",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/kb/auto-create-from-patterns",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/self-learn/record-prediction",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/self-learn/record-outcome",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/self-learn/effectiveness",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/self-learn/accuracy-report",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/self-learn/predictions",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/self-learn/feature-importance",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/self-learn/export-training-data",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/self-learn/trigger-retrain",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/workflow/full-cycle",
+      "file": "self_learning_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/executive",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/learning-trends",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analytics/drill-down",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/performance-matrix",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/comparative",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/benchmarks",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/export",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/real-time",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/predictions",
+      "file": "analytics_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/competency",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/competency",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/teams/analyze",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/roles/gaps",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{role_name}/requirements",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/decay/calculate",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/competencies/summary",
+      "file": "competency_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/gaps/map-to-knowledge",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning-paths/generate",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning-paths/save",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning-paths/{user_id}",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning-paths/{path_id}/progress",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/effectiveness/record",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/effectiveness/report",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/effectiveness/{gap_keyword}/best-resources",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gap-mappings",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/gap-mappings/create",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/resources/recommend",
+      "file": "knowledge_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/detect",
+      "file": "pattern_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{pattern_id}",
+      "file": "pattern_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{pattern_id}/acknowledge",
+      "file": "pattern_router.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{pattern_id}",
+      "file": "pattern_router.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "LLMProvider",
+      "file": "llm_router.py",
+      "methods": 0
+    },
+    {
+      "name": "LLMRouter",
+      "file": "llm_router.py",
+      "methods": 4
+    },
+    {
+      "name": "LiteLLMRouter",
+      "file": "litellm_router.py",
+      "methods": 4
+    },
+    {
+      "name": "ContextBuilder",
+      "file": "context_builder.py",
+      "methods": 2
+    },
+    {
+      "name": "RuleGenerator",
+      "file": "rule_generator.py",
+      "methods": 5
+    },
+    {
+      "name": "SelfLearningEngine",
+      "file": "self_learning_engine.py",
+      "methods": 7
+    },
+    {
+      "name": "PatternExtractor",
+      "file": "pattern_extractor.py",
+      "methods": 4
+    },
+    {
+      "name": "ExerciseSuccessPredictor",
+      "file": "ml_predictor.py",
+      "methods": 7
+    },
+    {
+      "name": "DifficultyAdjuster",
+      "file": "ml_predictor.py",
+      "methods": 3
+    },
+    {
+      "name": "PersonalizedPathRecommender",
+      "file": "ml_predictor.py",
+      "methods": 5
+    },
+    {
+      "name": "AnomalyDetector",
+      "file": "ml_predictor.py",
+      "methods": 2
+    },
+    {
+      "name": "SelfLearningEngine",
+      "file": "self_learning_engine.py",
+      "methods": 13
+    },
+    {
+      "name": "GamificationEngine",
+      "file": "gamification_engine.py",
+      "methods": 10
+    },
+    {
+      "name": "LeaderboardGenerator",
+      "file": "gamification_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "KnowledgeBaseClient",
+      "file": "knowledge_base_connector.py",
+      "methods": 2
+    },
+    {
+      "name": "KnowledgeAutoCreator",
+      "file": "knowledge_base_connector.py",
+      "methods": 2
+    },
+    {
+      "name": "ExternalKnowledgeSync",
+      "file": "knowledge_base_connector.py",
+      "methods": 1
+    },
+    {
+      "name": "EnhancedKnowledgeIntegrator",
+      "file": "knowledge_base_connector.py",
+      "methods": 3
+    },
+    {
+      "name": "ProcessGapAnalyzer",
+      "file": "process_gap_analyzer.py",
+      "methods": 8
+    },
+    {
+      "name": "ProcessCoverageMatrix",
+      "file": "process_gap_analyzer.py",
+      "methods": 5
+    },
+    {
+      "name": "PatternDetector",
+      "file": "pattern_detector.py",
+      "methods": 8
+    },
+    {
+      "name": "ScenarioAnalyzer",
+      "file": "pattern_detector.py",
+      "methods": 2
+    },
+    {
+      "name": "IntegratedKnowledgeConnector",
+      "file": "knowledge_base_connector_integrated.py",
+      "methods": 6
+    },
+    {
+      "name": "ExternalKnowledgeSyncManager",
+      "file": "knowledge_base_connector_integrated.py",
+      "methods": 1
+    },
+    {
+      "name": "LearningNeedsCollector",
+      "file": "learning_needs_collector.py",
+      "methods": 23
+    },
+    {
+      "name": "CompetencyTracker",
+      "file": "competency_tracker.py",
+      "methods": 7
+    },
+    {
+      "name": "TeamCompetencyAnalyzer",
+      "file": "competency_tracker.py",
+      "methods": 3
+    },
+    {
+      "name": "RoleGapAnalyzer",
+      "file": "competency_tracker.py",
+      "methods": 6
+    },
+    {
+      "name": "IntegratedMLPredictor",
+      "file": "ml_predictor_integrated.py",
+      "methods": 9
+    },
+    {
+      "name": "KnowledgeIntegrator",
+      "file": "knowledge_integrator.py",
+      "methods": 6
+    },
+    {
+      "name": "LearningPathGenerator",
+      "file": "knowledge_integrator.py",
+      "methods": 4
+    },
+    {
+      "name": "GapEffectivenessTracker",
+      "file": "knowledge_integrator.py",
+      "methods": 5
+    },
+    {
+      "name": "GamificationService",
+      "file": "gamification_service.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingService",
+      "file": "training_service.py",
+      "methods": 1
+    },
+    {
+      "name": "CoachingStyle",
+      "file": "ai_coach.py",
+      "methods": 0
+    },
+    {
+      "name": "AILearningCoach",
+      "file": "ai_coach.py",
+      "methods": 9
+    },
+    {
+      "name": "TestStandardsLoader",
+      "file": "test_basic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestCaseCollector",
+      "file": "test_basic.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowIntelligenceAdapter",
+      "file": "workflow_intelligence_adapter.py",
+      "methods": 5
+    },
+    {
+      "name": "VirtuousLearningCycle",
+      "file": "virtuous_cycle.py",
+      "methods": 3
+    },
+    {
+      "name": "LessonCreator",
+      "file": "lesson_creator.py",
+      "methods": 5
+    },
+    {
+      "name": "ArticleCreator",
+      "file": "article_creator.py",
+      "methods": 4
+    },
+    {
+      "name": "ISOMonitor",
+      "file": "standards_monitor.py",
+      "methods": 3
+    },
+    {
+      "name": "BCIMonitor",
+      "file": "standards_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "WHOMonitor",
+      "file": "standards_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "NISTMonitor",
+      "file": "standards_monitor.py",
+      "methods": 1
+    },
+    {
+      "name": "StandardsMonitor",
+      "file": "standards_monitor.py",
+      "methods": 2
+    },
+    {
+      "name": "KnowledgeUsageRecord",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "QualityMetrics",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeAnalytics",
+      "file": "analytics.py",
+      "methods": 1
+    },
+    {
+      "name": "KnowledgeCategory",
+      "file": "article.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeType",
+      "file": "article.py",
+      "methods": 0
+    },
+    {
+      "name": "DomainType",
+      "file": "article.py",
+      "methods": 0
+    },
+    {
+      "name": "UsageType",
+      "file": "article.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeArticle",
+      "file": "article.py",
+      "methods": 3
+    },
+    {
+      "name": "StandardsLoader",
+      "file": "standards_loader.py",
+      "methods": 2
+    },
+    {
+      "name": "CaseCollector",
+      "file": "case_loader.py",
+      "methods": 2
+    },
+    {
+      "name": "EmbeddingProvider",
+      "file": "vector_indexer.py",
+      "methods": 2
+    },
+    {
+      "name": "VectorIndexer",
+      "file": "vector_indexer.py",
+      "methods": 1
+    },
+    {
+      "name": "StandardMetadata",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseMetadata",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSearchRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "HistoricalResult",
+      "file": "ml_router.py",
+      "methods": 0
+    },
+    {
+      "name": "SuccessPredictionRequest",
+      "file": "ml_router.py",
+      "methods": 0
+    },
+    {
+      "name": "DifficultyAdjustmentRequest",
+      "file": "ml_router.py",
+      "methods": 0
+    },
+    {
+      "name": "PathRecommendationRequest",
+      "file": "ml_router.py",
+      "methods": 0
+    },
+    {
+      "name": "AnomalyDetectionRequest",
+      "file": "ml_router.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationResponse",
+      "file": "recommendation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "RAGSearchRequest",
+      "file": "platform_integration_router.py",
+      "methods": 0
+    },
+    {
+      "name": "MLPredictionRequest",
+      "file": "platform_integration_router.py",
+      "methods": 0
+    },
+    {
+      "name": "FeedbackRequest",
+      "file": "platform_integration_router.py",
+      "methods": 0
+    },
+    {
+      "name": "LearningPathRequest",
+      "file": "platform_integration_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResultCreate",
+      "file": "learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResultResponse",
+      "file": "learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioLearningResponse",
+      "file": "learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ActivityRecord",
+      "file": "gamification_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ProfileRequest",
+      "file": "gamification_router.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardRequest",
+      "file": "gamification_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResultForGapAnalysis",
+      "file": "process_gap_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessCoverageRequest",
+      "file": "process_gap_router.py",
+      "methods": 0
+    },
+    {
+      "name": "MatrixRequest",
+      "file": "process_gap_router.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectNeedsRequest",
+      "file": "self_learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionRecordRequest",
+      "file": "self_learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "OutcomeRecordRequest",
+      "file": "self_learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "CreateLearningPathRequest",
+      "file": "self_learning_router.py",
+      "methods": 0
+    },
+    {
+      "name": "TimeRange",
+      "file": "analytics_router.py",
+      "methods": 0
+    },
+    {
+      "name": "DrillDownRequest",
+      "file": "analytics_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResultInput",
+      "file": "competency_router.py",
+      "methods": 0
+    },
+    {
+      "name": "UserCompetencyResponse",
+      "file": "competency_router.py",
+      "methods": 0
+    },
+    {
+      "name": "TeamAnalysisRequest",
+      "file": "competency_router.py",
+      "methods": 0
+    },
+    {
+      "name": "RoleGapRequest",
+      "file": "competency_router.py",
+      "methods": 0
+    },
+    {
+      "name": "GapMappingRequest",
+      "file": "knowledge_router.py",
+      "methods": 0
+    },
+    {
+      "name": "LearningPathRequest",
+      "file": "knowledge_router.py",
+      "methods": 0
+    },
+    {
+      "name": "EffectivenessRecordRequest",
+      "file": "knowledge_router.py",
+      "methods": 0
+    },
+    {
+      "name": "PatternResponse",
+      "file": "pattern_router.py",
+      "methods": 0
+    },
+    {
+      "name": "PatternDetectionRequest",
+      "file": "pattern_router.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthChecker",
+      "file": "metrics.py",
+      "methods": 1
+    },
+    {
+      "name": "MockEventBusClient",
+      "file": "test_subscribers.py",
+      "methods": 1
+    },
+    {
+      "name": "MockCompetencyTracker",
+      "file": "test_subscribers.py",
+      "methods": 1
+    },
+    {
+      "name": "MockCompetencyTracker",
+      "file": "test_subscribers.py",
+      "methods": 1
+    },
+    {
+      "name": "LearningEventSubscriber",
+      "file": "subscribers.py",
+      "methods": 4
+    },
+    {
+      "name": "MockCompetencyTracker",
+      "file": "subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "QdrantCollectionSetup",
+      "file": "setup_collections.py",
+      "methods": 6
+    },
+    {
+      "name": "EmbeddingGenerator",
+      "file": "embeddings.py",
+      "methods": 4
+    },
+    {
+      "name": "DocumentChunker",
+      "file": "embeddings.py",
+      "methods": 5
+    },
+    {
+      "name": "Reranker",
+      "file": "reranking.py",
+      "methods": 5
+    },
+    {
+      "name": "DiversityReranker",
+      "file": "reranking.py",
+      "methods": 3
+    },
+    {
+      "name": "RAGPipeline",
+      "file": "pipeline.py",
+      "methods": 4
+    },
+    {
+      "name": "KnowledgeSourceManager",
+      "file": "pipeline.py",
+      "methods": 1
+    },
+    {
+      "name": "HybridRetriever",
+      "file": "retrieval.py",
+      "methods": 3
+    },
+    {
+      "name": "VectorStore",
+      "file": "retrieval.py",
+      "methods": 3
+    },
+    {
+      "name": "QdrantVectorStore",
+      "file": "qdrant_client.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingPipeline",
+      "file": "training_pipeline.py",
+      "methods": 5
+    },
+    {
+      "name": "WorkflowPredictor",
+      "file": "predictive_models.py",
+      "methods": 9
+    },
+    {
+      "name": "AnomalyDetector",
+      "file": "anomaly_detection.py",
+      "methods": 7
+    }
+  ],
+  "functions": [
+    {
+      "name": "track_llm_request",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_routing_decision",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_streaming",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_cost",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "update_provider_availability",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_cache_hit",
+      "file": "metrics.py",
+      "params": 3
+    },
+    {
+      "name": "set_llm_health",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "init_llm_metrics",
+      "file": "metrics.py",
+      "params": 0
+    },
+    {
+      "name": "get_litellm_router",
+      "file": "litellm_router.py",
+      "params": 0
+    },
+    {
+      "name": "data_path",
+      "file": "test_integration.py",
+      "params": 0
+    },
+    {
+      "name": "standards_loader",
+      "file": "test_integration.py",
+      "params": 0
+    },
+    {
+      "name": "case_collector",
+      "file": "test_integration.py",
+      "params": 0
+    },
+    {
+      "name": "standards_monitor",
+      "file": "test_integration.py",
+      "params": 0
+    },
+    {
+      "name": "get_database_manager",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_supabase_manager",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_cache_manager",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "get_qdrant_client",
+      "file": "database.py",
+      "params": 0
+    },
+    {
+      "name": "integrate_with_workflow_engine",
+      "file": "workflow_intelligence_adapter.py",
+      "params": 1
+    },
+    {
+      "name": "get_standards_loader",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "get_case_collector",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "_scan_cases_in_directory",
+      "file": "main.py",
+      "params": 2
+    },
+    {
+      "name": "get_rag_connector",
+      "file": "platform_integration_router.py",
+      "params": 0
+    },
+    {
+      "name": "get_ml_client",
+      "file": "platform_integration_router.py",
+      "params": 0
+    },
+    {
+      "name": "get_kb_connector",
+      "file": "platform_integration_router.py",
+      "params": 0
+    },
+    {
+      "name": "get_ml_predictor",
+      "file": "platform_integration_router.py",
+      "params": 0
+    },
+    {
+      "name": "track_standard_load",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_case_collection",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_vector_search",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_api_request",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_update_check",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_learning_operation",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_competency_assessment",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_gamification_event",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_pattern_detection",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_gap_analysis",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "init_metrics",
+      "file": "metrics.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "setup_collections.py",
+      "params": 0
+    },
+    {
+      "name": "track_rag_search",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_embedding_generation",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "track_qdrant_operation",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "track_reranking",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "set_rag_health",
+      "file": "metrics.py",
+      "params": 2
+    },
+    {
+      "name": "init_rag_metrics",
+      "file": "metrics.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "intelligent-core/ai-foundation/requirements.txt"
+  },
+  "metrics": {
+    "loc": 23019,
+    "python_files": 82,
+    "classes": 116,
+    "functions": 43,
+    "endpoints": 108,
+    "dependencies": 145
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 2051,
+    "lines": 123,
+    "content": "# ai-foundation\n\n> \u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u0441\u043b\u043e\u0439 AI \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b: LLM \u0440\u043e\u0443\u0442\u0438\u043d\u0433, RAG pipeline, \u044d\u043c\u0431\u0435\u0434\u0434\u0438\u043d\u0433\u0438\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 19,908 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 75 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 110 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 23 |\n| **API Endpoints** | 109 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 133 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (62)\n\n- `/`\n- `/`\n- `/`\n- `/...`\n- `/analytics/benchmarks`\n\n### POST (46)\n\n- `/achievements/check`\n- `/analytics/drill-down`\n- `/api/cross-learning/virtuous-cycle/pattern`\n- `/api/cross-learning/virtuous-cycle/workflow`\n- `/badges/check`\n\n### DELETE (1)\n\n- `/{pattern_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **LearningNeedsCollector** (23 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `learning_needs_collector.py`\n- **SelfLearningEngine** (13 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `self_learning_engine.py`\n- **GamificationEngine** (10 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `gamification_engine.py`\n- **IntegratedMLPredictor** (9 \u043c\u0435\u0442\u043e\u0434\u043e\u0432)"
+  }
+}

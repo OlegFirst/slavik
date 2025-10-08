@@ -1,0 +1,49 @@
+# Universal Dockerfile for intelligent-core services
+# Usage: docker build -f Dockerfile.service --build-arg SERVICE_PATH=predictive -t predictive .
+
+ARG PYTHON_VERSION=3.11
+FROM python:${PYTHON_VERSION}-slim
+
+# Build arguments
+ARG SERVICE_PATH
+ARG SERVICE_PORT=8000
+
+# Environment
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/app
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy shared dependencies first
+COPY shared/ ./shared/
+COPY requirements.txt* ./
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt || echo "No root requirements.txt"
+
+# Copy entire intelligent-core
+COPY . .
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${SERVICE_PORT}/health || exit 1
+
+EXPOSE ${SERVICE_PORT}
+
+# Default command (override in docker-compose)
+CMD python -m ${SERVICE_PATH}.main

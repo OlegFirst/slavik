@@ -1,0 +1,983 @@
+-- ============================================
+-- BCM Platform - Unified Database
+-- Migration 010: Validation Schema
+-- ============================================
+-- ISO 22301:2019 Clauses:
+--   8.5 (Testing and Exercising)
+--   9.1 (Monitoring, Measurement, Analysis, Evaluation)
+--   9.2 (Internal Audit)
+--   9.3 (Management Review)
+--   10 (Improvement - CAPA)
+-- Schema: validation (exercises, KPIs, audits, CAPA, management reviews)
+-- ============================================
+
+-- Table: validation.exercises
+CREATE TABLE validation.exercises (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Exercise identity
+    exercise_code VARCHAR(100) UNIQUE NOT NULL,
+    title VARCHAR(500) NOT NULL,
+    description TEXT,
+
+    -- ISO 22301 Clause 8.5
+    exercise_type VARCHAR(100) NOT NULL, -- tabletop, walkthrough, simulation, full_scale, functional, drill
+    exercise_scope VARCHAR(100), -- single_process, department, organization_wide, multi_site, supply_chain
+
+    -- Classification
+    complexity_level VARCHAR(50), -- basic, intermediate, advanced, complex
+    involves_external_parties BOOLEAN DEFAULT FALSE,
+
+    -- Planning
+    objectives JSONB NOT NULL, -- Array of objectives
+    success_criteria JSONB, -- Array of measurable criteria
+
+    tested_plans JSONB DEFAULT '[]'::jsonb, -- UUIDs of plans being tested
+    tested_processes JSONB DEFAULT '[]'::jsonb, -- UUIDs of bia.processes
+    tested_controls JSONB DEFAULT '[]'::jsonb, -- UUIDs of risk.controls
+
+    -- Scheduling
+    status VARCHAR(50) DEFAULT 'planning', -- planning, scheduled, in_progress, completed, cancelled
+    scheduled_start TIMESTAMPTZ,
+    scheduled_end TIMESTAMPTZ,
+    actual_start TIMESTAMPTZ,
+    actual_end TIMESTAMPTZ,
+
+    -- Participation
+    exercise_director_id UUID REFERENCES auth.users(id),
+    lead_facilitator_id UUID REFERENCES auth.users(id),
+
+    participants JSONB DEFAULT '[]'::jsonb, -- {user_id, role, team, attendance_status}
+    participants_count INT,
+    observers JSONB DEFAULT '[]'::jsonb,
+    external_participants JSONB DEFAULT '[]'::jsonb,
+
+    -- Scenario
+    scenario_id UUID, -- Will reference validation.exercise_scenarios(id)
+    scenario_description TEXT,
+    scenario_complexity VARCHAR(50),
+    inject_schedule JSONB DEFAULT '[]'::jsonb, -- Timed injects during exercise
+
+    -- Location and logistics
+    location VARCHAR(255),
+    is_virtual BOOLEAN DEFAULT FALSE,
+    meeting_links JSONB DEFAULT '[]'::jsonb,
+    required_resources JSONB DEFAULT '[]'::jsonb,
+
+    -- Evaluation
+    overall_score DECIMAL(5,2), -- 0-100
+    evaluation_summary TEXT,
+    strengths TEXT,
+    weaknesses TEXT,
+    lessons_learned TEXT,
+
+    objectives_met_count INT DEFAULT 0,
+    objectives_total_count INT,
+    success_rate_percent DECIMAL(5,2),
+
+    -- Compliance
+    is_regulatory_requirement BOOLEAN DEFAULT FALSE,
+    regulatory_frequency VARCHAR(50), -- annual, biannual, as_required
+    last_similar_exercise_date DATE,
+    next_required_exercise_date DATE,
+
+    -- Outcomes
+    findings_count INT DEFAULT 0,
+    actions_identified_count INT DEFAULT 0,
+    actions_completed_count INT DEFAULT 0,
+
+    -- Reporting
+    report_completed BOOLEAN DEFAULT FALSE,
+    report_file_path VARCHAR(500),
+    report_completed_at TIMESTAMPTZ,
+    report_approved_by UUID REFERENCES auth.users(id),
+
+    -- Budget
+    estimated_cost DECIMAL(15,2),
+    actual_cost DECIMAL(15,2),
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+
+    -- Full-text search
+    search_vector tsvector GENERATED ALWAYS AS (
+        to_tsvector('english',
+            coalesce(exercise_code,'') || ' ' ||
+            coalesce(title,'') || ' ' ||
+            coalesce(description,'')
+        )
+    ) STORED,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id)
+);
+
+CREATE INDEX idx_exercises_org ON validation.exercises(organization_id);
+CREATE INDEX idx_exercises_code ON validation.exercises(exercise_code);
+CREATE INDEX idx_exercises_status ON validation.exercises(status);
+CREATE INDEX idx_exercises_type ON validation.exercises(exercise_type);
+CREATE INDEX idx_exercises_scheduled ON validation.exercises(scheduled_start);
+CREATE INDEX idx_exercises_search ON validation.exercises USING GIN(search_vector);
+
+CREATE TRIGGER update_exercises_updated_at BEFORE UPDATE ON validation.exercises
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.exercises ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Exercises visible to org members" ON validation.exercises FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Exercises manageable by org admins" ON validation.exercises FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.exercises IS 'BCM exercises per ISO 22301:2019 Clause 8.5';
+
+-- Table: validation.exercise_scenarios
+CREATE TABLE validation.exercise_scenarios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Scenario identity
+    scenario_code VARCHAR(100) NOT NULL,
+    scenario_name VARCHAR(255) NOT NULL,
+    description TEXT,
+
+    -- Classification
+    scenario_type VARCHAR(100) NOT NULL, -- cyber_attack, natural_disaster, supply_chain_disruption, pandemic, facility_loss, key_personnel_loss
+    threat_category VARCHAR(100),
+    severity_level VARCHAR(50), -- critical, high, medium, low
+
+    -- Scenario details
+    initial_situation TEXT NOT NULL, -- What participants are told at start
+    trigger_event TEXT, -- What initiates the incident
+    complicating_factors TEXT, -- Additional challenges during exercise
+
+    -- Timeline
+    estimated_duration_minutes INT,
+    phases JSONB DEFAULT '[]'::jsonb, -- Array of {phase_name, duration_minutes, description, objectives}
+
+    -- Injects
+    injects JSONB DEFAULT '[]'::jsonb, -- Array of {inject_time, type, title, description, expected_response}
+    injects_count INT DEFAULT 0,
+
+    -- Scope and impact
+    affected_processes JSONB DEFAULT '[]'::jsonb,
+    affected_locations JSONB DEFAULT '[]'::jsonb,
+    simulated_impacts JSONB DEFAULT '[]'::jsonb, -- {impact_type, severity, description}
+
+    -- Learning objectives
+    learning_objectives JSONB DEFAULT '[]'::jsonb,
+    skills_tested JSONB DEFAULT '[]'::jsonb, -- decision_making, communication, coordination, technical_recovery, etc.
+
+    -- Required participants
+    required_roles JSONB DEFAULT '[]'::jsonb,
+    min_participants INT,
+    max_participants INT,
+
+    -- Resources needed
+    required_props JSONB DEFAULT '[]'::jsonb, -- Physical or digital resources needed
+    technology_requirements TEXT,
+
+    -- Usage
+    is_template BOOLEAN DEFAULT FALSE,
+    usage_count INT DEFAULT 0,
+    last_used_date DATE,
+
+    -- Status
+    is_active BOOLEAN DEFAULT TRUE,
+    approval_status VARCHAR(50) DEFAULT 'draft', -- draft, approved, archived
+    approved_by UUID REFERENCES auth.users(id),
+    approved_at TIMESTAMPTZ,
+
+    -- Metadata
+    difficulty_rating VARCHAR(50), -- beginner, intermediate, advanced, expert
+    tags JSONB DEFAULT '[]'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, scenario_code)
+);
+
+CREATE INDEX idx_scenarios_org ON validation.exercise_scenarios(organization_id);
+CREATE INDEX idx_scenarios_type ON validation.exercise_scenarios(scenario_type);
+CREATE INDEX idx_scenarios_active ON validation.exercise_scenarios(is_active) WHERE is_active = TRUE;
+
+CREATE TRIGGER update_scenarios_updated_at BEFORE UPDATE ON validation.exercise_scenarios
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.exercise_scenarios ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Scenarios visible to org members" ON validation.exercise_scenarios FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Scenarios manageable by org admins" ON validation.exercise_scenarios FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.exercise_scenarios IS 'Exercise scenarios and templates per ISO 22301 Clause 8.5';
+
+-- Add foreign key now that exercise_scenarios exists
+ALTER TABLE validation.exercises
+    ADD CONSTRAINT fk_exercises_scenario
+    FOREIGN KEY (scenario_id) REFERENCES validation.exercise_scenarios(id);
+
+-- Table: validation.exercise_observations
+CREATE TABLE validation.exercise_observations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    exercise_id UUID NOT NULL REFERENCES validation.exercises(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Observation details
+    observation_type VARCHAR(100) NOT NULL, -- strength, weakness, gap, risk, improvement_opportunity
+    severity VARCHAR(50), -- critical, high, medium, low
+    category VARCHAR(100), -- communication, decision_making, coordination, technical, procedural, resource
+
+    title VARCHAR(500) NOT NULL,
+    description TEXT NOT NULL,
+
+    -- Context
+    observed_at TIMESTAMPTZ NOT NULL,
+    phase VARCHAR(100), -- Which phase of exercise this occurred in
+    related_objective_id VARCHAR(100), -- Which objective this relates to
+
+    affected_plan_id UUID, -- Which plan had the issue
+    affected_process_id UUID, -- Which process
+
+    -- Observer
+    observer_id UUID REFERENCES auth.users(id),
+    observer_role VARCHAR(100),
+
+    -- Impact
+    impact_assessment TEXT,
+    potential_consequences TEXT,
+
+    -- Evidence
+    evidence JSONB DEFAULT '[]'::jsonb, -- Photos, videos, documents, logs
+    witness_statements JSONB DEFAULT '[]'::jsonb,
+
+    -- Status
+    status VARCHAR(50) DEFAULT 'open', -- open, acknowledged, action_planned, resolved, closed
+    resolution_notes TEXT,
+    resolved_at TIMESTAMPTZ,
+
+    -- Priority
+    requires_immediate_action BOOLEAN DEFAULT FALSE,
+    action_deadline DATE,
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_observations_exercise ON validation.exercise_observations(exercise_id);
+CREATE INDEX idx_observations_org ON validation.exercise_observations(organization_id);
+CREATE INDEX idx_observations_type ON validation.exercise_observations(observation_type);
+CREATE INDEX idx_observations_severity ON validation.exercise_observations(severity);
+CREATE INDEX idx_observations_status ON validation.exercise_observations(status);
+
+CREATE TRIGGER update_observations_updated_at BEFORE UPDATE ON validation.exercise_observations
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.exercise_observations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Observations visible to org members" ON validation.exercise_observations FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+COMMENT ON TABLE validation.exercise_observations IS 'Observations during exercises';
+
+-- Table: validation.exercise_actions
+CREATE TABLE validation.exercise_actions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    exercise_id UUID NOT NULL REFERENCES validation.exercises(id) ON DELETE CASCADE,
+    observation_id UUID REFERENCES validation.exercise_observations(id),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Action details
+    action_code VARCHAR(100),
+    action_title VARCHAR(500) NOT NULL,
+    action_description TEXT NOT NULL,
+
+    action_type VARCHAR(100) NOT NULL, -- corrective, preventive, improvement
+    priority VARCHAR(50) NOT NULL, -- critical, high, medium, low
+
+    -- Assignment
+    assigned_to_id UUID REFERENCES auth.users(id),
+    assigned_to_team_id UUID REFERENCES public.teams(id),
+    assigned_to_role VARCHAR(100),
+
+    -- Timeline
+    status VARCHAR(50) DEFAULT 'planned', -- planned, in_progress, completed, cancelled, overdue
+    due_date DATE NOT NULL,
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+
+    -- Progress
+    progress_percent INT DEFAULT 0,
+    progress_notes TEXT,
+
+    -- Resources
+    estimated_effort_hours DECIMAL(10,2),
+    actual_effort_hours DECIMAL(10,2),
+    budget_required DECIMAL(15,2),
+
+    -- Verification
+    requires_verification BOOLEAN DEFAULT TRUE,
+    verification_method TEXT,
+    verified_by UUID REFERENCES auth.users(id),
+    verified_at TIMESTAMPTZ,
+    verification_notes TEXT,
+
+    -- Effectiveness
+    effectiveness_rating INT, -- 1-5 scale
+    effectiveness_notes TEXT,
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id)
+);
+
+CREATE INDEX idx_exercise_actions_exercise ON validation.exercise_actions(exercise_id);
+CREATE INDEX idx_exercise_actions_org ON validation.exercise_actions(organization_id);
+CREATE INDEX idx_exercise_actions_assigned ON validation.exercise_actions(assigned_to_id, status);
+CREATE INDEX idx_exercise_actions_status ON validation.exercise_actions(status);
+CREATE INDEX idx_exercise_actions_overdue ON validation.exercise_actions(due_date) WHERE status != 'completed';
+
+CREATE TRIGGER update_exercise_actions_updated_at BEFORE UPDATE ON validation.exercise_actions
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.exercise_actions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Exercise actions visible to org members" ON validation.exercise_actions FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Exercise actions manageable by org admins" ON validation.exercise_actions FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.exercise_actions IS 'Actions from exercise observations per ISO 22301 Clause 10';
+
+-- Table: validation.kpis
+CREATE TABLE validation.kpis (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- KPI identity
+    kpi_code VARCHAR(100) NOT NULL,
+    kpi_name VARCHAR(255) NOT NULL,
+    description TEXT,
+
+    -- ISO 22301 Clause 9.1
+    kpi_category VARCHAR(100) NOT NULL, -- bcms_performance, plan_effectiveness, process_performance, objective_achievement, incident_metrics
+    iso_clause VARCHAR(20), -- Which ISO clause this monitors
+
+    -- Measurement
+    measurement_unit VARCHAR(50) NOT NULL, -- percentage, count, minutes, hours, days, currency, ratio
+    measurement_method TEXT,
+    data_source VARCHAR(255), -- Where data comes from
+
+    calculation_formula TEXT, -- How to calculate the KPI
+    aggregation_method VARCHAR(50), -- sum, average, max, min, count, percentage
+
+    -- Targets
+    target_value DECIMAL(15,2),
+    target_operator VARCHAR(10), -- >=, <=, =, >, <
+    target_description TEXT,
+
+    warning_threshold DECIMAL(15,2),
+    critical_threshold DECIMAL(15,2),
+
+    -- Frequency
+    measurement_frequency VARCHAR(50) NOT NULL, -- daily, weekly, monthly, quarterly, annually, per_incident, real_time
+    reporting_frequency VARCHAR(50), -- daily, weekly, monthly, quarterly, annually
+
+    -- Ownership
+    owner_id UUID REFERENCES auth.users(id),
+    data_collector_id UUID REFERENCES auth.users(id),
+
+    -- Related entities
+    related_objectives JSONB DEFAULT '[]'::jsonb, -- UUIDs of governance.objectives
+    related_processes JSONB DEFAULT '[]'::jsonb, -- UUIDs of bia.processes
+    related_risks JSONB DEFAULT '[]'::jsonb, -- UUIDs of risk.risks
+
+    -- Status
+    is_active BOOLEAN DEFAULT TRUE,
+    status VARCHAR(50) DEFAULT 'active', -- active, on_target, at_risk, critical, paused
+
+    -- Current value
+    current_value DECIMAL(15,2),
+    current_status VARCHAR(50), -- on_target, warning, critical
+    last_measured_at TIMESTAMPTZ,
+
+    -- Trend analysis
+    trend VARCHAR(50), -- improving, stable, declining
+    trend_calculation_period INT, -- Days to look back for trend
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, kpi_code)
+);
+
+CREATE INDEX idx_kpis_org ON validation.kpis(organization_id);
+CREATE INDEX idx_kpis_code ON validation.kpis(kpi_code);
+CREATE INDEX idx_kpis_category ON validation.kpis(kpi_category);
+CREATE INDEX idx_kpis_status ON validation.kpis(status);
+CREATE INDEX idx_kpis_active ON validation.kpis(is_active) WHERE is_active = TRUE;
+
+CREATE TRIGGER update_kpis_updated_at BEFORE UPDATE ON validation.kpis
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.kpis ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "KPIs visible to org members" ON validation.kpis FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "KPIs manageable by org admins" ON validation.kpis FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.kpis IS 'Key Performance Indicators per ISO 22301:2019 Clause 9.1';
+
+-- Table: validation.kpi_measurements
+CREATE TABLE validation.kpi_measurements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    kpi_id UUID NOT NULL REFERENCES validation.kpis(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Measurement
+    measured_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    measurement_period_start DATE,
+    measurement_period_end DATE,
+
+    measured_value DECIMAL(15,2) NOT NULL,
+    target_value DECIMAL(15,2),
+
+    -- Status at time of measurement
+    status VARCHAR(50) NOT NULL, -- on_target, warning, critical, no_target
+
+    variance DECIMAL(15,2), -- Difference from target
+    variance_percent DECIMAL(5,2), -- Percentage difference
+
+    -- Context
+    measured_by UUID REFERENCES auth.users(id),
+    measurement_notes TEXT,
+
+    data_quality VARCHAR(50) DEFAULT 'verified', -- verified, estimated, unverified
+    data_source_reference VARCHAR(500),
+
+    -- Related entities
+    related_incident_id UUID, -- If measurement is incident-related
+    related_exercise_id UUID REFERENCES validation.exercises(id),
+
+    -- Metadata
+    metadata JSONB DEFAULT '{}'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_kpi_measurements_kpi ON validation.kpi_measurements(kpi_id, measured_at DESC);
+CREATE INDEX idx_kpi_measurements_org ON validation.kpi_measurements(organization_id);
+CREATE INDEX idx_kpi_measurements_period ON validation.kpi_measurements(measurement_period_start, measurement_period_end);
+CREATE INDEX idx_kpi_measurements_status ON validation.kpi_measurements(status);
+
+ALTER TABLE validation.kpi_measurements ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "KPI measurements visible to org members" ON validation.kpi_measurements FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+COMMENT ON TABLE validation.kpi_measurements IS 'Historical KPI measurements per ISO 22301 Clause 9.1';
+
+-- Table: validation.kpi_dashboards
+CREATE TABLE validation.kpi_dashboards (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Dashboard identity
+    dashboard_code VARCHAR(100) NOT NULL,
+    dashboard_name VARCHAR(255) NOT NULL,
+    description TEXT,
+
+    -- Configuration
+    dashboard_type VARCHAR(100), -- executive, operational, compliance, incident_metrics
+    kpi_ids JSONB NOT NULL, -- Array of KPI UUIDs to include
+
+    layout_config JSONB, -- Dashboard layout and visualization settings
+    refresh_frequency_seconds INT DEFAULT 300,
+
+    -- Access
+    is_public BOOLEAN DEFAULT FALSE,
+    authorized_roles JSONB DEFAULT '[]'::jsonb,
+    authorized_users JSONB DEFAULT '[]'::jsonb,
+
+    -- Status
+    is_active BOOLEAN DEFAULT TRUE,
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, dashboard_code)
+);
+
+CREATE INDEX idx_kpi_dashboards_org ON validation.kpi_dashboards(organization_id);
+CREATE INDEX idx_kpi_dashboards_active ON validation.kpi_dashboards(is_active) WHERE is_active = TRUE;
+
+CREATE TRIGGER update_kpi_dashboards_updated_at BEFORE UPDATE ON validation.kpi_dashboards
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.kpi_dashboards ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Dashboards visible to org members" ON validation.kpi_dashboards FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Dashboards manageable by org admins" ON validation.kpi_dashboards FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.kpi_dashboards IS 'KPI dashboards for monitoring and reporting';
+
+-- Table: validation.audit_plans
+CREATE TABLE validation.audit_plans (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Audit identity
+    audit_code VARCHAR(100) NOT NULL,
+    audit_title VARCHAR(500) NOT NULL,
+    description TEXT,
+
+    -- ISO 22301 Clause 9.2
+    audit_type VARCHAR(100) NOT NULL, -- internal, external, certification, surveillance, compliance
+    audit_scope TEXT NOT NULL, -- What is being audited
+
+    -- Classification
+    audit_standard VARCHAR(100), -- ISO_22301, ISO_27001, SOC2, custom
+    audited_clauses JSONB DEFAULT '[]'::jsonb, -- Which ISO clauses
+
+    audited_processes JSONB DEFAULT '[]'::jsonb, -- UUIDs of bia.processes
+    audited_locations JSONB DEFAULT '[]'::jsonb,
+    audited_departments JSONB DEFAULT '[]'::jsonb,
+
+    -- Planning
+    status VARCHAR(50) DEFAULT 'planning', -- planning, scheduled, in_progress, fieldwork_complete, reporting, completed, cancelled
+
+    planned_start_date DATE NOT NULL,
+    planned_end_date DATE NOT NULL,
+    actual_start_date DATE,
+    actual_end_date DATE,
+
+    -- Team
+    lead_auditor_id UUID REFERENCES auth.users(id),
+    audit_team JSONB DEFAULT '[]'::jsonb, -- {user_id, role, is_external}
+    auditee_contacts JSONB DEFAULT '[]'::jsonb,
+
+    -- Methodology
+    audit_criteria TEXT,
+    audit_methodology TEXT,
+    sample_size INT,
+    sampling_method VARCHAR(100),
+
+    -- Schedule
+    audit_schedule JSONB DEFAULT '[]'::jsonb, -- {date, time, activity, location, participants}
+
+    -- Findings summary
+    findings_count INT DEFAULT 0,
+    critical_findings_count INT DEFAULT 0,
+    major_findings_count INT DEFAULT 0,
+    minor_findings_count INT DEFAULT 0,
+    observations_count INT DEFAULT 0,
+
+    -- Compliance
+    is_regulatory_requirement BOOLEAN DEFAULT FALSE,
+    regulatory_body VARCHAR(255),
+    certification_body VARCHAR(255),
+
+    -- Outcomes
+    overall_conformity VARCHAR(50), -- conformant, non_conformant, partial_conformance
+    certification_decision VARCHAR(50), -- granted, denied, conditional, pending
+
+    report_issued_date DATE,
+    report_file_path VARCHAR(500),
+
+    -- Follow-up
+    next_audit_date DATE,
+    follow_up_required BOOLEAN DEFAULT FALSE,
+    follow_up_audit_id UUID REFERENCES validation.audit_plans(id),
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, audit_code)
+);
+
+CREATE INDEX idx_audit_plans_org ON validation.audit_plans(organization_id);
+CREATE INDEX idx_audit_plans_code ON validation.audit_plans(audit_code);
+CREATE INDEX idx_audit_plans_status ON validation.audit_plans(status);
+CREATE INDEX idx_audit_plans_type ON validation.audit_plans(audit_type);
+CREATE INDEX idx_audit_plans_dates ON validation.audit_plans(planned_start_date, planned_end_date);
+
+CREATE TRIGGER update_audit_plans_updated_at BEFORE UPDATE ON validation.audit_plans
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.audit_plans ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Audit plans visible to org members" ON validation.audit_plans FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Audit plans manageable by org admins" ON validation.audit_plans FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.audit_plans IS 'Internal audit plans per ISO 22301:2019 Clause 9.2';
+
+-- Table: validation.audit_findings
+CREATE TABLE validation.audit_findings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    audit_plan_id UUID NOT NULL REFERENCES validation.audit_plans(id) ON DELETE CASCADE,
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Finding identity
+    finding_code VARCHAR(100) NOT NULL,
+    finding_title VARCHAR(500) NOT NULL,
+    finding_description TEXT NOT NULL,
+
+    -- Classification
+    finding_type VARCHAR(100) NOT NULL, -- non_conformance, observation, opportunity_for_improvement
+    severity VARCHAR(50) NOT NULL, -- critical, major, minor
+
+    -- ISO context
+    iso_clause VARCHAR(20), -- Which clause is non-conformant
+    requirement_text TEXT, -- The specific requirement
+
+    -- Evidence
+    evidence TEXT NOT NULL,
+    evidence_files JSONB DEFAULT '[]'::jsonb,
+    root_cause TEXT,
+
+    -- Impact
+    impact_assessment TEXT,
+    affected_processes JSONB DEFAULT '[]'::jsonb,
+    affected_controls JSONB DEFAULT '[]'::jsonb,
+
+    -- Status
+    status VARCHAR(50) DEFAULT 'open', -- open, action_planned, in_progress, verification_pending, closed
+
+    -- Response
+    auditee_response TEXT,
+    corrective_action_plan TEXT,
+    target_closure_date DATE,
+
+    actual_closure_date DATE,
+    closed_by UUID REFERENCES auth.users(id),
+    closure_notes TEXT,
+
+    -- Verification
+    verification_required BOOLEAN DEFAULT TRUE,
+    verified_by UUID REFERENCES auth.users(id),
+    verified_at TIMESTAMPTZ,
+    verification_method TEXT,
+    verification_evidence TEXT,
+
+    -- Recurrence tracking
+    is_repeat_finding BOOLEAN DEFAULT FALSE,
+    previous_finding_id UUID REFERENCES validation.audit_findings(id),
+    recurrence_count INT DEFAULT 0,
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+
+    UNIQUE(organization_id, finding_code)
+);
+
+CREATE INDEX idx_audit_findings_plan ON validation.audit_findings(audit_plan_id);
+CREATE INDEX idx_audit_findings_org ON validation.audit_findings(organization_id);
+CREATE INDEX idx_audit_findings_severity ON validation.audit_findings(severity);
+CREATE INDEX idx_audit_findings_status ON validation.audit_findings(status);
+CREATE INDEX idx_audit_findings_open ON validation.audit_findings(status) WHERE status != 'closed';
+
+CREATE TRIGGER update_audit_findings_updated_at BEFORE UPDATE ON validation.audit_findings
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.audit_findings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Audit findings visible to org members" ON validation.audit_findings FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Audit findings manageable by org admins" ON validation.audit_findings FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.audit_findings IS 'Audit findings per ISO 22301 Clause 9.2';
+
+-- Table: validation.capa
+CREATE TABLE validation.capa (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- CAPA identity (Corrective and Preventive Actions)
+    capa_code VARCHAR(100) NOT NULL,
+    capa_title VARCHAR(500) NOT NULL,
+    description TEXT NOT NULL,
+
+    -- ISO 22301 Clause 10
+    capa_type VARCHAR(100) NOT NULL, -- corrective, preventive
+    action_category VARCHAR(100), -- process_improvement, control_enhancement, plan_update, training, resource_allocation
+
+    -- Source
+    source_type VARCHAR(100) NOT NULL, -- audit_finding, incident, exercise, management_review, risk_assessment, complaint, near_miss
+    source_reference_id UUID, -- UUID of the source (finding, incident, etc.)
+    source_description TEXT,
+
+    -- Root cause
+    root_cause_analysis TEXT,
+    root_cause_method VARCHAR(100), -- 5_whys, fishbone, fault_tree, pareto, other
+    contributing_factors JSONB DEFAULT '[]'::jsonb,
+
+    -- Action plan
+    action_plan TEXT NOT NULL,
+    implementation_steps JSONB DEFAULT '[]'::jsonb, -- {step_number, description, assigned_to, due_date, status}
+
+    -- Assignment
+    assigned_to_id UUID REFERENCES auth.users(id),
+    assigned_to_team_id UUID REFERENCES public.teams(id),
+    action_owner_id UUID REFERENCES auth.users(id) NOT NULL,
+
+    -- Timeline
+    status VARCHAR(50) DEFAULT 'planned', -- planned, in_progress, implemented, verification_pending, verified, effective, ineffective, closed
+    priority VARCHAR(50) NOT NULL, -- critical, high, medium, low
+
+    target_completion_date DATE NOT NULL,
+    actual_completion_date DATE,
+
+    implemented_at TIMESTAMPTZ,
+    implemented_by UUID REFERENCES auth.users(id),
+
+    -- Verification
+    requires_verification BOOLEAN DEFAULT TRUE,
+    verification_method TEXT,
+    verification_criteria TEXT,
+
+    verified_at TIMESTAMPTZ,
+    verified_by UUID REFERENCES auth.users(id),
+    verification_evidence TEXT,
+    verification_result VARCHAR(50), -- effective, partially_effective, ineffective
+
+    -- Effectiveness review
+    effectiveness_review_date DATE,
+    effectiveness_rating INT, -- 1-5 scale
+    effectiveness_notes TEXT,
+    reviewed_by UUID REFERENCES auth.users(id),
+
+    -- Related entities
+    related_risks JSONB DEFAULT '[]'::jsonb, -- UUIDs of risk.risks
+    related_processes JSONB DEFAULT '[]'::jsonb, -- UUIDs of bia.processes
+    related_controls JSONB DEFAULT '[]'::jsonb, -- UUIDs of risk.controls
+    related_objectives JSONB DEFAULT '[]'::jsonb, -- UUIDs of governance.objectives
+
+    -- Impact
+    expected_benefits TEXT,
+    actual_benefits TEXT,
+    estimated_cost DECIMAL(15,2),
+    actual_cost DECIMAL(15,2),
+
+    -- Recurrence prevention
+    preventive_measures JSONB DEFAULT '[]'::jsonb,
+    systemic_changes_made TEXT,
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, capa_code)
+);
+
+CREATE INDEX idx_capa_org ON validation.capa(organization_id);
+CREATE INDEX idx_capa_code ON validation.capa(capa_code);
+CREATE INDEX idx_capa_type ON validation.capa(capa_type);
+CREATE INDEX idx_capa_status ON validation.capa(status);
+CREATE INDEX idx_capa_priority ON validation.capa(priority);
+CREATE INDEX idx_capa_assigned ON validation.capa(assigned_to_id, status);
+CREATE INDEX idx_capa_overdue ON validation.capa(target_completion_date) WHERE status NOT IN ('verified', 'closed') AND target_completion_date < CURRENT_DATE;
+
+CREATE TRIGGER update_capa_updated_at BEFORE UPDATE ON validation.capa
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.capa ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "CAPA visible to org members" ON validation.capa FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "CAPA manageable by org admins" ON validation.capa FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.capa IS 'Corrective and Preventive Actions per ISO 22301:2019 Clause 10';
+
+-- Table: validation.management_reviews
+CREATE TABLE validation.management_reviews (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id UUID NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
+
+    -- Review identity
+    review_code VARCHAR(100) NOT NULL,
+    review_title VARCHAR(255) NOT NULL,
+    description TEXT,
+
+    -- ISO 22301 Clause 9.3
+    review_type VARCHAR(100) DEFAULT 'scheduled', -- scheduled, ad_hoc, post_incident, post_exercise
+
+    -- Scheduling
+    status VARCHAR(50) DEFAULT 'planning', -- planning, scheduled, in_progress, completed, cancelled
+    scheduled_date DATE NOT NULL,
+    actual_date DATE,
+    duration_hours DECIMAL(5,2),
+
+    -- Participants
+    chairperson_id UUID REFERENCES auth.users(id),
+    attendees JSONB DEFAULT '[]'::jsonb, -- {user_id, name, role, attended}
+    required_attendees JSONB DEFAULT '[]'::jsonb,
+    attendance_rate_percent DECIMAL(5,2),
+
+    -- Agenda (ISO 22301 Clause 9.3 requirements)
+    agenda JSONB DEFAULT '[]'::jsonb,
+
+    -- Inputs to review (ISO 22301:2019 9.3.2)
+    inputs JSONB DEFAULT '{}'::jsonb, -- {
+        -- bcms_performance: {...},
+        -- nonconformities_capa: {...},
+        -- monitoring_measurement_results: {...},
+        -- audit_results: {...},
+        -- objectives_achievement: {...},
+        -- risk_opportunities: {...},
+        -- adequacy_resources: {...},
+        -- stakeholder_communications: {...},
+        -- improvement_recommendations: {...}
+    -- }
+
+    -- Outputs (ISO 22301:2019 9.3.3)
+    decisions_made JSONB DEFAULT '[]'::jsonb,
+    improvement_opportunities JSONB DEFAULT '[]'::jsonb,
+    changes_to_bcms JSONB DEFAULT '[]'::jsonb,
+    resource_needs JSONB DEFAULT '[]'::jsonb,
+
+    -- Action items
+    action_items_count INT DEFAULT 0,
+    actions_completed_count INT DEFAULT 0,
+
+    -- Documentation
+    minutes_file_path VARCHAR(500),
+    minutes_completed BOOLEAN DEFAULT FALSE,
+    minutes_approved_by UUID REFERENCES auth.users(id),
+    minutes_approved_at TIMESTAMPTZ,
+
+    presentation_files JSONB DEFAULT '[]'::jsonb,
+    supporting_documents JSONB DEFAULT '[]'::jsonb,
+
+    -- Key metrics reviewed
+    kpis_reviewed JSONB DEFAULT '[]'::jsonb, -- UUIDs of validation.kpis
+    incidents_reviewed JSONB DEFAULT '[]'::jsonb, -- UUIDs of incidents
+    exercises_reviewed JSONB DEFAULT '[]'::jsonb, -- UUIDs of exercises
+    audits_reviewed JSONB DEFAULT '[]'::jsonb, -- UUIDs of audit_plans
+
+    -- Outcomes
+    overall_bcms_effectiveness VARCHAR(50), -- highly_effective, effective, needs_improvement, inadequate
+    strategic_direction_confirmed BOOLEAN,
+    policy_review_required BOOLEAN,
+    objectives_review_required BOOLEAN,
+
+    -- Follow-up
+    next_review_date DATE,
+    follow_up_required BOOLEAN DEFAULT FALSE,
+
+    -- Compliance
+    is_regulatory_requirement BOOLEAN DEFAULT TRUE, -- ISO 22301 requires management reviews
+    frequency_months INT DEFAULT 12, -- At least annually
+
+    -- Metadata
+    tags JSONB DEFAULT '[]'::jsonb,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+
+    -- Audit
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    created_by UUID REFERENCES auth.users(id),
+    updated_by UUID REFERENCES auth.users(id),
+
+    UNIQUE(organization_id, review_code)
+);
+
+CREATE INDEX idx_mgmt_reviews_org ON validation.management_reviews(organization_id);
+CREATE INDEX idx_mgmt_reviews_code ON validation.management_reviews(review_code);
+CREATE INDEX idx_mgmt_reviews_status ON validation.management_reviews(status);
+CREATE INDEX idx_mgmt_reviews_date ON validation.management_reviews(scheduled_date DESC);
+
+CREATE TRIGGER update_mgmt_reviews_updated_at BEFORE UPDATE ON validation.management_reviews
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+ALTER TABLE validation.management_reviews ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Management reviews visible to org members" ON validation.management_reviews FOR SELECT
+    USING (public.is_org_member(organization_id));
+
+CREATE POLICY "Management reviews manageable by org admins" ON validation.management_reviews FOR ALL
+    USING (public.is_org_admin(organization_id));
+
+COMMENT ON TABLE validation.management_reviews IS 'Management reviews per ISO 22301:2019 Clause 9.3';
+
+-- Success message
+DO $$
+BEGIN
+    RAISE NOTICE '✅ Migration 010 completed: Validation schema created (11 tables)';
+    RAISE NOTICE '   - exercises: BCM exercises and drills (ISO 22301 Clause 8.5)';
+    RAISE NOTICE '   - exercise_scenarios: Exercise scenarios and templates';
+    RAISE NOTICE '   - exercise_observations: Observations during exercises';
+    RAISE NOTICE '   - exercise_actions: Actions from exercises';
+    RAISE NOTICE '   - kpis: Key Performance Indicators (ISO 22301 Clause 9.1)';
+    RAISE NOTICE '   - kpi_measurements: Historical KPI data';
+    RAISE NOTICE '   - kpi_dashboards: KPI visualization dashboards';
+    RAISE NOTICE '   - audit_plans: Internal audit plans (ISO 22301 Clause 9.2)';
+    RAISE NOTICE '   - audit_findings: Audit findings and non-conformances';
+    RAISE NOTICE '   - capa: Corrective and Preventive Actions (ISO 22301 Clause 10)';
+    RAISE NOTICE '   - management_reviews: Management reviews (ISO 22301 Clause 9.3)';
+END
+$$;

@@ -1,0 +1,1659 @@
+{
+  "module_name": "community-service",
+  "path": "platform-services/community-service",
+  "structure": {
+    ".": [
+      "PHASE_4_COMPLETE.md",
+      ".DS_Store",
+      "INTEGRATION_PLAN.md",
+      "PHASE_1_COMPLETE.md",
+      "PHASE_2_COMPLETE.md",
+      "docker-compose.community.yml",
+      "README.md",
+      "FRONTEND_SPECIFICATION_SUMMARY.md",
+      "FRONTEND_TECHNICAL_SPECIFICATION.json",
+      "PHASE_5_COMPLETE.md",
+      "PHASE_3_COMPLETE.md"
+    ],
+    "migrations": [
+      "README.md",
+      "apply_migration.py",
+      "PHASE_4_MIGRATION_GUIDE.md",
+      "008_junction_tables.sql",
+      "001_community_schemas.sql",
+      "007_integration_columns.sql"
+    ],
+    "portal": [
+      ".DS_Store",
+      "PLATFORM_INTEGRATION.md",
+      "requirements.txt",
+      "Dockerfile",
+      "README.md",
+      "DEPLOYMENT.md",
+      "docker-compose.yml",
+      ".env.example",
+      "main.py"
+    ],
+    "portal/database": [
+      "organization_model.py",
+      ".DS_Store",
+      "models.py",
+      "__init__.py",
+      "simulation_model.py",
+      "connection.py"
+    ],
+    "portal/database/migrations": [
+      "003_add_forum.sql",
+      "002_add_scenarios.sql",
+      "005_add_organizations.sql",
+      "001_initial_portal_schema.sql",
+      "004_add_simulation_schema.sql"
+    ],
+    "portal/schemas": [
+      "scenarios.py",
+      "__init__.py",
+      "forum.py",
+      "knowledge.py"
+    ],
+    "portal/integrations": [
+      "eventbus_client.py",
+      "__init__.py",
+      "marketplace_client.py",
+      "learning_client.py",
+      "clients_client.py",
+      "ai_client.py",
+      "validation_client.py",
+      "governance_client.py"
+    ],
+    "portal/engines": [
+      "__init__.py",
+      "monte_carlo_engine.py",
+      "base_engine.py",
+      "scenario_engine.py",
+      "what_if_engine.py"
+    ],
+    "portal/scripts": [
+      "apply_migrations.sh"
+    ],
+    "portal/api": [
+      "scenarios.py",
+      "scenario_library_router.py",
+      "execution_router.py",
+      "__init__.py",
+      "forum.py",
+      "organizations.py",
+      "knowledge.py",
+      "dependencies.py",
+      "simulation_router.py"
+    ],
+    "portal/events": [
+      "subscribers.py"
+    ],
+    "portal/services": [
+      "reputation_service.py",
+      "moderation_service.py",
+      "__init__.py",
+      "knowledge_service.py",
+      "scenario_service.py",
+      "forum_service.py",
+      "search_service.py"
+    ],
+    "marketplace": [
+      "CONTEXT_MEMO.md",
+      "requirements.txt",
+      "Dockerfile",
+      "STATUS.md",
+      "README.md",
+      "IMPLEMENTATION_SPEC.md",
+      "ARCHITECTURE_DECISION.md",
+      "main.py",
+      "INTEGRATION_SUMMARY.md"
+    ],
+    "marketplace/database": [
+      "models.py",
+      "__init__.py",
+      "connection.py"
+    ],
+    "marketplace/database/migrations": [
+      "001_marketplace_schema.sql.backup",
+      "001_marketplace_schema.sql"
+    ],
+    "marketplace/schemas": [
+      "__init__.py",
+      "review.py",
+      "proposal.py",
+      "specialist.py",
+      "project.py"
+    ],
+    "marketplace/integrations": [
+      "eventbus_client.py",
+      "portal_client.py",
+      "__init__.py",
+      "learning_client.py",
+      "clients_client.py",
+      "governance_client.py"
+    ],
+    "marketplace/api": [
+      "reviews.py",
+      "specialists.py",
+      "__init__.py",
+      "projects.py",
+      "proposals.py",
+      "dependencies.py"
+    ],
+    "marketplace/events": [
+      "subscribers.py"
+    ],
+    "marketplace/services": [
+      "proposal_service.py",
+      "review_service.py",
+      "project_service.py",
+      "specialist_service.py",
+      "__init__.py"
+    ],
+    "shared": [
+      ".DS_Store"
+    ],
+    "shared/database": [
+      "__init__.py",
+      "connection.py"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "ai_client",
+    "api",
+    "api.dependencies",
+    "api.execution_router",
+    "api.forum",
+    "api.knowledge",
+    "api.organizations",
+    "api.scenarios",
+    "api.simulation_router",
+    "asyncio",
+    "asyncpg",
+    "base_engine",
+    "clients_client",
+    "connection",
+    "contextlib",
+    "database.connection",
+    "database.models",
+    "database.organization_model",
+    "database.simulation_model",
+    "database/postgresql",
+    "datetime",
+    "decimal",
+    "dotenv",
+    "engines.monte_carlo_engine",
+    "engines.scenario_engine",
+    "engines.what_if_engine",
+    "enum",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "forum",
+    "forum_service",
+    "httpx",
+    "integrations.ai_client",
+    "integrations.governance_client",
+    "integrations.learning_client",
+    "integrations.portal_client",
+    "integrations.validation_client",
+    "knowledge",
+    "knowledge_service",
+    "logging",
+    "markdown",
+    "models",
+    "moderation_service",
+    "numpy",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "re",
+    "reputation_service",
+    "runtime/eventbus",
+    "scenario_service",
+    "scenarios",
+    "schemas.forum",
+    "schemas.knowledge",
+    "schemas.project",
+    "schemas.proposal",
+    "schemas.review",
+    "schemas.scenarios",
+    "schemas.specialist",
+    "search_service",
+    "services.forum_service",
+    "services.knowledge_service",
+    "services.moderation_service",
+    "services.project_service",
+    "services.proposal_service",
+    "services.reputation_service",
+    "services.review_service",
+    "services.scenario_service",
+    "services.search_service",
+    "services.specialist_service",
+    "shared/auth",
+    "shared/database",
+    "slugify",
+    "ssl",
+    "sys",
+    "time",
+    "traceback",
+    "typing",
+    "uuid",
+    "uvicorn",
+    "validation_client"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{scenario_id}",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{scenario_id}/deploy",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{scenario_id}/reviews",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{scenario_id}/reviews",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/featured/popular",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/{scenario_id}",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/threat-types",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/complexity-levels",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/stats",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations/{sim_id}/run",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}/status",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}/results",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations/{sim_id}/stop",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/topics",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/topics",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/topics/{topic_id}",
+      "file": "forum.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/topics/{topic_id}",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/topics/{topic_id}/posts",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/topics/{topic_id}/posts",
+      "file": "forum.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/posts/{post_id}",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/topics/{topic_id}/vote",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/posts/{post_id}/vote",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/posts/{post_id}/mark-solution",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/topics/{topic_id}/flag",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/posts/{post_id}/flag",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/moderation/queue",
+      "file": "forum.py"
+    },
+    {
+      "method": "POST",
+      "path": "/moderation/flags/{flag_id}/resolve",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reputation/{user_id}",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/profile",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/badges",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/badges",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "file": "forum.py"
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "file": "organizations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{org_id}",
+      "file": "organizations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/articles/{article_id}",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/vote",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}/vote",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/bookmark",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}/bookmark",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "GET",
+      "path": "/bookmarks",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ai-generate",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/verify",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/discuss",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}/discussion",
+      "file": "knowledge.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/simulations/{sim_id}",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/engines",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}",
+      "file": "reviews.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/respond",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/specialists/{specialist_id}/reviews",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/specialists/{specialist_id}/stats",
+      "file": "reviews.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/hide",
+      "file": "reviews.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/verify",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/my/written",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "file": "specialists.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{specialist_id}",
+      "file": "specialists.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{specialist_id}",
+      "file": "specialists.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{specialist_id}",
+      "file": "specialists.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{specialist_id}/verify",
+      "file": "specialists.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{specialist_id}/certifications",
+      "file": "specialists.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{specialist_id}/certifications/{cert_id}",
+      "file": "specialists.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{specialist_id}/portfolio",
+      "file": "specialists.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{specialist_id}/portfolio/{portfolio_id}",
+      "file": "specialists.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{specialist_id}/knowledge-articles",
+      "file": "specialists.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{specialist_id}/community-reputation",
+      "file": "specialists.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{specialist_id}/verify-via-governance",
+      "file": "specialists.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{specialist_id}/sync-competencies",
+      "file": "specialists.py"
+    },
+    {
+      "method": "GET",
+      "path": "/my",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{project_id}",
+      "file": "projects.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{project_id}",
+      "file": "projects.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{project_id}/publish",
+      "file": "projects.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{project_id}/complete",
+      "file": "projects.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{project_id}/cancel",
+      "file": "projects.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{project_id}",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{project_id}/proposals",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{project_id}/scenarios",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/overview",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{project_id}/matching-specialists",
+      "file": "projects.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{project_id}/set-competency-requirements",
+      "file": "projects.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{proposal_id}",
+      "file": "proposals.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{proposal_id}",
+      "file": "proposals.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{proposal_id}",
+      "file": "proposals.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{proposal_id}/accept",
+      "file": "proposals.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{proposal_id}/reject",
+      "file": "proposals.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{proposal_id}/withdraw",
+      "file": "proposals.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/my",
+      "file": "proposals.py"
+    },
+    {
+      "method": "GET",
+      "path": "/endpoint",
+      "file": "connection.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Organization",
+      "file": "organization_model.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganizationUser",
+      "file": "organization_model.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganizationAuditLog",
+      "file": "organization_model.py",
+      "methods": 1
+    },
+    {
+      "name": "KnowledgeArticle",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ArticleBookmark",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ArticleVote",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "Scenario",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioReview",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TopicStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ModerationAction",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ForumCategory",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ForumTopic",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ForumPost",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TopicVote",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "PostVote",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ModerationFlag",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "UserReputation",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "Badge",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "UserBadge",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ReputationEvent",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ArticleCompetency",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioPolicy",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "Simulation",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "Scenario",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationExecution",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationResult",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioResponse",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioListItem",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioListResponse",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioDeployRequest",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioDeployResponse",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioReviewCreate",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioReviewResponse",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "CategoryResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "TopicCreate",
+      "file": "forum.py",
+      "methods": 1
+    },
+    {
+      "name": "TopicUpdate",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "TopicResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "TopicListItem",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "TopicListResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "PostCreate",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "PostUpdate",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "PostResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "VoteRequest",
+      "file": "forum.py",
+      "methods": 1
+    },
+    {
+      "name": "FlagRequest",
+      "file": "forum.py",
+      "methods": 1
+    },
+    {
+      "name": "FlagResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "ResolveFlagRequest",
+      "file": "forum.py",
+      "methods": 1
+    },
+    {
+      "name": "ReputationResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardEntry",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "BadgeResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "UserBadgeResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationEventResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "ForumStatsResponse",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "forum.py",
+      "methods": 0
+    },
+    {
+      "name": "ArticleCreate",
+      "file": "knowledge.py",
+      "methods": 1
+    },
+    {
+      "name": "ArticleUpdate",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "ArticleResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "ArticleListItem",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "ArticleListResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "ArticleVoteRequest",
+      "file": "knowledge.py",
+      "methods": 1
+    },
+    {
+      "name": "BookmarkResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "AIGenerateRequest",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "AIGenerateResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchRequest",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchResultItem",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "VerifyArticleRequest",
+      "file": "knowledge.py",
+      "methods": 1
+    },
+    {
+      "name": "VerifyArticleResponse",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "knowledge.py",
+      "methods": 0
+    },
+    {
+      "name": "EventBusClient",
+      "file": "eventbus_client.py",
+      "methods": 1
+    },
+    {
+      "name": "MarketplaceClient",
+      "file": "marketplace_client.py",
+      "methods": 1
+    },
+    {
+      "name": "LearningClient",
+      "file": "learning_client.py",
+      "methods": 1
+    },
+    {
+      "name": "ClientsClient",
+      "file": "clients_client.py",
+      "methods": 1
+    },
+    {
+      "name": "AIClient",
+      "file": "ai_client.py",
+      "methods": 1
+    },
+    {
+      "name": "ValidationClient",
+      "file": "validation_client.py",
+      "methods": 1
+    },
+    {
+      "name": "GovernanceClient",
+      "file": "governance_client.py",
+      "methods": 1
+    },
+    {
+      "name": "MonteCarloEngine",
+      "file": "monte_carlo_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "BaseSimulationEngine",
+      "file": "base_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "ScenarioEngine",
+      "file": "scenario_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "WhatIfEngine",
+      "file": "what_if_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioSummary",
+      "file": "scenario_library_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioDetail",
+      "file": "scenario_library_router.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationResponse",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationDetailResponse",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationCreate",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResponse",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationService",
+      "file": "reputation_service.py",
+      "methods": 1
+    },
+    {
+      "name": "ModerationService",
+      "file": "moderation_service.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeService",
+      "file": "knowledge_service.py",
+      "methods": 3
+    },
+    {
+      "name": "ScenarioService",
+      "file": "scenario_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ForumService",
+      "file": "forum_service.py",
+      "methods": 1
+    },
+    {
+      "name": "SearchService",
+      "file": "search_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "UrgencyLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BudgetType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkLocation",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AvailabilityStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Specialist",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Certification",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PortfolioItem",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Project",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Proposal",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Review",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistCompetency",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ProjectCompetencyRequirement",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "SpecialistCertificationNormalized",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ReviewBase",
+      "file": "review.py",
+      "methods": 1
+    },
+    {
+      "name": "ReviewCreate",
+      "file": "review.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewResponse",
+      "file": "review.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewWithProject",
+      "file": "review.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistResponseCreate",
+      "file": "review.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "review.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalBase",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalCreate",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalUpdate",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalResponse",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "ProposalWithSpecialist",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "proposal.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistBase",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistCreate",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistUpdate",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistResponse",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistListItem",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationBase",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationCreate",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationResponse",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "PortfolioItemBase",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "PortfolioItemCreate",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "PortfolioItemResponse",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistSearchFilters",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "specialist.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectBase",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectCreate",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectUpdate",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectResponse",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectListItem",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectSearchFilters",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "project.py",
+      "methods": 0
+    },
+    {
+      "name": "EventBusClient",
+      "file": "eventbus_client.py",
+      "methods": 1
+    },
+    {
+      "name": "PortalClient",
+      "file": "portal_client.py",
+      "methods": 1
+    },
+    {
+      "name": "LearningClient",
+      "file": "learning_client.py",
+      "methods": 1
+    },
+    {
+      "name": "ClientsClient",
+      "file": "clients_client.py",
+      "methods": 1
+    },
+    {
+      "name": "GovernanceClient",
+      "file": "governance_client.py",
+      "methods": 1
+    },
+    {
+      "name": "ProposalService",
+      "file": "proposal_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewService",
+      "file": "review_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectService",
+      "file": "project_service.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialistService",
+      "file": "specialist_service.py",
+      "methods": 2
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_learning_client",
+      "file": "learning_client.py",
+      "params": 0
+    },
+    {
+      "name": "get_governance_client",
+      "file": "governance_client.py",
+      "params": 0
+    },
+    {
+      "name": "get_validation_client",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "get_ai_client",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "list_engines",
+      "file": "simulation_router.py",
+      "params": 0
+    },
+    {
+      "name": "get_learning_client",
+      "file": "learning_client.py",
+      "params": 0
+    },
+    {
+      "name": "get_governance_client",
+      "file": "governance_client.py",
+      "params": 0
+    },
+    {
+      "name": "get_eventbus_client",
+      "file": "dependencies.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 18334,
+    "python_files": 70,
+    "classes": 170,
+    "functions": 8,
+    "endpoints": 100,
+    "dependencies": 84
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 2969,
+    "lines": 110,
+    "content": "# Community Service\n\n\u041f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u0435\u043d\u043d\u044b\u0439 \u0441\u0435\u0440\u0432\u0438\u0441 \u0434\u043b\u044f \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0441\u043e\u043e\u0431\u0449\u0435\u0441\u0442\u0432\u043e\u043c BCM-\u0441\u043f\u0435\u0446\u0438\u0430\u043b\u0438\u0441\u0442\u043e\u0432.\n\n## \u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430\n\n```\ncommunity-service/\n\u251c\u2500\u2500 portal/                 # Community Portal (\u0444\u043e\u0440\u0443\u043c, \u0431\u0430\u0437\u0430 \u0437\u043d\u0430\u043d\u0438\u0439, \u043d\u043e\u0432\u043e\u0441\u0442\u0438)\n\u2502   \u251c\u2500\u2500 api/               # REST API endpoints\n\u2502   \u251c\u2500\u2500 services/          # Business logic\n\u2502   \u251c\u2500\u2500 database/          # Models and migrations\n\u2502   \u251c\u2500\u2500 integrations/      # EventBus, Marketplace clients\n\u2502   \u2514\u2500\u2500 main.py           # FastAPI application\n\u2502\n\u251c\u2500\u2500 marketplace/           # Professional Marketplace (Uber \u0434\u043b\u044f BCM \u043a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u043d\u0442\u043e\u0432)\n\u2502   \u251c\u2500\u2500 api/              # REST API endpoints\n\u2502   \u251c\u2500\u2500 services/         # Business logic\n\u2502   \u251c\u2500\u2500 database/         # Models and migrations\n\u2502   \u251c\u2500\u2500 integrations/     # EventBus, Portal clients\n\u2502   \u2514\u2500\u2500 main.py          # FastAPI application\n\u2502\n\u251c\u2500\u2500 shared/               # Shared code\n\u2502   \u251c\u2500\u2500 database/         # Supabase connection manager\n\u2502   \u251c\u2500\u2500 auth/            # Authentication utilities\n\u2502   \u2514\u2500\u2500 events/          # EventBus integration\n\u2502\n\u2514\u2500\u2500 migrations/        "
+  }
+}

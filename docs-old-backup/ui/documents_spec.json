@@ -1,0 +1,416 @@
+{
+  "service": "Documents",
+  "resources": {
+    "api": {
+      "screens": [
+        {
+          "name": "Api List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/api/compliance/check"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Api"
+            }
+          ]
+        }
+      ]
+    },
+    "health": {
+      "screens": [
+        {
+          "name": "Health List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/health"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Health"
+            }
+          ]
+        }
+      ]
+    },
+    "default": {
+      "screens": [
+        {
+          "name": "Default List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Default"
+            }
+          ]
+        }
+      ]
+    },
+    "ai-advice": {
+      "screens": [
+        {
+          "name": "Ai-Advice Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/{item_id}/ai-advice"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "benchmarks": {
+      "screens": [
+        {
+          "name": "Benchmarks List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/benchmarks"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Benchmarks"
+            }
+          ]
+        }
+      ]
+    },
+    "documents": {
+      "screens": [
+        {
+          "name": "Documents List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/documents"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Documents"
+            }
+          ]
+        },
+        {
+          "name": "Create Documents",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/documents/compare",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        },
+        {
+          "name": "Documents Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/documents/{document_id}/access-log"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        },
+        {
+          "name": "Upload Document File",
+          "type": "action",
+          "endpoint": "/documents/{document_id}/upload",
+          "method": "POST"
+        },
+        {
+          "name": "Update Document",
+          "type": "action",
+          "endpoint": "/documents/{document_id}",
+          "method": "PATCH"
+        },
+        {
+          "name": "Execute Workflow Action Endpoint",
+          "type": "action",
+          "endpoint": "/documents/{document_id}/workflow/{action}",
+          "method": "POST"
+        },
+        {
+          "name": "Create New Version",
+          "type": "action",
+          "endpoint": "/documents/{document_id}/version",
+          "method": "POST"
+        },
+        {
+          "name": "Share Document Endpoint",
+          "type": "action",
+          "endpoint": "/documents/{document_id}/share",
+          "method": "POST"
+        },
+        {
+          "name": "Request Approval Endpoint",
+          "type": "action",
+          "endpoint": "/documents/{document_id}/approvals",
+          "method": "POST"
+        }
+      ]
+    },
+    "approvals": {
+      "screens": [
+        {
+          "name": "Respond To Approval Endpoint",
+          "type": "action",
+          "endpoint": "/approvals/{approval_id}/respond",
+          "method": "POST"
+        }
+      ]
+    },
+    "retention-policies": {
+      "screens": [
+        {
+          "name": "Retention-Policies List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/retention-policies"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Retention-Policies"
+            }
+          ]
+        },
+        {
+          "name": "Create Retention-Policies",
+          "type": "form",
+          "components": [
+            {
+              "type": "form",
+              "endpoint": "/retention-policies",
+              "method": "POST"
+            },
+            {
+              "type": "button",
+              "action": "submit",
+              "label": "Create"
+            },
+            {
+              "type": "button",
+              "action": "cancel",
+              "label": "Cancel"
+            }
+          ]
+        }
+      ]
+    },
+    "plans": {
+      "screens": [
+        {
+          "name": "Plans Details",
+          "type": "detail",
+          "components": [
+            {
+              "type": "detail_view",
+              "data_source": "/plans/{plan_id}/documents"
+            },
+            {
+              "type": "button",
+              "action": "edit",
+              "label": "Edit"
+            },
+            {
+              "type": "button",
+              "action": "delete",
+              "label": "Delete",
+              "confirm": true
+            }
+          ]
+        }
+      ]
+    },
+    "iso-coverage": {
+      "screens": [
+        {
+          "name": "Iso-Coverage List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/iso-coverage"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Iso-Coverage"
+            }
+          ]
+        }
+      ]
+    },
+    "search": {
+      "screens": [
+        {
+          "name": "Search List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/search"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Search"
+            }
+          ]
+        }
+      ]
+    },
+    "analytics": {
+      "screens": [
+        {
+          "name": "Analytics List",
+          "type": "list",
+          "components": [
+            {
+              "type": "table",
+              "data_source": "/analytics/compliance"
+            },
+            {
+              "type": "search_bar"
+            },
+            {
+              "type": "filters"
+            },
+            {
+              "type": "pagination"
+            },
+            {
+              "type": "button",
+              "action": "create",
+              "label": "New Analytics"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,532 @@
+{
+  "dashboard": {
+    "title": "AI Orchestrator Performance",
+    "tags": ["orchestrator", "performance", "ai"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+        "type": "row",
+        "title": "📊 Overview - Golden Metrics"
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 1},
+        "type": "stat",
+        "title": "Throughput (tasks/min)",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_tasks_total[5m]) * 60",
+            "legendFormat": "Tasks/min"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "orientation": "auto",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "red"},
+                {"value": 10, "color": "yellow"},
+                {"value": 50, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 6, "w": 6, "x": 6, "y": 1},
+        "type": "stat",
+        "title": "P95 Latency",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(orchestrator_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P95"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 2, "color": "yellow"},
+                {"value": 5, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 6, "w": 6, "x": 12, "y": 1},
+        "type": "stat",
+        "title": "Success Rate",
+        "targets": [
+          {
+            "expr": "avg(orchestrator_success_rate_percent)",
+            "legendFormat": "Success %"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "red"},
+                {"value": 90, "color": "yellow"},
+                {"value": 95, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 6, "w": 6, "x": 18, "y": 1},
+        "type": "stat",
+        "title": "Active Tasks",
+        "targets": [
+          {
+            "expr": "sum(orchestrator_active_tasks)",
+            "legendFormat": "Active"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 50, "color": "yellow"},
+                {"value": 100, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 10,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 7},
+        "type": "row",
+        "title": "📈 Response Time Trends"
+      },
+      {
+        "id": 11,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Response Time (P50, P95, P99)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(orchestrator_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P50"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(orchestrator_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(orchestrator_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P99"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Latency"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2,
+        "legend": {"show": true, "alignAsTable": true, "values": true, "current": true, "avg": true, "max": true}
+      },
+      {
+        "id": 12,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "graph",
+        "title": "Task Duration by Type",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_task_duration_seconds_sum[5m]) / rate(orchestrator_task_duration_seconds_count[5m])",
+            "legendFormat": "{{task_type}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2,
+        "legend": {"show": true, "alignAsTable": true, "values": true, "current": true}
+      },
+      {
+        "id": 20,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 16},
+        "type": "row",
+        "title": "🤖 Agent Utilization"
+      },
+      {
+        "id": 21,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 17},
+        "type": "graph",
+        "title": "Agent Utilization %",
+        "targets": [
+          {
+            "expr": "orchestrator_agent_utilization_percent",
+            "legendFormat": "{{agent_name}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Utilization", "min": 0, "max": 100},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2,
+        "legend": {"show": true, "alignAsTable": true, "values": true, "current": true, "avg": true},
+        "thresholds": [
+          {"value": 70, "colorMode": "custom", "fill": true, "line": false, "op": "gt", "fillColor": "rgba(255, 170, 0, 0.2)"},
+          {"value": 90, "colorMode": "custom", "fill": true, "line": false, "op": "gt", "fillColor": "rgba(255, 0, 0, 0.2)"}
+        ]
+      },
+      {
+        "id": 22,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 17},
+        "type": "graph",
+        "title": "Tasks by Agent",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_tasks_total[5m])",
+            "legendFormat": "{{agent}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Tasks/sec"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "bars": false,
+        "stack": true,
+        "fill": 3,
+        "legend": {"show": true, "alignAsTable": true, "values": true, "current": true}
+      },
+      {
+        "id": 30,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 25},
+        "type": "row",
+        "title": "💻 Resource Usage"
+      },
+      {
+        "id": 31,
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 26},
+        "type": "graph",
+        "title": "CPU Usage",
+        "targets": [
+          {
+            "expr": "orchestrator_cpu_usage_percent",
+            "legendFormat": "CPU %"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "CPU", "min": 0, "max": 100},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2,
+        "thresholds": [
+          {"value": 70, "colorMode": "custom", "fill": true, "line": true, "op": "gt", "fillColor": "rgba(255, 170, 0, 0.2)", "lineColor": "rgba(255, 170, 0, 1)"},
+          {"value": 90, "colorMode": "custom", "fill": true, "line": true, "op": "gt", "fillColor": "rgba(255, 0, 0, 0.2)", "lineColor": "rgba(255, 0, 0, 1)"}
+        ]
+      },
+      {
+        "id": 32,
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 26},
+        "type": "graph",
+        "title": "Memory Usage",
+        "targets": [
+          {
+            "expr": "orchestrator_memory_usage_bytes / 1024 / 1024",
+            "legendFormat": "Memory MB"
+          }
+        ],
+        "yaxes": [
+          {"format": "mbytes", "label": "Memory"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2
+      },
+      {
+        "id": 33,
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 26},
+        "type": "graph",
+        "title": "Queue Length",
+        "targets": [
+          {
+            "expr": "orchestrator_queue_length",
+            "legendFormat": "{{priority}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Queue Size"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2,
+        "thresholds": [
+          {"value": 50, "colorMode": "custom", "fill": true, "line": true, "op": "gt", "fillColor": "rgba(255, 170, 0, 0.2)", "lineColor": "rgba(255, 170, 0, 1)"},
+          {"value": 100, "colorMode": "custom", "fill": true, "line": true, "op": "gt", "fillColor": "rgba(255, 0, 0, 0.2)", "lineColor": "rgba(255, 0, 0, 1)"}
+        ]
+      },
+      {
+        "id": 40,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 32},
+        "type": "row",
+        "title": "🧠 LLM Performance"
+      },
+      {
+        "id": 41,
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 33},
+        "type": "graph",
+        "title": "LLM Calls Rate",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_llm_calls_total[5m])",
+            "legendFormat": "{{model}} ({{status}})"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Calls/sec"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "bars": false,
+        "stack": true,
+        "fill": 3
+      },
+      {
+        "id": 42,
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 33},
+        "type": "graph",
+        "title": "LLM Latency",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_llm_latency_seconds_sum[5m]) / rate(orchestrator_llm_latency_seconds_count[5m])",
+            "legendFormat": "{{model}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Latency"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 1,
+        "linewidth": 2
+      },
+      {
+        "id": 43,
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 33},
+        "type": "graph",
+        "title": "Token Usage",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_tokens_used_total[5m])",
+            "legendFormat": "{{model}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Tokens/sec"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2
+      },
+      {
+        "id": 50,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 39},
+        "type": "row",
+        "title": "💰 Cost Tracking"
+      },
+      {
+        "id": 51,
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 40},
+        "type": "graph",
+        "title": "Total Cost Over Time",
+        "targets": [
+          {
+            "expr": "orchestrator_cost_dollars_total",
+            "legendFormat": "{{resource_type}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "currencyUSD", "label": "Cost"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "fill": 2,
+        "linewidth": 2,
+        "stack": true
+      },
+      {
+        "id": 52,
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 40},
+        "type": "stat",
+        "title": "Cost per Task",
+        "targets": [
+          {
+            "expr": "avg(orchestrator_cost_per_task_dollars)",
+            "legendFormat": "Avg Cost"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "decimals": 4,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 0.05, "color": "yellow"},
+                {"value": 0.10, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 60,
+        "gridPos": {"h": 1, "w": 24, "x": 0, "y": 46},
+        "type": "row",
+        "title": "⚠️ Errors & Alerts"
+      },
+      {
+        "id": 61,
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 47},
+        "type": "graph",
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_errors_total[5m])",
+            "legendFormat": "{{error_type}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Errors/sec"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "bars": false,
+        "stack": true,
+        "fill": 3,
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {"params": [5], "type": "gt"},
+              "operator": {"type": "and"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "High Error Rate Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "id": 62,
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 47},
+        "type": "graph",
+        "title": "SLA Violations",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_sla_violations_total[5m])",
+            "legendFormat": "{{sla_type}} ({{severity}})"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops", "label": "Violations/sec"},
+          {"format": "short"}
+        ],
+        "lines": true,
+        "bars": true,
+        "fill": 2
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "datasource",
+          "type": "datasource",
+          "query": "prometheus",
+          "current": {"text": "Prometheus", "value": "Prometheus"}
+        }
+      ]
+    },
+    "time": {"from": "now-1h", "to": "now"},
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+    }
+  }
+}

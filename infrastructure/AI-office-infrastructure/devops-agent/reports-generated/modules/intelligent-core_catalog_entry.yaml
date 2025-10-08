@@ -1,0 +1,58 @@
+
+  intelligent_core:
+    type: service
+    location: intelligent-core
+    port: 9000
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - database/vector-db
+        - runtime/eventbus
+      external:
+        - external/anthropic
+        - external/temporal-cloud
+      internal:
+        - ai_context_builder
+        - ai_foundation
+        - ai_foundation.context
+        - ai_foundation.llm
+        - ai_foundation.rag
+        - ai_foundation.rag.metrics
+        - ai_foundation/core
+        - ai_foundation/expertise_center
+        - ai_foundation/integrations
+        - ai_foundation/intelligent_core
+        - ai_foundation/workflow_intelligence
+        - ai_foundation/workflow_intelligence_adapter
+        - ai_models
+        - ai_office_connector
+        - ai_orchestrator
+        - ai_services/community_intelligence
+        - ai_services/intelligent_core
+        - ai_services/living_docs
+        - ai_services/ml
+        - ai_services/predictive
+        - ai_services/predictive_models
+        - ai_services/predictive_timeline
+        - ai_services/services
+        - shared/auth
+        - shared/base
+        - shared/cache
+        - shared/database
+        - shared/event_bus
+        - shared/platform_client
+    endpoints:
+      - GET /metrics
+      - GET /health
+      - POST /rag/search
+      - POST /analyze/impact
+      - GET /
+    metrics:
+      loc: 118590
+      files: 476
+      classes: 697
+      functions: 214
+    status: discovered

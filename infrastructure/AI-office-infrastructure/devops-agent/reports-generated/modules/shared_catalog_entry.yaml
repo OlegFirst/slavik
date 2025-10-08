@@ -1,0 +1,27 @@
+
+  shared:
+    type: service
+    location: platform-services/shared
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+
+      internal:
+        - shared/healthcheck
+        - shared/logging_config
+    endpoints:
+      - GET /health
+      - GET /health/simple
+      - GET /health/database
+      - GET /api/example
+    metrics:
+      loc: 513
+      files: 4
+      classes: 0
+      functions: 2
+    status: discovered

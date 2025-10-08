@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Incident Categories with AI Configuration -->
+        <record id="category_cyber_security" model="bcm.incident.category">
+            <field name="name">Cyber Security Incident</field>
+            <field name="code">CYBER</field>
+            <field name="severity_default">high</field>
+            <field name="rto_default">2.0</field>
+            <field name="auto_escalate_after">30</field>
+        </record>
+        
+        <record id="category_operational_disruption" model="bcm.incident.category">
+            <field name="name">Operational Disruption</field>
+            <field name="code">OPS</field>
+            <field name="severity_default">medium</field>
+            <field name="rto_default">4.0</field>
+            <field name="auto_escalate_after">120</field>
+        </record>
+        
+        <record id="category_natural_disaster" model="bcm.incident.category">
+            <field name="name">Natural Disaster</field>
+            <field name="code">NAT</field>
+            <field name="severity_default">critical</field>
+            <field name="rto_default">1.0</field>
+            <field name="auto_escalate_after">15</field>
+        </record>
+        
+        <record id="category_supply_chain" model="bcm.incident.category">
+            <field name="name">Supply Chain Disruption</field>
+            <field name="code">SUP</field>
+            <field name="severity_default">medium</field>
+            <field name="rto_default">8.0</field>
+            <field name="auto_escalate_after">240</field>
+        </record>
+        
+        <record id="category_health_safety" model="bcm.incident.category">
+            <field name="name">Health &amp; Safety Emergency</field>
+            <field name="code">HSE</field>
+            <field name="severity_default">critical</field>
+            <field name="rto_default">0.5</field>
+            <field name="auto_escalate_after">10</field>
+        </record>
+        
+        <record id="category_financial_impact" model="bcm.incident.category">
+            <field name="name">Financial Impact Event</field>
+            <field name="code">FIN</field>
+            <field name="severity_default">high</field>
+            <field name="rto_default">6.0</field>
+            <field name="auto_escalate_after">180</field>
+        </record>
+        
+        <record id="category_reputational_risk" model="bcm.incident.category">
+            <field name="name">Reputational Risk</field>
+            <field name="code">REP</field>
+            <field name="severity_default">high</field>
+            <field name="rto_default">3.0</field>
+            <field name="auto_escalate_after">60</field>
+        </record>
+        
+        <record id="category_regulatory_compliance" model="bcm.incident.category">
+            <field name="name">Regulatory Compliance Issue</field>
+            <field name="code">REG</field>
+            <field name="severity_default">medium</field>
+            <field name="rto_default">12.0</field>
+            <field name="auto_escalate_after">360</field>
+        </record>
+        
+        <record id="category_human_resources" model="bcm.incident.category">
+            <field name="name">Human Resources Crisis</field>
+            <field name="code">HR</field>
+            <field name="severity_default">medium</field>
+            <field name="rto_default">24.0</field>
+            <field name="auto_escalate_after">480</field>
+        </record>
+        
+        <record id="category_environmental" model="bcm.incident.category">
+            <field name="name">Environmental Incident</field>
+            <field name="code">ENV</field>
+            <field name="severity_default">high</field>
+            <field name="rto_default">4.0</field>
+            <field name="auto_escalate_after">90</field>
+        </record>
+        
+    </data>
+</odoo>

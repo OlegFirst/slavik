@@ -1,0 +1,206 @@
+{
+  "module_name": "security",
+  "path": "infrastructure/security",
+  "structure": {
+    ".": [
+      "SECURITY_ROADMAP.md",
+      "vault_helper.py",
+      ".DS_Store",
+      "README.md",
+      "DEPLOYMENT_GUIDE.md",
+      "INTEGRATION_ARCHITECTURE.md",
+      "SERVICE_SPEC.md",
+      "start_vault.sh"
+    ],
+    "secrets-manager": [
+      "requirements.txt",
+      "README.md",
+      "vault_manager.py"
+    ],
+    "auth": [
+      "auth_service.py",
+      ".env",
+      "start_auth_service.sh",
+      "test_auth_service.py",
+      "main.py"
+    ]
+  },
+  "dependencies": [
+    "asyncio",
+    "base64",
+    "bcrypt",
+    "contextlib",
+    "database.managers.db_manager",
+    "database.managers.session_store",
+    "database/postgresql",
+    "datetime",
+    "dotenv",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "httpx",
+    "hvac",
+    "hvac.exceptions",
+    "jwt",
+    "logging",
+    "os",
+    "pydantic",
+    "runtime/eventbus",
+    "sys",
+    "time",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/signup",
+      "file": "auth_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "file": "auth_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/logout",
+      "file": "auth_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "file": "auth_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "auth_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/signup",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/logout",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "VaultHelper",
+      "file": "vault_helper.py",
+      "methods": 7
+    },
+    {
+      "name": "VaultManager",
+      "file": "vault_manager.py",
+      "methods": 16
+    },
+    {
+      "name": "LoginRequest",
+      "file": "auth_service.py",
+      "methods": 0
+    },
+    {
+      "name": "SignupRequest",
+      "file": "auth_service.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "auth_service.py",
+      "methods": 0
+    },
+    {
+      "name": "UserInfo",
+      "file": "auth_service.py",
+      "methods": 0
+    },
+    {
+      "name": "LoginRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "SignupRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "main.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_vault",
+      "file": "vault_helper.py",
+      "params": 0
+    },
+    {
+      "name": "get_vault_manager",
+      "file": "vault_manager.py",
+      "params": 2
+    },
+    {
+      "name": "create_access_token",
+      "file": "auth_service.py",
+      "params": 2
+    },
+    {
+      "name": "verify_token",
+      "file": "auth_service.py",
+      "params": 1
+    },
+    {
+      "name": "hash_password",
+      "file": "auth_service.py",
+      "params": 1
+    },
+    {
+      "name": "verify_password",
+      "file": "auth_service.py",
+      "params": 2
+    },
+    {
+      "name": "create_access_token",
+      "file": "main.py",
+      "params": 1
+    },
+    {
+      "name": "verify_token",
+      "file": "main.py",
+      "params": 1
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 1847,
+    "python_files": 5,
+    "classes": 9,
+    "functions": 8,
+    "endpoints": 9,
+    "dependencies": 25
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 6015,
+    "lines": 302,
+    "content": "# Security Infrastructure\n\n**Status:** \u2705 Production Ready\n**Last Updated:** 2025-10-07\n**Coverage:** 100%\n\n---\n\n## Overview\n\nSecurity layer provides authentication, authorization, secrets management, and API gateway functionality for the AI-Platform-ISO.\n\n### Components Status\n\n| Component | Status | Port | Details |\n|-----------|--------|------|---------|\n| **HashiCorp Vault** | \u2705 Running | 8200 | Centralized secrets management |\n| **Auth Service** | \u2705 Running | 8001 | JWT + Supabase authentication |\n| **API Gateway** | \u26a0\ufe0f Planned | 8000 | Kong or custom FastAPI gateway |\n| **Rate Limiting** | \u2705 Ready | - | Redis-based rate limiter |\n| **Audit Logging** | \u2705 Ready | - | PostgreSQL audit trail |\n\n---\n\n## Quick Start\n\n### 1. Start Vault\n\n```bash\ncd /Users/MD/AI-Platform-ISO/infrastructure/security\n./start_vault.sh\n```\n\nVault will be available at `http://localhost:8200`\n\n### 2. Start Auth Service\n\n```bash\ncd /Users/MD/AI-Platform-ISO/infrastructure/security/auth\npython3 main.py\n```\n\nAuth "
+  }
+}

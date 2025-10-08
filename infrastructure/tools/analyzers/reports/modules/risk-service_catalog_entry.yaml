@@ -1,0 +1,27 @@
+
+  risk_service:
+    type: business-service
+    location: platform-services/risk-service
+    port: 8040
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+    endpoints:
+      - GET /api/compliance/check
+      - GET /health
+      - GET /
+      - GET /risks
+      - GET /public-risks
+    metrics:
+      loc: 6127
+      files: 23
+      classes: 48
+      functions: 23
+    status: discovered

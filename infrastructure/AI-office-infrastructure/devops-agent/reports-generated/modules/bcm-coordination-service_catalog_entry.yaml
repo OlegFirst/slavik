@@ -1,0 +1,27 @@
+
+  bcm_coordination_service:
+    type: business-service
+    location: platform-services/bcm-coordination-service
+    port: 8070
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /health
+      - GET /api/v1/analyzers
+      - GET /api/v1/stats
+      - POST /api/v1/analyze
+      - POST /api/v1/analyze/batch
+    metrics:
+      loc: 1023
+      files: 2
+      classes: 3
+      functions: 0
+    status: discovered

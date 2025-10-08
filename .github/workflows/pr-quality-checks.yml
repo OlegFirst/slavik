@@ -1,0 +1,175 @@
+name: PR Quality Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'intelligent-core/**'
+      - 'infrastructure/**'
+      - '**.py'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r infrastructure/tools/requirements.txt || true
+          pip install requests pyyaml bandit
+
+      - name: Create reports directory
+        run: |
+          mkdir -p infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}
+
+      # ===== CODE QUALITY CHECKS =====
+
+      - name: Module Scanner
+        id: module-scan
+        continue-on-error: true
+        run: |
+          echo "Scanning modules in changed files..."
+          python3 infrastructure/tools/analyzers/module_scanner.py > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/module_scan.txt || true
+
+      - name: Dependency Validation
+        id: dep-validation
+        continue-on-error: true
+        run: |
+          echo "Validating dependencies..."
+          python3 infrastructure/tools/analyzers/dependency_validator.py > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/dependency_validation.txt || true
+
+      - name: Code Complexity Analysis
+        id: complexity
+        continue-on-error: true
+        run: |
+          echo "Analyzing code complexity..."
+          python3 infrastructure/tools/analyzers/code_complexity_analyzer.py > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/complexity.txt || true
+
+      - name: Security Scan
+        id: security
+        continue-on-error: true
+        run: |
+          echo "Running security scan..."
+          python3 infrastructure/tools/analyzers/security_scanner.py > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/security.txt || true
+
+          # Also run bandit directly
+          bandit -r intelligent-core/ infrastructure/ -f json -o infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/bandit.json || true
+
+      - name: Test Coverage Analysis
+        id: coverage
+        continue-on-error: true
+        run: |
+          echo "Analyzing test coverage..."
+          python3 infrastructure/tools/analyzers/test_coverage_analyzer.py > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/coverage.txt || true
+
+      # ===== GENERATE PR COMMENT =====
+
+      - name: Generate quality report
+        id: report
+        run: |
+          cat > infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/quality_report.md <<'EOF'
+          ## 🔍 Code Quality Analysis
+
+          **PR:** #${{ github.event.pull_request.number }}
+          **Branch:** `${{ github.event.pull_request.head.ref }}`
+          **Analyzed:** $(date -u +"%Y-%m-%d %H:%M UTC")
+
+          ---
+
+          ### 📊 Analysis Results
+
+          #### Module Structure
+          $(cat infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/module_scan.txt 2>/dev/null | head -20 || echo "No issues detected")
+
+          #### Dependency Health
+          $(cat infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/dependency_validation.txt 2>/dev/null | head -20 || echo "All dependencies valid")
+
+          #### Code Complexity
+          $(cat infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/complexity.txt 2>/dev/null | head -20 || echo "Complexity within acceptable limits")
+
+          #### Security Scan
+          $(cat infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/security.txt 2>/dev/null | head -30 || echo "No security issues detected")
+
+          #### Test Coverage
+          $(cat infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/coverage.txt 2>/dev/null | head -10 || echo "Coverage analysis not available")
+
+          ---
+
+          ### ✅ Recommendations
+
+          - Review any security warnings above
+          - Ensure all new code has tests
+          - Keep complexity scores low (<10 per function)
+          - Add documentation for new modules
+
+          ---
+
+          <sub>🤖 Automated by AI Office Infrastructure - Analytics Specialist</sub>
+          EOF
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/quality_report.md';
+
+            if (fs.existsSync(reportPath)) {
+              const report = fs.readFileSync(reportPath, 'utf8');
+
+              // Find existing bot comment
+              const {data: comments} = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+
+              const botComment = comments.find(comment =>
+                comment.user.type === 'Bot' &&
+                comment.body.includes('Code Quality Analysis')
+              );
+
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: report
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: report
+                });
+              }
+            }
+
+      - name: Upload PR analysis artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-analysis-${{ github.event.pull_request.number }}
+          path: infrastructure/tools/reports/pr-${{ github.event.pull_request.number }}/
+          retention-days: 30

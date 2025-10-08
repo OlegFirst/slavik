@@ -1,0 +1,27 @@
+
+  living_docs:
+    type: service
+    location: platform-services/living-docs
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+        - external/anthropic
+      internal:
+        - shared/database
+    endpoints:
+      - GET /
+      - GET /health
+      - GET /stats
+      - GET /{page_id}
+      - POST /examples/generate
+    metrics:
+      loc: 3262
+      files: 12
+      classes: 24
+      functions: 0
+    status: discovered

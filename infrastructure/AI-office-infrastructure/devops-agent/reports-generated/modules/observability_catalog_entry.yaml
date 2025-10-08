@@ -1,0 +1,29 @@
+
+  observability:
+    type: service
+    location: infrastructure/observability
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - database/vector-db
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/intelligent_core
+    endpoints:
+      - GET /metrics
+      - GET /metrics\
+      - GET /health
+      - POST /email/send
+      - POST /sms/send
+    metrics:
+      loc: 1899
+      files: 6
+      classes: 7
+      functions: 16
+    status: discovered

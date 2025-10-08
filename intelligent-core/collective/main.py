@@ -38,12 +38,20 @@ Platform: "That information is anonymous to protect privacy.
 Port: 8032
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
+import os
+import sys
+from pathlib import Path
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from .config import settings
 from .api import collective_agents, stuck_detection
+
+# Add shared event_bus to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from shared.event_bus import init_event_bus, get_event_bus
 
 # Configure logging
 logging.basicConfig(
@@ -76,6 +84,16 @@ async def lifespan(app: FastAPI):
     logger.info(f"K-anonymity: {settings.K_ANONYMITY} (minimum organizations)")
     logger.info(f"Agent expiration: {settings.AGENT_EXPIRATION_DAYS} days")
 
+    # Initialize EventBus
+    try:
+        await init_event_bus(
+            service_name="collective",
+            redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
+        )
+        logger.info("✅ EventBus initialized")
+    except Exception as e:
+        logger.warning(f"⚠️ EventBus init failed: {e}")
+
     # Startup
     try:
         # Initialize background jobs
@@ -90,6 +108,9 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     logger.info("🛑 Collective Agent Networks Service shutting down...")
+    bus = get_event_bus()
+    if bus:
+        await bus.close()
 
 # ================================================
 # APPLICATION
@@ -207,6 +228,15 @@ async def health_check():
             "agent_expiration_days": settings.AGENT_EXPIRATION_DAYS
         }
     }
+
+@app.get("/metrics")
+async def metrics():
+    """
+    Prometheus metrics endpoint
+
+    Exposes collective agent metrics for monitoring.
+    """
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 @app.get("/")
 async def root():

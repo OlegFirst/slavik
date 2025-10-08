@@ -1,0 +1,354 @@
+version: '3.8'
+
+# BCM Platform - Complete Infrastructure Stack
+# Auto-generated: 2025-10-08
+# All infrastructure services in one docker-compose
+
+networks:
+  bcm-platform:
+    driver: bridge
+    name: bcm-platform-network
+  bcm-gateway:
+    driver: bridge
+    name: bcm-gateway-network
+  bcm-monitoring:
+    driver: bridge
+    name: bcm-monitoring-network
+
+volumes:
+  grafana-data:
+  prometheus-data:
+  loki-data:
+  alertmanager-data:
+
+services:
+  # ============================================================================
+  # GATEWAY LAYER (8000-8099)
+  # ============================================================================
+
+  api-gateway:
+    build:
+      context: ./gateway/api-gateway
+      dockerfile: Dockerfile
+    container_name: bcm-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - LOG_LEVEL=INFO
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - REDIS_URL=${REDIS_URL}
+    networks:
+      - bcm-gateway
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================================
+  # RUNTIME LAYER (8100-8199)
+  # ============================================================================
+
+  realtime-websocket:
+    build:
+      context: ./runtime/realtime-websocket
+      dockerfile: Dockerfile
+    container_name: bcm-realtime-websocket
+    ports:
+      - "8100:8100"
+    environment:
+      - PORT=8100
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - REDIS_URL=${REDIS_URL}
+    networks:
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # OBSERVABILITY LAYER (9000-9199 + специфичные порты)
+  # ============================================================================
+
+  # Prometheus - Metrics Collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: bcm-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./observability/config/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.retention.time=30d'
+    networks:
+      - bcm-monitoring
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana - Visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bcm-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./observability/config/grafana:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-clock-panel
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    networks:
+      - bcm-monitoring
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Loki - Log Aggregation
+  loki:
+    image: grafana/loki:latest
+    container_name: bcm-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./observability/config/loki:/etc/loki:ro
+      - loki-data:/loki
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - bcm-monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3100/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Promtail - Log Shipper
+  promtail:
+    image: grafana/promtail:latest
+    container_name: bcm-promtail
+    volumes:
+      - ./observability/config/promtail:/etc/promtail:ro
+      - ./observability/logs:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/promtail-config.yml
+    networks:
+      - bcm-monitoring
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  # AlertManager - Alert Management
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: bcm-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./observability/config/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    networks:
+      - bcm-monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Notification Service
+  notification-service:
+    build:
+      context: ./observability/notification-service
+      dockerfile: Dockerfile
+    container_name: bcm-notification-service
+    ports:
+      - "8035:8035"
+    environment:
+      - PORT=8035
+      - ENV=production
+      - LOG_LEVEL=INFO
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - UPSTASH_REDIS_URL=${UPSTASH_REDIS_URL}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_FROM=${SMTP_FROM}
+      - PROMETHEUS_ENABLED=true
+    networks:
+      - bcm-monitoring
+      - bcm-platform
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8035/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # AI OFFICE INFRASTRUCTURE (8040-8099)
+  # ============================================================================
+
+  analytics-specialist:
+    build:
+      context: ./AI-office-infrastructure/analytics-specialist
+      dockerfile: Dockerfile
+    container_name: bcm-analytics-specialist
+    ports:
+      - "8051:8051"
+    environment:
+      - PORT=8051
+      - LOG_LEVEL=INFO
+      - COMPETENCY_LEVEL=junior
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8051/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  db-intelligence:
+    build:
+      context: ./AI-office-infrastructure/db-intelligence
+      dockerfile: Dockerfile
+    container_name: bcm-db-intelligence
+    ports:
+      - "8052:8052"
+    environment:
+      - PORT=8052
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+    networks:
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8052/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  ai-event-manager:
+    build:
+      context: ./AI-office-infrastructure/ai-event-manager
+      dockerfile: Dockerfile
+    container_name: bcm-ai-event-manager
+    ports:
+      - "8053:8053"
+    environment:
+      - PORT=8053
+      - LOG_LEVEL=INFO
+    networks:
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8053/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mio-manager:
+    build:
+      context: ./AI-office-infrastructure/mio-manager
+      dockerfile: Dockerfile
+    container_name: bcm-mio-manager
+    ports:
+      - "8046:8046"
+    environment:
+      - PORT=8046
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - PROMETHEUS_URL=http://prometheus:9090
+    networks:
+      - bcm-platform
+      - bcm-monitoring
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8046/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ============================================================================
+  # INTEGRATION LAYER (8200-8299)
+  # ============================================================================
+
+  github-integration:
+    build:
+      context: ./integration/github-integration
+      dockerfile: Dockerfile
+    container_name: bcm-github-integration
+    ports:
+      - "8200:8200"
+    environment:
+      - PORT=8200
+      - LOG_LEVEL=INFO
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - bcm-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

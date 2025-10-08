@@ -1,0 +1,110 @@
+name: Ruff - Code Linting
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'intelligent-core/**/*.py'
+      - 'platform-services/**/*.py'
+      - 'infrastructure/**/*.py'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'intelligent-core/**/*.py'
+      - 'platform-services/**/*.py'
+      - 'infrastructure/**/*.py'
+  workflow_dispatch:
+
+jobs:
+  ruff-check:
+    name: Ruff Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: |
+          echo "🔍 Running Ruff linter..."
+          ruff check intelligent-core/ platform-services/ infrastructure/ \
+            --output-format=github \
+            --exit-non-zero-on-fix
+        continue-on-error: true
+
+      - name: Run Ruff formatter check
+        run: |
+          echo "✨ Checking code formatting..."
+          ruff format --check intelligent-core/ platform-services/ infrastructure/
+        continue-on-error: true
+
+      - name: Generate Ruff report
+        if: always()
+        run: |
+          echo "📊 Generating detailed report..."
+          ruff check intelligent-core/ platform-services/ infrastructure/ \
+            --output-format=json > ruff-report.json || true
+
+          # Summary
+          echo "## 🔍 Ruff Linting Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -s ruff-report.json ]; then
+            total=$(jq '. | length' ruff-report.json)
+            echo "- **Total issues found:** $total" >> $GITHUB_STEP_SUMMARY
+
+            # Top 5 most common issues
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Top Issues:" >> $GITHUB_STEP_SUMMARY
+            jq -r 'group_by(.code) | map({code: .[0].code, message: .[0].message, count: length}) | sort_by(.count) | reverse | .[:5] | .[] | "- `\(.code)`: \(.message) (\(.count) occurrences)"' ruff-report.json >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **No issues found!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Ruff report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ruff-report
+          path: ruff-report.json
+          retention-days: 30
+
+  ruff-stats:
+    name: Code Statistics
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Generate statistics
+        run: |
+          echo "📊 Code Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Count Python files
+          py_files=$(find intelligent-core platform-services infrastructure -name "*.py" | wc -l)
+          echo "- **Python files:** $py_files" >> $GITHUB_STEP_SUMMARY
+
+          # Count lines of code
+          total_lines=$(find intelligent-core platform-services infrastructure -name "*.py" -exec wc -l {} + | tail -1 | awk '{print $1}')
+          echo "- **Total lines:** $total_lines" >> $GITHUB_STEP_SUMMARY
+
+          # Ruff statistics
+          ruff check intelligent-core/ platform-services/ infrastructure/ --statistics || true >> $GITHUB_STEP_SUMMARY

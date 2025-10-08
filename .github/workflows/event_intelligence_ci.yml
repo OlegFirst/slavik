@@ -1,0 +1,127 @@
+name: Event Intelligence CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Запуск каждый день в 9:00 UTC
+    - cron: '0 9 * * *'
+
+jobs:
+  event-intelligence-scan:
+    name: Scan Event Architecture
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+
+      - name: Run Event Intelligence System
+        run: |
+          python3 tools/event_intelligence/event_intelligence_system.py \
+            --scan \
+            --validate \
+            --suggest \
+            --report infrastructure/eventbus/events/intelligence_report.json
+
+      - name: Check for critical issues
+        id: check_critical
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+
+          with open('infrastructure/eventbus/events/intelligence_report.json', 'r') as f:
+              report = json.load(f)
+
+          critical_gaps = [g for g in report['gaps'] if g['severity'] == 'critical']
+
+          if critical_gaps:
+              print(f"❌ Found {len(critical_gaps)} CRITICAL issues!")
+              for gap in critical_gaps[:5]:
+                  print(f"  - {gap['event_name']}: {gap['gap_type']}")
+              sys.exit(1)
+          else:
+              print("✅ No critical issues found")
+              sys.exit(0)
+          EOF
+
+      - name: Generate Event Coverage Badge
+        if: always()
+        run: |
+          python3 << 'EOF'
+          import json
+
+          with open('infrastructure/eventbus/events/intelligence_report.json', 'r') as f:
+              report = json.load(f)
+
+          schema_events = report['summary']['schema_events']
+          code_events = report['summary']['code_events']
+          coverage = (code_events / schema_events * 100) if schema_events > 0 else 0
+
+          color = 'green' if coverage > 80 else 'yellow' if coverage > 50 else 'red'
+
+          badge = {
+              'schemaVersion': 1,
+              'label': 'Event Coverage',
+              'message': f'{coverage:.0f}%',
+              'color': color
+          }
+
+          with open('event_coverage_badge.json', 'w') as f:
+              json.dump(badge, f)
+
+          print(f"Event Coverage: {coverage:.0f}%")
+          EOF
+
+      - name: Upload Intelligence Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: event-intelligence-report
+          path: infrastructure/eventbus/events/intelligence_report.json
+
+      - name: Comment PR with Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('infrastructure/eventbus/events/intelligence_report.json', 'utf8'));
+
+            const summary = report.summary;
+            const critical = report.gaps.filter(g => g.severity === 'critical').length;
+            const warnings = report.gaps.filter(g => g.severity === 'warning').length;
+
+            const comment = `## 📊 Event Intelligence Report
+
+            **Summary:**
+            - Schema Events: ${summary.schema_events}
+            - Code Events: ${summary.code_events}
+            - Gaps Found: ${summary.gaps_found}
+              - 🔴 Critical: ${critical}
+              - ⚠️ Warning: ${warnings}
+            - 💡 Potential Events: ${summary.potential_events}
+
+            **Recommendations:**
+            ${report.recommendations.map(r => `- **[${r.priority.toUpperCase()}]** ${r.title}`).join('\n')}
+
+            [View Full Report](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

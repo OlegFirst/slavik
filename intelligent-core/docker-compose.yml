@@ -1,0 +1,415 @@
+version: '3.8'
+
+# INTELLIGENT-CORE Services (Ports 8030-8040)
+# All services now on correct ports matching SERVICE_CATALOG.yaml
+
+services:
+  # ============================================================================
+  # PORT 8030: AI Orchestration - Main Decision Engine
+  # ============================================================================
+  ai-orchestration:
+    build:
+      context: .
+      dockerfile: orchestration/ai-orchestration/Dockerfile
+    container_name: ai-orchestration
+    ports:
+      - "8030:8030"
+    environment:
+      - PORT=8030
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
+      - TEMPORAL_NAMESPACE=${TEMPORAL_NAMESPACE}
+    networks:
+      - intelligent-core
+    depends_on:
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8030/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8030"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8031: Community Intelligence - Peer Review & Case Library
+  # ============================================================================
+  community-intelligence:
+    build:
+      context: .
+      dockerfile: community_intelligence/Dockerfile
+    container_name: community-intelligence
+    ports:
+      - "8031:8031"
+    environment:
+      - PORT=8031
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+      - WORKFLOW_INTELLIGENCE_URL=http://workflow-intelligence:8037
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - intelligent-core
+    depends_on:
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8031/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8031"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8032: Predictive Analytics - ML Predictions
+  # ============================================================================
+  predictive:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: predictive
+        SERVICE_PORT: 8032
+    container_name: predictive
+    ports:
+      - "8032:8032"
+    environment:
+      - PORT=8032
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+    networks:
+      - intelligent-core
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8032/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8032"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8033: Collective Agents - Multi-Agent Networks
+  # ============================================================================
+  collective:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: collective
+        SERVICE_PORT: 8033
+    container_name: collective
+    ports:
+      - "8033:8033"
+    environment:
+      - PORT=8033
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - intelligent-core
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8033/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8033"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8034: Coordination Center - Task Execution
+  # ============================================================================
+  coordination-center:
+    build:
+      context: .
+      dockerfile: orchestration/coordination-center/Dockerfile
+    container_name: coordination-center
+    ports:
+      - "8034:8034"
+    environment:
+      - PORT=8034
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+    networks:
+      - intelligent-core
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8034/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8034"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8035: Expertise Center - 12 BCM Experts + 10 Analyzers
+  # ============================================================================
+  expertise-center:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: expertise-center.service.standalone_main
+        SERVICE_PORT: 8035
+    container_name: expertise-center
+    ports:
+      - "8035:8035"
+    environment:
+      - PORT=8035
+      - PYTHONPATH=/app
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - intelligent-core
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8035/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8035"
+      - "layer=intelligent-core"
+      - "experts=12"
+      - "analyzers=10"
+
+  # ============================================================================
+  # PORT 8036: Workflow Engine - BPMN Execution
+  # ============================================================================
+  workflow-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: workflow-engine.workflow.api
+        SERVICE_PORT: 8036
+    container_name: workflow-engine
+    ports:
+      - "8036:8036"
+    environment:
+      - PORT=8036
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+    networks:
+      - intelligent-core
+    depends_on:
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8036/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8036"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8037: Workflow Intelligence - Case Library + ML Analysis
+  # ============================================================================
+  workflow-intelligence:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: workflow_intelligence
+        SERVICE_PORT: 8037
+    container_name: workflow-intelligence
+    ports:
+      - "8037:8037"
+    environment:
+      - PORT=8037
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
+      - TEMPORAL_NAMESPACE=${TEMPORAL_NAMESPACE}
+    networks:
+      - intelligent-core
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8037/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8037"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8038: AI Workflow Optimizer - Process Optimization
+  # ============================================================================
+  ai-workflow-optimizer:
+    build:
+      context: .
+      dockerfile: ai_workflow_optimizer/Dockerfile
+    container_name: ai-workflow-optimizer
+    ports:
+      - "8038:8038"
+    environment:
+      - PORT=8038
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - intelligent-core
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8038/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8038"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8039: Event Intelligence - Event Analysis + Learning
+  # ============================================================================
+  event-intelligence:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        SERVICE_PATH: event_intelligence
+        SERVICE_PORT: 8039
+    container_name: event-intelligence
+    ports:
+      - "8039:8039"
+    environment:
+      - PORT=8039
+      - PYTHONPATH=/app
+      - RABBITMQ_URL=${RABBITMQ_URL:-amqp://bcm_platform:bcm_secure_2024@rabbitmq:5672/}
+    networks:
+      - intelligent-core
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8039/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8039"
+      - "layer=intelligent-core"
+
+  # ============================================================================
+  # PORT 8040: AI Foundation - RAG + LLM + Learning & Knowledge
+  # ============================================================================
+  ai-foundation:
+    build:
+      context: ./ai-foundation/learning-knowledge
+      dockerfile: Dockerfile
+    container_name: ai-foundation
+    ports:
+      - "8040:8040"
+    environment:
+      - PORT=8040
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
+    networks:
+      - intelligent-core
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8040/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=8040"
+      - "layer=intelligent-core"
+      - "subsystems=RAG,LLM,Embeddings,Context"
+
+  # ============================================================================
+  # INFRASTRUCTURE DEPENDENCIES
+  # ============================================================================
+
+  redis:
+    image: redis:7-alpine
+    container_name: intelligent-core-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - intelligent-core
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: intelligent-core-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=bcm_platform
+      - RABBITMQ_DEFAULT_PASS=bcm_secure_2024
+    networks:
+      - intelligent-core
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  intelligent-core:
+    name: intelligent-core-network
+    driver: bridge
+
+volumes:
+  redis-data:
+    name: intelligent-core-redis-data
+  rabbitmq-data:
+    name: intelligent-core-rabbitmq-data

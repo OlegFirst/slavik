@@ -1,0 +1,56 @@
+{
+  "module_name": "scripts",
+  "path": "infrastructure/scripts",
+  "structure": {
+    ".": [
+      "setup_observability.sh",
+      "stop_platform_services.sh",
+      "test_connections.sh",
+      "start_all.sh",
+      "pre_flight_check.sh",
+      "verify_env.py",
+      "start_platform_services.sh",
+      "health_check_all.sh"
+    ]
+  },
+  "dependencies": [
+    "os",
+    "secrets",
+    "sys",
+    "typing"
+  ],
+  "endpoints": [],
+  "classes": [],
+  "functions": [
+    {
+      "name": "check_var",
+      "file": "verify_env.py",
+      "params": 1
+    },
+    {
+      "name": "verify_environment",
+      "file": "verify_env.py",
+      "params": 0
+    },
+    {
+      "name": "generate_jwt_secret",
+      "file": "verify_env.py",
+      "params": 0
+    },
+    {
+      "name": "suggest_fixes",
+      "file": "verify_env.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 135,
+    "python_files": 1,
+    "classes": 0,
+    "functions": 4,
+    "endpoints": 0,
+    "dependencies": 4
+  },
+  "readme": null
+}

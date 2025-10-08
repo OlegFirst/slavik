@@ -1,0 +1,620 @@
+{
+  "module_name": "risk-service",
+  "path": "platform-services/risk-service",
+  "structure": {
+    ".": [
+      "TEST_SUMMARY.md",
+      "config.py",
+      "requirements.txt",
+      "__init__.py",
+      ".env.example",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    "auth": [
+      "jwt_handler.py",
+      "__init__.py",
+      "dependencies.py"
+    ],
+    "tests": [
+      "test_repository.py",
+      "conftest.py",
+      "test_auth.py",
+      "test_business_logic.py",
+      "__init__.py",
+      "README.md",
+      "test_api.py"
+    ],
+    "repositories": [
+      "__init__.py",
+      "repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "routes.py"
+    ],
+    "services": [
+      "__init__.py",
+      "business_logic.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "api.routes",
+    "api.workflow_ai",
+    "auth.dependencies",
+    "auth.jwt_handler",
+    "business_logic",
+    "config",
+    "contextlib",
+    "database",
+    "database.connection",
+    "database/postgresql",
+    "datetime",
+    "dependencies",
+    "domain",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "fastapi.testclient",
+    "httpx",
+    "importlib.util",
+    "jose",
+    "jwt",
+    "jwt_handler",
+    "logging",
+    "main",
+    "models.database",
+    "models.domain",
+    "numpy",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "pytest_asyncio",
+    "random",
+    "repositories.repository",
+    "repository",
+    "routes",
+    "services.business_logic",
+    "sys",
+    "typing",
+    "unittest.mock",
+    "uuid",
+    "uvicorn",
+    "workflow_integration"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/risks",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "GET",
+      "path": "/public-risks",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "POST",
+      "path": "/critical-risks",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "GET",
+      "path": "/insights",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/search",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/similar",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/timeline",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/patterns",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/performance",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "POST",
+      "path": "/assessments",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{risk_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/assessments/{risk_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/assessments/{risk_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/assessments/{risk_id}/fair-analysis",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{risk_id}/fair-analysis",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/assessments/{risk_id}/monte-carlo",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{risk_id}/monte-carlo",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/assessments/{risk_id}/treatment-plans",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{risk_id}/treatment-plans",
+      "file": "routes.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/treatment-plans/{plan_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reports",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/assessments/{risk_id}/matrix-position",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/risk-heat-map",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/risk-trends",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "TestRiskCRUD",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestFAIRAnalysis",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestMonteCarloSimulation",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestTreatmentPlans",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAnalytics",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestJWTVerification",
+      "file": "test_auth.py",
+      "methods": 5
+    },
+    {
+      "name": "TestJWTDecoding",
+      "file": "test_auth.py",
+      "methods": 4
+    },
+    {
+      "name": "TestUserCreation",
+      "file": "test_auth.py",
+      "methods": 6
+    },
+    {
+      "name": "TestGetCurrentUser",
+      "file": "test_auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TestGetOptionalUser",
+      "file": "test_auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRoleBasedAuth",
+      "file": "test_auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TestTokenEdgeCases",
+      "file": "test_auth.py",
+      "methods": 3
+    },
+    {
+      "name": "TestRiskServiceCRUD",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestFAIRAnalysis",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestMonteCarloSimulation",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestTreatmentPlanService",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRiskTrends",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRiskReports",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestUtilities",
+      "file": "test_business_logic.py",
+      "methods": 4
+    },
+    {
+      "name": "TestRiskAPI",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestFAIRAnalysisAPI",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestMonteCarloAPI",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestTreatmentPlanAPI",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRiskReportsAPI",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAuthorization",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "TestErrorHandling",
+      "file": "test_api.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "RiskCategory",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskLikelihood",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskImpact",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TreatmentStrategy",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Risk",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "FAIRAnalysis",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "MonteCarloSimulation",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskTreatmentPlan",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskReport",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AIRiskAdvisor",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskDB",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "FAIRAnalysisDB",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "MonteCarloSimulationDB",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "RiskTreatmentPlanDB",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "AIRiskAdvisorDB",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "RiskService",
+      "file": "business_logic.py",
+      "methods": 7
+    }
+  ],
+  "functions": [
+    {
+      "name": "verify_jwt_token",
+      "file": "jwt_handler.py",
+      "params": 3
+    },
+    {
+      "name": "decode_token",
+      "file": "jwt_handler.py",
+      "params": 3
+    },
+    {
+      "name": "create_user_from_token",
+      "file": "jwt_handler.py",
+      "params": 1
+    },
+    {
+      "name": "require_role",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "test_user",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "admin_user",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "test_organization_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_risk",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_fair_analysis",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_monte_carlo",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_treatment_plan",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_risk_db",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_fair_db",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_monte_carlo_db",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_treatment_plan_db",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "valid_jwt_payload",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "expired_jwt_payload",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "jwt_secret_key",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_sqlalchemy_result",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "create_multiple_risks",
+      "file": "conftest.py",
+      "params": 2
+    },
+    {
+      "name": "auth_headers",
+      "file": "test_api.py",
+      "params": 1
+    },
+    {
+      "name": "get_workflow_engine",
+      "file": "workflow_ai.py",
+      "params": 0
+    },
+    {
+      "name": "get_case_collector",
+      "file": "workflow_ai.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    ".env.example": "platform-services/risk-service/.env.example",
+    "requirements.txt": "platform-services/risk-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 6127,
+    "python_files": 23,
+    "classes": 48,
+    "functions": 23,
+    "endpoints": 30,
+    "dependencies": 47
+  },
+  "readme": null
+}

@@ -1,0 +1,65 @@
+# AI-Platform-ISO Analysis Configuration
+
+# Directories to scan (updated 2025-10-06)
+scan_paths:
+  # Intelligent Core
+  - intelligent-core/workflow_intelligence
+  - intelligent-core/ai_workflow_optimizer
+  - intelligent-core/workflow-engine
+  - intelligent-core/expertise-center
+  - intelligent-core/community_intelligence
+  - intelligent-core/collective
+  - intelligent-core/predictive
+  - intelligent-core/orchestration
+  - intelligent-core/ai-foundation
+  # Platform Services
+  - platform-services/bia-service
+  - platform-services/risk-service
+  - platform-services/compliance-service
+  - platform-services/governance-service
+  - platform-services/validation-service
+  - platform-services/documents-service
+  - platform-services/response-service
+  - platform-services/learning-service
+  - platform-services/planning_service
+  - platform-services/plans_service
+  - platform-services/simulation
+  - platform-services/community-service
+  - platform-services/living-docs
+  # Infrastructure
+  - infrastructure/gateway
+  - infrastructure/eventbus
+  - infrastructure/observability
+  - infrastructure/security
+  - infrastructure/database
+  - infrastructure/realtime-websocket
+  # Shared
+  - shared
+
+# Exclude patterns
+exclude:
+  - "*/venv/*"
+  - "*/__pycache__/*"
+  - "*/migrations/*"
+  - "*/.pytest_cache/*"
+
+# Analysis settings
+complexity:
+  max_cyclomatic: 10
+  max_cognitive: 15
+  warn_threshold: 5
+
+security:
+  confidence_level: "HIGH"
+  severity_level: "MEDIUM"
+
+# Output formats
+reports:
+  formats: ["json", "html", "markdown"]
+  output_dir: "tools/reports"
+
+# Documentation
+docs:
+  api_format: "openapi"
+  include_examples: true
+  auto_generate_ui: true

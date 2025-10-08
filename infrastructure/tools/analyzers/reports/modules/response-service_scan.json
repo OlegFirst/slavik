@@ -1,0 +1,797 @@
+{
+  "module_name": "response-service",
+  "path": "platform-services/response-service",
+  "structure": {
+    ".": [
+      "PROJECT_SUMMARY.md",
+      "config.py",
+      "requirements.txt",
+      "QUICKSTART.md",
+      "__init__.py",
+      "README.md",
+      "VERIFICATION.md",
+      ".gitignore",
+      "CONTEXT_MEMORY.md",
+      ".env.example",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    ".pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    ".pytest_cache/v/cache": [
+      "nodeids",
+      "lastfailed",
+      "stepwise"
+    ],
+    "auth": [
+      "jwt_handler.py",
+      "__init__.py",
+      "dependencies.py"
+    ],
+    "tests": [
+      "test_repository.py",
+      "test_publishers.py",
+      "conftest.py",
+      "test_business_logic.py",
+      "__init__.py",
+      "test_subscribers.py",
+      "test_api.py"
+    ],
+    "tests/unit": [
+      "__init__.py"
+    ],
+    "tests/integration": [
+      "__init__.py"
+    ],
+    "repositories": [
+      "__init__.py",
+      "repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "publishers.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "transactions.py",
+      "__init__.py",
+      "business_logic.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "aio_pika",
+    "aio_pika.exceptions",
+    "api.routes",
+    "asyncio",
+    "auth.dependencies",
+    "config",
+    "contextlib",
+    "database",
+    "database/postgresql",
+    "datetime",
+    "dependencies",
+    "enum",
+    "events.publishers",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.security",
+    "fastapi.testclient",
+    "importlib.util",
+    "jose",
+    "json",
+    "jwt",
+    "jwt_handler",
+    "logging",
+    "logging.config",
+    "main",
+    "models.database",
+    "models.domain",
+    "os",
+    "pathlib",
+    "publishers",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "repositories.repository",
+    "services.business_logic",
+    "services.transactions",
+    "subscribers",
+    "sys",
+    "typing",
+    "unittest.mock",
+    "uuid"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/ready",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/live",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/incidents",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "GET",
+      "path": "/public-incidents",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "POST",
+      "path": "/critical-incidents",
+      "file": "dependencies.py"
+    },
+    {
+      "method": "GET",
+      "path": "/insights",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/search",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/similar",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/cases/{case_id}/timeline",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/patterns",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/performance",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/playbooks/recommend",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "workflow_ai.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Settings",
+      "file": "config.py",
+      "methods": 4
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "TestIncidentCRUD",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestResponseActions",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestResponseTeams",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestCommunications",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestTimeline",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRecoveryMetrics",
+      "file": "test_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "TestPublisherInitialization",
+      "file": "test_publishers.py",
+      "methods": 3
+    },
+    {
+      "name": "TestConnectionManagement",
+      "file": "test_publishers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestEventPublishing",
+      "file": "test_publishers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestIncidentManagement",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestStatusManagement",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestEscalation",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestResponseActions",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestResponseTeams",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestRecoveryMetrics",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestDashboardAndReporting",
+      "file": "test_business_logic.py",
+      "methods": 0
+    },
+    {
+      "name": "TestSubscriberInitialization",
+      "file": "test_subscribers.py",
+      "methods": 4
+    },
+    {
+      "name": "TestSubscriberConnection",
+      "file": "test_subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestEventHandlers",
+      "file": "test_subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestMessageProcessing",
+      "file": "test_subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestCustomHandlers",
+      "file": "test_subscribers.py",
+      "methods": 3
+    },
+    {
+      "name": "TestHelperMethods",
+      "file": "test_subscribers.py",
+      "methods": 0
+    },
+    {
+      "name": "TestIncidentEndpoints",
+      "file": "test_api.py",
+      "methods": 9
+    },
+    {
+      "name": "TestResponseActionEndpoints",
+      "file": "test_api.py",
+      "methods": 2
+    },
+    {
+      "name": "TestResponseTeamEndpoints",
+      "file": "test_api.py",
+      "methods": 3
+    },
+    {
+      "name": "TestDashboardEndpoints",
+      "file": "test_api.py",
+      "methods": 3
+    },
+    {
+      "name": "TestHealthCheck",
+      "file": "test_api.py",
+      "methods": 1
+    },
+    {
+      "name": "ResponseRepository",
+      "file": "repository.py",
+      "methods": 8
+    },
+    {
+      "name": "IncidentSeverity",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ActionPriority",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationType",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "TeamMemberRole",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamMemberBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamMemberCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamMemberUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamMember",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeam",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseActionBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseActionCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseActionUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseAction",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationLogBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationLogCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationLogUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationLog",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentTimelineEntry",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RecoveryMetricsBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RecoveryMetricsCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RecoveryMetricsUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RecoveryMetrics",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentStatusChange",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Incident",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentReport",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentDashboard",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationMetrics",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentListQuery",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentListResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentEscalation",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheck",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseTeamMemberDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseActionDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunicationLogDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentTimelineDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "RecoveryMetricsDB",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ResponseEventPublisher",
+      "file": "publishers.py",
+      "methods": 1
+    },
+    {
+      "name": "ResponseEventSubscriber",
+      "file": "subscribers.py",
+      "methods": 4
+    },
+    {
+      "name": "ResponseService",
+      "file": "business_logic.py",
+      "methods": 2
+    }
+  ],
+  "functions": [
+    {
+      "name": "configure_logging",
+      "file": "config.py",
+      "params": 0
+    },
+    {
+      "name": "verify_jwt_token",
+      "file": "jwt_handler.py",
+      "params": 3
+    },
+    {
+      "name": "decode_token",
+      "file": "jwt_handler.py",
+      "params": 3
+    },
+    {
+      "name": "create_user_from_token",
+      "file": "jwt_handler.py",
+      "params": 1
+    },
+    {
+      "name": "require_role",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_db_session",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "org_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "user_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "incident_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "team_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "action_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_incident_create",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_incident_update",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_action_create",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_action_update",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_team_create",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_communication_create",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_metrics_create",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_metrics_update",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_event_publisher",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_rabbitmq_connection",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_rabbitmq_channel",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_rabbitmq_exchange",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_rabbitmq_queue",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_user",
+      "file": "conftest.py",
+      "params": 2
+    },
+    {
+      "name": "incident_number_generator",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "test_app",
+      "file": "test_api.py",
+      "params": 0
+    },
+    {
+      "name": "test_client",
+      "file": "test_api.py",
+      "params": 1
+    },
+    {
+      "name": "mock_service",
+      "file": "test_api.py",
+      "params": 0
+    },
+    {
+      "name": "auth_headers",
+      "file": "test_api.py",
+      "params": 2
+    },
+    {
+      "name": "get_workflow_engine",
+      "file": "workflow_ai.py",
+      "params": 0
+    },
+    {
+      "name": "get_case_collector",
+      "file": "workflow_ai.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    ".env.example": "platform-services/response-service/.env.example",
+    "requirements.txt": "platform-services/response-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 10708,
+    "python_files": 30,
+    "classes": 80,
+    "functions": 33,
+    "endpoints": 18,
+    "dependencies": 42
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 9377,
+    "lines": 401,
+    "content": "# Response Module\n\n**ISO 22301:2019 Clause 8.4 - Incident Response**\n\nComplete incident response management module for BCM Platform.\n\n## Overview\n\nThe Response module provides comprehensive incident response capabilities including:\n\n- **Incident Management**: Create, track, and manage incidents\n- **Response Actions**: Define and track response actions\n- **Response Teams**: Manage incident response teams\n- **Communications**: Track all incident communications\n- **Timeline**: Chronological incident timeline\n- **Recovery Metrics**: RTO/RPO tracking and validation\n- **Escalation**: Automatic and manual incident escalation\n- **Reporting**: Comprehensive incident reports\n- **Dashboard**: Real-time incident analytics\n\n## Architecture\n\n```\nresponse/\n\u251c\u2500\u2500 api/\n\u2502   \u251c\u2500\u2500 __init__.py\n\u2502   \u2514\u2500\u2500 routes.py          # All 15+ API endpoints\n\u251c\u2500\u2500 models/\n\u2502   \u251c\u2500\u2500 __init__.py\n\u2502   \u251c\u2500\u2500 domain.py          # Pydantic models\n\u2502   \u2514\u2500\u2500 database.py        # SQLAlchemy models\n\u251c\u2500\u2500 services/\n\u2502   \u251c\u2500\u2500 __init__.py\n\u2502   \u2514\u2500\u2500 bu"
+  }
+}

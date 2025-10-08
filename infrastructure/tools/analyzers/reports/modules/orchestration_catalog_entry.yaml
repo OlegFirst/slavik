@@ -1,0 +1,33 @@
+
+  orchestration:
+    type: service
+    location: intelligent-core/orchestration
+    port: 8002
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+        - external/anthropic
+        - external/temporal-cloud
+      internal:
+        - ai_models
+        - ai_office_connector
+        - ai_orchestrator
+        - shared/cache
+        - shared/database
+    endpoints:
+      - GET /health
+      - POST /api/message
+      - GET /api/actions
+      - POST /api/actions/{action_id}/execute
+      - POST /api/phase/update
+    metrics:
+      loc: 22120
+      files: 108
+      classes: 146
+      functions: 15
+    status: discovered

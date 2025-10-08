@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  runtime:
+    container_name: runtime
+    build:
+      context: infrastructure/runtime
+      dockerfile: Dockerfile
+    ports:
+    - 8500:8500
+    environment:
+    - SERVICE_NAME=runtime
+    - SERVICE_PORT=8500
+    - RABBITMQ_URL=${{var_name}}
+    - REDIS_URL=${{var_name}}
+    - MESSAGE_RETENTION_HOURS=${{var_name}}
+    - EVENTBUS_EXCHANGE=${{var_name}}
+    - UPSTASH_REDIS_URL=${{var_name}}
+    - EVENTBUS_BACKEND=${{var_name}}
+    - MAX_CONNECTIONS_PER_USER=${{var_name}}
+    - DATABASE_URL=${{var_name}}
+    - PORT=${{var_name}}
+    networks:
+    - runtime-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8500/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    depends_on:
+      infrastructure-services:
+        condition: service_healthy
+networks:
+  runtime-network:
+    driver: bridge
+volumes: {}

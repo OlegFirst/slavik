@@ -1,0 +1,80 @@
+groups:
+  - name: notification_service
+    interval: 30s
+    rules:
+      # Notification Delivery
+      - alert: NotificationFailureRate
+        expr: rate(notifications_failed_total[5m]) / rate(notifications_sent_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High notification failure rate"
+          description: "Notification failure rate is {{ $value | humanizePercentage }} for channel {{ $labels.channel }}"
+
+      - alert: CriticalNotificationFailureRate
+        expr: rate(notifications_failed_total[5m]) / rate(notifications_sent_total[5m]) > 0.3
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical notification failure rate"
+          description: "Notification failure rate is {{ $value | humanizePercentage }} for channel {{ $labels.channel }}"
+
+      - alert: NotificationChannelDown
+        expr: rate(notifications_sent_total{channel=~"email|sms|push|webhook"}[5m]) == 0 and rate(notifications_failed_total{channel=~"email|sms|push|webhook"}[5m]) > 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Notification channel {{ $labels.channel }} is down"
+          description: "No successful notifications via {{ $labels.channel }} for 10 minutes"
+
+      # Queue Health
+      - alert: NotificationQueueBacklog
+        expr: notification_queue_size > 1000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Large notification queue backlog"
+          description: "Queue has {{ $value }} pending notifications"
+
+      - alert: CriticalQueueBacklog
+        expr: notification_queue_size > 5000
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical notification queue backlog"
+          description: "Queue has {{ $value }} pending notifications"
+
+      # Processing Time
+      - alert: SlowNotificationProcessing
+        expr: histogram_quantile(0.95, rate(notification_processing_duration_seconds_bucket[5m])) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow notification processing"
+          description: "95th percentile processing time is {{ $value }}s"
+
+      # Rate Limiting
+      - alert: NotificationRateLimitApproaching
+        expr: rate(notifications_sent_total{channel="sms"}[1m]) > 8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "SMS rate limit approaching"
+          description: "Sending {{ $value }} SMS per second, close to provider limit"
+
+      # Redis Connection
+      - alert: NotificationServiceRedisDown
+        expr: redis_up{service="notification-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Notification service Redis connection down"
+          description: "Cannot connect to Redis for notification history"

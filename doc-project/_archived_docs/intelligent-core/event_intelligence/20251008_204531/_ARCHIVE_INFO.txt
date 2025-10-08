@@ -1,0 +1,14 @@
+Archive Created: Wed Oct  8 20:45:31 EEST 2025
+Module: event_intelligence
+Section: intelligent-core
+Original Path: /Users/MD/AI-Platform-ISO/intelligent-core/event_intelligence
+
+Archived Files:
+total 40
+drwxr-xr-x@ 5 MD  staff    160 Oct  8 20:45 .
+drwxr-xr-x@ 3 MD  staff     96 Oct  8 20:45 ..
+-rw-r--r--@ 1 MD  staff  13414 Oct  8 20:45 ARCHITECTURE.md
+-rw-r--r--@ 1 MD  staff   1326 Oct  8 20:45 README.md
+-rw-r--r--@ 1 MD  staff      0 Oct  8 20:45 _ARCHIVE_INFO.txt
+
+Reason: Documentation update - Professional ISO standards compliance

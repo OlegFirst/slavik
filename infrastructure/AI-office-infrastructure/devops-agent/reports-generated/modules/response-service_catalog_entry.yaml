@@ -1,0 +1,27 @@
+
+  response_service:
+    type: business-service
+    location: platform-services/response-service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+    endpoints:
+      - GET /
+      - GET /api/compliance/check
+      - GET /health
+      - GET /ready
+      - GET /live
+    metrics:
+      loc: 10711
+      files: 30
+      classes: 80
+      functions: 33
+    status: discovered

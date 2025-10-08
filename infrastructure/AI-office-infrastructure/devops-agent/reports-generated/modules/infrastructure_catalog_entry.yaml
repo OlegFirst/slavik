@@ -1,0 +1,23 @@
+
+  infrastructure:
+    type: service
+    location: infrastructure/infrastructure
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+
+      external:
+
+      internal:
+
+    endpoints:
+
+    metrics:
+      loc: 0
+      files: 0
+      classes: 0
+      functions: 0
+    status: discovered

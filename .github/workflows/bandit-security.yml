@@ -1,0 +1,253 @@
+name: Bandit - Security Scanning
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'intelligent-core/**/*.py'
+      - 'platform-services/**/*.py'
+      - 'infrastructure/**/*.py'
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Weekly security scan on Sundays at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  bandit-scan:
+    name: Bandit Security Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Bandit
+        run: |
+          pip install bandit[toml]
+
+      - name: Run Bandit on intelligent-core
+        continue-on-error: true
+        run: |
+          echo "🔒 Scanning intelligent-core for security issues..."
+          bandit -r intelligent-core/ \
+            -f json \
+            -o bandit-intelligent-core.json \
+            --severity-level medium \
+            --confidence-level medium \
+            --exclude intelligent-core/_archive,intelligent-core/*/venv,intelligent-core/*/tests
+
+      - name: Run Bandit on platform-services
+        continue-on-error: true
+        run: |
+          echo "🔒 Scanning platform-services for security issues..."
+          bandit -r platform-services/ \
+            -f json \
+            -o bandit-platform-services.json \
+            --severity-level medium \
+            --confidence-level medium \
+            --exclude platform-services/*/venv,platform-services/*/tests
+
+      - name: Run Bandit on infrastructure
+        continue-on-error: true
+        run: |
+          echo "🔒 Scanning infrastructure for security issues..."
+          bandit -r infrastructure/ \
+            -f json \
+            -o bandit-infrastructure.json \
+            --severity-level medium \
+            --confidence-level medium \
+            --exclude infrastructure/*/venv
+
+      - name: Merge Bandit reports
+        if: always()
+        run: |
+          echo "📊 Merging security reports..."
+
+          # Create combined report
+          echo '{"results": []}' > bandit-combined.json
+
+          # Merge all JSON reports
+          for file in bandit-*.json; do
+            if [ -f "$file" ] && [ "$file" != "bandit-combined.json" ]; then
+              jq -s '.[0].results += .[1].results | .[0]' bandit-combined.json "$file" > temp.json
+              mv temp.json bandit-combined.json
+            fi
+          done
+
+      - name: Generate security summary
+        if: always()
+        run: |
+          echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f bandit-combined.json ]; then
+            total=$(jq '.results | length' bandit-combined.json)
+            echo "- **Total issues found:** $total" >> $GITHUB_STEP_SUMMARY
+
+            # Count by severity
+            high=$(jq '[.results[] | select(.issue_severity=="HIGH")] | length' bandit-combined.json)
+            medium=$(jq '[.results[] | select(.issue_severity=="MEDIUM")] | length' bandit-combined.json)
+            low=$(jq '[.results[] | select(.issue_severity=="LOW")] | length' bandit-combined.json)
+
+            echo "- **High severity:** $high" >> $GITHUB_STEP_SUMMARY
+            echo "- **Medium severity:** $medium" >> $GITHUB_STEP_SUMMARY
+            echo "- **Low severity:** $low" >> $GITHUB_STEP_SUMMARY
+
+            # Top 5 most common issues
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Top Security Issues:" >> $GITHUB_STEP_SUMMARY
+            jq -r '[.results[] | {test_id: .test_id, issue_text: .issue_text}] | group_by(.test_id) | map({test_id: .[0].test_id, issue: .[0].issue_text, count: length}) | sort_by(.count) | reverse | .[:5] | .[] | "- `\(.test_id)`: \(.issue) (\(.count) occurrences)"' bandit-combined.json >> $GITHUB_STEP_SUMMARY || true
+
+            # Critical files
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Files with Most Issues:" >> $GITHUB_STEP_SUMMARY
+            jq -r '[.results[] | .filename] | group_by(.) | map({file: .[0], count: length}) | sort_by(.count) | reverse | .[:5] | .[] | "- `\(.file)`: \(.count) issues"' bandit-combined.json >> $GITHUB_STEP_SUMMARY || true
+          else
+            echo "✅ **No security issues found!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Bandit reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit-security-reports
+          path: |
+            bandit-*.json
+          retention-days: 90
+
+      - name: Check for critical vulnerabilities
+        if: always()
+        run: |
+          if [ -f bandit-combined.json ]; then
+            high_issues=$(jq '[.results[] | select(.issue_severity=="HIGH")] | length' bandit-combined.json)
+
+            if [ "$high_issues" -gt 0 ]; then
+              echo "❌ Found $high_issues HIGH severity security issues!"
+              echo ""
+              echo "High severity issues:"
+              jq -r '.results[] | select(.issue_severity=="HIGH") | "- \(.filename):\(.line_number) - \(.issue_text)"' bandit-combined.json
+
+              # Don't fail the build, just warn
+              echo "::warning::Found $high_issues HIGH severity security issues. Please review."
+            else
+              echo "✅ No HIGH severity security issues found"
+            fi
+          fi
+
+  safety-check:
+    name: Safety - Dependency Vulnerabilities
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Safety
+        run: pip install safety
+
+      - name: Check intelligent-core dependencies
+        continue-on-error: true
+        run: |
+          echo "🔍 Checking intelligent-core dependencies..."
+          find intelligent-core -name "requirements.txt" -type f | while read req; do
+            echo "Checking: $req"
+            safety check -r "$req" --json > "safety-$(echo $req | tr '/' '-').json" || true
+          done
+
+      - name: Check platform-services dependencies
+        continue-on-error: true
+        run: |
+          echo "🔍 Checking platform-services dependencies..."
+          find platform-services -name "requirements.txt" -type f | while read req; do
+            echo "Checking: $req"
+            safety check -r "$req" --json > "safety-$(echo $req | tr '/' '-').json" || true
+          done
+
+      - name: Generate Safety summary
+        if: always()
+        run: |
+          echo "## 🛡️ Dependency Vulnerability Scan" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          total_vulns=0
+          for file in safety-*.json; do
+            if [ -f "$file" ]; then
+              vulns=$(jq '[.vulnerabilities // []] | length' "$file" 2>/dev/null || echo "0")
+              total_vulns=$((total_vulns + vulns))
+            fi
+          done
+
+          echo "- **Total vulnerable packages:** $total_vulns" >> $GITHUB_STEP_SUMMARY
+
+          if [ $total_vulns -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Vulnerable Packages:" >> $GITHUB_STEP_SUMMARY
+
+            for file in safety-*.json; do
+              if [ -f "$file" ]; then
+                jq -r '.vulnerabilities[]? | "- **\(.package)** \(.installed_version): \(.vulnerability)"' "$file" >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+              fi
+            done
+          else
+            echo "✅ **No vulnerable dependencies found!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Safety reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: safety-reports
+          path: safety-*.json
+          retention-days: 90
+
+  security-summary:
+    name: Security Report Summary
+    runs-on: ubuntu-latest
+    needs: [bandit-scan, safety-check]
+    if: always()
+
+    steps:
+      - name: Download all reports
+        uses: actions/download-artifact@v3
+        with:
+          path: security-reports/
+
+      - name: Create consolidated report
+        run: |
+          echo "## 🔐 Consolidated Security Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scan Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Bandit summary
+          if [ -f security-reports/bandit-security-reports/bandit-combined.json ]; then
+            bandit_total=$(jq '.results | length' security-reports/bandit-security-reports/bandit-combined.json)
+            bandit_high=$(jq '[.results[] | select(.issue_severity=="HIGH")] | length' security-reports/bandit-security-reports/bandit-combined.json)
+
+            echo "### Bandit (Code Security):" >> $GITHUB_STEP_SUMMARY
+            echo "- Total issues: $bandit_total" >> $GITHUB_STEP_SUMMARY
+            echo "- High severity: $bandit_high" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Safety summary
+          safety_files=$(find security-reports -name "safety-*.json" | wc -l)
+          echo "### Safety (Dependencies):" >> $GITHUB_STEP_SUMMARY
+          echo "- Requirements files checked: $safety_files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Full reports available in workflow artifacts**" >> $GITHUB_STEP_SUMMARY

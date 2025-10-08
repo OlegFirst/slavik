@@ -1,0 +1,964 @@
+{
+  "module_name": "learning-service",
+  "path": "platform-services/learning-service",
+  "structure": {
+    ".": [
+      "KNOWLEDGE_BASE_EXTRACTION.md",
+      "config.py",
+      "requirements.txt",
+      "test_auth.py",
+      "BCM_1_ANALYSIS.md",
+      "AUTH_TESTING_GUIDE.md",
+      "__init__.py",
+      "README.md",
+      "FRONTEND_SPECIFICATION.md",
+      "main.py",
+      "BCM_1_EXTRACTION_COMPLETE.md",
+      "workflow_integration.py",
+      "requirements-auth.txt",
+      "MIGRATION_STATUS.md",
+      "USER_SCENARIOS.md"
+    ],
+    "database": [
+      "init_db.sql",
+      "models.py",
+      "__init__.py",
+      "connection.py",
+      "learning_seed.sql",
+      "bci_gpg_training_seed.sql"
+    ],
+    "migrations": [
+      "002_learning_schema.sql"
+    ],
+    "workflows": [
+      "gamification_workflow.py",
+      "training_workflow.py",
+      "__init__.py"
+    ],
+    "repositories": [
+      "training_repository.py",
+      "__init__.py",
+      "gamification_repository.py"
+    ],
+    "models": [
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "_archived": [
+      "main.py.20251002"
+    ],
+    "_archived/workflows.20251002": [
+      "gamification_workflow.py",
+      "training_workflow.py",
+      "__init__.py"
+    ],
+    "_archived/database.20251002": [
+      "init_db.sql",
+      "models.py",
+      "__init__.py",
+      "connection.py",
+      "learning_seed.sql",
+      "bci_gpg_training_seed.sql"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "__init__.py",
+      "analytics.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "publishers.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "training_service.py",
+      "__init__.py",
+      "gamification_service.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "api.analytics",
+    "api.routes",
+    "api.workflow_ai",
+    "config",
+    "connection",
+    "contextlib",
+    "database/postgresql",
+    "datetime",
+    "dateutil.relativedelta",
+    "dotenv",
+    "enum",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "gamification_workflow",
+    "importlib.util",
+    "jwt",
+    "logging",
+    "main",
+    "models",
+    "models.database",
+    "models.domain",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "repositories.gamification_repository",
+    "repositories.training_repository",
+    "runtime/eventbus",
+    "services.gamification_service",
+    "services.training_service",
+    "shared/auth",
+    "shared/config",
+    "shared/database",
+    "shared/models",
+    "shared/utils",
+    "ssl",
+    "sys",
+    "time",
+    "training_workflow",
+    "typing",
+    "uuid",
+    "uvicorn",
+    "workflow_integration",
+    "workflows.gamification_workflow",
+    "workflows.training_workflow"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/token",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/learning/programs",
+      "file": "connection.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/governance/policies",
+      "file": "connection.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "analytics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/performance",
+      "file": "analytics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/departments/metrics",
+      "file": "analytics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learners/{person_id}/profile",
+      "file": "analytics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/certifications/expiring",
+      "file": "analytics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gamification/metrics",
+      "file": "analytics.py"
+    },
+    {
+      "method": "POST",
+      "path": "/programs",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/programs/{program_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/programs/{program_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/{program_id}/publish",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/programs/{program_id}/archive",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/programs",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/enrollments/{enrollment_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/submit",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/approve",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/start",
+      "file": "routes.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/enrollments/{enrollment_id}/progress",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/complete",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/assess",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/enrollments/{enrollment_id}/certify",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/persons/{person_id}/enrollments",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/persons/{person_id}/achievements",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/persons/{person_id}/points",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/persons/{person_id}/rank",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "LearningServiceSettings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "LoginRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "ProgramStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AchievementLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingProgram",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingEnrollment",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "CompetencyAssessment",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "AwarenessCampaign",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingTemplate",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "UserAchievement",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "ActionCategory",
+      "file": "gamification_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentAction",
+      "file": "training_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingProgramRepository",
+      "file": "training_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingEnrollmentRepository",
+      "file": "training_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "GamificationRepository",
+      "file": "gamification_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ProgramStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyLevel",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignStatus",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AchievementLevel",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentProgressUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentAssessment",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AchievementResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardEntry",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyLevel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AchievementLevel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingProgram",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingEnrollment",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "CompetencyAssessment",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "AwarenessCampaign",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingTemplate",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "UserAchievement",
+      "file": "database.py",
+      "methods": 1
+    },
+    {
+      "name": "ActionCategory",
+      "file": "gamification_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentState",
+      "file": "training_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentAction",
+      "file": "training_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "EnrollmentStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CompetencyLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CampaignStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AchievementLevel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingProgram",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingEnrollment",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "CompetencyAssessment",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "AwarenessCampaign",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "TrainingTemplate",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "UserAchievement",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingMetrics",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "ProgramPerformance",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "DepartmentMetrics",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "LearnerProfile",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationExpiry",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "GamificationMetrics",
+      "file": "analytics.py",
+      "methods": 0
+    },
+    {
+      "name": "TrainingService",
+      "file": "training_service.py",
+      "methods": 1
+    },
+    {
+      "name": "GamificationService",
+      "file": "gamification_service.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "test_jwt_functions",
+      "file": "test_auth.py",
+      "params": 0
+    },
+    {
+      "name": "calculate_points",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "award_points",
+      "file": "gamification_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "check_achievements",
+      "file": "gamification_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_streak",
+      "file": "gamification_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_leaderboard_rank",
+      "file": "gamification_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "calculate_level",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_badge_color",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_badge_icon",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_transition",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_state",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_transition",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_enrollment_data",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "validate_progress_update",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "validate_assessment_score",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_assessment_attempts",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "determine_assessment_result",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_start_training",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_complete_training",
+      "file": "training_workflow.py",
+      "params": 4
+    },
+    {
+      "name": "can_issue_certification",
+      "file": "training_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "auto_progress_calculation",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_enrollment_deadline",
+      "file": "training_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "should_auto_complete",
+      "file": "training_workflow.py",
+      "params": 4
+    },
+    {
+      "name": "calculate_certification_expiry",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_state_entry_actions",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "calculate_points",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "award_points",
+      "file": "gamification_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "check_achievements",
+      "file": "gamification_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "calculate_streak",
+      "file": "gamification_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_leaderboard_rank",
+      "file": "gamification_workflow.py",
+      "params": 3
+    },
+    {
+      "name": "calculate_level",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_badge_color",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "get_badge_icon",
+      "file": "gamification_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_transition",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_next_state",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_transition",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "validate_enrollment_data",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "validate_progress_update",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "validate_assessment_score",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "determine_assessment_result",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_start_training",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "can_complete_training",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "can_issue_certification",
+      "file": "training_workflow.py",
+      "params": 1
+    },
+    {
+      "name": "auto_progress_calculation",
+      "file": "training_workflow.py",
+      "params": 2
+    },
+    {
+      "name": "get_state_entry_actions",
+      "file": "training_workflow.py",
+      "params": 1
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/learning-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 6268,
+    "python_files": 33,
+    "classes": 83,
+    "functions": 45,
+    "endpoints": 34,
+    "dependencies": 48
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 13695,
+    "lines": 502,
+    "content": "# BCM Learning Service\n\n**ISO 22301:2019 Clauses 7.2 & 7.3 - Competence & Awareness**\n**BCI GPG Practice 2 (PP2: Embracing BC)**\n\n## Overview\n\nThe Learning Service provides comprehensive training, competency, and awareness management for Business Continuity Management (BCM) aligned with ISO 22301 standards and BCI Good Practice Guidelines.\n\n### Core Features\n\n- \ud83c\udf93 **Training Programs** - Create and manage BCM training programs (basic \u2192 expert levels)\n- \ud83d\udcca **Competency Assessment** - Identify and track competency gaps (ISO 7.2)\n- \ud83d\udce2 **Awareness Campaigns** - Run organization-wide awareness initiatives (ISO 7.3)\n- \ud83c\udfc6 **Gamification** - Points, achievements, leaderboards, and learning streaks\n- \ud83d\udcc4 **Template Library** - Reusable training content and scenarios\n- \ud83d\udcc8 **Analytics** - Track completion rates, effectiveness, and compliance\n\n## Architecture\n\n```\nlearning/\n\u251c\u2500\u2500 main.py                          # FastAPI application (26 endpoints)\n\u251c\u2500\u2500 database/\n\u2502   \u251c\u2500\u2500 models.py                    # SQLAl"
+  }
+}

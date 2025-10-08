@@ -1,0 +1,28 @@
+
+  можетпригодится:
+    type: service
+    location: intelligent-core/можетпригодится
+    port: 8005
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - GET /health
+      - POST /api/bpmn/processes
+      - GET /api/bpmn/processes
+      - GET /api/bpmn/processes/{process_id}
+      - POST /api/bpmn/processes/{process_id}/start
+    metrics:
+      loc: 8234
+      files: 28
+      classes: 91
+      functions: 24
+    status: discovered

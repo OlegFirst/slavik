@@ -1,0 +1,21 @@
+[
+  [
+    "functools"
+  ],
+  [
+    "exemplar"
+  ],
+  [
+    "distro"
+  ],
+  [
+    "temporalio.workflow"
+  ],
+  [
+    "autocommand"
+  ],
+  [
+    "temporalio.client",
+    "temporalio.activity"
+  ]
+]

@@ -1,0 +1,27 @@
+# Dockerfile for AI Agent Router Metrics Server
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY metrics_server.py .
+COPY router.py .
+COPY circuit_breaker.py .
+COPY metrics.py .
+COPY health_daemon.py .
+COPY __init__.py .
+
+# Expose metrics port
+EXPOSE 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:9090/health').raise_for_status()"
+
+# Run metrics server
+CMD ["python", "metrics_server.py"]

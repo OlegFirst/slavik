@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ai-event-manager:
+    build: .
+    container_name: ai-event-manager
+    ports:
+      - "8055:8055"
+    environment:
+      - EVENTBUS_BACKEND=redis
+      - REDIS_URL=redis://redis:6379
+      - EVENT_INTELLIGENCE_URL=http://event-intelligence:8039
+      - DEVOPS_AGENT_URL=http://devops-agent:8050
+      - GITHUB_INTEGRATION_URL=http://github-integration:8051
+      - MIO_MANAGER_URL=http://mio-manager:8046
+      - PROJECT_ROOT=/app
+    volumes:
+      - /Users/MD/AI-Platform-ISO:/app
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - ai-platform
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-event-manager-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - ai-platform
+
+networks:
+  ai-platform:
+    external: true

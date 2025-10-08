@@ -1,0 +1,260 @@
+{
+  "module_name": "living-docs",
+  "path": "platform-services/living-docs",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "requirements-dev.txt",
+      ".env.example",
+      "main.py",
+      "dependencies.py"
+    ],
+    "models": [
+      "database.py",
+      "__init__.py"
+    ],
+    "docs": [
+      "ARCHITECTURE.md",
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "INTEGRATION_COMPLETE.md",
+      "README.md"
+    ],
+    "api": [
+      "documentation.py",
+      "__init__.py"
+    ],
+    "services": [
+      "ai_example_generator.py",
+      "__init__.py",
+      "documentation_evolution_engine.py",
+      "personalization_service.py"
+    ]
+  },
+  "dependencies": [
+    "api",
+    "asyncio",
+    "collections",
+    "config",
+    "contextlib",
+    "database/postgresql",
+    "datetime",
+    "external/anthropic",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "hashlib",
+    "httpx",
+    "json",
+    "logging",
+    "os",
+    "pathlib",
+    "pydantic",
+    "pydantic_settings",
+    "services.ai_example_generator",
+    "services.documentation_evolution_engine",
+    "services.personalization_service",
+    "shared/database",
+    "sys",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{page_id}",
+      "file": "documentation.py"
+    },
+    {
+      "method": "POST",
+      "path": "/examples/generate",
+      "file": "documentation.py"
+    },
+    {
+      "method": "POST",
+      "path": "/feedback",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/journey/{goal}",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/gaps",
+      "file": "documentation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements",
+      "file": "documentation.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "LivingDocsConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "MockAIClient",
+      "file": "dependencies.py",
+      "methods": 0
+    },
+    {
+      "name": "MockDatabase",
+      "file": "dependencies.py",
+      "methods": 0
+    },
+    {
+      "name": "MockResponse",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "MockContent",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "MockResult",
+      "file": "dependencies.py",
+      "methods": 2
+    },
+    {
+      "name": "DocumentationPage",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PageVersion",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserInteraction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "KnowledgeGap",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ImprovementQueue",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserProfile",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchQuery",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "GetDocRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "GenerateExampleRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "FeedbackRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "SearchRequest",
+      "file": "documentation.py",
+      "methods": 0
+    },
+    {
+      "name": "AIExampleGenerator",
+      "file": "ai_example_generator.py",
+      "methods": 8
+    },
+    {
+      "name": "ExampleLibrary",
+      "file": "ai_example_generator.py",
+      "methods": 1
+    },
+    {
+      "name": "InteractiveExampleRunner",
+      "file": "ai_example_generator.py",
+      "methods": 3
+    },
+    {
+      "name": "DocumentationEvolutionEngine",
+      "file": "documentation_evolution_engine.py",
+      "methods": 6
+    },
+    {
+      "name": "PersonalizationService",
+      "file": "personalization_service.py",
+      "methods": 2
+    },
+    {
+      "name": "UserJourneyPersonalizer",
+      "file": "personalization_service.py",
+      "methods": 2
+    }
+  ],
+  "functions": [],
+  "config": {
+    ".env.example": "platform-services/living-docs/.env.example",
+    "requirements.txt": "platform-services/living-docs/requirements.txt"
+  },
+  "metrics": {
+    "loc": 3262,
+    "python_files": 12,
+    "classes": 24,
+    "functions": 0,
+    "endpoints": 10,
+    "dependencies": 26
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1673,
+    "lines": 105,
+    "content": "# living-docs\n\n> \ud83c\udf10 API Service \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 3,255 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 9 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 24 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 0 |\n| **API Endpoints** | 10 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 24 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (8)\n\n- `/`\n- `/gaps`\n- `/health`\n- `/improvements`\n- `/journey/{goal}`\n\n### POST (2)\n\n- `/examples/generate`\n- `/feedback`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **AIExampleGenerator** (8 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `ai_example_generator.py`\n- **DocumentationEvolutionEngine** (6 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `documentation_evolution_engine.py`\n- **InteractiveExampleRunner** (3 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `ai_example_generator.py`\n- **MockResult** (2 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `dependencies.py`\n- **PersonalizationService** (2 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `personalization_service.py`\n\n---\n\n## \ud83d\udd17 \u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438\n\n### \u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0438\u0435\n- `shared/database`\n\n### \u0418\u043d\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430\n- `database/pos"
+  }
+}

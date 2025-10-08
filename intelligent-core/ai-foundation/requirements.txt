@@ -1,0 +1,24 @@
+# AI Foundation Dependencies
+
+# LLM Providers
+anthropic>=0.25.0
+openai>=1.30.0
+
+# Vector DB
+qdrant-client>=1.8.0
+
+# Embeddings
+sentence-transformers>=2.5.0
+voyageai>=0.2.0  # Optional: Voyage embeddings
+
+# ML & Learning
+scikit-learn>=1.4.0
+numpy>=1.26.0
+pandas>=2.2.0
+
+# Utilities
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+
+# Shared (from parent project)
+# Uses: shared.database, shared.cache, shared.config

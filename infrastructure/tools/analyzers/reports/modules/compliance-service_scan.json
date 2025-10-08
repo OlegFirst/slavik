@@ -1,0 +1,1583 @@
+{
+  "module_name": "compliance-service",
+  "path": "platform-services/compliance-service",
+  "structure": {
+    ".": [
+      "config.py",
+      "pytest.ini",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "main.py",
+      "workflow_integration.py"
+    ],
+    "database": [
+      "__init__.py",
+      "connection.py"
+    ],
+    "tests": [
+      "test_workflows.py",
+      "conftest.py",
+      "test_rca_templates.py"
+    ],
+    "workflows": [
+      "gap_workflow.py",
+      "nonconformity_workflow.py",
+      "validators.py",
+      "__init__.py",
+      "README.md",
+      "evidence_workflow.py",
+      "audit_workflow.py",
+      "base_workflow.py",
+      "assessment_workflow.py"
+    ],
+    "repositories": [
+      "audit_repository.py",
+      "base_repository.py",
+      "evidence_repository.py",
+      "__init__.py",
+      "nonconformity_repository.py",
+      "gap_repository.py",
+      "assessment_repository.py"
+    ],
+    "models": [
+      "enums.py",
+      "domain.py",
+      "database.py",
+      "__init__.py"
+    ],
+    "integrations": [
+      "__init__.py",
+      "ai_orchestrator.py",
+      "eventbus.py"
+    ],
+    "api": [
+      "workflow_ai.py",
+      "library.py",
+      "audit.py",
+      "knowledge_base.py",
+      "health.py",
+      "__init__.py",
+      "improvements.py",
+      "dashboard.py",
+      "templates.py",
+      "nonconformities.py",
+      "modules.py",
+      "gaps.py",
+      "assessments.py",
+      "bulk_operations.py",
+      "evidence.py",
+      "management_review.py"
+    ],
+    "templates": [
+      "models.py",
+      "__init__.py"
+    ],
+    "templates/data": [
+      "bcm_templates_data.xml",
+      "bpmn_workflow_templates.xml"
+    ],
+    "services": [
+      "rca_templates.py"
+    ],
+    "services/core": [
+      "__init__.py",
+      "gap_analyzer.py",
+      "assessment_engine.py"
+    ],
+    "standards": [
+      "__init__.py",
+      "iso_22301.py"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "ai_foundation/workflow_intelligence",
+    "aiohttp",
+    "api",
+    "api.workflow_ai",
+    "assessment_engine",
+    "assessment_repository",
+    "assessment_workflow",
+    "asyncio",
+    "audit_repository",
+    "audit_workflow",
+    "auth.dependencies",
+    "base_repository",
+    "base_workflow",
+    "compliance.config.settings",
+    "compliance.core.assessment_engine",
+    "compliance.core.gap_analyzer",
+    "compliance.database.connection",
+    "compliance.integrations.ai_orchestrator",
+    "compliance.models.database",
+    "compliance.models.enums",
+    "compliance.models.schemas",
+    "compliance.repositories.assessment_repository",
+    "compliance.repositories.audit_repository",
+    "compliance.repositories.evidence_repository",
+    "compliance.repositories.gap_repository",
+    "compliance.repositories.nonconformity_repository",
+    "compliance.services.rca_templates",
+    "compliance.standards.iso_22301",
+    "compliance.workflows.audit_workflow",
+    "compliance.workflows.evidence_workflow",
+    "compliance.workflows.gap_workflow",
+    "compliance.workflows.nonconformity_workflow",
+    "config",
+    "connection",
+    "contextlib",
+    "database",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "enums",
+    "evidence_repository",
+    "evidence_workflow",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "gap_analyzer",
+    "gap_repository",
+    "gap_workflow",
+    "improvements",
+    "iso_22301",
+    "json",
+    "jwt",
+    "logging",
+    "main",
+    "models",
+    "models.database",
+    "models.enums",
+    "nonconformities",
+    "nonconformity_repository",
+    "nonconformity_workflow",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "pytest",
+    "re",
+    "runtime/eventbus",
+    "schemas",
+    "services.rca_templates",
+    "shared/audit",
+    "shared/auth",
+    "shared/cache",
+    "shared/config",
+    "shared/database",
+    "shared/exceptions",
+    "shared/middleware",
+    "shared/utils",
+    "standards.iso_22301",
+    "storage",
+    "sys",
+    "templates.models",
+    "typing",
+    "unittest.mock",
+    "utils",
+    "uuid",
+    "uvicorn",
+    "validators",
+    "validators.business_rules",
+    "workflow_integration",
+    "workflows.audit_workflow",
+    "workflows.nonconformity_workflow",
+    "workflows.validators"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/compliance/check",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "file": "connection.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{item_id}/ai-advice",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/benchmarks",
+      "file": "workflow_ai.py"
+    },
+    {
+      "method": "GET",
+      "path": "/guides",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/guides/{guide_id}",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/research",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/research/{source}",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/best-practices",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/case-studies",
+      "file": "library.py"
+    },
+    {
+      "method": "GET",
+      "path": "/programs",
+      "file": "audit.py"
+    },
+    {
+      "method": "GET",
+      "path": "/audits",
+      "file": "audit.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{audit_id}/checklist",
+      "file": "audit.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{audit_id}/findings",
+      "file": "audit.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{audit_id}/findings",
+      "file": "audit.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{audit_id}/start",
+      "file": "audit.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{audit_id}/complete",
+      "file": "audit.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{audit_id}/report",
+      "file": "audit.py"
+    },
+    {
+      "method": "GET",
+      "path": "/standards",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/iso22301/clauses",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/iso22301/{clause}",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/bci/practices",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/who/framework",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/mapping",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "knowledge_base.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/info",
+      "file": "health.py"
+    },
+    {
+      "method": "POST",
+      "path": "/improvements",
+      "file": "improvements.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements",
+      "file": "improvements.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements/{initiative_id}",
+      "file": "improvements.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/improvements/{initiative_id}",
+      "file": "improvements.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/improvements/{initiative_id}/progress",
+      "file": "improvements.py"
+    },
+    {
+      "method": "POST",
+      "path": "/improvements/{initiative_id}/verify",
+      "file": "improvements.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements/dashboard",
+      "file": "improvements.py"
+    },
+    {
+      "method": "GET",
+      "path": "/improvements/roi-analysis",
+      "file": "improvements.py"
+    },
+    {
+      "method": "GET",
+      "path": "/overview",
+      "file": "dashboard.py"
+    },
+    {
+      "method": "GET",
+      "path": "/requirements-matrix",
+      "file": "dashboard.py"
+    },
+    {
+      "method": "GET",
+      "path": "/roadmap",
+      "file": "dashboard.py"
+    },
+    {
+      "method": "GET",
+      "path": "/analytics",
+      "file": "dashboard.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "file": "templates.py"
+    },
+    {
+      "method": "POST",
+      "path": "/templates",
+      "file": "templates.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{template_id}",
+      "file": "templates.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{template_id}",
+      "file": "templates.py"
+    },
+    {
+      "method": "POST",
+      "path": "/templates/{template_id}/render",
+      "file": "templates.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{template_id}",
+      "file": "templates.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates/category/{category}",
+      "file": "templates.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates/iso-clause/{clause}",
+      "file": "templates.py"
+    },
+    {
+      "method": "POST",
+      "path": "/templates/generate",
+      "file": "templates.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates/bpmn/{workflow_type}",
+      "file": "templates.py"
+    },
+    {
+      "method": "POST",
+      "path": "/templates/{template_id}/verify",
+      "file": "templates.py"
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{template_id}/usage-stats",
+      "file": "templates.py"
+    },
+    {
+      "method": "POST",
+      "path": "/nonconformities/{nc_id}/rca/start",
+      "file": "nonconformities.py"
+    },
+    {
+      "method": "POST",
+      "path": "/nonconformities/{nc_id}/rca/complete",
+      "file": "nonconformities.py"
+    },
+    {
+      "method": "GET",
+      "path": "/rca/templates/{method}",
+      "file": "nonconformities.py"
+    },
+    {
+      "method": "GET",
+      "path": "/rca/methods",
+      "file": "nonconformities.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "modules.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/{service_name}",
+      "file": "modules.py"
+    },
+    {
+      "method": "GET",
+      "path": "/registry",
+      "file": "modules.py"
+    },
+    {
+      "method": "POST",
+      "path": "/registry",
+      "file": "modules.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "gaps.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{gap_id}",
+      "file": "gaps.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/{gap_id}",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/start-remediation",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/update-progress",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/resolve",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/verify",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/reopen",
+      "file": "gaps.py"
+    },
+    {
+      "method": "GET",
+      "path": "/severity/{severity}",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/rca",
+      "file": "gaps.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{gap_id}/rca",
+      "file": "gaps.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{gap_id}/effectiveness-review",
+      "file": "gaps.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{gap_id}/effectiveness-reviews",
+      "file": "gaps.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "assessments.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{assessment_id}",
+      "file": "assessments.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{assessment_id}/run",
+      "file": "assessments.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{assessment_id}/results",
+      "file": "assessments.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{assessment_id}",
+      "file": "assessments.py"
+    },
+    {
+      "method": "POST",
+      "path": "/batch-ai-scan",
+      "file": "assessments.py"
+    },
+    {
+      "method": "POST",
+      "path": "/nonconformities/bulk",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/evidence/bulk",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/corrective-actions/bulk",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/rca/bulk-validate",
+      "file": "bulk_operations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "evidence.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{evidence_id}",
+      "file": "evidence.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/{evidence_id}",
+      "file": "evidence.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{evidence_id}/transition",
+      "file": "evidence.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{evidence_id}",
+      "file": "evidence.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{evidence_id}/history",
+      "file": "evidence.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "management_review.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}",
+      "file": "management_review.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}/inputs",
+      "file": "management_review.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/start",
+      "file": "management_review.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/decisions",
+      "file": "management_review.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{review_id}/complete",
+      "file": "management_review.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}/report",
+      "file": "management_review.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "ComplianceSettings",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowSecurityMiddleware",
+      "file": "workflow_integration.py",
+      "methods": 1
+    },
+    {
+      "name": "TestWorkflowValidators",
+      "file": "test_workflows.py",
+      "methods": 24
+    },
+    {
+      "name": "TestAuditWorkflowTransitions",
+      "file": "test_workflows.py",
+      "methods": 5
+    },
+    {
+      "name": "TestNonconformityWorkflowTransitions",
+      "file": "test_workflows.py",
+      "methods": 6
+    },
+    {
+      "name": "TestEvidenceWorkflowValidation",
+      "file": "test_workflows.py",
+      "methods": 3
+    },
+    {
+      "name": "TestGapAnalysisWorkflowValidation",
+      "file": "test_workflows.py",
+      "methods": 3
+    },
+    {
+      "name": "TestAssessmentWorkflowValidation",
+      "file": "test_workflows.py",
+      "methods": 3
+    },
+    {
+      "name": "TestFiveWhysTemplate",
+      "file": "test_rca_templates.py",
+      "methods": 5
+    },
+    {
+      "name": "TestFishboneTemplate",
+      "file": "test_rca_templates.py",
+      "methods": 5
+    },
+    {
+      "name": "TestFaultTreeTemplate",
+      "file": "test_rca_templates.py",
+      "methods": 6
+    },
+    {
+      "name": "TestRCATemplateFactory",
+      "file": "test_rca_templates.py",
+      "methods": 5
+    },
+    {
+      "name": "TestRCAAnalyzer",
+      "file": "test_rca_templates.py",
+      "methods": 6
+    },
+    {
+      "name": "GapState",
+      "file": "gap_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "GapEvent",
+      "file": "gap_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "GapWorkflow",
+      "file": "gap_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "NCState",
+      "file": "nonconformity_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "NCEvent",
+      "file": "nonconformity_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityWorkflow",
+      "file": "nonconformity_workflow.py",
+      "methods": 6
+    },
+    {
+      "name": "WorkflowValidationError",
+      "file": "validators.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowValidator",
+      "file": "validators.py",
+      "methods": 11
+    },
+    {
+      "name": "EvidenceState",
+      "file": "evidence_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceEvent",
+      "file": "evidence_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceWorkflow",
+      "file": "evidence_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "AuditState",
+      "file": "audit_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditEvent",
+      "file": "audit_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditWorkflow",
+      "file": "audit_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "WorkflowTransition",
+      "file": "base_workflow.py",
+      "methods": 1
+    },
+    {
+      "name": "WorkflowGuard",
+      "file": "base_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowError",
+      "file": "base_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "BaseWorkflow",
+      "file": "base_workflow.py",
+      "methods": 11
+    },
+    {
+      "name": "AssessmentState",
+      "file": "assessment_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentEvent",
+      "file": "assessment_workflow.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentWorkflow",
+      "file": "assessment_workflow.py",
+      "methods": 5
+    },
+    {
+      "name": "AuditRepository",
+      "file": "audit_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ConcurrencyError",
+      "file": "base_repository.py",
+      "methods": 0
+    },
+    {
+      "name": "BaseRepository",
+      "file": "base_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "EvidenceRepository",
+      "file": "evidence_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "NonconformityRepository",
+      "file": "nonconformity_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "GapRepository",
+      "file": "gap_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "AssessmentRepository",
+      "file": "assessment_repository.py",
+      "methods": 1
+    },
+    {
+      "name": "ComplianceStandard",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStatus",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "Severity",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "RequirementCategory",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceType",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentType",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "GapPriority",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "NCType",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "NCSource",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditType",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditResult",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "RCAMethod",
+      "file": "enums.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirementBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirementCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirementUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirement",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceBase",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "EvidenceCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Evidence",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentBase",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "AssessmentCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Assessment",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "AssessmentResult",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RemediationAction",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "GapBase",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "GapCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "GapUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Gap",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "GapResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RootCause",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "CorrectiveAction",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "RootCauseAnalysis",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Nonconformity",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "NonconformityResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditFinding",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditBase",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditCreate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditUpdate",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Audit",
+      "file": "domain.py",
+      "methods": 1
+    },
+    {
+      "name": "AuditResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowTransitionRequest",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "WorkflowStatusResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceDashboard",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceScore",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceTrend",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceTrendsResponse",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "domain.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceRequirementModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AssessmentModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "GapModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditModel",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceAIClient",
+      "file": "ai_orchestrator.py",
+      "methods": 9
+    },
+    {
+      "name": "EventBusService",
+      "file": "eventbus.py",
+      "methods": 3
+    },
+    {
+      "name": "AIAdviceResponse",
+      "file": "workflow_ai.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityCreateRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkNonconformityRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "EvidenceUploadRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkEvidenceRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "CorrectiveActionRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkCorrectiveActionRequest",
+      "file": "bulk_operations.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateCategory",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "Template",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BPMNWorkflow",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateCreate",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateUpdate",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateRenderRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AIGenerateRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TemplateModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "FiveWhysTemplate",
+      "file": "rca_templates.py",
+      "methods": 2
+    },
+    {
+      "name": "FishboneCause",
+      "file": "rca_templates.py",
+      "methods": 0
+    },
+    {
+      "name": "FishboneTemplate",
+      "file": "rca_templates.py",
+      "methods": 2
+    },
+    {
+      "name": "FaultTreeNode",
+      "file": "rca_templates.py",
+      "methods": 1
+    },
+    {
+      "name": "FaultTreeTemplate",
+      "file": "rca_templates.py",
+      "methods": 2
+    },
+    {
+      "name": "RCATemplateFactory",
+      "file": "rca_templates.py",
+      "methods": 3
+    },
+    {
+      "name": "RCAAnalyzer",
+      "file": "rca_templates.py",
+      "methods": 2
+    },
+    {
+      "name": "GapAnalyzer",
+      "file": "gap_analyzer.py",
+      "methods": 4
+    },
+    {
+      "name": "AssessmentEngine",
+      "file": "assessment_engine.py",
+      "methods": 2
+    },
+    {
+      "name": "ISORequirement",
+      "file": "iso_22301.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "iso_22301.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "tenant_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "user_id",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_cache",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_eventbus",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "mock_audit_logger",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_audit_create_data",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_audit_with_findings",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_nonconformity_create_data",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_nonconformity_with_rca",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "sample_five_whys_template",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_fishbone_template",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_fault_tree_template",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_evidence_items",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_corrective_actions",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "valid_workflow_transitions",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_bulk_audits",
+      "file": "conftest.py",
+      "params": 1
+    },
+    {
+      "name": "get_audit_repository",
+      "file": "audit.py",
+      "params": 1
+    },
+    {
+      "name": "get_assessment_repository",
+      "file": "dashboard.py",
+      "params": 1
+    },
+    {
+      "name": "get_gap_repository",
+      "file": "dashboard.py",
+      "params": 1
+    },
+    {
+      "name": "get_evidence_repository",
+      "file": "dashboard.py",
+      "params": 1
+    },
+    {
+      "name": "_get_compliance_status",
+      "file": "dashboard.py",
+      "params": 1
+    },
+    {
+      "name": "_get_requirement_status",
+      "file": "dashboard.py",
+      "params": 1
+    },
+    {
+      "name": "get_nc_repository",
+      "file": "nonconformities.py",
+      "params": 1
+    },
+    {
+      "name": "get_gap_repository",
+      "file": "gaps.py",
+      "params": 1
+    },
+    {
+      "name": "verify_tenant_access",
+      "file": "assessments.py",
+      "params": 2
+    },
+    {
+      "name": "get_assessment_repository",
+      "file": "assessments.py",
+      "params": 1
+    },
+    {
+      "name": "get_nc_repository",
+      "file": "bulk_operations.py",
+      "params": 1
+    },
+    {
+      "name": "get_evidence_repository",
+      "file": "bulk_operations.py",
+      "params": 1
+    },
+    {
+      "name": "verify_tenant_access",
+      "file": "evidence.py",
+      "params": 2
+    },
+    {
+      "name": "get_evidence_repository",
+      "file": "evidence.py",
+      "params": 1
+    },
+    {
+      "name": "get_assessment_repository",
+      "file": "management_review.py",
+      "params": 1
+    },
+    {
+      "name": "get_audit_repository",
+      "file": "management_review.py",
+      "params": 1
+    },
+    {
+      "name": "get_gap_repository",
+      "file": "management_review.py",
+      "params": 1
+    },
+    {
+      "name": "get_requirement",
+      "file": "iso_22301.py",
+      "params": 1
+    },
+    {
+      "name": "get_all_requirements",
+      "file": "iso_22301.py",
+      "params": 0
+    },
+    {
+      "name": "get_requirements_by_category",
+      "file": "iso_22301.py",
+      "params": 1
+    },
+    {
+      "name": "get_requirements_by_weight",
+      "file": "iso_22301.py",
+      "params": 1
+    },
+    {
+      "name": "get_mandatory_requirements",
+      "file": "iso_22301.py",
+      "params": 0
+    },
+    {
+      "name": "get_total_weight",
+      "file": "iso_22301.py",
+      "params": 0
+    },
+    {
+      "name": "get_clause_list",
+      "file": "iso_22301.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "platform-services/compliance-service/requirements.txt"
+  },
+  "metrics": {
+    "loc": 17481,
+    "python_files": 55,
+    "classes": 136,
+    "functions": 41,
+    "endpoints": 97,
+    "dependencies": 94
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 11077,
+    "lines": 367,
+    "content": "# Compliance Service - ISO 22301:2019 Compliance Management\n\n**ISO 22301 Clauses: 9.2 (Internal Audit), 10.1 (Nonconformity), 10.2 (Improvement)**\n\nUnified architecture microservice for comprehensive compliance management.\n\n---\n\n## \u2705 MIGRATION STATUS\n\n**Source:** `/Users/MD/ISO-22301\u2014\u043a\u043e\u043f\u0438\u044f/services/SERVICES/BCM/compliance/` (~8000 lines)\n**Target:** `/Users/MD/AI-Platform-ISO/services/bcm/compliance/` (unified architecture)\n**Status:** \u2705 **COMPLETE - FULL STRUCTURE PRESERVED**\n\n### What Was Preserved:\n- \u2705 All 13 Enums (ComplianceStandard, ComplianceStatus, etc.)\n- \u2705 All Pydantic models (506 lines of schemas)\n- \u2705 All 12 API routers (health, evidence, assessments, gaps, dashboard, audit, management_review, modules, knowledge_base, library, templates, improvements)\n- \u2705 Core services (assessment_engine, gap_analyzer)\n- \u2705 Workflows (assessment, audit, evidence, gap, nonconformity)\n- \u2705 Standards (ISO 22301 requirements)\n- \u2705 Templates management\n- \u2705 Integrations (AI orchestrator, EventBus)\n- "
+  }
+}

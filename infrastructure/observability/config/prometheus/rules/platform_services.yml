@@ -1,0 +1,80 @@
+groups:
+  - name: platform_services
+    interval: 30s
+    rules:
+      # Service Health
+      - alert: ServiceDown
+        expr: up{job=~".+-service"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.service }} is down"
+          description: "{{ $labels.service }} has been down for more than 2 minutes"
+
+      - alert: ServiceFlapping
+        expr: changes(up{job=~".+-service"}[10m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Service {{ $labels.service }} is flapping"
+          description: "{{ $labels.service }} has restarted {{ $value }} times in 10 minutes"
+
+      # Response Time
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time on {{ $labels.service }}"
+          description: "95th percentile response time is {{ $value }}s"
+
+      - alert: CriticalResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical response time on {{ $labels.service }}"
+          description: "95th percentile response time is {{ $value }}s"
+
+      # Error Rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          description: "Error rate is {{ $value | humanizePercentage }}"
+
+      - alert: CriticalErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.15
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical error rate on {{ $labels.service }}"
+          description: "Error rate is {{ $value | humanizePercentage }}"
+
+      # Request Rate Anomaly
+      - alert: RequestRateDrop
+        expr: rate(http_requests_total[5m]) < 0.2 * avg_over_time(rate(http_requests_total[5m])[1h:5m])
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Request rate dropped on {{ $labels.service }}"
+          description: "Current rate is {{ $value }}, significantly lower than 1h average"
+
+      # Database Connection Pool
+      - alert: DatabaseConnectionPoolExhaustion
+        expr: (database_connections_active / database_connections_max) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database connection pool near exhaustion on {{ $labels.service }}"
+          description: "Using {{ $value | humanizePercentage }} of connection pool"

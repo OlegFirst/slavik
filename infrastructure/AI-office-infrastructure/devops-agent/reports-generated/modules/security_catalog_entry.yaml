@@ -1,0 +1,28 @@
+
+  security:
+    type: service
+    location: infrastructure/security
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - POST /signup
+      - POST /login
+      - POST /logout
+      - GET /me
+      - GET /health
+    metrics:
+      loc: 1847
+      files: 5
+      classes: 9
+      functions: 8
+    status: discovered

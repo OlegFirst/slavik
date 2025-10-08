@@ -1,0 +1,23 @@
+{
+  "module_name": "scripts",
+  "path": "platform-services/scripts",
+  "structure": {
+    ".": [
+      "init-databases.sh"
+    ]
+  },
+  "dependencies": [],
+  "endpoints": [],
+  "classes": [],
+  "functions": [],
+  "config": {},
+  "metrics": {
+    "loc": 0,
+    "python_files": 0,
+    "classes": 0,
+    "functions": 0,
+    "endpoints": 0,
+    "dependencies": 0
+  },
+  "readme": null
+}

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  expertise-center:
+    build:
+      context: ../..
+      dockerfile: expertise-center/service/Dockerfile
+    container_name: expertise-center-service
+    ports:
+      - "8035:8035"
+    environment:
+      - EXPERTISE_CENTER_PORT=8035
+      - EXPERTISE_CENTER_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      - AI_FOUNDATION_URL=http://ai-foundation:8040
+      - KNOWLEDGE_BASE_URL=http://ai-foundation:8040
+      - EVENTBUS_ENABLED=false
+      - CORS_ORIGINS=*
+      - WORKERS=1
+    volumes:
+      - ../:/app/expertise-center
+    networks:
+      - bcm-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8035/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    depends_on:
+      - ai-foundation
+    labels:
+      - "com.bcm.service=expertise-center"
+      - "com.bcm.version=1.0.0"
+      - "com.bcm.port=8035"
+
+  # AI Foundation (if not running separately)
+  ai-foundation:
+    image: ai-platform-iso/ai-foundation:latest
+    container_name: ai-foundation
+    ports:
+      - "8040:8040"
+    environment:
+      - PORT=8040
+      - LOG_LEVEL=INFO
+    networks:
+      - bcm-network
+    profiles:
+      - with-dependencies
+
+networks:
+  bcm-network:
+    name: bcm-network
+    driver: bridge

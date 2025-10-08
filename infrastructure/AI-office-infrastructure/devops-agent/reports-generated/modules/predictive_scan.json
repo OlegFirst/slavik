@@ -1,0 +1,285 @@
+{
+  "module_name": "predictive",
+  "path": "intelligent-core/predictive",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "event_handlers.py",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "main.py"
+    ],
+    "database": [
+      "__init__.py",
+      "repository.py"
+    ],
+    "integration": [
+      "__init__.py",
+      "dependencies.py"
+    ],
+    "scheduler": [
+      "__init__.py",
+      "daily_digests.py"
+    ],
+    "docs": [
+      "ARCHITECTURE.md",
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "INTEGRATION_COMPLETE.md",
+      "README.md",
+      "MAGIC_COMPLETE.md",
+      "EVENTBUS_INTEGRATION.md"
+    ],
+    "integrations": [
+      "event_intelligence_learning.py"
+    ],
+    "api": [
+      "predictions.py"
+    ],
+    "services": [
+      "journey_predictor.py",
+      "proactive_recommendations.py",
+      "ai_foundation_integration.py",
+      "demand_forecaster.py"
+    ]
+  },
+  "dependencies": [
+    "ai_foundation/workflow_intelligence",
+    "ai_services/predictive",
+    "aiohttp",
+    "api",
+    "apscheduler.schedulers.asyncio",
+    "apscheduler.triggers.cron",
+    "asyncio",
+    "asyncpg",
+    "collections",
+    "contextlib",
+    "daily_digests",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "dependencies",
+    "event_handlers",
+    "event_intelligence.continuous_monitor",
+    "event_intelligence.event_intelligence_system",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "httpx",
+    "integration.dependencies",
+    "journey_predictor",
+    "llm.llm_router",
+    "logging",
+    "numpy",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "rag.pipeline",
+    "repository",
+    "runtime/eventbus",
+    "scheduler.daily_digests",
+    "services.journey_predictor",
+    "services.proactive_recommendations",
+    "sys",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/journey/{org_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/certification/{org_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/recommendations/{org_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/expert-demand",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/similar-organizations/{org_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/eventbus",
+      "file": "predictions.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "PredictiveEventHandlers",
+      "file": "event_handlers.py",
+      "methods": 3
+    },
+    {
+      "name": "PredictiveRepository",
+      "file": "repository.py",
+      "methods": 1
+    },
+    {
+      "name": "NotificationClient",
+      "file": "dependencies.py",
+      "methods": 2
+    },
+    {
+      "name": "EventBusService",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "Dependencies",
+      "file": "dependencies.py",
+      "methods": 1
+    },
+    {
+      "name": "DailyDigestScheduler",
+      "file": "daily_digests.py",
+      "methods": 1
+    },
+    {
+      "name": "EventIntelligenceLearning",
+      "file": "event_intelligence_learning.py",
+      "methods": 5
+    },
+    {
+      "name": "MilestoneResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "JourneyPredictionResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationPredictionResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "DemandForecastResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "RecommendationResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationContext",
+      "file": "journey_predictor.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictedMilestone",
+      "file": "journey_predictor.py",
+      "methods": 0
+    },
+    {
+      "name": "CertificationPrediction",
+      "file": "journey_predictor.py",
+      "methods": 0
+    },
+    {
+      "name": "JourneyPredictor",
+      "file": "journey_predictor.py",
+      "methods": 11
+    },
+    {
+      "name": "ProactiveRecommendation",
+      "file": "proactive_recommendations.py",
+      "methods": 0
+    },
+    {
+      "name": "ProactiveRecommendationsEngine",
+      "file": "proactive_recommendations.py",
+      "methods": 6
+    },
+    {
+      "name": "PredictiveAIFoundation",
+      "file": "ai_foundation_integration.py",
+      "methods": 4
+    },
+    {
+      "name": "DemandForecast",
+      "file": "demand_forecaster.py",
+      "methods": 0
+    },
+    {
+      "name": "SpecialtyDemand",
+      "file": "demand_forecaster.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertDemandForecaster",
+      "file": "demand_forecaster.py",
+      "methods": 5
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_supabase_client",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "get_predictive_repository",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "get_notification_client",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "get_eventbus",
+      "file": "dependencies.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 4761,
+    "python_files": 15,
+    "classes": 22,
+    "functions": 4,
+    "endpoints": 9,
+    "dependencies": 40
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1579,
+    "lines": 93,
+    "content": "# predictive\n\n> \u041f\u0440\u0435\u0434\u0438\u043a\u0442\u0438\u0432\u043d\u0430\u044f \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0430 \u0438 ML \u043c\u043e\u0434\u0435\u043b\u0438\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 2,995 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 12 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 18 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 3 |\n| **API Endpoints** | 7 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 32 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (7)\n\n- `/`\n- `/certification/{org_id}`\n- `/expert-demand`\n- `/health`\n- `/journey/{org_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **JourneyPredictor** (11 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `journey_predictor.py`\n- **ProactiveRecommendationsEngine** (6 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `proactive_recommendations.py`\n- **ExpertDemandForecaster** (5 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `demand_forecaster.py`\n- **NotificationClient** (2 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `dependencies.py`\n- **PredictiveRepository** (1 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `repository.py`\n\n### \u0424\u0443\u043d\u043a\u0446\u0438\u0438\n\n\u0412\u0441\u0435\u0433\u043e \u043f\u0443\u0431\u043b\u0438\u0447\u043d\u044b\u0445 \u0444\u0443\u043d\u043a\u0446\u0438\u0439: 3\n\n---\n\n## \ud83d\udd17 \u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438\n\n### \u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0438\u0435\n- `ai_foundation/workflow_intelligence`\n- `ai_services/predic"
+  }
+}

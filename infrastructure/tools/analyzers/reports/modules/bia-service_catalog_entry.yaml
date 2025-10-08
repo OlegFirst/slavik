@@ -1,0 +1,38 @@
+
+  bia_service:
+    type: business-service
+    location: platform-services/bia-service
+    port: 8001
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - ai_service
+        - shared/audit
+        - shared/auth
+        - shared/cache
+        - shared/config
+        - shared/database
+        - shared/exceptions
+        - shared/history
+        - shared/middleware
+        - shared/utils
+    endpoints:
+      - POST /suppliers
+      - GET /suppliers
+      - GET /suppliers/{supplier_id}
+      - PATCH /suppliers/{supplier_id}
+      - GET /suppliers/{supplier_id}/risk-profile
+    metrics:
+      loc: 6919
+      files: 30
+      classes: 77
+      functions: 26
+    status: discovered

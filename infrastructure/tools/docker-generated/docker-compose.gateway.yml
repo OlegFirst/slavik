@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: infrastructure/gateway
+      dockerfile: Dockerfile
+    ports:
+    - 8500:8500
+    environment:
+    - SERVICE_NAME=gateway
+    - SERVICE_PORT=8500
+    - RABBITMQ_URL=${{var_name}}
+    - ODOO_API_URL=${{var_name}}
+    - SUPABASE_URL=${{var_name}}
+    - MONGODB_URL=${{var_name}}
+    - SUPABASE_KEY=${{var_name}}
+    - REDIS_URL=${{var_name}}
+    - DATABASE_URL=${{var_name}}
+    - ODOO_DB_NAME=${{var_name}}
+    - ODOO_DB_URL=${{var_name}}
+    - REDIS_PASSWORD=${{var_name}}
+    - JWT_SECRET=${{var_name}}
+    - POSTGRES_URL=${{var_name}}
+    networks:
+    - gateway-network
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://localhost:8500/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+networks:
+  gateway-network:
+    driver: bridge
+volumes: {}

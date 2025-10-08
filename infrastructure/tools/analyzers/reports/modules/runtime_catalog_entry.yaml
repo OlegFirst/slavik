@@ -1,0 +1,28 @@
+
+  runtime:
+    type: service
+    location: infrastructure/runtime
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - POST /workflows
+      - GET /
+      - POST /workflows/{workflow_id}/complete
+      - GET /stats
+      - GET /health
+    metrics:
+      loc: 4689
+      files: 24
+      classes: 33
+      functions: 12
+    status: discovered

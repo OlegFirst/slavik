@@ -1,0 +1,331 @@
+{
+  "module_name": "collective",
+  "path": "intelligent-core/collective",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "config.py",
+      "requirements.txt",
+      "Dockerfile",
+      "__init__.py",
+      "README.md",
+      "main.py",
+      "dependencies.py"
+    ],
+    "models": [
+      "database.py"
+    ],
+    "docs": [
+      "ARCHITECTURE.md",
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "INTEGRATION_COMPLETE.md",
+      "INTEGRATION_MCP_PARTISIA.md",
+      "TECHNICAL_SPECIFICATION.md",
+      "README.md"
+    ],
+    "api": [
+      "stuck_detection.py",
+      "collective_agents.py"
+    ],
+    "services": [
+      "anonymizer_service.py",
+      "analytics_client.py",
+      "ai_foundation_integration.py",
+      "case_library.py",
+      "collective_agent_service.py",
+      "llm_client.py",
+      "mcp_partisia_integration.py",
+      "stuck_detector_service.py"
+    ]
+  },
+  "dependencies": [
+    "ai_services/intelligent_core",
+    "ai_services/services",
+    "api",
+    "asyncio",
+    "config",
+    "contextlib",
+    "database/postgresql",
+    "datetime",
+    "dependencies",
+    "enum",
+    "external/anthropic",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.security",
+    "hashlib",
+    "httpx",
+    "json",
+    "llm.llm_router",
+    "logging",
+    "math",
+    "models.database",
+    "os",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "pydantic_settings",
+    "rag.pipeline",
+    "re",
+    "services.ai_foundation_integration",
+    "services.analytics_client",
+    "services.anonymizer_service",
+    "services.case_library",
+    "services.llm_client",
+    "services.mcp_partisia_integration",
+    "services.stuck_detector_service",
+    "shared/database",
+    "sys",
+    "typing",
+    "uuid",
+    "uvicorn"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/check",
+      "file": "stuck_detection.py"
+    },
+    {
+      "method": "POST",
+      "path": "/accept-help",
+      "file": "stuck_detection.py"
+    },
+    {
+      "method": "POST",
+      "path": "/create",
+      "file": "collective_agents.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{agent_id}/chat",
+      "file": "collective_agents.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{agent_id}",
+      "file": "collective_agents.py"
+    },
+    {
+      "method": "GET",
+      "path": "/active",
+      "file": "collective_agents.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{agent_id}/history",
+      "file": "collective_agents.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "CollectiveConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveAgent",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveAgentMessage",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "StuckDetectionLog",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "StuckSignals",
+      "file": "stuck_detection.py",
+      "methods": 0
+    },
+    {
+      "name": "Recommendation",
+      "file": "stuck_detection.py",
+      "methods": 0
+    },
+    {
+      "name": "StuckCheckResponse",
+      "file": "stuck_detection.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "stuck_detection.py",
+      "methods": 0
+    },
+    {
+      "name": "CreateAgentRequest",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "CreateAgentResponse",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "ChatRequest",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "ChatResponse",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentDetails",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "ChatMessage",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "collective_agents.py",
+      "methods": 0
+    },
+    {
+      "name": "AnonymizerService",
+      "file": "anonymizer_service.py",
+      "methods": 21
+    },
+    {
+      "name": "AnonymizationResult",
+      "file": "anonymizer_service.py",
+      "methods": 2
+    },
+    {
+      "name": "AnalyticsClient",
+      "file": "analytics_client.py",
+      "methods": 1
+    },
+    {
+      "name": "CollectiveAIFoundation",
+      "file": "ai_foundation_integration.py",
+      "methods": 5
+    },
+    {
+      "name": "CaseLibrary",
+      "file": "case_library.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectiveAgentService",
+      "file": "collective_agent_service.py",
+      "methods": 9
+    },
+    {
+      "name": "InsufficientDataError",
+      "file": "collective_agent_service.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentNotFoundError",
+      "file": "collective_agent_service.py",
+      "methods": 0
+    },
+    {
+      "name": "AgentExpiredError",
+      "file": "collective_agent_service.py",
+      "methods": 0
+    },
+    {
+      "name": "UnauthorizedError",
+      "file": "collective_agent_service.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveLLMClient",
+      "file": "llm_client.py",
+      "methods": 4
+    },
+    {
+      "name": "MockLLMClient",
+      "file": "llm_client.py",
+      "methods": 0
+    },
+    {
+      "name": "MCPPartisiaIntegration",
+      "file": "mcp_partisia_integration.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectiveAgentWithBlockchain",
+      "file": "mcp_partisia_integration.py",
+      "methods": 2
+    },
+    {
+      "name": "StuckDetectorService",
+      "file": "stuck_detector_service.py",
+      "methods": 3
+    }
+  ],
+  "functions": [],
+  "config": {
+    "requirements.txt": "intelligent-core/collective/requirements.txt"
+  },
+  "metrics": {
+    "loc": 5230,
+    "python_files": 15,
+    "classes": 35,
+    "functions": 0,
+    "endpoints": 10,
+    "dependencies": 40
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 13205,
+    "lines": 462,
+    "content": "# Collective Agent Networks\n\n## Overview\nCollective Agent Networks is a revolutionary privacy-preserving collaboration system that enables organizations to help each other through AI without revealing their identities. Organizations share collective wisdom while maintaining complete anonymity through multi-layer privacy protection and k-anonymity guarantees.\n\n## Features\n\n- **Anonymous Collective Agents**: Temporary AI agents created from multiple organizations' experiences\n- **Stuck Detection**: Automatically detects when organizations need help based on progress indicators\n- **Privacy-Preserving Architecture**: Multi-layer anonymization with k-anonymity (minimum 5 organizations)\n- **Intelligent Matching**: Finds organizations that solved similar problems\n- **Temporary Agents**: Auto-expiring agents (7 days default) for security\n- **Real-time Collaboration**: Chat-based interface with collective wisdom\n- **Partisia Integration**: Blockchain-based privacy using Partisia MPC\n- **Case Li"
+  }
+}

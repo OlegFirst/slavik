@@ -1,0 +1,257 @@
+global:
+  evaluation_interval: 15s
+  scrape_interval: 15s
+scrape_configs:
+- job_name: workflow-engine
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: ai-service
+    targets:
+    - localhost:9000
+- job_name: predictive
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: application
+    targets:
+    - localhost:8031
+- job_name: collective
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: application
+    targets:
+    - localhost:9000
+- job_name: ai-workflow-optimizer
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: ai-service
+    targets:
+    - localhost:8006
+- job_name: "\u043C\u043E\u0436\u0435\u0442\u043F\u0440\u0438\u0433\u043E\u0434\u0438\
+    \u0442\u0441\u044F"
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: application
+    targets:
+    - localhost:8005
+- job_name: workflow-intelligence
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: ai-service
+    targets:
+    - localhost:9002
+- job_name: ai-foundation
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: ai-service
+    targets:
+    - localhost:8030
+- job_name: community-intelligence
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: ai-service
+    targets:
+    - localhost:9000
+- job_name: orchestration
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: core
+      type: application
+    targets:
+    - localhost:8002
+- job_name: "\u0430\u0440\u0445\u0438\u0432"
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: application
+    targets:
+    - localhost:8001
+- job_name: integration
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: application
+    targets:
+    - localhost:8003
+- job_name: runtime
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: application
+    targets:
+    - localhost:8500
+- job_name: observability
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: application
+    targets:
+    - localhost:8035
+- job_name: deployment
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: application
+    targets:
+    - localhost:8002
+- job_name: gateway
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: infrastructure
+      type: gateway
+    targets:
+    - localhost:8500
+- job_name: validation-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: compliance-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8012
+- job_name: governance-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: plans-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: planning-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: living-docs
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: risk-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8040
+- job_name: simulation
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8031
+- job_name: community-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8031
+- job_name: response-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: learning-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: bia-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010
+- job_name: documents-service
+  metrics_path: /metrics
+  scrape_interval: 30s
+  static_configs:
+  - labels:
+      category: platform
+      type: application
+    targets:
+    - localhost:8010

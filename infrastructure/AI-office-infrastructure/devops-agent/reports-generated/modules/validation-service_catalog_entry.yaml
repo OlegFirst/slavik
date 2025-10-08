@@ -1,0 +1,28 @@
+
+  validation_service:
+    type: business-service
+    location: platform-services/validation-service
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/database
+    endpoints:
+      - GET /api/compliance/check
+      - GET /health
+      - POST /api/events/webhook
+      - GET /insights
+      - GET /recommendations
+    metrics:
+      loc: 7567
+      files: 32
+      classes: 109
+      functions: 53
+    status: discovered

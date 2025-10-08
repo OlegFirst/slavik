@@ -1,0 +1,619 @@
+{
+  "module_name": "community_intelligence",
+  "path": "intelligent-core/community_intelligence",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "config.py",
+      "requirements.txt",
+      "__init__.py",
+      "README.md",
+      "main.py"
+    ],
+    "archive/docs": [
+      "COMPLETE.md",
+      "ARCHITECTURE.md",
+      "INTEGRATION_COMPLETE.md",
+      "IMPLEMENTATION_SUMMARY.md",
+      "UNIFIED_API_IMPLEMENTATION.md",
+      "README_OLD.md",
+      "MODULE_SUMMARY.md",
+      "INTEGRATION_GUIDE.md"
+    ],
+    "tests": [
+      "__init__.py",
+      "test_anonymizer.py",
+      "test_contribution_service.py"
+    ],
+    "models": [
+      "database.py",
+      "__init__.py"
+    ],
+    "docs": [
+      "ANALYSIS_AND_IMPROVEMENTS.md",
+      "TECHNICAL_SPECIFICATION.md",
+      "README.md"
+    ],
+    "examples": [
+      "__init__.py",
+      "basic_workflow.py"
+    ],
+    "scripts": [
+      "generate_openapi.py"
+    ],
+    "api": [
+      "reviews.py",
+      "reputation.py",
+      "__init__.py",
+      "cases.py",
+      "contributions.py",
+      "routes.py"
+    ],
+    "events": [
+      "__init__.py",
+      "subscribers.py"
+    ],
+    "services": [
+      "living_docs.py",
+      "workflow_integration_service.py",
+      "ml_predictor.py",
+      "peer_review_service.py",
+      "anonymizer.py",
+      "contribution_service.py",
+      "__init__.py",
+      "unified_ai_context.py",
+      "reputation_engine.py",
+      "predictive_timeline.py",
+      "case_library_bridge.py",
+      "workflow_completion_handler.py"
+    ]
+  },
+  "dependencies": [
+    "ai_services/community_intelligence",
+    "ai_services/intelligent_core",
+    "ai_services/living_docs",
+    "ai_services/predictive_timeline",
+    "ai_services/services",
+    "anonymizer",
+    "api",
+    "asyncio",
+    "collections",
+    "config",
+    "contextlib",
+    "contribution_service",
+    "database",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "enum",
+    "events.subscribers",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "hashlib",
+    "httpx",
+    "joblib",
+    "json",
+    "logging",
+    "models.database",
+    "numpy",
+    "os",
+    "pathlib",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "re",
+    "routes",
+    "runtime/eventbus",
+    "services.anonymizer",
+    "services.case_library_bridge",
+    "services.contribution_service",
+    "services.peer_review_service",
+    "services.reputation_engine",
+    "services.workflow_completion_handler",
+    "services.workflow_integration_service",
+    "shared/auth",
+    "shared/database",
+    "sklearn.ensemble",
+    "sklearn.model_selection",
+    "sklearn.preprocessing",
+    "sys",
+    "typing",
+    "unittest.mock",
+    "uuid",
+    "uvicorn",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/pending",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/my",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{review_id}",
+      "file": "reviews.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{user_id}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{user_id}/expertise/{module}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/global",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/leaderboard/{module}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{user_id}",
+      "file": "reputation.py"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{case_id}",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/similar/for-workflow",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/overview",
+      "file": "cases.py"
+    },
+    {
+      "method": "GET",
+      "path": "/my",
+      "file": "contributions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{contribution_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{contribution_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/preview-anonymization",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/from-workflow/{workflow_id}",
+      "file": "contributions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/contributions",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/contributions/{contribution_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/contributions/pending-reviews",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/contributions/{contribution_id}/review",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reputation/{user_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/reputation/leaderboard",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/annotations",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/guidance/{clause_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/annotations/{annotation_id}/vote",
+      "file": "routes.py"
+    },
+    {
+      "method": "POST",
+      "path": "/timeline/predict",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/insights/similar-orgs/{org_id}",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/timeline/{org_id}/next-steps",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/demand-forecast",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/clauses/search",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/community",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/stats/impact",
+      "file": "routes.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "routes.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "CommunityIntelligenceConfig",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionStatus",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseContribution",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReview",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "UserReputation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationTransaction",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "CommunityAnnotation",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "SynthesizedGuidance",
+      "file": "database.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewSubmit",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewResponse",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReviewDetail",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "PendingReviewItem",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reviews.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationProfile",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "LeaderboardEntry",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "TransactionItem",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertiseLevelResponse",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "reputation.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSearchRequest",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseResponse",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseDetail",
+      "file": "cases.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionCreate",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionResponse",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "ContributionDetail",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "AnonymizationPreview",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "contributions.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSubmissionRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSubmissionResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReviewRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "PeerReviewResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnnotationRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "AnnotationResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "TimelineRequest",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "ReputationResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "TimelineResponse",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "MockUser",
+      "file": "routes.py",
+      "methods": 0
+    },
+    {
+      "name": "LivingDocumentationService",
+      "file": "living_docs.py",
+      "methods": 9
+    },
+    {
+      "name": "WorkflowIntegrationService",
+      "file": "workflow_integration_service.py",
+      "methods": 1
+    },
+    {
+      "name": "MLPredictor",
+      "file": "ml_predictor.py",
+      "methods": 7
+    },
+    {
+      "name": "PeerReviewService",
+      "file": "peer_review_service.py",
+      "methods": 2
+    },
+    {
+      "name": "AnonymizationResult",
+      "file": "anonymizer.py",
+      "methods": 0
+    },
+    {
+      "name": "SmartAnonymizer",
+      "file": "anonymizer.py",
+      "methods": 9
+    },
+    {
+      "name": "ContributionService",
+      "file": "contribution_service.py",
+      "methods": 4
+    },
+    {
+      "name": "UnifiedAIContextBuilder",
+      "file": "unified_ai_context.py",
+      "methods": 6
+    },
+    {
+      "name": "ReputationEngine",
+      "file": "reputation_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "PredictedEvent",
+      "file": "predictive_timeline.py",
+      "methods": 1
+    },
+    {
+      "name": "PredictiveTimelineService",
+      "file": "predictive_timeline.py",
+      "methods": 5
+    },
+    {
+      "name": "CaseLibraryBridge",
+      "file": "case_library_bridge.py",
+      "methods": 3
+    },
+    {
+      "name": "WorkflowCompletionHandler",
+      "file": "workflow_completion_handler.py",
+      "methods": 1
+    }
+  ],
+  "functions": [
+    {
+      "name": "anonymizer",
+      "file": "test_anonymizer.py",
+      "params": 0
+    },
+    {
+      "name": "sample_case",
+      "file": "test_anonymizer.py",
+      "params": 0
+    },
+    {
+      "name": "mock_db",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "mock_anonymizer",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "mock_case_library",
+      "file": "test_contribution_service.py",
+      "params": 0
+    },
+    {
+      "name": "service",
+      "file": "test_contribution_service.py",
+      "params": 3
+    },
+    {
+      "name": "generate_openapi_spec",
+      "file": "generate_openapi.py",
+      "params": 0
+    }
+  ],
+  "config": {
+    "requirements.txt": "intelligent-core/community_intelligence/requirements.txt"
+  },
+  "metrics": {
+    "loc": 7408,
+    "python_files": 31,
+    "classes": 51,
+    "functions": 7,
+    "endpoints": 36,
+    "dependencies": 53
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 3074,
+    "lines": 140,
+    "content": "# Community Intelligence Service\n\n**Port:** 8030\n**Status:** Production Ready\n**Version:** 1.0.0\n\n## Documentation\n\nAll technical documentation is located in the [`docs/`](docs/) folder:\n- **[Technical Specification](docs/TECHNICAL_SPECIFICATION.md)** - Comprehensive technical documentation\n- **[Analysis and Improvements](docs/ANALYSIS_AND_IMPROVEMENTS.md)** - Production readiness assessment and recommendations\n\nArchived documentation can be found in [`archive/docs/`](archive/docs/).\n\n---\n\n## \ud83c\udfaf Purpose\n\nTransforms passive case collection into **active community-driven knowledge creation** through:\n\n- **Workflow Integration:** Auto-capture success stories from completed workflows\n- **Peer Review:** Quality assurance through expert validation\n- **Reputation Economy:** Gamification to incentivize contributions\n- **Case Library:** Searchable knowledge base of best practices\n\n---\n\n## \ud83c\udfd7\ufe0f Architecture\n\nSee [ARCHITECTURE.md](ARCHITECTURE.md) for detailed architecture documentation.\n\n```\nWorkfl"
+  }
+}

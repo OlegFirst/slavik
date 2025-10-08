@@ -1,0 +1,336 @@
+name: Dependency Health Check
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '**/requirements.txt'
+      - '**/pyproject.toml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - '**/requirements.txt'
+      - '**/pyproject.toml'
+  schedule:
+    # Weekly dependency check on Mondays at 8 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  find-requirements:
+    name: Discover Requirements Files
+    runs-on: ubuntu-latest
+    outputs:
+      requirements: ${{ steps.find-reqs.outputs.files }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Find all requirements.txt
+        id: find-reqs
+        run: |
+          echo "🔍 Finding all requirements.txt files..."
+
+          # Find all requirements.txt excluding venv and _archive
+          files=$(find . -name "requirements.txt" \
+            -not -path "*/venv/*" \
+            -not -path "*/_archive/*" \
+            -not -path "*/node_modules/*" \
+            -type f)
+
+          # Convert to JSON array
+          json_array=$(echo "$files" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          echo "files=$json_array" >> $GITHUB_OUTPUT
+          echo "Found files:"
+          echo "$files"
+
+  pip-audit:
+    name: pip-audit Security Check
+    runs-on: ubuntu-latest
+    needs: find-requirements
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Run pip-audit
+        continue-on-error: true
+        run: |
+          echo "🔍 Running pip-audit on all requirements..."
+
+          mkdir -p audit-reports
+
+          # Audit each requirements file
+          find . -name "requirements.txt" \
+            -not -path "*/venv/*" \
+            -not -path "*/_archive/*" \
+            -type f | while read req; do
+
+            echo "Auditing: $req"
+            output_file="audit-reports/$(echo $req | tr '/' '-' | sed 's/^.-//')"
+
+            pip-audit -r "$req" \
+              --format json \
+              --output "$output_file.json" || true
+
+            pip-audit -r "$req" \
+              --format markdown \
+              --output "$output_file.md" || true
+          done
+
+      - name: Generate audit summary
+        if: always()
+        run: |
+          echo "## 🔐 pip-audit Security Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          total_vulns=0
+          critical=0
+          high=0
+          medium=0
+          low=0
+
+          for file in audit-reports/*.json; do
+            if [ -f "$file" ]; then
+              vulns=$(jq '[.dependencies[]? | .vulns[]?] | length' "$file" 2>/dev/null || echo "0")
+              total_vulns=$((total_vulns + vulns))
+
+              # Count by severity
+              critical=$((critical + $(jq '[.dependencies[]? | .vulns[]? | select(.severity == "CRITICAL")] | length' "$file" 2>/dev/null || echo "0")))
+              high=$((high + $(jq '[.dependencies[]? | .vulns[]? | select(.severity == "HIGH")] | length' "$file" 2>/dev/null || echo "0")))
+              medium=$((medium + $(jq '[.dependencies[]? | .vulns[]? | select(.severity == "MEDIUM")] | length' "$file" 2>/dev/null || echo "0")))
+              low=$((low + $(jq '[.dependencies[]? | .vulns[]? | select(.severity == "LOW")] | length' "$file" 2>/dev/null || echo "0")))
+            fi
+          done
+
+          echo "- **Total vulnerabilities:** $total_vulns" >> $GITHUB_STEP_SUMMARY
+          echo "- **Critical:** $critical" >> $GITHUB_STEP_SUMMARY
+          echo "- **High:** $high" >> $GITHUB_STEP_SUMMARY
+          echo "- **Medium:** $medium" >> $GITHUB_STEP_SUMMARY
+          echo "- **Low:** $low" >> $GITHUB_STEP_SUMMARY
+
+          if [ $total_vulns -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Vulnerable Packages:" >> $GITHUB_STEP_SUMMARY
+
+            for file in audit-reports/*.json; do
+              if [ -f "$file" ]; then
+                jq -r '.dependencies[]? | select(.vulns | length > 0) | "- **\(.name)** \(.version): \(.vulns | length) vulnerabilities"' "$file" >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+              fi
+            done
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **No vulnerabilities found!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pip-audit-reports
+          path: audit-reports/
+          retention-days: 90
+
+  dependency-review:
+    name: Dependency Version Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install pip-tools
+        run: pip install pip-tools
+
+      - name: Check for outdated packages
+        run: |
+          echo "📊 Checking for outdated dependencies..."
+
+          mkdir -p dependency-reports
+
+          find . -name "requirements.txt" \
+            -not -path "*/venv/*" \
+            -not -path "*/_archive/*" \
+            -type f | while read req; do
+
+            echo "Checking: $req"
+
+            # Install requirements
+            pip install -q -r "$req" 2>/dev/null || continue
+
+            # Check outdated
+            output_file="dependency-reports/$(echo $req | tr '/' '-' | sed 's/^.-//')"
+            pip list --outdated --format json > "$output_file-outdated.json" || true
+          done
+
+      - name: Generate outdated summary
+        if: always()
+        run: |
+          echo "## 📦 Outdated Dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          total_outdated=0
+
+          for file in dependency-reports/*-outdated.json; do
+            if [ -f "$file" ]; then
+              count=$(jq '. | length' "$file" 2>/dev/null || echo "0")
+              total_outdated=$((total_outdated + count))
+            fi
+          done
+
+          echo "- **Total outdated packages:** $total_outdated" >> $GITHUB_STEP_SUMMARY
+
+          if [ $total_outdated -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Top Outdated Packages:" >> $GITHUB_STEP_SUMMARY
+
+            for file in dependency-reports/*-outdated.json; do
+              if [ -f "$file" ]; then
+                jq -r '.[] | "- **\(.name)**: \(.version) → \(.latest_version)"' "$file" | head -10 >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+              fi
+            done
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **All dependencies are up to date!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload dependency reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-version-reports
+          path: dependency-reports/
+          retention-days: 30
+
+  license-check:
+    name: License Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install pip-licenses
+        run: pip install pip-licenses
+
+      - name: Check licenses
+        run: |
+          echo "📜 Checking package licenses..."
+
+          mkdir -p license-reports
+
+          find . -name "requirements.txt" \
+            -not -path "*/venv/*" \
+            -not -path "*/_archive/*" \
+            -type f | while read req; do
+
+            echo "Checking licenses for: $req"
+
+            # Install requirements
+            pip install -q -r "$req" 2>/dev/null || continue
+
+            # Generate license report
+            output_file="license-reports/$(echo $req | tr '/' '-' | sed 's/^.-//')"
+
+            pip-licenses \
+              --format=json \
+              --output-file="$output_file-licenses.json" || true
+
+            pip-licenses \
+              --format=markdown \
+              --output-file="$output_file-licenses.md" || true
+          done
+
+      - name: Generate license summary
+        if: always()
+        run: |
+          echo "## 📜 License Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Aggregate all licenses
+          all_licenses=""
+          for file in license-reports/*-licenses.json; do
+            if [ -f "$file" ]; then
+              licenses=$(jq -r '.[].License' "$file" 2>/dev/null || true)
+              all_licenses="$all_licenses $licenses"
+            fi
+          done
+
+          # Count unique licenses
+          unique_licenses=$(echo "$all_licenses" | tr ' ' '\n' | sort -u | grep -v '^$' | wc -l)
+          echo "- **Unique licenses found:** $unique_licenses" >> $GITHUB_STEP_SUMMARY
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### License Types:" >> $GITHUB_STEP_SUMMARY
+          echo "$all_licenses" | tr ' ' '\n' | sort | uniq -c | sort -rn | head -10 | while read count license; do
+            echo "- $license: $count packages" >> $GITHUB_STEP_SUMMARY
+          done
+
+      - name: Upload license reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: license-reports
+          path: license-reports/
+          retention-days: 90
+
+  dependency-summary:
+    name: Consolidated Dependency Report
+    runs-on: ubuntu-latest
+    needs: [pip-audit, dependency-review, license-check]
+    if: always()
+
+    steps:
+      - name: Download all reports
+        uses: actions/download-artifact@v3
+        with:
+          path: all-reports/
+
+      - name: Create consolidated summary
+        run: |
+          echo "## 📊 Consolidated Dependency Health Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Report Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Count requirements files
+          req_count=$(find all-reports -name "*requirements.txt*" -o -name "*-outdated.json" | wc -l)
+          echo "- **Requirements files analyzed:** $req_count" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### 🔐 Security Status:" >> $GITHUB_STEP_SUMMARY
+          if [ -d all-reports/pip-audit-reports ]; then
+            total_vulns=$(find all-reports/pip-audit-reports -name "*.json" -exec jq '[.dependencies[]? | .vulns[]?] | length' {} + 2>/dev/null | awk '{s+=$1} END {print s}' || echo "0")
+            echo "- Vulnerabilities: $total_vulns" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Update Status:" >> $GITHUB_STEP_SUMMARY
+          if [ -d all-reports/dependency-version-reports ]; then
+            outdated=$(find all-reports/dependency-version-reports -name "*-outdated.json" -exec jq '. | length' {} + 2>/dev/null | awk '{s+=$1} END {print s}' || echo "0")
+            echo "- Outdated packages: $outdated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "📥 **Full reports available in workflow artifacts**" >> $GITHUB_STEP_SUMMARY

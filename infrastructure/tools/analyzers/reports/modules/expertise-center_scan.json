@@ -1,0 +1,413 @@
+{
+  "module_name": "expertise-center",
+  "path": "intelligent-core/expertise-center",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "README.md.bak2",
+      "README.md.bak4",
+      "README.md.bak3",
+      "__init__.py",
+      "update_assistants.py",
+      "README.md",
+      "README.md.bak",
+      "update_specialists.py",
+      "fix_indentation.py"
+    ],
+    "domains": [
+      "HOW_TO_CREATE_NEW_DOMAIN.md",
+      ".DS_Store",
+      "__init__.py"
+    ],
+    "domains/bcm": [
+      ".DS_Store",
+      "__init__.py",
+      "KNOWLEDGE_INTEGRATION_EXAMPLE.md"
+    ],
+    "domains/bcm/analyzers": [
+      "lifecycle_analyzer.py",
+      "impact_analyzer.py",
+      "performance_analyzer.py",
+      "plan_analyzer.py",
+      "scenario_analyzer.py",
+      "__init__.py",
+      "emergency_analyzer.py",
+      "governance_analyzer.py",
+      "risk_analyzer.py",
+      "compliance_analyzer.py",
+      "learning_analyzer.py"
+    ],
+    "domains/bcm/tactical_assistants": [
+      "community_specialist.py",
+      "incident_advisor.py",
+      "plan_generator.py",
+      "__init__.py",
+      "documents_specialist.py",
+      "bia_specialist.py",
+      "README.md",
+      "risk_analyst.py",
+      "exercise_designer.py",
+      "governance_specialist.py",
+      "learning_specialist.py",
+      "project_manager.py",
+      "compliance_copilot.py",
+      "validation_specialist.py"
+    ],
+    "domains/bcm/specialists": [
+      "compliance_auditor.py",
+      "bcm_advisor.py",
+      "__init__.py",
+      "strategic_planner.py"
+    ],
+    "core": [
+      "expert_registry.py",
+      "__init__.py",
+      "chief_executive.py",
+      "domain_loader.py",
+      "organism_coordinator.py"
+    ],
+    "shared": [
+      "learning_knowledge_adapter.py"
+    ],
+    "shared/base": [
+      "base_tactical_assistant.py",
+      "base_colleague.py",
+      "__init__.py",
+      "base_specialist.py",
+      "base_analyzer.py"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "ai_foundation",
+    "ai_foundation/expertise_center",
+    "aiohttp",
+    "base_analyzer",
+    "base_organ",
+    "base_specialist",
+    "base_tactical_assistant",
+    "bia_specialist",
+    "chief_executive",
+    "community_specialist",
+    "compliance_copilot",
+    "core",
+    "dataclasses",
+    "datetime",
+    "documents_specialist",
+    "domain_loader",
+    "enum",
+    "exercise_designer",
+    "expert_registry",
+    "governance_specialist",
+    "httpx",
+    "importlib",
+    "incident_advisor",
+    "json",
+    "learning_specialist",
+    "logging",
+    "pathlib",
+    "plan_generator",
+    "project_manager",
+    "re",
+    "risk_analyst",
+    "shared/base",
+    "sys",
+    "typing",
+    "validation_specialist"
+  ],
+  "endpoints": [],
+  "classes": [
+    {
+      "name": "LifecycleMonitor",
+      "file": "lifecycle_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "ImpactOracle",
+      "file": "impact_analyzer.py",
+      "methods": 5
+    },
+    {
+      "name": "PerformanceAnalyst",
+      "file": "performance_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "ScenarioCreator",
+      "file": "scenario_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "EmergencyResponse",
+      "file": "emergency_analyzer.py",
+      "methods": 6
+    },
+    {
+      "name": "GovernanceBrain",
+      "file": "governance_analyzer.py",
+      "methods": 7
+    },
+    {
+      "name": "RiskAdvisor",
+      "file": "risk_analyzer.py",
+      "methods": 5
+    },
+    {
+      "name": "ComplianceGuardian",
+      "file": "compliance_analyzer.py",
+      "methods": 8
+    },
+    {
+      "name": "LearningCoach",
+      "file": "learning_analyzer.py",
+      "methods": 10
+    },
+    {
+      "name": "CommunitySpecialistAI",
+      "file": "community_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "IncidentAdvisorAI",
+      "file": "incident_advisor.py",
+      "methods": 4
+    },
+    {
+      "name": "PlanGeneratorAI",
+      "file": "plan_generator.py",
+      "methods": 4
+    },
+    {
+      "name": "DocumentsSpecialistAI",
+      "file": "documents_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BIASpecialistAI",
+      "file": "bia_specialist.py",
+      "methods": 4
+    },
+    {
+      "name": "RiskAnalystAI",
+      "file": "risk_analyst.py",
+      "methods": 4
+    },
+    {
+      "name": "ExerciseDesignerAI",
+      "file": "exercise_designer.py",
+      "methods": 4
+    },
+    {
+      "name": "GovernanceSpecialistAI",
+      "file": "governance_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "LearningSpecialistAI",
+      "file": "learning_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BCMProjectType",
+      "file": "project_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthStatus",
+      "file": "project_manager.py",
+      "methods": 0
+    },
+    {
+      "name": "ProjectManagerAI",
+      "file": "project_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "ComplianceCopilot",
+      "file": "compliance_copilot.py",
+      "methods": 3
+    },
+    {
+      "name": "ValidationSpecialistAI",
+      "file": "validation_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "ComplianceAuditor",
+      "file": "compliance_auditor.py",
+      "methods": 1
+    },
+    {
+      "name": "BCMAdvisor",
+      "file": "bcm_advisor.py",
+      "methods": 1
+    },
+    {
+      "name": "StrategicPlanner",
+      "file": "strategic_planner.py",
+      "methods": 1
+    },
+    {
+      "name": "ExpertRegistry",
+      "file": "expert_registry.py",
+      "methods": 9
+    },
+    {
+      "name": "ChiefExecutive",
+      "file": "chief_executive.py",
+      "methods": 2
+    },
+    {
+      "name": "DomainLoader",
+      "file": "domain_loader.py",
+      "methods": 4
+    },
+    {
+      "name": "ExpertLifecycleState",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganismPersonality",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "DecisionContext",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertInfo",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertInput",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectiveDecision",
+      "file": "organism_coordinator.py",
+      "methods": 0
+    },
+    {
+      "name": "ExpertCommunicationChannels",
+      "file": "organism_coordinator.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganismCoordinator",
+      "file": "organism_coordinator.py",
+      "methods": 10
+    },
+    {
+      "name": "ExpertRegistry",
+      "file": "organism_coordinator.py",
+      "methods": 6
+    },
+    {
+      "name": "ExpertSelectionStrategy",
+      "file": "organism_coordinator.py",
+      "methods": 1
+    },
+    {
+      "name": "WeightedConfidenceScorer",
+      "file": "organism_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectiveWisdomTracker",
+      "file": "organism_coordinator.py",
+      "methods": 5
+    },
+    {
+      "name": "OrganismEvolution",
+      "file": "organism_coordinator.py",
+      "methods": 2
+    },
+    {
+      "name": "LearningKnowledgeAdapter",
+      "file": "learning_knowledge_adapter.py",
+      "methods": 1
+    },
+    {
+      "name": "BaseTacticalAssistant",
+      "file": "base_tactical_assistant.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseColleague",
+      "file": "base_colleague.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseSpecialist",
+      "file": "base_specialist.py",
+      "methods": 2
+    },
+    {
+      "name": "BaseAnalyzer",
+      "file": "base_analyzer.py",
+      "methods": 2
+    }
+  ],
+  "functions": [
+    {
+      "name": "update_imports",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "update_class_declaration",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "update_init_method",
+      "file": "update_assistants.py",
+      "params": 3
+    },
+    {
+      "name": "process_file",
+      "file": "update_assistants.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "update_assistants.py",
+      "params": 0
+    },
+    {
+      "name": "update_file",
+      "file": "update_specialists.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "update_specialists.py",
+      "params": 0
+    },
+    {
+      "name": "get_learning_knowledge_adapter",
+      "file": "learning_knowledge_adapter.py",
+      "params": 1
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 7932,
+    "python_files": 45,
+    "classes": 47,
+    "functions": 8,
+    "endpoints": 0,
+    "dependencies": 36
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 5533,
+    "lines": 211,
+    "content": "# Expertise Center\n\nDomain Plugin Manager for AI-Powered BCM Platform\n\n## Overview\n\nExpertise Center manages domain-specific AI experts:\n- **Specialists** - Strategic experts (deep analysis, strategic recommendations)\n- **Tactical Assistants** - Tactical assistants (specific tasks, quick answers)\n- **Analyzers** - Heavy AI (deep data analysis, pattern recognition)\n\n## Architecture\n\n```\nexpertise-center/\n\u251c\u2500\u2500 core/                    # Plugin Manager Core\n\u2502   \u251c\u2500\u2500 chief_executive.py   # Main orchestrator\n\u2502   \u251c\u2500\u2500 domain_loader.py     # Plugin loader\n\u2502   \u2514\u2500\u2500 expert_registry.py   # Expert registry\n\u2502\n\u251c\u2500\u2500 shared/                  # Shared for Domain Plugins\n\u2502   \u251c\u2500\u2500 base/               # Base Classes\n\u2502   \u2502   \u251c\u2500\u2500 base_specialist.py\n\u2502   \u2502   \u251c\u2500\u2500 base_tactical_assistant.py\n\u2502   \u2502   \u2514\u2500\u2500 base_analyzer.py\n\u2502   \u2514\u2500\u2500 tools/              # Domain Tools\n\u2502\n\u2514\u2500\u2500 domains/                # Domain Plugins\n    \u2514\u2500\u2500 bcm/               # BCM Domain\n        \u251c\u2500\u2500 specialists/   # 3 Strategic Experts\n        \u251c\u2500\u2500 tactical_"
+  }
+}

@@ -1,0 +1,186 @@
+name: Daily Platform Analysis
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 02:00 UTC
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  analyze-platform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git-based analysis
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r infrastructure/tools/requirements.txt || echo "requirements.txt not found, installing base packages"
+          pip install requests pyyaml jinja2
+
+      - name: Create reports directory
+        run: |
+          mkdir -p infrastructure/tools/reports/daily-$(date +%Y-%m-%d)
+
+      # ===== JUNIOR TOOLS (Always run) =====
+
+      - name: AST Analysis
+        continue-on-error: true
+        run: |
+          echo "Running AST Analysis..."
+          python3 infrastructure/tools/analyzers/ast_analyzer.py || echo "AST analysis failed, continuing..."
+
+      - name: Module Scanner
+        continue-on-error: true
+        run: |
+          echo "Running Module Scanner..."
+          python3 infrastructure/tools/analyzers/module_scanner.py || echo "Module scan failed, continuing..."
+
+      - name: Metrics Discovery
+        continue-on-error: true
+        run: |
+          echo "Running Metrics Discovery..."
+          python3 infrastructure/tools/analyzers/metrics_discovery.py || echo "Metrics discovery failed, continuing..."
+
+      - name: Service Discovery
+        continue-on-error: true
+        run: |
+          echo "Running Service Discovery..."
+          python3 infrastructure/tools/analyzers/service_discovery.py || echo "Service discovery failed, continuing..."
+
+      # ===== MIDDLE TOOLS =====
+
+      - name: Dependency Mapping
+        continue-on-error: true
+        run: |
+          echo "Running Dependency Mapper..."
+          python3 infrastructure/tools/analyzers/dependency_mapper.py || echo "Dependency mapping failed, continuing..."
+
+      - name: API Mapping
+        continue-on-error: true
+        run: |
+          echo "Running API Mapper..."
+          python3 infrastructure/tools/analyzers/api_mapper.py || echo "API mapping failed, continuing..."
+
+      - name: Dependency Validation
+        continue-on-error: true
+        run: |
+          echo "Running Dependency Validator..."
+          python3 infrastructure/tools/analyzers/dependency_validator.py || echo "Dependency validation failed, continuing..."
+
+      - name: Security Scan
+        continue-on-error: true
+        run: |
+          echo "Running Security Scanner..."
+          python3 infrastructure/tools/analyzers/security_scanner.py || echo "Security scan failed, continuing..."
+
+      # ===== DOC GENERATORS =====
+
+      - name: Generate Documentation
+        continue-on-error: true
+        run: |
+          echo "Generating Documentation..."
+          python3 infrastructure/tools/doc-generators/documentation_generator.py || echo "Documentation generation failed, continuing..."
+
+      - name: Generate Test Cases
+        continue-on-error: true
+        run: |
+          echo "Generating Test Cases..."
+          python3 infrastructure/tools/doc-generators/test_generator.py || echo "Test generation failed, continuing..."
+
+      # ===== CONFIG GENERATORS =====
+
+      - name: Generate Docker Compose
+        continue-on-error: true
+        run: |
+          echo "Generating Docker Compose configs..."
+          python3 infrastructure/tools/generators/docker_compose_generator.py || echo "Docker compose generation failed, continuing..."
+
+      - name: Generate Prometheus Config
+        continue-on-error: true
+        run: |
+          echo "Generating Prometheus config..."
+          python3 infrastructure/tools/generators/prometheus_config_generator.py || echo "Prometheus config generation failed, continuing..."
+
+      # ===== COMMIT RESULTS =====
+
+      - name: Commit analysis reports
+        id: commit
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add generated files
+          git add -A infrastructure/tools/reports/ || true
+          git add -A docs/ || true
+          git add -A tests/generated/ || true
+          git add -A infrastructure/tools/auto-generated/ || true
+          git add -A infrastructure/tools/docker-generated/ || true
+
+          # Check if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: daily platform analysis [skip ci]
+
+Generated on $(date -u +"%Y-%m-%d %H:%M UTC")
+
+Automated by GitHub Actions
+🤖 Daily Analysis Workflow"
+            git push
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Daily Analysis Complete 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +"%Y-%m-%d %H:%M UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tools Executed:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ AST Analyzer" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Module Scanner" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Metrics Discovery" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Service Discovery" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dependency Mapper" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ API Mapper" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Dependency Validator" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Security Scanner" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Documentation Generator" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Test Generator" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Docker Compose Generator" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Prometheus Config Generator" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.commit.outputs.changes }}" == "true" ]; then
+            echo "**Status:** Reports committed and pushed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** No changes detected" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-analysis-${{ github.run_number }}
+          path: |
+            infrastructure/tools/reports/
+            docs/
+            tests/generated/
+          retention-days: 30

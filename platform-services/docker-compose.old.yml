@@ -1,0 +1,253 @@
+services:
+  # PostgreSQL Database - Shared by all services
+  postgres:
+    image: postgres:15-alpine
+    container_name: bcm-postgres
+    environment:
+      POSTGRES_DB: bcm_platform
+      POSTGRES_USER: bcm_user
+      POSTGRES_PASSWORD: bcm_password_change_in_production
+      POSTGRES_MULTIPLE_DATABASES: planning,plans,governance,risk,response,learning
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bcm_user -d bcm_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bcm-network
+
+  # Redis - For caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: bcm-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - bcm-network
+
+  # EventBus - Simple HTTP event bus
+  eventbus:
+    image: python:3.11-slim
+    container_name: bcm-eventbus
+    working_dir: /app
+    command: python -m http.server 8001
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - bcm-network
+
+  # Planning Service - ISO 22301 Clause 8.3
+  planning-service:
+    build:
+      context: ./planning_service
+      dockerfile: Dockerfile
+    container_name: planning-service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://bcm_user:bcm_password_change_in_production@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379/0
+      - EVENTBUS_URL=http://eventbus:8001
+      - SERVICE_NAME=planning_service
+      - SERVICE_PORT=8011
+      - JWT_PUBLIC_KEY=
+      - JWT_ALGORITHM=RS256
+    ports:
+      - "8011:8011"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+  # Plans Service - ISO 22301 Clause 8.4
+  plans-service:
+    build:
+      context: ./plans_service
+      dockerfile: Dockerfile
+    container_name: plans-service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://bcm_user:bcm_password_change_in_production@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379/1
+      - EVENTBUS_URL=http://eventbus:8001
+      - SERVICE_NAME=plans_service
+      - SERVICE_PORT=8023
+      - JWT_PUBLIC_KEY=
+      - JWT_ALGORITHM=RS256
+      - PLANNING_SERVICE_URL=http://planning-service:8011
+    ports:
+      - "8023:8023"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+      planning-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8023/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+  # Prometheus - Metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: bcm-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+  # Grafana - Metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bcm-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - bcm-network
+    restart: unless-stopped
+
+  # BIA Service - Business Impact Analysis (ISO 22301 Clause 8.2.2)
+  bia-service:
+    build:
+      context: ./bia-service
+      dockerfile: Dockerfile
+    container_name: bia-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_user:bcm_password_change_in_production@postgres:5432/bcm_platform
+      EVENTBUS_URL: amqp://guest:guest@rabbitmq:5672/
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-CHANGE-IN-PRODUCTION}
+      SERVICE_PORT: 8012
+      LOG_LEVEL: INFO
+    ports:
+      - "8012:8012"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bcm-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Compliance Service - ISO 22301 Compliance Management
+  compliance-service:
+    build:
+      context: ./compliance-service
+      dockerfile: Dockerfile
+    container_name: compliance-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://bcm_user:bcm_password_change_in_production@postgres:5432/bcm_platform
+      EVENTBUS_URL: amqp://guest:guest@rabbitmq:5672/
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-CHANGE-IN-PRODUCTION}
+      SERVICE_PORT: 8014
+      LOG_LEVEL: INFO
+    ports:
+      - "8014:8014"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bcm-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Centralized Monitoring Service - Active monitoring and log aggregation
+  monitoring-service:
+    build:
+      context: ../infrastructure/monitoring
+      dockerfile: Dockerfile
+    container_name: monitoring-service
+    environment:
+      - LOG_DIR=/var/log/bcm
+      - CHECK_INTERVAL_SECONDS=30
+      - METRICS_RETENTION_HOURS=24
+      - ALERT_EMAIL=alerts@bcm.example.com
+      - NOTIFICATION_SERVICE_URL=http://notification-service:8035
+      - PORT=8045
+    ports:
+      - "8045:8045"
+    volumes:
+      - monitoring_logs:/var/log/bcm
+    depends_on:
+      planning-service:
+        condition: service_healthy
+      plans-service:
+        condition: service_healthy
+    networks:
+      - bcm-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8045/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  bcm-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  monitoring_logs:

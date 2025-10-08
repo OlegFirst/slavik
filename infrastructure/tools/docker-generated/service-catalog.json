@@ -1,0 +1,1684 @@
+[
+  {
+    "name": "workflow-engine",
+    "display_name": "Workflow-Engine",
+    "path": "intelligent-core/workflow-engine",
+    "category": "core",
+    "type": "ai-service",
+    "port": 9000,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "POST",
+        "path": "/processes"
+      },
+      {
+        "method": "GET",
+        "path": "/instances/{instance_id}/visual-state"
+      },
+      {
+        "method": "POST",
+        "path": "/tasks/{task_id}/complete"
+      },
+      {
+        "method": "POST",
+        "path": "/tasks/{task_id}/assign"
+      },
+      {
+        "method": "GET",
+        "path": "/users/{user_email}/tasks"
+      },
+      {
+        "method": "GET",
+        "path": "/processes"
+      },
+      {
+        "method": "GET",
+        "path": "/instances"
+      },
+      {
+        "method": "DELETE",
+        "path": "/instances/{instance_id}"
+      }
+    ],
+    "environment": [
+      "WORKFLOW_API_PORT",
+      "DATABASE_URL"
+    ],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "predictive",
+    "display_name": "Predictive",
+    "path": "intelligent-core/predictive",
+    "category": "core",
+    "type": "application",
+    "port": 8031,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/journey/{org_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/certification/{org_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/recommendations/{org_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/expert-demand"
+      },
+      {
+        "method": "GET",
+        "path": "/similar-organizations/{org_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/stats/eventbus"
+      }
+    ],
+    "environment": [
+      "EVENTBUS_URL",
+      "ENABLE_DAILY_DIGESTS",
+      "SUPABASE_DB_PASSWORD",
+      "DATABASE_URL",
+      "SUPABASE_URL",
+      "REDIS_URL",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "dependencies": [
+      "workflow-intelligence"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "collective",
+    "display_name": "Collective",
+    "path": "intelligent-core/collective",
+    "category": "core",
+    "type": "application",
+    "port": 9000,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/check"
+      },
+      {
+        "method": "POST",
+        "path": "/accept-help"
+      },
+      {
+        "method": "POST",
+        "path": "/create"
+      },
+      {
+        "method": "POST",
+        "path": "/{agent_id}/chat"
+      },
+      {
+        "method": "GET",
+        "path": "/{agent_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/active"
+      },
+      {
+        "method": "GET",
+        "path": "/{agent_id}/history"
+      }
+    ],
+    "environment": [
+      "ANTHROPIC_API_KEY"
+    ],
+    "dependencies": [
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "ai-workflow-optimizer",
+    "display_name": "Ai Workflow Optimizer",
+    "path": "intelligent-core/ai_workflow_optimizer",
+    "category": "core",
+    "type": "ai-service",
+    "port": 8006,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/optimize/performance"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/analyze/bottlenecks/{process_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/optimize/resources/{process_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/detect/anomalies/{process_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/models/retrain"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/models/status"
+      }
+    ],
+    "environment": [
+      "DATABASE_URL"
+    ],
+    "dependencies": [],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "workflow-intelligence",
+    "display_name": "Workflow Intelligence",
+    "path": "intelligent-core/workflow_intelligence",
+    "category": "core",
+    "type": "ai-service",
+    "port": 9002,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      }
+    ],
+    "environment": [
+      "windir",
+      "MACOSX_DEPLOYMENT_TARGET",
+      "_PIP_RUNNING_IN_SUBPROCESS",
+      "CXX",
+      "NO_NETWORK",
+      "USERPROFILE",
+      "VISUAL",
+      "PATH",
+      "_PYTHON_PROJECT_BASE",
+      "COMP_WORDS",
+      "DATABRICKS_RUNTIME_VERSION",
+      "ANDROID_ROOT",
+      "TEMPORARILY_DISABLE_PROTOBUF_VERSION_CHECK",
+      "PATHEXT",
+      "PYTHONPATH",
+      "path",
+      "HOME",
+      "LDFLAGS",
+      "CPP",
+      "LDSHARED"
+    ],
+    "dependencies": [
+      "shared-libraries",
+      "workflow-intelligence",
+      "ai-foundation"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "ai-foundation",
+    "display_name": "Ai-Foundation",
+    "path": "intelligent-core/ai-foundation",
+    "category": "core",
+    "type": "ai-service",
+    "port": 8030,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/..."
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/standards"
+      },
+      {
+        "method": "GET",
+        "path": "/standards/{standard_id:path}"
+      },
+      {
+        "method": "GET",
+        "path": "/standards/{standard_id:path}/metadata"
+      },
+      {
+        "method": "GET",
+        "path": "/cases"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/{case_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/cases/search"
+      },
+      {
+        "method": "POST",
+        "path": "/api/cross-learning/virtuous-cycle/workflow"
+      }
+    ],
+    "environment": [
+      "QDRANT_URL",
+      "RABBITMQ_URL",
+      "OPENAI_API_KEY",
+      "VOYAGE_API_KEY",
+      "ANTHROPIC_API_KEY",
+      "QDRANT_API_KEY"
+    ],
+    "dependencies": [
+      "ai-foundation",
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "community-intelligence",
+    "display_name": "Community Intelligence",
+    "path": "intelligent-core/community_intelligence",
+    "category": "core",
+    "type": "ai-service",
+    "port": 9000,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/pending"
+      },
+      {
+        "method": "GET",
+        "path": "/my"
+      },
+      {
+        "method": "GET",
+        "path": "/{review_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/{user_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/{user_id}/expertise/{module}"
+      },
+      {
+        "method": "GET",
+        "path": "/leaderboard/global"
+      },
+      {
+        "method": "GET",
+        "path": "/leaderboard/{module}"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "orchestration",
+    "display_name": "Orchestration",
+    "path": "intelligent-core/orchestration",
+    "category": "core",
+    "type": "application",
+    "port": 8002,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/message"
+      },
+      {
+        "method": "GET",
+        "path": "/api/actions"
+      },
+      {
+        "method": "POST",
+        "path": "/api/actions/{action_id}/execute"
+      },
+      {
+        "method": "POST",
+        "path": "/api/phase/update"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/system/status"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/system/restart"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/system/orchestrator/{orchestrator}/restart"
+      }
+    ],
+    "environment": [
+      "SUPABASE_URL",
+      "REDIS_URL",
+      "RABBITMQ_URL",
+      "SUPABASE_KEY",
+      "ANTHROPIC_API_KEY",
+      "GITHUB_REPO"
+    ],
+    "dependencies": [
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "\u0430\u0440\u0445\u0438\u0432",
+    "display_name": "\u0410\u0440\u0445\u0438\u0432",
+    "path": "infrastructure/\u0430\u0440\u0445\u0438\u0432",
+    "category": "infrastructure",
+    "type": "application",
+    "port": 8001,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/events/publish"
+      },
+      {
+        "method": "GET",
+        "path": "/api/events/history"
+      },
+      {
+        "method": "GET",
+        "path": "/api/events/stream"
+      },
+      {
+        "method": "GET",
+        "path": "/api/events/stats"
+      },
+      {
+        "method": "POST",
+        "path": "/api/events/validate"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/services"
+      },
+      {
+        "method": "GET",
+        "path": "/services/health"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      }
+    ],
+    "environment": [
+      "CORS_ORIGINS",
+      "SUPABASE_URL",
+      "REDIS_URL",
+      "RABBITMQ_URL",
+      "POSTGRES_URL",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "dependencies": [
+      "infrastructure-services"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "integration",
+    "display_name": "Integration",
+    "path": "infrastructure/integration",
+    "category": "infrastructure",
+    "type": "application",
+    "port": 8003,
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/log-execution"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/log-event"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/analyze-performance/{process_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/discover-patterns/{process_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/detect-deviations/{process_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/process-mining/comprehensive-analysis"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/process-mining/health"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/process-mining/processes/{process_id}/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "POST",
+        "path": "/github/webhook"
+      }
+    ],
+    "environment": [
+      "GITHUB_APP_ID",
+      "DATABASE_URL"
+    ],
+    "dependencies": [
+      "infrastructure-services"
+    ],
+    "health_check": "/api/v1/process-mining/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "runtime",
+    "display_name": "Runtime",
+    "path": "infrastructure/runtime",
+    "category": "infrastructure",
+    "type": "application",
+    "port": 8500,
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/workflows"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "POST",
+        "path": "/workflows"
+      },
+      {
+        "method": "POST",
+        "path": "/workflows/{workflow_id}/complete"
+      },
+      {
+        "method": "GET",
+        "path": "/stats"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/notifications/broadcast"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/channels/{channel_id}/users"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/channels/{channel_id}/messages"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/stats"
+      }
+    ],
+    "environment": [
+      "DATABASE_URL",
+      "EVENTBUS_EXCHANGE",
+      "REDIS_URL",
+      "EVENTBUS_BACKEND",
+      "RABBITMQ_URL",
+      "UPSTASH_REDIS_URL",
+      "PORT",
+      "MESSAGE_RETENTION_HOURS",
+      "MAX_CONNECTIONS_PER_USER"
+    ],
+    "dependencies": [
+      "infrastructure-services"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "observability",
+    "display_name": "Observability",
+    "path": "infrastructure/observability",
+    "category": "infrastructure",
+    "type": "application",
+    "port": 8035,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/email/send"
+      },
+      {
+        "method": "POST",
+        "path": "/sms/send"
+      },
+      {
+        "method": "POST",
+        "path": "/push/send"
+      },
+      {
+        "method": "POST",
+        "path": "/webhook/send"
+      },
+      {
+        "method": "GET",
+        "path": "/notifications/history"
+      },
+      {
+        "method": "GET",
+        "path": "/notifications/stats"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      }
+    ],
+    "environment": [
+      "SLACK_CHANNEL_ALERTS",
+      "TEAMS_ENABLED",
+      "TWILIO_AUTH_TOKEN",
+      "PAGERDUTY_INTEGRATION_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "NOTIFICATIONS_ENABLED",
+      "TWILIO_ACCOUNT_SID",
+      "LOG_LEVEL",
+      "SLACK_WEBHOOK_URL",
+      "QDRANT_EXPORTER_PORT",
+      "SCRAPE_INTERVAL",
+      "SUPABASE_URL",
+      "SLACK_ENABLED",
+      "RABBITMQ_URL",
+      "COMPLIANCE_OFFICERS_EMAILS",
+      "AUDIT_TEAM_EMAILS",
+      "SMTP_PORT",
+      "PROMETHEUS_SD_DIR",
+      "ALERT_EMAIL",
+      "SMTP_HOST"
+    ],
+    "dependencies": [],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "deployment",
+    "display_name": "Deployment",
+    "path": "infrastructure/deployment",
+    "category": "infrastructure",
+    "type": "application",
+    "port": 8002,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/deploy"
+      },
+      {
+        "method": "GET",
+        "path": "/status"
+      },
+      {
+        "method": "POST",
+        "path": "/restart/{service_name}"
+      },
+      {
+        "method": "GET",
+        "path": "/deployments/recent"
+      },
+      {
+        "method": "GET",
+        "path": "/deployments/{deployment_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/deployments/stats"
+      },
+      {
+        "method": "POST",
+        "path": "/monitoring/start"
+      },
+      {
+        "method": "POST",
+        "path": "/monitoring/stop"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "infrastructure-services"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "gateway",
+    "display_name": "Gateway",
+    "path": "infrastructure/gateway",
+    "category": "infrastructure",
+    "type": "gateway",
+    "port": 8500,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/gateway/ai/analyze"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/gateway/ai/optimize"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/gateway/services"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/health/databases"
+      },
+      {
+        "method": "POST",
+        "path": "/query"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/odoo"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/odoo/session/{session_id}"
+      },
+      {
+        "method": "DELETE",
+        "path": "/auth/odoo/session/{session_id}"
+      }
+    ],
+    "environment": [
+      "ODOO_API_URL",
+      "ODOO_DB_NAME",
+      "DATABASE_URL",
+      "SUPABASE_URL",
+      "REDIS_URL",
+      "MONGODB_URL",
+      "RABBITMQ_URL",
+      "SUPABASE_KEY",
+      "REDIS_PASSWORD",
+      "ODOO_DB_URL",
+      "POSTGRES_URL",
+      "JWT_SECRET"
+    ],
+    "dependencies": [],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "validation-service",
+    "display_name": "Validation-Service",
+    "path": "platform-services/validation-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/events/webhook"
+      },
+      {
+        "method": "GET",
+        "path": "/insights"
+      },
+      {
+        "method": "GET",
+        "path": "/recommendations"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/search"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/{case_id}/similar"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/{case_id}/timeline"
+      },
+      {
+        "method": "GET",
+        "path": "/analytics/patterns"
+      },
+      {
+        "method": "GET",
+        "path": "/analytics/performance"
+      }
+    ],
+    "environment": [
+      "EMAIL_USERNAME",
+      "EMAIL_HOST",
+      "EMAIL_PORT",
+      "EMAIL_PASSWORD",
+      "EMAIL_FROM",
+      "EMAIL_USE_TLS"
+    ],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "compliance-service",
+    "display_name": "Compliance-Service",
+    "path": "platform-services/compliance-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8012,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/items"
+      },
+      {
+        "method": "GET",
+        "path": "/{item_id}/ai-advice"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "GET",
+        "path": "/guides"
+      },
+      {
+        "method": "GET",
+        "path": "/guides/{guide_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/research"
+      },
+      {
+        "method": "GET",
+        "path": "/research/{source}"
+      },
+      {
+        "method": "GET",
+        "path": "/best-practices"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "governance-service",
+    "display_name": "Governance-Service",
+    "path": "platform-services/governance-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/token"
+      },
+      {
+        "method": "GET",
+        "path": "/{item_id}/ai-advice"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "POST",
+        "path": "/policies"
+      },
+      {
+        "method": "GET",
+        "path": "/policies"
+      },
+      {
+        "method": "GET",
+        "path": "/policies/{policy_id}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/policies/{policy_id}"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "plans-service",
+    "display_name": "Plans Service",
+    "path": "platform-services/plans_service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/{item_id}/ai-advice"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/health/detailed"
+      },
+      {
+        "method": "GET",
+        "path": "/health/ready"
+      },
+      {
+        "method": "GET",
+        "path": "/health/live"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "planning-service",
+    "display_name": "Planning Service",
+    "path": "platform-services/planning_service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/strategies/{strategy_id}/ai-advice"
+      },
+      {
+        "method": "POST",
+        "path": "/strategies/{strategy_id}/complete-case"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/health/detailed"
+      },
+      {
+        "method": "GET",
+        "path": "/health/ready"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "living-docs",
+    "display_name": "Living-Docs",
+    "path": "platform-services/living-docs",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/stats"
+      },
+      {
+        "method": "GET",
+        "path": "/{page_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/examples/generate"
+      },
+      {
+        "method": "POST",
+        "path": "/feedback"
+      },
+      {
+        "method": "GET",
+        "path": "/search"
+      },
+      {
+        "method": "GET",
+        "path": "/journey/{goal}"
+      },
+      {
+        "method": "GET",
+        "path": "/gaps"
+      },
+      {
+        "method": "GET",
+        "path": "/improvements"
+      }
+    ],
+    "environment": [
+      "ANTHROPIC_API_KEY"
+    ],
+    "dependencies": [
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "risk-service",
+    "display_name": "Risk-Service",
+    "path": "platform-services/risk-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8040,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/risks"
+      },
+      {
+        "method": "GET",
+        "path": "/public-risks"
+      },
+      {
+        "method": "POST",
+        "path": "/critical-risks"
+      },
+      {
+        "method": "GET",
+        "path": "/insights"
+      },
+      {
+        "method": "GET",
+        "path": "/recommendations"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/search"
+      },
+      {
+        "method": "GET",
+        "path": "/cases/{case_id}/similar"
+      }
+    ],
+    "environment": [
+      "CORS_ORIGINS",
+      "DEBUG"
+    ],
+    "dependencies": [
+      "workflow-intelligence"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "simulation",
+    "display_name": "Simulation",
+    "path": "platform-services/simulation",
+    "category": "platform",
+    "type": "application",
+    "port": 8031,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/incident/create-case"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/exercise/create-case"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v1/case/{case_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/case/{case_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/cases"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/case/{case_id}/sync"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/metrics"
+      }
+    ],
+    "environment": [
+      "ENVIRONMENT",
+      "VISUAL",
+      "FOO",
+      "XDG_DATA_HOME",
+      "PGSSLMAXPROTOCOLVERSION",
+      "REDIS_PASSWORD",
+      "_PYTHON_PROJECT_BASE",
+      "ANDROID_ROOT",
+      "PYTEST_XDIST_WORKER_COUNT",
+      "SIMULATION_TIMEOUT_SECONDS",
+      "COVERAGE_RCFILE",
+      "COVERAGE_SYSMON_STATS",
+      "DATABASE_URL",
+      "LDFLAGS",
+      "CPP",
+      "COVERAGE_RUN",
+      "MYPY_TEST_PREFIX",
+      "DEFAULT_PAP",
+      "EXCEPTIONGROUP_NO_PATCH",
+      "PGSSLMINPROTOCOLVERSION"
+    ],
+    "dependencies": [],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "community-service",
+    "display_name": "Community-Service",
+    "path": "platform-services/community-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8033,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/{scenario_id}"
+      },
+      {
+        "method": "POST",
+        "path": "/{scenario_id}/deploy"
+      },
+      {
+        "method": "POST",
+        "path": "/{scenario_id}/reviews"
+      },
+      {
+        "method": "GET",
+        "path": "/{scenario_id}/reviews"
+      },
+      {
+        "method": "GET",
+        "path": "/featured/popular"
+      },
+      {
+        "method": "GET",
+        "path": "/library"
+      },
+      {
+        "method": "GET",
+        "path": "/library/{scenario_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/library/threat-types"
+      }
+    ],
+    "environment": [
+      "CORS_ORIGINS",
+      "EVENTBUS_URL",
+      "DEBUG",
+      "VALIDATION_SERVICE_URL",
+      "DB_ECHO",
+      "LEARNING_SERVICE_URL",
+      "DATABASE_URL",
+      "AI_ORCHESTRATOR_URL",
+      "DB_POOL_SIZE",
+      "DB_POOL_TIMEOUT",
+      "PORT",
+      "PORTAL_URL",
+      "DB_MAX_OVERFLOW",
+      "MARKETPLACE_URL",
+      "CLIENTS_SERVICE_URL",
+      "GOVERNANCE_SERVICE_URL"
+    ],
+    "dependencies": [
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": false
+  },
+  {
+    "name": "response-service",
+    "display_name": "Response-Service",
+    "path": "platform-services/response-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/ready"
+      },
+      {
+        "method": "GET",
+        "path": "/live"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/incidents"
+      },
+      {
+        "method": "GET",
+        "path": "/public-incidents"
+      },
+      {
+        "method": "POST",
+        "path": "/critical-incidents"
+      },
+      {
+        "method": "GET",
+        "path": "/insights"
+      }
+    ],
+    "environment": [
+      "EVENT_BUS_ENABLED",
+      "ENVIRONMENT",
+      "RABBITMQ_QUEUE",
+      "RABBITMQ_EXCHANGE",
+      "RABBITMQ_PORT",
+      "RABBITMQ_HOST",
+      "RABBITMQ_PASSWORD",
+      "RABBITMQ_USER"
+    ],
+    "dependencies": [
+      "workflow-intelligence"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "learning-service",
+    "display_name": "Learning-Service",
+    "path": "platform-services/learning-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/token"
+      },
+      {
+        "method": "GET",
+        "path": "/api/learning/programs"
+      },
+      {
+        "method": "GET",
+        "path": "/api/governance/policies"
+      },
+      {
+        "method": "GET",
+        "path": "/{item_id}/ai-advice"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "GET",
+        "path": "/metrics"
+      },
+      {
+        "method": "GET",
+        "path": "/programs/performance"
+      }
+    ],
+    "environment": [
+      "PYTHONPATH",
+      "DB_ECHO",
+      "DATABASE_URL",
+      "DB_POOL_SIZE",
+      "DB_POOL_TIMEOUT",
+      "DB_MAX_OVERFLOW"
+    ],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  },
+  {
+    "name": "bia-service",
+    "display_name": "Bia-Service",
+    "path": "platform-services/bia-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/suppliers"
+      },
+      {
+        "method": "GET",
+        "path": "/suppliers"
+      },
+      {
+        "method": "GET",
+        "path": "/suppliers/{supplier_id}"
+      },
+      {
+        "method": "PATCH",
+        "path": "/suppliers/{supplier_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/suppliers/{supplier_id}/risk-profile"
+      },
+      {
+        "method": "GET",
+        "path": "/single-points-of-failure"
+      },
+      {
+        "method": "POST",
+        "path": "/disruptions"
+      },
+      {
+        "method": "POST",
+        "path": "/what-if-analysis"
+      },
+      {
+        "method": "GET",
+        "path": "/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": true,
+    "has_requirements": true
+  },
+  {
+    "name": "documents-service",
+    "display_name": "Documents-Service",
+    "path": "platform-services/documents-service",
+    "category": "platform",
+    "type": "application",
+    "port": 8010,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/compliance/check"
+      },
+      {
+        "method": "GET",
+        "path": "/health"
+      },
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/{item_id}/ai-advice"
+      },
+      {
+        "method": "GET",
+        "path": "/benchmarks"
+      },
+      {
+        "method": "POST",
+        "path": "/documents"
+      },
+      {
+        "method": "POST",
+        "path": "/documents/{document_id}/upload"
+      },
+      {
+        "method": "GET",
+        "path": "/documents/{document_id}"
+      },
+      {
+        "method": "GET",
+        "path": "/documents/{document_id}/download"
+      },
+      {
+        "method": "GET",
+        "path": "/documents"
+      }
+    ],
+    "environment": [],
+    "dependencies": [
+      "workflow-intelligence",
+      "shared-libraries"
+    ],
+    "health_check": "/health",
+    "metrics_endpoint": "/metrics",
+    "has_dockerfile": false,
+    "has_requirements": true
+  }
+]

@@ -35,7 +35,6 @@ from prometheus_client import make_asgi_app
 
 # Service workflow integration
 from workflow_integration import WorkflowSecurityMiddleware, check_compliance
-from prometheus_client import make_asgi_app
 
 # Global workflow intelligence instances
 workflow_storage = None

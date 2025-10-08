@@ -1,0 +1,3975 @@
+{
+  "module_name": "simulation",
+  "path": "platform-services/simulation",
+  "structure": {
+    ".": [
+      ".DS_Store",
+      "API.md",
+      "__init__.py",
+      "README.md"
+    ],
+    "simulation": [
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ],
+    "simulation/thehive": [
+      "bridge_service.py",
+      ".DS_Store",
+      "Dockerfile.bridge",
+      "thehive_client.py",
+      "README.md",
+      "docker-compose.thehive.yml",
+      "thehive_adapter.py",
+      "webhooks.py",
+      "requirements.bridge.txt"
+    ],
+    "simulation/thehive/thehive": [
+      "config.py",
+      "models.py",
+      "requirements.txt",
+      "Dockerfile",
+      "app.py",
+      "docker-compose.yml"
+    ],
+    "simulation/thehive/thehive/services": [
+      "processor.py",
+      "thehive_client.py",
+      "eventbus.py"
+    ],
+    "simulation/thehive/config": [
+      "thehive.conf"
+    ],
+    "simulation/thehive/thehive_adapter": [
+      "requirements.txt",
+      "Dockerfile",
+      "mock_data.py",
+      "main.py"
+    ],
+    "simulation/simulation2": [
+      "config.py",
+      "models.py",
+      "requirements.txt",
+      "Dockerfile",
+      "simple_app.py",
+      "app.py"
+    ],
+    "simulation/simulation": [
+      ".DS_Store"
+    ],
+    "simulation/simulation/bia_engine": [
+      "requirements.txt",
+      "Dockerfile",
+      "bia_ciw_engine.py",
+      "app.py",
+      "main.py"
+    ],
+    "simulation/simulation/bia_engine_O": [
+      "requirements.txt",
+      "Dockerfile",
+      "app.py"
+    ],
+    "simulation/simulation/exercise_simulators": [
+      "bridge_service.py",
+      "scenario_flow_manager.py",
+      "ai_scenario_generator.py",
+      "Dockerfile.jaamsim",
+      ".DS_Store",
+      "requirements.simulators.txt",
+      "Dockerfile.bridge",
+      "docker-compose.simulators.yml",
+      "README.md",
+      "nics_client.py",
+      "jaamsim_client.py"
+    ],
+    "simulation/simulation/exercise_simulators/scripts": [
+      "run_simulation.sh"
+    ],
+    "simulation/simulation/exercise_simulators/templates": [
+      "it_system_failure.cfg"
+    ],
+    "simulation/simulation/simulation": [
+      ".DS_Store",
+      "sim_adapter.py"
+    ],
+    "simulation/simulation/scenario_orchestrator": [
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/app/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/app/schemas": [
+      "scenario.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/app/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/generated_scenarios": [
+      "scenario_ai_20250914_181500.json",
+      "scenario_ai_20250914_175757.json",
+      "scenario_ai_20250914_181510.json",
+      "scenario_ai_20250915_131305.json",
+      "scenario_ai_20250914_181509.json",
+      "scenario_ai_20250914_181518.json"
+    ],
+    "simulation/simulation/scenario_orchestrator/src/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/src/schemas": [
+      "scenario.py"
+    ],
+    "simulation/simulation/scenario_orchestrator/src/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "simulation/models": [
+      "simulation_model.py"
+    ],
+    "simulation/engines": [
+      "__init__.py",
+      "monte_carlo_engine.py",
+      "base_engine.py",
+      "scenario_engine.py",
+      "what_if_engine.py"
+    ],
+    "simulation/api": [
+      "scenario_library_router.py",
+      "execution_router.py",
+      "__init__.py",
+      "scenario_router.py",
+      "simulation_router.py"
+    ],
+    "scenarios": [
+      ".DS_Store"
+    ],
+    "scenarios/bcm_incident": [
+      "__init__.py",
+      "__manifest__.py"
+    ],
+    "scenarios/bcm_incident/demo": [
+      "incident_demo_data.xml"
+    ],
+    "scenarios/bcm_incident/security": [
+      "ir.model.access.csv",
+      "record_rules.xml",
+      "incident_security.xml"
+    ],
+    "scenarios/bcm_incident/models": [
+      "bcm_incident_integration_api.py",
+      "bcm_incident_unified.py",
+      "__init__.py",
+      "ai_communication_models.py"
+    ],
+    "scenarios/bcm_incident/static/src/css": [
+      "incident_dashboard.css"
+    ],
+    "scenarios/bcm_incident/static/src/js": [
+      "ai_commander_widget.js"
+    ],
+    "scenarios/bcm_incident/data": [
+      "incident_sequences.xml",
+      "cron_jobs.xml",
+      "ai_commander_data.xml",
+      "migration_data.xml",
+      "incident_types_data.xml"
+    ],
+    "scenarios/bcm_incident/views": [
+      "bcm_incident_views.xml",
+      "incident_menus.xml"
+    ],
+    "scenarios/bcm_incident/migration": [
+      "migration_script.py"
+    ],
+    "scenarios/scenario_orchestrator": [
+      "requirements.txt",
+      "Dockerfile",
+      "main.py"
+    ],
+    "scenarios/scenario_orchestrator/app/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "scenarios/scenario_orchestrator/app/schemas": [
+      "scenario.py"
+    ],
+    "scenarios/scenario_orchestrator/app/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "scenarios/scenario_orchestrator/generated_scenarios": [
+      "scenario_ai_20250914_181500.json",
+      "scenario_ai_20250914_175757.json",
+      "scenario_ai_20250914_181510.json",
+      "scenario_ai_20250915_131305.json",
+      "scenario_ai_20250914_181509.json",
+      "scenario_ai_20250914_181518.json"
+    ],
+    "scenarios/scenario_orchestrator/src/models": [
+      "__init__.py",
+      "scenario.py"
+    ],
+    "scenarios/scenario_orchestrator/src/schemas": [
+      "scenario.py"
+    ],
+    "scenarios/scenario_orchestrator/src/api/v1/endpoints": [
+      "scenarios.py"
+    ],
+    "digital-twin": [
+      ".DS_Store",
+      "pytest.ini",
+      "requirements.txt",
+      "alembic.ini",
+      "Dockerfile",
+      ".coverage",
+      ".env.test",
+      ".dockerignore",
+      ".env",
+      "docker-compose.yml",
+      "coverage.xml",
+      ".env.example",
+      "main.py",
+      "digital_twin.log"
+    ],
+    "digital-twin/frontend-twin": [
+      ".env.local",
+      "Dockerfile",
+      "next.config.js",
+      "next-env.d.ts",
+      "README.md",
+      "tailwind.config.ts",
+      ".dockerignore",
+      "package-lock.json",
+      "package.json",
+      "tsconfig.json",
+      "postcss.config.js"
+    ],
+    "digital-twin/frontend-twin/app": [
+      "layout.tsx",
+      "page.tsx",
+      "globals.css"
+    ],
+    "digital-twin/frontend-twin/app/dashboard": [
+      "layout.tsx",
+      "page.tsx"
+    ],
+    "digital-twin/frontend-twin/app/dashboard/bia": [
+      "page.tsx"
+    ],
+    "digital-twin/frontend-twin/app/dashboard/scenarios": [
+      "page.tsx"
+    ],
+    "digital-twin/frontend-twin/app/login": [
+      "page.tsx"
+    ],
+    "digital-twin/frontend-twin/.next": [
+      "trace",
+      "react-loadable-manifest.json",
+      "build-manifest.json",
+      "package.json",
+      "app-build-manifest.json"
+    ],
+    "digital-twin/frontend-twin/.next/types": [
+      "package.json"
+    ],
+    "digital-twin/frontend-twin/.next/types/app": [
+      "page.ts",
+      "layout.ts"
+    ],
+    "digital-twin/frontend-twin/.next/types/app/login": [
+      "page.ts"
+    ],
+    "digital-twin/frontend-twin/.next/cache": [
+      ".tsbuildinfo"
+    ],
+    "digital-twin/frontend-twin/.next/cache/webpack/client-production": [
+      "index.pack",
+      "0.pack"
+    ],
+    "digital-twin/frontend-twin/.next/cache/webpack/client-development": [
+      "index.pack.gz",
+      "3.pack.gz",
+      "2.pack.gz",
+      "index.pack.gz.old",
+      "0.pack.gz",
+      "1.pack.gz"
+    ],
+    "digital-twin/frontend-twin/.next/cache/webpack/edge-server-production": [
+      "index.pack",
+      "0.pack"
+    ],
+    "digital-twin/frontend-twin/.next/cache/webpack/server-development": [
+      "index.pack.gz",
+      "2.pack.gz",
+      "index.pack.gz.old",
+      "0.pack.gz",
+      "1.pack.gz"
+    ],
+    "digital-twin/frontend-twin/.next/cache/webpack/server-production": [
+      "index.pack",
+      "0.pack"
+    ],
+    "digital-twin/frontend-twin/.next/server": [
+      "pages-manifest.json",
+      "next-font-manifest.js",
+      "interception-route-rewrite-manifest.js",
+      "server-reference-manifest.js",
+      "middleware-manifest.json",
+      "middleware-react-loadable-manifest.js",
+      "app-paths-manifest.json",
+      "webpack-runtime.js",
+      "middleware-build-manifest.js",
+      "server-reference-manifest.json",
+      "next-font-manifest.json"
+    ],
+    "digital-twin/frontend-twin/.next/server/app": [
+      "page.js",
+      "page_client-reference-manifest.js"
+    ],
+    "digital-twin/frontend-twin/.next/server/app/_not-found": [
+      "page.js",
+      "page_client-reference-manifest.js"
+    ],
+    "digital-twin/frontend-twin/.next/server/app/login": [
+      "page.js",
+      "page_client-reference-manifest.js"
+    ],
+    "digital-twin/frontend-twin/.next/server/vendor-chunks": [
+      "mime-db.js",
+      "get-proto.js",
+      "has-symbols.js",
+      "mime-types.js",
+      "call-bind-apply-helpers.js",
+      "axios.js",
+      "ms.js",
+      "gopd.js",
+      "es-errors.js",
+      "@swc.js",
+      "combined-stream.js",
+      "@tanstack.js",
+      "get-intrinsic.js",
+      "math-intrinsics.js",
+      "proxy-from-env.js",
+      "has-tostringtag.js",
+      "es-object-atoms.js",
+      "es-define-property.js",
+      "es-set-tostringtag.js",
+      "asynckit.js",
+      "next.js",
+      "dunder-proto.js",
+      "follow-redirects.js",
+      "delayed-stream.js",
+      "hasown.js",
+      "use-sync-external-store.js",
+      "form-data.js",
+      "zustand.js",
+      "function-bind.js",
+      "debug.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/css/app": [
+      "layout.css"
+    ],
+    "digital-twin/frontend-twin/.next/static/development": [
+      "_ssgManifest.js",
+      "_buildManifest.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/webpack": [
+      "webpack.a28137186609f220.hot-update.js",
+      "webpack.f1c8f061a5039590.hot-update.js",
+      "a28137186609f220.webpack.hot-update.json",
+      "f1c8f061a5039590.webpack.hot-update.json",
+      "633457081244afec._.hot-update.json",
+      "webpack.88cd16e8fb1db906.hot-update.js",
+      "88cd16e8fb1db906.webpack.hot-update.json"
+    ],
+    "digital-twin/frontend-twin/.next/static/webpack/app": [
+      "layout.88cd16e8fb1db906.hot-update.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/chunks": [
+      "webpack.js",
+      "main-app.js",
+      "app-pages-internals.js",
+      "polyfills.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/chunks/app": [
+      "layout.js",
+      "page.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/chunks/app/_not-found": [
+      "page.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/chunks/app/login": [
+      "page.js"
+    ],
+    "digital-twin/frontend-twin/.next/static/media": [
+      "ba9851c3c22cd980-s.woff2",
+      "19cfc7226ec3afaa-s.woff2",
+      "21350d82a1f187e9-s.woff2",
+      "df0a9ae256c0569c-s.woff2",
+      "8e9860b6e62d6359-s.woff2",
+      "c5fe6dc8356a8c31-s.woff2",
+      "e4af272ccee01ff0-s.p.woff2"
+    ],
+    "digital-twin/frontend-twin/components": [
+      "providers.tsx"
+    ],
+    "digital-twin/frontend-twin/components/insights": [
+      "insight-card.tsx"
+    ],
+    "digital-twin/frontend-twin/components/layout": [
+      "sidebar.tsx"
+    ],
+    "digital-twin/frontend-twin/components/charts": [
+      "insights-chart.tsx",
+      "bia-charts.tsx"
+    ],
+    "digital-twin/frontend-twin/lib/api": [
+      "queries.ts",
+      "types.ts",
+      "client.ts"
+    ],
+    "digital-twin/frontend-twin/lib/store": [
+      "auth.ts"
+    ],
+    "digital-twin/collectors": [
+      "__init__.py",
+      "manager.py"
+    ],
+    "digital-twin/collectors/custom": [
+      "__init__.py"
+    ],
+    "digital-twin/collectors/builtin": [
+      "salesforce_collector.py",
+      "csv_collector.py",
+      "odoo_collector.py",
+      "__init__.py",
+      "hubspot_collector.py",
+      "database_collector.py",
+      "generic_rest_collector.py"
+    ],
+    "digital-twin/collectors/base": [
+      "collector.py",
+      "__init__.py"
+    ],
+    "digital-twin/core": [
+      ".DS_Store",
+      "__init__.py"
+    ],
+    "digital-twin/core/models": [
+      "__init__.py",
+      "base.py"
+    ],
+    "digital-twin/core/storage": [
+      "__init__.py"
+    ],
+    "digital-twin/core/ai": [
+      "advanced_scenario_generator.py",
+      "__init__.py"
+    ],
+    "digital-twin/core/engine": [
+      "impact_passport_engine.py",
+      "prediction_engine.py",
+      "__init__.py",
+      "monte_carlo_engine.py",
+      "metrics_engine.py",
+      "twin_engine.py",
+      "queue_theory_engine.py",
+      "simulation_engine.py",
+      "toc_engine.py"
+    ],
+    "digital-twin/.pytest_cache": [
+      "CACHEDIR.TAG",
+      "README.md",
+      ".gitignore"
+    ],
+    "digital-twin/.pytest_cache/v/cache": [
+      "nodeids",
+      "lastfailed"
+    ],
+    "digital-twin/config": [
+      "__init__.py",
+      "settings.py"
+    ],
+    "digital-twin/web": [
+      ".DS_Store"
+    ],
+    "digital-twin/tests": [
+      "conftest.py",
+      "__init__.py"
+    ],
+    "digital-twin/tests/unit": [
+      "__init__.py",
+      "test_models.py",
+      "test_frontend_models.py",
+      "test_auth_password.py",
+      "test_auth_jwt.py"
+    ],
+    "digital-twin/tests/integration": [
+      "test_tenant_isolation.py",
+      "__init__.py",
+      "test_auth_flow.py",
+      "test_multi_tenancy.py"
+    ],
+    "digital-twin/tests/api": [
+      "__init__.py",
+      "test_insights_endpoint.py",
+      "test_bia_endpoints.py",
+      "test_simulation_endpoints.py",
+      "test_scenario_ai_endpoints.py",
+      "test_auth_endpoints.py",
+      "test_organization_endpoints.py"
+    ],
+    "digital-twin/mcp": [
+      "__init__.py"
+    ],
+    "digital-twin/docs": [
+      "ADVANCED_AI_INTEGRATION.md",
+      "README.md",
+      "DOCKER_READY.md",
+      "FRONTEND_SPECIFICATION.md",
+      "DEPLOYMENT.md",
+      "CONTINUATION_MEMO.md",
+      "QUICK_START.md"
+    ],
+    "digital-twin/bridges": [
+      "__init__.py"
+    ],
+    "digital-twin/bridges/bia_engine": [
+      "client.py",
+      "__init__.py"
+    ],
+    "digital-twin/bridges/odoo": [
+      "sync.py",
+      "bridge.py",
+      "__init__.py"
+    ],
+    "digital-twin/bridges/scenario_ai": [
+      "client.py",
+      "__init__.py"
+    ],
+    "digital-twin/bridges/salesforce": [
+      "__init__.py"
+    ],
+    "digital-twin/storage": [
+      "models.py",
+      "__init__.py",
+      "postgres_storage.py",
+      "redis_cache.py"
+    ],
+    "digital-twin/processors": [
+      "conflict_resolver.py",
+      "entity_resolver.py",
+      "__init__.py",
+      "enricher.py",
+      "normalizer.py"
+    ],
+    "digital-twin/scripts": [
+      "init_db.py"
+    ],
+    "digital-twin/api": [
+      "__init__.py",
+      "app.py"
+    ],
+    "digital-twin/api/routers": [
+      "bia.py",
+      "scenarios.py",
+      "auth.py",
+      "metrics.py",
+      "predictions.py",
+      "bridges.py",
+      "import_data.py",
+      "health.py",
+      "simulations.py",
+      "__init__.py",
+      "visualize.py",
+      "organizations.py",
+      "integrations.py",
+      "exercises.py"
+    ],
+    "digital-twin/api/middleware": [
+      "__init__.py"
+    ],
+    "digital-twin/api/websocket": [
+      "__init__.py"
+    ],
+    "digital-twin/api/auth": [
+      "__init__.py",
+      "password.py",
+      "dependencies.py",
+      "jwt.py"
+    ],
+    "digital-twin/api/graphql": [
+      "__init__.py"
+    ],
+    "digital-twin/api/routes": [
+      "__init__.py"
+    ],
+    "digital-twin/alembic": [
+      "script.py.mako",
+      "env.py",
+      "README"
+    ],
+    "digital-twin/alembic/versions": [
+      "76253af070c2_initial_schema_organizations_.py",
+      "a1b2c3d4e5f6_add_simulation_hub_tables.py",
+      "776e3e3e2ae8_add_personal_digital_twin_and_frontend_.py"
+    ],
+    "digital-twin/htmlcov": [
+      "z_108d8df05de9c314___init___py.html",
+      "z_ec8fbf5ffc6816b0_password_py.html",
+      "z_e3e666b0f9b040c4___init___py.html",
+      "z_1a87e07b7d9ec38e_organizations_py.html",
+      "z_78361d3913668f02_models_py.html",
+      "z_ec8fbf5ffc6816b0_jwt_py.html",
+      "index.html",
+      "z_78361d3913668f02___init___py.html",
+      "z_ec8fbf5ffc6816b0_dependencies_py.html",
+      "z_1a87e07b7d9ec38e_auth_py.html",
+      "z_1a87e07b7d9ec38e_bridges_py.html",
+      "style_cb_6b508a39.css",
+      "z_1a87e07b7d9ec38e_import_data_py.html",
+      "z_10fae538ba4e8521___init___py.html",
+      "z_1a87e07b7d9ec38e_scenarios_py.html",
+      "z_77723d3fadc4dd19___init___py.html",
+      "z_1a87e07b7d9ec38e_visualize_py.html",
+      "z_1a87e07b7d9ec38e___init___py.html",
+      "z_1a87e07b7d9ec38e_health_py.html",
+      "z_1a87e07b7d9ec38e_predictions_py.html",
+      "z_1a87e07b7d9ec38e_metrics_py.html",
+      "z_1a87e07b7d9ec38e_simulations_py.html",
+      "z_4fb5f34370673e01___init___py.html",
+      "z_78361d3913668f02_postgres_storage_py.html",
+      "z_1a87e07b7d9ec38e_exercises_py.html",
+      "keybd_closed_cb_ce680311.png",
+      "coverage_html_cb_6fb7b396.js",
+      "z_ec8fbf5ffc6816b0___init___py.html",
+      ".gitignore",
+      "z_1a87e07b7d9ec38e_bia_py.html",
+      "function_index.html",
+      "z_1a87e07b7d9ec38e_integrations_py.html",
+      "z_10fae538ba4e8521_app_py.html",
+      "status.json",
+      "favicon_32_cb_58284776.png",
+      "z_78361d3913668f02_redis_cache_py.html",
+      "class_index.html"
+    ]
+  },
+  "dependencies": [
+    "abc",
+    "advanced_scenario_generator",
+    "ai_scenario_generator",
+    "aiofiles",
+    "aiohttp",
+    "alembic",
+    "api",
+    "api.app",
+    "api.auth",
+    "api.auth.dependencies",
+    "api.auth.jwt",
+    "api.auth.password",
+    "api.routers.auth",
+    "app",
+    "app.api.v1.endpoints.scenarios",
+    "app.core.ai_engine",
+    "app.core.database",
+    "app.core.security",
+    "app.models",
+    "app.schemas.scenario",
+    "argparse",
+    "asyncio",
+    "base",
+    "base64",
+    "base_engine",
+    "bridge",
+    "bridges.bia_engine.client",
+    "bridges.odoo",
+    "bridges.scenario_ai.client",
+    "ciw",
+    "client",
+    "collector",
+    "collectors.base",
+    "collectors.builtin.generic_rest_collector",
+    "collectors.builtin.hubspot_collector",
+    "collectors.builtin.odoo_collector",
+    "collectors.builtin.salesforce_collector",
+    "config",
+    "conflict_resolver",
+    "contextlib",
+    "core.ai.advanced_scenario_generator",
+    "core.engine.monte_carlo_engine",
+    "core.engine.prediction_engine",
+    "core.engine.queue_theory_engine",
+    "core.engine.simulation_engine",
+    "core.models.base",
+    "csv",
+    "csv_collector",
+    "database.base",
+    "database/postgresql",
+    "database_collector",
+    "dataclasses",
+    "datetime",
+    "dependencies",
+    "difflib",
+    "dotenv",
+    "engines.monte_carlo_engine",
+    "engines.scenario_engine",
+    "engines.what_if_engine",
+    "enricher",
+    "entity_resolver",
+    "enum",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "fastapi.security",
+    "generic_rest_collector",
+    "hashlib",
+    "hmac",
+    "httpx",
+    "hubspot",
+    "hubspot.crm.companies",
+    "hubspot.crm.contacts",
+    "hubspot_collector",
+    "impact_passport_engine",
+    "io",
+    "jaamsim_client",
+    "jose",
+    "json",
+    "jwt",
+    "logging",
+    "logging.config",
+    "main",
+    "manager",
+    "math",
+    "metrics_engine",
+    "mock_data",
+    "models",
+    "models.simulation_model",
+    "nics_client",
+    "normalizer",
+    "numpy",
+    "odoo",
+    "odoo.exceptions",
+    "odoo_collector",
+    "os",
+    "pandas",
+    "passlib.context",
+    "password",
+    "pathlib",
+    "postgres_storage",
+    "prediction_engine",
+    "pydantic",
+    "pydantic_settings",
+    "pytest",
+    "random",
+    "re",
+    "requests",
+    "routers",
+    "runtime/eventbus",
+    "salesforce_collector",
+    "scenario",
+    "scenarios",
+    "services.processor",
+    "services.thehive_client",
+    "shutil",
+    "simple_salesforce",
+    "simulation_engine",
+    "statistics",
+    "storage",
+    "storage.models",
+    "storage.postgres_storage",
+    "structlog",
+    "subprocess",
+    "sync",
+    "sys",
+    "thehive_client",
+    "toc_engine",
+    "twin_engine",
+    "typing",
+    "unittest.mock",
+    "urllib.parse",
+    "uuid",
+    "uvicorn",
+    "websockets",
+    "xml.etree.ElementTree",
+    "xmlrpc.client",
+    "zipfile"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/incident/create-case",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercise/create-case",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/case/{case_id}",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/case/{case_id}",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cases",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/case/{case_id}/sync",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/alerts",
+      "file": "thehive_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cases",
+      "file": "thehive_adapter.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/cases",
+      "file": "thehive_adapter.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics",
+      "file": "thehive_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/alerts/{alert_id}/promote",
+      "file": "thehive_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cases/create",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/cases/{case_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/cases/{case_id}/update",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cases/{case_id}/observables",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/cases/{case_id}/tasks",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/cases/search",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks/thehive",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/statistics/{tenant_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/cases/{case_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/thehive/{config_id}/cases/{case_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/{config_id}/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/alerts/{alert_id}/promote",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/cases/{case_id}/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/{config_id}/bcm/incident",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/configs",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/cases",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/observables",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/tasks",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/templates",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/thehive/mock/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/thehive/mock/setup-demo-config",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulate",
+      "file": "simple_app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/simulations/start",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/simulations/{simulation_id}/status",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/simulations/{simulation_id}/results",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/simulations/{simulation_id}/stop",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/scenarios",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/scenarios/{scenario_name}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/scenarios/validate",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/exercises/{exercise_id}/simulations",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics/{tenant_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/scenarios/custom",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/batch/simulations",
+      "file": "app.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reports/{simulation_id}",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compute",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/optimize/single-process",
+      "file": "app.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercises/create",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercises/{exercise_id}/start",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercises/{exercise_id}/inject",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/exercises/{exercise_id}/status",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercises/{exercise_id}/complete",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/exercises",
+      "file": "bridge_service.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/exercises",
+      "file": "sim_adapter.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/exercises",
+      "file": "sim_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/exercises/{exercise_id}/start",
+      "file": "sim_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/exercises/{exercise_id}/complete",
+      "file": "sim_adapter.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scenarios/generate",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios/available",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learning/exercise-result",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/scenario/{scenario_id}/insights",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/learning/dashboard",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scenarios/status",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/generate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/analyze",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/optimize",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/recommend",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/test/simulate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/hub/catalog",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/hub/submit",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/{scenario_id}",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/threat-types",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/complexity-levels",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/library/stats",
+      "file": "scenario_library_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations/{sim_id}/run",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}/status",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}/results",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations/{sim_id}/stop",
+      "file": "execution_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/scenarios",
+      "file": "scenario_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios",
+      "file": "scenario_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/scenarios/{scenario_id}",
+      "file": "scenario_router.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/scenarios/{scenario_id}",
+      "file": "scenario_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/simulations",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/simulations/{sim_id}",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/simulations/{sim_id}",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "GET",
+      "path": "/engines",
+      "file": "simulation_router.py"
+    },
+    {
+      "method": "POST",
+      "path": "/",
+      "file": "bia.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{bia_id}",
+      "file": "bia.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{bia_id}",
+      "file": "bia.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{bia_id}/execute",
+      "file": "bia.py"
+    },
+    {
+      "method": "GET",
+      "path": "/types/available",
+      "file": "bia.py"
+    },
+    {
+      "method": "POST",
+      "path": "/queue-theory",
+      "file": "bia.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{scenario_id}",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{scenario_id}",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{scenario_id}",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ai-generate",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "GET",
+      "path": "/categories/available",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ai-generate-advanced",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/learn-from-exercise",
+      "file": "scenarios.py"
+    },
+    {
+      "method": "POST",
+      "path": "/register",
+      "file": "auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "file": "auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/refresh",
+      "file": "auth.py"
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "file": "auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/logout",
+      "file": "auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/series",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/series/{twin_id}",
+      "file": "metrics.py"
+    },
+    {
+      "method": "POST",
+      "path": "/health",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/{twin_id}",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/health/{twin_id}/latest",
+      "file": "metrics.py"
+    },
+    {
+      "method": "POST",
+      "path": "/predictions",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/predictions/{pred_id}",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/predictions/twin/{twin_id}",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/{twin_id}",
+      "file": "metrics.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{prediction_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{prediction_id}",
+      "file": "predictions.py"
+    },
+    {
+      "method": "GET",
+      "path": "/organization/{org_id}/summary",
+      "file": "predictions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/monte-carlo",
+      "file": "predictions.py"
+    },
+    {
+      "method": "POST",
+      "path": "/odoo/sync",
+      "file": "bridges.py"
+    },
+    {
+      "method": "POST",
+      "path": "/odoo/push",
+      "file": "bridges.py"
+    },
+    {
+      "method": "GET",
+      "path": "/odoo/status",
+      "file": "bridges.py"
+    },
+    {
+      "method": "GET",
+      "path": "/odoo/organization/{odoo_id}",
+      "file": "bridges.py"
+    },
+    {
+      "method": "GET",
+      "path": "/salesforce/status",
+      "file": "bridges.py"
+    },
+    {
+      "method": "POST",
+      "path": "/csv",
+      "file": "import_data.py"
+    },
+    {
+      "method": "POST",
+      "path": "/json",
+      "file": "import_data.py"
+    },
+    {
+      "method": "GET",
+      "path": "/template/csv",
+      "file": "import_data.py"
+    },
+    {
+      "method": "GET",
+      "path": "/template/json",
+      "file": "import_data.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/statistics",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/ping",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/readiness",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/liveness",
+      "file": "health.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{sim_id}",
+      "file": "simulations.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{sim_id}",
+      "file": "simulations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/twin/{twin_id}/latest",
+      "file": "simulations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{sim_id}/execute",
+      "file": "simulations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/twin/{twin_id}/summary",
+      "file": "simulations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{twin_id}/organization-graph",
+      "file": "visualize.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{twin_id}/simulation-flow",
+      "file": "visualize.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{twin_id}/risk-heatmap",
+      "file": "visualize.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{twin_id}/health-trend",
+      "file": "visualize.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{twin_id}/simulation-impact",
+      "file": "visualize.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{org_id}",
+      "file": "organizations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/twin/{twin_id}",
+      "file": "organizations.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{org_id}",
+      "file": "organizations.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{org_id}",
+      "file": "organizations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{org_id}/data-sources",
+      "file": "organizations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{org_id}/insights",
+      "file": "organizations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/bia/analyze/{twin_id}",
+      "file": "integrations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/bia/status/{twin_id}",
+      "file": "integrations.py"
+    },
+    {
+      "method": "POST",
+      "path": "/ai-scenarios/generate/{twin_id}",
+      "file": "integrations.py"
+    },
+    {
+      "method": "GET",
+      "path": "/{exercise_id}",
+      "file": "exercises.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/{exercise_id}",
+      "file": "exercises.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{exercise_id}",
+      "file": "exercises.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{exercise_id}/start",
+      "file": "exercises.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{exercise_id}/complete",
+      "file": "exercises.py"
+    },
+    {
+      "method": "POST",
+      "path": "/{exercise_id}/execute",
+      "file": "exercises.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "BCMIncidentRequest",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMExerciseRequest",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveCaseUpdate",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveCase",
+      "file": "thehive_client.py",
+      "methods": 1
+    },
+    {
+      "name": "TheHiveTask",
+      "file": "thehive_client.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveAlert",
+      "file": "thehive_client.py",
+      "methods": 1
+    },
+    {
+      "name": "TheHiveClient",
+      "file": "thehive_client.py",
+      "methods": 14
+    },
+    {
+      "name": "BCMTheHiveIntegration",
+      "file": "thehive_client.py",
+      "methods": 12
+    },
+    {
+      "name": "IncidentSeverity",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentStatus",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseStatus",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Alert",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Case",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Task",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Observable",
+      "file": "thehive_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveAdapter",
+      "file": "thehive_adapter.py",
+      "methods": 3
+    },
+    {
+      "name": "TheHiveWebhookPayload",
+      "file": "webhooks.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveWebhookHandler",
+      "file": "webhooks.py",
+      "methods": 4
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 11
+    },
+    {
+      "name": "IncidentSeverity",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TaskStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ObservableDataType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "IncidentData",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HiveCaseCreationRequest",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "HiveCaseUpdate",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HiveCase",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HiveTask",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HiveObservable",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseStatistics",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "WebhookPayload",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "EventData",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSearchQuery",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "CaseSearchResult",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "IntegrationStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AdapterConfiguration",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveProcessor",
+      "file": "processor.py",
+      "methods": 4
+    },
+    {
+      "name": "TheHiveClient",
+      "file": "thehive_client.py",
+      "methods": 4
+    },
+    {
+      "name": "EventBusService",
+      "file": "eventbus.py",
+      "methods": 3
+    },
+    {
+      "name": "TheHiveConfig",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Case",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Observable",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Task",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Alert",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "TheHiveAdapter",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "TheHiveManager",
+      "file": "main.py",
+      "methods": 1
+    },
+    {
+      "name": "Config",
+      "file": "config.py",
+      "methods": 2
+    },
+    {
+      "name": "SimulationEngine",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationStatus",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioCategory",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricType",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationParameter",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseScenario",
+      "file": "models.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationState",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseMetrics",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResult",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplate",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BatchSimulationRequest",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationComparison",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "EventData",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationEngineConfig",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "AdapterStatistics",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMQueueSimulator",
+      "file": "bia_ciw_engine.py",
+      "methods": 7
+    },
+    {
+      "name": "AdvancedBIAEngine",
+      "file": "bia_ciw_engine.py",
+      "methods": 6
+    },
+    {
+      "name": "IndustryType",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "CriticalityLevel",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "BusinessProcess",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "BIARequest",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "IntelligentBIAEngine",
+      "file": "app.py",
+      "methods": 4
+    },
+    {
+      "name": "IndustryType",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "CriticalityLevel",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "BusinessProcess",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "BIARequest",
+      "file": "app.py",
+      "methods": 0
+    },
+    {
+      "name": "IntelligentBIAEngine",
+      "file": "app.py",
+      "methods": 4
+    },
+    {
+      "name": "BCMExerciseRequest",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseInjectRequest",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseUpdateRequest",
+      "file": "bridge_service.py",
+      "methods": 0
+    },
+    {
+      "name": "ConnectionManager",
+      "file": "bridge_service.py",
+      "methods": 2
+    },
+    {
+      "name": "ScenarioFlowManager",
+      "file": "scenario_flow_manager.py",
+      "methods": 4
+    },
+    {
+      "name": "ScenarioType",
+      "file": "ai_scenario_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioParameters",
+      "file": "ai_scenario_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "GeneratedScenario",
+      "file": "ai_scenario_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "AIScenarioGenerator",
+      "file": "ai_scenario_generator.py",
+      "methods": 6
+    },
+    {
+      "name": "NICSRole",
+      "file": "nics_client.py",
+      "methods": 0
+    },
+    {
+      "name": "NICSIncident",
+      "file": "nics_client.py",
+      "methods": 0
+    },
+    {
+      "name": "NICSResource",
+      "file": "nics_client.py",
+      "methods": 0
+    },
+    {
+      "name": "NICSMessage",
+      "file": "nics_client.py",
+      "methods": 0
+    },
+    {
+      "name": "NICSForm",
+      "file": "nics_client.py",
+      "methods": 0
+    },
+    {
+      "name": "NICSClient",
+      "file": "nics_client.py",
+      "methods": 2
+    },
+    {
+      "name": "BCMNICSIntegration",
+      "file": "nics_client.py",
+      "methods": 3
+    },
+    {
+      "name": "ExerciseScenario",
+      "file": "jaamsim_client.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationEntity",
+      "file": "jaamsim_client.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationEvent",
+      "file": "jaamsim_client.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "jaamsim_client.py",
+      "methods": 0
+    },
+    {
+      "name": "JaamSimClient",
+      "file": "jaamsim_client.py",
+      "methods": 7
+    },
+    {
+      "name": "BCMExerciseSimulator",
+      "file": "jaamsim_client.py",
+      "methods": 4
+    },
+    {
+      "name": "ExerciseType",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseStatus",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "ParticipantRole",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioComplexity",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Participant",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Inject",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "Exercise",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "sim_adapter.py",
+      "methods": 0
+    },
+    {
+      "name": "SimAdapter",
+      "file": "sim_adapter.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioGenerationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioLearning",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Simulation",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "Scenario",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationExecution",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationResult",
+      "file": "simulation_model.py",
+      "methods": 1
+    },
+    {
+      "name": "MonteCarloEngine",
+      "file": "monte_carlo_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "BaseSimulationEngine",
+      "file": "base_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "ScenarioEngine",
+      "file": "scenario_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "WhatIfEngine",
+      "file": "what_if_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioSummary",
+      "file": "scenario_library_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioDetail",
+      "file": "scenario_library_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioCreate",
+      "file": "scenario_router.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioResponse",
+      "file": "scenario_router.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "scenario_router.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationCreate",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResponse",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "simulation_router.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMIncidentIntegrationAPI",
+      "file": "bcm_incident_integration_api.py",
+      "methods": 6
+    },
+    {
+      "name": "BCMIncidentIntegrationMixin",
+      "file": "bcm_incident_integration_api.py",
+      "methods": 2
+    },
+    {
+      "name": "BCMIncidentUnified",
+      "file": "bcm_incident_unified.py",
+      "methods": 47
+    },
+    {
+      "name": "BCMIncidentCategory",
+      "file": "bcm_incident_unified.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMIncidentFieldUpdate",
+      "file": "bcm_incident_unified.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMCrisisCommunicationPlan",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMCommunicationTemplate",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMStakeholderNotification",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMAIResponseTemplate",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMAIClassificationRule",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMAIEscalationRule",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMAILearningPattern",
+      "file": "ai_communication_models.py",
+      "methods": 0
+    },
+    {
+      "name": "BCMIncidentMigration",
+      "file": "migration_script.py",
+      "methods": 14
+    },
+    {
+      "name": "ScenarioGenerationRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResult",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioLearning",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Scenario",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerateResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAnalyzeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioOptimizeResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendRequest",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioRecommendResponse",
+      "file": "scenario.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTestConfig",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectorStatus",
+      "file": "manager.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectorInfo",
+      "file": "manager.py",
+      "methods": 2
+    },
+    {
+      "name": "CollectorManager",
+      "file": "manager.py",
+      "methods": 10
+    },
+    {
+      "name": "SalesforceCollector",
+      "file": "salesforce_collector.py",
+      "methods": 6
+    },
+    {
+      "name": "CSVCollector",
+      "file": "csv_collector.py",
+      "methods": 5
+    },
+    {
+      "name": "OdooCollector",
+      "file": "odoo_collector.py",
+      "methods": 7
+    },
+    {
+      "name": "HubSpotCollector",
+      "file": "hubspot_collector.py",
+      "methods": 6
+    },
+    {
+      "name": "DatabaseCollector",
+      "file": "database_collector.py",
+      "methods": 7
+    },
+    {
+      "name": "GenericRESTCollector",
+      "file": "generic_rest_collector.py",
+      "methods": 6
+    },
+    {
+      "name": "CollectionStatus",
+      "file": "collector.py",
+      "methods": 0
+    },
+    {
+      "name": "EntityType",
+      "file": "collector.py",
+      "methods": 0
+    },
+    {
+      "name": "CollectionResult",
+      "file": "collector.py",
+      "methods": 2
+    },
+    {
+      "name": "DataCollector",
+      "file": "collector.py",
+      "methods": 6
+    },
+    {
+      "name": "RESTCollector",
+      "file": "collector.py",
+      "methods": 3
+    },
+    {
+      "name": "DatabaseCollector",
+      "file": "collector.py",
+      "methods": 1
+    },
+    {
+      "name": "FileCollector",
+      "file": "collector.py",
+      "methods": 1
+    },
+    {
+      "name": "OrganizationType",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationScenarioType",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationStatus",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "DataSourceType",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "TimestampedModel",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "IdentifiableModel",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "Location",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "Contact",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "DataSource",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "Organization",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationCreate",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationUpdate",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationParameters",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResult",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthScore",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricPoint",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricSeries",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "Prediction",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "TheoryOfChange",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ImpactPassport",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "QualityScore",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ConflictValue",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "PaginatedResponse",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "SuccessResponse",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ErrorResponse",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "TwinInsightType",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ImpactLevel",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "TwinInsight",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskLandscape",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceFramework",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStatus",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "DepartmentTwin",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "PersonalDigitalTwin",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationTwin",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "AIInsightsResponse",
+      "file": "base.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioParameters",
+      "file": "advanced_scenario_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "GeneratedScenario",
+      "file": "advanced_scenario_generator.py",
+      "methods": 0
+    },
+    {
+      "name": "AdvancedScenarioGenerator",
+      "file": "advanced_scenario_generator.py",
+      "methods": 7
+    },
+    {
+      "name": "ImpactPassportEngine",
+      "file": "impact_passport_engine.py",
+      "methods": 8
+    },
+    {
+      "name": "PredictionEngine",
+      "file": "prediction_engine.py",
+      "methods": 5
+    },
+    {
+      "name": "MonteCarloResult",
+      "file": "monte_carlo_engine.py",
+      "methods": 0
+    },
+    {
+      "name": "MonteCarloEngine",
+      "file": "monte_carlo_engine.py",
+      "methods": 3
+    },
+    {
+      "name": "MetricsEngine",
+      "file": "metrics_engine.py",
+      "methods": 5
+    },
+    {
+      "name": "DigitalTwinEngine",
+      "file": "twin_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "QueueTheoryEngine",
+      "file": "queue_theory_engine.py",
+      "methods": 12
+    },
+    {
+      "name": "SimulationScenario",
+      "file": "simulation_engine.py",
+      "methods": 2
+    },
+    {
+      "name": "FundingShockScenario",
+      "file": "simulation_engine.py",
+      "methods": 7
+    },
+    {
+      "name": "StaffDisruptionScenario",
+      "file": "simulation_engine.py",
+      "methods": 7
+    },
+    {
+      "name": "SupplyChainBreakScenario",
+      "file": "simulation_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "CyberAttackScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "RegulatoryChangeScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "ReputationCrisisScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "EconomicDownturnScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "NaturalDisasterScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "PandemicScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "MarketShiftScenario",
+      "file": "simulation_engine.py",
+      "methods": 1
+    },
+    {
+      "name": "SimulationEngine",
+      "file": "simulation_engine.py",
+      "methods": 4
+    },
+    {
+      "name": "ToCEngine",
+      "file": "toc_engine.py",
+      "methods": 13
+    },
+    {
+      "name": "Settings",
+      "file": "settings.py",
+      "methods": 1
+    },
+    {
+      "name": "TestAuthModels",
+      "file": "test_models.py",
+      "methods": 8
+    },
+    {
+      "name": "TestTwinInsight",
+      "file": "test_frontend_models.py",
+      "methods": 6
+    },
+    {
+      "name": "TestRiskLandscape",
+      "file": "test_frontend_models.py",
+      "methods": 3
+    },
+    {
+      "name": "TestComplianceFramework",
+      "file": "test_frontend_models.py",
+      "methods": 2
+    },
+    {
+      "name": "TestComplianceStatus",
+      "file": "test_frontend_models.py",
+      "methods": 1
+    },
+    {
+      "name": "TestDepartmentTwin",
+      "file": "test_frontend_models.py",
+      "methods": 2
+    },
+    {
+      "name": "TestPersonalDigitalTwin",
+      "file": "test_frontend_models.py",
+      "methods": 3
+    },
+    {
+      "name": "TestOrganizationTwin",
+      "file": "test_frontend_models.py",
+      "methods": 2
+    },
+    {
+      "name": "TestAIInsightsResponse",
+      "file": "test_frontend_models.py",
+      "methods": 2
+    },
+    {
+      "name": "TestPasswordHashing",
+      "file": "test_auth_password.py",
+      "methods": 8
+    },
+    {
+      "name": "TestJWTTokens",
+      "file": "test_auth_jwt.py",
+      "methods": 10
+    },
+    {
+      "name": "TestTenantIsolation",
+      "file": "test_tenant_isolation.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAuthenticationFlow",
+      "file": "test_auth_flow.py",
+      "methods": 0
+    },
+    {
+      "name": "TestMultiTenancy",
+      "file": "test_multi_tenancy.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAIInsightsEndpoint",
+      "file": "test_insights_endpoint.py",
+      "methods": 0
+    },
+    {
+      "name": "TestBIAEndpoints",
+      "file": "test_bia_endpoints.py",
+      "methods": 0
+    },
+    {
+      "name": "TestSimulationEndpoints",
+      "file": "test_simulation_endpoints.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAdvancedAIScenarios",
+      "file": "test_scenario_ai_endpoints.py",
+      "methods": 0
+    },
+    {
+      "name": "TestAuthEndpoints",
+      "file": "test_auth_endpoints.py",
+      "methods": 0
+    },
+    {
+      "name": "TestOrganizationEndpoints",
+      "file": "test_organization_endpoints.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAEngineClient",
+      "file": "client.py",
+      "methods": 1
+    },
+    {
+      "name": "BIAEngineError",
+      "file": "client.py",
+      "methods": 0
+    },
+    {
+      "name": "OdooSyncManager",
+      "file": "sync.py",
+      "methods": 4
+    },
+    {
+      "name": "OdooBridge",
+      "file": "bridge.py",
+      "methods": 4
+    },
+    {
+      "name": "ScenarioType",
+      "file": "client.py",
+      "methods": 0
+    },
+    {
+      "name": "RiskLevel",
+      "file": "client.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioAIClient",
+      "file": "client.py",
+      "methods": 1
+    },
+    {
+      "name": "ScenarioAIError",
+      "file": "client.py",
+      "methods": 0
+    },
+    {
+      "name": "Base",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TenantModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "UserModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "DataSourceModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PersonalDigitalTwinModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResultModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricSeriesModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthScoreModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "TheoryOfChangeModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ImpactPassportModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplateModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAAnalysisModel",
+      "file": "models.py",
+      "methods": 0
+    },
+    {
+      "name": "PostgreSQLStorage",
+      "file": "postgres_storage.py",
+      "methods": 2
+    },
+    {
+      "name": "RedisCache",
+      "file": "redis_cache.py",
+      "methods": 2
+    },
+    {
+      "name": "ResolutionStrategy",
+      "file": "conflict_resolver.py",
+      "methods": 0
+    },
+    {
+      "name": "ConflictType",
+      "file": "conflict_resolver.py",
+      "methods": 0
+    },
+    {
+      "name": "ConflictResolver",
+      "file": "conflict_resolver.py",
+      "methods": 12
+    },
+    {
+      "name": "SimilarityMetric",
+      "file": "entity_resolver.py",
+      "methods": 4
+    },
+    {
+      "name": "EntityResolver",
+      "file": "entity_resolver.py",
+      "methods": 5
+    },
+    {
+      "name": "EnrichmentProvider",
+      "file": "enricher.py",
+      "methods": 1
+    },
+    {
+      "name": "ClearbitEnricher",
+      "file": "enricher.py",
+      "methods": 1
+    },
+    {
+      "name": "GoogleMapsEnricher",
+      "file": "enricher.py",
+      "methods": 1
+    },
+    {
+      "name": "DataEnricher",
+      "file": "enricher.py",
+      "methods": 4
+    },
+    {
+      "name": "EntityType",
+      "file": "normalizer.py",
+      "methods": 0
+    },
+    {
+      "name": "DataQuality",
+      "file": "normalizer.py",
+      "methods": 0
+    },
+    {
+      "name": "CanonicalFieldMapping",
+      "file": "normalizer.py",
+      "methods": 0
+    },
+    {
+      "name": "DataNormalizer",
+      "file": "normalizer.py",
+      "methods": 8
+    },
+    {
+      "name": "AppState",
+      "file": "app.py",
+      "methods": 1
+    },
+    {
+      "name": "BIAAnalysisCreate",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAAnalysisResponse",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAAnalysisList",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "QueueTheoryRequest",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "QueueTheoryResponse",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "bia.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplateCreate",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplateUpdate",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplateResponse",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioTemplateList",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "AIGenerationRequest",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "AdvancedAIRequest",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "LearningFeedback",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "scenarios.py",
+      "methods": 0
+    },
+    {
+      "name": "RegisterRequest",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "LoginRequest",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenResponse",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "RefreshTokenRequest",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "UserResponse",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "MeResponse",
+      "file": "auth.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricSeriesCreate",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthScoreCreate",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionCreate",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "MetricSeriesResponse",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthScoreResponse",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionResponse",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "metrics.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionCreate",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionResponse",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "PredictionList",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "predictions.py",
+      "methods": 0
+    },
+    {
+      "name": "SyncRequest",
+      "file": "bridges.py",
+      "methods": 0
+    },
+    {
+      "name": "PushRequest",
+      "file": "bridges.py",
+      "methods": 0
+    },
+    {
+      "name": "BulkImportRequest",
+      "file": "import_data.py",
+      "methods": 0
+    },
+    {
+      "name": "ImportResponse",
+      "file": "import_data.py",
+      "methods": 0
+    },
+    {
+      "name": "HealthCheckResponse",
+      "file": "health.py",
+      "methods": 0
+    },
+    {
+      "name": "StatisticsResponse",
+      "file": "health.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationCreate",
+      "file": "simulations.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationUpdate",
+      "file": "simulations.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationResponse",
+      "file": "simulations.py",
+      "methods": 0
+    },
+    {
+      "name": "SimulationList",
+      "file": "simulations.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "simulations.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationCreate",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationUpdate",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationResponse",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "OrganizationList",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "organizations.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAAnalysisRequest",
+      "file": "integrations.py",
+      "methods": 0
+    },
+    {
+      "name": "BIAAnalysisResponse",
+      "file": "integrations.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationRequest",
+      "file": "integrations.py",
+      "methods": 0
+    },
+    {
+      "name": "ScenarioGenerationResponse",
+      "file": "integrations.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseCreate",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseUpdate",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseResponse",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseList",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "ExerciseExecuteRequest",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "Config",
+      "file": "exercises.py",
+      "methods": 0
+    },
+    {
+      "name": "TokenPayload",
+      "file": "jwt.py",
+      "methods": 0
+    }
+  ],
+  "functions": [
+    {
+      "name": "verify_api_key",
+      "file": "bridge_service.py",
+      "params": 1
+    },
+    {
+      "name": "create_thehive_webhook_handler",
+      "file": "webhooks.py",
+      "params": 3
+    },
+    {
+      "name": "get_mock_thehive_configs",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_cases",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_alerts",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_observables",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_tasks",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_case_templates",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "get_mock_incident_metrics",
+      "file": "mock_data.py",
+      "params": 0
+    },
+    {
+      "name": "enhance_bia_engine_with_ciw",
+      "file": "bia_ciw_engine.py",
+      "params": 1
+    },
+    {
+      "name": "health",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "main",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "health",
+      "file": "app.py",
+      "params": 0
+    },
+    {
+      "name": "verify_api_key",
+      "file": "bridge_service.py",
+      "params": 1
+    },
+    {
+      "name": "_format_ai_response_to_markdown",
+      "file": "main.py",
+      "params": 2
+    },
+    {
+      "name": "_generate_jaamsim_config",
+      "file": "main.py",
+      "params": 1
+    },
+    {
+      "name": "get_simulation_status",
+      "file": "execution_router.py",
+      "params": 2
+    },
+    {
+      "name": "get_simulation_results",
+      "file": "execution_router.py",
+      "params": 2
+    },
+    {
+      "name": "create_scenario",
+      "file": "scenario_router.py",
+      "params": 2
+    },
+    {
+      "name": "list_scenarios",
+      "file": "scenario_router.py",
+      "params": 5
+    },
+    {
+      "name": "get_scenario",
+      "file": "scenario_router.py",
+      "params": 2
+    },
+    {
+      "name": "delete_scenario",
+      "file": "scenario_router.py",
+      "params": 2
+    },
+    {
+      "name": "list_simulations",
+      "file": "simulation_router.py",
+      "params": 6
+    },
+    {
+      "name": "get_simulation",
+      "file": "simulation_router.py",
+      "params": 2
+    },
+    {
+      "name": "list_engines",
+      "file": "simulation_router.py",
+      "params": 0
+    },
+    {
+      "name": "post_init_hook",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "create_default_incident_categories",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "setup_ai_commander_defaults",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "create_default_response_teams",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "setup_automation_jobs",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "uninstall_hook",
+      "file": "__init__.py",
+      "params": 1
+    },
+    {
+      "name": "main",
+      "file": "migration_script.py",
+      "params": 0
+    },
+    {
+      "name": "_format_ai_response_to_markdown",
+      "file": "main.py",
+      "params": 2
+    },
+    {
+      "name": "_generate_jaamsim_config",
+      "file": "main.py",
+      "params": 1
+    },
+    {
+      "name": "get_config",
+      "file": "main.py",
+      "params": 0
+    },
+    {
+      "name": "get_collector_manager",
+      "file": "manager.py",
+      "params": 0
+    },
+    {
+      "name": "register_builtin_collectors",
+      "file": "manager.py",
+      "params": 0
+    },
+    {
+      "name": "event_loop",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "sample_csv_data",
+      "file": "conftest.py",
+      "params": 0
+    },
+    {
+      "name": "create_app",
+      "file": "app.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "app.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "app.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "bia.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "scenarios.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "auth.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "metrics.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "predictions.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "bridges.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "bridges.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "import_data.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "import_data.py",
+      "params": 1
+    },
+    {
+      "name": "auto_detect_columns",
+      "file": "import_data.py",
+      "params": 1
+    },
+    {
+      "name": "normalize_row",
+      "file": "import_data.py",
+      "params": 2
+    },
+    {
+      "name": "get_storage",
+      "file": "simulations.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "simulations.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "visualize.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "visualize.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "organizations.py",
+      "params": 1
+    },
+    {
+      "name": "get_cache",
+      "file": "organizations.py",
+      "params": 1
+    },
+    {
+      "name": "get_storage",
+      "file": "integrations.py",
+      "params": 0
+    },
+    {
+      "name": "get_cache",
+      "file": "integrations.py",
+      "params": 0
+    },
+    {
+      "name": "get_bia_client",
+      "file": "integrations.py",
+      "params": 0
+    },
+    {
+      "name": "get_scenario_ai_client",
+      "file": "integrations.py",
+      "params": 0
+    },
+    {
+      "name": "get_storage",
+      "file": "exercises.py",
+      "params": 1
+    },
+    {
+      "name": "hash_password",
+      "file": "password.py",
+      "params": 1
+    },
+    {
+      "name": "verify_password",
+      "file": "password.py",
+      "params": 2
+    },
+    {
+      "name": "get_storage",
+      "file": "dependencies.py",
+      "params": 0
+    },
+    {
+      "name": "create_access_token",
+      "file": "jwt.py",
+      "params": 4
+    },
+    {
+      "name": "create_refresh_token",
+      "file": "jwt.py",
+      "params": 3
+    },
+    {
+      "name": "verify_token",
+      "file": "jwt.py",
+      "params": 2
+    },
+    {
+      "name": "get_url",
+      "file": "env.py",
+      "params": 0
+    },
+    {
+      "name": "run_migrations_offline",
+      "file": "env.py",
+      "params": 0
+    },
+    {
+      "name": "do_run_migrations",
+      "file": "env.py",
+      "params": 1
+    },
+    {
+      "name": "run_migrations_online",
+      "file": "env.py",
+      "params": 0
+    },
+    {
+      "name": "upgrade",
+      "file": "76253af070c2_initial_schema_organizations_.py",
+      "params": 0
+    },
+    {
+      "name": "downgrade",
+      "file": "76253af070c2_initial_schema_organizations_.py",
+      "params": 0
+    },
+    {
+      "name": "upgrade",
+      "file": "a1b2c3d4e5f6_add_simulation_hub_tables.py",
+      "params": 0
+    },
+    {
+      "name": "downgrade",
+      "file": "a1b2c3d4e5f6_add_simulation_hub_tables.py",
+      "params": 0
+    },
+    {
+      "name": "upgrade",
+      "file": "776e3e3e2ae8_add_personal_digital_twin_and_frontend_.py",
+      "params": 0
+    },
+    {
+      "name": "downgrade",
+      "file": "776e3e3e2ae8_add_personal_digital_twin_and_frontend_.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 44465,
+    "python_files": 160,
+    "classes": 382,
+    "functions": 81,
+    "endpoints": 168,
+    "dependencies": 138
+  },
+  "readme": {
+    "file": "README.md",
+    "size": 1852,
+    "lines": 121,
+    "content": "# simulation\n\n> \ud83c\udf10 API Service \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b\n\n## \ud83d\udcca \u041e\u0431\u0437\u043e\u0440\n\n| \u041c\u0435\u0442\u0440\u0438\u043a\u0430 | \u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 |\n|---------|----------|\n| **\u0421\u0442\u0440\u043e\u043a \u043a\u043e\u0434\u0430** | 44,465 |\n| **Python \u0444\u0430\u0439\u043b\u043e\u0432** | 160 |\n| **\u041a\u043b\u0430\u0441\u0441\u043e\u0432** | 382 |\n| **\u0424\u0443\u043d\u043a\u0446\u0438\u0439** | 81 |\n| **API Endpoints** | 233 |\n| **\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439** | 138 |\n\n**\u0422\u0438\u043f \u043c\u043e\u0434\u0443\u043b\u044f:** \ud83c\udf10 API Service\n**\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435:** 2025-10-07\n\n---\n\n## \ud83c\udf10 API Endpoints\n\n### GET (124)\n\n- `/`\n- `/`\n- `/`\n- `/`\n- `/`\n\n### POST (95)\n\n- `/`\n- `/`\n- `/`\n- `/`\n- `/`\n\n### PUT (6)\n\n- `/api/cases/{case_id}/update`\n- `/api/v1/case/{case_id}`\n- `/{exercise_id}`\n- `/{org_id}`\n- `/{scenario_id}`\n\n### DELETE (7)\n\n- `/scenarios/{scenario_id}`\n- `/simulations/{sim_id}`\n- `/{bia_id}`\n- `/{exercise_id}`\n- `/{org_id}`\n\n### PATCH (1)\n\n- `/api/thehive/{config_id}/cases/{case_id}`\n\n[\u2192 \u041f\u043e\u043b\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f API](./API.md)\n\n---\n\n## \ud83c\udfd7\ufe0f \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430\n\n### \u041a\u043b\u044e\u0447\u0435\u0432\u044b\u0435 \u043a\u043b\u0430\u0441\u0441\u044b\n\n- **BCMIncidentUnified** (47 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `bcm_incident_unified.py`\n- **TheHiveClient** (14 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `thehive_client.py`\n- **BCMIncidentMigration** (14 \u043c\u0435\u0442\u043e\u0434\u043e\u0432) - `m"
+  }
+}

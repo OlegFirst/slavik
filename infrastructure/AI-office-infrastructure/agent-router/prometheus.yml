@@ -1,0 +1,37 @@
+# Prometheus Configuration for AI Agent Router
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'ai-agent-router'
+    environment: 'production'
+
+# Scrape configs
+scrape_configs:
+  # AI Agent Router Metrics
+  - job_name: 'agent-router'
+    static_configs:
+      - targets: ['agent-router-metrics:9090']
+        labels:
+          service: 'ai-agent-router'
+          component: 'metrics-server'
+
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+# Alerting rules (optional)
+rule_files:
+  # - 'alerts/agent-router-alerts.yml'
+
+# Alert manager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']

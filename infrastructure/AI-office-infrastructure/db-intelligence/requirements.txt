@@ -1,0 +1,23 @@
+# Database Intelligence Service Dependencies
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# Database
+sqlalchemy[asyncio]==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# HTTP Client
+httpx==0.25.2
+
+# System Monitoring
+psutil==5.9.6
+
+# Supabase (optional, if using Supabase client)
+supabase==2.3.0
+
+# Utilities
+python-dotenv==1.0.0

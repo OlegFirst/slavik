@@ -1,0 +1,1069 @@
+{
+  "stats": {
+    "total_events": 126,
+    "total_publishers": 132,
+    "total_subscribers": 45,
+    "files_scanned": 10220
+  },
+  "events": {
+    "bpmn.process.deployed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "bpmn.instance.started": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "bpmn.task.created": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "bpmn.instance.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "bpmn.task.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "bpmn.instance.terminated": {
+      "publishers": [
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine.py",
+        "intelligent-core/intelligent-core/workflow-engine/workflow/bpmn/engine_persistent.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "proactive.daily_digest": {
+      "publishers": [
+        "intelligent-core/intelligent-core/predictive/services/proactive_recommendations.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "specialist.demand_forecast": {
+      "publishers": [
+        "intelligent-core/intelligent-core/predictive/services/demand_forecaster.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "state_changed": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "process_added": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py",
+        "intelligent-core/intelligent-core/workflow_intelligence/workflows/bia_workflow.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 2
+    },
+    "dependency_added": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "impact_assessed": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "rto_set": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "stage_completed": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py",
+        "intelligent-core/intelligent-core/workflow_intelligence/workflows/bia_workflow.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 2
+    },
+    "milestone_reached": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/integration/bia_adapter.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "test.workflow.started": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/tests/test_workflow_engine.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "test.*": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/tests/test_workflow_engine.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "test.workflow.completed": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/workflow_intelligence/tests/test_workflow_engine.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "training.auto_completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/ai-foundation/learning-knowledge/training/programs/training_service.py",
+        "platform-services/platform-services/learning-service/services/training_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "training.assessment_failed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/ai-foundation/learning-knowledge/training/programs/training_service.py",
+        "platform-services/platform-services/learning-service/services/training_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "training.certified": {
+      "publishers": [
+        "intelligent-core/intelligent-core/ai-foundation/learning-knowledge/training/programs/training_service.py",
+        "platform-services/platform-services/learning-service/services/training_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "contribution.submission_failed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_integration_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "contribution.offer_sent": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_completion_handler.py",
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_integration_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "case.review.assigned": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/peer_review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "review.submitted": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/peer_review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "case.approved": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/peer_review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "case.rejected": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/peer_review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "reputation.points_awarded": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/reputation_engine.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "reputation.level_up": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/reputation_engine.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "contribution.processing_failed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_completion_handler.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "contribution.auto_submitted": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_completion_handler.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "contribution.submitted": {
+      "publishers": [
+        "intelligent-core/intelligent-core/community_intelligence/services/workflow_completion_handler.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "workflow.*": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/orchestration/ai-orchestration/orchestrator.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "system.*": {
+      "publishers": [],
+      "subscribers": [
+        "intelligent-core/intelligent-core/orchestration/ai-orchestration/orchestrator.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "compliance.check.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/compliance_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "gap.analysis.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/compliance_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "evidence.validation.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/compliance_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "timeline.prediction.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/strategic_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "resource.planning.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/strategic_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "maturity.assessment.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/strategic_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bia.analysis.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/bia_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "dependency.mapping.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/bia_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "impact.calculation.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/bia_tools.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "case.search.completed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/case_library_tool.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "best.practice.retrieved": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/case_library_tool.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "ai.tool.executed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/base_tool.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "ai.tool.failed": {
+      "publishers": [
+        "intelligent-core/intelligent-core/_archive/ai_experts/tools/base_tool.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.compliance.improvement_created": {
+      "publishers": [
+        "platform-services/platform-services/compliance-service/api/improvements.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.compliance.improvement_verified": {
+      "publishers": [
+        "platform-services/platform-services/compliance-service/api/improvements.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "governance.policy.created": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/portal/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 1
+    },
+    "governance.policy.updated": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.policy.deleted": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.policy.approved": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.policy.published": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/portal/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 1
+    },
+    "governance.role.created": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.role.assigned": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py",
+        "platform-services/platform-services/community-service/portal/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 2
+    },
+    "governance.resource.created": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.resource.allocated": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 1
+    },
+    "governance.competence.recorded": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 1
+    },
+    "governance.objective.created": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.objective.updated": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/api/routes.py",
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "governance.competence.gap_identified": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "governance.objective.completed": {
+      "publishers": [
+        "platform-services/platform-services/governance-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.training.completed": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py",
+        "platform-services/platform-services/community-service/portal/events/subscribers.py",
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 1,
+      "subscriber_count": 3
+    },
+    "learning.certification.issued": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py",
+        "platform-services/platform-services/learning-service/events/publishers.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py",
+        "platform-services/platform-services/community-service/portal/events/subscribers.py",
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 2,
+      "subscriber_count": 3
+    },
+    "exercise.completed": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "exercise.gap_identified": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "risk.identified": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "incident.declared": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "incident.resolved": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "document.approved": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/governance-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "bia.process.created": {
+      "publishers": [
+        "platform-services/platform-services/integration-tests/test_eventbus_integration.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.incident.alert_created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.incident.case_created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.incident.case_updated": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.incident.task_created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.case.created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.case.updated": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.alert.created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.alert.promoted": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.task.created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "thehive.bcm.incident.created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/thehive/thehive_adapter/main.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.scenario_created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.created": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.scheduled": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.started": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.completed": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.inject_delivered": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.exercise.response_submitted": {
+      "publishers": [
+        "platform-services/platform-services/simulation/simulation/simulation/simulation/sim_adapter.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.program.published": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py"
+      ],
+      "subscribers": [
+        "platform-services/platform-services/community-service/portal/events/subscribers.py"
+      ],
+      "publisher_count": 1,
+      "subscriber_count": 1
+    },
+    "governance.role.removed": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/community-service/marketplace/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "marketplace.proposal.submitted": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/proposal_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.proposal.accepted": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/proposal_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.project.assigned": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/project_service.py",
+        "platform-services/platform-services/community-service/marketplace/services/proposal_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "marketplace.proposal.rejected": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/proposal_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.review.created": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.review.responded": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/review_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.project.created": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/project_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.project.published": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/project_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.project.completed": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/project_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.specialist.registered": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/specialist_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.specialist.profile_updated": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/specialist_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "marketplace.specialist.verified": {
+      "publishers": [
+        "platform-services/platform-services/community-service/marketplace/services/specialist_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.created": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.updated": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.status_changed": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.resolved": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.closed": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.incident.escalated": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.stakeholder.notification": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.metrics.updated": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "response.compliance.violation": {
+      "publishers": [
+        "platform-services/platform-services/response-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.program.created": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py",
+        "platform-services/platform-services/learning-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 2,
+      "subscriber_count": 0
+    },
+    "learning.enrollment.created": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.enrollment.submitted": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.training.started": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/api/routes.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "learning.enrollment.completed": {
+      "publishers": [
+        "platform-services/platform-services/learning-service/events/publishers.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "governance.organization.created": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/learning-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "governance.person.added": {
+      "publishers": [],
+      "subscribers": [
+        "platform-services/platform-services/learning-service/events/subscribers.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "bcm.bia.started": {
+      "publishers": [
+        "platform-services/platform-services/bia-service/services/bia_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.bia.completed": {
+      "publishers": [
+        "platform-services/platform-services/bia-service/services/bia_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "bcm.bia.critical_process_identified": {
+      "publishers": [
+        "platform-services/platform-services/bia-service/services/bia_service.py"
+      ],
+      "subscribers": [],
+      "publisher_count": 1,
+      "subscriber_count": 0
+    },
+    "exercise.created": {
+      "publishers": [
+        "shared/shared/eventbus/client.py"
+      ],
+      "subscribers": [
+        "shared/shared/eventbus/client.py",
+        "shared/shared/eventbus/subscriber.py"
+      ],
+      "publisher_count": 1,
+      "subscriber_count": 2
+    },
+    "exercise.*": {
+      "publishers": [],
+      "subscribers": [
+        "shared/shared/eventbus/client.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "#": {
+      "publishers": [],
+      "subscribers": [
+        "shared/shared/eventbus/client.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    },
+    "document.*": {
+      "publishers": [],
+      "subscribers": [
+        "shared/shared/eventbus/subscriber.py"
+      ],
+      "publisher_count": 0,
+      "subscriber_count": 1
+    }
+  }
+}

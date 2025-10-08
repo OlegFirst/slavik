@@ -1,0 +1,367 @@
+{
+  "module_name": "\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433",
+  "path": "platform-services/\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433",
+  "structure": {
+    "compliance-monitoring": [
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "README.md",
+      "main.py"
+    ],
+    "compliance-monitoring/database": [
+      "supabase_schema.sql",
+      "APPLY_SCHEMA.md"
+    ],
+    "compliance-monitoring/integrations": [
+      "automation_toolkit.py",
+      "__init__.py",
+      "notifications.py"
+    ],
+    "compliance-monitoring/_archive_docs_20251007": [
+      "MIGRATION_CHECKLIST.md",
+      "STATUS_REPORT.md",
+      "main.py.backup.20251003",
+      "\u2705_\u0411\u0410\u0417\u0410_\u0413\u041e\u0422\u041e\u0412\u0410_\u041a\u041b\u0418\u0415\u041d\u0422_\u0421\u041e\u0417\u0414\u0410\u041d.md"
+    ],
+    "process-analytics": [
+      ".DS_Store",
+      "requirements.txt",
+      "Dockerfile",
+      "\u0427\u0422\u041e_\u041c\u041e\u041d\u0418\u0422\u041e\u0420\u0418\u0422.md",
+      "README.md",
+      "main.py"
+    ],
+    "process-analytics/database": [
+      "supabase_schema.sql",
+      "APPLY_SCHEMA.md"
+    ],
+    "process-analytics/\u0430\u0440\u0445\u0438\u0432": [
+      "COMPARISON_WITH_AI_WORKFLOW_OPTIMIZER.md",
+      "ALTERNATIVE_TACTICAL_APPROACH.md",
+      "FINAL_RECOMMENDATION.md",
+      "STRATEGIC_EVOLUTION_ANALYSIS.md",
+      "DATA_FLOW_AND_IMPACT.md",
+      "IMPROVEMENTS.md",
+      "INTEGRATION_GUIDE.md"
+    ]
+  },
+  "dependencies": [
+    "aiofiles",
+    "analyzers.ast_analyzer",
+    "analyzers.dependency_mapper",
+    "apscheduler.schedulers.asyncio",
+    "asyncio",
+    "automation_toolkit",
+    "collections",
+    "database/postgresql",
+    "dataclasses",
+    "datetime",
+    "fastapi",
+    "fastapi.middleware.cors",
+    "fastapi.responses",
+    "httpx",
+    "json",
+    "logging",
+    "numpy",
+    "os",
+    "pandas",
+    "pathlib",
+    "prometheus_client",
+    "pydantic",
+    "statistics",
+    "subprocess",
+    "sys",
+    "time",
+    "typing",
+    "uuid",
+    "uvicorn",
+    "yaml"
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/status",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/iso-clauses",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/services",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/alerts",
+      "file": "main.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/compliance/alerts/{alert_id}/acknowledge",
+      "file": "main.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/compliance/alerts/{alert_id}/resolve",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/nonconformities",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/nonconformities",
+      "file": "main.py"
+    },
+    {
+      "method": "PUT",
+      "path": "/compliance/nonconformities/{nonconformity_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/audit-requirements",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/audit-requirements",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/compliance/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/compliance/metrics/{service}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/register-service",
+      "file": "main.py"
+    },
+    {
+      "method": "DELETE",
+      "path": "/deregister-service/{service_name}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/automation/discover-services",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/automation/auto-register-services",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/automation/dependencies/{service_name}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/automation/root-cause/{failed_service}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/automation/security-scan",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/automation/code-complexity/{service_name}",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/automation/metrics",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/log-execution",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/log-event",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/analyze-performance/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/discover-patterns/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/detect-deviations/{process_id}",
+      "file": "main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/process-mining/comprehensive-analysis",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/process-mining/health",
+      "file": "main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/process-mining/processes/{process_id}/summary",
+      "file": "main.py"
+    }
+  ],
+  "classes": [
+    {
+      "name": "Config",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceAlert",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "NonconformityRecord",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "AuditRequirement",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ServiceRegistration",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceMetrics",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStatus",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ComplianceStorage",
+      "file": "main.py",
+      "methods": 6
+    },
+    {
+      "name": "AutomationToolkitIntegration",
+      "file": "automation_toolkit.py",
+      "methods": 7
+    },
+    {
+      "name": "NotificationIntegration",
+      "file": "notifications.py",
+      "methods": 1
+    },
+    {
+      "name": "ProcessExecution",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessEvent",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessPattern",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessDeviation",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessEventCreate",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessExecutionCreate",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessAnalysisResult",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessMiningRequest",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessTrace",
+      "file": "main.py",
+      "methods": 0
+    },
+    {
+      "name": "ProcessMiningEngine",
+      "file": "main.py",
+      "methods": 21
+    }
+  ],
+  "functions": [
+    {
+      "name": "get_db",
+      "file": "main.py",
+      "params": 0
+    }
+  ],
+  "config": {},
+  "metrics": {
+    "loc": 3346,
+    "python_files": 5,
+    "classes": 20,
+    "functions": 1,
+    "endpoints": 33,
+    "dependencies": 30
+  },
+  "readme": null
+}

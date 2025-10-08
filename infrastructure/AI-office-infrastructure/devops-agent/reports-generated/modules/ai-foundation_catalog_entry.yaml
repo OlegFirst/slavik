@@ -1,0 +1,33 @@
+
+  ai_foundation:
+    type: service
+    location: intelligent-core/ai-foundation
+    port: 8030
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - database/vector-db
+        - runtime/eventbus
+      external:
+        - external/anthropic
+      internal:
+        - ai_foundation
+        - ai_foundation/workflow_intelligence
+        - ai_foundation/workflow_intelligence_adapter
+        - ai_services/ml
+        - ai_services/predictive_models
+    endpoints:
+      - GET /health
+      - GET /metrics
+      - GET /
+      - GET /...
+      - GET /standards
+    metrics:
+      loc: 23019
+      files: 82
+      classes: 116
+      functions: 43
+    status: discovered

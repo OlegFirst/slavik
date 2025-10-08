@@ -1,0 +1,26 @@
+
+  eventbus:
+    type: service
+    location: infrastructure/eventbus
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - runtime/eventbus
+      external:
+
+      internal:
+
+    endpoints:
+      - POST /workflows
+      - GET /
+      - POST /workflows/{workflow_id}/complete
+      - GET /stats
+    metrics:
+      loc: 3445
+      files: 27
+      classes: 22
+      functions: 25
+    status: discovered

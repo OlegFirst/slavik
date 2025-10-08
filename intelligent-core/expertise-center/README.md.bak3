@@ -1,0 +1,165 @@
+# Expertise Center
+
+Domain Plugin Manager for AI-Powered BCM Platform
+
+## Overview
+
+Expertise Center manages domain-specific AI experts:
+- **Specialists** - Strategic experts (deep analysis, strategic recommendations)
+- **Tactical Assistants** - Tactical assistants (specific tasks, quick answers)
+- **Analyzers** - Heavy AI (deep data analysis, pattern recognition)
+
+## Architecture
+
+```
+expertise-center/
+├── core/                    # Plugin Manager Core
+│   ├── chief_executive.py   # Main orchestrator
+│   ├── domain_loader.py     # Plugin loader
+│   └── expert_registry.py   # Expert registry
+│
+├── shared/                  # Shared for Domain Plugins
+│   ├── base/               # Base Classes
+│   │   ├── base_specialist.py
+│   │   ├── base_colleague.py
+│   │   └── base_analyzer.py
+│   └── tools/              # Domain Tools
+│
+└── domains/                # Domain Plugins
+    └── bcm/               # BCM Domain
+        ├── specialists/   # 3 Strategic Experts
+        ├── tactical_assistants/    # 7 Tactical Assistants
+        ├── analyzers/     # 10 Heavy Analyzers
+        └── knowledge/     # Domain Knowledge
+```
+
+## BCM Domain
+
+### Specialists (3)
+1. **BCM Advisor** - Strategic BCM guidance
+2. **Compliance Auditor** - Compliance analysis
+3. **Strategic Planner** - Strategic planning
+
+### Tactical Assistants (7)
+1. **BIA Specialist** - Business Impact Analysis
+2. **Risk Analyst** - Risk assessment
+3. **Project Manager** - BCM project management
+4. **Incident Advisor** - Incident response
+5. **Plan Generator** - Plan generation
+6. **Compliance Copilot** - Compliance assistance
+7. **Exercise Designer** - Exercise design
+
+### Analyzers (10)
+1. **Governance Analyzer** - Governance analysis
+2. **Impact Analyzer** - Impact assessment
+3. **Risk Analyzer** - Risk analysis
+4. **Compliance Analyzer** - Compliance checking
+5. **Emergency Analyzer** - Emergency analysis
+6. **Scenario Analyzer** - Scenario modeling
+7. **Performance Analyzer** - Performance analysis
+8. **Learning Analyzer** - Learning insights
+9. **Plan Analyzer** - Plan analysis
+10. **Lifecycle Analyzer** - Lifecycle monitoring
+
+## Usage
+
+### Initialize Expertise Center
+
+```python
+from intelligent_core.expertise_center.core import ChiefExecutive
+
+# Create chief executive
+chief = ChiefExecutive()
+
+# Initialize with BCM domain
+await chief.initialize(domains=['bcm'])
+
+# Get status
+status = chief.get_status()
+print(status)
+```
+
+### Query a Specialist
+
+```python
+# Query strategic advisor
+result = await chief.query_specialist(
+    specialist_id="bcm_advisor",
+    context={"organization": "org-123", "domain": "bcm"},
+    query="What are best practices for BIA?"
+)
+```
+
+### Ask a Colleague
+
+```python
+# Ask BIA specialist
+result = await chief.ask_colleague(
+    colleague_id="bia_specialist",
+    task="Analyze critical function dependencies",
+    context={"critical_function_id": "cf-456"}
+)
+```
+
+### Run an Analyzer
+
+```python
+# Run risk analyzer
+result = await chief.run_analyzer(
+    analyzer_id="risk_analyzer",
+    data={"risks": [...], "assets": [...]},
+    config={"depth": "comprehensive"}
+)
+```
+
+## Integration
+
+### With ai-foundation
+
+All experts use ai-foundation for:
+- RAG (knowledge retrieval)
+- LLM (AI generation)
+- ML (predictive models)
+
+```python
+from ai_foundation import RAGPipeline, LLMRouter
+
+# In specialist/colleague/analyzer
+rag = RAGPipeline()
+llm = LLMRouter()
+
+knowledge = await rag.search(query="ISO 22301")
+response = await llm.route(task="strategic_analysis", prompt=...)
+```
+
+### With shared/
+
+All experts use shared libraries:
+- `shared.database` - Database access
+- `shared.cache` - Caching
+- `shared.eventbus` - Event publishing
+
+## Adding New Domains
+
+To add a new domain (e.g., HR, Finance):
+
+1. Create domain directory:
+```bash
+mkdir -p domains/hr/{specialists,tactical_assistants,analyzers,knowledge}
+```
+
+2. Create domain experts inheriting from base classes
+
+3. Load domain:
+```python
+await chief.load_domain('hr')
+```
+
+## Status
+
+✅ **Production Ready** (V7 Architecture)
+
+- Core: Complete
+- Base Classes: Complete
+- BCM Domain: Complete (3 specialists, 7 tactical_assistants, 10 analyzers)
+- Integration: ai-foundation + shared

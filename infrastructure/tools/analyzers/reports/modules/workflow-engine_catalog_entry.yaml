@@ -1,0 +1,30 @@
+
+  workflow_engine:
+    type: ai-service
+    location: intelligent-core/workflow-engine
+    port: null
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_foundation/workflow_intelligence
+        - shared/cache
+        - shared/database
+    endpoints:
+      - GET /health
+      - GET /metrics
+      - POST /processes
+      - GET /instances/{instance_id}/visual-state
+      - POST /tasks/{task_id}/complete
+    metrics:
+      loc: 6309
+      files: 22
+      classes: 29
+      functions: 6
+    status: discovered

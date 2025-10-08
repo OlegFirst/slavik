@@ -1,0 +1,32 @@
+
+  community_service:
+    type: business-service
+    location: platform-services/community-service
+    port: 8033
+    technology:
+      - Python 3.11
+      - FastAPI
+    dependencies:
+      infrastructure:
+        - database/postgresql
+        - runtime/eventbus
+      external:
+
+      internal:
+        - ai_client
+        - shared/auth
+        - shared/database
+    endpoints:
+      - GET /health
+      - GET /
+      - GET , response_model=ScenarioListResponse)
+async def get_scenarios(
+    scenario_type: Optional[str] = Query(None, description=
+      - GET /{scenario_id}
+      - POST /{scenario_id}/deploy
+    metrics:
+      loc: 18334
+      files: 70
+      classes: 170
+      functions: 8
+    status: discovered
