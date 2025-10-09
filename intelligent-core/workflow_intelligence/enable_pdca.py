@@ -254,6 +254,18 @@ async def initialize_pdca_with_real_dependencies(
     logger.info("   - KnowledgeBase: Adapter ready")
     logger.info("   - PatternDetector: Ready")
 
+    # 6. Initialize Prometheus metrics
+    try:
+        if __name__ == "__main__":
+            from workflow_intelligence.metrics.pdca_metrics import initialize_pdca_metrics
+        else:
+            from .metrics.pdca_metrics import initialize_pdca_metrics
+
+        initialize_pdca_metrics(tenant_id=tenant_id, version="1.0.0")
+        logger.info("✅ Prometheus metrics initialized")
+    except ImportError as e:
+        logger.warning(f"⚠️ Prometheus metrics not available: {e}")
+
     _global_pdca_engine = pdca_engine
     return pdca_engine
 

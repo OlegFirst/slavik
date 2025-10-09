@@ -201,6 +201,7 @@ class PDCARulesEngine:
     # DO PHASE
     # ========================================================================
 
+    @track_pdca_phase("do")
     async def track_execution(
         self,
         workflow_id: str,
@@ -224,6 +225,7 @@ class PDCARulesEngine:
     # CHECK PHASE
     # ========================================================================
 
+    @track_pdca_phase("check")
     async def check_workflow(
         self,
         workflow_id: str,
@@ -288,6 +290,7 @@ class PDCARulesEngine:
     # ACT PHASE
     # ========================================================================
 
+    @track_pdca_phase("act")
     async def complete_cycle(
         self,
         workflow_id: str
@@ -381,6 +384,15 @@ class PDCARulesEngine:
                 logger.error(f"Failed to save lessons: {e}")
 
         logger.info(f"✅ ACT complete: {len(lessons)} lessons, {len(cycle.patterns_detected)} patterns")
+
+        # Track metrics if available
+        if METRICS_AVAILABLE:
+            try:
+                cycle_dict = asdict(cycle)
+                track_pdca_metrics(cycle_dict, cycle.module, self.tenant_id)
+                logger.info("📊 PDCA metrics tracked successfully")
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to track PDCA metrics: {e}")
 
         return {
             'cycle_id': cycle_id,
