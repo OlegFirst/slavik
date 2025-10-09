@@ -1,15 +1,53 @@
-# Виключаємо тільки критично великі системні папки
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+
+# Environment and config
+.env
+.env.local
+*.local.json
+data/config/email-credentials.json
+data/integrations/config.json
+data/store/*.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# IDE
+.vscode/
+.idea/
+
+# Cache
 .cache/
 .cargo/bin/
 .cargo/registry/
 .rustup/toolchains/
+
+# Large system folders
 AppData/
 .android/
 .docker/
-.vscode/extensions/
 
-# Зберігаємо node_modules як частину повного проекту
-# node_modules/
+# Release artifacts
+release/
+release-portable/
+*.zip
+*.exe
 
-# Залишаємо dist для демонстрації
-# dist/
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Examples (moved to documentation)
+examples/

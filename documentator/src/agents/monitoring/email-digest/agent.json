@@ -1,0 +1,78 @@
+{
+  "id": "email-digest",
+  "name": "Email Digest Agent",
+  "version": "1.0.0",
+  "description": "Щоденний агент для аналізу пошти, класифікації листів та створення дайджесту о 16:00",
+  "category": "monitoring",
+  "enabled": true,
+  "enableIntegrations": true,
+  "schedule": {
+    "type": "cron",
+    "cronExpression": "0 16 * * *",
+    "timezone": "Europe/Kiev",
+    "enabled": true
+  },
+  "capabilities": [
+    "email_monitoring",
+    "email_classification",
+    "digest_generation",
+    "task_creation",
+    "meeting_summary_aggregation"
+  ],
+  "settings": {
+    "emailProvider": "gmail",
+    "lookbackHours": 24,
+    "classification": {
+      "enabled": true,
+      "categories": [
+        "important",
+        "newsletter",
+        "advertisement",
+        "spam",
+        "meeting_summary",
+        "notification",
+        "personal"
+      ]
+    },
+    "taskCreation": {
+      "enabled": true,
+      "taskProvider": "asana",
+      "createTasksFor": ["important"],
+      "priorityMapping": {
+        "urgent": "urgent",
+        "high": "high",
+        "medium": "medium",
+        "low": "low"
+      }
+    },
+    "digest": {
+      "enabled": true,
+      "sendTo": "user@example.com",
+      "includeAttachments": true,
+      "includeMeetingSummaries": true,
+      "format": "markdown"
+    },
+    "meetingSummaryServices": [
+      "otter.ai",
+      "read.ai",
+      "fireflies.ai",
+      "tldv.io",
+      "fathom.video"
+    ],
+    "filters": {
+      "excludeSenders": [],
+      "excludeDomains": [],
+      "prioritySenders": [],
+      "priorityDomains": []
+    }
+  },
+  "resources": {
+    "maxMemoryMb": 512,
+    "maxConcurrentRequests": 10
+  },
+  "metadata": {
+    "author": "Digital Office Team",
+    "tags": ["email", "monitoring", "digest", "automation"],
+    "documentation": "README.md"
+  }
+}
