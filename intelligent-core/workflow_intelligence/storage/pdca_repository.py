@@ -443,3 +443,107 @@ class PDCACycleRepository:
             "avg_patterns_per_cycle": row.avg_patterns_per_cycle or 0,
             "period_days": days_back
         }
+
+    async def get_recent_cycles(
+        self,
+        module: Optional[str] = None,
+        limit: int = 20
+    ) -> List[Dict[str, Any]]:
+        """Get recent PDCA cycles with summary info"""
+
+        base_query = """
+            SELECT
+                id,
+                workflow_id,
+                module,
+                cycle_started_at,
+                cycle_completed_at,
+                do_duration,
+                quality_score,
+                array_length(lessons_learned, 1) as lessons_count,
+                array_length(patterns_detected, 1) as patterns_count,
+                array_length(deviations, 1) as deviations_count
+            FROM workflow_intelligence.pdca_cycles
+            WHERE tenant_id = :tenant_id::UUID
+            AND cycle_completed_at IS NOT NULL
+        """
+
+        if module:
+            base_query += " AND module = :module"
+
+        base_query += " ORDER BY cycle_completed_at DESC LIMIT :limit"
+
+        query = text(base_query)
+
+        params = {
+            "tenant_id": self.tenant_id,
+            "limit": limit
+        }
+
+        if module:
+            params["module"] = module
+
+        result = await self.db.execute(query, params)
+
+        cycles = []
+        for row in result:
+            cycles.append({
+                "id": str(row.id),
+                "workflow_id": row.workflow_id,
+                "module": row.module,
+                "cycle_started_at": row.cycle_started_at,
+                "cycle_completed_at": row.cycle_completed_at,
+                "do_duration": row.do_duration,
+                "quality_score": row.quality_score,
+                "lessons_count": row.lessons_count or 0,
+                "patterns_count": row.patterns_count or 0,
+                "deviations_count": row.deviations_count or 0
+            })
+
+        return cycles
+
+    async def get_cycle_by_workflow_id(self, workflow_id: str) -> Optional[Dict[str, Any]]:
+        """Get full PDCA cycle by workflow ID (alias for get_cycle_by_workflow)"""
+        return await self.get_cycle_by_workflow(workflow_id)
+
+    async def update_cycle_metadata(
+        self,
+        workflow_id: str,
+        saved_to_knowledge_base: Optional[bool] = None,
+        saved_to_case_library: Optional[bool] = None,
+        contributed_to_predictive: Optional[bool] = None
+    ):
+        """Update cycle metadata flags"""
+
+        updates = []
+        params = {
+            "workflow_id": workflow_id,
+            "tenant_id": self.tenant_id
+        }
+
+        if saved_to_knowledge_base is not None:
+            updates.append("saved_to_knowledge_base = :saved_to_knowledge_base")
+            params["saved_to_knowledge_base"] = saved_to_knowledge_base
+
+        if saved_to_case_library is not None:
+            updates.append("saved_to_case_library = :saved_to_case_library")
+            params["saved_to_case_library"] = saved_to_case_library
+
+        if contributed_to_predictive is not None:
+            updates.append("contributed_to_predictive = :contributed_to_predictive")
+            params["contributed_to_predictive"] = contributed_to_predictive
+
+        if not updates:
+            return
+
+        query = text(f"""
+            UPDATE workflow_intelligence.pdca_cycles
+            SET {', '.join(updates)}
+            WHERE workflow_id = :workflow_id
+            AND tenant_id = :tenant_id::UUID
+        """)
+
+        await self.db.execute(query, params)
+        await self.db.commit()
+
+        logger.info(f"✅ Updated metadata for workflow {workflow_id}")

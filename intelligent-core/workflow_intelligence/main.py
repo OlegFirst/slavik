@@ -60,6 +60,9 @@ GOVERNANCE_CONFIG_PATH = Path(__file__).parent / "governance" / "goals.yaml"
 # Global governance orchestrator
 governance: Optional[GovernanceOrchestrator] = None
 
+# Global PDCA engine
+pdca_engine = None
+
 # Self-monitoring task
 self_monitoring_task = None
 
@@ -119,7 +122,7 @@ async def system_self_monitoring():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    global governance, self_monitoring_task
+    global governance, pdca_engine, self_monitoring_task
 
     # Startup
     logger.info("🚀 Starting Workflow Intelligence Service v2.0")
@@ -149,6 +152,25 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"❌ Governance init failed: {e}")
         governance = None
+
+    # Initialize PDCA Rules Engine (NEW!)
+    try:
+        from .enable_pdca import enable_pdca_for_platform_eventbus
+
+        event_bus = get_event_bus()
+        if event_bus:
+            pdca_engine = await enable_pdca_for_platform_eventbus(
+                event_bus=event_bus,
+                tenant_id=os.getenv("TENANT_ID", "default-tenant")
+            )
+            logger.info("✅ PDCA Rules Engine activated")
+            logger.info("   - All workflows will go through PDCA cycles")
+            logger.info("   - PLAN → DO → CHECK → ACT")
+        else:
+            logger.warning("⚠️ EventBus not available, skipping PDCA activation")
+    except Exception as e:
+        logger.error(f"❌ PDCA initialization failed: {e}", exc_info=True)
+        pdca_engine = None
 
     # Start system self-monitoring background task
     if governance:
@@ -734,6 +756,256 @@ async def get_optimization_suggestions():
 
     except Exception as e:
         logger.error(f"Failed to get optimization suggestions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== NEW: PDCA Endpoints ====================
+
+@router.get("/pdca/status")
+async def get_pdca_status():
+    """
+    Get PDCA system status
+
+    Returns whether PDCA is initialized and working
+    """
+    if not pdca_engine:
+        return {
+            'status': 'inactive',
+            'message': 'PDCA not initialized',
+            'initialized': False
+        }
+
+    return {
+        'status': 'active',
+        'message': 'PDCA Rules Engine is running',
+        'initialized': True,
+        'tenant_id': pdca_engine.tenant_id,
+        'components': {
+            'database': pdca_engine.db is not None,
+            'case_library': pdca_engine.case_library is not None,
+            'knowledge_base': pdca_engine.knowledge_base is not None,
+            'pattern_detector': pdca_engine.pattern_detector is not None
+        }
+    }
+
+
+@router.get("/pdca/cycles")
+async def list_pdca_cycles(
+    module: Optional[str] = None,
+    limit: int = 20
+):
+    """
+    List recent PDCA cycles
+
+    Args:
+        module: Filter by module (bia, risk, compliance, etc.)
+        limit: Maximum results to return
+
+    Returns:
+        List of PDCA cycles with summaries
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        # Get cycles from repository
+        cycles = await pdca_engine.pdca_repo.get_recent_cycles(
+            module=module,
+            limit=limit
+        )
+
+        return {
+            'cycles': cycles,
+            'total': len(cycles),
+            'module': module
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to list PDCA cycles: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/pdca/cycles/{workflow_id}")
+async def get_pdca_cycle(workflow_id: str):
+    """
+    Get detailed PDCA cycle for a workflow
+
+    Returns full cycle data:
+    - PLAN: Recommendations, expected outcomes, benchmarks
+    - DO: Execution data, duration
+    - CHECK: Quality score, deviations
+    - ACT: Lessons learned, patterns, improvements
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        cycle = await pdca_engine.pdca_repo.get_cycle_by_workflow_id(workflow_id)
+
+        if not cycle:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No PDCA cycle found for workflow {workflow_id}"
+            )
+
+        return cycle
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get PDCA cycle: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/pdca/benchmarks/{module}")
+async def get_pdca_benchmarks(
+    module: str,
+    days_back: int = 90
+):
+    """
+    Get PDCA benchmarks for a module
+
+    Returns statistical benchmarks:
+    - Average duration
+    - Median duration
+    - P95 duration
+    - Average quality score
+    - Success rate
+    - Total cycles
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        benchmarks = await pdca_engine.pdca_repo.get_benchmarks(
+            module=module,
+            days_back=days_back
+        )
+
+        return {
+            'module': module,
+            'days_back': days_back,
+            'benchmarks': benchmarks
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get benchmarks: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/pdca/patterns")
+async def get_pdca_patterns(
+    module: Optional[str] = None,
+    limit: int = 20
+):
+    """
+    Get detected patterns from PDCA cycles
+
+    Returns patterns discovered by ML analysis
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        patterns = await pdca_engine.pdca_repo.get_recent_patterns(
+            module=module,
+            limit=limit
+        )
+
+        return {
+            'patterns': patterns,
+            'total': len(patterns),
+            'module': module
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get patterns: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/pdca/lessons")
+async def get_pdca_lessons(
+    module: Optional[str] = None,
+    min_quality: float = 70.0,
+    limit: int = 20
+):
+    """
+    Get lessons learned from PDCA cycles
+
+    Returns high-quality lessons that can be applied to future workflows
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        lessons = await pdca_engine.pdca_repo.get_lessons_learned(
+            module=module,
+            min_quality=min_quality,
+            limit=limit
+        )
+
+        return {
+            'lessons': lessons,
+            'total': len(lessons),
+            'module': module,
+            'min_quality': min_quality
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get lessons: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/pdca/statistics")
+async def get_pdca_statistics(
+    module: Optional[str] = None,
+    days_back: int = 30
+):
+    """
+    Get overall PDCA statistics
+
+    Returns:
+    - Total cycles
+    - Average quality scores
+    - Most common deviations
+    - Learning velocity (lessons/day)
+    - Pattern discovery rate
+    """
+    if not pdca_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="PDCA not initialized"
+        )
+
+    try:
+        stats = await pdca_engine.pdca_repo.get_statistics(
+            module=module,
+            days_back=days_back
+        )
+
+        return {
+            'statistics': stats,
+            'module': module,
+            'days_back': days_back
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get statistics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

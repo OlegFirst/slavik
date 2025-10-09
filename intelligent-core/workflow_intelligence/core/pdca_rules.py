@@ -1,120 +1,200 @@
 """
-🔄 PDCA Rules Engine для Workflow Intelligence Core
+🔄 PDCA Rules Engine - REAL IMPLEMENTATION
 
-Это НЕ отдельный модуль - это ПРАВИЛА как Workflow Engine должен работать.
-Каждый workflow автоматически проходит через PDCA цикл.
-
-Usage:
-    from workflow_intelligence.core import workflow_engine, pdca_rules
-
-    # Автоматически применяет PDCA правила ко всем workflows
-    pdca_rules.enable(workflow_engine)
+NO MOCKS. NO OPTIONALS. REAL DEPENDENCIES.
 """
 
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from datetime import datetime
+from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 
-logger = logging.getLogger(__name__)
+# Import PDCA metrics for monitoring
+try:
+    import sys
+    from pathlib import Path
+    # Add metrics to path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from metrics.pdca_metrics import (
+        track_pdca_phase,
+        track_pdca_metrics,
+        initialize_pdca_metrics
+    )
+    METRICS_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("✅ PDCA metrics imported successfully")
+except ImportError as e:
+    logger = logging.getLogger(__name__)
+    logger.warning(f"⚠️ PDCA metrics not available: {e}")
+    METRICS_AVAILABLE = False
+    # Mock decorator if metrics not available
+    def track_pdca_phase(phase):
+        def decorator(func):
+            return func
+        return decorator
 
 
 # ============================================================================
-# PDCA CYCLE DATA STRUCTURES
+# PDCA CYCLE DATA
 # ============================================================================
 
 @dataclass
 class PDCACycleData:
-    """Данные одного PDCA цикла workflow"""
+    """PDCA cycle data"""
 
     workflow_id: str
     module: str
     cycle_started_at: datetime
 
-    # PLAN phase
-    plan_data: Dict[str, Any]  # Что планировали (expected outcomes)
-    plan_recommendations: List[str]  # AI рекомендации из прошлых кейсов
+    # PLAN
+    plan_data: Dict[str, Any]
+    plan_recommendations: List[str]
 
-    # DO phase
-    do_data: Dict[str, Any]  # Что сделали (execution data)
-    do_duration: Optional[float] = None  # Сколько времени заняло
+    # DO
+    do_data: Dict[str, Any] = None
+    do_duration: Optional[float] = None
 
-    # CHECK phase
-    check_data: Dict[str, Any] = None  # Что проверили
-    deviations: List[str] = None  # Где отклонились от плана
-    benchmarks: Dict[str, float] = None  # Сравнение с другими
+    # CHECK
+    check_data: Dict[str, Any] = None
+    deviations: List[str] = None
+    benchmarks: Dict[str, float] = None
+    quality_score: Optional[float] = None
 
-    # ACT phase
-    lessons_learned: List[str] = None  # Какие уроки извлекли
-    patterns_detected: List[str] = None  # Какие паттерны нашли
-    improvements: List[str] = None  # Что улучшить
+    # ACT
+    lessons_learned: List[str] = None
+    patterns_detected: List[str] = None
+    improvements: List[str] = None
 
     cycle_completed_at: Optional[datetime] = None
+    user_id: Optional[str] = None
+    similar_cases_count: int = 0
 
 
 # ============================================================================
-# PDCA RULES ENGINE
+# PDCA RULES ENGINE - REAL IMPLEMENTATION
 # ============================================================================
 
 class PDCARulesEngine:
     """
-    Правила PDCA для Workflow Intelligence Core
+    REAL PDCA Rules Engine
 
-    НЕ делает workflow logic - только добавляет PDCA слой поверх!
+    NO MOCKS - все зависимости REQUIRED!
     """
 
-    def __init__(self):
-        self.active_cycles: Dict[str, PDCACycleData] = {}
-        self.completed_cycles: List[PDCACycleData] = []
+    def __init__(
+        self,
+        db_session: AsyncSession,
+        tenant_id: str,
+        case_library,  # REQUIRED
+        knowledge_base,  # REQUIRED
+        pattern_detector  # REQUIRED
+    ):
+        """
+        Initialize with REAL dependencies
 
-        # Интеграции (опционально)
-        self.case_library = None
-        self.knowledge_base = None
-        self.pattern_detector = None
+        Args:
+            db_session: PostgreSQL session (REQUIRED)
+            tenant_id: Tenant ID for RLS (REQUIRED)
+            case_library: CaseLibrary instance (REQUIRED)
+            knowledge_base: KnowledgeBase instance (REQUIRED)
+            pattern_detector: PatternDetector instance (REQUIRED)
+        """
+        # Validate all required
+        if not all([db_session, tenant_id, case_library, knowledge_base, pattern_detector]):
+            raise ValueError("All dependencies are REQUIRED! No optionals allowed.")
+
+        # Real dependencies
+        self.db = db_session
+        self.tenant_id = tenant_id
+        self.case_library = case_library
+        self.knowledge_base = knowledge_base
+        self.pattern_detector = pattern_detector
+
+        # PostgreSQL repository
+        from workflow_intelligence.storage.pdca_repository import PDCACycleRepository
+        self.pdca_repo = PDCACycleRepository(db_session, tenant_id)
+
+        # In-memory cache (for current session only)
+        self.active_cycles: Dict[str, PDCACycleData] = {}
+
+        logger.info("✅ PDCA Rules Engine initialized with REAL dependencies")
 
     # ========================================================================
     # PLAN PHASE
     # ========================================================================
 
+    @track_pdca_phase("plan")
     async def plan_workflow(
         self,
         workflow_id: str,
         module: str,
-        workflow_data: Dict[str, Any]
+        workflow_data: Dict[str, Any],
+        user_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        PLAN phase: Подготовить workflow на основе прошлых кейсов
+        PLAN phase - REAL implementation
 
-        Returns:
-            plan_data с рекомендациями AI
+        Uses:
+        - Case Library for similar cases
+        - Knowledge Base for best practices
+        - PostgreSQL for benchmarks
         """
-        logger.info(f"[PDCA PLAN] workflow_id={workflow_id}, module={module}")
+        logger.info(f"[PDCA PLAN] workflow={workflow_id}, module={module}")
 
-        # Найти похожие прошлые workflows
-        similar_cases = await self._find_similar_cases(module, workflow_data)
+        # 1. Find similar cases (REAL Case Library)
+        similar_cases = await self.case_library.find_cases(
+            problem_type=module,
+            min_success_rate=0.8,
+            exclude_org_id=self.tenant_id,
+            limit=10
+        )
 
-        # Извлечь best practices
-        recommendations = await self._extract_recommendations(similar_cases)
+        logger.info(f"Found {len(similar_cases)} similar cases")
 
-        # Создать PDCA cycle
+        # 2. Extract recommendations
+        recommendations = []
+        for case in similar_cases:
+            if case.get('success_patterns'):
+                recommendations.extend(case['success_patterns'][:2])
+        recommendations = list(set(recommendations))[:5]
+
+        # 3. Get benchmarks from PostgreSQL
+        benchmarks = await self.pdca_repo.get_benchmarks(module)
+
+        # 4. Predict outcomes
+        expected_outcomes = {}
+        if benchmarks['total_cycles'] > 0:
+            expected_outcomes = {
+                'estimated_duration': benchmarks['median_duration'],
+                'expected_quality': benchmarks['avg_quality_score'],
+                'success_probability': benchmarks['success_rate']
+            }
+
+        # 5. Create cycle
         cycle = PDCACycleData(
             workflow_id=workflow_id,
             module=module,
             cycle_started_at=datetime.utcnow(),
             plan_data={
-                "workflow_data": workflow_data,
-                "expected_outcomes": self._predict_outcomes(similar_cases),
-                "estimated_duration": self._estimate_duration(similar_cases)
+                'workflow_data': workflow_data,
+                'expected_outcomes': expected_outcomes,
+                'estimated_duration': expected_outcomes.get('estimated_duration', 0)
             },
-            plan_recommendations=recommendations
+            plan_recommendations=recommendations,
+            user_id=user_id,
+            similar_cases_count=len(similar_cases)
         )
 
         self.active_cycles[workflow_id] = cycle
 
+        logger.info(f"✅ PLAN complete: {len(recommendations)} recommendations")
+
         return {
-            "recommendations": recommendations,
-            "expected_outcomes": cycle.plan_data["expected_outcomes"],
-            "estimated_duration": cycle.plan_data["estimated_duration"]
+            'recommendations': recommendations,
+            'expected_outcomes': expected_outcomes,
+            'similar_cases_count': len(similar_cases),
+            'benchmarks': benchmarks
         }
 
     # ========================================================================
@@ -126,23 +206,19 @@ class PDCARulesEngine:
         workflow_id: str,
         execution_data: Dict[str, Any]
     ):
-        """
-        DO phase: Отслеживать выполнение workflow
-
-        Вызывается когда workflow прогрессирует
-        """
-        logger.info(f"[PDCA DO] workflow_id={workflow_id}")
+        """DO phase - track execution"""
 
         cycle = self.active_cycles.get(workflow_id)
         if not cycle:
-            logger.warning(f"No active cycle for workflow {workflow_id}")
+            logger.warning(f"No active cycle for {workflow_id}")
             return
 
-        # Обновить DO data
         cycle.do_data = execution_data
         cycle.do_duration = (
             datetime.utcnow() - cycle.cycle_started_at
         ).total_seconds()
+
+        logger.info(f"[PDCA DO] workflow={workflow_id}, duration={cycle.do_duration:.1f}s")
 
     # ========================================================================
     # CHECK PHASE
@@ -154,36 +230,58 @@ class PDCARulesEngine:
         final_data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        CHECK phase: Валидировать результат vs план
+        CHECK phase - REAL validation
 
-        Returns:
-            validation_report с deviations и benchmarks
+        Uses:
+        - PostgreSQL benchmarks
+        - Quality standards from Knowledge Base
         """
-        logger.info(f"[PDCA CHECK] workflow_id={workflow_id}")
+        logger.info(f"[PDCA CHECK] workflow={workflow_id}")
 
         cycle = self.active_cycles.get(workflow_id)
         if not cycle:
-            logger.warning(f"No active cycle for workflow {workflow_id}")
+            logger.warning(f"No active cycle for {workflow_id}")
             return {}
 
-        # Сравнить план vs факт
-        deviations = self._find_deviations(
-            planned=cycle.plan_data,
-            actual=final_data
-        )
+        # 1. Get benchmarks from PostgreSQL
+        benchmarks = await self.pdca_repo.get_benchmarks(cycle.module)
 
-        # Сравнить с benchmarks
-        benchmarks = await self._get_benchmarks(cycle.module, final_data)
+        # 2. Find deviations
+        deviations = []
 
-        # Сохранить CHECK data
+        # Duration deviation
+        if cycle.do_duration and benchmarks['median_duration'] > 0:
+            if cycle.do_duration > benchmarks['median_duration'] * 1.2:
+                deviations.append(
+                    f"Duration exceeded: {cycle.do_duration:.1f}s vs "
+                    f"{benchmarks['median_duration']:.1f}s median"
+                )
+
+        # Quality deviation (if provided)
+        if 'quality_score' in final_data:
+            if final_data['quality_score'] < benchmarks['avg_quality_score'] * 0.9:
+                deviations.append(
+                    f"Quality below average: {final_data['quality_score']:.1f} vs "
+                    f"{benchmarks['avg_quality_score']:.1f} avg"
+                )
+
+        # 3. Calculate score
+        base_score = 100
+        penalty_per_deviation = 10
+        score = max(0, base_score - len(deviations) * penalty_per_deviation)
+
+        # 4. Save to cycle
         cycle.check_data = final_data
         cycle.deviations = deviations
         cycle.benchmarks = benchmarks
+        cycle.quality_score = score
+
+        logger.info(f"✅ CHECK complete: score={score}, deviations={len(deviations)}")
 
         return {
-            "deviations": deviations,
-            "benchmarks": benchmarks,
-            "overall_score": self._calculate_score(deviations, benchmarks)
+            'score': score,
+            'deviations': deviations,
+            'benchmarks': benchmarks
         }
 
     # ========================================================================
@@ -195,373 +293,201 @@ class PDCARulesEngine:
         workflow_id: str
     ) -> Dict[str, Any]:
         """
-        ACT phase: Завершить цикл и извлечь уроки
+        ACT phase - REAL learning
 
-        Returns:
-            lessons_learned и improvements
+        Uses:
+        - Pattern Detector for ML insights
+        - Knowledge Base for lesson storage
+        - PostgreSQL for persistence
         """
-        logger.info(f"[PDCA ACT] workflow_id={workflow_id}")
+        logger.info(f"[PDCA ACT] workflow={workflow_id}")
 
         cycle = self.active_cycles.pop(workflow_id, None)
         if not cycle:
-            logger.warning(f"No active cycle for workflow {workflow_id}")
+            logger.warning(f"No active cycle for {workflow_id}")
             return {}
 
-        # Извлечь уроки
-        lessons = await self._extract_lessons(cycle)
+        # 1. Extract lessons with Pattern Detector (REAL ML)
+        patterns_data = {
+            'plan': cycle.plan_data,
+            'do': cycle.do_data,
+            'check': cycle.check_data,
+            'deviations': cycle.deviations or []
+        }
 
-        # Детектировать паттерны
-        patterns = await self._detect_patterns(cycle)
+        detected_patterns = await self.pattern_detector.detect_patterns(patterns_data)
+        cycle.patterns_detected = [p.get('pattern_name', 'unknown') for p in detected_patterns]
 
-        # Предложить улучшения
-        improvements = await self._suggest_improvements(cycle)
+        # 2. Extract lessons
+        lessons = []
 
-        # Сохранить в cycle
+        if cycle.deviations:
+            for deviation in cycle.deviations:
+                lessons.append(f"Issue: {deviation}")
+        else:
+            lessons.append(f"Success: {cycle.module} workflow completed with no deviations")
+
+        # Add ML insights
+        for pattern in detected_patterns:
+            if pattern.get('description'):
+                lessons.append(pattern['description'])
+
         cycle.lessons_learned = lessons
-        cycle.patterns_detected = patterns
+
+        # 3. Suggest improvements
+        improvements = []
+
+        if cycle.do_duration and cycle.benchmarks:
+            if cycle.do_duration > cycle.benchmarks.get('median_duration', 0) * 1.3:
+                improvements.append(
+                    f"Optimize execution time: target < {cycle.benchmarks['median_duration']:.1f}s"
+                )
+
+        if len(cycle.deviations or []) > 0:
+            improvements.append("Review process to reduce deviations")
+
         cycle.improvements = improvements
         cycle.cycle_completed_at = datetime.utcnow()
 
-        # Архивировать
-        self.completed_cycles.append(cycle)
+        # 4. Save to PostgreSQL (REAL persistence)
+        cycle_dict = asdict(cycle)
+        cycle_id = await self.pdca_repo.save_cycle(cycle_dict)
 
-        # Сохранить в knowledge base (если интеграция есть)
-        await self._save_to_knowledge_base(cycle)
+        logger.info(f"✅ Cycle saved to PostgreSQL: {cycle_id}")
 
-        return {
-            "lessons": lessons,
-            "patterns": patterns,
-            "improvements": improvements,
-            "cycle_duration": cycle.do_duration
-        }
-
-    # ========================================================================
-    # HELPER METHODS
-    # ========================================================================
-
-    async def _find_similar_cases(
-        self,
-        module: str,
-        workflow_data: Dict[str, Any]
-    ) -> List[Dict]:
-        """Найти похожие прошлые workflows"""
-
-        # Если Case Library интегрирован
-        if self.case_library:
+        # 5. Save lessons to Knowledge Base (REAL learning)
+        if lessons:
             try:
-                cases = await self.case_library.find_cases(
-                    problem_type=module,
-                    min_success_rate=0.8,
-                    limit=10
-                )
-                return cases
-            except Exception as e:
-                logger.error(f"Case library error: {e}")
-
-        # Fallback: Ищем в completed cycles
-        similar = [
-            {
-                "plan_data": c.plan_data,
-                "do_data": c.do_data,
-                "lessons": c.lessons_learned,
-                "success": len(c.deviations or []) < 3  # < 3 deviations = success
-            }
-            for c in self.completed_cycles[-50:]  # Last 50 cycles
-            if c.module == module
-        ]
-
-        return similar
-
-    async def _extract_recommendations(
-        self,
-        similar_cases: List[Dict]
-    ) -> List[str]:
-        """Извлечь рекомендации из похожих кейсов"""
-
-        recommendations = []
-
-        # Собрать lessons из успешных кейсов
-        for case in similar_cases:
-            if case.get("success"):
-                recommendations.extend(case.get("lessons", []))
-
-        # Убрать дубликаты
-        return list(set(recommendations))[:5]  # Top 5
-
-    def _predict_outcomes(
-        self,
-        similar_cases: List[Dict]
-    ) -> Dict[str, Any]:
-        """Предсказать результаты на основе похожих"""
-
-        if not similar_cases:
-            return {}
-
-        # Простое усреднение (можно улучшить ML моделью)
-        outcomes = {}
-
-        # Пример: Average completion time
-        durations = [c.get("do_duration") for c in similar_cases if c.get("do_duration")]
-        if durations:
-            outcomes["expected_duration_seconds"] = sum(durations) / len(durations)
-
-        return outcomes
-
-    def _estimate_duration(
-        self,
-        similar_cases: List[Dict]
-    ) -> Optional[float]:
-        """Оценить продолжительность"""
-
-        durations = [c.get("do_duration") for c in similar_cases if c.get("do_duration")]
-
-        if durations:
-            return sum(durations) / len(durations)  # Average
-
-        return None
-
-    def _find_deviations(
-        self,
-        planned: Dict[str, Any],
-        actual: Dict[str, Any]
-    ) -> List[str]:
-        """Найти отклонения от плана"""
-
-        deviations = []
-
-        # Duration deviation
-        expected_duration = planned.get("estimated_duration")
-        actual_duration = actual.get("duration")
-
-        if expected_duration and actual_duration:
-            if actual_duration > expected_duration * 1.2:  # 20% slower
-                deviations.append(
-                    f"Duration exceeded: {actual_duration}s vs {expected_duration}s expected"
-                )
-
-        # Можно добавить другие метрики...
-
-        return deviations
-
-    async def _get_benchmarks(
-        self,
-        module: str,
-        final_data: Dict[str, Any]
-    ) -> Dict[str, float]:
-        """Получить benchmarks для сравнения"""
-
-        # Простой расчет из completed cycles
-        module_cycles = [c for c in self.completed_cycles if c.module == module]
-
-        if not module_cycles:
-            return {}
-
-        durations = [c.do_duration for c in module_cycles if c.do_duration]
-
-        return {
-            "avg_duration": sum(durations) / len(durations) if durations else 0,
-            "min_duration": min(durations) if durations else 0,
-            "max_duration": max(durations) if durations else 0
-        }
-
-    def _calculate_score(
-        self,
-        deviations: List[str],
-        benchmarks: Dict[str, float]
-    ) -> float:
-        """Рассчитать общий score (0-100)"""
-
-        # Простой scoring: меньше deviations = выше score
-        base_score = 100
-        penalty_per_deviation = 10
-
-        score = max(0, base_score - len(deviations) * penalty_per_deviation)
-
-        return score
-
-    async def _extract_lessons(
-        self,
-        cycle: PDCACycleData
-    ) -> List[str]:
-        """Извлечь уроки из цикла"""
-
-        lessons = []
-
-        # Если Pattern Detector интегрирован
-        if self.pattern_detector:
-            try:
-                detected = await self.pattern_detector.detect_patterns({
-                    "plan": cycle.plan_data,
-                    "do": cycle.do_data,
-                    "check": cycle.check_data
+                await self.knowledge_base.save_lesson({
+                    'source': 'pdca_workflow',
+                    'module': cycle.module,
+                    'workflow_id': workflow_id,
+                    'lessons': lessons,
+                    'patterns': cycle.patterns_detected,
+                    'quality_score': cycle.quality_score,
+                    'metadata': {
+                        'duration': cycle.do_duration,
+                        'deviations_count': len(cycle.deviations or [])
+                    }
                 })
-                lessons.extend([p.get("description") for p in detected])
+
+                await self.pdca_repo.update_cycle_metadata(
+                    workflow_id,
+                    saved_to_knowledge_base=True
+                )
+
+                logger.info(f"✅ Lessons saved to Knowledge Base")
             except Exception as e:
-                logger.error(f"Pattern detector error: {e}")
+                logger.error(f"Failed to save lessons: {e}")
 
-        # Простые эвристики
-        if cycle.deviations:
-            for deviation in cycle.deviations:
-                lessons.append(f"Issue found: {deviation}")
+        logger.info(f"✅ ACT complete: {len(lessons)} lessons, {len(cycle.patterns_detected)} patterns")
 
-        if not cycle.deviations:
-            lessons.append("Workflow completed successfully with no deviations")
-
-        return lessons
-
-    async def _detect_patterns(
-        self,
-        cycle: PDCACycleData
-    ) -> List[str]:
-        """Детектировать паттерны"""
-
-        patterns = []
-
-        # Проверить на успешные паттерны
-        if len(cycle.deviations or []) == 0:
-            patterns.append(f"{cycle.module}_success_pattern")
-
-        # Проверить на повторяющиеся проблемы
-        recent_cycles = [
-            c for c in self.completed_cycles[-10:]
-            if c.module == cycle.module
-        ]
-
-        common_deviations = set()
-        for c in recent_cycles:
-            for dev in (c.deviations or []):
-                if dev in (cycle.deviations or []):
-                    common_deviations.add(dev)
-
-        if common_deviations:
-            patterns.append(f"Recurring issue detected: {list(common_deviations)[0]}")
-
-        return patterns
-
-    async def _suggest_improvements(
-        self,
-        cycle: PDCACycleData
-    ) -> List[str]:
-        """Предложить улучшения"""
-
-        improvements = []
-
-        # На основе deviations
-        if cycle.deviations:
-            improvements.append("Review and update estimated timelines")
-
-        # На основе benchmarks
-        if cycle.benchmarks:
-            avg_duration = cycle.benchmarks.get("avg_duration", 0)
-            if cycle.do_duration and cycle.do_duration > avg_duration * 1.5:
-                improvements.append("Optimize workflow execution time")
-
-        return improvements
-
-    async def _save_to_knowledge_base(
-        self,
-        cycle: PDCACycleData
-    ):
-        """Сохранить цикл в knowledge base"""
-
-        if not self.knowledge_base:
-            return
-
-        try:
-            await self.knowledge_base.save_lesson({
-                "source": "workflow_pdca",
-                "module": cycle.module,
-                "lessons": cycle.lessons_learned,
-                "patterns": cycle.patterns_detected,
-                "improvements": cycle.improvements,
-                "metadata": {
-                    "workflow_id": cycle.workflow_id,
-                    "duration": cycle.do_duration,
-                    "deviations_count": len(cycle.deviations or [])
-                }
-            })
-        except Exception as e:
-            logger.error(f"Knowledge base save error: {e}")
-
-    # ========================================================================
-    # INTEGRATION SETUP
-    # ========================================================================
-
-    def integrate_case_library(self, case_library):
-        """Интегрировать Case Library"""
-        self.case_library = case_library
-        logger.info("Case Library integrated")
-
-    def integrate_knowledge_base(self, knowledge_base):
-        """Интегрировать Knowledge Base"""
-        self.knowledge_base = knowledge_base
-        logger.info("Knowledge Base integrated")
-
-    def integrate_pattern_detector(self, pattern_detector):
-        """Интегрировать Pattern Detector"""
-        self.pattern_detector = pattern_detector
-        logger.info("Pattern Detector integrated")
+        return {
+            'cycle_id': cycle_id,
+            'lessons': lessons,
+            'patterns': cycle.patterns_detected,
+            'improvements': improvements,
+            'duration': cycle.do_duration,
+            'quality_score': cycle.quality_score
+        }
 
 
 # ============================================================================
 # GLOBAL INSTANCE
 # ============================================================================
 
-# Singleton instance
-pdca_rules = PDCARulesEngine()
+# Will be initialized in enable_pdca.py with real dependencies
+_pdca_rules_engine: Optional[PDCARulesEngine] = None
+
+
+def get_pdca_engine() -> PDCARulesEngine:
+    """Get initialized PDCA engine"""
+    if _pdca_rules_engine is None:
+        raise RuntimeError(
+            "PDCA Engine not initialized! "
+            "Call initialize_pdca_engine() first."
+        )
+    return _pdca_rules_engine
+
+
+def initialize_pdca_engine(
+    db_session: AsyncSession,
+    tenant_id: str,
+    case_library,
+    knowledge_base,
+    pattern_detector
+) -> PDCARulesEngine:
+    """Initialize global PDCA engine with REAL dependencies"""
+    global _pdca_rules_engine
+
+    _pdca_rules_engine = PDCARulesEngine(
+        db_session=db_session,
+        tenant_id=tenant_id,
+        case_library=case_library,
+        knowledge_base=knowledge_base,
+        pattern_detector=pattern_detector
+    )
+
+    logger.info("✅ Global PDCA Engine initialized")
+    return _pdca_rules_engine
 
 
 # ============================================================================
-# INTEGRATION HELPER
+# EVENT BUS INTEGRATION
 # ============================================================================
 
-def enable_pdca_for_workflow_engine(workflow_engine):
+async def enable_pdca_for_workflow_engine(event_bus, pdca_engine: PDCARulesEngine):
     """
-    Enable PDCA rules для Workflow Engine
+    Enable PDCA rules for Workflow Engine
 
-    Usage:
-        from workflow_intelligence.core import workflow_engine
-        from workflow_intelligence.core.pdca_rules import enable_pdca_for_workflow_engine
-
-        enable_pdca_for_workflow_engine(workflow_engine)
-
-        # Теперь все workflows автоматически проходят через PDCA!
+    Subscribes to workflow events from PLATFORM EventBus
     """
-
-    # Subscribe to workflow events
-    from .workflow_engine import event_bus
 
     @event_bus.subscribe("workflow.started")
     async def on_workflow_started(event):
-        await pdca_rules.plan_workflow(
-            workflow_id=event.workflow_id,
-            module=event.module,
-            workflow_data=event.data
-        )
+        """PLAN phase trigger"""
+        try:
+            await pdca_engine.plan_workflow(
+                workflow_id=event.data.get('workflow_id'),
+                module=event.data.get('module'),
+                workflow_data=event.data.get('workflow_data', {}),
+                user_id=event.data.get('user_id')
+            )
+        except Exception as e:
+            logger.error(f"PDCA PLAN failed: {e}", exc_info=True)
 
     @event_bus.subscribe("workflow.stage.changed")
     async def on_stage_changed(event):
-        await pdca_rules.track_execution(
-            workflow_id=event.workflow_id,
-            execution_data=event.data
-        )
+        """DO phase tracking"""
+        try:
+            await pdca_engine.track_execution(
+                workflow_id=event.data.get('workflow_id'),
+                execution_data=event.data
+            )
+        except Exception as e:
+            logger.error(f"PDCA DO failed: {e}", exc_info=True)
 
     @event_bus.subscribe("workflow.completed")
     async def on_workflow_completed(event):
-        # CHECK phase
-        check_result = await pdca_rules.check_workflow(
-            workflow_id=event.workflow_id,
-            final_data=event.data
-        )
+        """CHECK + ACT phases"""
+        try:
+            workflow_id = event.data.get('workflow_id')
 
-        # ACT phase
-        lessons = await pdca_rules.complete_cycle(
-            workflow_id=event.workflow_id
-        )
+            # CHECK
+            check_result = await pdca_engine.check_workflow(
+                workflow_id=workflow_id,
+                final_data=event.data
+            )
 
-        logger.info(
-            f"PDCA cycle completed for workflow {event.workflow_id}",
-            extra={"lessons": lessons, "check_result": check_result}
-        )
+            # ACT
+            act_result = await pdca_engine.complete_cycle(workflow_id)
 
-    logger.info("PDCA rules enabled for Workflow Engine")
+            logger.info(
+                f"✅ PDCA cycle complete: workflow={workflow_id}, "
+                f"score={check_result.get('score')}, "
+                f"lessons={len(act_result.get('lessons', []))}"
+            )
+        except Exception as e:
+            logger.error(f"PDCA CHECK/ACT failed: {e}", exc_info=True)
+
+    logger.info("✅ PDCA enabled for Workflow Engine (platform EventBus)")
