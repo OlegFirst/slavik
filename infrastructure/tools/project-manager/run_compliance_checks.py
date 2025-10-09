@@ -134,6 +134,102 @@ class ComplianceCheckRunner:
             logger.error(f"❌ Ошибка при проверке БД: {e}", exc_info=True)
             return False
 
+    def run_priority_4_kpi(self) -> bool:
+        """
+        ПРИОРИТЕТ 4: Регистрация KPI
+        """
+        logger.info("")
+        logger.info("=" * 80)
+        logger.info("ЗАПУСК: ПРИОРИТЕТ 4 - Проверка регистрации KPI")
+        logger.info("=" * 80)
+
+        try:
+            from compliance_checks.priority_4_kpi_registration import KPIRegistrationChecker
+
+            checker = KPIRegistrationChecker()
+            results = checker.check_all_kpis()
+            success = checker.print_results(results)
+
+            self.results['kpi_registration'] = {
+                'priority': 4,
+                'passed': success
+            }
+
+            if success:
+                logger.info("✅ ПРИОРИТЕТ 4 PASSED: Регистрация KPI в порядке")
+            else:
+                logger.warning("⚠️  ПРИОРИТЕТ 4 WARNING: Проблемы с регистрацией KPI")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка при проверке KPI: {e}", exc_info=True)
+            return False
+
+    def run_priority_5_eventbus(self) -> bool:
+        """
+        ПРИОРИТЕТ 5: Публикация событий в EventBus
+        """
+        logger.info("")
+        logger.info("=" * 80)
+        logger.info("ЗАПУСК: ПРИОРИТЕТ 5 - Проверка публикации событий в EventBus")
+        logger.info("=" * 80)
+
+        try:
+            from compliance_checks.priority_5_eventbus_events import EventBusEventChecker
+
+            checker = EventBusEventChecker()
+            results = checker.check_all_services()
+            success = checker.print_results(results)
+
+            self.results['eventbus_events'] = {
+                'priority': 5,
+                'passed': success
+            }
+
+            if success:
+                logger.info("✅ ПРИОРИТЕТ 5 PASSED: EventBus интеграция в порядке")
+            else:
+                logger.warning("⚠️  ПРИОРИТЕТ 5 WARNING: Проблемы с EventBus интеграцией")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка при проверке EventBus: {e}", exc_info=True)
+            return False
+
+    def run_priority_6_orchestrator(self) -> bool:
+        """
+        ПРИОРИТЕТ 6: Контроль оркестратором
+        """
+        logger.info("")
+        logger.info("=" * 80)
+        logger.info("ЗАПУСК: ПРИОРИТЕТ 6 - Проверка контроля оркестратором")
+        logger.info("=" * 80)
+
+        try:
+            from compliance_checks.priority_6_orchestrator_control import OrchestratorControlChecker
+
+            checker = OrchestratorControlChecker()
+            results = checker.check_all_services()
+            success = checker.print_results(results)
+
+            self.results['orchestrator_control'] = {
+                'priority': 6,
+                'passed': success
+            }
+
+            if success:
+                logger.info("✅ ПРИОРИТЕТ 6 PASSED: Контроль оркестратором в порядке")
+            else:
+                logger.warning("⚠️  ПРИОРИТЕТ 6 WARNING: Проблемы с контролем оркестратором")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка при проверке оркестратора: {e}", exc_info=True)
+            return False
+
     def run_all_checks(self) -> bool:
         """
         Запустить все проверки в правильном порядке
@@ -167,9 +263,14 @@ class ComplianceCheckRunner:
         # ПРИОРИТЕТ 3: БД (некритично, но важно)
         priority_3_passed = self.run_priority_3_database()
 
-        # TODO: ПРИОРИТЕТ 4: KPI регистрация
-        # TODO: ПРИОРИТЕТ 5: EventBus события
-        # TODO: ПРИОРИТЕТ 6: Контроль оркестратором
+        # ПРИОРИТЕТ 4: KPI регистрация
+        priority_4_passed = self.run_priority_4_kpi()
+
+        # ПРИОРИТЕТ 5: EventBus события
+        priority_5_passed = self.run_priority_5_eventbus()
+
+        # ПРИОРИТЕТ 6: Контроль оркестратором
+        priority_6_passed = self.run_priority_6_orchestrator()
 
         # Итоговый отчет
         self._print_final_summary()

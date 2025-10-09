@@ -105,32 +105,89 @@
 }
 ```
 
-### ПРИОРИТЕТ 4: Регистрация KPI (TODO)
+### ПРИОРИТЕТ 4: Регистрация KPI ✅
 **Файл**: `compliance-checks/priority_4_kpi_registration.py`
 
-**Что должно проверять**:
-- ✅ Каждый сервис имеет определенные KPI
-- ✅ KPI зарегистрированы в системе мониторинга
-- ✅ KPI обновляются регулярно
+**Почему четвертое**:
+- После БД проверяем регистрацию KPI
+- KPI необходимы для измерения производительности
+- Prometheus должен собирать метрики каждого сервиса
 
-### ПРИОРИТЕТ 5: Публикация Событий в EventBus (TODO)
+**Что проверяет**:
+- ✅ Каждый сервис имеет определенные KPI
+- ✅ KPI зарегистрированы в Prometheus
+- ✅ KPI обновляются (имеют актуальные значения)
+- ✅ Базовые KPI: http_requests_total, http_request_duration_seconds, database_connections
+- ✅ Специфичные KPI для каждого типа сервиса
+
+**Результат для Центрального Мозга**:
+```json
+{
+  "kpi": {
+    "total_services": 20,
+    "total_kpis": 100,
+    "registered_kpis": 85,
+    "coverage_percent": 85.0
+  }
+}
+```
+
+### ПРИОРИТЕТ 5: Публикация Событий в EventBus ✅
 **Файл**: `compliance-checks/priority_5_eventbus_events.py`
 
-**Что должно проверять**:
+**Почему пятое**:
+- После KPI проверяем подключение к EventBus
+- EventBus - критический компонент для координации
+- **КРИТИЧНО**: Обнаружение сервисов, работающих НО НЕ подключенных к EventBus
+
+**Что проверяет**:
 - ✅ Сервис подключен к EventBus
 - ✅ Сервис публикует события lifecycle (started, stopped, heartbeat)
-- ✅ Сервис подписан на релевантные события
-- ✅ Heartbeat отправляется регулярно (каждые 30с)
+- ✅ Heartbeat отправляется регулярно (каждые 30-60с)
+- 🚨 **КРИТИЧНО**: Сервис работает НО НЕ подключен к EventBus (главное требование!)
+- ✅ Сервис публикует специфичные события (например, plan.created, incident.resolved)
 
-### ПРИОРИТЕТ 6: Контроль Оркестратором (TODO)
+**Результат для Центрального Мозга**:
+```json
+{
+  "eventbus": {
+    "running_services": 20,
+    "connected_services": 18,
+    "connection_rate": 90.0,
+    "critical_running_not_connected": []
+  }
+}
+```
+
+### ПРИОРИТЕТ 6: Контроль Оркестратором ✅
 **Файл**: `compliance-checks/priority_6_orchestrator_control.py`
 
-**Что должно проверять**:
+**Почему шестое**:
+- Финальная проверка: управление оркестратором
+- Проверяем, что сервисы правильно настроены для автоматического управления
+- Health checks и restart policy обеспечивают автоматическое восстановление
+
+**Что проверяет**:
 - ✅ Сервис зарегистрирован в Service Registry
-- ✅ Сервис управляется оркестратором (docker-compose/k8s)
+- ✅ Сервис управляется оркестратором (docker-compose/kubernetes)
 - ✅ Оркестратор знает о статусе сервиса
-- ✅ Есть health checks
-- ✅ Есть restart policy
+- ✅ Настроен health check
+- ✅ Настроена restart policy (always/on-failure/unless-stopped)
+- ✅ Мониторинг количества перезапусков (если > 10 - проблема)
+
+**Результат для Центрального Мозга**:
+```json
+{
+  "orchestrator": {
+    "total_services": 20,
+    "managed_services": 18,
+    "with_health_check": 16,
+    "with_restart_policy": 18,
+    "fully_controlled": 16,
+    "control_rate": 80.0
+  }
+}
+```
 
 ## Использование
 
@@ -258,12 +315,12 @@ infrastructure/tools/project-manager/
 ├── README.md                          # Этот файл
 ├── run_compliance_checks.py           # Мастер-скрипт для всех проверок
 └── compliance-checks/
-    ├── priority_1_port_conflicts.py           # ПРИОРИТЕТ 1 ⚠️ КРИТИЧНО
-    ├── priority_2_metrics_integration.py      # ПРИОРИТЕТ 2
-    ├── priority_3_database_connections.py     # ПРИОРИТЕТ 3
-    ├── priority_4_kpi_registration.py         # TODO
-    ├── priority_5_eventbus_events.py          # TODO
-    └── priority_6_orchestrator_control.py     # TODO
+    ├── priority_1_port_conflicts.py           # ПРИОРИТЕТ 1 ⚠️ КРИТИЧНО ✅
+    ├── priority_2_metrics_integration.py      # ПРИОРИТЕТ 2 ✅
+    ├── priority_3_database_connections.py     # ПРИОРИТЕТ 3 ✅
+    ├── priority_4_kpi_registration.py         # ПРИОРИТЕТ 4 ✅
+    ├── priority_5_eventbus_events.py          # ПРИОРИТЕТ 5 ✅
+    └── priority_6_orchestrator_control.py     # ПРИОРИТЕТ 6 ✅
 ```
 
 ## Различие с Центральным Мозгом
@@ -282,13 +339,14 @@ infrastructure/tools/project-manager/
 - ✅ ПРИОРИТЕТ 1: Конфликты портов
 - ✅ ПРИОРИТЕТ 2: Метрики
 - ✅ ПРИОРИТЕТ 3: База данных
-- ⏳ ПРИОРИТЕТ 4: KPI (TODO)
-- ⏳ ПРИОРИТЕТ 5: EventBus (TODO)
-- ⏳ ПРИОРИТЕТ 6: Оркестратор (TODO)
+- ✅ ПРИОРИТЕТ 4: KPI регистрация
+- ✅ ПРИОРИТЕТ 5: EventBus события
+- ✅ ПРИОРИТЕТ 6: Контроль оркестратором
 
 ---
 
 **Created**: 2025-10-09
+**Updated**: 2025-10-09
 **Author**: Проектный Менеджер
-**Status**: ✅ Первые 3 приоритета реализованы
+**Status**: ✅ ВСЕ 6 ПРИОРИТЕТОВ РЕАЛИЗОВАНЫ
 ```
