@@ -158,6 +158,18 @@ try:
 except ImportError:
     _has_decision_center = False
 
+# Phase 2 additions - Wishlist Integration
+try:
+    from infrastructure.decision_center.wishlist_integration import (
+        WishlistDecisionIntegration,
+        Wish,
+        WishStatus,
+        WishNeedType
+    )
+    _has_wishlist = True
+except ImportError:
+    _has_wishlist = False
+
 __all__ = [
     # Policy Engine
     "PolicyEngine",
@@ -235,6 +247,14 @@ if _has_decision_center:
         'ApprovalStatus',
         'DecisionAuditLog',
         'PolicyRule'
+    ])
+
+if _has_wishlist:
+    __all__.extend([
+        'WishlistDecisionIntegration',
+        'Wish',
+        'WishStatus',
+        'WishNeedType'
     ])
 
 # Version

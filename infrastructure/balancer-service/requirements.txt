@@ -1,0 +1,19 @@
+# Core dependencies
+asyncio
+dataclasses
+typing
+datetime
+uuid
+
+# EventBus
+redis>=4.0.0
+aioredis>=2.0.0
+
+# Metrics
+prometheus-client>=0.16.0
+
+# Logging
+structlog>=23.1.0
+
+# Health checks
+aiohttp>=3.8.0

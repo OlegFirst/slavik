@@ -35,6 +35,7 @@ from integrations.compliance_monitoring_client import ComplianceMonitoringClient
 from integrations.eventbus_client import EventBusClient, DefaultEventHandlers
 from integrations.ai_event_manager_client import AIEventManagerClient
 from integrations.devops_agent_client import DevOpsAgentClient
+from integrations.resource_tracker_client import ResourceTrackerClient  # Phase 2
 from scheduler.automation_jobs import start_scheduler, stop_scheduler
 from scheduler.smart_scheduler import SmartScheduler
 from api import routes
@@ -72,6 +73,9 @@ ai_coordinator = None
 decision_engine = None
 learning_tracker = None
 
+# Phase 2 instances
+resource_tracker = None
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -79,6 +83,7 @@ async def lifespan(app: FastAPI):
     global toolkit_manager, orchestrator_client, gateway_manager
     global brain_client, predictive_client, optimizer_client, coordinator_client, compliance_client, eventbus_client, ai_event_manager_client, devops_agent_client, smart_scheduler
     global ai_coordinator, decision_engine, learning_tracker
+    global resource_tracker  # Phase 2
 
     logger.info("🚀 AI MIO Manager v2.0 starting...")
     logger.info("   🧠 Enhanced with AI Intelligence Layer")
@@ -147,6 +152,24 @@ async def lifespan(app: FastAPI):
         base_url=settings.COMPLIANCE_MONITORING_URL
     )
     logger.info("   ✅ Compliance Monitoring Client initialized")
+
+    # Initialize Resource Tracker (Phase 2 - ГЛАЗА)
+    try:
+        # Resource Tracker needs EventBus, so initialize it first if not done
+        if not eventbus_client:
+            eventbus_client = EventBusClient()
+            await eventbus_client.connect()
+            logger.info("   ✅ EventBus Client initialized for Resource Tracker")
+
+        resource_tracker = ResourceTrackerClient(
+            eventbus=eventbus_client,
+            check_interval=60  # Check every 60 seconds
+        )
+        await resource_tracker.start()
+        logger.info("   👀 Resource Tracker started (Phase 2 - ГЛАЗА)")
+    except Exception as e:
+        logger.error(f"   ⚠️  Resource Tracker initialization failed: {e}")
+        logger.warning("   ⚠️  Running without Resource Tracker")
 
     # Initialize AI Event Manager Client
     ai_event_manager_client = AIEventManagerClient(

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  balancer-service:
+    build:
+      context: ../..
+      dockerfile: infrastructure/balancer-service/Dockerfile
+    container_name: balancer-service
+    ports:
+      - "9091:9091"  # Prometheus metrics
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - platform-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:9091')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: balancer-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - platform-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  platform-network:
+    name: ai-platform-network
+    external: true  # Use existing platform network if available
