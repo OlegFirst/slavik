@@ -127,7 +127,10 @@ async def lifespan(app: FastAPI):
         await eventbus_client.connect()
         logger.info(f"📡 EventBus connected to RabbitMQ: {settings.EVENTBUS_URL}")
 
-        # Subscribe to relevant events
+        # Setup event choreography subscriptions
+        await setup_event_subscriptions()
+
+        # Subscribe to relevant events (legacy)
         if settings.SUBSCRIBE_TOPICS:
             for topic in settings.SUBSCRIBE_TOPICS:
                 await eventbus_client.subscribe(topic, handle_event)
@@ -165,6 +168,8 @@ async def handle_event(event_data: dict, tenant_id: str = None):
     EventBus event handler for BIA service.
 
     Handles events from other services (e.g., risk assessments, exercises).
+    NOTE: This is kept for backward compatibility.
+    New event handling is in event_handlers.py
     """
     try:
         event_type = event_data.get("event_type", "unknown")
@@ -182,6 +187,38 @@ async def handle_event(event_data: dict, tenant_id: str = None):
 
     except Exception as e:
         logger.error(f"Error handling event: {e}")
+
+
+# Import event handlers for choreography
+from event_handlers import get_bia_event_handlers
+
+# Initialize event handlers after eventbus is ready
+async def setup_event_subscriptions():
+    """
+    Setup event subscriptions for BIA service choreography.
+
+    BIA Service PUBLISHES:
+    - bia.assessment.completed
+    - bia.process.created
+    - bia.criticality.changed
+    - bia.critical.process.identified
+
+    No subscriptions needed - BIA is typically at the start of the flow.
+    """
+    try:
+        eventbus = get_eventbus()
+        if not eventbus:
+            logger.warning("EventBus not available - skipping event subscriptions")
+            return
+
+        # Get BIA event handlers
+        handlers = get_bia_event_handlers(eventbus)
+
+        logger.info("✅ BIA event handlers initialized (publisher mode)")
+        logger.info("📤 Ready to publish: bia.assessment.completed, bia.criticality.changed, etc.")
+
+    except Exception as e:
+        logger.error(f"Failed to setup event subscriptions: {e}", exc_info=True)
 
 
 # Create FastAPI application

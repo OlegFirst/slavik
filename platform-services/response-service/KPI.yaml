@@ -1,0 +1,38 @@
+module_name: response-service
+version: 1.0.0
+description: '**ISO 22301:2019 Clause 8.4 - Incident Response**'
+module_type: service
+owner: platform-team
+kpis:
+- name: request_count
+  description: Total number of requests processed by response-service
+  type: counter
+  target: '> 1000/day'
+  measurement: Count of API requests
+  prometheus_metric: response_service_requests_total
+- name: response_time_p95
+  description: 95th percentile response time
+  type: histogram
+  target: < 500ms
+  measurement: Response time in milliseconds
+  prometheus_metric: response_service_response_time_ms
+- name: error_rate
+  description: Percentage of failed requests
+  type: gauge
+  target: < 1%
+  measurement: errors / total_requests * 100
+  prometheus_metric: response_service_error_rate
+- name: availability
+  description: Service uptime percentage
+  type: gauge
+  target: '> 99.5%'
+  measurement: uptime / total_time * 100
+  prometheus_metric: response_service_availability
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/response-service.json
+  alert_rules: alerts/response-service.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

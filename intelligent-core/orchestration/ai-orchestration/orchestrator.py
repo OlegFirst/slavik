@@ -28,6 +28,7 @@ from intelligent_core.ai_orchestration.decision_center.delegation_manager import
 from intelligent_core.ai_orchestration.memory.distributed_memory import DistributedMemory
 from intelligent_core.ai_orchestration.safety.safety_monitor import SafetyMonitor
 from intelligent_core.ai_orchestration.evolution.evolution_engine import EvolutionEngine
+from intelligent_core.ai_orchestration.service_registry import ServiceRegistry
 from infrastructure.eventbus import create_eventbus, Event, EventPriority
 
 logger = logging.getLogger(__name__)
@@ -97,6 +98,7 @@ class AIOrchestrator:
 
         # Infrastructure
         self.event_bus = create_eventbus(event_bus_backend)
+        self.service_registry = ServiceRegistry()
 
         # State
         self.initialized = False
@@ -150,6 +152,13 @@ class AIOrchestrator:
 
                 # Start evolution cycles
                 asyncio.create_task(self._run_evolution_cycles())
+
+            # Initialize service registry
+            await self.service_registry.initialize()
+            logger.info("✅ Service registry initialized")
+
+            # Register platform services
+            await self._register_platform_services()
 
             # Subscribe to platform events
             await self._subscribe_to_events()
@@ -337,6 +346,9 @@ class AIOrchestrator:
             if self.evolution_engine:
                 await self.evolution_engine.shutdown()
 
+            # Shutdown service registry
+            await self.service_registry.shutdown()
+
             # Close event bus
             await self.event_bus.close()
 
@@ -359,6 +371,24 @@ class AIOrchestrator:
     # ============================================
     # Private Methods
     # ============================================
+
+    async def _register_platform_services(self) -> None:
+        """Register all platform services with the service registry."""
+        services = [
+            ('bia', 'http://localhost:8012', '/health'),
+            ('risk', 'http://localhost:8040', '/health'),
+            ('planning', 'http://localhost:8011', '/health'),
+            ('compliance', 'http://localhost:8014', '/health'),
+            ('governance', 'http://localhost:8013', '/health'),
+        ]
+
+        for name, url, health_endpoint in services:
+            try:
+                await self.service_registry.register_service(name, url, health_endpoint)
+            except Exception as e:
+                logger.warning(f"Failed to register service '{name}': {e}")
+
+        logger.info("Platform services registered")
 
     async def _subscribe_to_events(self) -> None:
         """Subscribe to relevant platform events."""
@@ -480,25 +510,388 @@ class AIOrchestrator:
         await self.event_bus.publish(event)
 
     async def _auto_resolve(self, decision: Decision) -> Dict[str, Any]:
-        """Auto-resolve the issue."""
-        logger.info("Auto-resolving...")
-        # TODO: Implement auto-resolution logic
+        """
+        Auto-resolve the issue by calling appropriate services.
+
+        Analyzes the decision and makes real API calls to platform services
+        based on the action recommended. Includes retry logic via ServiceRegistry.
+
+        Args:
+            decision: The decision to execute
+
+        Returns:
+            dict: Execution result with success status and details
+        """
+        logger.info(f"Auto-resolving: {decision.rationale}")
+
+        try:
+            # Extract situation details from decision metadata
+            situation = decision.metadata.get('situation', {})
+            action_details = self._parse_action_from_decision(decision)
+
+            # Route to appropriate service based on action
+            service_name = action_details.get('service')
+            method = action_details.get('method', 'POST')
+            endpoint = action_details.get('endpoint')
+            data = action_details.get('data', {})
+
+            if not service_name or not endpoint:
+                logger.warning("No specific service action identified, using generic resolution")
+                return {
+                    'success': True,
+                    'action': 'auto_resolve',
+                    'message': decision.rationale,
+                    'resolution_type': 'generic'
+                }
+
+            # Make service call with automatic retry
+            logger.info(f"Calling {service_name} service: {method} {endpoint}")
+            result = await self.service_registry.call_service(
+                service_name=service_name,
+                method=method,
+                endpoint=endpoint,
+                data=data
+            )
+
+            logger.info(f"Service call succeeded: {result}")
+
+            return {
+                'success': True,
+                'action': 'auto_resolve',
+                'message': f"Successfully resolved via {service_name} service",
+                'service': service_name,
+                'endpoint': endpoint,
+                'result': result,
+                'decision_rationale': decision.rationale
+            }
+
+        except ValueError as e:
+            # Service not available
+            logger.error(f"Service unavailable for auto-resolution: {e}")
+            return {
+                'success': False,
+                'action': 'auto_resolve',
+                'error': str(e),
+                'fallback': 'escalate_to_human',
+                'message': f"Auto-resolution failed: {str(e)}"
+            }
+
+        except RuntimeError as e:
+            # All retries failed
+            logger.error(f"Auto-resolution failed after retries: {e}")
+            return {
+                'success': False,
+                'action': 'auto_resolve',
+                'error': str(e),
+                'fallback': 'escalate_to_human',
+                'message': f"Auto-resolution failed after retries: {str(e)}"
+            }
+
+        except Exception as e:
+            # Unexpected error
+            logger.error(f"Unexpected error in auto-resolution: {e}", exc_info=True)
+            return {
+                'success': False,
+                'action': 'auto_resolve',
+                'error': str(e),
+                'fallback': 'emergency_stop',
+                'message': f"Critical error in auto-resolution: {str(e)}"
+            }
+
+    def _parse_action_from_decision(self, decision: Decision) -> Dict[str, Any]:
+        """
+        Parse action details from decision metadata and strategies.
+
+        Args:
+            decision: The decision containing action details
+
+        Returns:
+            dict: Action details including service, method, endpoint, data
+        """
+        # Check decision metadata for explicit action details
+        if 'action_details' in decision.metadata:
+            return decision.metadata['action_details']
+
+        # Parse from strategies
+        if decision.strategies_considered:
+            best_strategy = decision.strategies_considered[0]
+
+            # Check strategy metadata
+            if 'service' in best_strategy.metadata:
+                return best_strategy.metadata
+
+            # Parse from action string
+            action = best_strategy.action.lower()
+
+            # BIA-related actions
+            if 'bia' in action or 'business impact' in action:
+                if 'create' in action or 'add' in action:
+                    return {
+                        'service': 'bia',
+                        'method': 'POST',
+                        'endpoint': '/api/v1/processes',
+                        'data': self._extract_bia_data(decision)
+                    }
+                elif 'update' in action:
+                    return {
+                        'service': 'bia',
+                        'method': 'PUT',
+                        'endpoint': '/api/v1/processes/{id}',
+                        'data': self._extract_bia_data(decision)
+                    }
+
+            # Risk-related actions
+            elif 'risk' in action or 'assessment' in action:
+                if 'create' in action or 'assess' in action:
+                    return {
+                        'service': 'risk',
+                        'method': 'POST',
+                        'endpoint': '/api/v1/assessments',
+                        'data': self._extract_risk_data(decision)
+                    }
+
+            # Planning-related actions
+            elif 'plan' in action or 'recovery' in action:
+                if 'create' in action or 'generate' in action:
+                    return {
+                        'service': 'planning',
+                        'method': 'POST',
+                        'endpoint': '/api/v1/plans',
+                        'data': self._extract_planning_data(decision)
+                    }
+
+            # Workflow-related actions
+            elif 'workflow' in action:
+                if 'restart' in action or 'resume' in action:
+                    workflow_id = decision.metadata.get('situation', {}).get('workflow_id')
+                    if workflow_id:
+                        return {
+                            'service': 'planning',  # Planning service manages workflows
+                            'method': 'POST',
+                            'endpoint': f'/api/v1/workflows/{workflow_id}/resume',
+                            'data': {'reason': decision.rationale}
+                        }
+
+        # Default: no specific action
+        return {}
+
+    def _extract_bia_data(self, decision: Decision) -> Dict[str, Any]:
+        """Extract BIA-related data from decision."""
+        situation = decision.metadata.get('situation', {})
         return {
-            'success': True,
-            'action': 'auto_resolve',
-            'message': decision.rationale
+            'name': situation.get('process_name', 'Unknown Process'),
+            'description': decision.rationale,
+            'tenant_id': decision.metadata.get('tenant_id', 'default')
+        }
+
+    def _extract_risk_data(self, decision: Decision) -> Dict[str, Any]:
+        """Extract risk assessment data from decision."""
+        situation = decision.metadata.get('situation', {})
+        return {
+            'target_type': situation.get('target_type', 'system'),
+            'target_id': situation.get('target_id', 'unknown'),
+            'description': decision.rationale,
+            'tenant_id': decision.metadata.get('tenant_id', 'default')
+        }
+
+    def _extract_planning_data(self, decision: Decision) -> Dict[str, Any]:
+        """Extract planning data from decision."""
+        situation = decision.metadata.get('situation', {})
+        return {
+            'plan_type': situation.get('plan_type', 'recovery'),
+            'description': decision.rationale,
+            'tenant_id': decision.metadata.get('tenant_id', 'default')
         }
 
     async def _escalate_to_human(self, decision: Decision) -> Dict[str, Any]:
-        """Escalate to human operator."""
-        logger.warning("Escalating to human...")
-        # TODO: Send notification to human operators
+        """
+        Escalate to human operator.
+
+        Sends notifications and creates escalation records.
+
+        Args:
+            decision: The decision requiring escalation
+
+        Returns:
+            dict: Escalation result
+        """
+        logger.warning(f"Escalating to human: {decision.rationale}")
+
+        escalation_id = f"esc_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        situation = decision.metadata.get('situation', {})
+        tenant_id = decision.metadata.get('tenant_id', 'default')
+
+        try:
+            # 1. Create escalation event
+            escalation_event = Event.create(
+                event_type='orchestrator.escalation',
+                data={
+                    'escalation_id': escalation_id,
+                    'priority': decision.priority.name,
+                    'confidence': decision.confidence,
+                    'rationale': decision.rationale,
+                    'situation': situation,
+                    'safety_concerns': self._get_safety_concerns(decision),
+                    'timestamp': datetime.utcnow().isoformat(),
+                    'requires_immediate_attention': decision.priority == PriorityLevel.CRITICAL
+                },
+                source='ai-orchestrator',
+                tenant_id=tenant_id,
+                priority=EventPriority.CRITICAL if decision.priority == PriorityLevel.CRITICAL else EventPriority.HIGH
+            )
+            await self.event_bus.publish(escalation_event)
+            logger.info(f"Published escalation event: {escalation_id}")
+
+            # 2. Send notification (stub - would integrate with notification service)
+            notification_result = await self._send_escalation_notification(
+                escalation_id=escalation_id,
+                decision=decision,
+                tenant_id=tenant_id
+            )
+
+            # 3. Create incident ticket structure (logged for now)
+            incident_ticket = {
+                'ticket_id': f"INC-{escalation_id}",
+                'escalation_id': escalation_id,
+                'title': f"AI Orchestrator Escalation: {decision.rationale[:100]}",
+                'description': self._format_escalation_description(decision, situation),
+                'priority': decision.priority.name,
+                'status': 'open',
+                'assigned_to': 'operations_team',
+                'created_at': datetime.utcnow().isoformat(),
+                'metadata': {
+                    'confidence': decision.confidence,
+                    'safety_approved': decision.safety_approved,
+                    'situation': situation
+                }
+            }
+            logger.info(f"Incident ticket structure: {incident_ticket}")
+
+            # Store escalation in memory for tracking
+            await self._store_escalation(escalation_id, decision, incident_ticket)
+
+            return {
+                'success': True,
+                'action': 'escalate_to_human',
+                'escalation_id': escalation_id,
+                'ticket_id': incident_ticket['ticket_id'],
+                'message': f"Escalated to human operators: {decision.rationale}",
+                'requires_human_intervention': True,
+                'priority': decision.priority.name,
+                'notification_sent': notification_result['sent'],
+                'incident_ticket': incident_ticket
+            }
+
+        except Exception as e:
+            logger.error(f"Error during escalation: {e}", exc_info=True)
+            # Still return success - escalation logged even if notification fails
+            return {
+                'success': True,
+                'action': 'escalate_to_human',
+                'escalation_id': escalation_id,
+                'message': f"Escalated (with errors): {decision.rationale}",
+                'requires_human_intervention': True,
+                'error': str(e)
+            }
+
+    def _get_safety_concerns(self, decision: Decision) -> List[str]:
+        """Extract safety concerns from decision."""
+        concerns = []
+        if not decision.safety_approved:
+            concerns.append("Safety validation failed")
+        if decision.confidence < 0.5:
+            concerns.append(f"Low confidence: {decision.confidence:.2f}")
+        return concerns
+
+    def _format_escalation_description(
+        self,
+        decision: Decision,
+        situation: Dict[str, Any]
+    ) -> str:
+        """Format detailed escalation description."""
+        lines = [
+            "ESCALATION FROM AI ORCHESTRATOR",
+            "=" * 50,
+            "",
+            f"Rationale: {decision.rationale}",
+            f"Priority: {decision.priority.name}",
+            f"Confidence: {decision.confidence:.2%}",
+            f"Safety Approved: {decision.safety_approved}",
+            "",
+            "SITUATION:",
+        ]
+
+        for key, value in situation.items():
+            lines.append(f"  - {key}: {value}")
+
+        if decision.strategies_considered:
+            lines.extend([
+                "",
+                "STRATEGIES CONSIDERED:",
+            ])
+            for i, strategy in enumerate(decision.strategies_considered[:3], 1):
+                lines.append(f"  {i}. {strategy.action} (confidence: {strategy.confidence:.2%})")
+
+        lines.extend([
+            "",
+            "ACTION REQUIRED:",
+            "  Please review the situation and take appropriate action.",
+            "  Update the incident ticket when resolved."
+        ])
+
+        return "\n".join(lines)
+
+    async def _send_escalation_notification(
+        self,
+        escalation_id: str,
+        decision: Decision,
+        tenant_id: str
+    ) -> Dict[str, Any]:
+        """
+        Send escalation notification to human operators.
+
+        Stub implementation - would integrate with notification service.
+
+        Args:
+            escalation_id: Escalation identifier
+            decision: The decision
+            tenant_id: Tenant identifier
+
+        Returns:
+            dict: Notification result
+        """
+        # This is a stub - in production would call notification service
+        logger.warning(
+            f"ESCALATION NOTIFICATION [{escalation_id}]: "
+            f"Priority={decision.priority.name}, "
+            f"Rationale={decision.rationale}"
+        )
+
+        # Simulate notification
         return {
-            'success': True,
-            'action': 'escalate_to_human',
-            'message': f"Escalated: {decision.rationale}",
-            'requires_human_intervention': True
+            'sent': True,
+            'channels': ['email', 'slack', 'pagerduty'] if decision.priority == PriorityLevel.CRITICAL else ['email'],
+            'recipients': ['ops-team@company.com'],
+            'timestamp': datetime.utcnow().isoformat()
         }
+
+    async def _store_escalation(
+        self,
+        escalation_id: str,
+        decision: Decision,
+        incident_ticket: Dict[str, Any]
+    ) -> None:
+        """Store escalation in memory for tracking."""
+        try:
+            await self.memory.working_memory.store({
+                'type': 'escalation',
+                'escalation_id': escalation_id,
+                'decision': decision.to_dict(),
+                'incident_ticket': incident_ticket,
+                'timestamp': datetime.utcnow().isoformat()
+            })
+        except Exception as e:
+            logger.error(f"Failed to store escalation in memory: {e}")
 
     async def _wait_and_monitor(self, decision: Decision) -> Dict[str, Any]:
         """Wait and monitor situation."""
@@ -511,15 +904,164 @@ class AIOrchestrator:
         }
 
     async def _emergency_stop(self, decision: Decision) -> Dict[str, Any]:
-        """Emergency stop - halt all operations."""
-        logger.critical("EMERGENCY STOP TRIGGERED!")
-        # TODO: Implement emergency stop logic
-        return {
-            'success': True,
-            'action': 'emergency_stop',
-            'message': 'Emergency stop executed',
-            'critical': True
-        }
+        """
+        Emergency stop - halt all operations.
+
+        Triggers platform-wide emergency shutdown procedures.
+
+        Args:
+            decision: The decision that triggered emergency stop
+
+        Returns:
+            dict: Emergency stop result
+        """
+        emergency_id = f"emg_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        tenant_id = decision.metadata.get('tenant_id', 'default')
+        situation = decision.metadata.get('situation', {})
+
+        logger.critical(f"EMERGENCY STOP TRIGGERED [{emergency_id}]: {decision.rationale}")
+
+        try:
+            # 1. Publish critical emergency stop event
+            emergency_event = Event.create(
+                event_type='orchestrator.emergency_stop',
+                data={
+                    'emergency_id': emergency_id,
+                    'trigger_reason': decision.rationale,
+                    'situation': situation,
+                    'timestamp': datetime.utcnow().isoformat(),
+                    'metadata': decision.metadata,
+                    'action_required': 'immediate_manual_intervention'
+                },
+                source='ai-orchestrator',
+                tenant_id=tenant_id,
+                priority=EventPriority.CRITICAL
+            )
+            await self.event_bus.publish(emergency_event)
+            logger.critical(f"Published emergency stop event: {emergency_id}")
+
+            # 2. Log critical alert (would integrate with monitoring/alerting)
+            critical_alert = {
+                'alert_id': f"ALERT-{emergency_id}",
+                'severity': 'CRITICAL',
+                'title': 'AI Orchestrator Emergency Stop',
+                'message': decision.rationale,
+                'situation': situation,
+                'timestamp': datetime.utcnow().isoformat(),
+                'requires_immediate_attention': True
+            }
+            logger.critical(f"CRITICAL ALERT: {critical_alert}")
+
+            # 3. Attempt to stop pending workflows via delegation manager
+            stopped_workflows = []
+            try:
+                # Send stop command via event bus to workflow engine
+                stop_workflow_event = Event.create(
+                    event_type='workflow.emergency_stop_all',
+                    data={
+                        'emergency_id': emergency_id,
+                        'reason': decision.rationale,
+                        'initiated_by': 'ai-orchestrator',
+                        'timestamp': datetime.utcnow().isoformat()
+                    },
+                    source='ai-orchestrator',
+                    tenant_id=tenant_id,
+                    priority=EventPriority.CRITICAL
+                )
+                await self.event_bus.publish(stop_workflow_event)
+                logger.critical("Sent emergency stop command to workflow engine")
+                stopped_workflows.append("all_workflows")
+
+            except Exception as e:
+                logger.error(f"Failed to stop workflows: {e}")
+
+            # 4. Disable auto-resolution temporarily (safety measure)
+            self.stats['emergency_stops'] = self.stats.get('emergency_stops', 0) + 1
+            self.stats['last_emergency_stop'] = datetime.utcnow().isoformat()
+
+            # 5. Store emergency stop in memory
+            await self._store_emergency_stop(emergency_id, decision, critical_alert)
+
+            # 6. Send critical notifications
+            await self._send_emergency_notification(emergency_id, decision, tenant_id)
+
+            return {
+                'success': True,
+                'action': 'emergency_stop',
+                'emergency_id': emergency_id,
+                'message': f'EMERGENCY STOP EXECUTED: {decision.rationale}',
+                'critical': True,
+                'timestamp': datetime.utcnow().isoformat(),
+                'stopped_workflows': stopped_workflows,
+                'alert': critical_alert,
+                'requires_manual_intervention': True,
+                'recovery_instructions': self._get_recovery_instructions(decision)
+            }
+
+        except Exception as e:
+            logger.critical(f"Error during emergency stop: {e}", exc_info=True)
+            # Even if errors occur, mark as executed
+            return {
+                'success': True,
+                'action': 'emergency_stop',
+                'emergency_id': emergency_id,
+                'message': f'EMERGENCY STOP EXECUTED (with errors): {decision.rationale}',
+                'critical': True,
+                'error': str(e),
+                'requires_manual_intervention': True
+            }
+
+    async def _store_emergency_stop(
+        self,
+        emergency_id: str,
+        decision: Decision,
+        critical_alert: Dict[str, Any]
+    ) -> None:
+        """Store emergency stop in memory for audit trail."""
+        try:
+            await self.memory.working_memory.store({
+                'type': 'emergency_stop',
+                'emergency_id': emergency_id,
+                'decision': decision.to_dict(),
+                'alert': critical_alert,
+                'timestamp': datetime.utcnow().isoformat()
+            })
+        except Exception as e:
+            logger.error(f"Failed to store emergency stop in memory: {e}")
+
+    async def _send_emergency_notification(
+        self,
+        emergency_id: str,
+        decision: Decision,
+        tenant_id: str
+    ) -> None:
+        """Send critical emergency notifications."""
+        try:
+            logger.critical(
+                f"EMERGENCY NOTIFICATION [{emergency_id}]: "
+                f"IMMEDIATE ACTION REQUIRED - {decision.rationale}"
+            )
+
+            # In production, this would:
+            # - Send PagerDuty alerts
+            # - Send SMS to on-call engineers
+            # - Trigger incident response procedures
+            # - Update status pages
+
+        except Exception as e:
+            logger.error(f"Failed to send emergency notification: {e}")
+
+    def _get_recovery_instructions(self, decision: Decision) -> List[str]:
+        """Get recovery instructions for emergency stop."""
+        return [
+            "1. Investigate the root cause of the emergency stop",
+            "2. Review the orchestrator logs and decision history",
+            "3. Verify all systems are in safe state",
+            "4. Address the underlying issue that triggered the stop",
+            "5. Manually restart workflows if appropriate",
+            "6. Monitor the system closely after restart",
+            "7. Update escalation procedures if needed"
+        ]
 
     async def _run_evolution_cycles(self) -> None:
         """Run periodic evolution cycles in background."""

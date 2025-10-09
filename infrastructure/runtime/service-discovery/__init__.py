@@ -14,6 +14,13 @@ Date: 2025-10-04
 from .service_registry import ServiceRegistry, Service
 from .health_monitor import HealthMonitor, HealthCheck, HealthCheckResult, HealthStatus
 from .iso_service_map import ISO_SERVICE_REGISTRY
+from .eventbus_integration import (
+    ServiceDiscoveryEventBusIntegration,
+    publish_service_started,
+    publish_service_heartbeat,
+    publish_service_health,
+    publish_service_stopped
+)
 
 __all__ = [
     'ServiceRegistry',
@@ -22,5 +29,11 @@ __all__ = [
     'HealthCheck',
     'HealthCheckResult',
     'HealthStatus',
-    'ISO_SERVICE_REGISTRY'
+    'ISO_SERVICE_REGISTRY',
+    # EventBus Integration (Phase 2)
+    'ServiceDiscoveryEventBusIntegration',
+    'publish_service_started',
+    'publish_service_heartbeat',
+    'publish_service_health',
+    'publish_service_stopped'
 ]

@@ -1,1715 +1,960 @@
-# AI-Platform-ISO: System Architecture
+# GitHub Pages Architecture - AI-Platform-ISO Documentation
 
 **Version**: 1.0.0
 **Date**: 2025-10-09
-**Status**: Production Ready
-**Standards Compliance**: ISO/IEC/IEEE 42010:2011
-**Classification**: Enterprise Architecture Specification
+**Purpose**: Interactive Technical Documentation Website
 
 ---
 
-## Document Information
+## 1. Architecture Overview
 
-### Purpose
-This document provides a comprehensive architectural specification for the AI-Platform-ISO system, detailing the complete system architecture, component interactions, integration patterns, data flows, and deployment architecture.
-
-### Audience
-- Enterprise Architects
-- Solution Architects
-- Software Engineers
-- DevOps Engineers
-- Technical Leadership
-- Security Teams
-
-### Related Documents
-- [GETTING_STARTED.md](GETTING_STARTED.md) - Platform setup and quickstart
-- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Deployment procedures
-- [API_REFERENCE.md](API_REFERENCE.md) - Complete API documentation
-- [SECURITY.md](SECURITY.md) - Security specifications
-
----
-
-## Table of Contents
-
-1. [Introduction](#1-introduction)
-2. [Architecture Overview](#2-architecture-overview)
-3. [System Context (C4 Level 1)](#3-system-context-c4-level-1)
-4. [Container Architecture (C4 Level 2)](#4-container-architecture-c4-level-2)
-5. [Component Architecture (C4 Level 3)](#5-component-architecture-c4-level-3)
-6. [Layer Details](#6-layer-details)
-7. [Data Architecture](#7-data-architecture)
-8. [Security Architecture](#8-security-architecture)
-9. [Deployment Architecture](#9-deployment-architecture)
-10. [Technology Stack](#10-technology-stack)
-
----
-
-## 1. Introduction
-
-### 1.1 System Overview
-
-The AI-Platform-ISO is an enterprise-grade Business Continuity Management (BCM) platform that leverages artificial intelligence to provide intelligent workflow orchestration, predictive analytics, and automated compliance management. The platform is designed to support organizations in implementing and maintaining ISO 22301 compliance while providing advanced AI-powered capabilities.
-
-**Key Capabilities**:
-- Intelligent workflow orchestration with AI-assisted decision making
-- Automated Business Impact Analysis (BIA) and risk assessment
-- ISO 22301 compliance monitoring and validation
-- Predictive analytics for proactive risk management
-- Community-driven knowledge sharing and collective intelligence
-- Real-time simulation and digital twin capabilities
-- Self-evolving platform that learns from usage patterns
-
-### 1.2 Architecture Principles
-
-The platform architecture is based on the following core principles:
-
-**1. Layered Architecture**
-- Clear separation of concerns across architectural layers
-- Higher layers depend only on lower layers
-- No circular dependencies between layers
-- Each layer has well-defined responsibilities
-
-**2. Microservices Architecture**
-- Independent, loosely-coupled services
-- Service autonomy and independent scaling
-- Technology heterogeneity where appropriate
-- Fault isolation and resilience
-
-**3. Event-Driven Architecture**
-- Asynchronous communication via EventBus
-- Publish-subscribe patterns for loose coupling
-- Event sourcing for audit trails
-- Real-time event processing
-
-**4. AI-First Design**
-- Intelligence embedded at every layer
-- Autonomous decision-making capabilities
-- Self-learning and self-optimization
-- Privacy-preserving AI with GDPR compliance
-
-**5. Domain-Driven Design**
-- Business domain modeling
-- Bounded contexts for service boundaries
-- Ubiquitous language across teams
-- Domain expertise embedded in code
-
-**6. Security by Design**
-- Multi-tenant data isolation
-- Row-level security (RLS) enforcement
-- Encryption at rest and in transit
-- Zero-trust security model
-
-### 1.3 Architecture Standards
-
-This architecture specification conforms to:
-- **ISO/IEC/IEEE 42010:2011** - Systems and software engineering - Architecture description
-- **ISO 25010** - Systems and software Quality Requirements and Evaluation (SQuaRE)
-- **The C4 Model** - Context, Containers, Components, Code
-- **12-Factor App** - Methodology for cloud-native applications
-
----
-
-## 2. Architecture Overview
-
-### 2.1 Layered Architecture
-
-The platform implements a 5-layer architecture:
+### 1.1 Technology Stack
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer 5: Human Interface                                       │
-│  ┌──────────────────┐  ┌────────────────────────────────────┐  │
-│  │  Web Application │  │  API Gateway (REST/GraphQL)        │  │
-│  │  (React/Next.js) │  │  Port: 8000                        │  │
-│  └──────────────────┘  └────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓↑
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer 4: Platform Services (BCM Domain Services)               │
-│  ┌────────────┬────────────┬────────────┬────────────────────┐ │
-│  │ BIA Service│Risk Service│ Compliance │ Governance Service │ │
-│  │ Port: 8012 │Port: 8040  │Port: 8014  │ Port: 8013         │ │
-│  ├────────────┼────────────┼────────────┼────────────────────┤ │
-│  │ Planning   │ Plans      │ Documents  │ Validation         │ │
-│  │ Port: 8011 │Port: 8023  │Port: 8024  │ Port: 8022         │ │
-│  ├────────────┼────────────┼────────────┼────────────────────┤ │
-│  │ Response   │ Learning   │ Community  │ Process Analytics  │ │
-│  │ Port: 8041 │Port: 8021  │Port: 8033  │ Port: 8780         │ │
-│  └────────────┴────────────┴────────────┴────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓↑
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer 3: Intelligent Core (AI & Workflow Intelligence)         │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Orchestration Layer                                     │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │   │
-│  │  │ Coordination │  │ AI           │  │ Expertise    │  │   │
-│  │  │ Center       │  │ Orchestrator │  │ Center       │  │   │
-│  │  │ Port: 8034   │  │ Port: 8030   │  │ Port: 8035   │  │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Intelligence Layer                                      │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │   │
-│  │  │ Workflow     │  │ AI Foundation│  │ Workflow     │  │   │
-│  │  │ Intelligence │  │ (RAG/ML/LLM) │  │ Engine       │  │   │
-│  │  │ Port: 8037   │  │ Port: 8040   │  │ Port: 8036   │  │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Advanced Intelligence                                   │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │   │
-│  │  │ Predictive   │  │ Community    │  │ Collective   │  │   │
-│  │  │ Analytics    │  │ Intelligence │  │ Intelligence │  │   │
-│  │  │ Port: 8031   │  │ Port: 8030   │  │ Port: 8032   │  │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓↑
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer 2: Shared Libraries & Cross-Cutting Concerns             │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  EventBus │ Database │ Cache │ Auth │ Utils │ Models   │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓↑
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer 1: Infrastructure (Data, Messaging, Security)            │
-│  ┌──────────────┬──────────────┬──────────────┬─────────────┐  │
-│  │ PostgreSQL   │ Redis        │ RabbitMQ     │ Qdrant      │  │
-│  │ Port: 5432   │ Port: 6379   │ Port: 5672   │ Port: 6333  │  │
-│  ├──────────────┼──────────────┼──────────────┼─────────────┤  │
-│  │ Prometheus   │ Grafana      │ Temporal     │ API Gateway │  │
-│  │ Port: 9090   │ Port: 9093   │ Port: 7233   │ Port: 8000  │  │
-│  └──────────────┴──────────────┴──────────────┴─────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
+GitHub Pages (Jekyll/Static)
+├── Frontend Framework: Next.js (Static Export) or Docusaurus
+├── Styling: Tailwind CSS
+├── Diagrams: Mermaid.js (interactive)
+├── Search: Algolia DocSearch or Lunr.js
+├── Analytics: Google Analytics / Plausible
+└── Deployment: GitHub Actions
 ```
 
-### 2.2 Dependency Rules
-
-**Layer Dependencies**:
-- Layer 5 (Human Interface) → Layer 4, Layer 2, Layer 1
-- Layer 4 (Platform Services) → Layer 3, Layer 2, Layer 1
-- Layer 3 (Intelligent Core) → Layer 2, Layer 1
-- Layer 2 (Shared Libraries) → Layer 1
-- Layer 1 (Infrastructure) → No dependencies (foundation)
-
-**Communication Patterns**:
-- Synchronous: HTTP/REST for request-response
-- Asynchronous: EventBus for event-driven communication
-- Real-time: WebSocket for live updates
-- Streaming: Server-Sent Events (SSE) for notifications
-
-### 2.3 Key Metrics
-
-**System Scale**:
-- **Total Modules**: 66+
-- **Total Services**: 40+
-- **Lines of Code**: 356,679+
-- **API Endpoints**: 1,067+ (332 intelligent-core + 735 platform-services)
-- **Database Tables**: 110+ (30 intelligent-core + 80 platform-services)
-- **Port Range**: 8001-8103, 9090-9099
-- **Docker Containers**: 40+
-
-**Integration Metrics**:
-- **EventBus Publishers**: 40+
-- **EventBus Subscribers**: 25+
-- **Database Schemas**: 13+
-- **AI Agents**: 26 specialized agents
-- **ML Models**: 8+ trained models
-
----
-
-## 3. System Context (C4 Level 1)
-
-### 3.1 System Context Diagram
+### 1.2 Site Structure
 
 ```
-                        ┌──────────────────────────────────┐
-                        │                                  │
-                        │   Business Continuity Manager    │
-                        │   (Primary User)                 │
-                        │                                  │
-                        └───────────────┬──────────────────┘
-                                        │
-                                        │ Web UI / API
-                                        ↓
-┌──────────────────────┐      ┌─────────────────────────────────┐
-│                      │      │                                 │
-│  ISO 22301          │◄─────┤    AI-Platform-ISO              │
-│  Standards Database  │      │                                 │
-│                      │      │  - Workflow Intelligence        │
-└──────────────────────┘      │  - AI-Powered Analytics         │
-                              │  - Compliance Management        │
-┌──────────────────────┐      │  - Risk Assessment              │
-│                      │      │  - Digital Twin Simulation      │
-│  External BCM        │◄────►│                                 │
-│  Community Platform  │      │                                 │
-│                      │      └───────────────┬─────────────────┘
-└──────────────────────┘                      │
-                                              │
-                              ┌───────────────┼────────────────┐
-                              │               │                │
-                              ↓               ↓                ↓
-                    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-                    │              │  │              │  │              │
-                    │  Email       │  │  Slack       │  │  External    │
-                    │  Service     │  │  Integration │  │  APIs        │
-                    │  (SMTP)      │  │              │  │  (GitHub)    │
-                    │              │  │              │  │              │
-                    └──────────────┘  └──────────────┘  └──────────────┘
-```
-
-### 3.2 External Actors
-
-**Primary Users**:
-- **Business Continuity Managers**: Plan, implement, and maintain BCM programs
-- **Compliance Officers**: Monitor and ensure ISO 22301 compliance
-- **Risk Analysts**: Assess and manage organizational risks
-- **Executive Leadership**: Review dashboards and strategic reports
-- **Auditors**: Conduct compliance audits and validations
-
-**External Systems**:
-- **ISO Standards Database**: ISO 22301, 27001, 9001 standards and updates
-- **BCM Community Platform**: Peer review, knowledge sharing, case studies
-- **Email Service**: Notification and digest delivery
-- **Slack/Teams**: Real-time alerts and collaboration
-- **GitHub**: Code repository and issue tracking
-- **External APIs**: Third-party integrations (CRM, ERP, monitoring)
-
-### 3.3 System Boundaries
-
-**In Scope**:
-- Workflow orchestration and state management
-- AI-powered analysis and recommendations
-- Compliance monitoring and validation
-- Risk assessment and management
-- Business impact analysis
-- Document management
-- Incident response coordination
-- Training and learning management
-- Community knowledge sharing
-- Digital twin simulation
-
-**Out of Scope**:
-- Human resources management
-- Financial accounting
-- Customer relationship management (CRM)
-- Enterprise resource planning (ERP)
-- Physical security systems
-- Building management systems
-
----
-
-## 4. Container Architecture (C4 Level 2)
-
-### 4.1 Container Diagram
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              Human Interface Layer                          │
-│  ┌───────────────────────────────┐  ┌────────────────────────────────────┐ │
-│  │  Web Application              │  │  API Gateway                       │ │
-│  │  Technology: Next.js/React    │  │  Technology: Python/FastAPI        │ │
-│  │  Port: 3000                   │◄─┤  Port: 8000                        │ │
-│  │                               │  │  - Authentication                  │ │
-│  │  - Dashboard                  │  │  - Rate limiting                   │ │
-│  │  - Workflow UI                │  │  - Request routing                 │ │
-│  │  - Analytics Charts           │  │  - Load balancing                  │ │
-│  └───────────────────────────────┘  └────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                         │
-                                         ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Platform Services Layer                           │
-│  ┌──────────────┬──────────────┬──────────────┬──────────────────────────┐ │
-│  │ BIA Service  │ Risk Service │ Compliance   │ Governance Service       │ │
-│  │ 8012         │ 8040         │ 8014         │ 8013                     │ │
-│  └──────────────┴──────────────┴──────────────┴──────────────────────────┘ │
-│  ┌──────────────┬──────────────┬──────────────┬──────────────────────────┐ │
-│  │ Planning     │ Plans        │ Documents    │ Validation Service       │ │
-│  │ 8011         │ 8023         │ 8024         │ 8022                     │ │
-│  └──────────────┴──────────────┴──────────────┴──────────────────────────┘ │
-│  ┌──────────────┬──────────────┬──────────────┬──────────────────────────┐ │
-│  │ Response     │ Learning     │ Community    │ Process Analytics        │ │
-│  │ 8041         │ 8021         │ 8033         │ 8780                     │ │
-│  └──────────────┴──────────────┴──────────────┴──────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                         │
-                                         ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          Intelligent Core Layer                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  Orchestration Sublayer                                             │   │
-│  │  ┌────────────────┬────────────────┬────────────────────────────┐   │   │
-│  │  │ Coordination   │ AI             │ Expertise Center           │   │   │
-│  │  │ Center (8034)  │ Orchestrator   │ (8035)                     │   │   │
-│  │  │                │ (8030)         │ - 26 AI Agents             │   │   │
-│  │  └────────────────┴────────────────┴────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  Intelligence Sublayer                                              │   │
-│  │  ┌────────────────┬────────────────┬────────────────────────────┐   │   │
-│  │  │ Workflow       │ AI Foundation  │ Workflow Engine            │   │   │
-│  │  │ Intelligence   │ (8040)         │ (8036)                     │   │   │
-│  │  │ (8037)         │ - RAG Pipeline │ - BPMN 2.0                 │   │   │
-│  │  │ - THE BRAIN    │ - ML Models    │ - State Machine            │   │   │
-│  │  │ - Case Library │ - LLM Router   │                            │   │   │
-│  │  └────────────────┴────────────────┴────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  Advanced Intelligence Sublayer                                     │   │
-│  │  ┌────────────────┬────────────────┬────────────────────────────┐   │   │
-│  │  │ Predictive     │ Community      │ Collective Intelligence    │   │   │
-│  │  │ (8031)         │ Intelligence   │ (8032)                     │   │   │
-│  │  │ - Journey Pred │ (8030)         │ - K-Anonymity              │   │   │
-│  │  │ - Forecasting  │ - Peer Review  │ - Privacy Preserving       │   │   │
-│  │  └────────────────┴────────────────┴────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                         │
-                                         ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                            Infrastructure Layer                             │
-│  ┌──────────────┬──────────────┬──────────────┬────────────────────────┐   │
-│  │ PostgreSQL   │ Redis        │ Qdrant       │ RabbitMQ               │   │
-│  │ (5432)       │ (6379)       │ (6333)       │ (5672)                 │   │
-│  │ - Multi-     │ - Caching    │ - Vector     │ - Event Bus            │   │
-│  │   tenant DB  │ - Sessions   │   Search     │ - Async Messaging      │   │
-│  └──────────────┴──────────────┴──────────────┴────────────────────────┘   │
-│  ┌──────────────┬──────────────┬──────────────┬────────────────────────┐   │
-│  │ Prometheus   │ Grafana      │ Temporal     │ Notification Service   │   │
-│  │ (9090)       │ (9093)       │ (7233)       │ (8081)                 │   │
-│  │ - Metrics    │ - Dashboards │ - Workflows  │ - Email/Slack          │   │
-│  └──────────────┴──────────────┴──────────────┴────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 4.2 Container Responsibilities
-
-**Human Interface Containers**:
-- **Web Application**: User interface for all platform features
-- **API Gateway**: Single entry point, authentication, routing
-
-**Platform Services Containers** (12 microservices):
-- **BIA Service**: Business Impact Analysis workflows and calculations
-- **Risk Service**: Risk assessment, mitigation planning, monitoring
-- **Compliance Service**: ISO 22301 compliance tracking and validation
-- **Governance Service**: Policy management, organizational structure
-- **Planning Service**: BCM planning workflows
-- **Plans Service**: Continuity plan management
-- **Documents Service**: Document lifecycle management
-- **Validation Service**: Testing, exercises, plan validation
-- **Response Service**: Incident response coordination
-- **Learning Service**: Training, competency management
-- **Community Service**: Community marketplace, knowledge sharing
-- **Process Analytics**: Process mining and optimization
-
-**Intelligent Core Containers**:
-- **Coordination Center**: Intent-based routing, AI-to-tools mediation
-- **AI Orchestrator**: Autonomous decision-making, task delegation
-- **Expertise Center**: 26 specialized AI agents for BCM domains
-- **Workflow Intelligence**: Workflow state machine, case library
-- **AI Foundation**: RAG, ML models, LLM routing
-- **Workflow Engine**: BPMN 2.0 execution, gateway evaluation
-- **Predictive**: Journey prediction, proactive recommendations
-- **Community Intelligence**: Peer review, reputation system
-- **Collective Intelligence**: Privacy-preserving collective agents
-
-**Infrastructure Containers**:
-- **PostgreSQL**: Primary relational database with RLS
-- **Redis**: Caching, sessions, real-time data structures
-- **Qdrant**: Vector database for RAG and semantic search
-- **RabbitMQ**: Message broker for event-driven architecture
-- **Prometheus**: Metrics collection and alerting
-- **Grafana**: Metrics visualization and dashboards
-- **Temporal**: Distributed workflow orchestration
-- **Notification Service**: Multi-channel notifications
-
-### 4.3 Inter-Container Communication
-
-**Synchronous Communication (HTTP/REST)**:
-```
-Web App → API Gateway → Platform Services
-Web App → API Gateway → Intelligent Core
-Platform Services → Intelligent Core (direct HTTP)
-```
-
-**Asynchronous Communication (EventBus)**:
-```
-Platform Services → EventBus → Intelligent Core
-Intelligent Core → EventBus → Platform Services
-Infrastructure Services → EventBus → All Subscribers
-```
-
-**Data Access**:
-```
-All Services → PostgreSQL (via connection pool)
-All Services → Redis (for caching)
-AI Services → Qdrant (for vector search)
-```
-
----
-
-## 5. Component Architecture (C4 Level 3)
-
-### 5.1 Intelligent Core - Detailed Components
-
-#### 5.1.1 Workflow Intelligence (THE BRAIN)
-
-```
-workflow_intelligence/
-├── core/
-│   ├── engine.py                    # Main workflow orchestration engine
-│   ├── state_machine.py             # State transition logic
-│   ├── validators.py                # Business rule validation
-│   ├── context.py                   # AI context generation
-│   └── governance/
-│       ├── rules_engine.py          # Governance rules
-│       ├── checkpoints.py           # Strict checkpoints
-│       └── creative_zones.py        # AI freedom zones
+docs-website/
+├── public/                  # Static assets
+│   ├── diagrams/           # Mermaid diagram files
+│   ├── images/             # Screenshots, logos
+│   └── pdf/                # Downloadable PDFs
 │
-├── services/
-│   ├── case_library/                # Workflow case management
-│   │   ├── collector.py             # Collect completed workflows
-│   │   ├── repository.py            # Store workflow cases
-│   │   ├── analyzer.py              # Extract patterns
-│   │   └── search.py                # Search and retrieve
+├── src/
+│   ├── pages/              # Main pages
+│   │   ├── index.tsx       # Home
+│   │   ├── architecture/   # Architecture section
+│   │   ├── services/       # Services catalog
+│   │   ├── api/            # API reference
+│   │   ├── diagrams/       # Interactive diagrams
+│   │   └── library/        # Document library
 │   │
-│   ├── journey/                     # Journey prediction
-│   │   ├── journey_predictor.py     # Predict next steps
-│   │   ├── timeline_engine.py       # Timeline management
-│   │   └── milestone_tracker.py     # Track milestones
+│   ├── components/         # React components
+│   │   ├── ServiceCard.tsx
+│   │   ├── DiagramViewer.tsx
+│   │   ├── DocumentSearch.tsx
+│   │   └── Navigation.tsx
 │   │
-│   └── anomaly/                     # Anomaly detection
-│       ├── stuck_detector.py        # Detect stuck workflows
-│       └── anomaly_detector.py      # General anomaly detection
-│
-├── storage/
-│   ├── postgres_adapter.py          # PostgreSQL with RLS
-│   └── rls_context.py               # Multi-tenancy security
-│
-└── integration/
-    ├── eventbus_publisher.py        # Publish workflow events
-    ├── ai_foundation_bridge.py      # Bridge to AI Foundation
-    └── service_adapters.py          # Service integrations
-```
-
-**Key Responsibilities**:
-- Workflow state machine management
-- Multi-tenancy with Row-Level Security (RLS)
-- AI context generation for decision-making
-- Case library for learning from completed workflows
-- Journey prediction and timeline management
-- Stuck workflow detection and resolution
-- Event publishing for platform-wide coordination
-
-**Database Schema**:
-```sql
--- workflow_intelligence schema
-CREATE SCHEMA workflow_intelligence;
-
-CREATE TABLE workflow_intelligence.workflow_contexts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL,
-    module VARCHAR(50) NOT NULL,
-    current_stage VARCHAR(50),
-    data JSONB,
-    available_actions TEXT[],
-    gaps JSONB[],
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Row-Level Security
-ALTER TABLE workflow_intelligence.workflow_contexts ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY tenant_isolation ON workflow_intelligence.workflow_contexts
-    USING (tenant_id = current_setting('app.current_tenant')::UUID);
-```
-
-#### 5.1.2 AI Foundation
-
-```
-ai-foundation/
-├── rag/
-│   ├── pipeline.py                  # Main RAG orchestration
-│   ├── embeddings.py                # Voyage/OpenAI embeddings
-│   ├── retrieval.py                 # Hybrid search (semantic + keyword)
-│   ├── reranking.py                 # Cohere reranking
-│   └── qdrant_client.py             # Vector DB client
-│
-├── ml/
-│   ├── predictive_models.py         # RandomForest, Gradient Boosting
-│   ├── training_pipeline.py         # ML model training
-│   ├── anomaly_detector.py          # Isolation Forest for anomalies
-│   └── community_predictor.py       # Community-specific predictions
-│
-├── learning/
-│   ├── self_learning_engine.py      # Platform self-learning
-│   ├── pattern_extractor.py         # Extract usage patterns
-│   ├── rule_generator.py            # Generate new rules
-│   └── improvement_tracker.py       # Track improvements
-│
-├── context/
-│   ├── context_builder.py           # Build AI context from data
-│   ├── context_aggregator.py        # Aggregate from multiple sources
-│   ├── prompt_builder.py            # Construct LLM prompts
-│   └── enricher.py                  # Enrich context with metadata
-│
-└── llm/
-    ├── llm_client.py                # Unified LLM client
-    ├── anthropic_adapter.py         # Claude integration
-    ├── openai_adapter.py            # GPT integration
-    └── llm_router.py                # Multi-provider routing
-```
-
-**Key Capabilities**:
-- **RAG Pipeline**: Document ingestion, embedding generation, hybrid search, reranking
-- **ML Models**: Predictive analytics, anomaly detection, classification
-- **Self-Learning**: Pattern extraction, rule generation, continuous improvement
-- **Context Building**: Multi-source context aggregation for AI
-- **LLM Routing**: Multi-provider support with automatic fallback
-
-**Integration Points**:
-```python
-# Example: Using AI Foundation from Platform Services
-from intelligent_core.ai_foundation.rag import RAGPipeline
-from intelligent_core.ai_foundation.llm import LLMRouter
-
-# RAG retrieval
-rag = RAGPipeline()
-relevant_docs = await rag.retrieve(
-    query="ISO 22301 BIA requirements",
-    top_k=5,
-    filters={"standard": "ISO 22301"}
-)
-
-# LLM generation with context
-llm = LLMRouter()
-response = await llm.generate(
-    prompt=f"Based on: {relevant_docs}\n\nProvide BIA guidance",
-    model="claude-3-5-sonnet",
-    temperature=0.7
-)
-```
-
-#### 5.1.3 Expertise Center (26 AI Agents)
-
-```
-expertise-center/
-├── core/
-│   ├── chief_executive.py           # Main orchestrator
-│   ├── domain_loader.py             # Plugin loader
-│   ├── expert_registry.py           # Expert registry
-│   └── coordinator.py               # Agent coordination
-│
-├── shared/
-│   ├── base/
-│   │   ├── base_specialist.py       # Strategic AI agents
-│   │   ├── base_colleague.py        # Tactical AI assistants
-│   │   └── base_analyzer.py         # Heavy AI analyzers
+│   ├── data/               # Structured data
+│   │   ├── services.json   # Service catalog
+│   │   ├── diagrams.json   # Diagram metadata
+│   │   └── documents.json  # Document index
 │   │
-│   └── tools/
-│       ├── bia_tools.py             # BIA-specific tools
-│       ├── compliance_tools.py      # Compliance tools
-│       ├── strategic_tools.py       # Strategic planning tools
-│       └── case_library_tool.py     # Case library access
+│   └── styles/             # CSS
 │
-└── domains/
-    └── bcm/                          # BCM Domain Plugin
-        ├── specialists/              # 3 Strategic Experts
-        │   ├── bcm_advisor.py
-        │   ├── compliance_auditor.py
-        │   └── strategic_planner.py
-        │
-        ├── colleagues/               # 7 Tactical Assistants
-        │   ├── bia_specialist.py
-        │   ├── risk_analyst.py
-        │   ├── incident_advisor.py
-        │   ├── plan_generator.py
-        │   ├── exercise_designer.py
-        │   ├── compliance_copilot.py
-        │   └── project_manager.py
-        │
-        └── analyzers/                # 10 Heavy Analyzers
-            ├── impact_analyzer.py
-            ├── risk_analyzer.py
-            ├── compliance_analyzer.py
-            ├── governance_analyzer.py
-            ├── emergency_analyzer.py
-            ├── scenario_analyzer.py
-            ├── performance_analyzer.py
-            ├── learning_analyzer.py
-            ├── plan_analyzer.py
-            └── lifecycle_analyzer.py
-```
-
-**Agent Types**:
-
-1. **Specialists (Strategic)**: Expert advice for complex decisions
-   - Execution time: 3-10 seconds
-   - Uses: RAG + LLM
-   - Output: Strategic recommendations
-
-2. **Colleagues (Tactical)**: Conversational assistants for daily tasks
-   - Execution time: 1-5 seconds
-   - Uses: RAG + LLM
-   - Output: Conversational responses
-
-3. **Analyzers (Heavy)**: Deep analysis with ML predictions
-   - Execution time: 5-30 seconds
-   - Uses: RAG + LLM + ML
-   - Output: Detailed analysis reports with insights
-
-### 5.2 Platform Services - Component Structure
-
-Each platform service follows a consistent component structure:
-
-```
-{service-name}/
-├── api/
-│   ├── routes.py                    # FastAPI endpoints
-│   ├── dependencies.py              # Dependency injection
-│   └── validators.py                # Request validation
+├── content/                # Markdown content
+│   ├── architecture/       # Architecture docs
+│   ├── guides/             # User guides
+│   ├── api/                # API documentation
+│   └── specs/              # Technical specs
 │
-├── models/
-│   ├── database.py                  # SQLAlchemy ORM models
-│   └── schemas.py                   # Pydantic schemas
+├── scripts/                # Build scripts
+│   ├── build-index.js      # Generate search index
+│   ├── process-diagrams.js # Process Mermaid diagrams
+│   └── generate-data.js    # Generate data files
 │
-├── services/
-│   ├── {domain}_service.py          # Business logic
-│   ├── workflow_service.py          # Workflow integration
-│   └── ai_service.py                # AI integration
-│
-├── repositories/
-│   └── {domain}_repository.py       # Data access layer
-│
-├── integration/
-│   ├── eventbus_client.py           # EventBus integration
-│   ├── ai_foundation_client.py      # AI Foundation integration
-│   └── workflow_client.py           # Workflow Intelligence integration
-│
-├── config.py                        # Service configuration
-├── main.py                          # FastAPI application
-├── Dockerfile                       # Container definition
-└── requirements.txt                 # Python dependencies
-```
-
-**Example: BIA Service Components**
-
-```python
-# api/routes.py - REST endpoints
-@router.post("/api/v1/bia/analyses")
-async def create_bia_analysis(
-    data: BIAAnalysisCreate,
-    current_user: User = Depends(get_current_user),
-    bia_service: BIAService = Depends(get_bia_service)
-):
-    """Create new BIA analysis"""
-    return await bia_service.create_analysis(data, current_user)
-
-# services/bia_service.py - Business logic
-class BIAService:
-    async def create_analysis(self, data: BIAAnalysisCreate, user: User):
-        # Start workflow
-        workflow_id = await self.workflow_client.start_workflow(
-            module="bia",
-            tenant_id=user.tenant_id,
-            user_id=user.id,
-            initial_data=data.dict()
-        )
-
-        # Get AI recommendations
-        recommendations = await self.ai_client.analyze(
-            analysis_type="bia",
-            data=data.dict()
-        )
-
-        # Store in database
-        analysis = await self.repository.create(
-            workflow_id=workflow_id,
-            data=data,
-            recommendations=recommendations
-        )
-
-        # Publish event
-        await self.eventbus.publish(
-            topic="bia.analysis.created",
-            event={"analysis_id": analysis.id}
-        )
-
-        return analysis
+└── .github/
+    └── workflows/
+        └── deploy.yml      # Deployment workflow
 ```
 
 ---
 
-## 6. Layer Details
+## 2. Core Features
 
-### 6.1 Layer 1: Infrastructure
+### 2.1 Home Page
 
-**Purpose**: Foundation services for data persistence, messaging, security, and observability.
+**URL**: `/`
 
-**Components**:
+**Sections**:
+1. **Hero Section**
+   - Platform overview
+   - Key metrics (23 services, 11 AI modules, 347+ cases)
+   - Quick start buttons
 
-#### 6.1.1 Database (PostgreSQL + Supabase)
-- **Multi-tenant isolation** with Row-Level Security (RLS)
-- **13+ schemas** for service separation
-- **110+ tables** across all services
-- **Connection pooling** (20 connections per service)
-- **Automated migrations** via Alembic
+2. **Architecture Overview** (Interactive)
+   - 4-layer diagram (clickable)
+   - Hover: show details
+   - Click: navigate to section
 
-#### 6.1.2 Caching (Redis)
-- **Session storage** for user authentication
-- **API response caching** with TTL
-- **Real-time data structures** (lists, sets, sorted sets)
-- **Pub/Sub** for real-time notifications
-- **Distributed locks** for concurrency control
+3. **Services Grid** (Interactive Cards)
+   - 23 services
+   - Status indicators (simulated)
+   - Click: service details
 
-#### 6.1.3 Message Queue (RabbitMQ)
-- **EventBus** with topic-based routing
-- **40+ publishers** across services
-- **25+ subscribers** for event processing
-- **Dead letter queues** for failed messages
-- **Event replay** capability for audit
+4. **Quick Links**
+   - API Reference
+   - Deployment Guide
+   - Specifications Catalog
+   - Diagrams Library
 
-#### 6.1.4 Vector Database (Qdrant)
-- **Collections**: iso_standards, bci_guidelines, workflow_cases, community_knowledge
-- **Vector dimensions**: 1024 (Voyage AI embeddings)
-- **Hybrid search**: Semantic + keyword
-- **Filtering**: Metadata-based filters
+5. **Latest Updates** (GitHub API)
+   - Latest commits
+   - Latest releases
+   - Contributors
 
-#### 6.1.5 Monitoring (Prometheus + Grafana)
-- **Metrics collection** from all services
-- **Pre-built dashboards** for infrastructure, services, business metrics
-- **Alert rules** for critical conditions
-- **Retention**: 15 days
+### 2.2 Architecture Section
 
-#### 6.1.6 Workflow Orchestration (Temporal)
-- **Distributed workflows** for long-running processes
-- **Temporal workflows**: BIA, Risk Assessment, Planning
-- **Automatic retries** and error handling
-- **Workflow state visibility**
+**URL**: `/architecture`
 
-### 6.2 Layer 2: Shared Libraries
+**Sub-pages**:
 
-**Purpose**: Reusable libraries for cross-cutting concerns.
+#### `/architecture/overview`
+- 4-layer architecture
+- Interactive Mermaid diagram
+- Click layers → drill down
+- Component descriptions
 
-**Components**:
+#### `/architecture/services`
+- Service dependency graph
+- Interactive exploration
+- Port mappings
+- Technology stack per service
 
-```python
-shared/
-├── auth/                            # Authentication & Authorization
-│   ├── jwt.py                       # JWT token handling
-│   ├── rbac.py                      # Role-based access control
-│   └── permissions.py               # Permission checks
-│
-├── database/                        # Database utilities
-│   ├── async_db.py                  # Async database session
-│   ├── connection_pool.py           # Connection pooling
-│   └── migrations.py                # Migration helpers
-│
-├── cache/                           # Caching utilities
-│   ├── redis_cache.py               # Redis cache client
-│   └── decorators.py                # Caching decorators
-│
-├── eventbus/                        # EventBus client
-│   ├── publisher.py                 # Event publishing
-│   ├── subscriber.py                # Event subscription
-│   └── topics.py                    # Topic definitions
-│
-├── exceptions/                      # Custom exceptions
-│   └── exceptions.py                # Exception classes
-│
-├── utils/                           # Utilities
-│   ├── logging.py                   # Structured logging
-│   ├── metrics.py                   # Metrics helpers
-│   └── validators.py                # Validation functions
-│
-├── models/                          # Common models
-│   ├── base.py                      # Base Pydantic models
-│   └── common.py                    # Common schemas
-│
-└── middleware/                      # FastAPI middleware
-    ├── auth_middleware.py           # Authentication
-    ├── logging_middleware.py        # Request logging
-    └── error_handling.py            # Error handling
+#### `/architecture/data-flow`
+- Data flow diagrams
+- EventBus topology
+- Real-time event flows
+- AI orchestration flow
+
+#### `/architecture/infrastructure`
+- Infrastructure components
+- Database schema
+- EventBus architecture
+- Deployment architecture (Docker, K8s)
+
+### 2.3 Services Catalog
+
+**URL**: `/services`
+
+**Features**:
+
+#### Service Grid View
+```typescript
+interface Service {
+  id: string;
+  name: string;
+  category: 'platform' | 'intelligent-core' | 'infrastructure';
+  port: number;
+  description: string;
+  techStack: string[];
+  dependencies: string[];
+  apiEndpoints: number;
+  documentation: string;
+  repository: string;
+  status: 'active' | 'development' | 'deprecated';
+}
 ```
 
-**Usage Example**:
-```python
-# Using shared libraries in a service
-from shared.auth import require_permission
-from shared.database import get_db_session
-from shared.eventbus import get_eventbus
-from shared.cache import cached
+**Display**:
+- Filterable by category
+- Searchable
+- Sortable (name, port, status)
+- Card view with:
+  - Service icon
+  - Name & port
+  - Tech stack badges
+  - Quick actions (Docs, API, Code)
 
-@router.get("/api/v1/bia/analyses/{id}")
-@require_permission("bia:read")
-@cached(ttl=3600, key_prefix="bia_analysis")
-async def get_bia_analysis(
-    id: str,
-    db: Session = Depends(get_db_session),
-    eventbus: EventBus = Depends(get_eventbus)
-):
-    analysis = await db.get(BIAAnalysis, id)
+#### Service Detail Page `/services/{service-id}`
 
-    # Publish view event
-    await eventbus.publish("bia.analysis.viewed", {"id": id})
+**Tabs**:
+1. **Overview**
+   - Description
+   - Purpose
+   - Key features
+   - Metrics (if available)
 
-    return analysis
+2. **Architecture**
+   - Component diagram
+   - Dependencies (visual)
+   - Data flow
+   - Technology stack
+
+3. **API Reference**
+   - Endpoints list
+   - Request/response examples
+   - Authentication
+   - Rate limits
+
+4. **Integration**
+   - How to integrate
+   - Code examples
+   - EventBus events
+   - Dependencies
+
+5. **Deployment**
+   - Docker configuration
+   - Environment variables
+   - Health checks
+   - Troubleshooting
+
+### 2.4 Interactive Diagrams
+
+**URL**: `/diagrams`
+
+**Categories**:
+
+#### Architecture Diagrams (24)
+- Filterable by type
+- Interactive Mermaid rendering
+- Zoom & pan
+- Export as PNG/SVG
+- Full-screen mode
+
+#### User Scenarios (4)
+- BCM User Journey
+- BIA Workflow
+- Admin Monitoring
+- Risk Assessment
+
+#### Dependencies (1)
+- Service Dependencies
+- Interactive exploration
+- Click service → show details
+
+#### Flows (3)
+- EventBus Message Flow
+- Data Flow Complete
+- AI Orchestration Flow
+
+**Features**:
+- **Live Rendering**: Mermaid.js
+- **Interactive**: Click nodes → tooltips
+- **Search**: Find diagrams by keyword
+- **Collections**: Group related diagrams
+- **Embed Code**: Copy embed code for external use
+
+### 2.5 API Reference
+
+**URL**: `/api`
+
+**Structure**:
+
+#### API Overview
+- Base URL
+- Authentication (JWT)
+- Rate limits
+- Error codes
+- Versioning
+
+#### By Service (grouped)
+```
+Platform Services (12 services)
+├── BIA Service
+│   ├── GET /api/bia
+│   ├── POST /api/bia
+│   └── [all endpoints]
+├── Risk Service
+│   └── [endpoints]
+└── [other services]
+
+Intelligent Core (11 modules)
+└── [endpoints]
+
+Infrastructure
+└── [endpoints]
 ```
 
-### 6.3 Layer 3: Intelligent Core
+**Each Endpoint**:
+- HTTP method + URL
+- Description
+- Parameters (query, body, headers)
+- Request example (curl, JS, Python)
+- Response example (JSON)
+- Error responses
+- Try it out (interactive)
 
-**Purpose**: AI intelligence, workflow orchestration, and domain expertise.
+**Tech**: OpenAPI 3.0 spec → Swagger UI / Redoc
 
-**Sublayers**:
+### 2.6 Document Library
 
-1. **Orchestration Sublayer**:
-   - Coordination Center (intent-based routing)
-   - AI Orchestrator (autonomous decision-making)
-   - Expertise Center (26 AI agents)
+**URL**: `/library`
 
-2. **Intelligence Sublayer**:
-   - Workflow Intelligence (THE BRAIN)
-   - AI Foundation (RAG/ML/LLM)
-   - Workflow Engine (BPMN 2.0)
+**Features**:
 
-3. **Advanced Intelligence Sublayer**:
-   - Predictive Analytics
-   - Community Intelligence
-   - Collective Intelligence
+#### Main Library View
+```
+┌─────────────────────────────────────────────┐
+│ Search: [___________________________] 🔍    │
+├─────────────────────────────────────────────┤
+│ Filters:                                     │
+│ [ ] Specifications (108)                     │
+│ [ ] Architecture (24)                        │
+│ [ ] API Docs (3)                             │
+│ [ ] Guides (15)                              │
+│ [ ] Reports (24)                             │
+├─────────────────────────────────────────────┤
+│ Documents (550):                             │
+│                                              │
+│ 📄 TZ_USER_INTERFACE.md             35 KB   │
+│    Technical specification for UI/UX         │
+│    Tags: specification, ui, frontend         │
+│    [View] [Download]                         │
+│                                              │
+│ 📄 TZ_AI_BCM_PLATFORM.md            63 KB   │
+│    Main technical specification              │
+│    [View] [Download]                         │
+│                                              │
+│ [... more documents ...]                     │
+└─────────────────────────────────────────────┘
+```
 
-### 6.4 Layer 4: Platform Services
+#### Document View `/library/{doc-id}`
+- Rendered markdown
+- Table of contents (auto-generated)
+- Breadcrumbs
+- Related documents
+- Download options (MD, PDF)
+- Edit on GitHub link
+- Last updated info
 
-**Purpose**: Business logic for BCM domain services.
+#### Search Features
+- Full-text search (Algolia or Lunr.js)
+- Filters: category, file type, size, date
+- Sorting: relevance, date, name, size
+- Autocomplete
+- Keyboard shortcuts (⌘K to search)
 
-**Core Services**:
-
-| Service | Purpose | Port | Key Features |
-|---------|---------|------|--------------|
-| BIA Service | Business Impact Analysis | 8012 | Process mapping, impact assessment, MTD/RTO calculation |
-| Risk Service | Risk Management | 8040 | Risk identification, assessment, mitigation, monitoring |
-| Compliance Service | ISO 22301 Compliance | 8014 | Compliance tracking, gap analysis, audit preparation |
-| Governance Service | BCM Governance | 8013 | Policy management, org structure, roles & responsibilities |
-| Planning Service | BCM Planning | 8011 | Strategic planning, project management, roadmaps |
-| Plans Service | Continuity Plans | 8023 | Plan creation, version control, activation |
-| Documents Service | Document Management | 8024 | Document lifecycle, version control, approvals |
-| Validation Service | Testing & Exercises | 8022 | Exercise planning, execution, evaluation, lessons learned |
-| Response Service | Incident Response | 8041 | Incident coordination, communication, recovery |
-| Learning Service | Training & Competency | 8021 | Training programs, competency tracking, certifications |
-| Community Service | Knowledge Sharing | 8033 | Community marketplace, peer review, case studies |
-| Process Analytics | Process Mining | 8780 | Process discovery, conformance checking, optimization |
-
-### 6.5 Layer 5: Human Interface
-
-**Purpose**: User-facing interfaces for platform interaction.
-
-**Components**:
-
-1. **Web Application** (Next.js/React):
-   - Responsive dashboard
-   - Workflow wizards
-   - Analytics and reporting
-   - Real-time notifications
-   - Mobile-responsive design
-
-2. **API Gateway** (FastAPI):
-   - Authentication and authorization
-   - Rate limiting and throttling
-   - Request routing to services
-   - Load balancing
-   - API documentation (OpenAPI/Swagger)
+#### Collections
+Pre-defined collections:
+- **Getting Started** (5 docs)
+- **Technical Specifications** (108 docs)
+- **API Documentation** (3 docs)
+- **Deployment Guides** (10 docs)
+- **Architecture Docs** (24 docs)
 
 ---
 
-## 7. Data Architecture
+## 3. Data Structure
 
-### 7.1 Database Schema Organization
+### 3.1 Services Data (`services.json`)
 
-**PostgreSQL Schemas** (13+):
-
-```sql
--- Platform Services Schemas
-CREATE SCHEMA bia;              -- BIA Service (4 tables, 60+ columns)
-CREATE SCHEMA risk;             -- Risk Service (5 tables, 70+ columns)
-CREATE SCHEMA compliance;       -- Compliance Service (8 tables, 90+ columns)
-CREATE SCHEMA governance;       -- Governance Service (7 tables, 80+ columns)
-CREATE SCHEMA documents;        -- Documents Service (5 tables, 50+ columns)
-CREATE SCHEMA validation;       -- Validation Service (6 tables, 65+ columns)
-CREATE SCHEMA planning;         -- Planning Service (4 tables, 45+ columns)
-CREATE SCHEMA plans;            -- Plans Service (5 tables, 55+ columns)
-CREATE SCHEMA response;         -- Response Service (6 tables, 60+ columns)
-CREATE SCHEMA learning;         -- Learning Service (5 tables, 55+ columns)
-
--- Intelligent Core Schemas
-CREATE SCHEMA workflow_intelligence;  -- Workflow contexts, cases (10+ tables)
-CREATE SCHEMA community;              -- Community content (8+ tables)
-CREATE SCHEMA collective;             -- Collective agents (5+ tables)
-
--- Shared Schema
-CREATE SCHEMA public;           -- Users, audit logs, change history
+```json
+{
+  "services": [
+    {
+      "id": "bia-service",
+      "name": "BIA Service",
+      "category": "platform-services",
+      "port": 8012,
+      "description": "Business Impact Analysis service with 6-step wizard",
+      "version": "2.0.0",
+      "techStack": ["Python 3.11", "FastAPI", "PostgreSQL", "Redis"],
+      "dependencies": ["ai-foundation", "workflow-intelligence", "eventbus"],
+      "apiEndpoints": 15,
+      "documentation": "/docs/platform-services/bia-service/",
+      "repository": "platform-services/bia-service",
+      "healthCheck": "http://localhost:8012/health",
+      "status": "active",
+      "features": [
+        "6-step BIA wizard",
+        "AI-assisted analysis",
+        "Dependency mapping",
+        "RTO/RPO recommendations"
+      ],
+      "events": {
+        "publishes": ["BIA.Started", "BIA.Completed", "BIA.FunctionsAnalyzed"],
+        "subscribes": ["User.Action"]
+      }
+    }
+    // ... 22 more services
+  ]
+}
 ```
 
-### 7.2 Multi-Tenancy Strategy
+### 3.2 Diagrams Data (`diagrams.json`)
 
-**Row-Level Security (RLS)**:
-
-```sql
--- Enable RLS on all tenant-specific tables
-ALTER TABLE bia.analyses ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can only see their organization's data
-CREATE POLICY tenant_isolation ON bia.analyses
-    USING (organization_id = current_setting('app.current_tenant')::UUID);
-
--- Set tenant context before queries
-SELECT set_config('app.current_tenant', 'org-123-uuid', false);
-
--- Now queries are automatically filtered
-SELECT * FROM bia.analyses;  -- Only returns org-123 data
+```json
+{
+  "diagrams": [
+    {
+      "id": "platform-architecture",
+      "title": "Platform Architecture Overview",
+      "category": "architecture",
+      "file": "architecture/platform-architecture.mmd",
+      "description": "4-layer platform architecture",
+      "tags": ["architecture", "overview", "layers"],
+      "lastUpdated": "2025-10-09",
+      "complexity": "high",
+      "relatedDiagrams": ["service-dependencies", "data-flow"],
+      "relatedDocs": ["ARCHITECTURE.md", "DEPLOYMENT_GUIDE.md"]
+    }
+    // ... 35 more diagrams
+  ]
+}
 ```
 
-**Benefits**:
-- Database-enforced isolation
-- Prevents accidental cross-tenant access
-- Simplifies application code
-- Performance optimized with indexes
+### 3.3 Documents Index (`documents.json`)
 
-### 7.3 Data Flow Patterns
-
-#### 7.3.1 Workflow Data Flow
-
+```json
+{
+  "documents": [
+    {
+      "id": "tz-user-interface",
+      "title": "Technical Specification: User Interface & Administrator Panel",
+      "path": "doc-project/TZ_USER_INTERFACE.md",
+      "category": "specification",
+      "type": "technical-specification",
+      "size": 35840,
+      "tags": ["ui", "ux", "frontend", "specification"],
+      "description": "Complete web-based user interface with administrator panel",
+      "lastUpdated": "2025-10-09",
+      "author": "Claude Code",
+      "relatedDocs": ["TZ_AI_BCM_PLATFORM.md", "ARCHITECTURE.md"],
+      "sections": [
+        "Executive Summary",
+        "Technical Stack",
+        "User Interface Structure",
+        "Administrator Panel",
+        "Timeline & Phases"
+      ]
+    }
+    // ... 549 more documents
+  ]
+}
 ```
-User Request
-    ↓
-API Gateway
-    ↓
-Platform Service (e.g., BIA Service)
-    ↓
-Workflow Intelligence (start workflow)
-    ↓
-PostgreSQL (store workflow state)
-    ↓
-EventBus (publish workflow.started)
-    ↓
-AI Foundation (analyze context)
-    ↓
-Expertise Center (get recommendations)
-    ↓
-Platform Service (update analysis)
-    ↓
-EventBus (publish bia.analysis.updated)
-    ↓
-Notification Service (notify user)
-```
-
-#### 7.3.2 AI Analysis Data Flow
-
-```
-Analysis Request
-    ↓
-Platform Service
-    ↓
-AI Foundation - RAG Pipeline
-    ├── Qdrant (retrieve relevant docs)
-    ├── LLM Router (generate analysis)
-    └── ML Models (predictions)
-    ↓
-Expertise Center - Analyzer
-    ├── Domain Knowledge
-    ├── Historical Patterns
-    └── Best Practices
-    ↓
-Analysis Result
-    ↓
-PostgreSQL (store result)
-    ↓
-Redis (cache for 1 hour)
-    ↓
-Response to User
-```
-
-#### 7.3.3 Event-Driven Data Flow
-
-```
-Service A
-    ↓ (publishes event)
-EventBus (RabbitMQ)
-    ├─→ Service B (subscriber 1)
-    ├─→ Service C (subscriber 2)
-    └─→ Service D (subscriber 3)
-    ↓
-Each subscriber processes independently
-    ├─→ Update database
-    ├─→ Send notification
-    └─→ Trigger workflow
-```
-
-### 7.4 Caching Strategy
-
-**Multi-Level Caching**:
-
-```python
-# Level 1: Application-level cache (in-memory)
-@lru_cache(maxsize=100)
-def get_iso_standard(standard_id: str):
-    return load_standard(standard_id)
-
-# Level 2: Redis cache (distributed)
-@cached(ttl=3600, key_prefix="bia_analysis")
-async def get_bia_analysis(analysis_id: str):
-    return await db.query(BIAAnalysis).filter_by(id=analysis_id).first()
-
-# Level 3: Database query result cache
-SELECT * FROM bia.analyses WHERE id = $1;  -- PostgreSQL query cache
-```
-
-**Cache Invalidation**:
-```python
-# Invalidate on update
-@eventbus.subscribe("bia.analysis.updated")
-async def invalidate_bia_cache(event):
-    analysis_id = event["analysis_id"]
-    await cache.delete(f"bia_analysis:{analysis_id}")
-```
-
-### 7.5 Data Retention and Archival
-
-**Retention Policies**:
-
-| Data Type | Retention Period | Archive Strategy |
-|-----------|------------------|------------------|
-| Workflow contexts | 2 years active | Move to archive schema |
-| Audit logs | 7 years | Partition by year |
-| Metrics | 15 days | Downsample to 1-hour resolution |
-| Event logs | 90 days | Compress and archive to S3 |
-| Case library | Indefinite | Keep all successful workflows |
-| User sessions | 7 days | Auto-expire in Redis |
 
 ---
 
-## 8. Security Architecture
+## 4. Implementation Details
 
-### 8.1 Security Layers
+### 4.1 Technology Choice: Docusaurus vs Next.js
 
-```
-┌────────────────────────────────────────────────────────────┐
-│  Layer 5: Application Security                             │
-│  - Input validation                                        │
-│  - XSS/CSRF prevention                                     │
-│  - SQL injection prevention                                │
-│  - Business logic security                                 │
-└────────────────────────────────────────────────────────────┘
-                         ↓
-┌────────────────────────────────────────────────────────────┐
-│  Layer 4: API Security                                     │
-│  - JWT authentication                                      │
-│  - Rate limiting (100 req/min per user)                    │
-│  - API key validation                                      │
-│  - Request/response validation                             │
-└────────────────────────────────────────────────────────────┘
-                         ↓
-┌────────────────────────────────────────────────────────────┐
-│  Layer 3: Authorization                                    │
-│  - Role-based access control (RBAC)                        │
-│  - Resource-level permissions                              │
-│  - Row-level security (RLS)                                │
-│  - Tenant isolation                                        │
-└────────────────────────────────────────────────────────────┘
-                         ↓
-┌────────────────────────────────────────────────────────────┐
-│  Layer 2: Data Security                                    │
-│  - Encryption at rest (AES-256)                            │
-│  - Encryption in transit (TLS 1.3)                         │
-│  - PII anonymization                                       │
-│  - K-anonymity (k≥5)                                       │
-└────────────────────────────────────────────────────────────┘
-                         ↓
-┌────────────────────────────────────────────────────────────┐
-│  Layer 1: Infrastructure Security                          │
-│  - Network segmentation                                    │
-│  - Firewall rules                                          │
-│  - DDoS protection                                         │
-│  - Intrusion detection                                     │
-└────────────────────────────────────────────────────────────┘
-```
+**Recommended: Docusaurus 3.0**
 
-### 8.2 Authentication and Authorization
+**Pros**:
+- ✅ Built for documentation
+- ✅ Markdown-first
+- ✅ Built-in search (Algolia)
+- ✅ Versioning support
+- ✅ i18n support
+- ✅ Fast static site generation
+- ✅ React components in MDX
+- ✅ Plugin ecosystem
 
-**JWT Token Flow**:
+**Next.js Alternative**:
+- More flexibility
+- Better for custom features
+- Requires more setup
+
+**Decision**: Use **Docusaurus** for faster development with documentation focus.
+
+### 4.2 Directory Structure (Docusaurus)
 
 ```
-User Login
-    ↓
-API Gateway → Auth Service
-    ↓
-Validate credentials (PostgreSQL)
-    ↓
-Generate JWT tokens:
-    - Access token (15 min expiry)
-    - Refresh token (7 days expiry)
-    ↓
-Return tokens to user
-    ↓
-User stores tokens (secure httpOnly cookie)
-    ↓
-Subsequent requests include access token
-    ↓
-API Gateway validates token:
-    - Signature verification (RS256)
-    - Expiration check
-    - Tenant validation
-    ↓
-Extract user context:
-    - user_id, tenant_id, roles, permissions
-    ↓
-Set PostgreSQL session context:
-    SELECT set_config('app.current_tenant', tenant_id, false);
-    SELECT set_config('app.current_user', user_id, false);
-    ↓
-RLS policies automatically filter data
+docs-website/
+├── docs/                   # Documentation content
+│   ├── architecture/
+│   ├── services/
+│   ├── api/
+│   └── guides/
+│
+├── src/
+│   ├── components/
+│   │   ├── ServiceCard.tsx
+│   │   ├── DiagramViewer.tsx
+│   │   ├── InteractiveDiagram.tsx
+│   │   └── DocumentSearch.tsx
+│   │
+│   ├── pages/              # Custom pages
+│   │   ├── index.tsx       # Home
+│   │   ├── services.tsx    # Services catalog
+│   │   └── diagrams.tsx    # Diagram gallery
+│   │
+│   ├── css/
+│   │   └── custom.css
+│   │
+│   └── data/
+│       ├── services.ts
+│       ├── diagrams.ts
+│       └── documents.ts
+│
+├── static/
+│   ├── diagrams/           # .mmd files
+│   ├── img/
+│   └── pdf/
+│
+├── docusaurus.config.js
+├── sidebars.js
+└── package.json
 ```
 
-**RBAC Model**:
+### 4.3 Key Components
 
-```python
-# Roles
-ROLES = {
-    "admin": ["*"],  # All permissions
-    "bcm_manager": [
-        "bia:read", "bia:write", "bia:delete",
-        "risk:read", "risk:write",
-        "plans:read", "plans:write"
-    ],
-    "auditor": [
-        "bia:read", "risk:read", "compliance:read",
-        "audit:read", "audit:write"
-    ],
-    "viewer": [
-        "bia:read", "risk:read", "plans:read"
-    ]
+#### 4.3.1 ServiceCard Component
+
+```typescript
+// src/components/ServiceCard.tsx
+import React from 'react';
+
+interface ServiceCardProps {
+  service: Service;
 }
 
-# Permission check
-@require_permission("bia:write")
-async def create_bia_analysis(data: BIACreate, user: User):
-    # User must have bia:write permission
-    pass
+export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
+  return (
+    <div className="service-card">
+      <div className="service-header">
+        <h3>{service.name}</h3>
+        <span className="port-badge">:{service.port}</span>
+        <span className={`status-badge ${service.status}`}>
+          {service.status}
+        </span>
+      </div>
+
+      <p className="description">{service.description}</p>
+
+      <div className="tech-stack">
+        {service.techStack.map(tech => (
+          <span key={tech} className="tech-badge">{tech}</span>
+        ))}
+      </div>
+
+      <div className="actions">
+        <a href={`/services/${service.id}`}>Details</a>
+        <a href={`/api#${service.id}`}>API</a>
+        <a href={service.repository}>Code</a>
+      </div>
+    </div>
+  );
+};
 ```
 
-### 8.3 Data Protection
+#### 4.3.2 Interactive Diagram Viewer
 
-**Encryption at Rest**:
-- **Database**: PostgreSQL with transparent data encryption (TDE)
-- **Backups**: AES-256 encrypted backups
-- **Secrets**: HashiCorp Vault or AWS Secrets Manager
+```typescript
+// src/components/DiagramViewer.tsx
+import React, { useEffect, useRef } from 'react';
+import mermaid from 'mermaid';
 
-**Encryption in Transit**:
-- **HTTPS**: TLS 1.3 for all external traffic
-- **mTLS**: Mutual TLS for service-to-service (optional)
-- **VPN**: Encrypted tunnels for remote access
+interface DiagramViewerProps {
+  diagram: string; // Mermaid code
+  title: string;
+  interactive?: boolean;
+}
 
-**PII Protection**:
-```python
-# Anonymization for collective intelligence
-from intelligent_core.collective.anonymizer import Anonymizer
+export const DiagramViewer: React.FC<DiagramViewerProps> = ({
+  diagram,
+  title,
+  interactive = true
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-anonymizer = Anonymizer()
-anonymized_case = anonymizer.anonymize_case(workflow_case)
+  useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+    });
 
-# Verify no PII remains
-assert anonymizer.verify_anonymization(anonymized_case) == True
+    if (containerRef.current) {
+      mermaid.render('diagram', diagram).then(({ svg }) => {
+        containerRef.current!.innerHTML = svg;
+
+        if (interactive) {
+          addInteractivity();
+        }
+      });
+    }
+  }, [diagram, interactive]);
+
+  const addInteractivity = () => {
+    // Add click handlers to nodes
+    const nodes = containerRef.current?.querySelectorAll('.node');
+    nodes?.forEach(node => {
+      node.addEventListener('click', (e) => {
+        const nodeId = node.getAttribute('id');
+        showNodeDetails(nodeId);
+      });
+    });
+  };
+
+  const showNodeDetails = (nodeId: string) => {
+    // Show tooltip or modal with node details
+    console.log('Node clicked:', nodeId);
+  };
+
+  return (
+    <div className="diagram-viewer">
+      <h3>{title}</h3>
+      <div
+        ref={containerRef}
+        className="diagram-container"
+      />
+      <div className="diagram-actions">
+        <button onClick={() => exportAsPNG()}>Export PNG</button>
+        <button onClick={() => exportAsSVG()}>Export SVG</button>
+        <button onClick={() => toggleFullscreen()}>Fullscreen</button>
+      </div>
+    </div>
+  );
+};
 ```
 
-### 8.4 Security Monitoring
+#### 4.3.3 Document Search Component
 
-**Audit Logging**:
-```sql
--- Audit log table
-CREATE TABLE public.audit_logs (
-    id UUID PRIMARY KEY,
-    timestamp TIMESTAMPTZ DEFAULT NOW(),
-    user_id UUID NOT NULL,
-    tenant_id UUID NOT NULL,
-    action VARCHAR(100) NOT NULL,
-    resource_type VARCHAR(50),
-    resource_id UUID,
-    ip_address INET,
-    user_agent TEXT,
-    request_data JSONB,
-    response_status INTEGER
+```typescript
+// src/components/DocumentSearch.tsx
+import React, { useState } from 'react';
+import { DocSearch } from '@docsearch/react';
+import '@docsearch/css';
+
+export const DocumentSearch: React.FC = () => {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="document-search">
+      <DocSearch
+        apiKey="YOUR_ALGOLIA_API_KEY"
+        indexName="ai-platform-iso"
+        appId="YOUR_APP_ID"
+      />
+    </div>
+  );
+};
+```
+
+### 4.4 Data Generation Scripts
+
+#### Generate Services Data
+
+```javascript
+// scripts/generate-services-data.js
+const fs = require('fs');
+const path = require('path');
+const yaml = require('yaml');
+
+// Read service catalog from existing YAML
+const catalogPath = path.join(__dirname, '../docs-old-backup/architecture/SERVICE_CATALOG.yaml');
+const catalog = yaml.parse(fs.readFileSync(catalogPath, 'utf8'));
+
+// Transform to JSON for website
+const services = {
+  services: Object.entries(catalog.services).map(([id, service]) => ({
+    id: id,
+    name: service.name,
+    category: determineCategory(id),
+    port: service.port,
+    description: service.description,
+    techStack: service.tech_stack || [],
+    dependencies: service.depends_on || [],
+    apiEndpoints: service.endpoints?.length || 0,
+    documentation: `/docs/services/${id}`,
+    repository: `https://github.com/yourorg/ai-platform-iso/tree/main/${getServicePath(id)}`,
+    status: 'active',
+    features: service.capabilities || []
+  }))
+};
+
+fs.writeFileSync(
+  path.join(__dirname, '../src/data/services.json'),
+  JSON.stringify(services, null, 2)
 );
 
--- Index for fast queries
-CREATE INDEX idx_audit_timestamp ON public.audit_logs(timestamp);
-CREATE INDEX idx_audit_user ON public.audit_logs(user_id);
-CREATE INDEX idx_audit_tenant ON public.audit_logs(tenant_id);
+console.log(`✅ Generated services data: ${services.services.length} services`);
 ```
 
-**Security Events**:
-- Failed login attempts (trigger after 5 failures)
-- Unauthorized access attempts
-- Permission violations
-- Data export events
-- Configuration changes
-- Privilege escalations
+#### Generate Document Index
+
+```javascript
+// scripts/generate-document-index.js
+const fs = require('fs');
+const path = require('path');
+const glob = require('glob');
+const matter = require('gray-matter');
+
+const rootDir = path.join(__dirname, '..');
+const docsDir = path.join(rootDir, 'docs');
+const projectDir = path.join(rootDir, 'doc-project');
+
+const documents = [];
+
+// Scan all markdown files
+const files = [
+  ...glob.sync(`${docsDir}/**/*.md`),
+  ...glob.sync(`${projectDir}/**/*.md`)
+];
+
+files.forEach(filePath => {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const { data: frontmatter, content: body } = matter(content);
+  const stats = fs.statSync(filePath);
+
+  const relativePath = path.relative(rootDir, filePath);
+  const id = relativePath.replace(/\//g, '-').replace('.md', '');
+
+  documents.push({
+    id,
+    title: frontmatter.title || extractTitle(body),
+    path: relativePath,
+    category: determineCategory(relativePath),
+    type: determineType(relativePath),
+    size: stats.size,
+    tags: frontmatter.tags || extractTags(body),
+    description: frontmatter.description || extractDescription(body),
+    lastUpdated: stats.mtime.toISOString().split('T')[0],
+    sections: extractSections(body)
+  });
+});
+
+const index = {
+  documents,
+  totalCount: documents.length,
+  categories: getCategoryCounts(documents),
+  lastGenerated: new Date().toISOString()
+};
+
+fs.writeFileSync(
+  path.join(rootDir, 'src/data/documents.json'),
+  JSON.stringify(index, null, 2)
+);
+
+console.log(`✅ Generated document index: ${documents.length} documents`);
+```
 
 ---
 
-## 9. Deployment Architecture
+## 5. Deployment
 
-### 9.1 Container Deployment
-
-**Docker Compose (Development)**:
+### 5.1 GitHub Actions Workflow
 
 ```yaml
-version: '3.8'
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
 
-services:
-  # Infrastructure
-  postgres:
-    image: postgres:15-alpine
-    ports: ["5432:5432"]
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: docs-website/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./docs-website
+        run: npm ci
+
+      - name: Generate data files
+        working-directory: ./docs-website
+        run: |
+          node scripts/generate-services-data.js
+          node scripts/generate-diagrams-data.js
+          node scripts/generate-document-index.js
+
+      - name: Build website
+        working-directory: ./docs-website
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs-website/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
-      POSTGRES_DB: ai_platform
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-
-  redis:
-    image: redis:7-alpine
-    ports: ["6379:6379"]
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-
-  rabbitmq:
-    image: rabbitmq:3.12-management
-    ports: ["5672:5672", "15672:15672"]
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-
-  qdrant:
-    image: qdrant/qdrant:latest
-    ports: ["6333:6333"]
-    volumes:
-      - qdrant_data:/qdrant/storage
-
-  # Intelligent Core
-  workflow-intelligence:
-    build: ./intelligent-core/workflow_intelligence
-    ports: ["8037:8037"]
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-    depends_on: [postgres, redis]
-
-  ai-foundation:
-    build: ./intelligent-core/ai-foundation
-    ports: ["8040:8040"]
-    environment:
-      QDRANT_URL: ${QDRANT_URL}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-    depends_on: [qdrant, postgres]
-
-  # Platform Services
-  bia-service:
-    build: ./platform-services/bia-service
-    ports: ["8012:8012"]
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      WORKFLOW_INTELLIGENCE_URL: http://workflow-intelligence:8037
-    depends_on: [postgres, workflow-intelligence]
-
-  # Monitoring
-  prometheus:
-    image: prom/prometheus:latest
-    ports: ["9090:9090"]
-    volumes:
-      - ./infrastructure/monitoring/prometheus:/etc/prometheus
-
-  grafana:
-    image: grafana/grafana:latest
-    ports: ["9093:3000"]
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
-
-volumes:
-  postgres_data:
-  qdrant_data:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
 ```
 
-### 9.2 Kubernetes Deployment
+### 5.2 Configuration
 
-**Namespace Structure**:
+```javascript
+// docusaurus.config.js
+module.exports = {
+  title: 'AI-Platform-ISO',
+  tagline: 'Business Continuity Management Platform with AI',
+  url: 'https://yourorg.github.io',
+  baseUrl: '/ai-platform-iso/',
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
+  favicon: 'img/favicon.ico',
+  organizationName: 'yourorg',
+  projectName: 'ai-platform-iso',
 
-```yaml
-# Namespaces
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ai-platform-infrastructure
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ai-platform-intelligent-core
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ai-platform-services
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ai-platform-interface
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: 'https://github.com/yourorg/ai-platform-iso/edit/main/docs-website/',
+        },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      },
+    ],
+  ],
+
+  themeConfig: {
+    navbar: {
+      title: 'AI-Platform-ISO',
+      logo: {
+        alt: 'Logo',
+        src: 'img/logo.svg',
+      },
+      items: [
+        {
+          type: 'doc',
+          docId: 'intro',
+          position: 'left',
+          label: 'Docs',
+        },
+        {
+          to: '/services',
+          label: 'Services',
+          position: 'left',
+        },
+        {
+          to: '/diagrams',
+          label: 'Diagrams',
+          position: 'left',
+        },
+        {
+          to: '/api',
+          label: 'API',
+          position: 'left',
+        },
+        {
+          to: '/library',
+          label: 'Library',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/yourorg/ai-platform-iso',
+          label: 'GitHub',
+          position: 'right',
+        },
+      ],
+    },
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Documentation',
+          items: [
+            { label: 'Getting Started', to: '/docs/intro' },
+            { label: 'Architecture', to: '/docs/architecture' },
+            { label: 'API Reference', to: '/api' },
+          ],
+        },
+        {
+          title: 'Resources',
+          items: [
+            { label: 'Services Catalog', to: '/services' },
+            { label: 'Diagrams', to: '/diagrams' },
+            { label: 'Document Library', to: '/library' },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} AI-Platform-ISO`,
+    },
+    prism: {
+      theme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('prism-react-renderer/themes/dracula'),
+    },
+    algolia: {
+      apiKey: 'YOUR_API_KEY',
+      indexName: 'ai-platform-iso',
+      appId: 'YOUR_APP_ID',
+    },
+  },
+
+  plugins: [
+    [
+      require.resolve('@docusaurus/plugin-content-docs'),
+      {
+        id: 'architecture',
+        path: 'architecture',
+        routeBasePath: 'architecture',
+        sidebarPath: require.resolve('./sidebarsArchitecture.js'),
+      },
+    ],
+  ],
+};
 ```
 
-**Deployment Example (Workflow Intelligence)**:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: workflow-intelligence
-  namespace: ai-platform-intelligent-core
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: workflow-intelligence
-  template:
-    metadata:
-      labels:
-        app: workflow-intelligence
-    spec:
-      containers:
-      - name: workflow-intelligence
-        image: ai-platform/workflow-intelligence:1.0.0
-        ports:
-        - containerPort: 8037
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: database-secrets
-              key: url
-        - name: REDIS_URL
-          valueFrom:
-            secretKeyRef:
-              name: redis-secrets
-              key: url
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "2"
-          limits:
-            memory: "4Gi"
-            cpu: "4"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8037
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8037
-          initialDelaySeconds: 10
-          periodSeconds: 5
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: workflow-intelligence
-  namespace: ai-platform-intelligent-core
-spec:
-  selector:
-    app: workflow-intelligence
-  ports:
-  - port: 8037
-    targetPort: 8037
-  type: ClusterIP
-```
 
-### 9.3 Scaling Strategy
+## 6. Features Roadmap
 
-**Horizontal Scaling**:
+### Phase 1: Core (Week 1-2)
+- ✅ Setup Docusaurus
+- ✅ Home page with hero
+- ✅ Services catalog page
+- ✅ Basic documentation pages
+- ✅ Deploy to GitHub Pages
 
-| Service | Min Replicas | Max Replicas | CPU Trigger | Memory Trigger |
-|---------|--------------|--------------|-------------|----------------|
-| API Gateway | 2 | 10 | 70% | 80% |
-| Workflow Intelligence | 3 | 8 | 70% | 80% |
-| AI Foundation | 2 | 6 | 75% | 85% |
-| BIA Service | 2 | 6 | 70% | 80% |
-| Platform Services | 2 | 5 | 70% | 80% |
+### Phase 2: Interactive (Week 3-4)
+- ✅ Interactive Mermaid diagrams
+- ✅ Service detail pages
+- ✅ Document search (Algolia)
+- ✅ Diagram viewer with zoom
 
-**Vertical Scaling**:
+### Phase 3: Advanced (Week 5-6)
+- ✅ API reference (Swagger UI)
+- ✅ Document library with filters
+- ✅ Related documents suggestions
+- ✅ GitHub integration (latest commits, contributors)
 
-| Service | CPU (Request/Limit) | Memory (Request/Limit) |
-|---------|---------------------|------------------------|
-| Workflow Intelligence | 2/4 cores | 2Gi/4Gi |
-| AI Foundation | 4/8 cores | 4Gi/8Gi |
-| Platform Services | 2/4 cores | 2Gi/4Gi |
-| Database (PostgreSQL) | 8/16 cores | 16Gi/32Gi |
-
-### 9.4 High Availability
-
-**Database HA**:
-- **Primary-Replica**: 1 primary + 2 read replicas
-- **Automatic failover**: Patroni or similar
-- **Backup**: Daily full + hourly incremental
-- **Recovery Time Objective (RTO)**: < 1 hour
-- **Recovery Point Objective (RPO)**: < 15 minutes
-
-**Service HA**:
-- **Multiple replicas**: Minimum 2 per service
-- **Health checks**: Liveness and readiness probes
-- **Rolling updates**: Zero-downtime deployments
-- **Circuit breakers**: Fail fast and recover
-
-**Data HA**:
-- **Redis Cluster**: 3 masters + 3 replicas
-- **RabbitMQ Cluster**: 3 nodes with mirrored queues
-- **Qdrant**: Single instance with persistent volumes (upgrade to cluster for HA)
+### Phase 4: Polish (Week 7-8)
+- ✅ Dark mode
+- ✅ Performance optimization
+- ✅ SEO optimization
+- ✅ Analytics integration
 
 ---
 
-## 10. Technology Stack
+## 7. Metrics & Analytics
 
-### 10.1 Programming Languages
+### 7.1 Key Metrics
 
-**Primary**:
-- **Python 3.11+**: All backend services, AI/ML components
-- **TypeScript**: Frontend (Next.js/React)
-- **SQL**: Database queries, migrations
+- Page views
+- Most visited pages
+- Search queries
+- Document downloads
+- Diagram views
+- API endpoint documentation views
 
-**Configuration**:
-- **YAML**: Service configurations, Kubernetes manifests
-- **JSON**: Data interchange, API schemas
-- **TOML**: Python project configuration
+### 7.2 Tools
 
-### 10.2 Frameworks and Libraries
-
-**Backend**:
-- **FastAPI 0.109+**: Web framework for REST APIs
-- **SQLAlchemy 2.0+**: ORM and database toolkit
-- **Pydantic 2.5+**: Data validation and settings
-- **Alembic**: Database migrations
-- **Celery**: Distributed task queue (optional)
-
-**AI/ML**:
-- **LangChain 0.1+**: LLM orchestration framework
-- **scikit-learn 1.3+**: Machine learning models
-- **Anthropic SDK**: Claude API integration
-- **OpenAI SDK**: GPT API integration
-- **Voyage AI**: Embeddings generation
-- **Cohere**: Reranking for RAG
-
-**Frontend**:
-- **Next.js 14+**: React framework with SSR
-- **React 18+**: UI library
-- **Tailwind CSS**: Utility-first CSS framework
-- **shadcn/ui**: Component library
-- **TanStack Query**: Data fetching and caching
-- **Zustand**: State management
-
-### 10.3 Databases and Storage
-
-**Relational**:
-- **PostgreSQL 15+**: Primary database with pgvector extension
-- **Supabase**: Managed PostgreSQL with real-time features
-
-**Cache**:
-- **Redis 7+**: Caching, sessions, pub/sub
-
-**Vector**:
-- **Qdrant**: Vector database for RAG and semantic search
-
-**Message Queue**:
-- **RabbitMQ 3.12+**: Message broker for EventBus
-
-**Object Storage**:
-- **AWS S3** or **MinIO**: File storage for documents, backups
-
-### 10.4 Infrastructure
-
-**Container Orchestration**:
-- **Docker**: Containerization
-- **Docker Compose**: Local development
-- **Kubernetes**: Production orchestration
-
-**Workflow Engine**:
-- **Temporal**: Distributed workflow orchestration
-
-**Monitoring**:
-- **Prometheus**: Metrics collection
-- **Grafana**: Metrics visualization
-- **Alertmanager**: Alert routing
-
-**Logging**:
-- **Structured logging**: JSON format
-- **Log aggregation**: ELK Stack or Loki (optional)
-
-**Tracing**:
-- **OpenTelemetry**: Distributed tracing (planned)
-- **Jaeger** or **Zipkin**: Trace visualization (planned)
-
-### 10.5 Security
-
-**Authentication**:
-- **JWT**: JSON Web Tokens (RS256)
-- **OAuth2**: Third-party authentication
-
-**Secrets Management**:
-- **HashiCorp Vault**: Secrets storage and rotation
-- **AWS Secrets Manager**: Cloud-native secrets (alternative)
-
-**Encryption**:
-- **TLS 1.3**: Transport encryption
-- **AES-256**: Data at rest encryption
-
-### 10.6 Development Tools
-
-**Code Quality**:
-- **Black**: Python code formatter
-- **Ruff**: Fast Python linter
-- **mypy**: Static type checker
-- **Prettier**: TypeScript/JavaScript formatter
-- **ESLint**: TypeScript linter
-
-**Testing**:
-- **pytest**: Python testing framework
-- **pytest-asyncio**: Async test support
-- **pytest-cov**: Code coverage
-- **Jest**: JavaScript testing
-- **React Testing Library**: React component testing
-
-**CI/CD**:
-- **GitHub Actions**: Continuous integration
-- **ArgoCD**: GitOps continuous deployment (Kubernetes)
-- **Docker Registry**: Container image storage
-
-### 10.7 External APIs
-
-**AI/ML Providers**:
-- **Anthropic Claude API**: Claude 3.5 Sonnet
-- **OpenAI API**: GPT-4, GPT-3.5-turbo
-- **Voyage AI API**: Embeddings (voyage-2)
-- **Cohere API**: Reranking
-
-**Notifications**:
-- **SendGrid** or **SMTP**: Email delivery
-- **Slack API**: Slack notifications
-- **Twilio**: SMS notifications (optional)
-
-**Integration**:
-- **GitHub API**: Repository integration
-- **Zapier/Make**: No-code integrations (future)
+- **Google Analytics** or **Plausible** (privacy-friendly)
+- **Hotjar** (heatmaps, recordings)
+- **GitHub Insights** (traffic, clones)
 
 ---
 
-## Appendices
-
-### Appendix A: Port Allocation
-
-**Intelligent Core Zone (8030-8040)**:
-
-| Port | Service | Status |
-|------|---------|--------|
-| 8030 | AI Orchestrator | Operational |
-| 8031 | Predictive Service | Operational |
-| 8032 | Collective Intelligence | Operational |
-| 8034 | Coordination Center | Ready |
-| 8035 | Expertise Center | Ready |
-| 8036 | Workflow Engine | Ready |
-| 8037 | Workflow Intelligence | Operational |
-| 8038 | AI Workflow Optimizer | Operational |
-| 8039 | Event Intelligence | Ready |
-| 8040 | AI Foundation | Ready |
-
-**Platform Services Zone (8011-8024, 8040-8041, 8033, 8780)**:
-
-| Port | Service | Status |
-|------|---------|--------|
-| 8011 | Planning Service | Ready |
-| 8012 | BIA Service | Ready |
-| 8013 | Governance Service | Ready |
-| 8014 | Compliance Service | Ready |
-| 8021 | Learning Service | Ready |
-| 8022 | Validation Service | Ready |
-| 8023 | Plans Service | Ready |
-| 8024 | Documents Service | Ready |
-| 8033 | Community Portal | Ready |
-| 8040 | Risk Service | Ready |
-| 8041 | Response Service | Ready |
-| 8780 | Process Analytics | Ready |
-
-**Infrastructure Zone (5000+, 9000+)**:
-
-| Port | Service | Status |
-|------|---------|--------|
-| 5432 | PostgreSQL | Operational |
-| 5672 | RabbitMQ | Operational |
-| 6333 | Qdrant | Setup Required |
-| 6379 | Redis | Operational |
-| 7233 | Temporal | Setup Required |
-| 8000 | API Gateway | Operational |
-| 9090 | Prometheus | Setup Required |
-| 9093 | Grafana | Setup Required |
-
-### Appendix B: Glossary
-
-**BCM**: Business Continuity Management
-**BIA**: Business Impact Analysis
-**RAG**: Retrieval-Augmented Generation
-**LLM**: Large Language Model
-**RLS**: Row-Level Security
-**BPMN**: Business Process Model and Notation
-**k-anonymity**: Privacy model requiring minimum k organizations
-**MTD**: Maximum Tolerable Downtime
-**RTO**: Recovery Time Objective
-**RPO**: Recovery Point Objective
-**RBAC**: Role-Based Access Control
-**JWT**: JSON Web Token
-**TLS**: Transport Layer Security
-**mTLS**: Mutual TLS
-**HA**: High Availability
-**DR**: Disaster Recovery
-
-### Appendix C: References
-
-**Standards**:
-- ISO/IEC/IEEE 42010:2011 - Systems and software engineering - Architecture description
-- ISO 22301:2019 - Security and resilience - Business continuity management systems
-- ISO 25010 - Systems and software Quality Requirements and Evaluation (SQuaRE)
-- BPMN 2.0 Specification - Business Process Model and Notation
-
-**External Documentation**:
-- [The C4 Model](https://c4model.com/) - Software architecture diagramming
-- [12-Factor App](https://12factor.net/) - Cloud-native application methodology
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Temporal Documentation](https://docs.temporal.io/)
-- [Anthropic Claude API](https://docs.anthropic.com/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-
-### Appendix D: Document History
-
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0.0 | 2025-10-09 | Architecture Team | Initial comprehensive architecture specification |
-
----
-
-**Document Version**: 1.0.0
-**Last Updated**: 2025-10-09
-**Next Review**: 2026-01-09
-**Maintained By**: Architecture Team
-**Status**: Production Ready
-
----
-
-**End of Document**
+**Status**: Architecture Complete
+**Next**: Implementation
+**Timeline**: 8 weeks

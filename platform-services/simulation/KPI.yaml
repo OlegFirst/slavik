@@ -1,0 +1,38 @@
+module_name: simulation
+version: 1.0.0
+description: '**Type**: Platform Service'
+module_type: service
+owner: platform-team
+kpis:
+- name: request_count
+  description: Total number of requests processed by simulation
+  type: counter
+  target: '> 1000/day'
+  measurement: Count of API requests
+  prometheus_metric: simulation_requests_total
+- name: response_time_p95
+  description: 95th percentile response time
+  type: histogram
+  target: < 500ms
+  measurement: Response time in milliseconds
+  prometheus_metric: simulation_response_time_ms
+- name: error_rate
+  description: Percentage of failed requests
+  type: gauge
+  target: < 1%
+  measurement: errors / total_requests * 100
+  prometheus_metric: simulation_error_rate
+- name: availability
+  description: Service uptime percentage
+  type: gauge
+  target: '> 99.5%'
+  measurement: uptime / total_time * 100
+  prometheus_metric: simulation_availability
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/simulation.json
+  alert_rules: alerts/simulation.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

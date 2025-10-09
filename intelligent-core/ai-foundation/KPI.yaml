@@ -1,0 +1,38 @@
+module_name: ai-foundation
+version: 1.0.0
+description: Core AI Infrastructure for BCM Platform
+module_type: intelligence
+owner: platform-team
+kpis:
+- name: predictions_made
+  description: Number of predictions/recommendations made by ai-foundation
+  type: counter
+  target: '> 100/day'
+  measurement: Count of AI predictions
+  prometheus_metric: ai_foundation_predictions_total
+- name: prediction_accuracy
+  description: Accuracy of AI predictions
+  type: gauge
+  target: '> 85%'
+  measurement: correct_predictions / total_predictions * 100
+  prometheus_metric: ai_foundation_accuracy
+- name: processing_time
+  description: Time to generate prediction
+  type: histogram
+  target: < 2s
+  measurement: Time in seconds
+  prometheus_metric: ai_foundation_processing_time_seconds
+- name: model_confidence
+  description: Average confidence score of predictions
+  type: gauge
+  target: '> 0.8'
+  measurement: avg(confidence_scores)
+  prometheus_metric: ai_foundation_confidence
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/ai-foundation.json
+  alert_rules: alerts/ai-foundation.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

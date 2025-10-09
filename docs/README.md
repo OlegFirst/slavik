@@ -1,462 +1,499 @@
-# AI-Platform-ISO Documentation
+# AI-Platform-ISO Documentation Website
 
-**Platform:** AI-Platform-ISO - Enterprise Business Continuity Management Platform
-**Version:** 1.0.0
-**Last Updated:** 2025-10-09
-**Documentation Standard:** ISO/IEC/IEEE 26514:2022
-
----
-
-## Overview
-
-The AI-Platform-ISO is an enterprise-grade artificial intelligence platform that democratizes business continuity management (BCM) expertise through intelligent automation, collective intelligence, and continuous compliance monitoring. The platform enables organizations of all sizes to achieve ISO 22301 certification and maintain operational resilience.
-
-**Core Capabilities:**
-- AI-powered business continuity planning and risk assessment
-- Automated ISO 22301 compliance monitoring and gap analysis
-- Collective intelligence from thousands of organizational implementations
-- Predictive analytics for proactive risk management
-- Intelligent workflow automation for BCM processes
-
-**Target Users:**
-- Organizations seeking ISO 22301 certification
-- Business continuity managers and coordinators
-- Risk and compliance officers
-- Enterprise architects and IT operations
-- BCM consultants and service providers
+**Status**: 🚧 Ready for Implementation
+**Technology**: Docusaurus 3.0 + React + TypeScript
+**Deployment**: GitHub Pages
+**Timeline**: 8 weeks
 
 ---
 
-## What is AI-Platform-ISO?
+## 🎯 Overview
 
-AI-Platform-ISO transforms business continuity management from a specialized, resource-intensive discipline into an accessible capability powered by artificial intelligence and collective learning.
+Interactive technical documentation website for AI-Platform-ISO platform showcasing:
 
-### Key Capabilities
-
-#### 1. Intelligent Business Impact Analysis (BIA)
-Automated business impact analysis with machine learning-driven predictions and intelligent dependency mapping. The platform analyzes organizational processes, identifies critical functions, determines recovery time objectives (RTO) and recovery point objectives (RPO), and provides data-driven recommendations for business continuity priorities.
-
-**Key Features:**
-- Automated dependency discovery across business processes
-- ML-based impact prediction and risk scoring
-- Integration with enterprise systems (ERP, ITSM, CRM)
-- Visual impact mapping and critical path analysis
-
-#### 2. AI-Powered Risk Management
-Continuous risk assessment combining historical data, industry benchmarks, and predictive analytics to identify emerging threats before they materialize. The system learns from organizational incidents and collective intelligence to provide increasingly accurate risk predictions.
-
-**Key Features:**
-- Automated threat identification and scenario generation
-- Predictive risk scoring with confidence intervals
-- Industry-specific risk libraries and benchmarking
-- Integration with vulnerability scanning and threat intelligence
-
-#### 3. Automated Compliance Management
-Real-time tracking of ISO 22301 requirements with automated evidence collection, intelligent gap analysis, and remediation recommendations. The platform maintains continuous compliance visibility and generates audit-ready documentation on demand.
-
-**Key Features:**
-- 250+ ISO 22301 requirement controls
-- Automated evidence gathering from integrated systems
-- Intelligent gap analysis with prioritized remediation plans
-- Audit trail and documentation generation
-
-#### 4. Collective Intelligence Platform
-Anonymous aggregation of BCM practices, lessons learned, and implementation patterns from thousands of organizations. Network effects ensure that each implementation strengthens recommendations for all users while maintaining data privacy and competitive confidentiality.
-
-**Key Features:**
-- Industry-specific best practices and benchmarking
-- Anonymous case study library with 10,000+ scenarios
-- Peer comparison and maturity assessment
-- Community-driven knowledge base
-
-#### 5. Workflow Intelligence Engine
-Advanced workflow automation that learns organizational patterns and optimizes BCM processes over time. The engine orchestrates complex multi-step procedures, coordinates stakeholder activities, and ensures consistent execution of business continuity protocols.
-
-**Key Features:**
-- Visual workflow designer with AI-assisted creation
-- Intelligent task routing and escalation
-- Real-time collaboration and status tracking
-- Process mining and optimization recommendations
+- **23 Services** with detailed specifications
+- **36 Interactive Diagrams** (Mermaid.js)
+- **550+ Documents** with full-text search
+- **108 Technical Specifications**
+- **Complete API Reference** (150+ endpoints)
 
 ---
 
-## Platform Architecture
+## 🏗️ Architecture
 
-AI-Platform-ISO employs a layered architecture designed for scalability, resilience, and extensibility:
-
-### Infrastructure Layer
-
-**Purpose:** Foundation services for platform operation
-
-Core components:
-- Event-driven messaging system (EventBus)
-- Multi-tenant database architecture (PostgreSQL, Redis)
-- API Gateway with intelligent routing and rate limiting
-- Authentication and authorization (JWT, RBAC)
-- Observability and monitoring (Prometheus, Grafana)
-- Service discovery and health monitoring
-
-**Key Characteristics:**
-- Microservices architecture for independent scaling
-- Event-driven communication for loose coupling
-- Multi-tenant security with data isolation
-- Cloud-agnostic deployment (AWS, Azure, GCP, on-premises)
-
-### Intelligent Core Layer
-
-**Purpose:** AI and machine learning capabilities
-
-Core modules:
-- **AI Foundation:** Multi-model LLM orchestration, RAG (Retrieval-Augmented Generation), embeddings
-- **Workflow Intelligence:** Process automation, state machines, intelligent routing
-- **Predictive Analytics:** Risk forecasting, scenario simulation, ML pipelines
-- **Collective Intelligence:** Knowledge aggregation, pattern detection, benchmarking
-- **Learning Systems:** Continuous improvement, model retraining, feedback loops
-- **Expertise Center:** Domain knowledge, ISO standards, industry frameworks
-
-**Key Characteristics:**
-- Multi-provider AI strategy (Anthropic Claude, OpenAI GPT)
-- Vector database for semantic search (Qdrant)
-- Self-learning systems that improve with usage
-- Real-time and batch ML pipelines
-
-### Platform Services Layer
-
-**Purpose:** Business logic and domain-specific functionality
-
-Core services:
-- Business Continuity Planning
-- Business Impact Analysis (BIA)
-- Risk Assessment and Management
-- Compliance and Governance
-- Document Management
-- Incident Response
-- Training and Exercises
-- Validation and Testing
-- Community and Knowledge Sharing
-
-**Key Characteristics:**
-- RESTful APIs with OpenAPI specifications
-- Event-driven integration with intelligent core
-- Multi-tenant data models
-- Comprehensive audit logging
-
-### Integration Layer
-
-**Purpose:** External system connectivity and data exchange
-
-Integration capabilities:
-- API Gateway for external clients
-- Webhook support for real-time notifications
-- Bidirectional connectors (ERP, ITSM, GRC platforms)
-- Data import/export (CSV, JSON, XML)
-- MCP (Model Context Protocol) for AI agent collaboration
-
-**Key Characteristics:**
-- Standards-based protocols (REST, GraphQL, AsyncAPI)
-- Secure data exchange with encryption
-- Configurable transformation pipelines
-- Real-time and batch synchronization
+```
+┌─────────────────────────────────────────────────────────┐
+│                    GitHub Pages                          │
+│              (Static Site Hosting)                       │
+└─────────────────────┬───────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────┐
+│              Docusaurus Frontend                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │   React      │  │  Mermaid.js  │  │  Algolia     │  │
+│  │  Components  │  │  (Diagrams)  │  │  (Search)    │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────┬───────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────┐
+│              Static Data Files                           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │ services.json│  │diagrams.json │  │documents.json│  │
+│  │  (23 items)  │  │  (36 items)  │  │ (550 items)  │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Quick Start
+## 📁 Project Structure
+
+```
+docs-website/
+├── 📄 README.md                    # This file
+├── 📄 ARCHITECTURE.md              # Detailed architecture
+├── 📄 IMPLEMENTATION_GUIDE.md      # Step-by-step implementation
+│
+├── 📦 src/
+│   ├── components/                 # React components
+│   │   ├── ServiceCard/           # Service display card
+│   │   ├── DiagramViewer/         # Interactive diagram viewer
+│   │   └── DocumentSearch/        # Document search component
+│   │
+│   ├── pages/                      # Custom pages
+│   │   ├── index.tsx              # Home page
+│   │   ├── services.tsx           # Services catalog
+│   │   ├── diagrams.tsx           # Diagram gallery
+│   │   └── library.tsx            # Document library
+│   │
+│   ├── data/                       # Generated data files
+│   │   ├── services.json          # 23 services
+│   │   ├── diagrams.json          # 36 diagrams
+│   │   └── documents.json         # 550 documents
+│   │
+│   └── css/
+│       └── custom.css             # Custom styling
+│
+├── 📚 docs/                        # Markdown documentation
+│   ├── intro.md
+│   ├── architecture/
+│   ├── services/
+│   ├── api/
+│   └── guides/
+│
+├── 🎨 static/                      # Static assets
+│   ├── diagrams/                  # Mermaid .mmd files (36)
+│   ├── img/
+│   └── pdf/
+│
+├── 🔧 scripts/                     # Data generation scripts
+│   ├── generate-all-data.js
+│   ├── generate-services-data.js
+│   ├── generate-diagrams-data.js
+│   └── generate-document-index.js
+│
+├── ⚙️ .github/
+│   └── workflows/
+│       └── deploy.yml             # GitHub Actions deployment
+│
+├── 📋 package.json
+├── 📋 tsconfig.json
+└── 📋 docusaurus.config.ts
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-**Technical Requirements:**
-- Docker 24.0+ and Docker Compose 2.0+
-- Python 3.11+ (for local development)
-- Node.js 18+ (for frontend development)
-- PostgreSQL 15+ (or use managed service)
-- Redis 7+ (or use managed service)
+- Node.js 18+
+- npm or yarn
 
-**Access Requirements:**
-- Anthropic API key (for Claude models)
-- Supabase account (for managed PostgreSQL and vector database)
-- Qdrant Cloud account (for vector search)
-
-### Installation Steps
-
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/your-org/AI-Platform-ISO.git
-   cd AI-Platform-ISO
-   ```
-
-2. **Configure Environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API keys and configuration
-   ```
-
-3. **Start Infrastructure Services**
-   ```bash
-   cd infrastructure
-   docker-compose up -d
-   ```
-
-4. **Initialize Database**
-   ```bash
-   python scripts/init_database.py
-   ```
-
-5. **Start Platform Services**
-   ```bash
-   docker-compose up -d
-   ```
-
-6. **Access Platform**
-   - Web Interface: http://localhost:3000
-   - API Gateway: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
-
-For detailed installation instructions, see [GETTING_STARTED.md](./GETTING_STARTED.md).
-
----
-
-## Documentation Structure
-
-### Platform-Level Documentation
-
-**Executive and Strategic:**
-- [EXECUTIVE_SUMMARY.md](./EXECUTIVE_SUMMARY.md) - Business value proposition and theory of change
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Complete platform architecture
-- [STANDARDS_COMPLIANCE.md](./STANDARDS_COMPLIANCE.md) - ISO 22301, ISO 27001, and other standards
-
-**Getting Started:**
-- [GETTING_STARTED.md](./GETTING_STARTED.md) - Quick start guide and first steps
-- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Production deployment instructions
-- [API_REFERENCE.md](./API_REFERENCE.md) - Unified API documentation
-
-**Navigation:**
-- [INDEX.md](./INDEX.md) - Master documentation index
-
-### Layer-Level Documentation
-
-**Infrastructure Layer:**
-- [/infrastructure/README.md](/infrastructure/README.md) - Infrastructure services overview
-- Component-specific documentation in each service directory
-
-**Intelligent Core Layer:**
-- [/intelligent-core/README.md](/intelligent-core/README.md) - AI capabilities overview
-- Module-specific documentation in `/intelligent-core/*/docs/`
-
-**Platform Services Layer:**
-- [/platform-services/README.md](/platform-services/README.md) - Business services overview
-- Service-specific documentation in `/platform-services/*/docs/`
-
-### Module and Service Documentation
-
-Each module and service contains:
-- `README.md` - Overview, features, and quick reference
-- `docs/ARCHITECTURE.md` - Technical architecture
-- `docs/TECHNICAL_SPECIFICATION.md` - Detailed specifications
-- `docs/API.md` - API documentation and examples
-- `docs/INTEGRATION.md` - Integration patterns
-- `docs/DEPLOYMENT.md` - Deployment instructions
-
----
-
-## Common Tasks
-
-### Business Impact Analysis
-
-**Objective:** Conduct automated BIA with AI assistance
+### Installation
 
 ```bash
-# Via API
-curl -X POST http://localhost:8000/api/v1/bia/analysis \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{"organization_id": "org-123", "scope": "full"}'
+# 1. Initialize Docusaurus
+cd docs-website
+npx create-docusaurus@latest . classic --typescript
 
-# Via CLI
-python -m platform_services.bia.cli analyze --org org-123
+# 2. Install dependencies
+npm install
+
+# 3. Install additional packages
+npm install --save \
+  mermaid \
+  @docsearch/react \
+  gray-matter \
+  glob \
+  yaml \
+  react-icons \
+  clsx
+
+# 4. Generate data files
+npm run generate-data
+
+# 5. Start development server
+npm start
 ```
 
-See [BIA Service Documentation](/platform-services/bia-service/docs/API.md) for details.
+Open http://localhost:3000
 
-### Risk Assessment
+---
 
-**Objective:** Generate AI-powered risk assessment
+## 📊 Features
+
+### 1. Services Catalog (`/services`)
+
+**Display**:
+- Grid view of all 23 services
+- Filters: Platform Services (12), Intelligent Core (11)
+- Search by name, description
+- Service cards showing:
+  - Name & port
+  - Status (Active, Development)
+  - Tech stack
+  - API endpoint count
+  - Quick links (Details, API, Code)
+
+**Service Detail Pages**:
+- Overview & description
+- Architecture diagram
+- API endpoints list
+- Technology stack
+- Dependencies
+- Integration guide
+- Deployment instructions
+
+### 2. Interactive Diagrams (`/diagrams`)
+
+**36 Mermaid Diagrams**:
+- **Architecture** (24): Platform overview, service dependencies, data flow
+- **User Scenarios** (4): BCM journey, BIA workflow, admin monitoring, risk assessment
+- **Dependencies** (1): Detailed service dependency graph
+- **Flows** (3): EventBus flow, data flow, AI orchestration
+- **Integration** (4): Integration patterns
+- **Business Processes** (1): Document generation
+
+**Features**:
+- Live Mermaid.js rendering
+- Interactive exploration (click nodes → details)
+- Zoom & pan
+- Export as PNG/SVG
+- Full-screen mode
+- Search diagrams
+- Filter by category
+
+### 3. Document Library (`/library`)
+
+**550+ Documents**:
+- Full-text search (Algolia DocSearch)
+- Filters:
+  - Category (Specification, Architecture, Guide, Report)
+  - File type (MD, PDF)
+  - Size, Date
+- Sort: Relevance, Date, Name, Size
+- Collections:
+  - Getting Started (5 docs)
+  - Technical Specifications (108 docs)
+  - API Documentation (3 docs)
+  - Deployment Guides (10 docs)
+
+**Document View**:
+- Rendered Markdown
+- Auto-generated TOC
+- Breadcrumbs
+- Related documents
+- Download options
+- Edit on GitHub link
+
+### 4. API Reference (`/api`)
+
+**150+ Endpoints**:
+- Grouped by service
+- Interactive Swagger UI
+- Request/response examples
+- Authentication guide
+- Try it out feature
+- Code examples (curl, JavaScript, Python)
+
+### 5. Architecture Section (`/architecture`)
+
+**Sub-sections**:
+- Overview: 4-layer architecture
+- Services: Service dependency graph
+- Data Flow: EventBus, AI orchestration
+- Infrastructure: Deployment architecture (Docker, K8s)
+- All with interactive diagrams
+
+---
+
+## 🎨 Customization
+
+### Branding
+
+Edit `docusaurus.config.ts`:
+
+```typescript
+{
+  title: 'Your Platform Name',
+  tagline: 'Your Tagline',
+  favicon: 'img/favicon.ico',
+  url: 'https://yourorg.github.io',
+  baseUrl: '/your-repo/',
+  organizationName: 'yourorg',
+  projectName: 'your-repo',
+}
+```
+
+### Styling
+
+Edit `src/css/custom.css`:
+
+```css
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  /* ... */
+}
+```
+
+### Navigation
+
+Edit `docusaurus.config.ts` → `themeConfig.navbar.items`
+
+---
+
+## 📦 Data Generation
+
+### Services Data
 
 ```bash
-# Via API
-curl -X POST http://localhost:8000/api/v1/risk/assessment \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{"organization_id": "org-123", "assessment_type": "comprehensive"}'
+node scripts/generate-services-data.js
+# Output: src/data/services.json (23 services)
 ```
 
-See [Risk Service Documentation](/platform-services/risk-service/docs/API.md) for details.
+Contains:
+- Service ID, name, port
+- Description
+- Tech stack
+- Dependencies
+- API endpoint count
+- Status (active, development)
+- Features list
 
-### Compliance Check
-
-**Objective:** Verify ISO 22301 compliance status
+### Diagrams Data
 
 ```bash
-# Via API
-curl -X GET http://localhost:8000/api/v1/compliance/iso22301/status?org_id=org-123 \
-  -H "Authorization: Bearer YOUR_TOKEN"
+node scripts/generate-diagrams-data.js
+# Output: src/data/diagrams.json (36 diagrams)
 ```
 
-See [Compliance Service Documentation](/platform-services/compliance-service/docs/API.md) for details.
+Scans `/doc-project/diagrams/` and extracts:
+- Diagram metadata
+- Category, type
+- File path
+- Last updated date
+
+### Document Index
+
+```bash
+node scripts/generate-document-index.js
+# Output: src/data/documents.json (550 documents)
+```
+
+Scans all `.md` files in `/docs/` and `/doc-project/`:
+- Title, description
+- File path, size
+- Category, type
+- Tags
+- Sections (extracted from headings)
+
+### Generate All
+
+```bash
+npm run generate-data
+# Runs all three scripts
+```
 
 ---
 
-## Key Concepts
+## 🚢 Deployment
 
-### Multi-Tenancy
+### GitHub Actions (Automatic)
 
-The platform supports full multi-tenancy with data isolation:
-- Each organization has isolated data storage
-- Role-based access control (RBAC) within organizations
-- Shared AI models with tenant-specific fine-tuning
-- Separate encryption keys per tenant
+Push to `main` branch triggers deployment:
 
-### Event-Driven Architecture
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
 
-All platform services communicate via EventBus:
-- Asynchronous, non-blocking operations
-- Event sourcing for audit trails
-- Retry and dead-letter queue handling
-- Real-time notifications and webhooks
+on:
+  push:
+    branches: [main]
 
-### AI Model Orchestration
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/deploy-pages@v2
+```
 
-Intelligent routing of requests to optimal AI models:
-- Task complexity analysis determines model selection
-- Cost optimization (Haiku for simple, Opus for complex)
-- Fallback mechanisms for provider availability
-- Response caching for efficiency
+### Manual Deployment
 
-### Collective Intelligence
+```bash
+npm run build
+npm run deploy
+```
 
-Privacy-preserving knowledge aggregation:
-- Anonymous contribution of BCM patterns
-- Differential privacy for sensitive data
-- Opt-in/opt-out controls per organization
-- Industry-specific knowledge clustering
+### Custom Domain
 
----
+Add `static/CNAME` file:
 
-## Standards and Compliance
+```
+docs.yourplatform.com
+```
 
-### ISO 22301:2019 - Business Continuity Management
-
-The platform implements all requirements of ISO 22301:2019:
-- Context of the organization (Clause 4)
-- Leadership and commitment (Clause 5)
-- Planning (Clause 6)
-- Support and resources (Clause 7)
-- Operational planning and control (Clause 8)
-- Performance evaluation (Clause 9)
-- Improvement (Clause 10)
-
-See [STANDARDS_COMPLIANCE.md](./STANDARDS_COMPLIANCE.md) for detailed mapping.
-
-### ISO 27001 - Information Security Management
-
-Security controls aligned with ISO 27001:
-- Access control and authentication
-- Cryptography and data protection
-- Security monitoring and logging
-- Incident management
-- Business continuity for IT services
-
-### ISO/IEC/IEEE 26514:2022 - Documentation
-
-Documentation follows international standards:
-- User documentation design and content
-- Information architecture principles
-- Accessibility requirements
-- Version control and change management
+Configure DNS:
+```
+CNAME record: docs → yourorg.github.io
+```
 
 ---
 
-## Support and Resources
+## 🔍 Search Integration
 
-### Documentation Resources
+### Algolia DocSearch
 
-- **Getting Started Guide:** [GETTING_STARTED.md](./GETTING_STARTED.md)
-- **API Reference:** [API_REFERENCE.md](./API_REFERENCE.md)
-- **Architecture Documentation:** [ARCHITECTURE.md](./ARCHITECTURE.md)
-- **Deployment Guide:** [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
+1. Apply at https://docsearch.algolia.com/apply/
+2. Get API keys
+3. Update `docusaurus.config.ts`:
 
-### Technical Support
+```typescript
+algolia: {
+  appId: 'YOUR_APP_ID',
+  apiKey: 'YOUR_API_KEY',
+  indexName: 'ai-platform-iso',
+}
+```
 
-- **Issue Tracking:** GitHub Issues
-- **Community Forum:** [Planned]
-- **Professional Support:** [Contact information]
+### Alternative: Local Search (Lunr.js)
 
-### Contributing
+Install plugin:
 
-For information on contributing to the platform, see [CONTRIBUTING.md](./CONTRIBUTING.md).
-
----
-
-## License and Legal
-
-### Software License
-
-Proprietary - AI-Platform-ISO. All rights reserved.
-
-### Data Privacy
-
-The platform complies with:
-- GDPR (General Data Protection Regulation)
-- CCPA (California Consumer Privacy Act)
-- Industry-specific regulations (HIPAA, GLBA, etc.)
-
-See [Privacy Policy] for details.
-
-### Terms of Service
-
-See [Terms of Service] for platform usage terms.
+```bash
+npm install --save @easyops-cn/docusaurus-search-local
+```
 
 ---
 
-## Roadmap and Future Development
+## 📈 Analytics
 
-### Current Version (1.0)
-- Core BCM capabilities (BIA, Risk, Planning)
-- ISO 22301 compliance monitoring
-- AI-powered workflow automation
-- Basic collective intelligence features
+### Google Analytics
 
-### Planned Features (1.1-1.2)
-- Advanced predictive analytics
-- Industry-specific templates and workflows
-- Enhanced integration ecosystem
-- Mobile application
+```typescript
+// docusaurus.config.ts
+gtag: {
+  trackingID: 'G-XXXXXXXXXX',
+}
+```
 
-### Future Vision (2.0+)
-- Multi-standard compliance (ISO 27001, SOC 2)
-- Advanced simulation and digital twin
-- Blockchain-based audit trails
-- Open platform for third-party extensions
+### Plausible (Privacy-friendly)
 
----
-
-## Document Information
-
-**Document Version:** 1.0.0
-**Last Updated:** 2025-10-09
-**Next Review:** 2025-11-09
-**Maintained By:** AI Platform Documentation Team
-**Document Standard:** ISO/IEC/IEEE 26514:2022
+```typescript
+scripts: [
+  {
+    src: 'https://plausible.io/js/script.js',
+    defer: true,
+    'data-domain': 'yourorg.github.io',
+  },
+],
+```
 
 ---
 
-## Quick Navigation
+## 🧪 Testing
 
-- [Executive Summary](./EXECUTIVE_SUMMARY.md) - Business value and strategy
-- [Getting Started](./GETTING_STARTED.md) - Installation and first steps
-- [Architecture](./ARCHITECTURE.md) - System design and components
-- [API Reference](./API_REFERENCE.md) - Complete API documentation
-- [Standards Compliance](./STANDARDS_COMPLIANCE.md) - ISO 22301 and related standards
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Production deployment
-- [Master Index](./INDEX.md) - Complete documentation index
+```bash
+# Build
+npm run build
+
+# Serve locally
+npm run serve
+# Open http://localhost:3000
+
+# Check for broken links
+npm run build && npx broken-link-checker http://localhost:3000
+```
 
 ---
 
-For questions, feedback, or support requests, please contact the AI-Platform-ISO team.
+## 📚 Documentation Files
+
+| File | Purpose |
+|------|---------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Detailed architecture design |
+| [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) | Step-by-step implementation guide |
+| [README.md](README.md) | This file - Quick start & overview |
+
+---
+
+## 🗓️ Timeline
+
+| Week | Milestone |
+|------|-----------|
+| 1 | Setup, basic structure, generate data |
+| 2 | Service catalog, search |
+| 3 | Diagram viewer (Mermaid) |
+| 4 | Document library |
+| 5 | API reference (Swagger UI) |
+| 6 | Interactive features, polish |
+| 7 | Testing, optimization |
+| 8 | Documentation, deployment, launch |
+
+**Total**: 8 weeks (1 developer)
+
+---
+
+## 🎯 Success Metrics
+
+- **Pages**: 100+ pages
+- **Services**: 23 cataloged
+- **Diagrams**: 36 interactive
+- **Documents**: 550+ indexed
+- **API Endpoints**: 150+ documented
+- **Search**: Full-text with autocomplete
+- **Performance**: Lighthouse score > 90
+- **Mobile**: Fully responsive
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+---
+
+## 📝 License
+
+See [LICENSE](../LICENSE)
+
+---
+
+## 🔗 Links
+
+- **Live Site**: https://yourorg.github.io/ai-platform-iso/
+- **GitHub Repository**: https://github.com/yourorg/ai-platform-iso
+- **Docusaurus**: https://docusaurus.io/
+- **Mermaid.js**: https://mermaid.js.org/
+
+---
+
+**Status**: ✅ Architecture Complete, Ready for Implementation
+**Next Steps**: Run `npx create-docusaurus@latest . classic --typescript`

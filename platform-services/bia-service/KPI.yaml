@@ -1,0 +1,50 @@
+module_name: bia-service
+version: 1.0.0
+description: '**Type**: Platform Service'
+module_type: service
+owner: platform-team
+kpis:
+- name: request_count
+  description: Total number of requests processed by bia-service
+  type: counter
+  target: '> 1000/day'
+  measurement: Count of API requests
+  prometheus_metric: bia_service_requests_total
+- name: response_time_p95
+  description: 95th percentile response time
+  type: histogram
+  target: < 500ms
+  measurement: Response time in milliseconds
+  prometheus_metric: bia_service_response_time_ms
+- name: error_rate
+  description: Percentage of failed requests
+  type: gauge
+  target: < 1%
+  measurement: errors / total_requests * 100
+  prometheus_metric: bia_service_error_rate
+- name: availability
+  description: Service uptime percentage
+  type: gauge
+  target: '> 99.5%'
+  measurement: uptime / total_time * 100
+  prometheus_metric: bia_service_availability
+- name: bia_completed
+  description: Number of BIA analyses completed
+  type: counter
+  target: '> 50/month'
+  measurement: Count of completed BIA workflows
+  prometheus_metric: bia_completed_total
+- name: process_coverage
+  description: Percentage of critical processes analyzed
+  type: gauge
+  target: '> 95%'
+  measurement: analyzed_processes / total_critical_processes * 100
+  prometheus_metric: bia_process_coverage
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/bia-service.json
+  alert_rules: alerts/bia-service.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

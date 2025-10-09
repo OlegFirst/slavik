@@ -1,0 +1,38 @@
+module_name: knowledge-system
+version: 1.0.0
+description: '**Version:** 1.0.0'
+module_type: intelligence
+owner: platform-team
+kpis:
+- name: predictions_made
+  description: Number of predictions/recommendations made by knowledge-system
+  type: counter
+  target: '> 100/day'
+  measurement: Count of AI predictions
+  prometheus_metric: knowledge_system_predictions_total
+- name: prediction_accuracy
+  description: Accuracy of AI predictions
+  type: gauge
+  target: '> 85%'
+  measurement: correct_predictions / total_predictions * 100
+  prometheus_metric: knowledge_system_accuracy
+- name: processing_time
+  description: Time to generate prediction
+  type: histogram
+  target: < 2s
+  measurement: Time in seconds
+  prometheus_metric: knowledge_system_processing_time_seconds
+- name: model_confidence
+  description: Average confidence score of predictions
+  type: gauge
+  target: '> 0.8'
+  measurement: avg(confidence_scores)
+  prometheus_metric: knowledge_system_confidence
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/knowledge-system.json
+  alert_rules: alerts/knowledge-system.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

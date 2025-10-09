@@ -1,0 +1,50 @@
+module_name: collective
+version: 1.0.0
+description: '**Type**: Core Module'
+module_type: intelligence
+owner: platform-team
+kpis:
+- name: predictions_made
+  description: Number of predictions/recommendations made by collective
+  type: counter
+  target: '> 100/day'
+  measurement: Count of AI predictions
+  prometheus_metric: collective_predictions_total
+- name: prediction_accuracy
+  description: Accuracy of AI predictions
+  type: gauge
+  target: '> 85%'
+  measurement: correct_predictions / total_predictions * 100
+  prometheus_metric: collective_accuracy
+- name: processing_time
+  description: Time to generate prediction
+  type: histogram
+  target: < 2s
+  measurement: Time in seconds
+  prometheus_metric: collective_processing_time_seconds
+- name: model_confidence
+  description: Average confidence score of predictions
+  type: gauge
+  target: '> 0.8'
+  measurement: avg(confidence_scores)
+  prometheus_metric: collective_confidence
+- name: case_contributions
+  description: Number of cases contributed to library
+  type: counter
+  target: '> 50/month'
+  measurement: Count of approved case contributions
+  prometheus_metric: case_contributions_total
+- name: k_anonymity_compliance
+  description: "Percentage of patterns with k\u22655 anonymity"
+  type: gauge
+  target: 100%
+  measurement: compliant_patterns / total_patterns * 100
+  prometheus_metric: k_anonymity_compliance_rate
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/collective.json
+  alert_rules: alerts/collective.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

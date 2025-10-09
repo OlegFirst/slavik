@@ -1,0 +1,1503 @@
+openapi: 3.0.3
+info:
+  title: BIA Module API
+  description: |
+    Business Impact Analysis (BIA) Module API для AI-платформы ISO 22301.
+
+    **Основные возможности:**
+    - Создание и управление BIA анализами
+    - 3 метода сбора данных (Questionnaire, Document Upload, ERP Integration)
+    - AI-обработка и построение графа зависимостей
+    - Расчёт RTO/RPO и финансового воздействия
+    - Генерация отчётов и мониторинг
+
+    **Аутентификация:** Bearer Token (Supabase JWT)
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@ai-platform-iso.com
+
+servers:
+  - url: https://api.ai-platform-iso.com/v1
+    description: Production
+  - url: https://staging-api.ai-platform-iso.com/v1
+    description: Staging
+  - url: http://localhost:8000/v1
+    description: Local development
+
+tags:
+  - name: BIA Analysis
+    description: Управление BIA анализами
+  - name: Data Collection
+    description: Сбор данных (анкета, документы, ERP)
+  - name: Processes
+    description: Бизнес-процессы и зависимости
+  - name: AI Processing
+    description: AI-анализ и обработка
+  - name: Findings
+    description: Результаты и рекомендации
+  - name: Reports
+    description: Генерация отчётов
+  - name: Monitoring
+    description: Непрерывный мониторинг
+
+paths:
+  # ============================================================================
+  # BIA ANALYSIS ENDPOINTS
+  # ============================================================================
+
+  /bia/analyses:
+    get:
+      tags: [BIA Analysis]
+      summary: Список всех BIA анализов организации
+      operationId: listBIAAnalyses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organization_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, in_progress, completed, archived]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Список анализов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BIAAnalysis'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags: [BIA Analysis]
+      summary: Создать новый BIA анализ
+      operationId: createBIAAnalysis
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - organization_id
+              properties:
+                organization_id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                  maxLength: 255
+                  example: "Healthcare BIA 2025"
+                collection_method:
+                  type: string
+                  enum: [questionnaire, document_upload, erp_integration, hybrid]
+      responses:
+        '201':
+          description: BIA создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAAnalysis'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /bia/analyses/{analysis_id}:
+    get:
+      tags: [BIA Analysis]
+      summary: Получить детали BIA анализа
+      operationId: getBIAAnalysis
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Детали анализа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAAnalysisDetailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [BIA Analysis]
+      summary: Обновить BIA анализ
+      operationId: updateBIAAnalysis
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                status:
+                  type: string
+                  enum: [draft, in_progress, completed, archived]
+      responses:
+        '200':
+          description: Анализ обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAAnalysis'
+
+    delete:
+      tags: [BIA Analysis]
+      summary: Удалить BIA анализ
+      operationId: deleteBIAAnalysis
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '204':
+          description: Удалено успешно
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================================================
+  # DATA COLLECTION - QUESTIONNAIRE
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/questionnaire/generate:
+    post:
+      tags: [Data Collection]
+      summary: AI генерирует персонализированную анкету
+      operationId: generateQuestionnaire
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                industry:
+                  type: string
+                  example: "Healthcare"
+                company_size:
+                  type: integer
+                  example: 450
+                focus_areas:
+                  type: array
+                  items:
+                    type: string
+                  example: ["IT Systems", "Patient Care", "Billing"]
+      responses:
+        '201':
+          description: Анкета сгенерирована
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  questions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BIAQuestion'
+                  estimated_time_minutes:
+                    type: integer
+                    example: 30
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /bia/analyses/{analysis_id}/questionnaire/questions:
+    get:
+      tags: [Data Collection]
+      summary: Получить вопросы анкеты
+      operationId: getQuestions
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Список вопросов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BIAQuestion'
+
+  /bia/analyses/{analysis_id}/questionnaire/answers:
+    post:
+      tags: [Data Collection]
+      summary: Сохранить ответы на анкету
+      operationId: submitAnswers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - question_id
+                      - answer
+                    properties:
+                      question_id:
+                        type: string
+                        format: uuid
+                      answer_text:
+                        type: string
+                      answer_number:
+                        type: number
+                      answer_choice:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '201':
+          description: Ответы сохранены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  saved_count:
+                    type: integer
+                  completion_percentage:
+                    type: number
+                    format: float
+
+  # ============================================================================
+  # DATA COLLECTION - DOCUMENT UPLOAD
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/documents/upload:
+    post:
+      tags: [Data Collection]
+      summary: Загрузить документы для OCR + AI extraction
+      operationId: uploadDocuments
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - files
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  maxItems: 10
+      responses:
+        '202':
+          description: Документы приняты на обработку
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_ids:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                  estimated_processing_time_seconds:
+                    type: integer
+                    example: 120
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /bia/analyses/{analysis_id}/documents:
+    get:
+      tags: [Data Collection]
+      summary: Список загруженных документов
+      operationId: listDocuments
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Список документов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BIADocument'
+
+  /bia/analyses/{analysis_id}/documents/{document_id}/status:
+    get:
+      tags: [Data Collection]
+      summary: Статус обработки документа (OCR + AI)
+      operationId: getDocumentStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Статус обработки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document_id:
+                    type: string
+                    format: uuid
+                  ocr_status:
+                    type: string
+                    enum: [pending, processing, completed, failed]
+                  ai_extraction_status:
+                    type: string
+                    enum: [pending, processing, completed, failed]
+                  progress_percentage:
+                    type: integer
+                    minimum: 0
+                    maximum: 100
+                  extracted_processes_count:
+                    type: integer
+
+  # ============================================================================
+  # DATA COLLECTION - ERP INTEGRATION
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/erp/connect:
+    post:
+      tags: [Data Collection]
+      summary: Подключить ERP систему (Odoo)
+      operationId: connectERP
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - erp_type
+                - erp_url
+                - credentials
+              properties:
+                erp_type:
+                  type: string
+                  enum: [odoo, sap, oracle, custom]
+                erp_url:
+                  type: string
+                  format: uri
+                  example: "https://erp.company.com"
+                credentials:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+                      format: password
+                    api_key:
+                      type: string
+      responses:
+        '201':
+          description: ERP подключен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ERPConnection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /bia/analyses/{analysis_id}/erp/sync:
+    post:
+      tags: [Data Collection]
+      summary: Синхронизировать данные из ERP
+      operationId: syncERP
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '202':
+          description: Синхронизация запущена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sync_job_id:
+                    type: string
+                    format: uuid
+                  estimated_time_seconds:
+                    type: integer
+
+  /bia/analyses/{analysis_id}/erp/status:
+    get:
+      tags: [Data Collection]
+      summary: Статус ERP подключения и синхронизации
+      operationId: getERPStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Статус ERP
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connection_status:
+                    type: string
+                    enum: [connected, disconnected, error]
+                  last_sync_at:
+                    type: string
+                    format: date-time
+                  synced_processes_count:
+                    type: integer
+
+  # ============================================================================
+  # PROCESSES & DEPENDENCIES
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/processes:
+    get:
+      tags: [Processes]
+      summary: Список бизнес-процессов
+      operationId: listProcesses
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: criticality
+          in: query
+          schema:
+            type: string
+            enum: [critical, high, medium, low]
+      responses:
+        '200':
+          description: Список процессов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BIAProcess'
+
+    post:
+      tags: [Processes]
+      summary: Добавить процесс вручную
+      operationId: createProcess
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BIAProcessCreate'
+      responses:
+        '201':
+          description: Процесс создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAProcess'
+
+  /bia/analyses/{analysis_id}/processes/{process_id}:
+    get:
+      tags: [Processes]
+      summary: Детали процесса
+      operationId: getProcess
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: process_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Детали процесса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAProcessDetailed'
+
+    patch:
+      tags: [Processes]
+      summary: Обновить процесс
+      operationId: updateProcess
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: process_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BIAProcessUpdate'
+      responses:
+        '200':
+          description: Процесс обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAProcess'
+
+  /bia/analyses/{analysis_id}/dependencies:
+    get:
+      tags: [Processes]
+      summary: Граф зависимостей процессов
+      operationId: listDependencies
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Граф зависимостей
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nodes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BIAProcess'
+                  edges:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BIADependency'
+
+    post:
+      tags: [Processes]
+      summary: Добавить зависимость между процессами
+      operationId: createDependency
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - source_process_id
+                - target_process_id
+                - dependency_type
+              properties:
+                source_process_id:
+                  type: string
+                  format: uuid
+                target_process_id:
+                  type: string
+                  format: uuid
+                dependency_type:
+                  type: string
+                  enum: [hard, soft, optional, cascading]
+                dependency_strength:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+      responses:
+        '201':
+          description: Зависимость создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIADependency'
+
+  # ============================================================================
+  # AI PROCESSING
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/ai/process-mapping:
+    post:
+      tags: [AI Processing]
+      summary: AI строит граф зависимостей
+      operationId: aiProcessMapping
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '202':
+          description: AI обработка запущена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+                  estimated_time_seconds:
+                    type: integer
+                    example: 30
+
+  /bia/analyses/{analysis_id}/ai/calculate-rto:
+    post:
+      tags: [AI Processing]
+      summary: AI рассчитывает RTO/RPO для всех процессов
+      operationId: aiCalculateRTO
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '202':
+          description: Расчёт запущен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+
+  /bia/analyses/{analysis_id}/ai/financial-impact:
+    post:
+      tags: [AI Processing]
+      summary: AI рассчитывает финансовое воздействие + Monte Carlo
+      operationId: aiFinancialImpact
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monte_carlo_iterations:
+                  type: integer
+                  default: 10000
+                  minimum: 1000
+                  maximum: 50000
+      responses:
+        '202':
+          description: Расчёт запущен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+
+  /bia/analyses/{analysis_id}/ai/jobs/{job_id}/status:
+    get:
+      tags: [AI Processing]
+      summary: Статус AI задачи
+      operationId: getAIJobStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Статус задачи
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIJob'
+
+  # ============================================================================
+  # FINDINGS & RECOMMENDATIONS
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/findings:
+    get:
+      tags: [Findings]
+      summary: Список результатов и рекомендаций
+      operationId: listFindings
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: finding_type
+          in: query
+          schema:
+            type: string
+            enum: [gap, risk, opportunity, recommendation]
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [critical, high, medium, low, info]
+      responses:
+        '200':
+          description: Список результатов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BIAFinding'
+
+  /bia/analyses/{analysis_id}/findings/{finding_id}:
+    patch:
+      tags: [Findings]
+      summary: Обновить статус результата
+      operationId: updateFinding
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: finding_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [new, acknowledged, in_progress, resolved, dismissed]
+                user_notes:
+                  type: string
+      responses:
+        '200':
+          description: Результат обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIAFinding'
+
+  # ============================================================================
+  # REPORTS
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/reports/generate:
+    post:
+      tags: [Reports]
+      summary: Генерация отчёта
+      operationId: generateReport
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - report_type
+                - format
+              properties:
+                report_type:
+                  type: string
+                  enum: [executive_summary, technical_detail, compliance_audit, custom]
+                format:
+                  type: string
+                  enum: [pdf, docx, html, json]
+                include_sections:
+                  type: array
+                  items:
+                    type: string
+                  example: ["processes", "dependencies", "financial_impact", "recommendations"]
+      responses:
+        '202':
+          description: Генерация запущена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_id:
+                    type: string
+                    format: uuid
+                  estimated_time_seconds:
+                    type: integer
+
+  /bia/analyses/{analysis_id}/reports:
+    get:
+      tags: [Reports]
+      summary: Список сгенерированных отчётов
+      operationId: listReports
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Список отчётов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BIAReport'
+
+  /bia/analyses/{analysis_id}/reports/{report_id}/download:
+    get:
+      tags: [Reports]
+      summary: Скачать отчёт
+      operationId: downloadReport
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Файл отчёта
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================================================
+  # MONITORING
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/monitoring/enable:
+    post:
+      tags: [Monitoring]
+      summary: Включить непрерывный мониторинг
+      operationId: enableMonitoring
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alert_rules:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      rule_type:
+                        type: string
+                        enum: [rto_breach, process_change, dependency_broken, compliance_drift]
+                      threshold:
+                        type: object
+      responses:
+        '200':
+          description: Мониторинг включён
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  monitoring_enabled:
+                    type: boolean
+                  active_rules_count:
+                    type: integer
+
+  /bia/analyses/{analysis_id}/monitoring/alerts:
+    get:
+      tags: [Monitoring]
+      summary: Список алертов мониторинга
+      operationId: listMonitoringAlerts
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [open, acknowledged, investigating, resolved, false_positive]
+      responses:
+        '200':
+          description: Список алертов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MonitoringAlert'
+
+  # ============================================================================
+  # STATISTICS & SUMMARY
+  # ============================================================================
+
+  /bia/analyses/{analysis_id}/summary:
+    get:
+      tags: [BIA Analysis]
+      summary: Сводная статистика по BIA
+      operationId: getBIASummary
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AnalysisId'
+      responses:
+        '200':
+          description: Сводка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BIASummary'
+
+# ==============================================================================
+# COMPONENTS
+# ==============================================================================
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token
+
+  parameters:
+    AnalysisId:
+      name: analysis_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: BIA Analysis ID
+
+  schemas:
+    # Core BIA Analysis
+    BIAAnalysis:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        status:
+          type: string
+          enum: [draft, in_progress, completed, archived]
+        collection_method:
+          type: string
+          enum: [questionnaire, document_upload, erp_integration, hybrid]
+        compliance_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    BIAAnalysisDetailed:
+      allOf:
+        - $ref: '#/components/schemas/BIAAnalysis'
+        - type: object
+          properties:
+            processes_count:
+              type: integer
+            critical_processes_count:
+              type: integer
+            dependencies_count:
+              type: integer
+            findings_count:
+              type: integer
+            total_daily_financial_impact:
+              type: number
+              format: float
+
+    # Processes
+    BIAProcess:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        criticality:
+          type: string
+          enum: [critical, high, medium, low]
+        rto_hours:
+          type: integer
+        rpo_hours:
+          type: integer
+        mtpd_hours:
+          type: integer
+        financial_impact_per_hour:
+          type: number
+          format: float
+        category:
+          type: string
+        owner_department:
+          type: string
+
+    BIAProcessCreate:
+      type: object
+      required:
+        - name
+        - criticality
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        criticality:
+          type: string
+          enum: [critical, high, medium, low]
+        category:
+          type: string
+        owner_department:
+          type: string
+        owner_person:
+          type: string
+
+    BIAProcessUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        criticality:
+          type: string
+          enum: [critical, high, medium, low]
+        rto_hours:
+          type: integer
+        rpo_hours:
+          type: integer
+        financial_impact_per_hour:
+          type: number
+
+    BIAProcessDetailed:
+      allOf:
+        - $ref: '#/components/schemas/BIAProcess'
+        - type: object
+          properties:
+            dependencies:
+              type: array
+              items:
+                $ref: '#/components/schemas/BIADependency'
+            monte_carlo_results:
+              $ref: '#/components/schemas/MonteCarloResult'
+
+    # Dependencies
+    BIADependency:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        source_process_id:
+          type: string
+          format: uuid
+        target_process_id:
+          type: string
+          format: uuid
+        dependency_type:
+          type: string
+          enum: [hard, soft, optional, cascading]
+        dependency_strength:
+          type: integer
+          minimum: 1
+          maximum: 10
+        ai_detected:
+          type: boolean
+
+    # Questions & Answers
+    BIAQuestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        question_text:
+          type: string
+        question_type:
+          type: string
+          enum: [text, number, choice, multiple_choice, scale]
+        options:
+          type: array
+          items:
+            type: string
+        ai_prefilled_answer:
+          type: string
+        sequence_number:
+          type: integer
+
+    # Documents
+    BIADocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+        file_type:
+          type: string
+        file_size_bytes:
+          type: integer
+        ocr_status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        ai_extraction_status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        uploaded_at:
+          type: string
+          format: date-time
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    # ERP
+    ERPConnection:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        erp_type:
+          type: string
+          enum: [odoo, sap, oracle, custom]
+        erp_url:
+          type: string
+        connection_status:
+          type: string
+          enum: [connected, disconnected, error]
+        last_sync_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    # AI Jobs
+    AIJob:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_type:
+          type: string
+          enum: [process_mapping, rto_calculation, financial_impact, monte_carlo]
+        status:
+          type: string
+          enum: [queued, running, completed, failed]
+        progress_percentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+
+    # Monte Carlo
+    MonteCarloResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        process_id:
+          type: string
+          format: uuid
+        iterations:
+          type: integer
+        financial_impact_best_case:
+          type: number
+          format: float
+        financial_impact_likely_case:
+          type: number
+          format: float
+        financial_impact_worst_case:
+          type: number
+          format: float
+        distribution_data:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+              probability:
+                type: number
+
+    # Findings
+    BIAFinding:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        finding_type:
+          type: string
+          enum: [gap, risk, opportunity, recommendation]
+        severity:
+          type: string
+          enum: [critical, high, medium, low, info]
+        title:
+          type: string
+        description:
+          type: string
+        affected_processes:
+          type: array
+          items:
+            type: string
+            format: uuid
+        iso_clause:
+          type: string
+        recommended_action:
+          type: string
+        status:
+          type: string
+          enum: [new, acknowledged, in_progress, resolved, dismissed]
+        created_at:
+          type: string
+          format: date-time
+
+    # Reports
+    BIAReport:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        report_type:
+          type: string
+          enum: [executive_summary, technical_detail, compliance_audit, custom]
+        format:
+          type: string
+          enum: [pdf, docx, html, json]
+        title:
+          type: string
+        storage_path:
+          type: string
+        generated_at:
+          type: string
+          format: date-time
+
+    # Monitoring
+    MonitoringAlert:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        alert_type:
+          type: string
+          enum: [rto_breach, process_change, dependency_broken, compliance_drift]
+        severity:
+          type: string
+          enum: [critical, high, medium, low]
+        title:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+          enum: [open, acknowledged, investigating, resolved, false_positive]
+        detected_at:
+          type: string
+          format: date-time
+
+    # Summary
+    BIASummary:
+      type: object
+      properties:
+        analysis_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        compliance_score:
+          type: integer
+        total_processes:
+          type: integer
+        critical_processes:
+          type: integer
+        avg_rto_hours:
+          type: number
+        total_daily_impact:
+          type: number
+        total_dependencies:
+          type: integer
+        total_findings:
+          type: integer
+        critical_findings:
+          type: integer
+        unresolved_findings:
+          type: integer
+
+    # Common
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        has_more:
+          type: boolean
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "UNAUTHORIZED"
+              message: "Invalid or missing authentication token"
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "FORBIDDEN"
+              message: "You don't have permission to access this resource"
+
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "NOT_FOUND"
+              message: "Resource not found"

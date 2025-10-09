@@ -1,0 +1,50 @@
+module_name: compliance-service
+version: 1.0.0
+description: '**Type**: Platform Service'
+module_type: service
+owner: platform-team
+kpis:
+- name: request_count
+  description: Total number of requests processed by compliance-service
+  type: counter
+  target: '> 1000/day'
+  measurement: Count of API requests
+  prometheus_metric: compliance_service_requests_total
+- name: response_time_p95
+  description: 95th percentile response time
+  type: histogram
+  target: < 500ms
+  measurement: Response time in milliseconds
+  prometheus_metric: compliance_service_response_time_ms
+- name: error_rate
+  description: Percentage of failed requests
+  type: gauge
+  target: < 1%
+  measurement: errors / total_requests * 100
+  prometheus_metric: compliance_service_error_rate
+- name: availability
+  description: Service uptime percentage
+  type: gauge
+  target: '> 99.5%'
+  measurement: uptime / total_time * 100
+  prometheus_metric: compliance_service_availability
+- name: compliance_score
+  description: Overall ISO 22301 compliance score
+  type: gauge
+  target: '> 85%'
+  measurement: compliant_controls / total_controls * 100
+  prometheus_metric: compliance_score
+- name: audit_findings
+  description: Number of open audit findings
+  type: gauge
+  target: < 10
+  measurement: Count of unresolved audit findings
+  prometheus_metric: audit_findings_open
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/compliance-service.json
+  alert_rules: alerts/compliance-service.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review

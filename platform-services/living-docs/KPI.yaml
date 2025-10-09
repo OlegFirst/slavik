@@ -1,0 +1,39 @@
+module_name: living-docs
+version: 1.0.0
+description: "> \U0001F310 API Service \u043C\u043E\u0434\u0443\u043B\u044C \u043F\
+  \u043B\u0430\u0442\u0444\u043E\u0440\u043C\u044B"
+module_type: service
+owner: platform-team
+kpis:
+- name: request_count
+  description: Total number of requests processed by living-docs
+  type: counter
+  target: '> 1000/day'
+  measurement: Count of API requests
+  prometheus_metric: living_docs_requests_total
+- name: response_time_p95
+  description: 95th percentile response time
+  type: histogram
+  target: < 500ms
+  measurement: Response time in milliseconds
+  prometheus_metric: living_docs_response_time_ms
+- name: error_rate
+  description: Percentage of failed requests
+  type: gauge
+  target: < 1%
+  measurement: errors / total_requests * 100
+  prometheus_metric: living_docs_error_rate
+- name: availability
+  description: Service uptime percentage
+  type: gauge
+  target: '> 99.5%'
+  measurement: uptime / total_time * 100
+  prometheus_metric: living_docs_availability
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/living-docs.json
+  alert_rules: alerts/living-docs.yaml
+targets:
+  daily: Track daily metrics
+  weekly: Review weekly trends
+  monthly: Monthly performance review
