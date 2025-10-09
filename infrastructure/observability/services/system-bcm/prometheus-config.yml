@@ -1,0 +1,41 @@
+# System BCM - Prometheus Scrape Configuration
+
+# Add this to your main prometheus.yml scrape_configs section:
+
+scrape_configs:
+  - job_name: 'system-bcm'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['system-bcm-service:8050']
+        labels:
+          service: 'system-bcm'
+          layer: 'intelligent-core'
+          tier: 'critical'
+          port: '8050'
+
+    # Optional: Basic auth if enabled
+    # basic_auth:
+    #   username: 'prometheus'
+    #   password: '${PROMETHEUS_PASSWORD}'
+
+    # Relabeling
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'system-bcm-service'
+
+      - source_labels: [__address__]
+        target_label: __address__
+        replacement: 'system-bcm-service:8050'
+
+    # Metric relabeling
+    metric_relabel_configs:
+      # Add platform label
+      - target_label: platform
+        replacement: 'ai-platform-iso'
+
+      # Add version from service
+      - source_labels: [version]
+        target_label: bcm_version

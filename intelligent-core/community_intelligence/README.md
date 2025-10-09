@@ -1,139 +1,181 @@
 # Community Intelligence Service
 
-**Port:** 8030
-**Status:** Production Ready
-**Version:** 1.0.0
+**Type**: Core Module
+**Domain**: Intelligent-Core
+**Status**: Production Ready
+**Version**: 1.0.0
+**Port**: 8030
 
-## Documentation
+## Overview
 
-All technical documentation is located in the [`docs/`](docs/) folder:
-- **[Technical Specification](docs/TECHNICAL_SPECIFICATION.md)** - Comprehensive technical documentation
-- **[Analysis and Improvements](docs/ANALYSIS_AND_IMPROVEMENTS.md)** - Production readiness assessment and recommendations
+The Community Intelligence Service transforms passive case collection into active community-driven knowledge creation. It enables peer-reviewed knowledge sharing through automated workflow integration, expert validation, reputation systems, and a searchable case library of BCM best practices.
 
-Archived documentation can be found in [`archive/docs/`](archive/docs/).
+## Architecture
 
----
+### Core Components
 
-## 🎯 Purpose
+- **Contribution Manager**: Auto-captures workflow completions as shareable cases
+- **Peer Review System**: Smart reviewer matching and quality scoring
+- **Reputation Engine**: Gamification and incentive mechanisms
+- **Case Library**: Searchable knowledge base with anonymization
+- **Event Integration**: Workflow completion triggers and EventBus publishing
 
-Transforms passive case collection into **active community-driven knowledge creation** through:
+### Technology Stack
 
-- **Workflow Integration:** Auto-capture success stories from completed workflows
-- **Peer Review:** Quality assurance through expert validation
-- **Reputation Economy:** Gamification to incentivize contributions
-- **Case Library:** Searchable knowledge base of best practices
+- FastAPI (REST API framework)
+- PostgreSQL (Supabase) - contributions, reviews, reputation
+- Redis (EventBus messaging)
+- AI Foundation (anonymization, reviewer matching)
 
----
+## Features
 
-## 🏗️ Architecture
+- **Auto-Contribution**: Workflow completion triggers contribution offers
+- **Smart Anonymization**: AI-powered PII removal with preview
+- **Peer Review**: 3-reviewer consensus with quality scoring (1-10)
+- **Reputation Economy**: Points, badges, and leaderboards
+- **Case Search**: Full-text and semantic similarity search
+- **Reviewer Matching**: Expertise, industry, and workload-based matching
+- **Quality Assurance**: 2/3 approval threshold for publication
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed architecture documentation.
+## Installation
 
-```
-Workflow Completion
-    ↓
-Auto-offer Contribution (or auto-submit if opted-in)
-    ↓
-Anonymize Case Data
-    ↓
-Assign 3 Peer Reviewers (smart matching)
-    ↓
-Reviews Collected (quality scored 1-10)
-    ↓
-2/3 Approve → Case Library + Reputation
-    ↓
-AI uses cases to help future users
-```
+### Prerequisites
 
----
+- Python 3.11+
+- PostgreSQL (Supabase)
+- Redis 7.0+
 
-## ⚡ Quick Start
-
-### 1. Environment Setup
+### Setup
 
 ```bash
-# Copy environment template
-cp .env.example .env
+cd intelligent-core/community_intelligence
 
-# Edit .env
-DATABASE_URL=postgresql://...
-REDIS_URL=redis://...
-EVENTBUS_URL=http://localhost:8001
-ANTHROPIC_API_KEY=...
-```
-
-### 2. Database Migration
-
-```bash
-# Apply migration
-psql $DATABASE_URL -f ../../infrastructure/database/migrations_source/040_community_intelligence.sql
-```
-
-### 3. Run Service
-
-```bash
 # Install dependencies
 pip install -r requirements.txt
+
+# Configure environment
+cp ../.env.example .env
+# Edit .env with SUPABASE_URL, SUPABASE_KEY, REDIS_URL
+
+# Apply database migration
+psql $DATABASE_URL -f ../../infrastructure/database/migrations_source/040_community_intelligence.sql
 
 # Run service
 python main.py
 ```
 
-Service starts on **http://localhost:8030**
+Service starts on http://localhost:8030
 
-### 4. API Documentation
+API documentation: http://localhost:8030/docs
 
-Visit **http://localhost:8030/docs** for interactive Swagger UI
+## API Reference
+
+See [API.md](API.md) for complete API documentation.
+
+### Primary Endpoints
+
+- `POST /api/v1/community/contributions` - Create contribution
+- `POST /api/v1/community/contributions/from-workflow/{id}` - Auto-contribution from workflow
+- `GET /api/v1/community/contributions/my` - User's contributions
+- `POST /api/v1/community/reviews` - Submit review
+- `GET /api/v1/community/reputation/leaderboard` - Top contributors
+- `GET /api/v1/community/cases/search` - Search case library
+
+## Dependencies
+
+### Internal Dependencies
+
+- `shared.database` - Supabase client
+- `shared.eventbus` - Event publishing/subscription
+- `ai_foundation` - Anonymization and matching
+
+### External Dependencies
+
+- PostgreSQL (Supabase) - Data persistence
+- Redis - EventBus messaging
+
+## Standards Compliance
+
+### ISO 22301:2019
+
+- **9.1 Monitoring and Review**: Knowledge management and lessons learned
+- **10.2 Nonconformity and Corrective Action**: Peer review and quality assurance
+- **A.17 Knowledge Management**: Community-driven knowledge base
+
+### Data Privacy
+
+- Automated PII anonymization
+- Opt-in contribution model
+- Reviewer anonymity
+- Tenant isolation
+
+## Configuration
+
+### Environment Variables
+
+```bash
+# Database
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-key
+
+# Messaging
+REDIS_URL=redis://localhost:6379
+
+# Service
+PORT=8030
+CORS_ORIGINS=["*"]
+
+# AI Foundation
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+## Development
+
+### Running Tests
+
+```bash
+pytest tests/
+pytest --cov=services
+```
+
+### Adding Features
+
+1. Create service in `services/`
+2. Add API endpoint in `api/`
+3. Update event handlers in `events/`
+4. Add tests in `tests/`
+
+## Deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for production deployment.
+
+### Docker
+
+```bash
+docker build -t community-intelligence:latest .
+docker run -p 8030:8030 --env-file .env community-intelligence:latest
+```
+
+## Monitoring
+
+### Health Checks
+
+- Readiness: `GET /health`
+- Metrics: `GET /metrics`
+
+### Key Metrics
+
+- `community_contributions_total` - Total contributions
+- `community_reviews_total` - Total reviews
+- `community_reputation_points` - Reputation distribution
+- `community_cases_published` - Published cases
+
+## License
+
+Proprietary - AI-Platform-ISO
 
 ---
 
-## 📡 API Endpoints
-
-### Contributions
-
-```
-POST   /api/v1/community/contributions
-GET    /api/v1/community/contributions/my
-GET    /api/v1/community/contributions/{id}
-DELETE /api/v1/community/contributions/{id}
-POST   /api/v1/community/contributions/preview-anonymization
-POST   /api/v1/community/contributions/from-workflow/{workflow_id}
-```
-
-### Peer Reviews
-
-```
-POST   /api/v1/community/reviews
-GET    /api/v1/community/reviews/pending
-GET    /api/v1/community/reviews/my
-GET    /api/v1/community/reviews/{id}
-```
-
-### Reputation
-
-```
-GET    /api/v1/community/reputation/{user_id}
-GET    /api/v1/community/reputation/{user_id}/expertise/{module}
-GET    /api/v1/community/reputation/leaderboard/global
-GET    /api/v1/community/reputation/leaderboard/{module}
-GET    /api/v1/community/reputation/transactions/{user_id}
-```
-
-### Case Library
-
-```
-GET    /api/v1/community/cases/search
-GET    /api/v1/community/cases/{id}
-GET    /api/v1/community/cases/similar/for-workflow
-GET    /api/v1/community/cases/stats/overview
-```
-
----
-
-## 🚀 Deployment
-
-See main README for deployment instructions.
-
----
-
-**Built with ❤️ for the BCM community**
+**Last Updated**: 2025-10-09
+**Maintainer**: AI Platform Team
+**Documentation**: See docs/ folder for detailed specifications

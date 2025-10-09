@@ -1,5 +1,0 @@
-version: '3.8'
-services: {}
-networks:
-  bcm-network:
-    driver: bridge

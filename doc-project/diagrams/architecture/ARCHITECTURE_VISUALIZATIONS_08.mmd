@@ -1,0 +1,64 @@
+sequenceDiagram
+    participant Events as Platform Events
+    participant EventBus as RabbitMQ
+    participant Predict as Predictive Service<br/>8031
+    participant WF_Int as Workflow Intelligence<br/>8037
+    participant Comm as Community Intelligence<br/>8030
+    participant Collective as Collective<br/>8032
+    participant Notif as Notification Service
+    participant DB as PostgreSQL
+
+    Note over Events: Continuous event stream
+
+    Events->>EventBus: workflow.*.completed<br/>organization.milestone.achieved<br/>user.activity.logged<br/>community.case.approved<br/>validation.kpi.updated
+
+    EventBus-->>Predict: SUBSCRIBE to all events
+
+    Note over Predict: Collect events for analysis<br/>Buffer: 100 events or 5 min
+
+    Predict->>Predict: Analyze patterns:<br/>- Event frequency<br/>- Completion rates<br/>- Timeline trends<br/>- Common blockers
+
+    Predict->>WF_Int: GET /cases/search<br/>{pattern_matching}
+    WF_Int->>DB: Query case_library
+    DB->>WF_Int: Historical patterns
+    WF_Int->>Predict: Case patterns with timelines
+
+    Predict->>Comm: GET /api/v1/community/timeline/predict<br/>{org_profile}
+    Comm->>DB: Query similar orgs:<br/>- Industry match<br/>- Size match<br/>- Geography
+    DB->>Comm: 20+ similar organizations
+    Comm->>Comm: Calculate median timeline<br/>Success rate: 85%
+    Comm->>Predict: Timeline predictions
+
+    Predict->>Collective: Query anonymous patterns<br/>(if stuck detected)
+    Collective->>Collective: Check stuck signals:<br/>- Days without progress<br/>- Validation failures<br/>- Low AI confidence
+    Collective->>Comm: GET /api/v1/community/cases<br/>{anonymized: true, k: 5}
+    Comm->>Collective: K-anonymized data
+    Collective->>Predict: Anonymous success patterns
+
+    Note over Predict: ML Model Prediction<br/>Algorithm: Random Forest<br/>Features: 30+<br/>Accuracy: 85%
+
+    Predict->>Predict: Run ML models:<br/>1. Journey Predictor<br/>2. Cert Timeline Predictor<br/>3. Challenge Predictor<br/>4. Expert Demand Forecaster
+
+    Predict->>DB: INSERT predictions
+    Predict->>DB: INSERT journey_timelines
+    Predict->>DB: INSERT proactive_recommendations
+
+    Predict->>EventBus: PUBLISH prediction.journey.generated
+    Predict->>EventBus: PUBLISH prediction.recommendation.generated
+
+    Note over Predict: Daily Digest Scheduler<br/>Cron: 8:00 AM daily
+
+    Predict->>DB: Query organizations needing digest
+    DB->>Predict: 150 active orgs
+
+    loop For each organization
+        Predict->>Predict: Generate personalized digest:<br/>- Journey status<br/>- Next steps<br/>- Proactive recommendations<br/>- Expert availability<br/>- Upcoming challenges
+
+        Predict->>Notif: POST /send-email<br/>{to, subject, body}
+    end
+
+    Predict->>EventBus: PUBLISH prediction.digest.sent<br/>{count: 150}
+
+    Note over Predict: Continuous Learning
+    Predict->>DB: Track prediction accuracy
+    Predict->>Predict: Retrain models (weekly)

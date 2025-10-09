@@ -1,16 +1,16 @@
-# Compliance Service - ISO 22301:2019 Compliance Management
+# Compliance Service
 
-**ISO 22301 Clauses: 9.2 (Internal Audit), 10.1 (Nonconformity), 10.2 (Improvement)**
+**Type**: Platform Service
+**Port**: 8014
+**Status**: Active
+**Version**: 1.0.0
+**ISO 22301 Clauses**: 9.2, 10.1, 10.2
 
-Unified architecture microservice for comprehensive compliance management.
+## Overview
 
----
+The Compliance Service provides comprehensive compliance management capabilities aligned with ISO 22301:2019 Clauses 9.2 (Internal Audit), 10.1 (Nonconformity and Corrective Action), and 10.2 (Continual Improvement). It serves as the central compliance hub for the AI-Platform-ISO, managing assessments, gap analysis, evidence collection, nonconformity management, and continual improvement initiatives.
 
-## ✅ MIGRATION STATUS
-
-**Source:** `/Users/MD/ISO-22301—копия/services/SERVICES/BCM/compliance/` (~8000 lines)
-**Target:** `/Users/MD/AI-Platform-ISO/services/bcm/compliance/` (unified architecture)
-**Status:** ✅ **COMPLETE - FULL STRUCTURE PRESERVED**
+This service enables organizations to maintain continuous compliance, identify and address gaps, conduct internal audits, manage nonconformities through Root Cause Analysis (RCA), and drive continual improvement across their Business Continuity Management System
 
 ### What Was Preserved:
 - ✅ All 13 Enums (ComplianceStandard, ComplianceStatus, etc.)

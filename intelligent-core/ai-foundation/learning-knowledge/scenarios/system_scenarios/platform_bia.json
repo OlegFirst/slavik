@@ -1,0 +1,385 @@
+{
+  "scenario_id": "system_bia_001",
+  "scenario_name": "Platform Self-BIA",
+  "level": "system",
+  "target": "AI-Platform-ISO",
+  "goal": "self_survival",
+  "description": "Business Impact Analysis for the platform itself - identifying critical processes, dependencies, and recovery requirements",
+  "version": "1.0.0",
+  "created": "2025-10-09",
+  "priority": "critical",
+
+  "critical_processes": [
+    {
+      "process_id": "cp_001",
+      "name": "Event Bus (Redis Streams)",
+      "description": "Core event-driven communication backbone",
+      "criticality": "tier_1_critical",
+      "rto": "30s",
+      "rpo": "0s",
+      "impact_if_down": {
+        "immediate": "All async communication stops, workflow coordination fails",
+        "1_hour": "System paralysis - no component can communicate",
+        "4_hours": "Complete platform failure, data loss in flight",
+        "24_hours": "Unrecoverable - requires full rebuild"
+      },
+      "dependencies": ["redis_streams", "eventbus_core"],
+      "recovery_priority": 1,
+      "auto_recovery": true,
+      "health_check_interval": "10s",
+      "metrics": [
+        "event_throughput",
+        "consumer_lag",
+        "stream_length",
+        "connection_count"
+      ]
+    },
+    {
+      "process_id": "cp_002",
+      "name": "API Gateway",
+      "description": "Primary user interface and request routing",
+      "criticality": "tier_1_critical",
+      "rto": "1m",
+      "rpo": "0s",
+      "impact_if_down": {
+        "immediate": "Users cannot access platform",
+        "1_hour": "User frustration, workflow interruption",
+        "4_hours": "Users abandon platform, reputation damage",
+        "24_hours": "Loss of trust, business impact"
+      },
+      "dependencies": ["fastapi", "nginx", "auth_service"],
+      "recovery_priority": 2,
+      "auto_recovery": true,
+      "health_check_interval": "15s",
+      "circuit_breaker": {
+        "enabled": true,
+        "failure_threshold": 5,
+        "timeout": "30s",
+        "fallback": "cached_responses"
+      },
+      "metrics": [
+        "request_latency_p95",
+        "error_rate",
+        "active_connections",
+        "throughput_rps"
+      ]
+    },
+    {
+      "process_id": "cp_003",
+      "name": "PostgreSQL Database",
+      "description": "Primary data persistence layer",
+      "criticality": "tier_1_critical",
+      "rto": "2m",
+      "rpo": "5m",
+      "impact_if_down": {
+        "immediate": "Cannot read/write workflow state",
+        "1_hour": "All stateful operations fail",
+        "4_hours": "Data integrity concerns, workflow corruption",
+        "24_hours": "Major data loss, compliance violations"
+      },
+      "dependencies": ["postgresql", "connection_pool"],
+      "recovery_priority": 1,
+      "auto_recovery": true,
+      "backup_strategy": {
+        "type": "continuous_archival",
+        "interval": "5m",
+        "retention": "30d",
+        "location": "supabase_backup"
+      },
+      "health_check_interval": "20s",
+      "metrics": [
+        "connection_pool_usage",
+        "query_latency_p95",
+        "replication_lag",
+        "disk_usage"
+      ]
+    },
+    {
+      "process_id": "cp_004",
+      "name": "RAG System (Qdrant + LLM)",
+      "description": "Knowledge retrieval and AI-powered responses",
+      "criticality": "tier_2_important",
+      "rto": "5m",
+      "rpo": "1h",
+      "impact_if_down": {
+        "immediate": "AI responses degraded, no context retrieval",
+        "1_hour": "Users get generic responses, expertise lost",
+        "4_hours": "Platform intelligence severely reduced",
+        "24_hours": "Competitive disadvantage, user dissatisfaction"
+      },
+      "dependencies": ["qdrant", "openai_api", "anthropic_api", "embedding_service"],
+      "recovery_priority": 3,
+      "auto_recovery": true,
+      "fallback_strategy": {
+        "type": "cached_embeddings",
+        "degraded_mode": "keyword_search",
+        "llm_fallback": "rule_based_responses"
+      },
+      "health_check_interval": "30s",
+      "metrics": [
+        "qdrant_query_latency",
+        "llm_api_latency",
+        "embedding_cache_hit_rate",
+        "retrieval_accuracy"
+      ]
+    },
+    {
+      "process_id": "cp_005",
+      "name": "Analytics Specialist",
+      "description": "System behavior analysis and scenario generation",
+      "criticality": "tier_2_important",
+      "rto": "10m",
+      "rpo": "1h",
+      "impact_if_down": {
+        "immediate": "No new scenario generation",
+        "1_hour": "Pattern detection stops",
+        "4_hours": "Self-learning cycle breaks",
+        "24_hours": "Platform stops evolving"
+      },
+      "dependencies": ["system_behavior_analyzer", "intelligent_module_analyzer"],
+      "recovery_priority": 4,
+      "auto_recovery": true,
+      "health_check_interval": "60s",
+      "metrics": [
+        "scenarios_generated_per_hour",
+        "pattern_detection_latency",
+        "analysis_queue_depth"
+      ]
+    },
+    {
+      "process_id": "cp_006",
+      "name": "Workflow Intelligence",
+      "description": "Workflow orchestration and execution",
+      "criticality": "tier_1_critical",
+      "rto": "3m",
+      "rpo": "0s",
+      "impact_if_down": {
+        "immediate": "No workflow execution",
+        "1_hour": "All BCM processes stop",
+        "4_hours": "Business continuity planning impossible",
+        "24_hours": "Platform primary function lost"
+      },
+      "dependencies": ["temporal_workflow_engine", "workflow_state_store"],
+      "recovery_priority": 2,
+      "auto_recovery": true,
+      "health_check_interval": "15s",
+      "metrics": [
+        "active_workflows",
+        "workflow_completion_rate",
+        "workflow_latency",
+        "failure_rate"
+      ]
+    },
+    {
+      "process_id": "cp_007",
+      "name": "Monitoring & Observability",
+      "description": "System health monitoring and alerting",
+      "criticality": "tier_2_important",
+      "rto": "15m",
+      "rpo": "5m",
+      "impact_if_down": {
+        "immediate": "Blind to system health",
+        "1_hour": "Cannot detect failures proactively",
+        "4_hours": "Problems cascade undetected",
+        "24_hours": "Multiple undetected failures, chaos"
+      },
+      "dependencies": ["prometheus", "grafana", "alerting_service"],
+      "recovery_priority": 5,
+      "auto_recovery": true,
+      "health_check_interval": "30s",
+      "metrics": [
+        "metrics_ingestion_rate",
+        "alert_latency",
+        "dashboard_query_time"
+      ]
+    }
+  ],
+
+  "cross_dependencies": [
+    {
+      "from": "API Gateway",
+      "to": ["Event Bus", "PostgreSQL", "RAG System", "Workflow Intelligence"],
+      "type": "synchronous",
+      "failure_mode": "cascade"
+    },
+    {
+      "from": "Workflow Intelligence",
+      "to": ["Event Bus", "PostgreSQL"],
+      "type": "both",
+      "failure_mode": "partial_degradation"
+    },
+    {
+      "from": "RAG System",
+      "to": ["Qdrant", "LLM APIs"],
+      "type": "synchronous",
+      "failure_mode": "fallback_available"
+    },
+    {
+      "from": "Analytics Specialist",
+      "to": ["Event Bus", "RAG System"],
+      "type": "asynchronous",
+      "failure_mode": "queued_retry"
+    }
+  ],
+
+  "resource_priorities": [
+    {
+      "tier": "tier_1_critical",
+      "processes": ["Event Bus", "API Gateway", "PostgreSQL", "Workflow Intelligence"],
+      "resource_allocation": {
+        "cpu": "guaranteed_80%",
+        "memory": "guaranteed_4GB_min",
+        "network": "priority_high",
+        "disk_io": "priority_high"
+      },
+      "action_on_resource_contention": "throttle_tier_2_and_3"
+    },
+    {
+      "tier": "tier_2_important",
+      "processes": ["RAG System", "Analytics Specialist", "Monitoring"],
+      "resource_allocation": {
+        "cpu": "best_effort_up_to_60%",
+        "memory": "best_effort_up_to_2GB",
+        "network": "priority_medium",
+        "disk_io": "priority_medium"
+      },
+      "action_on_resource_contention": "graceful_degradation"
+    },
+    {
+      "tier": "tier_3_optional",
+      "processes": ["Background Jobs", "Cleanup Tasks", "Analytics"],
+      "resource_allocation": {
+        "cpu": "best_effort_up_to_20%",
+        "memory": "best_effort_up_to_512MB",
+        "network": "priority_low",
+        "disk_io": "priority_low"
+      },
+      "action_on_resource_contention": "pause_until_resources_available"
+    }
+  ],
+
+  "recovery_scenarios": [
+    {
+      "scenario": "event_bus_failure",
+      "detection": "health_check_fails_3_consecutive",
+      "immediate_action": [
+        "trigger_circuit_breakers",
+        "switch_to_degraded_mode",
+        "alert_critical"
+      ],
+      "recovery_steps": [
+        "attempt_auto_restart_redis",
+        "verify_stream_integrity",
+        "replay_missed_events",
+        "restore_consumer_groups",
+        "verify_all_consumers_connected"
+      ],
+      "estimated_recovery_time": "30s",
+      "rollback_plan": "switch_to_backup_redis_instance"
+    },
+    {
+      "scenario": "database_connection_pool_exhausted",
+      "detection": "connection_pool_usage_>95%",
+      "immediate_action": [
+        "kill_long_running_queries",
+        "increase_pool_size_temporarily",
+        "enable_connection_queueing"
+      ],
+      "recovery_steps": [
+        "identify_connection_leaks",
+        "restart_leaking_services",
+        "verify_connection_pool_normal"
+      ],
+      "estimated_recovery_time": "2m",
+      "prevention": "implement_connection_timeout_30s"
+    },
+    {
+      "scenario": "rag_system_degradation",
+      "detection": "qdrant_latency_>2s_or_llm_errors_>10%",
+      "immediate_action": [
+        "switch_to_cached_embeddings",
+        "enable_keyword_fallback",
+        "reduce_llm_concurrency"
+      ],
+      "recovery_steps": [
+        "check_qdrant_health",
+        "verify_llm_api_keys",
+        "clear_embedding_cache",
+        "gradually_restore_normal_mode"
+      ],
+      "estimated_recovery_time": "5m",
+      "prevention": "implement_embedding_cache_warming"
+    },
+    {
+      "scenario": "memory_leak_detected",
+      "detection": "memory_usage_increasing_10%_per_hour",
+      "immediate_action": [
+        "capture_heap_dump",
+        "identify_leaking_service",
+        "prepare_rolling_restart"
+      ],
+      "recovery_steps": [
+        "analyze_heap_dump",
+        "rolling_restart_affected_services",
+        "verify_memory_stable",
+        "create_issue_for_root_cause"
+      ],
+      "estimated_recovery_time": "10m",
+      "prevention": "enable_memory_profiling_in_staging"
+    },
+    {
+      "scenario": "cascade_failure_detected",
+      "detection": "multiple_services_failing_simultaneously",
+      "immediate_action": [
+        "activate_all_circuit_breakers",
+        "isolate_failing_services",
+        "preserve_critical_tier_1_only"
+      ],
+      "recovery_steps": [
+        "identify_root_cause_service",
+        "restart_services_in_dependency_order",
+        "verify_each_before_next",
+        "gradually_restore_tier_2_and_3"
+      ],
+      "estimated_recovery_time": "15m",
+      "rollback_plan": "complete_platform_restart"
+    }
+  ],
+
+  "metrics_and_kpis": {
+    "availability_targets": {
+      "tier_1_critical": "99.9%",
+      "tier_2_important": "99.5%",
+      "tier_3_optional": "95%"
+    },
+    "performance_targets": {
+      "api_latency_p95": "<200ms",
+      "event_processing_latency": "<100ms",
+      "database_query_latency": "<50ms",
+      "rag_retrieval_latency": "<1s"
+    },
+    "resilience_metrics": {
+      "mean_time_to_detect_failure": "<30s",
+      "mean_time_to_recover": "<5m",
+      "auto_recovery_success_rate": ">95%",
+      "false_positive_alert_rate": "<5%"
+    }
+  },
+
+  "learning_from_practice": {
+    "measurement_interval": "24h",
+    "metrics_to_track": [
+      "actual_rto_vs_target",
+      "actual_rpo_vs_target",
+      "recovery_success_rate",
+      "false_alarm_rate",
+      "resource_utilization_efficiency"
+    ],
+    "improvement_triggers": [
+      "rto_exceeded_3_times_in_week",
+      "recovery_failure_rate_>5%",
+      "resource_contention_events_>10_per_day"
+    ],
+    "feedback_loop": "apply_improvements_to_platform_immediately"
+  }
+}

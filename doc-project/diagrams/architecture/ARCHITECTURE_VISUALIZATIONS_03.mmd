@@ -1,0 +1,66 @@
+graph TB
+    subgraph "Platform Services - ISO 22301 Compliance"
+        subgraph "Core BCM Services (ISO 22301)"
+            BIA_S[BIA Service<br/>Port 8012<br/>Clause 8.2.2<br/>━━━━━━━━━━━<br/>• Business Impact Analysis<br/>• RTO/RPO/MTPD<br/>• Criticality Assessment<br/>• Dependency Mapping]
+
+            RISK_S[Risk Service<br/>Port 8040<br/>Clause 8.2.3<br/>━━━━━━━━━━━<br/>• Risk Register<br/>• FAIR Analysis<br/>• Monte Carlo Simulation<br/>• Treatment Planning]
+
+            COMP_S[Compliance Service<br/>Port 8014<br/>Clauses 9.2, 10.1, 10.2<br/>━━━━━━━━━━━<br/>• Audit Management<br/>• Nonconformities<br/>• Root Cause Analysis<br/>• Corrective Actions]
+
+            GOV_S[Governance Service<br/>Port 8013<br/>Clauses 4, 5<br/>━━━━━━━━━━━<br/>• Policy Management<br/>• Stakeholder Mgmt<br/>• Context Analysis<br/>• Decision Tracking]
+
+            DOC_S[Documents Service<br/>Port 8024<br/>Clause 7.5<br/>━━━━━━━━━━━<br/>• Document Lifecycle<br/>• Version Control<br/>• Approval Workflows<br/>• Template Library]
+
+            VAL_S[Validation Service<br/>Port 8022<br/>Clauses 8.5, 9.1-9.3<br/>━━━━━━━━━━━<br/>• KPI Monitoring<br/>• Alert Management<br/>• Performance Tracking<br/>• Continuous Improvement]
+        end
+
+        subgraph "Planning & Execution"
+            PLAN_S[Planning Service<br/>Port 8011<br/>Clause 8.3<br/>━━━━━━━━━━━<br/>• Strategy Development<br/>• Cost-Benefit Analysis<br/>• NPV/ROI Calculation<br/>• Resource Planning]
+
+            PLANS_S[Plans Service<br/>Port 8023<br/>Clause 8.4<br/>━━━━━━━━━━━<br/>• Plan Repository<br/>• Procedure Management<br/>• Exercise Scheduling<br/>• Version Control]
+
+            RESP_S[Response Service<br/>Port 8041<br/>Clause 8.4.5<br/>━━━━━━━━━━━<br/>• Incident Management<br/>• Team Coordination<br/>• Escalation Workflows<br/>• Lessons Learned]
+        end
+
+        subgraph "Intelligence & Learning"
+            LEARN_S[Learning Service<br/>Port 8021<br/>Clauses 7.2, 7.3<br/>━━━━━━━━━━━<br/>• Training Programs<br/>• Competency Tracking<br/>• Certification Mgmt<br/>• Skills Gap Analysis]
+
+            LIVING_S[Living Docs<br/>Port 8034<br/>━━━━━━━━━━━<br/>• AI-Generated Examples<br/>• Self-Improvement<br/>• Personalization<br/>• Gap Detection]
+
+            SIM_S[Simulation<br/>Port 8031+<br/>━━━━━━━━━━━<br/>• Scenario Testing<br/>• Digital Twin<br/>• Monte Carlo Analysis<br/>• TheHive Integration]
+        end
+
+        subgraph "Coordination"
+            BCM_C[BCM Coordination<br/>Port 8070<br/>━━━━━━━━━━━<br/>• Analyzer Coordination<br/>• Intelligent Core Bridge<br/>• Service Orchestration]
+        end
+
+        subgraph "Community"
+            COMM_S[Community Service<br/>Ports 8032-8033<br/>━━━━━━━━━━━<br/>• Portal<br/>• Marketplace<br/>• Knowledge Sharing<br/>• Peer Review]
+        end
+    end
+
+    %% Coordination connects all
+    BCM_C --> BIA_S
+    BCM_C --> RISK_S
+    BCM_C --> COMP_S
+    BCM_C --> GOV_S
+    BCM_C --> DOC_S
+    BCM_C --> VAL_S
+    BCM_C --> PLAN_S
+    BCM_C --> PLANS_S
+    BCM_C --> RESP_S
+    BCM_C --> LEARN_S
+    BCM_C --> LIVING_S
+    BCM_C --> SIM_S
+
+    %% Service Dependencies
+    BIA_S -.creates.-> RISK_S
+    RISK_S -.escalates.-> RESP_S
+    COMP_S --> VAL_S
+    PLAN_S --> PLANS_S
+    RESP_S --> LEARN_S
+
+    style BIA_S fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style RISK_S fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style COMP_S fill:#cce5ff,stroke:#007bff,stroke-width:2px
+    style BCM_C fill:#f8d7da,stroke:#dc3545,stroke-width:3px

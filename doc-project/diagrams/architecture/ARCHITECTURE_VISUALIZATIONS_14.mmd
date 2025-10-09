@@ -1,0 +1,34 @@
+graph LR
+    API_GW[API Gateway<br/>Port 8000<br/>━━━━━━━━━━━<br/>• JWT Validation<br/>• Rate Limiting<br/>• Request Routing<br/>• Response Caching]
+
+    subgraph "Intelligent Core APIs"
+        AI_ORCH_API[AI Orchestration<br/>8030<br/>/api/v1/ai/*]
+        WF_INT_API[Workflow Intelligence<br/>8037<br/>/api/v1/workflow/*]
+        COORD_API[Coordination Center<br/>8034<br/>/coordination/*]
+        EXPERT_API[Expertise Center<br/>8035<br/>/expertise/*]
+        AI_FOUND_API[AI Foundation<br/>8040<br/>/api/v1/llm/*]
+    end
+
+    subgraph "Platform Services APIs"
+        BIA_API[BIA<br/>8012<br/>/api/v1/bia/*]
+        RISK_API[Risk<br/>8040<br/>/api/v1/risk/*]
+        COMP_API[Compliance<br/>8014<br/>/api/v1/compliance/*]
+        GOV_API[Governance<br/>8013<br/>/api/v1/governance/*]
+        DOC_API[Documents<br/>8024<br/>/api/v1/documents/*]
+        VAL_API[Validation<br/>8022<br/>/api/v1/validation/*]
+    end
+
+    API_GW -->|POST /ai/orchestrate| AI_ORCH_API
+    API_GW -->|POST /workflow/start| WF_INT_API
+    API_GW -->|POST /coordination/execute| COORD_API
+    API_GW -->|POST /expertise/analyze| EXPERT_API
+    API_GW -->|POST /llm/route| AI_FOUND_API
+
+    API_GW -->|POST /bia| BIA_API
+    API_GW -->|POST /risk| RISK_API
+    API_GW -->|POST /compliance/audit| COMP_API
+    API_GW -->|GET /governance/policies| GOV_API
+    API_GW -->|POST /documents/upload| DOC_API
+    API_GW -->|GET /validation/kpis| VAL_API
+
+    style API_GW fill:#fff3cd,stroke:#ffc107,stroke-width:3px

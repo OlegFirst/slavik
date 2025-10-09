@@ -1,0 +1,53 @@
+sequenceDiagram
+    participant Services as All Platform Services
+    participant EventBus as RabbitMQ
+    participant Event_Int as Event Intelligence<br/>8039
+    participant AI_Found as AI Foundation<br/>8040
+    participant DB as PostgreSQL
+
+    Note over Event_Int: Subscribe to ALL events: *.*
+
+    Services->>EventBus: Publish various events:<br/>• workflow.bia.started<br/>• risk.created<br/>• compliance.audit.completed<br/>• user.login<br/>• etc.
+
+    EventBus-->>Event_Int: Deliver ALL events
+
+    Note over Event_Int: Auto-Discovery Engine
+
+    Event_Int->>Event_Int: Analyze event:<br/>1. Extract service name<br/>2. Extract event type<br/>3. Extract payload schema<br/>4. Track frequency
+
+    Event_Int->>DB: INSERT/UPDATE service_registry<br/>{service, endpoints, health}
+
+    Event_Int->>DB: QUERY event_patterns<br/>WHERE event_type = ?
+
+    DB->>Event_Int: Historical patterns
+
+    Event_Int->>Event_Int: Pattern Learning:<br/>1. Sequence detection<br/>2. Correlation analysis<br/>3. Causation inference<br/>4. Timing analysis
+
+    alt New Pattern Detected
+        Event_Int->>DB: INSERT event_patterns<br/>{pattern, confidence}
+        Event_Int->>EventBus: PUBLISH event.pattern_detected
+    end
+
+    Event_Int->>Event_Int: Build event graph:<br/>workflow.started → workflow.state_changed<br/>→ workflow.completed
+
+    Event_Int->>AI_Found: POST /api/v1/llm/route<br/>"Analyze event pattern"
+
+    AI_Found->>Event_Int: Insights + predictions
+
+    Event_Int->>Event_Int: Predict next event:<br/>If workflow.started,<br/>then workflow.state_changed<br/>Confidence: 95%
+
+    Event_Int->>DB: UPDATE event_predictions
+
+    Event_Int->>EventBus: PUBLISH event.prediction.made
+
+    Note over Event_Int: Self-Healing Check
+
+    alt Error Pattern Detected
+        Event_Int->>Event_Int: Analyze error:<br/>• Frequency<br/>• Service affected<br/>• Root cause pattern
+
+        Event_Int->>AI_Found: "Generate fix for error pattern"
+
+        AI_Found->>Event_Int: Suggested fix (code/config)
+
+        Event_Int->>EventBus: PUBLISH event.healing.suggested
+    end

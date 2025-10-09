@@ -1,0 +1,80 @@
+graph TB
+    subgraph "Layer 1: Foundation"
+        direction LR
+        AI_F[AI Foundation<br/>8040<br/>━━━━━━━━━━━<br/>• LLM Router<br/>• RAG Pipeline<br/>• Embeddings<br/>• ML Predictor<br/>• Self-Learning]
+
+        SHARED_F[Shared<br/>━━━━━━━━━━━<br/>• Platform Client<br/>• EventBus Core<br/>• Outbox Pattern<br/>• Utilities]
+    end
+
+    subgraph "Layer 2: Intelligence & Orchestration"
+        direction TB
+
+        subgraph "Core Brain"
+            WF_I[Workflow Intelligence<br/>8037<br/>━━━━━━━━━━━<br/>• BPMN Engine<br/>• State Machines<br/>• Rules Engine<br/>• Case Library<br/>• 7 Workflow Types]
+        end
+
+        subgraph "Decision & Control"
+            AI_O[AI Orchestration<br/>8030<br/>━━━━━━━━━━━<br/>• 4-Layer Memory<br/>• Decision Center<br/>• Safety Monitor<br/>• Self-Evolution<br/>• Service Control]
+
+            COORD_C[Coordination Center<br/>8034<br/>━━━━━━━━━━━<br/>• Intent Translation<br/>• Security Layer<br/>• Execution Track<br/>• Rollback Support]
+        end
+
+        subgraph "Enhancement Services"
+            AI_OPT_L[AI Optimizer<br/>8038<br/>━━━━━━━━━━━<br/>• ML Models<br/>• Bottleneck Detect<br/>• Anomaly Detection]
+
+            EVENT_I[Event Intelligence<br/>8039<br/>━━━━━━━━━━━<br/>• Auto-Discovery<br/>• Pattern Learning<br/>• Self-Healing]
+
+            WF_E[Workflow Engine<br/>8036<br/>━━━━━━━━━━━<br/>• BPMN 2.0<br/>• Persistent State]
+        end
+    end
+
+    subgraph "Layer 3: Domain Expertise & Collaboration"
+        direction TB
+
+        EXPERT_C[Expertise Center<br/>8035<br/>━━━━━━━━━━━<br/>12 Tactical Assistants:<br/>• BIA Specialist<br/>• Risk Analyst<br/>• Compliance Copilot<br/>• Incident Advisor<br/>• Plan Generator<br/>• Exercise Designer<br/>• + 6 more<br/><br/>10 Strategic Analyzers:<br/>• Compliance Analyzer<br/>• Risk Analyzer<br/>• Governance Analyzer<br/>• + 7 more]
+
+        COMM_I[Community Intelligence<br/>8030<br/>━━━━━━━━━━━<br/>• Peer Review<br/>• Reputation System<br/>• Case Library<br/>• AI Synthesis<br/>• Timeline Prediction]
+
+        COLLECTIVE_L[Collective<br/>8032<br/>━━━━━━━━━━━<br/>• K-Anonymity k=5<br/>• Stuck Detection<br/>• Collective Agents<br/>• Privacy Protection]
+    end
+
+    subgraph "Layer 4: Predictive Intelligence"
+        PREDICT_L[Predictive Service<br/>8031<br/>━━━━━━━━━━━<br/>• Journey Prediction<br/>• Cert Timeline<br/>• Proactive Recs<br/>• Expert Demand<br/>• Daily Digests]
+    end
+
+    %% Dependencies - Foundation serves all
+    AI_F -.provides.-> WF_I
+    AI_F -.provides.-> AI_O
+    AI_F -.provides.-> AI_OPT_L
+    AI_F -.provides.-> EVENT_I
+    AI_F -.provides.-> EXPERT_C
+    AI_F -.provides.-> COMM_I
+    AI_F -.provides.-> COLLECTIVE_L
+    AI_F -.provides.-> PREDICT_L
+
+    SHARED_F -.provides.-> WF_I
+    SHARED_F -.provides.-> AI_O
+
+    %% Intelligence Layer
+    AI_O --> COORD_C
+    COORD_C --> WF_I
+    WF_I --> WF_E
+    WF_I <--> AI_OPT_L
+    EVENT_I -.observes.-> AI_O
+
+    %% Domain Layer
+    WF_I --> EXPERT_C
+    WF_I <--> COMM_I
+    COMM_I --> COLLECTIVE_L
+
+    %% Predictive Layer
+    WF_I --> PREDICT_L
+    COMM_I --> PREDICT_L
+    COLLECTIVE_L --> PREDICT_L
+
+    style AI_F fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style SHARED_F fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style WF_I fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style AI_O fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style EXPERT_C fill:#cce5ff,stroke:#007bff,stroke-width:3px
+    style PREDICT_L fill:#f8d7da,stroke:#dc3545,stroke-width:3px

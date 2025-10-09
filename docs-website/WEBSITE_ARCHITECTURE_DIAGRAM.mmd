@@ -1,0 +1,123 @@
+graph TB
+    subgraph "User Browser"
+        USER[👤 User]
+    end
+
+    subgraph "GitHub Pages - Static Hosting"
+        GH_PAGES[GitHub Pages<br/>yourorg.github.io/ai-platform-iso/]
+    end
+
+    subgraph "Docusaurus Frontend Application"
+        subgraph "Navigation & Layout"
+            NAV[Navigation Bar<br/>Services | Diagrams | API | Library]
+            SIDEBAR[Sidebar<br/>Documentation Tree]
+            FOOTER[Footer<br/>Links & Info]
+        end
+
+        subgraph "Main Pages"
+            HOME[🏠 Home Page<br/>Platform Overview + Stats]
+            SERVICES[📦 Services Catalog<br/>23 Services Grid + Details]
+            DIAGRAMS[📊 Diagrams Gallery<br/>36 Interactive Mermaid Diagrams]
+            LIBRARY[📚 Document Library<br/>550+ Documents with Search]
+            API[🔌 API Reference<br/>150+ Endpoints (Swagger UI)]
+            DOCS[📖 Documentation<br/>Markdown Pages]
+        end
+
+        subgraph "React Components"
+            SERVICE_CARD[ServiceCard Component<br/>Display service info]
+            DIAGRAM_VIEWER[DiagramViewer Component<br/>Mermaid.js rendering]
+            DOC_SEARCH[DocumentSearch Component<br/>Algolia integration]
+            INTERACTIVE[InteractiveDiagram<br/>Click nodes → details]
+        end
+
+        subgraph "Data Layer"
+            SERVICES_JSON[services.json<br/>23 services metadata]
+            DIAGRAMS_JSON[diagrams.json<br/>36 diagram metadata]
+            DOCS_JSON[documents.json<br/>550 document index]
+        end
+    end
+
+    subgraph "Static Assets"
+        MERMAID_FILES[36 Mermaid .mmd files<br/>/static/diagrams/]
+        MD_FILES[550 Markdown files<br/>/docs/ + /doc-project/]
+        IMAGES[Images & PDFs<br/>/static/]
+    end
+
+    subgraph "Build Pipeline - GitHub Actions"
+        TRIGGER[Push to main branch]
+        CHECKOUT[Checkout code]
+        INSTALL[npm install]
+        GENERATE[Generate Data<br/>services.json<br/>diagrams.json<br/>documents.json]
+        BUILD[Docusaurus Build<br/>npm run build]
+        DEPLOY[Deploy to GitHub Pages]
+    end
+
+    subgraph "Data Generation Scripts"
+        GEN_SERVICES[generate-services-data.js<br/>Scan service definitions]
+        GEN_DIAGRAMS[generate-diagrams-data.js<br/>Scan .mmd files]
+        GEN_DOCS[generate-document-index.js<br/>Scan all .md files]
+    end
+
+    subgraph "External Services"
+        ALGOLIA[Algolia DocSearch<br/>Full-text search]
+        ANALYTICS[Google Analytics /<br/>Plausible]
+        GITHUB_API[GitHub API<br/>Commits, Contributors]
+    end
+
+    %% User Flow
+    USER -->|HTTPS| GH_PAGES
+    GH_PAGES -->|Serve static site| NAV
+    NAV --> HOME
+    NAV --> SERVICES
+    NAV --> DIAGRAMS
+    NAV --> LIBRARY
+    NAV --> API
+    NAV --> DOCS
+
+    %% Pages to Components
+    HOME --> SERVICE_CARD
+    HOME --> DIAGRAM_VIEWER
+    SERVICES --> SERVICE_CARD
+    DIAGRAMS --> DIAGRAM_VIEWER
+    DIAGRAMS --> INTERACTIVE
+    LIBRARY --> DOC_SEARCH
+
+    %% Components to Data
+    SERVICE_CARD --> SERVICES_JSON
+    DIAGRAM_VIEWER --> DIAGRAMS_JSON
+    DIAGRAM_VIEWER --> MERMAID_FILES
+    DOC_SEARCH --> DOCS_JSON
+    DOC_SEARCH --> MD_FILES
+
+    %% Build Pipeline
+    TRIGGER --> CHECKOUT
+    CHECKOUT --> INSTALL
+    INSTALL --> GENERATE
+    GENERATE --> GEN_SERVICES
+    GENERATE --> GEN_DIAGRAMS
+    GENERATE --> GEN_DOCS
+    GEN_SERVICES --> SERVICES_JSON
+    GEN_DIAGRAMS --> DIAGRAMS_JSON
+    GEN_DOCS --> DOCS_JSON
+    GENERATE --> BUILD
+    BUILD --> DEPLOY
+    DEPLOY --> GH_PAGES
+
+    %% External Services
+    DOC_SEARCH -.->|Search API| ALGOLIA
+    HOME -.->|Track visits| ANALYTICS
+    HOME -.->|Fetch commits| GITHUB_API
+
+    %% Styling
+    style USER fill:#4CAF50
+    style GH_PAGES fill:#2196F3
+    style HOME fill:#FF9800
+    style SERVICES fill:#FF9800
+    style DIAGRAMS fill:#FF9800
+    style LIBRARY fill:#FF9800
+    style API fill:#FF9800
+    style SERVICES_JSON fill:#9C27B0
+    style DIAGRAMS_JSON fill:#9C27B0
+    style DOCS_JSON fill:#9C27B0
+    style ALGOLIA fill:#5468FF
+    style ANALYTICS fill:#F57C00

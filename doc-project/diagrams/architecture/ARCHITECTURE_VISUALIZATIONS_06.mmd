@@ -1,0 +1,87 @@
+sequenceDiagram
+    participant User
+    participant API_GW as API Gateway
+    participant AI_Orch as AI Orchestration<br/>8030
+    participant Coord as Coordination Center<br/>8034
+    participant WF_Int as Workflow Intelligence<br/>8037
+    participant AI_Opt as AI Optimizer<br/>8038
+    participant Expert as Expertise Center<br/>8035
+    participant Predict as Predictive<br/>8031
+    participant Comm as Community Intelligence<br/>8030
+    participant EventBus as RabbitMQ EventBus
+    participant DB as PostgreSQL
+
+    User->>API_GW: POST /api/workflows/bia/start
+    API_GW->>AI_Orch: Request + JWT context
+
+    Note over AI_Orch: 1. Context Aggregation<br/>2. Priority Assessment<br/>3. Strategy Selection<br/>4. Safety Validation
+
+    AI_Orch->>AI_Orch: Load Working Memory (Redis)
+    AI_Orch->>DB: Query Short-Term Memory
+    AI_Orch->>WF_Int: Query Case Library
+
+    AI_Orch->>Coord: Decision Intent:<br/>{type: start_bia, priority: high}
+
+    Note over Coord: 1. Validate Intent<br/>2. Check Permissions<br/>3. Security Layer<br/>4. Create Execution Tracker
+
+    Coord->>WF_Int: POST /api/v1/workflow/start<br/>{workflow_type: bia}
+
+    Note over WF_Int: 1. Initialize BPMN Workflow<br/>2. Create State Machine<br/>3. Apply Rules Engine<br/>4. Store in Case Library
+
+    WF_Int->>DB: INSERT workflow_instance
+    WF_Int->>DB: INSERT workflow_state
+
+    WF_Int->>EventBus: PUBLISH workflow.bia.started
+
+    par Parallel Processing
+        EventBus-->>AI_Opt: SUBSCRIBE workflow.bia.started
+        EventBus-->>Expert: SUBSCRIBE workflow.bia.started
+        EventBus-->>Predict: SUBSCRIBE workflow.bia.started
+    end
+
+    AI_Opt->>WF_Int: Query execution history
+    AI_Opt->>Expert: Query expert insights
+    AI_Opt->>AI_Opt: Run ML models:<br/>1. Performance prediction<br/>2. Bottleneck detection<br/>3. Anomaly detection
+    AI_Opt->>EventBus: PUBLISH workflow.optimization.completed
+
+    Expert->>Expert: Select BIA Specialist<br/>(Tactical Assistant)
+    Expert->>WF_Int: Query similar BIA cases
+    Expert->>Expert: Generate expert guidance
+    Expert->>EventBus: PUBLISH expert.recommendation.generated
+
+    Predict->>WF_Int: Query case patterns
+    Predict->>Comm: Query community timelines
+    Predict->>Predict: Update journey prediction
+    Predict->>EventBus: PUBLISH prediction.journey.updated
+
+    WF_Int->>WF_Int: Apply optimization<br/>Apply expert guidance<br/>Update journey context
+
+    WF_Int->>WF_Int: Execute workflow steps:<br/>1. Data collection<br/>2. Impact assessment<br/>3. Recovery objectives<br/>4. Dependency mapping
+
+    loop Workflow Execution
+        WF_Int->>DB: UPDATE workflow_state
+        WF_Int->>EventBus: PUBLISH workflow.state_changed
+    end
+
+    WF_Int->>DB: UPDATE workflow_instance (completed)
+    WF_Int->>EventBus: PUBLISH workflow.bia.completed
+
+    par Post-Completion Processing
+        EventBus-->>Comm: SUBSCRIBE workflow.bia.completed
+        EventBus-->>Predict: SUBSCRIBE workflow.bia.completed
+        EventBus-->>AI_Opt: SUBSCRIBE workflow.bia.completed
+    end
+
+    Comm->>Comm: Peer review eligibility?<br/>Success rate analysis
+    Comm->>WF_Int: POST /cases/add (if eligible)
+
+    Predict->>Predict: Update ML models<br/>Recalculate timelines<br/>Generate proactive recs
+    Predict->>EventBus: PUBLISH prediction.digest.ready
+
+    AI_Opt->>AI_Opt: Learn from execution<br/>Update ML models<br/>Store successful patterns
+
+    WF_Int->>Coord: Execution complete
+    Coord->>AI_Orch: Intent executed successfully
+    AI_Orch->>AI_Orch: Update Working Memory<br/>Store in Short-Term Memory
+    AI_Orch->>API_GW: Response with execution_id
+    API_GW->>User: 200 OK {execution_id, status}

@@ -1,0 +1,81 @@
+graph LR
+    subgraph "API Layer"
+        API[API Gateway :8000]
+    end
+    
+    subgraph "Platform Services"
+        BIA[BIA Service :8012]
+        RISK[Risk Service :8040]
+        COMP[Compliance :8014]
+        GOV[Governance :8013]
+        PLAN[Planning :8011]
+        PLANS[Plans :8023]
+        RESP[Response :8041]
+        DOC[Documents :8024]
+        VAL[Validation :8022]
+        LEARN[Learning :8021]
+        COORD[BCM Coord :8070]
+    end
+    
+    subgraph "Intelligent Core"
+        AI_FOUND[AI Foundation :8040]
+        WF_INT[Workflow Intel :8037]
+        EXPERT[Expertise :8035]
+        PREDICT[Predictive :8031]
+        COLLECTIVE[Collective :8032]
+        EVENT_INT[Event Intel :8039]
+    end
+    
+    subgraph "Infrastructure"
+        DB[(PostgreSQL)]
+        REDIS[(Redis)]
+        RABBIT[(RabbitMQ)]
+        QDRANT[(Qdrant)]
+    end
+    
+    API --> BIA
+    API --> RISK
+    API --> COMP
+    API --> GOV
+    API --> PLAN
+    
+    BIA --> AI_FOUND
+    BIA --> WF_INT
+    BIA --> DB
+    BIA --> RABBIT
+    
+    RISK --> AI_FOUND
+    RISK --> EXPERT
+    RISK --> DB
+    RISK --> RABBIT
+    
+    COMP --> AI_FOUND
+    COMP --> EXPERT
+    COMP --> DB
+    
+    PLAN --> WF_INT
+    PLAN --> AI_FOUND
+    PLAN --> PLANS
+    PLAN --> DB
+    
+    AI_FOUND --> QDRANT
+    AI_FOUND --> REDIS
+    
+    WF_INT --> RABBIT
+    WF_INT --> DB
+    
+    EXPERT --> AI_FOUND
+    EXPERT --> COLLECTIVE
+    
+    EVENT_INT --> RABBIT
+    EVENT_INT --> REDIS
+    
+    PREDICT --> AI_FOUND
+    PREDICT --> DB
+    
+    style API fill:#2196F3
+    style AI_FOUND fill:#FF9800
+    style DB fill:#4CAF50
+    style REDIS fill:#F44336
+    style RABBIT fill:#FF9800
+    style QDRANT fill:#9C27B0

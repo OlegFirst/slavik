@@ -1,0 +1,579 @@
+{
+  "scenario_id": "system_recovery_001",
+  "scenario_name": "Platform Self-Recovery Procedures",
+  "level": "system",
+  "target": "AI-Platform-ISO",
+  "goal": "self_survival",
+  "description": "Automated recovery procedures for platform self-healing",
+  "version": "1.0.0",
+  "created": "2025-10-09",
+  "priority": "critical",
+
+  "recovery_procedures": [
+    {
+      "procedure_id": "proc_001",
+      "name": "Event Bus Auto-Recovery",
+      "triggers": [
+        "redis_health_check_failed",
+        "event_processing_stopped",
+        "consumer_group_errors_>10"
+      ],
+      "detection_time_target": "15s",
+      "recovery_time_target": "30s",
+      "steps": [
+        {
+          "step": 1,
+          "action": "verify_failure",
+          "command": "redis-cli ping",
+          "expected": "PONG",
+          "timeout": "5s",
+          "on_failure": "proceed_to_step_2"
+        },
+        {
+          "step": 2,
+          "action": "activate_circuit_breakers",
+          "command": "curl -X POST http://api-gateway/circuit-breakers/activate",
+          "effect": "prevent_cascade_failures",
+          "timeout": "2s"
+        },
+        {
+          "step": 3,
+          "action": "attempt_redis_restart",
+          "command": "docker restart redis-streams",
+          "timeout": "10s",
+          "verification": "redis-cli ping"
+        },
+        {
+          "step": 4,
+          "action": "verify_stream_integrity",
+          "command": "redis-cli XINFO STREAM workflow_events",
+          "expected": "stream_exists",
+          "on_failure": "restore_from_backup"
+        },
+        {
+          "step": 5,
+          "action": "restore_consumer_groups",
+          "command": "python /scripts/restore_consumer_groups.py",
+          "timeout": "5s"
+        },
+        {
+          "step": 6,
+          "action": "verify_consumers_connected",
+          "command": "redis-cli XINFO GROUPS workflow_events",
+          "expected": "all_consumers_present",
+          "timeout": "5s"
+        },
+        {
+          "step": 7,
+          "action": "deactivate_circuit_breakers",
+          "command": "curl -X POST http://api-gateway/circuit-breakers/deactivate",
+          "timeout": "2s"
+        },
+        {
+          "step": 8,
+          "action": "verify_event_flow",
+          "command": "curl http://monitoring/metrics/event_throughput",
+          "expected": "throughput_>0",
+          "timeout": "10s"
+        }
+      ],
+      "rollback_plan": {
+        "trigger": "recovery_failed_after_3_attempts",
+        "actions": [
+          "switch_to_backup_redis_instance",
+          "alert_oncall_engineer",
+          "maintain_degraded_mode"
+        ]
+      },
+      "testing": {
+        "test_frequency": "monthly",
+        "last_tested": null,
+        "success_rate_target": "95%"
+      }
+    },
+    {
+      "procedure_id": "proc_002",
+      "name": "Database Connection Pool Recovery",
+      "triggers": [
+        "connection_pool_exhausted",
+        "connection_timeout_errors_>10_per_min",
+        "database_unavailable"
+      ],
+      "detection_time_target": "30s",
+      "recovery_time_target": "2m",
+      "steps": [
+        {
+          "step": 1,
+          "action": "identify_pool_status",
+          "command": "psql -c 'SELECT count(*) FROM pg_stat_activity'",
+          "timeout": "5s"
+        },
+        {
+          "step": 2,
+          "action": "kill_long_running_queries",
+          "command": "psql -c 'SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = \\'active\\' AND query_start < NOW() - INTERVAL \\'5 minutes\\''",
+          "timeout": "10s"
+        },
+        {
+          "step": 3,
+          "action": "identify_connection_leaks",
+          "command": "python /scripts/find_connection_leaks.py",
+          "output": "list_of_leaking_services",
+          "timeout": "10s"
+        },
+        {
+          "step": 4,
+          "action": "restart_leaking_services",
+          "command": "docker restart {leaking_services}",
+          "timeout": "30s"
+        },
+        {
+          "step": 5,
+          "action": "verify_pool_recovered",
+          "command": "curl http://monitoring/metrics/db_pool_usage",
+          "expected": "usage_<60%",
+          "timeout": "10s"
+        },
+        {
+          "step": 6,
+          "action": "enable_connection_queueing",
+          "command": "python /scripts/enable_connection_queue.py",
+          "effect": "graceful_degradation",
+          "timeout": "5s"
+        }
+      ],
+      "preventive_actions": [
+        "implement_connection_timeout_30s",
+        "add_connection_usage_monitoring",
+        "enforce_context_managers"
+      ],
+      "rollback_plan": {
+        "trigger": "pool_still_exhausted_after_10min",
+        "actions": [
+          "increase_max_connections_temporarily",
+          "restart_all_services_gracefully",
+          "investigate_root_cause"
+        ]
+      }
+    },
+    {
+      "procedure_id": "proc_003",
+      "name": "RAG System Degradation Recovery",
+      "triggers": [
+        "qdrant_latency_>2s",
+        "llm_api_errors_>10%",
+        "embedding_service_down"
+      ],
+      "detection_time_target": "1m",
+      "recovery_time_target": "5m",
+      "steps": [
+        {
+          "step": 1,
+          "action": "switch_to_cached_embeddings",
+          "command": "curl -X POST http://rag-service/mode/cached",
+          "effect": "immediate_latency_reduction",
+          "timeout": "2s"
+        },
+        {
+          "step": 2,
+          "action": "check_qdrant_health",
+          "command": "curl http://qdrant:6333/healthz",
+          "expected": "healthy",
+          "timeout": "5s"
+        },
+        {
+          "step": 3,
+          "action": "check_llm_api_status",
+          "command": "python /scripts/check_llm_apis.py",
+          "output": "api_status_report",
+          "timeout": "10s"
+        },
+        {
+          "step": 4,
+          "action": "switch_llm_provider_if_needed",
+          "command": "python /scripts/switch_llm_provider.py --provider={backup_provider}",
+          "timeout": "5s"
+        },
+        {
+          "step": 5,
+          "action": "clear_embedding_cache",
+          "command": "redis-cli DEL embeddings:*",
+          "effect": "force_fresh_embeddings",
+          "timeout": "2s"
+        },
+        {
+          "step": 6,
+          "action": "warm_cache_with_frequent_queries",
+          "command": "python /scripts/warm_embedding_cache.py",
+          "timeout": "60s"
+        },
+        {
+          "step": 7,
+          "action": "gradually_restore_normal_mode",
+          "command": "curl -X POST http://rag-service/mode/normal",
+          "timeout": "2s"
+        },
+        {
+          "step": 8,
+          "action": "verify_performance",
+          "command": "curl http://monitoring/metrics/rag_latency",
+          "expected": "p95_<1s",
+          "timeout": "30s"
+        }
+      ],
+      "fallback_modes": [
+        {
+          "mode": "cached_only",
+          "description": "Use only cached embeddings, no new queries to Qdrant",
+          "performance_impact": "slight_staleness"
+        },
+        {
+          "mode": "keyword_search",
+          "description": "Fallback to PostgreSQL full-text search",
+          "performance_impact": "reduced_accuracy"
+        },
+        {
+          "mode": "rule_based",
+          "description": "Use pre-defined rules instead of LLM",
+          "performance_impact": "limited_flexibility"
+        }
+      ]
+    },
+    {
+      "procedure_id": "proc_004",
+      "name": "Memory Leak Mitigation",
+      "triggers": [
+        "memory_growth_rate_>10%_per_hour",
+        "service_memory_>80%_limit",
+        "oom_killer_activated"
+      ],
+      "detection_time_target": "5m",
+      "recovery_time_target": "10m",
+      "steps": [
+        {
+          "step": 1,
+          "action": "identify_leaking_service",
+          "command": "docker stats --no-stream --format 'table {{.Name}}\\t{{.MemUsage}}'",
+          "output": "service_memory_usage",
+          "timeout": "5s"
+        },
+        {
+          "step": 2,
+          "action": "capture_heap_dump",
+          "command": "python /scripts/capture_heap_dump.py --service={leaking_service}",
+          "output": "heap_dump_file",
+          "timeout": "30s"
+        },
+        {
+          "step": 3,
+          "action": "prepare_rolling_restart",
+          "command": "python /scripts/prepare_rolling_restart.py --service={leaking_service}",
+          "effect": "drain_connections",
+          "timeout": "10s"
+        },
+        {
+          "step": 4,
+          "action": "restart_service",
+          "command": "docker restart {leaking_service}",
+          "timeout": "30s"
+        },
+        {
+          "step": 5,
+          "action": "verify_memory_stable",
+          "command": "python /scripts/monitor_memory.py --service={leaking_service} --duration=5m",
+          "expected": "no_growth",
+          "timeout": "300s"
+        },
+        {
+          "step": 6,
+          "action": "analyze_heap_dump_async",
+          "command": "python /scripts/analyze_heap_dump.py --file={heap_dump_file} &",
+          "effect": "identify_root_cause",
+          "async": true
+        },
+        {
+          "step": 7,
+          "action": "create_issue_for_fix",
+          "command": "gh issue create --title 'Memory leak in {leaking_service}' --body 'Heap dump: {heap_dump_file}'",
+          "timeout": "10s"
+        }
+      ],
+      "preventive_actions": [
+        "enable_memory_profiling_in_dev",
+        "add_memory_leak_tests",
+        "review_connection_handling_code"
+      ]
+    },
+    {
+      "procedure_id": "proc_005",
+      "name": "Cascade Failure Recovery",
+      "triggers": [
+        "multiple_services_failing_simultaneously",
+        "error_rate_>50%_across_platform",
+        "event_storm_detected"
+      ],
+      "detection_time_target": "30s",
+      "recovery_time_target": "15m",
+      "severity": "critical",
+      "steps": [
+        {
+          "step": 1,
+          "action": "activate_all_circuit_breakers",
+          "command": "curl -X POST http://api-gateway/emergency/circuit-breakers/all",
+          "effect": "isolate_all_services",
+          "timeout": "5s"
+        },
+        {
+          "step": 2,
+          "action": "identify_root_cause_service",
+          "command": "python /scripts/identify_cascade_root.py",
+          "output": "root_cause_analysis",
+          "timeout": "60s"
+        },
+        {
+          "step": 3,
+          "action": "isolate_failing_service",
+          "command": "docker network disconnect platform_network {failing_service}",
+          "effect": "prevent_further_propagation",
+          "timeout": "5s"
+        },
+        {
+          "step": 4,
+          "action": "preserve_tier_1_critical_only",
+          "command": "python /scripts/emergency_mode.py --preserve=tier_1",
+          "effect": "shutdown_tier_2_and_3",
+          "timeout": "30s"
+        },
+        {
+          "step": 5,
+          "action": "restart_root_cause_service",
+          "command": "docker restart {failing_service}",
+          "timeout": "30s"
+        },
+        {
+          "step": 6,
+          "action": "verify_root_service_healthy",
+          "command": "curl http://{failing_service}/health",
+          "expected": "healthy",
+          "timeout": "60s",
+          "retry": 3
+        },
+        {
+          "step": 7,
+          "action": "restore_services_in_dependency_order",
+          "command": "python /scripts/restore_services.py --order=dependency_graph",
+          "timeout": "300s"
+        },
+        {
+          "step": 8,
+          "action": "gradually_restore_tier_2",
+          "command": "python /scripts/restore_tier.py --tier=2",
+          "timeout": "120s"
+        },
+        {
+          "step": 9,
+          "action": "gradually_restore_tier_3",
+          "command": "python /scripts/restore_tier.py --tier=3",
+          "timeout": "60s"
+        },
+        {
+          "step": 10,
+          "action": "verify_full_system_health",
+          "command": "python /scripts/system_health_check.py --comprehensive",
+          "expected": "all_green",
+          "timeout": "60s"
+        }
+      ],
+      "rollback_plan": {
+        "trigger": "recovery_failed_after_30min",
+        "actions": [
+          "complete_platform_restart",
+          "restore_from_backup",
+          "activate_disaster_recovery_plan"
+        ]
+      }
+    },
+    {
+      "procedure_id": "proc_006",
+      "name": "Workflow Stuck State Recovery",
+      "triggers": [
+        "workflow_in_same_state_>30min",
+        "workflow_retry_count_>10",
+        "workflow_state_invalid"
+      ],
+      "detection_time_target": "30m",
+      "recovery_time_target": "5m",
+      "steps": [
+        {
+          "step": 1,
+          "action": "identify_stuck_workflow",
+          "command": "psql -c 'SELECT id, state, updated_at FROM workflows WHERE updated_at < NOW() - INTERVAL \\'30 minutes\\' AND state NOT IN (\\'completed\\', \\'failed\\')'",
+          "output": "stuck_workflow_list",
+          "timeout": "10s"
+        },
+        {
+          "step": 2,
+          "action": "capture_workflow_state",
+          "command": "python /scripts/capture_workflow_state.py --workflow_id={workflow_id}",
+          "output": "state_snapshot",
+          "timeout": "5s"
+        },
+        {
+          "step": 3,
+          "action": "attempt_workflow_compensation",
+          "command": "python /scripts/compensate_workflow.py --workflow_id={workflow_id}",
+          "timeout": "60s"
+        },
+        {
+          "step": 4,
+          "action": "rebuild_state_from_events",
+          "command": "python /scripts/rebuild_workflow_state.py --workflow_id={workflow_id}",
+          "timeout": "30s"
+        },
+        {
+          "step": 5,
+          "action": "verify_state_consistent",
+          "command": "python /scripts/validate_workflow_state.py --workflow_id={workflow_id}",
+          "expected": "state_valid",
+          "timeout": "10s"
+        },
+        {
+          "step": 6,
+          "action": "resume_workflow",
+          "command": "curl -X POST http://workflow-intelligence/workflows/{workflow_id}/resume",
+          "timeout": "5s"
+        }
+      ],
+      "manual_intervention_threshold": "state_corruption_detected",
+      "escalation": "create_support_ticket"
+    },
+    {
+      "procedure_id": "proc_007",
+      "name": "Self-Induced DDoS Recovery",
+      "triggers": [
+        "same_event_published_>100_times_per_sec",
+        "recursive_workflow_detected",
+        "event_bus_queue_exponential_growth"
+      ],
+      "detection_time_target": "1m",
+      "recovery_time_target": "5m",
+      "severity": "critical",
+      "steps": [
+        {
+          "step": 1,
+          "action": "identify_event_storm_source",
+          "command": "python /scripts/identify_event_storm.py",
+          "output": "event_pattern_analysis",
+          "timeout": "30s"
+        },
+        {
+          "step": 2,
+          "action": "block_recursive_publishing",
+          "command": "curl -X POST http://eventbus/emergency/block-pattern --pattern={storm_pattern}",
+          "effect": "stop_storm_immediately",
+          "timeout": "5s"
+        },
+        {
+          "step": 3,
+          "action": "kill_runaway_workflows",
+          "command": "python /scripts/kill_workflows.py --pattern={runaway_pattern}",
+          "timeout": "10s"
+        },
+        {
+          "step": 4,
+          "action": "clear_event_queue",
+          "command": "redis-cli DEL workflow_events",
+          "effect": "reset_event_bus",
+          "timeout": "5s"
+        },
+        {
+          "step": 5,
+          "action": "restart_affected_services",
+          "command": "docker restart {affected_services}",
+          "timeout": "60s"
+        },
+        {
+          "step": 6,
+          "action": "enable_rate_limiting",
+          "command": "curl -X POST http://eventbus/config/rate-limit --limit=100/sec",
+          "effect": "prevent_recurrence",
+          "timeout": "2s"
+        },
+        {
+          "step": 7,
+          "action": "verify_event_flow_normal",
+          "command": "curl http://monitoring/metrics/event_rate",
+          "expected": "rate_<100/sec",
+          "timeout": "60s"
+        }
+      ],
+      "preventive_actions": [
+        "implement_idempotency_keys",
+        "add_recursion_detection",
+        "enforce_event_publishing_limits"
+      ]
+    }
+  ],
+
+  "automation_config": {
+    "auto_recovery_enabled": true,
+    "auto_recovery_procedures": [
+      "proc_001",
+      "proc_002",
+      "proc_003",
+      "proc_004",
+      "proc_007"
+    ],
+    "manual_approval_required": [
+      "proc_005",
+      "proc_006"
+    ],
+    "notification_channels": {
+      "critical": ["pagerduty", "slack_critical"],
+      "warning": ["slack_warnings"],
+      "info": ["slack_info"]
+    }
+  },
+
+  "testing_and_validation": {
+    "chaos_engineering": {
+      "enabled": false,
+      "frequency": "monthly",
+      "scenarios": [
+        "redis_failure",
+        "database_connection_pool_exhaustion",
+        "qdrant_latency_spike",
+        "memory_leak_simulation",
+        "cascade_failure"
+      ]
+    },
+    "recovery_drills": {
+      "frequency": "monthly",
+      "last_drill": null,
+      "success_criteria": {
+        "detection_time": "within_target",
+        "recovery_time": "within_target",
+        "data_loss": "zero",
+        "automation_success_rate": ">90%"
+      }
+    }
+  },
+
+  "learning_from_practice": {
+    "measurement_interval": "24h",
+    "metrics_to_track": [
+      "actual_detection_time_vs_target",
+      "actual_recovery_time_vs_target",
+      "auto_recovery_success_rate",
+      "manual_intervention_required",
+      "false_trigger_rate"
+    ],
+    "improvement_triggers": [
+      "recovery_failed",
+      "recovery_time_exceeded_target_by_50%",
+      "same_issue_occurred_3_times",
+      "manual_intervention_required"
+    ],
+    "feedback_loop": "update_procedures_based_on_actual_performance"
+  }
+}

@@ -1,0 +1,10 @@
+# Policy Engine Requirements
+# ===========================
+
+# Core dependencies
+pydantic>=2.0.0,<3.0.0
+PyYAML>=6.0.0,<7.0.0
+
+# Optional testing dependencies
+pytest>=7.0.0
+pytest-asyncio>=0.21.0

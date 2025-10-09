@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant Pub as Publisher Service
+    participant Redis as Redis Streams
+    participant Rabbit as RabbitMQ
+    participant Sub1 as Subscriber 1
+    participant Sub2 as Subscriber 2
+    participant Sub3 as Subscriber 3
+    
+    Note over Pub: Event occurs
+    Pub->>Redis: XADD event_stream {event}
+    Redis-->>Pub: Event ID
+    
+    Note over Redis: Event persisted
+    
+    Redis->>Rabbit: Forward to topic exchange
+    Rabbit->>Rabbit: Route by event type
+    
+    par Parallel Delivery
+        Rabbit->>Sub1: Deliver event (Queue 1)
+        Rabbit->>Sub2: Deliver event (Queue 2)
+        Rabbit->>Sub3: Deliver event (Queue 3)
+    end
+    
+    Sub1->>Sub1: Process event
+    Sub1->>Rabbit: ACK
+    
+    Sub2->>Sub2: Process event
+    Sub2->>Rabbit: ACK
+    
+    Sub3->>Sub3: Process failed
+    Sub3->>Rabbit: NACK + Requeue
+    
+    Note over Rabbit: Retry Sub3
+    Rabbit->>Sub3: Redeliver event
+    Sub3->>Sub3: Process success
+    Sub3->>Rabbit: ACK
+    
+    Note over Redis: Event available for replay
+    Sub1->>Redis: XREAD (replay events)
+    Redis-->>Sub1: Historical events

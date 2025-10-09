@@ -1,0 +1,54 @@
+graph TB
+    subgraph "Pattern 1: Workflow Lifecycle Events"
+        WF_START[workflow.bia.started] --> WF_STATE[workflow.state_changed]
+        WF_STATE --> WF_COMPLETE[workflow.bia.completed]
+        WF_COMPLETE --> WF_LEARN[Learning & Optimization]
+    end
+
+    subgraph "Pattern 2: Cascade Events"
+        BIA_CREATE[bia.created] -.triggers.-> RISK_AUTO[risk.auto_created]
+        RISK_AUTO --> RISK_CRITICAL[risk.critical_detected]
+        RISK_CRITICAL -.triggers.-> INCIDENT_AUTO[incident.auto_escalated]
+    end
+
+    subgraph "Pattern 3: Predictive Events"
+        MILESTONE[organization.milestone.achieved]
+        WORKFLOW_COMP[workflow.*.completed]
+        USER_ACT[user.activity.logged]
+
+        MILESTONE --> PREDICT_ENGINE[Predictive Engine]
+        WORKFLOW_COMP --> PREDICT_ENGINE
+        USER_ACT --> PREDICT_ENGINE
+
+        PREDICT_ENGINE --> JOURNEY[prediction.journey.generated]
+        PREDICT_ENGINE --> CERT[prediction.certification.estimated]
+        PREDICT_ENGINE --> REC[prediction.recommendation.generated]
+    end
+
+    subgraph "Pattern 4: Stuck Detection"
+        NO_PROGRESS[workflow.no_progress]
+        VAL_FAIL[validation.failure]
+        LOW_CONF[ai.confidence.low]
+
+        NO_PROGRESS --> STUCK_ENGINE[Stuck Detection Engine]
+        VAL_FAIL --> STUCK_ENGINE
+        LOW_CONF --> STUCK_ENGINE
+
+        STUCK_ENGINE --> STUCK_DET[collective.org.stuck_detected]
+        STUCK_DET --> AGENT_CREATE[collective.agent.created]
+    end
+
+    subgraph "Pattern 5: Community Workflow"
+        CONTRIB[community.contribution.submitted]
+        CONTRIB --> REVIEW1[community.review.1_completed]
+        REVIEW1 --> REVIEW2[community.review.2_completed]
+        REVIEW2 --> REVIEW3[community.review.3_completed]
+        REVIEW3 --> APPROVED[community.case.approved]
+        APPROVED --> CASE_SYNC[workflow.case_library.synced]
+    end
+
+    style WF_START fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style BIA_CREATE fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style MILESTONE fill:#cce5ff,stroke:#007bff,stroke-width:2px
+    style NO_PROGRESS fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style CONTRIB fill:#e7f3ff,stroke:#0088cc,stroke-width:2px

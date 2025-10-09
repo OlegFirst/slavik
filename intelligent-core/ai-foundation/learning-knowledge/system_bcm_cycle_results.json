@@ -1,0 +1,2465 @@
+{
+  "bcm_execution": {
+    "cycle_start": "2025-10-09T00:13:25.100105",
+    "target": "AI-Platform-ISO",
+    "level": "system",
+    "phases": {
+      "bia": {
+        "status": "completed",
+        "results": {
+          "execution_time": "2025-10-09T00:13:25.101499",
+          "target": "AI-Platform-ISO",
+          "critical_processes": [
+            {
+              "process_id": "cp_001",
+              "name": "Event Bus (Redis Streams)",
+              "criticality": "tier_1_critical",
+              "rto": "30s",
+              "rpo": "0s",
+              "recovery_priority": 1,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_002",
+              "name": "API Gateway",
+              "criticality": "tier_1_critical",
+              "rto": "1m",
+              "rpo": "0s",
+              "recovery_priority": 2,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_003",
+              "name": "PostgreSQL Database",
+              "criticality": "tier_1_critical",
+              "rto": "2m",
+              "rpo": "5m",
+              "recovery_priority": 1,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_004",
+              "name": "RAG System (Qdrant + LLM)",
+              "criticality": "tier_2_important",
+              "rto": "5m",
+              "rpo": "1h",
+              "recovery_priority": 3,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_005",
+              "name": "Analytics Specialist",
+              "criticality": "tier_2_important",
+              "rto": "10m",
+              "rpo": "1h",
+              "recovery_priority": 4,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_006",
+              "name": "Workflow Intelligence",
+              "criticality": "tier_1_critical",
+              "rto": "3m",
+              "rpo": "0s",
+              "recovery_priority": 2,
+              "auto_recovery_enabled": true
+            },
+            {
+              "process_id": "cp_007",
+              "name": "Monitoring & Observability",
+              "criticality": "tier_2_important",
+              "rto": "15m",
+              "rpo": "5m",
+              "recovery_priority": 5,
+              "auto_recovery_enabled": true
+            }
+          ],
+          "dependencies_identified": [
+            {
+              "from_service": "API Gateway",
+              "to_services": [
+                "Event Bus",
+                "PostgreSQL",
+                "RAG System",
+                "Workflow Intelligence"
+              ],
+              "type": "synchronous",
+              "failure_mode": "cascade"
+            },
+            {
+              "from_service": "Workflow Intelligence",
+              "to_services": [
+                "Event Bus",
+                "PostgreSQL"
+              ],
+              "type": "both",
+              "failure_mode": "partial_degradation"
+            },
+            {
+              "from_service": "RAG System",
+              "to_services": [
+                "Qdrant",
+                "LLM APIs"
+              ],
+              "type": "synchronous",
+              "failure_mode": "fallback_available"
+            },
+            {
+              "from_service": "Analytics Specialist",
+              "to_services": [
+                "Event Bus",
+                "RAG System"
+              ],
+              "type": "asynchronous",
+              "failure_mode": "queued_retry"
+            }
+          ],
+          "recovery_targets_set": [
+            {
+              "tier": "tier_1_critical",
+              "processes": [
+                "Event Bus",
+                "API Gateway",
+                "PostgreSQL",
+                "Workflow Intelligence"
+              ],
+              "resource_allocation": {
+                "cpu": "guaranteed_80%",
+                "memory": "guaranteed_4GB_min",
+                "network": "priority_high",
+                "disk_io": "priority_high"
+              },
+              "action_on_contention": "throttle_tier_2_and_3"
+            },
+            {
+              "tier": "tier_2_important",
+              "processes": [
+                "RAG System",
+                "Analytics Specialist",
+                "Monitoring"
+              ],
+              "resource_allocation": {
+                "cpu": "best_effort_up_to_60%",
+                "memory": "best_effort_up_to_2GB",
+                "network": "priority_medium",
+                "disk_io": "priority_medium"
+              },
+              "action_on_contention": "graceful_degradation"
+            },
+            {
+              "tier": "tier_3_optional",
+              "processes": [
+                "Background Jobs",
+                "Cleanup Tasks",
+                "Analytics"
+              ],
+              "resource_allocation": {
+                "cpu": "best_effort_up_to_20%",
+                "memory": "best_effort_up_to_512MB",
+                "network": "priority_low",
+                "disk_io": "priority_low"
+              },
+              "action_on_contention": "pause_until_resources_available"
+            }
+          ],
+          "actions_taken": [
+            "critical_processes_identified",
+            "rto_rpo_targets_defined",
+            "dependencies_mapped",
+            "recovery_priorities_set",
+            "resource_tiers_established"
+          ]
+        }
+      },
+      "risk_assessment": {
+        "status": "completed",
+        "results": {
+          "execution_time": "2025-10-09T00:13:25.101848",
+          "target": "AI-Platform-ISO",
+          "risks_by_category": {
+            "technical_risks": [
+              {
+                "risk_id": "tech_001",
+                "name": "Memory Leak in Long-Running Services",
+                "probability": "high",
+                "impact": "high",
+                "risk_score": 9,
+                "current_controls": [
+                  "memory_monitoring_enabled",
+                  "restart_policy_configured"
+                ],
+                "residual_risk": "medium"
+              },
+              {
+                "risk_id": "tech_002",
+                "name": "Cascade Failure from Event Bus Overload",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "basic_monitoring",
+                  "manual_scaling"
+                ],
+                "residual_risk": "medium-high"
+              },
+              {
+                "risk_id": "tech_003",
+                "name": "Database Connection Pool Exhaustion",
+                "probability": "high",
+                "impact": "high",
+                "risk_score": 9,
+                "current_controls": [
+                  "connection_pooling_configured",
+                  "basic_timeout_set"
+                ],
+                "residual_risk": "medium"
+              },
+              {
+                "risk_id": "tech_004",
+                "name": "LLM API Rate Limiting / Failures",
+                "probability": "medium",
+                "impact": "high",
+                "risk_score": 7,
+                "current_controls": [
+                  "retry_logic_implemented",
+                  "multiple_providers_configured"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "tech_005",
+                "name": "Qdrant Vector Database Performance Degradation",
+                "probability": "medium",
+                "impact": "medium",
+                "risk_score": 6,
+                "current_controls": [
+                  "performance_monitoring",
+                  "basic_optimization"
+                ],
+                "residual_risk": "low"
+              }
+            ],
+            "operational_risks": [
+              {
+                "risk_id": "ops_001",
+                "name": "Self-Induced DDoS from Recursive Workflows",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "basic_rate_limiting"
+                ],
+                "residual_risk": "medium-high"
+              },
+              {
+                "risk_id": "ops_002",
+                "name": "Configuration Drift Across Environments",
+                "probability": "medium",
+                "impact": "medium",
+                "risk_score": 6,
+                "current_controls": [
+                  "env_files_in_git",
+                  "manual_reviews"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "ops_003",
+                "name": "Alert Fatigue from False Positives",
+                "probability": "high",
+                "impact": "medium",
+                "risk_score": 7,
+                "current_controls": [
+                  "basic_alerting_configured"
+                ],
+                "residual_risk": "medium"
+              }
+            ],
+            "security_risks": [
+              {
+                "risk_id": "sec_001",
+                "name": "API Key Exposure in Logs/Errors",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "env_vars_for_secrets",
+                  "gitignore_configured"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "sec_002",
+                "name": "Unauthorized Access via EventBus",
+                "probability": "low",
+                "impact": "high",
+                "risk_score": 5,
+                "current_controls": [
+                  "network_isolation"
+                ],
+                "residual_risk": "low"
+              }
+            ],
+            "data_risks": [
+              {
+                "risk_id": "data_001",
+                "name": "Workflow State Corruption",
+                "probability": "medium",
+                "impact": "high",
+                "risk_score": 7,
+                "current_controls": [
+                  "database_transactions",
+                  "state_validation"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "data_002",
+                "name": "Knowledge Base Poisoning",
+                "probability": "low",
+                "impact": "high",
+                "risk_score": 5,
+                "current_controls": [
+                  "source_tracking",
+                  "manual_review"
+                ],
+                "residual_risk": "low"
+              }
+            ]
+          },
+          "high_priority_risks": [
+            {
+              "risk_id": "tech_001",
+              "name": "Memory Leak in Long-Running Services",
+              "probability": "high",
+              "impact": "high",
+              "risk_score": 9,
+              "current_controls": [
+                "memory_monitoring_enabled",
+                "restart_policy_configured"
+              ],
+              "residual_risk": "medium"
+            },
+            {
+              "risk_id": "tech_002",
+              "name": "Cascade Failure from Event Bus Overload",
+              "probability": "medium",
+              "impact": "critical",
+              "risk_score": 8,
+              "current_controls": [
+                "basic_monitoring",
+                "manual_scaling"
+              ],
+              "residual_risk": "medium-high"
+            },
+            {
+              "risk_id": "tech_003",
+              "name": "Database Connection Pool Exhaustion",
+              "probability": "high",
+              "impact": "high",
+              "risk_score": 9,
+              "current_controls": [
+                "connection_pooling_configured",
+                "basic_timeout_set"
+              ],
+              "residual_risk": "medium"
+            },
+            {
+              "risk_id": "tech_004",
+              "name": "LLM API Rate Limiting / Failures",
+              "probability": "medium",
+              "impact": "high",
+              "risk_score": 7,
+              "current_controls": [
+                "retry_logic_implemented",
+                "multiple_providers_configured"
+              ],
+              "residual_risk": "low-medium"
+            },
+            {
+              "risk_id": "ops_001",
+              "name": "Self-Induced DDoS from Recursive Workflows",
+              "probability": "medium",
+              "impact": "critical",
+              "risk_score": 8,
+              "current_controls": [
+                "basic_rate_limiting"
+              ],
+              "residual_risk": "medium-high"
+            },
+            {
+              "risk_id": "ops_003",
+              "name": "Alert Fatigue from False Positives",
+              "probability": "high",
+              "impact": "medium",
+              "risk_score": 7,
+              "current_controls": [
+                "basic_alerting_configured"
+              ],
+              "residual_risk": "medium"
+            },
+            {
+              "risk_id": "sec_001",
+              "name": "API Key Exposure in Logs/Errors",
+              "probability": "medium",
+              "impact": "critical",
+              "risk_score": 8,
+              "current_controls": [
+                "env_vars_for_secrets",
+                "gitignore_configured"
+              ],
+              "residual_risk": "low-medium"
+            },
+            {
+              "risk_id": "data_001",
+              "name": "Workflow State Corruption",
+              "probability": "medium",
+              "impact": "high",
+              "risk_score": 7,
+              "current_controls": [
+                "database_transactions",
+                "state_validation"
+              ],
+              "residual_risk": "low-medium"
+            }
+          ],
+          "mitigations_to_implement": [
+            {
+              "risk_id": "tech_001",
+              "risk_name": "Memory Leak in Long-Running Services",
+              "type": "preventive",
+              "actions": [
+                "implement_memory_profiling",
+                "add_connection_pool_limits",
+                "enable_gc_debugging",
+                "code_review_for_circular_refs"
+              ]
+            },
+            {
+              "risk_id": "tech_001",
+              "risk_name": "Memory Leak in Long-Running Services",
+              "type": "detective",
+              "actions": [
+                "monitor_memory_growth_rate",
+                "alert_on_10%_growth_per_hour",
+                "automated_heap_dump_on_threshold"
+              ]
+            },
+            {
+              "risk_id": "tech_001",
+              "risk_name": "Memory Leak in Long-Running Services",
+              "type": "corrective",
+              "actions": [
+                "automated_rolling_restart_at_80%_threshold",
+                "graceful_shutdown_with_connection_drain",
+                "analyze_heap_dump_post_restart"
+              ]
+            },
+            {
+              "risk_id": "tech_002",
+              "risk_name": "Cascade Failure from Event Bus Overload",
+              "type": "preventive",
+              "actions": [
+                "implement_rate_limiting_on_event_publishing",
+                "add_backpressure_mechanism",
+                "separate_critical_vs_non_critical_streams",
+                "implement_event_deduplication"
+              ]
+            },
+            {
+              "risk_id": "tech_002",
+              "risk_name": "Cascade Failure from Event Bus Overload",
+              "type": "detective",
+              "actions": [
+                "monitor_stream_length",
+                "alert_on_consumer_lag_>1000_events",
+                "track_event_throughput_anomalies"
+              ]
+            },
+            {
+              "risk_id": "tech_002",
+              "risk_name": "Cascade Failure from Event Bus Overload",
+              "type": "corrective",
+              "actions": [
+                "auto_scale_consumer_groups",
+                "drop_non_critical_events_under_pressure",
+                "circuit_breaker_activation",
+                "isolate_failing_consumers"
+              ]
+            },
+            {
+              "risk_id": "tech_003",
+              "risk_name": "Database Connection Pool Exhaustion",
+              "type": "preventive",
+              "actions": [
+                "implement_connection_timeout_30s",
+                "use_connection_context_managers",
+                "limit_connections_per_service",
+                "implement_connection_pooling_best_practices"
+              ]
+            },
+            {
+              "risk_id": "tech_003",
+              "risk_name": "Database Connection Pool Exhaustion",
+              "type": "detective",
+              "actions": [
+                "monitor_connection_pool_usage",
+                "alert_on_>80%_utilization",
+                "track_long_running_queries",
+                "identify_connection_leak_sources"
+              ]
+            },
+            {
+              "risk_id": "tech_003",
+              "risk_name": "Database Connection Pool Exhaustion",
+              "type": "corrective",
+              "actions": [
+                "kill_queries_running_>5min",
+                "restart_services_with_connection_leaks",
+                "temporarily_increase_pool_size",
+                "enable_connection_queueing"
+              ]
+            },
+            {
+              "risk_id": "tech_004",
+              "risk_name": "LLM API Rate Limiting / Failures",
+              "type": "preventive",
+              "actions": [
+                "implement_request_queuing",
+                "add_exponential_backoff",
+                "distribute_across_multiple_api_keys",
+                "implement_local_llm_fallback"
+              ]
+            },
+            {
+              "risk_id": "tech_004",
+              "risk_name": "LLM API Rate Limiting / Failures",
+              "type": "detective",
+              "actions": [
+                "monitor_api_error_rates",
+                "track_daily_token_usage",
+                "alert_on_approaching_rate_limits"
+              ]
+            },
+            {
+              "risk_id": "tech_004",
+              "risk_name": "LLM API Rate Limiting / Failures",
+              "type": "corrective",
+              "actions": [
+                "switch_to_backup_llm_provider",
+                "enable_cached_responses",
+                "degrade_to_rule_based_responses",
+                "queue_non_critical_requests"
+              ]
+            },
+            {
+              "risk_id": "tech_005",
+              "risk_name": "Qdrant Vector Database Performance Degradation",
+              "type": "preventive",
+              "actions": [
+                "implement_collection_sharding",
+                "optimize_hnsw_parameters",
+                "archive_old_vectors",
+                "implement_tiered_storage"
+              ]
+            },
+            {
+              "risk_id": "tech_005",
+              "risk_name": "Qdrant Vector Database Performance Degradation",
+              "type": "detective",
+              "actions": [
+                "monitor_query_latency_percentiles",
+                "track_collection_growth",
+                "alert_on_latency_degradation"
+              ]
+            },
+            {
+              "risk_id": "tech_005",
+              "risk_name": "Qdrant Vector Database Performance Degradation",
+              "type": "corrective",
+              "actions": [
+                "switch_to_cached_embeddings",
+                "reduce_top_k_results",
+                "enable_approximate_search",
+                "scale_up_qdrant_resources"
+              ]
+            },
+            {
+              "risk_id": "ops_001",
+              "risk_name": "Self-Induced DDoS from Recursive Workflows",
+              "type": "preventive",
+              "actions": [
+                "implement_workflow_execution_limits",
+                "add_recursion_detection",
+                "implement_workflow_idempotency",
+                "add_circuit_breakers_between_workflows"
+              ]
+            },
+            {
+              "risk_id": "ops_001",
+              "risk_name": "Self-Induced DDoS from Recursive Workflows",
+              "type": "detective",
+              "actions": [
+                "detect_recursive_patterns",
+                "alert_on_same_workflow_>10_executions_per_minute",
+                "track_workflow_call_chains"
+              ]
+            },
+            {
+              "risk_id": "ops_001",
+              "risk_name": "Self-Induced DDoS from Recursive Workflows",
+              "type": "corrective",
+              "actions": [
+                "kill_runaway_workflows",
+                "block_recursive_event_publishing",
+                "clear_event_queue",
+                "restart_affected_services"
+              ]
+            },
+            {
+              "risk_id": "ops_002",
+              "risk_name": "Configuration Drift Across Environments",
+              "type": "preventive",
+              "actions": [
+                "use_infrastructure_as_code",
+                "automate_configuration_management",
+                "implement_config_validation",
+                "version_control_all_configs"
+              ]
+            },
+            {
+              "risk_id": "ops_002",
+              "risk_name": "Configuration Drift Across Environments",
+              "type": "detective",
+              "actions": [
+                "automated_config_drift_detection",
+                "compare_env_configs_daily",
+                "alert_on_differences"
+              ]
+            },
+            {
+              "risk_id": "ops_002",
+              "risk_name": "Configuration Drift Across Environments",
+              "type": "corrective",
+              "actions": [
+                "auto_sync_configs_from_source_of_truth",
+                "rollback_to_known_good_config",
+                "document_all_config_changes"
+              ]
+            },
+            {
+              "risk_id": "ops_003",
+              "risk_name": "Alert Fatigue from False Positives",
+              "type": "preventive",
+              "actions": [
+                "tune_alert_thresholds",
+                "implement_alert_grouping",
+                "add_smart_suppression",
+                "use_anomaly_detection_instead_of_static_thresholds"
+              ]
+            },
+            {
+              "risk_id": "ops_003",
+              "risk_name": "Alert Fatigue from False Positives",
+              "type": "detective",
+              "actions": [
+                "track_false_positive_rate",
+                "measure_time_to_acknowledge",
+                "analyze_alert_patterns"
+              ]
+            },
+            {
+              "risk_id": "ops_003",
+              "risk_name": "Alert Fatigue from False Positives",
+              "type": "corrective",
+              "actions": [
+                "disable_noisy_alerts",
+                "escalate_critical_alerts_differently",
+                "implement_alert_priority_levels"
+              ]
+            },
+            {
+              "risk_id": "sec_001",
+              "risk_name": "API Key Exposure in Logs/Errors",
+              "type": "preventive",
+              "actions": [
+                "implement_log_sanitization",
+                "use_secret_management_service",
+                "never_log_env_vars",
+                "implement_sensitive_data_detection"
+              ]
+            },
+            {
+              "risk_id": "sec_001",
+              "risk_name": "API Key Exposure in Logs/Errors",
+              "type": "detective",
+              "actions": [
+                "scan_logs_for_api_key_patterns",
+                "monitor_unauthorized_api_usage",
+                "alert_on_suspicious_patterns"
+              ]
+            },
+            {
+              "risk_id": "sec_001",
+              "risk_name": "API Key Exposure in Logs/Errors",
+              "type": "corrective",
+              "actions": [
+                "immediately_rotate_exposed_keys",
+                "remove_from_logs",
+                "audit_all_access_with_exposed_key"
+              ]
+            },
+            {
+              "risk_id": "sec_002",
+              "risk_name": "Unauthorized Access via EventBus",
+              "type": "preventive",
+              "actions": [
+                "implement_event_level_authorization",
+                "whitelist_allowed_subscribers",
+                "add_event_signing",
+                "implement_stream_acls"
+              ]
+            },
+            {
+              "risk_id": "sec_002",
+              "risk_name": "Unauthorized Access via EventBus",
+              "type": "detective",
+              "actions": [
+                "audit_all_consumer_groups",
+                "monitor_event_access_patterns",
+                "alert_on_new_consumers"
+              ]
+            },
+            {
+              "risk_id": "sec_002",
+              "risk_name": "Unauthorized Access via EventBus",
+              "type": "corrective",
+              "actions": [
+                "revoke_unauthorized_access",
+                "purge_unauthorized_events",
+                "investigate_breach"
+              ]
+            },
+            {
+              "risk_id": "data_001",
+              "risk_name": "Workflow State Corruption",
+              "type": "preventive",
+              "actions": [
+                "implement_optimistic_locking",
+                "use_event_sourcing",
+                "add_state_validation",
+                "implement_saga_pattern"
+              ]
+            },
+            {
+              "risk_id": "data_001",
+              "risk_name": "Workflow State Corruption",
+              "type": "detective",
+              "actions": [
+                "validate_state_consistency",
+                "detect_orphaned_workflows",
+                "monitor_state_transitions"
+              ]
+            },
+            {
+              "risk_id": "data_001",
+              "risk_name": "Workflow State Corruption",
+              "type": "corrective",
+              "actions": [
+                "rebuild_state_from_events",
+                "manual_state_correction",
+                "workflow_compensation"
+              ]
+            },
+            {
+              "risk_id": "data_002",
+              "risk_name": "Knowledge Base Poisoning",
+              "type": "preventive",
+              "actions": [
+                "validate_all_knowledge_sources",
+                "implement_approval_workflow",
+                "version_control_knowledge_base",
+                "add_source_verification"
+              ]
+            },
+            {
+              "risk_id": "data_002",
+              "risk_name": "Knowledge Base Poisoning",
+              "type": "detective",
+              "actions": [
+                "monitor_knowledge_quality_metrics",
+                "user_feedback_analysis",
+                "periodic_knowledge_audits"
+              ]
+            },
+            {
+              "risk_id": "data_002",
+              "risk_name": "Knowledge Base Poisoning",
+              "type": "corrective",
+              "actions": [
+                "rollback_to_previous_version",
+                "quarantine_suspicious_knowledge",
+                "re_embed_from_verified_sources"
+              ]
+            }
+          ],
+          "actions_taken": [
+            "identified_12_risks",
+            "flagged_8_high_priority_risks",
+            "prepared_36_mitigation_strategies"
+          ]
+        }
+      },
+      "recovery_setup": {
+        "status": "completed",
+        "results": {
+          "execution_time": "2025-10-09T00:13:25.102163",
+          "target": "AI-Platform-ISO",
+          "procedures_configured": [
+            {
+              "procedure_id": "proc_001",
+              "name": "Event Bus Auto-Recovery",
+              "triggers": [
+                "redis_health_check_failed",
+                "event_processing_stopped",
+                "consumer_group_errors_>10"
+              ],
+              "detection_time_target": "15s",
+              "recovery_time_target": "30s",
+              "steps_count": 8,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_002",
+              "name": "Database Connection Pool Recovery",
+              "triggers": [
+                "connection_pool_exhausted",
+                "connection_timeout_errors_>10_per_min",
+                "database_unavailable"
+              ],
+              "detection_time_target": "30s",
+              "recovery_time_target": "2m",
+              "steps_count": 6,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_003",
+              "name": "RAG System Degradation Recovery",
+              "triggers": [
+                "qdrant_latency_>2s",
+                "llm_api_errors_>10%",
+                "embedding_service_down"
+              ],
+              "detection_time_target": "1m",
+              "recovery_time_target": "5m",
+              "steps_count": 8,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_004",
+              "name": "Memory Leak Mitigation",
+              "triggers": [
+                "memory_growth_rate_>10%_per_hour",
+                "service_memory_>80%_limit",
+                "oom_killer_activated"
+              ],
+              "detection_time_target": "5m",
+              "recovery_time_target": "10m",
+              "steps_count": 7,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_005",
+              "name": "Cascade Failure Recovery",
+              "triggers": [
+                "multiple_services_failing_simultaneously",
+                "error_rate_>50%_across_platform",
+                "event_storm_detected"
+              ],
+              "detection_time_target": "30s",
+              "recovery_time_target": "15m",
+              "steps_count": 10,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_006",
+              "name": "Workflow Stuck State Recovery",
+              "triggers": [
+                "workflow_in_same_state_>30min",
+                "workflow_retry_count_>10",
+                "workflow_state_invalid"
+              ],
+              "detection_time_target": "30m",
+              "recovery_time_target": "5m",
+              "steps_count": 6,
+              "automation_ready": true
+            },
+            {
+              "procedure_id": "proc_007",
+              "name": "Self-Induced DDoS Recovery",
+              "triggers": [
+                "same_event_published_>100_times_per_sec",
+                "recursive_workflow_detected",
+                "event_bus_queue_exponential_growth"
+              ],
+              "detection_time_target": "1m",
+              "recovery_time_target": "5m",
+              "steps_count": 7,
+              "automation_ready": true
+            }
+          ],
+          "auto_recovery_enabled": [
+            "proc_001",
+            "proc_002",
+            "proc_003",
+            "proc_004",
+            "proc_007"
+          ],
+          "manual_approval_required": [
+            "proc_005",
+            "proc_006"
+          ],
+          "actions_taken": [
+            "configured_7_recovery_procedures",
+            "enabled_auto_recovery_for_5_procedures",
+            "manual_approval_required_for_2_procedures"
+          ]
+        }
+      },
+      "priority_application": {
+        "status": "completed",
+        "results": {
+          "execution_time": "2025-10-09T00:13:25.812618",
+          "target": "AI-Platform-ISO",
+          "tiers_configured": [
+            {
+              "tier": "tier_1_critical",
+              "description": "Essential for platform survival - must never fail",
+              "services_count": 4,
+              "resource_reservation": {
+                "cpu": "50%_of_total",
+                "memory": "60%_of_total",
+                "network": "70%_of_bandwidth",
+                "disk_io": "60%_of_iops"
+              }
+            },
+            {
+              "tier": "tier_2_important",
+              "description": "Important for platform intelligence - degrade gracefully",
+              "services_count": 3,
+              "resource_reservation": {
+                "cpu": "30%_of_total",
+                "memory": "30%_of_total",
+                "network": "20%_of_bandwidth",
+                "disk_io": "25%_of_iops"
+              }
+            },
+            {
+              "tier": "tier_3_optional",
+              "description": "Nice to have - pause if needed",
+              "services_count": 3,
+              "resource_reservation": {
+                "cpu": "20%_of_total",
+                "memory": "10%_of_total",
+                "network": "10%_of_bandwidth",
+                "disk_io": "15%_of_iops"
+              }
+            }
+          ],
+          "services_prioritized": [
+            {
+              "service_name": "event-bus",
+              "tier": "tier_1_critical",
+              "criticality": "absolute",
+              "cpu_guarantee": {
+                "minimum": "2_cores",
+                "maximum": "4_cores",
+                "shares": 2048,
+                "quota": "80%"
+              },
+              "memory_guarantee": {
+                "minimum": "4GB",
+                "maximum": "8GB",
+                "oom_score_adj": -1000,
+                "swappiness": 0
+              },
+              "degradation_behavior": "never_degrade"
+            },
+            {
+              "service_name": "api-gateway",
+              "tier": "tier_1_critical",
+              "criticality": "absolute",
+              "cpu_guarantee": {
+                "minimum": "2_cores",
+                "maximum": "4_cores",
+                "shares": 2048,
+                "quota": "80%"
+              },
+              "memory_guarantee": {
+                "minimum": "2GB",
+                "maximum": "4GB",
+                "oom_score_adj": -900,
+                "swappiness": 0
+              },
+              "degradation_behavior": "enable_circuit_breakers"
+            },
+            {
+              "service_name": "postgresql",
+              "tier": "tier_1_critical",
+              "criticality": "absolute",
+              "cpu_guarantee": {
+                "minimum": "2_cores",
+                "maximum": "4_cores",
+                "shares": 2048,
+                "quota": "80%"
+              },
+              "memory_guarantee": {
+                "minimum": "4GB",
+                "maximum": "8GB",
+                "oom_score_adj": -1000,
+                "swappiness": 0
+              },
+              "degradation_behavior": "never_degrade"
+            },
+            {
+              "service_name": "workflow-intelligence",
+              "tier": "tier_1_critical",
+              "criticality": "absolute",
+              "cpu_guarantee": {
+                "minimum": "1_core",
+                "maximum": "3_cores",
+                "shares": 1536,
+                "quota": "60%"
+              },
+              "memory_guarantee": {
+                "minimum": "2GB",
+                "maximum": "4GB",
+                "oom_score_adj": -800,
+                "swappiness": 0
+              },
+              "degradation_behavior": "queue_non_critical_workflows"
+            },
+            {
+              "service_name": "rag-system",
+              "tier": "tier_2_important",
+              "criticality": "important",
+              "cpu_guarantee": {
+                "minimum": "1_core",
+                "maximum": "3_cores",
+                "shares": 1024,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "2GB",
+                "maximum": "6GB",
+                "oom_score_adj": 0,
+                "swappiness": 10
+              },
+              "degradation_behavior": "switch_to_cached_embeddings"
+            },
+            {
+              "service_name": "analytics-specialist",
+              "tier": "tier_2_important",
+              "criticality": "important",
+              "cpu_guarantee": {
+                "minimum": "500m",
+                "maximum": "2_cores",
+                "shares": 512,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "1GB",
+                "maximum": "3GB",
+                "oom_score_adj": 100,
+                "swappiness": 20
+              },
+              "degradation_behavior": "pause_non_urgent_analysis"
+            },
+            {
+              "service_name": "monitoring",
+              "tier": "tier_2_important",
+              "criticality": "important",
+              "cpu_guarantee": {
+                "minimum": "500m",
+                "maximum": "1_core",
+                "shares": 512,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "1GB",
+                "maximum": "2GB",
+                "oom_score_adj": 50,
+                "swappiness": 10
+              },
+              "degradation_behavior": "increase_scrape_interval"
+            },
+            {
+              "service_name": "background-jobs",
+              "tier": "tier_3_optional",
+              "criticality": "optional",
+              "cpu_guarantee": {
+                "minimum": "0",
+                "maximum": "1_core",
+                "shares": 256,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "256MB",
+                "maximum": "1GB",
+                "oom_score_adj": 500,
+                "swappiness": 60
+              },
+              "degradation_behavior": "pause_immediately"
+            },
+            {
+              "service_name": "cleanup-tasks",
+              "tier": "tier_3_optional",
+              "criticality": "optional",
+              "cpu_guarantee": {
+                "minimum": "0",
+                "maximum": "500m",
+                "shares": 128,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "128MB",
+                "maximum": "512MB",
+                "oom_score_adj": 600,
+                "swappiness": 80
+              },
+              "degradation_behavior": "pause_immediately"
+            },
+            {
+              "service_name": "reporting",
+              "tier": "tier_3_optional",
+              "criticality": "optional",
+              "cpu_guarantee": {
+                "minimum": "0",
+                "maximum": "1_core",
+                "shares": 256,
+                "quota": "best_effort"
+              },
+              "memory_guarantee": {
+                "minimum": "256MB",
+                "maximum": "1GB",
+                "oom_score_adj": 400,
+                "swappiness": 40
+              },
+              "degradation_behavior": "queue_reports"
+            }
+          ],
+          "contention_policies_set": [
+            {
+              "contention_type": "cpu_saturation",
+              "detection": "cpu_usage_>90%_for_5min",
+              "response_actions": 3
+            },
+            {
+              "contention_type": "memory_pressure",
+              "detection": "memory_usage_>85%",
+              "response_actions": 4
+            },
+            {
+              "contention_type": "network_saturation",
+              "detection": "network_bandwidth_>90%",
+              "response_actions": 3
+            },
+            {
+              "contention_type": "disk_io_saturation",
+              "detection": "disk_iops_>90%_or_io_wait_>20%",
+              "response_actions": 3
+            }
+          ],
+          "actions_taken": [
+            "configured_3_resource_tiers",
+            "prioritized_10_services",
+            "set_4_contention_policies",
+            "enabled_dynamic_resource_allocation"
+          ]
+        }
+      }
+    },
+    "cycle_end": "2025-10-09T00:13:26.328267",
+    "status": "success"
+  },
+  "learning_results": {
+    "learning_timestamp": "2025-10-09T00:13:26.328646",
+    "input_data": {
+      "cycle_start": "2025-10-09T00:13:25.100105",
+      "target": "AI-Platform-ISO",
+      "level": "system",
+      "phases": {
+        "bia": {
+          "status": "completed",
+          "results": {
+            "execution_time": "2025-10-09T00:13:25.101499",
+            "target": "AI-Platform-ISO",
+            "critical_processes": [
+              {
+                "process_id": "cp_001",
+                "name": "Event Bus (Redis Streams)",
+                "criticality": "tier_1_critical",
+                "rto": "30s",
+                "rpo": "0s",
+                "recovery_priority": 1,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_002",
+                "name": "API Gateway",
+                "criticality": "tier_1_critical",
+                "rto": "1m",
+                "rpo": "0s",
+                "recovery_priority": 2,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_003",
+                "name": "PostgreSQL Database",
+                "criticality": "tier_1_critical",
+                "rto": "2m",
+                "rpo": "5m",
+                "recovery_priority": 1,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_004",
+                "name": "RAG System (Qdrant + LLM)",
+                "criticality": "tier_2_important",
+                "rto": "5m",
+                "rpo": "1h",
+                "recovery_priority": 3,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_005",
+                "name": "Analytics Specialist",
+                "criticality": "tier_2_important",
+                "rto": "10m",
+                "rpo": "1h",
+                "recovery_priority": 4,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_006",
+                "name": "Workflow Intelligence",
+                "criticality": "tier_1_critical",
+                "rto": "3m",
+                "rpo": "0s",
+                "recovery_priority": 2,
+                "auto_recovery_enabled": true
+              },
+              {
+                "process_id": "cp_007",
+                "name": "Monitoring & Observability",
+                "criticality": "tier_2_important",
+                "rto": "15m",
+                "rpo": "5m",
+                "recovery_priority": 5,
+                "auto_recovery_enabled": true
+              }
+            ],
+            "dependencies_identified": [
+              {
+                "from_service": "API Gateway",
+                "to_services": [
+                  "Event Bus",
+                  "PostgreSQL",
+                  "RAG System",
+                  "Workflow Intelligence"
+                ],
+                "type": "synchronous",
+                "failure_mode": "cascade"
+              },
+              {
+                "from_service": "Workflow Intelligence",
+                "to_services": [
+                  "Event Bus",
+                  "PostgreSQL"
+                ],
+                "type": "both",
+                "failure_mode": "partial_degradation"
+              },
+              {
+                "from_service": "RAG System",
+                "to_services": [
+                  "Qdrant",
+                  "LLM APIs"
+                ],
+                "type": "synchronous",
+                "failure_mode": "fallback_available"
+              },
+              {
+                "from_service": "Analytics Specialist",
+                "to_services": [
+                  "Event Bus",
+                  "RAG System"
+                ],
+                "type": "asynchronous",
+                "failure_mode": "queued_retry"
+              }
+            ],
+            "recovery_targets_set": [
+              {
+                "tier": "tier_1_critical",
+                "processes": [
+                  "Event Bus",
+                  "API Gateway",
+                  "PostgreSQL",
+                  "Workflow Intelligence"
+                ],
+                "resource_allocation": {
+                  "cpu": "guaranteed_80%",
+                  "memory": "guaranteed_4GB_min",
+                  "network": "priority_high",
+                  "disk_io": "priority_high"
+                },
+                "action_on_contention": "throttle_tier_2_and_3"
+              },
+              {
+                "tier": "tier_2_important",
+                "processes": [
+                  "RAG System",
+                  "Analytics Specialist",
+                  "Monitoring"
+                ],
+                "resource_allocation": {
+                  "cpu": "best_effort_up_to_60%",
+                  "memory": "best_effort_up_to_2GB",
+                  "network": "priority_medium",
+                  "disk_io": "priority_medium"
+                },
+                "action_on_contention": "graceful_degradation"
+              },
+              {
+                "tier": "tier_3_optional",
+                "processes": [
+                  "Background Jobs",
+                  "Cleanup Tasks",
+                  "Analytics"
+                ],
+                "resource_allocation": {
+                  "cpu": "best_effort_up_to_20%",
+                  "memory": "best_effort_up_to_512MB",
+                  "network": "priority_low",
+                  "disk_io": "priority_low"
+                },
+                "action_on_contention": "pause_until_resources_available"
+              }
+            ],
+            "actions_taken": [
+              "critical_processes_identified",
+              "rto_rpo_targets_defined",
+              "dependencies_mapped",
+              "recovery_priorities_set",
+              "resource_tiers_established"
+            ]
+          }
+        },
+        "risk_assessment": {
+          "status": "completed",
+          "results": {
+            "execution_time": "2025-10-09T00:13:25.101848",
+            "target": "AI-Platform-ISO",
+            "risks_by_category": {
+              "technical_risks": [
+                {
+                  "risk_id": "tech_001",
+                  "name": "Memory Leak in Long-Running Services",
+                  "probability": "high",
+                  "impact": "high",
+                  "risk_score": 9,
+                  "current_controls": [
+                    "memory_monitoring_enabled",
+                    "restart_policy_configured"
+                  ],
+                  "residual_risk": "medium"
+                },
+                {
+                  "risk_id": "tech_002",
+                  "name": "Cascade Failure from Event Bus Overload",
+                  "probability": "medium",
+                  "impact": "critical",
+                  "risk_score": 8,
+                  "current_controls": [
+                    "basic_monitoring",
+                    "manual_scaling"
+                  ],
+                  "residual_risk": "medium-high"
+                },
+                {
+                  "risk_id": "tech_003",
+                  "name": "Database Connection Pool Exhaustion",
+                  "probability": "high",
+                  "impact": "high",
+                  "risk_score": 9,
+                  "current_controls": [
+                    "connection_pooling_configured",
+                    "basic_timeout_set"
+                  ],
+                  "residual_risk": "medium"
+                },
+                {
+                  "risk_id": "tech_004",
+                  "name": "LLM API Rate Limiting / Failures",
+                  "probability": "medium",
+                  "impact": "high",
+                  "risk_score": 7,
+                  "current_controls": [
+                    "retry_logic_implemented",
+                    "multiple_providers_configured"
+                  ],
+                  "residual_risk": "low-medium"
+                },
+                {
+                  "risk_id": "tech_005",
+                  "name": "Qdrant Vector Database Performance Degradation",
+                  "probability": "medium",
+                  "impact": "medium",
+                  "risk_score": 6,
+                  "current_controls": [
+                    "performance_monitoring",
+                    "basic_optimization"
+                  ],
+                  "residual_risk": "low"
+                }
+              ],
+              "operational_risks": [
+                {
+                  "risk_id": "ops_001",
+                  "name": "Self-Induced DDoS from Recursive Workflows",
+                  "probability": "medium",
+                  "impact": "critical",
+                  "risk_score": 8,
+                  "current_controls": [
+                    "basic_rate_limiting"
+                  ],
+                  "residual_risk": "medium-high"
+                },
+                {
+                  "risk_id": "ops_002",
+                  "name": "Configuration Drift Across Environments",
+                  "probability": "medium",
+                  "impact": "medium",
+                  "risk_score": 6,
+                  "current_controls": [
+                    "env_files_in_git",
+                    "manual_reviews"
+                  ],
+                  "residual_risk": "low-medium"
+                },
+                {
+                  "risk_id": "ops_003",
+                  "name": "Alert Fatigue from False Positives",
+                  "probability": "high",
+                  "impact": "medium",
+                  "risk_score": 7,
+                  "current_controls": [
+                    "basic_alerting_configured"
+                  ],
+                  "residual_risk": "medium"
+                }
+              ],
+              "security_risks": [
+                {
+                  "risk_id": "sec_001",
+                  "name": "API Key Exposure in Logs/Errors",
+                  "probability": "medium",
+                  "impact": "critical",
+                  "risk_score": 8,
+                  "current_controls": [
+                    "env_vars_for_secrets",
+                    "gitignore_configured"
+                  ],
+                  "residual_risk": "low-medium"
+                },
+                {
+                  "risk_id": "sec_002",
+                  "name": "Unauthorized Access via EventBus",
+                  "probability": "low",
+                  "impact": "high",
+                  "risk_score": 5,
+                  "current_controls": [
+                    "network_isolation"
+                  ],
+                  "residual_risk": "low"
+                }
+              ],
+              "data_risks": [
+                {
+                  "risk_id": "data_001",
+                  "name": "Workflow State Corruption",
+                  "probability": "medium",
+                  "impact": "high",
+                  "risk_score": 7,
+                  "current_controls": [
+                    "database_transactions",
+                    "state_validation"
+                  ],
+                  "residual_risk": "low-medium"
+                },
+                {
+                  "risk_id": "data_002",
+                  "name": "Knowledge Base Poisoning",
+                  "probability": "low",
+                  "impact": "high",
+                  "risk_score": 5,
+                  "current_controls": [
+                    "source_tracking",
+                    "manual_review"
+                  ],
+                  "residual_risk": "low"
+                }
+              ]
+            },
+            "high_priority_risks": [
+              {
+                "risk_id": "tech_001",
+                "name": "Memory Leak in Long-Running Services",
+                "probability": "high",
+                "impact": "high",
+                "risk_score": 9,
+                "current_controls": [
+                  "memory_monitoring_enabled",
+                  "restart_policy_configured"
+                ],
+                "residual_risk": "medium"
+              },
+              {
+                "risk_id": "tech_002",
+                "name": "Cascade Failure from Event Bus Overload",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "basic_monitoring",
+                  "manual_scaling"
+                ],
+                "residual_risk": "medium-high"
+              },
+              {
+                "risk_id": "tech_003",
+                "name": "Database Connection Pool Exhaustion",
+                "probability": "high",
+                "impact": "high",
+                "risk_score": 9,
+                "current_controls": [
+                  "connection_pooling_configured",
+                  "basic_timeout_set"
+                ],
+                "residual_risk": "medium"
+              },
+              {
+                "risk_id": "tech_004",
+                "name": "LLM API Rate Limiting / Failures",
+                "probability": "medium",
+                "impact": "high",
+                "risk_score": 7,
+                "current_controls": [
+                  "retry_logic_implemented",
+                  "multiple_providers_configured"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "ops_001",
+                "name": "Self-Induced DDoS from Recursive Workflows",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "basic_rate_limiting"
+                ],
+                "residual_risk": "medium-high"
+              },
+              {
+                "risk_id": "ops_003",
+                "name": "Alert Fatigue from False Positives",
+                "probability": "high",
+                "impact": "medium",
+                "risk_score": 7,
+                "current_controls": [
+                  "basic_alerting_configured"
+                ],
+                "residual_risk": "medium"
+              },
+              {
+                "risk_id": "sec_001",
+                "name": "API Key Exposure in Logs/Errors",
+                "probability": "medium",
+                "impact": "critical",
+                "risk_score": 8,
+                "current_controls": [
+                  "env_vars_for_secrets",
+                  "gitignore_configured"
+                ],
+                "residual_risk": "low-medium"
+              },
+              {
+                "risk_id": "data_001",
+                "name": "Workflow State Corruption",
+                "probability": "medium",
+                "impact": "high",
+                "risk_score": 7,
+                "current_controls": [
+                  "database_transactions",
+                  "state_validation"
+                ],
+                "residual_risk": "low-medium"
+              }
+            ],
+            "mitigations_to_implement": [
+              {
+                "risk_id": "tech_001",
+                "risk_name": "Memory Leak in Long-Running Services",
+                "type": "preventive",
+                "actions": [
+                  "implement_memory_profiling",
+                  "add_connection_pool_limits",
+                  "enable_gc_debugging",
+                  "code_review_for_circular_refs"
+                ]
+              },
+              {
+                "risk_id": "tech_001",
+                "risk_name": "Memory Leak in Long-Running Services",
+                "type": "detective",
+                "actions": [
+                  "monitor_memory_growth_rate",
+                  "alert_on_10%_growth_per_hour",
+                  "automated_heap_dump_on_threshold"
+                ]
+              },
+              {
+                "risk_id": "tech_001",
+                "risk_name": "Memory Leak in Long-Running Services",
+                "type": "corrective",
+                "actions": [
+                  "automated_rolling_restart_at_80%_threshold",
+                  "graceful_shutdown_with_connection_drain",
+                  "analyze_heap_dump_post_restart"
+                ]
+              },
+              {
+                "risk_id": "tech_002",
+                "risk_name": "Cascade Failure from Event Bus Overload",
+                "type": "preventive",
+                "actions": [
+                  "implement_rate_limiting_on_event_publishing",
+                  "add_backpressure_mechanism",
+                  "separate_critical_vs_non_critical_streams",
+                  "implement_event_deduplication"
+                ]
+              },
+              {
+                "risk_id": "tech_002",
+                "risk_name": "Cascade Failure from Event Bus Overload",
+                "type": "detective",
+                "actions": [
+                  "monitor_stream_length",
+                  "alert_on_consumer_lag_>1000_events",
+                  "track_event_throughput_anomalies"
+                ]
+              },
+              {
+                "risk_id": "tech_002",
+                "risk_name": "Cascade Failure from Event Bus Overload",
+                "type": "corrective",
+                "actions": [
+                  "auto_scale_consumer_groups",
+                  "drop_non_critical_events_under_pressure",
+                  "circuit_breaker_activation",
+                  "isolate_failing_consumers"
+                ]
+              },
+              {
+                "risk_id": "tech_003",
+                "risk_name": "Database Connection Pool Exhaustion",
+                "type": "preventive",
+                "actions": [
+                  "implement_connection_timeout_30s",
+                  "use_connection_context_managers",
+                  "limit_connections_per_service",
+                  "implement_connection_pooling_best_practices"
+                ]
+              },
+              {
+                "risk_id": "tech_003",
+                "risk_name": "Database Connection Pool Exhaustion",
+                "type": "detective",
+                "actions": [
+                  "monitor_connection_pool_usage",
+                  "alert_on_>80%_utilization",
+                  "track_long_running_queries",
+                  "identify_connection_leak_sources"
+                ]
+              },
+              {
+                "risk_id": "tech_003",
+                "risk_name": "Database Connection Pool Exhaustion",
+                "type": "corrective",
+                "actions": [
+                  "kill_queries_running_>5min",
+                  "restart_services_with_connection_leaks",
+                  "temporarily_increase_pool_size",
+                  "enable_connection_queueing"
+                ]
+              },
+              {
+                "risk_id": "tech_004",
+                "risk_name": "LLM API Rate Limiting / Failures",
+                "type": "preventive",
+                "actions": [
+                  "implement_request_queuing",
+                  "add_exponential_backoff",
+                  "distribute_across_multiple_api_keys",
+                  "implement_local_llm_fallback"
+                ]
+              },
+              {
+                "risk_id": "tech_004",
+                "risk_name": "LLM API Rate Limiting / Failures",
+                "type": "detective",
+                "actions": [
+                  "monitor_api_error_rates",
+                  "track_daily_token_usage",
+                  "alert_on_approaching_rate_limits"
+                ]
+              },
+              {
+                "risk_id": "tech_004",
+                "risk_name": "LLM API Rate Limiting / Failures",
+                "type": "corrective",
+                "actions": [
+                  "switch_to_backup_llm_provider",
+                  "enable_cached_responses",
+                  "degrade_to_rule_based_responses",
+                  "queue_non_critical_requests"
+                ]
+              },
+              {
+                "risk_id": "tech_005",
+                "risk_name": "Qdrant Vector Database Performance Degradation",
+                "type": "preventive",
+                "actions": [
+                  "implement_collection_sharding",
+                  "optimize_hnsw_parameters",
+                  "archive_old_vectors",
+                  "implement_tiered_storage"
+                ]
+              },
+              {
+                "risk_id": "tech_005",
+                "risk_name": "Qdrant Vector Database Performance Degradation",
+                "type": "detective",
+                "actions": [
+                  "monitor_query_latency_percentiles",
+                  "track_collection_growth",
+                  "alert_on_latency_degradation"
+                ]
+              },
+              {
+                "risk_id": "tech_005",
+                "risk_name": "Qdrant Vector Database Performance Degradation",
+                "type": "corrective",
+                "actions": [
+                  "switch_to_cached_embeddings",
+                  "reduce_top_k_results",
+                  "enable_approximate_search",
+                  "scale_up_qdrant_resources"
+                ]
+              },
+              {
+                "risk_id": "ops_001",
+                "risk_name": "Self-Induced DDoS from Recursive Workflows",
+                "type": "preventive",
+                "actions": [
+                  "implement_workflow_execution_limits",
+                  "add_recursion_detection",
+                  "implement_workflow_idempotency",
+                  "add_circuit_breakers_between_workflows"
+                ]
+              },
+              {
+                "risk_id": "ops_001",
+                "risk_name": "Self-Induced DDoS from Recursive Workflows",
+                "type": "detective",
+                "actions": [
+                  "detect_recursive_patterns",
+                  "alert_on_same_workflow_>10_executions_per_minute",
+                  "track_workflow_call_chains"
+                ]
+              },
+              {
+                "risk_id": "ops_001",
+                "risk_name": "Self-Induced DDoS from Recursive Workflows",
+                "type": "corrective",
+                "actions": [
+                  "kill_runaway_workflows",
+                  "block_recursive_event_publishing",
+                  "clear_event_queue",
+                  "restart_affected_services"
+                ]
+              },
+              {
+                "risk_id": "ops_002",
+                "risk_name": "Configuration Drift Across Environments",
+                "type": "preventive",
+                "actions": [
+                  "use_infrastructure_as_code",
+                  "automate_configuration_management",
+                  "implement_config_validation",
+                  "version_control_all_configs"
+                ]
+              },
+              {
+                "risk_id": "ops_002",
+                "risk_name": "Configuration Drift Across Environments",
+                "type": "detective",
+                "actions": [
+                  "automated_config_drift_detection",
+                  "compare_env_configs_daily",
+                  "alert_on_differences"
+                ]
+              },
+              {
+                "risk_id": "ops_002",
+                "risk_name": "Configuration Drift Across Environments",
+                "type": "corrective",
+                "actions": [
+                  "auto_sync_configs_from_source_of_truth",
+                  "rollback_to_known_good_config",
+                  "document_all_config_changes"
+                ]
+              },
+              {
+                "risk_id": "ops_003",
+                "risk_name": "Alert Fatigue from False Positives",
+                "type": "preventive",
+                "actions": [
+                  "tune_alert_thresholds",
+                  "implement_alert_grouping",
+                  "add_smart_suppression",
+                  "use_anomaly_detection_instead_of_static_thresholds"
+                ]
+              },
+              {
+                "risk_id": "ops_003",
+                "risk_name": "Alert Fatigue from False Positives",
+                "type": "detective",
+                "actions": [
+                  "track_false_positive_rate",
+                  "measure_time_to_acknowledge",
+                  "analyze_alert_patterns"
+                ]
+              },
+              {
+                "risk_id": "ops_003",
+                "risk_name": "Alert Fatigue from False Positives",
+                "type": "corrective",
+                "actions": [
+                  "disable_noisy_alerts",
+                  "escalate_critical_alerts_differently",
+                  "implement_alert_priority_levels"
+                ]
+              },
+              {
+                "risk_id": "sec_001",
+                "risk_name": "API Key Exposure in Logs/Errors",
+                "type": "preventive",
+                "actions": [
+                  "implement_log_sanitization",
+                  "use_secret_management_service",
+                  "never_log_env_vars",
+                  "implement_sensitive_data_detection"
+                ]
+              },
+              {
+                "risk_id": "sec_001",
+                "risk_name": "API Key Exposure in Logs/Errors",
+                "type": "detective",
+                "actions": [
+                  "scan_logs_for_api_key_patterns",
+                  "monitor_unauthorized_api_usage",
+                  "alert_on_suspicious_patterns"
+                ]
+              },
+              {
+                "risk_id": "sec_001",
+                "risk_name": "API Key Exposure in Logs/Errors",
+                "type": "corrective",
+                "actions": [
+                  "immediately_rotate_exposed_keys",
+                  "remove_from_logs",
+                  "audit_all_access_with_exposed_key"
+                ]
+              },
+              {
+                "risk_id": "sec_002",
+                "risk_name": "Unauthorized Access via EventBus",
+                "type": "preventive",
+                "actions": [
+                  "implement_event_level_authorization",
+                  "whitelist_allowed_subscribers",
+                  "add_event_signing",
+                  "implement_stream_acls"
+                ]
+              },
+              {
+                "risk_id": "sec_002",
+                "risk_name": "Unauthorized Access via EventBus",
+                "type": "detective",
+                "actions": [
+                  "audit_all_consumer_groups",
+                  "monitor_event_access_patterns",
+                  "alert_on_new_consumers"
+                ]
+              },
+              {
+                "risk_id": "sec_002",
+                "risk_name": "Unauthorized Access via EventBus",
+                "type": "corrective",
+                "actions": [
+                  "revoke_unauthorized_access",
+                  "purge_unauthorized_events",
+                  "investigate_breach"
+                ]
+              },
+              {
+                "risk_id": "data_001",
+                "risk_name": "Workflow State Corruption",
+                "type": "preventive",
+                "actions": [
+                  "implement_optimistic_locking",
+                  "use_event_sourcing",
+                  "add_state_validation",
+                  "implement_saga_pattern"
+                ]
+              },
+              {
+                "risk_id": "data_001",
+                "risk_name": "Workflow State Corruption",
+                "type": "detective",
+                "actions": [
+                  "validate_state_consistency",
+                  "detect_orphaned_workflows",
+                  "monitor_state_transitions"
+                ]
+              },
+              {
+                "risk_id": "data_001",
+                "risk_name": "Workflow State Corruption",
+                "type": "corrective",
+                "actions": [
+                  "rebuild_state_from_events",
+                  "manual_state_correction",
+                  "workflow_compensation"
+                ]
+              },
+              {
+                "risk_id": "data_002",
+                "risk_name": "Knowledge Base Poisoning",
+                "type": "preventive",
+                "actions": [
+                  "validate_all_knowledge_sources",
+                  "implement_approval_workflow",
+                  "version_control_knowledge_base",
+                  "add_source_verification"
+                ]
+              },
+              {
+                "risk_id": "data_002",
+                "risk_name": "Knowledge Base Poisoning",
+                "type": "detective",
+                "actions": [
+                  "monitor_knowledge_quality_metrics",
+                  "user_feedback_analysis",
+                  "periodic_knowledge_audits"
+                ]
+              },
+              {
+                "risk_id": "data_002",
+                "risk_name": "Knowledge Base Poisoning",
+                "type": "corrective",
+                "actions": [
+                  "rollback_to_previous_version",
+                  "quarantine_suspicious_knowledge",
+                  "re_embed_from_verified_sources"
+                ]
+              }
+            ],
+            "actions_taken": [
+              "identified_12_risks",
+              "flagged_8_high_priority_risks",
+              "prepared_36_mitigation_strategies"
+            ]
+          }
+        },
+        "recovery_setup": {
+          "status": "completed",
+          "results": {
+            "execution_time": "2025-10-09T00:13:25.102163",
+            "target": "AI-Platform-ISO",
+            "procedures_configured": [
+              {
+                "procedure_id": "proc_001",
+                "name": "Event Bus Auto-Recovery",
+                "triggers": [
+                  "redis_health_check_failed",
+                  "event_processing_stopped",
+                  "consumer_group_errors_>10"
+                ],
+                "detection_time_target": "15s",
+                "recovery_time_target": "30s",
+                "steps_count": 8,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_002",
+                "name": "Database Connection Pool Recovery",
+                "triggers": [
+                  "connection_pool_exhausted",
+                  "connection_timeout_errors_>10_per_min",
+                  "database_unavailable"
+                ],
+                "detection_time_target": "30s",
+                "recovery_time_target": "2m",
+                "steps_count": 6,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_003",
+                "name": "RAG System Degradation Recovery",
+                "triggers": [
+                  "qdrant_latency_>2s",
+                  "llm_api_errors_>10%",
+                  "embedding_service_down"
+                ],
+                "detection_time_target": "1m",
+                "recovery_time_target": "5m",
+                "steps_count": 8,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_004",
+                "name": "Memory Leak Mitigation",
+                "triggers": [
+                  "memory_growth_rate_>10%_per_hour",
+                  "service_memory_>80%_limit",
+                  "oom_killer_activated"
+                ],
+                "detection_time_target": "5m",
+                "recovery_time_target": "10m",
+                "steps_count": 7,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_005",
+                "name": "Cascade Failure Recovery",
+                "triggers": [
+                  "multiple_services_failing_simultaneously",
+                  "error_rate_>50%_across_platform",
+                  "event_storm_detected"
+                ],
+                "detection_time_target": "30s",
+                "recovery_time_target": "15m",
+                "steps_count": 10,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_006",
+                "name": "Workflow Stuck State Recovery",
+                "triggers": [
+                  "workflow_in_same_state_>30min",
+                  "workflow_retry_count_>10",
+                  "workflow_state_invalid"
+                ],
+                "detection_time_target": "30m",
+                "recovery_time_target": "5m",
+                "steps_count": 6,
+                "automation_ready": true
+              },
+              {
+                "procedure_id": "proc_007",
+                "name": "Self-Induced DDoS Recovery",
+                "triggers": [
+                  "same_event_published_>100_times_per_sec",
+                  "recursive_workflow_detected",
+                  "event_bus_queue_exponential_growth"
+                ],
+                "detection_time_target": "1m",
+                "recovery_time_target": "5m",
+                "steps_count": 7,
+                "automation_ready": true
+              }
+            ],
+            "auto_recovery_enabled": [
+              "proc_001",
+              "proc_002",
+              "proc_003",
+              "proc_004",
+              "proc_007"
+            ],
+            "manual_approval_required": [
+              "proc_005",
+              "proc_006"
+            ],
+            "actions_taken": [
+              "configured_7_recovery_procedures",
+              "enabled_auto_recovery_for_5_procedures",
+              "manual_approval_required_for_2_procedures"
+            ]
+          }
+        },
+        "priority_application": {
+          "status": "completed",
+          "results": {
+            "execution_time": "2025-10-09T00:13:25.812618",
+            "target": "AI-Platform-ISO",
+            "tiers_configured": [
+              {
+                "tier": "tier_1_critical",
+                "description": "Essential for platform survival - must never fail",
+                "services_count": 4,
+                "resource_reservation": {
+                  "cpu": "50%_of_total",
+                  "memory": "60%_of_total",
+                  "network": "70%_of_bandwidth",
+                  "disk_io": "60%_of_iops"
+                }
+              },
+              {
+                "tier": "tier_2_important",
+                "description": "Important for platform intelligence - degrade gracefully",
+                "services_count": 3,
+                "resource_reservation": {
+                  "cpu": "30%_of_total",
+                  "memory": "30%_of_total",
+                  "network": "20%_of_bandwidth",
+                  "disk_io": "25%_of_iops"
+                }
+              },
+              {
+                "tier": "tier_3_optional",
+                "description": "Nice to have - pause if needed",
+                "services_count": 3,
+                "resource_reservation": {
+                  "cpu": "20%_of_total",
+                  "memory": "10%_of_total",
+                  "network": "10%_of_bandwidth",
+                  "disk_io": "15%_of_iops"
+                }
+              }
+            ],
+            "services_prioritized": [
+              {
+                "service_name": "event-bus",
+                "tier": "tier_1_critical",
+                "criticality": "absolute",
+                "cpu_guarantee": {
+                  "minimum": "2_cores",
+                  "maximum": "4_cores",
+                  "shares": 2048,
+                  "quota": "80%"
+                },
+                "memory_guarantee": {
+                  "minimum": "4GB",
+                  "maximum": "8GB",
+                  "oom_score_adj": -1000,
+                  "swappiness": 0
+                },
+                "degradation_behavior": "never_degrade"
+              },
+              {
+                "service_name": "api-gateway",
+                "tier": "tier_1_critical",
+                "criticality": "absolute",
+                "cpu_guarantee": {
+                  "minimum": "2_cores",
+                  "maximum": "4_cores",
+                  "shares": 2048,
+                  "quota": "80%"
+                },
+                "memory_guarantee": {
+                  "minimum": "2GB",
+                  "maximum": "4GB",
+                  "oom_score_adj": -900,
+                  "swappiness": 0
+                },
+                "degradation_behavior": "enable_circuit_breakers"
+              },
+              {
+                "service_name": "postgresql",
+                "tier": "tier_1_critical",
+                "criticality": "absolute",
+                "cpu_guarantee": {
+                  "minimum": "2_cores",
+                  "maximum": "4_cores",
+                  "shares": 2048,
+                  "quota": "80%"
+                },
+                "memory_guarantee": {
+                  "minimum": "4GB",
+                  "maximum": "8GB",
+                  "oom_score_adj": -1000,
+                  "swappiness": 0
+                },
+                "degradation_behavior": "never_degrade"
+              },
+              {
+                "service_name": "workflow-intelligence",
+                "tier": "tier_1_critical",
+                "criticality": "absolute",
+                "cpu_guarantee": {
+                  "minimum": "1_core",
+                  "maximum": "3_cores",
+                  "shares": 1536,
+                  "quota": "60%"
+                },
+                "memory_guarantee": {
+                  "minimum": "2GB",
+                  "maximum": "4GB",
+                  "oom_score_adj": -800,
+                  "swappiness": 0
+                },
+                "degradation_behavior": "queue_non_critical_workflows"
+              },
+              {
+                "service_name": "rag-system",
+                "tier": "tier_2_important",
+                "criticality": "important",
+                "cpu_guarantee": {
+                  "minimum": "1_core",
+                  "maximum": "3_cores",
+                  "shares": 1024,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "2GB",
+                  "maximum": "6GB",
+                  "oom_score_adj": 0,
+                  "swappiness": 10
+                },
+                "degradation_behavior": "switch_to_cached_embeddings"
+              },
+              {
+                "service_name": "analytics-specialist",
+                "tier": "tier_2_important",
+                "criticality": "important",
+                "cpu_guarantee": {
+                  "minimum": "500m",
+                  "maximum": "2_cores",
+                  "shares": 512,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "1GB",
+                  "maximum": "3GB",
+                  "oom_score_adj": 100,
+                  "swappiness": 20
+                },
+                "degradation_behavior": "pause_non_urgent_analysis"
+              },
+              {
+                "service_name": "monitoring",
+                "tier": "tier_2_important",
+                "criticality": "important",
+                "cpu_guarantee": {
+                  "minimum": "500m",
+                  "maximum": "1_core",
+                  "shares": 512,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "1GB",
+                  "maximum": "2GB",
+                  "oom_score_adj": 50,
+                  "swappiness": 10
+                },
+                "degradation_behavior": "increase_scrape_interval"
+              },
+              {
+                "service_name": "background-jobs",
+                "tier": "tier_3_optional",
+                "criticality": "optional",
+                "cpu_guarantee": {
+                  "minimum": "0",
+                  "maximum": "1_core",
+                  "shares": 256,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "256MB",
+                  "maximum": "1GB",
+                  "oom_score_adj": 500,
+                  "swappiness": 60
+                },
+                "degradation_behavior": "pause_immediately"
+              },
+              {
+                "service_name": "cleanup-tasks",
+                "tier": "tier_3_optional",
+                "criticality": "optional",
+                "cpu_guarantee": {
+                  "minimum": "0",
+                  "maximum": "500m",
+                  "shares": 128,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "128MB",
+                  "maximum": "512MB",
+                  "oom_score_adj": 600,
+                  "swappiness": 80
+                },
+                "degradation_behavior": "pause_immediately"
+              },
+              {
+                "service_name": "reporting",
+                "tier": "tier_3_optional",
+                "criticality": "optional",
+                "cpu_guarantee": {
+                  "minimum": "0",
+                  "maximum": "1_core",
+                  "shares": 256,
+                  "quota": "best_effort"
+                },
+                "memory_guarantee": {
+                  "minimum": "256MB",
+                  "maximum": "1GB",
+                  "oom_score_adj": 400,
+                  "swappiness": 40
+                },
+                "degradation_behavior": "queue_reports"
+              }
+            ],
+            "contention_policies_set": [
+              {
+                "contention_type": "cpu_saturation",
+                "detection": "cpu_usage_>90%_for_5min",
+                "response_actions": 3
+              },
+              {
+                "contention_type": "memory_pressure",
+                "detection": "memory_usage_>85%",
+                "response_actions": 4
+              },
+              {
+                "contention_type": "network_saturation",
+                "detection": "network_bandwidth_>90%",
+                "response_actions": 3
+              },
+              {
+                "contention_type": "disk_io_saturation",
+                "detection": "disk_iops_>90%_or_io_wait_>20%",
+                "response_actions": 3
+              }
+            ],
+            "actions_taken": [
+              "configured_3_resource_tiers",
+              "prioritized_10_services",
+              "set_4_contention_policies",
+              "enabled_dynamic_resource_allocation"
+            ]
+          }
+        }
+      },
+      "cycle_end": "2025-10-09T00:13:26.328267",
+      "status": "success"
+    },
+    "metrics_analyzed": 4,
+    "insights_generated": [
+      {
+        "category": "performance_target",
+        "observation": "Average RTO is 313s - relatively high",
+        "recommendation": "Consider optimizing recovery procedures to reduce RTO",
+        "confidence": 0.6,
+        "evidence": {
+          "average_rto_seconds": 312.85714285714283
+        }
+      },
+      {
+        "category": "unmitigated_risk",
+        "observation": "High risk with high residual: Cascade Failure from Event Bus Overload",
+        "recommendation": "Implement additional controls for: Cascade Failure from Event Bus Overload",
+        "confidence": 0.85,
+        "evidence": {
+          "risk_id": "tech_002",
+          "name": "Cascade Failure from Event Bus Overload",
+          "probability": "medium",
+          "impact": "critical",
+          "risk_score": 8,
+          "current_controls": [
+            "basic_monitoring",
+            "manual_scaling"
+          ],
+          "residual_risk": "medium-high"
+        }
+      },
+      {
+        "category": "unmitigated_risk",
+        "observation": "High risk with high residual: Self-Induced DDoS from Recursive Workflows",
+        "recommendation": "Implement additional controls for: Self-Induced DDoS from Recursive Workflows",
+        "confidence": 0.85,
+        "evidence": {
+          "risk_id": "ops_001",
+          "name": "Self-Induced DDoS from Recursive Workflows",
+          "probability": "medium",
+          "impact": "critical",
+          "risk_score": 8,
+          "current_controls": [
+            "basic_rate_limiting"
+          ],
+          "residual_risk": "medium-high"
+        }
+      }
+    ],
+    "improvements_identified": [
+      {
+        "improvement_id": "imp_1759958006.328775_1",
+        "category": "unmitigated_risk",
+        "description": "Implement additional controls for: Cascade Failure from Event Bus Overload",
+        "priority": "critical",
+        "confidence": 0.85,
+        "estimated_impact": "high",
+        "source_insight": "High risk with high residual: Cascade Failure from Event Bus Overload"
+      },
+      {
+        "improvement_id": "imp_1759958006.328802_2",
+        "category": "unmitigated_risk",
+        "description": "Implement additional controls for: Self-Induced DDoS from Recursive Workflows",
+        "priority": "critical",
+        "confidence": 0.85,
+        "estimated_impact": "high",
+        "source_insight": "High risk with high residual: Self-Induced DDoS from Recursive Workflows"
+      }
+    ],
+    "confidence_scores": {
+      "overall_confidence": 0.7666666666666666,
+      "ready_to_apply": true
+    }
+  },
+  "effectiveness_metrics": [
+    {
+      "metric_type": "event_bus_rto",
+      "target_value": 30,
+      "actual_value": 28,
+      "success": true,
+      "deviation_percentage": -6.666666666666667
+    },
+    {
+      "metric_type": "tier_1_availability",
+      "target_value": 99.9,
+      "actual_value": 99.95,
+      "success": true,
+      "deviation_percentage": 0.0500500500500472
+    },
+    {
+      "metric_type": "auto_recovery_success_rate",
+      "target_value": 95,
+      "actual_value": 92,
+      "success": true,
+      "deviation_percentage": -3.1578947368421053
+    }
+  ]
+}

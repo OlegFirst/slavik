@@ -1,0 +1,33 @@
+graph TB
+
+    subgraph Infrastructure
+        eventbus[eventbus]
+        database[database]
+        observability[observability]
+        security[security]
+        gateway[gateway]
+        vector-db[vector-db]
+    end
+
+    subgraph IntelligentCore[Intelligent Core]
+        ai-foundation[ai-foundation]
+        workflow_intelligence[workflow_intelligence]
+        expertise-center[expertise-center]
+        collective[collective]
+        predictive[predictive]
+    end
+
+    subgraph PlatformServices[Platform Services]
+        bia-service[bia-service]
+        risk-service[risk-service]
+        compliance-service[compliance-service]
+        planning-service[planning-service]
+        response-service[response-service]
+    end
+
+    %% Sample dependencies
+    ai-foundation --> eventbus
+    ai-foundation --> database
+    expertise-center --> ai-foundation
+    bia-service --> ai-foundation
+    bia-service --> expertise-center

@@ -1,0 +1,661 @@
+{
+  "scenario_id": "system_risk_001",
+  "scenario_name": "Platform Self-Risk Assessment",
+  "level": "system",
+  "target": "AI-Platform-ISO",
+  "goal": "resilience",
+  "description": "Comprehensive risk assessment for the platform itself - identifying threats, vulnerabilities, and mitigation strategies",
+  "version": "1.0.0",
+  "created": "2025-10-09",
+  "priority": "critical",
+
+  "risk_categories": [
+    {
+      "category": "technical_risks",
+      "risks": [
+        {
+          "risk_id": "tech_001",
+          "name": "Memory Leak in Long-Running Services",
+          "description": "Python services accumulating memory over time due to unclosed connections, circular references, or caching issues",
+          "probability": "high",
+          "impact": "high",
+          "risk_score": 9,
+          "indicators": [
+            "memory_usage_increasing_trend",
+            "garbage_collection_frequency_increasing",
+            "service_restart_required_daily"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_memory_profiling",
+                "add_connection_pool_limits",
+                "enable_gc_debugging",
+                "code_review_for_circular_refs"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_memory_growth_rate",
+                "alert_on_10%_growth_per_hour",
+                "automated_heap_dump_on_threshold"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "automated_rolling_restart_at_80%_threshold",
+                "graceful_shutdown_with_connection_drain",
+                "analyze_heap_dump_post_restart"
+              ]
+            }
+          ],
+          "current_controls": [
+            "memory_monitoring_enabled",
+            "restart_policy_configured"
+          ],
+          "residual_risk": "medium",
+          "owner": "infrastructure_team"
+        },
+        {
+          "risk_id": "tech_002",
+          "name": "Cascade Failure from Event Bus Overload",
+          "description": "Event Bus overwhelmed by event storm, causing all dependent services to fail",
+          "probability": "medium",
+          "impact": "critical",
+          "risk_score": 8,
+          "indicators": [
+            "event_bus_lag_increasing",
+            "consumer_group_falling_behind",
+            "multiple_services_timing_out"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_rate_limiting_on_event_publishing",
+                "add_backpressure_mechanism",
+                "separate_critical_vs_non_critical_streams",
+                "implement_event_deduplication"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_stream_length",
+                "alert_on_consumer_lag_>1000_events",
+                "track_event_throughput_anomalies"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "auto_scale_consumer_groups",
+                "drop_non_critical_events_under_pressure",
+                "circuit_breaker_activation",
+                "isolate_failing_consumers"
+              ]
+            }
+          ],
+          "current_controls": [
+            "basic_monitoring",
+            "manual_scaling"
+          ],
+          "residual_risk": "medium-high",
+          "owner": "eventbus_team"
+        },
+        {
+          "risk_id": "tech_003",
+          "name": "Database Connection Pool Exhaustion",
+          "description": "Services holding database connections indefinitely, preventing new connections",
+          "probability": "high",
+          "impact": "high",
+          "risk_score": 9,
+          "indicators": [
+            "connection_pool_usage_>90%",
+            "connection_wait_time_increasing",
+            "database_timeout_errors"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_connection_timeout_30s",
+                "use_connection_context_managers",
+                "limit_connections_per_service",
+                "implement_connection_pooling_best_practices"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_connection_pool_usage",
+                "alert_on_>80%_utilization",
+                "track_long_running_queries",
+                "identify_connection_leak_sources"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "kill_queries_running_>5min",
+                "restart_services_with_connection_leaks",
+                "temporarily_increase_pool_size",
+                "enable_connection_queueing"
+              ]
+            }
+          ],
+          "current_controls": [
+            "connection_pooling_configured",
+            "basic_timeout_set"
+          ],
+          "residual_risk": "medium",
+          "owner": "database_team"
+        },
+        {
+          "risk_id": "tech_004",
+          "name": "LLM API Rate Limiting / Failures",
+          "description": "External LLM APIs (OpenAI, Anthropic) hitting rate limits or experiencing outages",
+          "probability": "medium",
+          "impact": "high",
+          "risk_score": 7,
+          "indicators": [
+            "llm_api_429_errors",
+            "llm_api_503_errors",
+            "response_latency_>10s"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_request_queuing",
+                "add_exponential_backoff",
+                "distribute_across_multiple_api_keys",
+                "implement_local_llm_fallback"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_api_error_rates",
+                "track_daily_token_usage",
+                "alert_on_approaching_rate_limits"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "switch_to_backup_llm_provider",
+                "enable_cached_responses",
+                "degrade_to_rule_based_responses",
+                "queue_non_critical_requests"
+              ]
+            }
+          ],
+          "current_controls": [
+            "retry_logic_implemented",
+            "multiple_providers_configured"
+          ],
+          "residual_risk": "low-medium",
+          "owner": "ai_team"
+        },
+        {
+          "risk_id": "tech_005",
+          "name": "Qdrant Vector Database Performance Degradation",
+          "description": "Qdrant query latency increases as vector collection grows",
+          "probability": "medium",
+          "impact": "medium",
+          "risk_score": 6,
+          "indicators": [
+            "query_latency_>2s",
+            "collection_size_>10M_vectors",
+            "memory_usage_high"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_collection_sharding",
+                "optimize_hnsw_parameters",
+                "archive_old_vectors",
+                "implement_tiered_storage"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_query_latency_percentiles",
+                "track_collection_growth",
+                "alert_on_latency_degradation"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "switch_to_cached_embeddings",
+                "reduce_top_k_results",
+                "enable_approximate_search",
+                "scale_up_qdrant_resources"
+              ]
+            }
+          ],
+          "current_controls": [
+            "performance_monitoring",
+            "basic_optimization"
+          ],
+          "residual_risk": "low",
+          "owner": "rag_team"
+        }
+      ]
+    },
+    {
+      "category": "operational_risks",
+      "risks": [
+        {
+          "risk_id": "ops_001",
+          "name": "Self-Induced DDoS from Recursive Workflows",
+          "description": "Platform workflows triggering each other recursively, creating internal DDoS",
+          "probability": "medium",
+          "impact": "critical",
+          "risk_score": 8,
+          "indicators": [
+            "event_bus_exponential_growth",
+            "same_workflow_executing_100+_times",
+            "cpu_usage_spike_all_services"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_workflow_execution_limits",
+                "add_recursion_detection",
+                "implement_workflow_idempotency",
+                "add_circuit_breakers_between_workflows"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "detect_recursive_patterns",
+                "alert_on_same_workflow_>10_executions_per_minute",
+                "track_workflow_call_chains"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "kill_runaway_workflows",
+                "block_recursive_event_publishing",
+                "clear_event_queue",
+                "restart_affected_services"
+              ]
+            }
+          ],
+          "current_controls": [
+            "basic_rate_limiting"
+          ],
+          "residual_risk": "medium-high",
+          "owner": "workflow_team"
+        },
+        {
+          "risk_id": "ops_002",
+          "name": "Configuration Drift Across Environments",
+          "description": "Production configuration differs from staging, causing unexpected behavior",
+          "probability": "medium",
+          "impact": "medium",
+          "risk_score": 6,
+          "indicators": [
+            "production_only_bugs",
+            "different_behavior_prod_vs_staging",
+            "missing_environment_variables"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "use_infrastructure_as_code",
+                "automate_configuration_management",
+                "implement_config_validation",
+                "version_control_all_configs"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "automated_config_drift_detection",
+                "compare_env_configs_daily",
+                "alert_on_differences"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "auto_sync_configs_from_source_of_truth",
+                "rollback_to_known_good_config",
+                "document_all_config_changes"
+              ]
+            }
+          ],
+          "current_controls": [
+            "env_files_in_git",
+            "manual_reviews"
+          ],
+          "residual_risk": "low-medium",
+          "owner": "devops_team"
+        },
+        {
+          "risk_id": "ops_003",
+          "name": "Alert Fatigue from False Positives",
+          "description": "Too many false alerts causing real alerts to be ignored",
+          "probability": "high",
+          "impact": "medium",
+          "risk_score": 7,
+          "indicators": [
+            "alert_acknowledgment_time_increasing",
+            "alerts_snoozed_frequently",
+            "real_incidents_detected_late"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "tune_alert_thresholds",
+                "implement_alert_grouping",
+                "add_smart_suppression",
+                "use_anomaly_detection_instead_of_static_thresholds"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "track_false_positive_rate",
+                "measure_time_to_acknowledge",
+                "analyze_alert_patterns"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "disable_noisy_alerts",
+                "escalate_critical_alerts_differently",
+                "implement_alert_priority_levels"
+              ]
+            }
+          ],
+          "current_controls": [
+            "basic_alerting_configured"
+          ],
+          "residual_risk": "medium",
+          "owner": "monitoring_team"
+        }
+      ]
+    },
+    {
+      "category": "security_risks",
+      "risks": [
+        {
+          "risk_id": "sec_001",
+          "name": "API Key Exposure in Logs/Errors",
+          "description": "Sensitive API keys accidentally logged or exposed in error messages",
+          "probability": "medium",
+          "impact": "critical",
+          "risk_score": 8,
+          "indicators": [
+            "api_keys_in_logs",
+            "credentials_in_error_traces",
+            "environment_vars_exposed"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_log_sanitization",
+                "use_secret_management_service",
+                "never_log_env_vars",
+                "implement_sensitive_data_detection"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "scan_logs_for_api_key_patterns",
+                "monitor_unauthorized_api_usage",
+                "alert_on_suspicious_patterns"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "immediately_rotate_exposed_keys",
+                "remove_from_logs",
+                "audit_all_access_with_exposed_key"
+              ]
+            }
+          ],
+          "current_controls": [
+            "env_vars_for_secrets",
+            "gitignore_configured"
+          ],
+          "residual_risk": "low-medium",
+          "owner": "security_team"
+        },
+        {
+          "risk_id": "sec_002",
+          "name": "Unauthorized Access via EventBus",
+          "description": "Services subscribing to events they shouldn't have access to",
+          "probability": "low",
+          "impact": "high",
+          "risk_score": 5,
+          "indicators": [
+            "unexpected_consumer_groups",
+            "unauthorized_event_publishing",
+            "data_access_anomalies"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_event_level_authorization",
+                "whitelist_allowed_subscribers",
+                "add_event_signing",
+                "implement_stream_acls"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "audit_all_consumer_groups",
+                "monitor_event_access_patterns",
+                "alert_on_new_consumers"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "revoke_unauthorized_access",
+                "purge_unauthorized_events",
+                "investigate_breach"
+              ]
+            }
+          ],
+          "current_controls": [
+            "network_isolation"
+          ],
+          "residual_risk": "low",
+          "owner": "security_team"
+        }
+      ]
+    },
+    {
+      "category": "data_risks",
+      "risks": [
+        {
+          "risk_id": "data_001",
+          "name": "Workflow State Corruption",
+          "description": "Workflow state becomes inconsistent due to concurrent updates or failures",
+          "probability": "medium",
+          "impact": "high",
+          "risk_score": 7,
+          "indicators": [
+            "workflow_stuck_in_invalid_state",
+            "state_rollback_failures",
+            "concurrent_modification_errors"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "implement_optimistic_locking",
+                "use_event_sourcing",
+                "add_state_validation",
+                "implement_saga_pattern"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "validate_state_consistency",
+                "detect_orphaned_workflows",
+                "monitor_state_transitions"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "rebuild_state_from_events",
+                "manual_state_correction",
+                "workflow_compensation"
+              ]
+            }
+          ],
+          "current_controls": [
+            "database_transactions",
+            "state_validation"
+          ],
+          "residual_risk": "low-medium",
+          "owner": "workflow_team"
+        },
+        {
+          "risk_id": "data_002",
+          "name": "Knowledge Base Poisoning",
+          "description": "Incorrect or malicious data loaded into RAG knowledge base",
+          "probability": "low",
+          "impact": "high",
+          "risk_score": 5,
+          "indicators": [
+            "ai_responses_incorrect",
+            "knowledge_quality_degradation",
+            "user_complaints_about_accuracy"
+          ],
+          "mitigation_strategies": [
+            {
+              "type": "preventive",
+              "actions": [
+                "validate_all_knowledge_sources",
+                "implement_approval_workflow",
+                "version_control_knowledge_base",
+                "add_source_verification"
+              ]
+            },
+            {
+              "type": "detective",
+              "actions": [
+                "monitor_knowledge_quality_metrics",
+                "user_feedback_analysis",
+                "periodic_knowledge_audits"
+              ]
+            },
+            {
+              "type": "corrective",
+              "actions": [
+                "rollback_to_previous_version",
+                "quarantine_suspicious_knowledge",
+                "re_embed_from_verified_sources"
+              ]
+            }
+          ],
+          "current_controls": [
+            "source_tracking",
+            "manual_review"
+          ],
+          "residual_risk": "low",
+          "owner": "knowledge_team"
+        }
+      ]
+    }
+  ],
+
+  "risk_matrix": {
+    "probability_scale": {
+      "low": "0-25%",
+      "medium": "25-60%",
+      "high": "60-100%"
+    },
+    "impact_scale": {
+      "low": "minor_degradation",
+      "medium": "significant_impact",
+      "high": "major_disruption",
+      "critical": "platform_failure"
+    },
+    "risk_score_calculation": "probability_percentage * impact_weight",
+    "action_thresholds": {
+      "score_0_3": "monitor",
+      "score_4_6": "mitigate",
+      "score_7_8": "urgent_mitigation",
+      "score_9_10": "immediate_action"
+    }
+  },
+
+  "monitoring_and_detection": {
+    "detection_mechanisms": [
+      "prometheus_metrics",
+      "log_analysis",
+      "anomaly_detection",
+      "health_checks",
+      "user_feedback"
+    ],
+    "alert_channels": [
+      "pagerduty_critical",
+      "slack_warnings",
+      "email_summaries"
+    ],
+    "response_procedures": {
+      "critical_risk_triggered": [
+        "immediate_pagerduty_alert",
+        "activate_incident_response",
+        "execute_mitigation_playbook",
+        "communicate_to_stakeholders"
+      ],
+      "high_risk_triggered": [
+        "slack_alert_to_oncall",
+        "execute_mitigation_within_1h",
+        "update_incident_log"
+      ],
+      "medium_risk_triggered": [
+        "create_jira_ticket",
+        "schedule_mitigation",
+        "track_in_risk_register"
+      ]
+    }
+  },
+
+  "learning_from_practice": {
+    "risk_review_interval": "weekly",
+    "metrics_to_track": [
+      "risk_materialization_rate",
+      "mitigation_effectiveness",
+      "time_to_detect",
+      "time_to_mitigate",
+      "false_positive_rate"
+    ],
+    "improvement_triggers": [
+      "risk_materialized_despite_controls",
+      "mitigation_failed",
+      "detection_time_>5min",
+      "same_risk_occurred_3_times"
+    ],
+    "feedback_loop": "update_risk_scores_and_controls_based_on_actual_incidents"
+  }
+}

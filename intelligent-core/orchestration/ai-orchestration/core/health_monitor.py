@@ -1,6 +1,8 @@
 """
 Health Monitor - Health checking system for all services
 Supports Docker health checks, HTTP endpoints, and custom checks
+
+Phase 1 Integration: Publishes health events to EventBus
 """
 
 from typing import Dict, List, Optional, Any, Callable
@@ -57,6 +59,8 @@ class HealthMonitor:
     - Docker: Check container status
     - HTTP: Check HTTP endpoint
     - Custom: Custom check function
+
+    Phase 1: Publishes health status changes to EventBus
     """
 
     def __init__(self):
@@ -65,6 +69,7 @@ class HealthMonitor:
         self.monitoring = False
         self.docker_client = None
         self.http_client = httpx.AsyncClient(timeout=10.0)
+        self.eventbus = None  # EventBus integration (Phase 1)
         logger.info("HealthMonitor initialized")
 
     async def connect_docker(self, docker_client) -> None:
@@ -76,6 +81,16 @@ class HealthMonitor:
         """
         self.docker_client = docker_client
         logger.info("HealthMonitor connected to Docker")
+
+    async def connect_eventbus(self, eventbus) -> None:
+        """
+        Connect to EventBus for publishing health events (Phase 1)
+
+        Args:
+            eventbus: EventBus instance (from infrastructure.eventbus)
+        """
+        self.eventbus = eventbus
+        logger.info("HealthMonitor connected to EventBus - will publish health events")
 
     async def register_check(self, check: HealthCheck) -> None:
         """
@@ -333,12 +348,16 @@ class HealthMonitor:
         Start continuous monitoring
 
         Runs health checks on all registered services at their configured intervals
+        Phase 1: Publishes health status changes to EventBus
         """
         self.monitoring = True
         logger.info("Starting continuous health monitoring")
 
         # Track next check time for each service
         next_checks: Dict[str, datetime] = {}
+
+        # Phase 1: Track previous status for change detection
+        previous_status: Dict[str, HealthStatus] = {}
 
         while self.monitoring:
             current_time = datetime.utcnow()
@@ -348,6 +367,12 @@ class HealthMonitor:
                 if service_name not in next_checks or current_time >= next_checks[service_name]:
                     # Run check
                     result = await self.check_service(service_name)
+
+                    # Phase 1: Publish event if status changed
+                    prev_status = previous_status.get(service_name)
+                    if prev_status != result.status:
+                        await self._publish_health_event(service_name, result, prev_status)
+                        previous_status[service_name] = result.status
 
                     # Log if unhealthy
                     if result.status == HealthStatus.UNHEALTHY:
@@ -367,6 +392,51 @@ class HealthMonitor:
         """Stop continuous monitoring"""
         self.monitoring = False
         logger.info("Stopping health monitoring")
+
+    async def _publish_health_event(
+        self,
+        service_name: str,
+        result: HealthCheckResult,
+        previous_status: Optional[HealthStatus]
+    ) -> None:
+        """
+        Publish health status change event to EventBus (Phase 1)
+
+        Args:
+            service_name: Name of the service
+            result: Current health check result
+            previous_status: Previous health status (None if first check)
+        """
+        if not self.eventbus:
+            return  # EventBus not connected, skip publishing
+
+        try:
+            # Import here to avoid circular dependencies
+            from infrastructure.eventbus import Event
+
+            # Create event based on current status
+            event_type = f'infrastructure.health.{result.status.value}'
+
+            event = Event.create(
+                event_type=event_type,  # Parameter name is 'event_type'
+                data={
+                    'service_name': service_name,
+                    'status': result.status.value,
+                    'previous_status': previous_status.value if previous_status else None,
+                    'response_time_ms': result.response_time_ms,
+                    'message': result.message,
+                    'details': result.details,
+                    'checked_at': result.checked_at.isoformat()
+                },
+                source='health_monitor',
+                tenant_id='system'  # System-level infrastructure event
+            )
+
+            await self.eventbus.publish(event)
+            logger.info(f"📤 Published health event: {service_name} → {result.status.value}")
+
+        except Exception as e:
+            logger.error(f"Failed to publish health event for {service_name}: {e}")
 
     async def get_all_results(self) -> Dict[str, HealthCheckResult]:
         """

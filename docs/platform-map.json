@@ -1,0 +1,1139 @@
+{
+  "version": "2.0.0",
+  "generated_at": "2025-10-09",
+  "platform_name": "AI-Platform-ISO",
+  "description": "Business Continuity Management Platform with AI",
+  "layers": {
+    "1_infrastructure": {
+      "name": "Infrastructure Layer",
+      "components": [
+        "eventbus",
+        "database",
+        "observability",
+        "security",
+        "gateway",
+        "vector-db"
+      ],
+      "description": "Core infrastructure: EventBus, Database, Security, Observability"
+    },
+    "2_intelligent_core": {
+      "name": "Intelligent Core Layer",
+      "components": [
+        "ai-foundation",
+        "workflow_intelligence",
+        "expertise-center",
+        "collective",
+        "predictive",
+        "community_intelligence",
+        "event_intelligence",
+        "orchestration",
+        "ai_workflow_optimizer",
+        "workflow-engine",
+        "system-bcm-service"
+      ],
+      "description": "AI modules: LLM routing, RAG, Specialists, Orchestration"
+    },
+    "3_platform_services": {
+      "name": "Platform Services Layer",
+      "components": [
+        "bia-service",
+        "risk-service",
+        "compliance-service",
+        "planning-service",
+        "response-service",
+        "documents-service",
+        "governance-service",
+        "validation-service",
+        "learning-service",
+        "bcm-coordination-service",
+        "community-service",
+        "monitoring"
+      ],
+      "description": "BCM services mapped to ISO 22301 clauses"
+    },
+    "4_integration": {
+      "name": "Integration Layer",
+      "components": [
+        "API Gateway",
+        "EventBus",
+        "WebSocket"
+      ],
+      "description": "External integrations and APIs"
+    }
+  },
+  "services": [
+    {
+      "name": "bia-service",
+      "type": "platform-service",
+      "path": "platform-services/bia-service",
+      "port": 8001,
+      "iso_clause": "8.2",
+      "description": "Business Impact Analysis service",
+      "capabilities": [
+        "BIA planning",
+        "Data collection",
+        "Dependency mapping",
+        "RTO/RPO analysis"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "risk-service",
+      "type": "platform-service",
+      "path": "platform-services/risk-service",
+      "port": 8002,
+      "iso_clause": "8.3",
+      "description": "Risk Assessment & Treatment service",
+      "capabilities": [
+        "Risk assessment",
+        "Treatment planning",
+        "Risk monitoring"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "compliance-service",
+      "type": "platform-service",
+      "path": "platform-services/compliance-service",
+      "port": 8003,
+      "iso_clause": "9.1",
+      "description": "ISO 22301 Compliance Monitoring",
+      "capabilities": [
+        "Real-time compliance",
+        "Gap analysis",
+        "Evidence collection",
+        "Audit prep"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "planning-service",
+      "type": "platform-service",
+      "path": "platform-services/planning-service",
+      "port": 8004,
+      "iso_clause": "8.4",
+      "description": "BC Plan Development & Journey Planning",
+      "capabilities": [
+        "Journey planning",
+        "BC plans",
+        "Timeline prediction",
+        "Exercise planning"
+      ],
+      "has_docs": true,
+      "has_readme": false,
+      "main_file": null
+    },
+    {
+      "name": "response-service",
+      "type": "platform-service",
+      "path": "platform-services/response-service",
+      "port": 8005,
+      "iso_clause": "8.4",
+      "description": "Incident Response & Crisis Management",
+      "capabilities": [
+        "Incident detection",
+        "Plan activation",
+        "RTO tracking",
+        "Crisis coordination"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "documents-service",
+      "type": "platform-service",
+      "path": "platform-services/documents-service",
+      "port": 8006,
+      "iso_clause": "7.5",
+      "description": "Document Management & Living Docs",
+      "capabilities": [
+        "Living docs",
+        "Version control",
+        "Templates",
+        "Collaboration"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "governance-service",
+      "type": "platform-service",
+      "path": "platform-services/governance-service",
+      "port": 8007,
+      "iso_clause": "5.0",
+      "description": "Leadership & Governance",
+      "capabilities": [
+        "Policy management",
+        "Management review",
+        "Stakeholder engagement"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "validation-service",
+      "type": "platform-service",
+      "path": "platform-services/validation-service",
+      "port": 8008,
+      "iso_clause": "8.5",
+      "description": "Exercise & Testing",
+      "capabilities": [
+        "Exercise planning",
+        "Digital twin",
+        "Scenario generation",
+        "AAR"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "learning-service",
+      "type": "platform-service",
+      "path": "platform-services/learning-service",
+      "port": 8009,
+      "iso_clause": "7.3",
+      "description": "Training & Awareness",
+      "capabilities": [
+        "Training programs",
+        "Certification tracking",
+        "Awareness campaigns"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "bcm-coordination-service",
+      "type": "platform-service",
+      "path": "platform-services/bcm-coordination-service",
+      "port": 8010,
+      "iso_clause": null,
+      "description": "Cross-service BCM coordination",
+      "capabilities": [
+        "Service orchestration",
+        "Workflow coordination"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "community-service",
+      "type": "platform-service",
+      "path": "platform-services/community-service",
+      "port": 8011,
+      "iso_clause": null,
+      "description": "Community & Knowledge sharing",
+      "capabilities": [
+        "Community forums",
+        "Knowledge sharing",
+        "Peer learning"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": null
+    },
+    {
+      "name": "monitoring",
+      "type": "platform-service",
+      "path": "platform-services/monitoring",
+      "port": 8012,
+      "iso_clause": "9.0",
+      "description": "Performance Monitoring & Analytics",
+      "capabilities": [
+        "Real-time monitoring",
+        "Metrics",
+        "Dashboards",
+        "Alerting"
+      ],
+      "has_docs": false,
+      "has_readme": true,
+      "main_file": null
+    }
+  ],
+  "modules": [
+    {
+      "name": "ai-foundation",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/ai-foundation",
+      "port": null,
+      "description": "Multi-model LLM orchestration, RAG pipeline, ML predictions",
+      "capabilities": [
+        "LLM routing",
+        "RAG",
+        "ML models",
+        "Self-learning"
+      ],
+      "dependencies": [
+        "Qdrant",
+        "Redis",
+        "PostgreSQL"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "workflow_intelligence",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/workflow_intelligence",
+      "port": 8037,
+      "description": "Workflow orchestration with Temporal Cloud",
+      "capabilities": [
+        "Temporal workflows",
+        "Orchestration",
+        "State management"
+      ],
+      "dependencies": [
+        "Temporal Cloud",
+        "EventBus",
+        "PostgreSQL"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "expertise-center",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/expertise-center",
+      "port": 8036,
+      "description": "14 domain specialists and tactical assistants",
+      "capabilities": [
+        "BIA specialist",
+        "Risk specialist",
+        "Compliance specialist",
+        "14 total"
+      ],
+      "dependencies": [
+        "ai-foundation",
+        "EventBus"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "service/main.py"
+    },
+    {
+      "name": "collective",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/collective",
+      "port": 8032,
+      "description": "Collective intelligence with privacy-preserving agents",
+      "capabilities": [
+        "Case library (347+)",
+        "k-anonymity (k=5)",
+        "Pattern matching"
+      ],
+      "dependencies": [
+        "Qdrant",
+        "PostgreSQL"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "predictive",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/predictive",
+      "port": 8031,
+      "description": "Risk forecasting and scenario simulation",
+      "capabilities": [
+        "Timeline prediction",
+        "Certification forecasting",
+        "Challenge prediction"
+      ],
+      "dependencies": [
+        "ai-foundation",
+        "PostgreSQL"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "community_intelligence",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/community_intelligence",
+      "port": 8038,
+      "description": "Community knowledge and peer learning",
+      "capabilities": [
+        "Community learning",
+        "Peer collaboration"
+      ],
+      "dependencies": [
+        "EventBus",
+        "PostgreSQL"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "event_intelligence",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/event_intelligence",
+      "port": 8039,
+      "description": "Real-time event pattern detection",
+      "capabilities": [
+        "Pattern learning",
+        "Anomaly detection",
+        "Event sequences"
+      ],
+      "dependencies": [
+        "EventBus",
+        "Redis"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "orchestration",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/orchestration",
+      "port": null,
+      "description": "Service coordination and cognitive loop",
+      "capabilities": [
+        "Cognitive Loop (6 steps)",
+        "MONITOR-UNDERSTAND-DECIDE-ACT-MEASURE-LEARN"
+      ],
+      "dependencies": [
+        "EventBus",
+        "Redis",
+        "ai-foundation"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": null
+    },
+    {
+      "name": "ai_workflow_optimizer",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/ai_workflow_optimizer",
+      "port": null,
+      "description": "Workflow optimization with AI",
+      "capabilities": [
+        "Workflow analysis",
+        "Optimization suggestions"
+      ],
+      "dependencies": [
+        "workflow_intelligence",
+        "ai-foundation"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "workflow-engine",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/workflow-engine",
+      "port": 8041,
+      "description": "BPMN workflow execution engine",
+      "capabilities": [
+        "BPMN execution",
+        "Process automation"
+      ],
+      "dependencies": [
+        "EventBus"
+      ],
+      "has_docs": true,
+      "has_readme": true,
+      "main_file": "main.py"
+    },
+    {
+      "name": "system-bcm-service",
+      "type": "intelligent-core-module",
+      "path": "intelligent-core/system-bcm-service",
+      "port": 8050,
+      "description": "Production BCM self-application service",
+      "capabilities": [
+        "Platform BIA",
+        "Risk assessment",
+        "Auto-recovery (7 procedures)",
+        "Practice learning",
+        "Real-time monitoring"
+      ],
+      "dependencies": [
+        "EventBus",
+        "Redis",
+        "Prometheus",
+        "ai-foundation"
+      ],
+      "has_docs": false,
+      "has_readme": true,
+      "main_file": "main.py"
+    }
+  ],
+  "infrastructure": [
+    {
+      "name": "eventbus",
+      "type": "infrastructure",
+      "subtype": "messaging",
+      "technology": "Redis Streams + RabbitMQ",
+      "port": "6379 (Redis), 5672 (RabbitMQ)",
+      "description": "Event-driven messaging system",
+      "capabilities": [],
+      "patterns": [
+        "Event Choreography",
+        "Saga",
+        "Event Sourcing",
+        "Dead Letter Queue"
+      ],
+      "has_docs": true
+    },
+    {
+      "name": "database",
+      "type": "infrastructure",
+      "subtype": "storage",
+      "technology": "PostgreSQL + Supabase",
+      "port": "5432",
+      "description": "Multi-tenant relational database with RLS",
+      "capabilities": [
+        "Multi-tenancy",
+        "Row-Level Security",
+        "Migrations",
+        "Backup"
+      ],
+      "patterns": [],
+      "has_docs": true
+    },
+    {
+      "name": "observability",
+      "type": "infrastructure",
+      "subtype": "monitoring",
+      "technology": "Prometheus + Grafana",
+      "port": "9090 (Prometheus), 3000 (Grafana)",
+      "description": "Metrics, monitoring, alerting",
+      "capabilities": [
+        "Metrics collection",
+        "Dashboards",
+        "Alerting",
+        "Tracing"
+      ],
+      "patterns": [],
+      "has_docs": true
+    },
+    {
+      "name": "security",
+      "type": "infrastructure",
+      "subtype": "security",
+      "technology": "Vault + JWT",
+      "port": "8200 (Vault)",
+      "description": "Secrets management, authentication, authorization",
+      "capabilities": [
+        "Secrets storage",
+        "JWT authentication",
+        "RBAC",
+        "Encryption"
+      ],
+      "patterns": [],
+      "has_docs": true
+    },
+    {
+      "name": "gateway",
+      "type": "infrastructure",
+      "subtype": "api-gateway",
+      "technology": "FastAPI",
+      "port": "8000",
+      "description": "Unified API gateway and routing",
+      "capabilities": [
+        "Request routing",
+        "Load balancing",
+        "Rate limiting",
+        "Authentication"
+      ],
+      "patterns": [],
+      "has_docs": true
+    },
+    {
+      "name": "vector-db",
+      "type": "infrastructure",
+      "subtype": "storage",
+      "technology": "Qdrant",
+      "port": "6333",
+      "description": "Vector database for RAG pipeline",
+      "capabilities": [
+        "Vector search",
+        "Hybrid search",
+        "Collections",
+        "Filtering"
+      ],
+      "patterns": [],
+      "has_docs": false
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "ai-foundation",
+      "to": "Qdrant",
+      "type": "uses"
+    },
+    {
+      "from": "ai-foundation",
+      "to": "Redis",
+      "type": "uses"
+    },
+    {
+      "from": "ai-foundation",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "workflow_intelligence",
+      "to": "Temporal Cloud",
+      "type": "uses"
+    },
+    {
+      "from": "workflow_intelligence",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "workflow_intelligence",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "expertise-center",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "expertise-center",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "collective",
+      "to": "Qdrant",
+      "type": "uses"
+    },
+    {
+      "from": "collective",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "predictive",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "predictive",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "community_intelligence",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "community_intelligence",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "event_intelligence",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "event_intelligence",
+      "to": "Redis",
+      "type": "uses"
+    },
+    {
+      "from": "orchestration",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "orchestration",
+      "to": "Redis",
+      "type": "uses"
+    },
+    {
+      "from": "orchestration",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "ai_workflow_optimizer",
+      "to": "workflow_intelligence",
+      "type": "uses"
+    },
+    {
+      "from": "ai_workflow_optimizer",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "workflow-engine",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "system-bcm-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "system-bcm-service",
+      "to": "Redis",
+      "type": "uses"
+    },
+    {
+      "from": "system-bcm-service",
+      "to": "Prometheus",
+      "type": "uses"
+    },
+    {
+      "from": "system-bcm-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "bia-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "bia-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "bia-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "bia-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "risk-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "risk-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "risk-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "risk-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "compliance-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "compliance-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "compliance-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "compliance-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "planning-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "planning-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "planning-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "planning-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "response-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "response-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "response-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "response-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "documents-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "documents-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "documents-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "documents-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "governance-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "governance-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "governance-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "governance-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "validation-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "validation-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "validation-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "validation-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "learning-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "learning-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "learning-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "learning-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "bcm-coordination-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "bcm-coordination-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "bcm-coordination-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "bcm-coordination-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "community-service",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "community-service",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "community-service",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "community-service",
+      "to": "expertise-center",
+      "type": "uses"
+    },
+    {
+      "from": "monitoring",
+      "to": "EventBus",
+      "type": "uses"
+    },
+    {
+      "from": "monitoring",
+      "to": "PostgreSQL",
+      "type": "uses"
+    },
+    {
+      "from": "monitoring",
+      "to": "ai-foundation",
+      "type": "uses"
+    },
+    {
+      "from": "monitoring",
+      "to": "expertise-center",
+      "type": "uses"
+    }
+  ],
+  "apis": [],
+  "events": [],
+  "ports": {
+    "8037": {
+      "service": "workflow_intelligence",
+      "type": "intelligent-core",
+      "description": "Workflow orchestration with Temporal Cloud"
+    },
+    "8036": {
+      "service": "expertise-center",
+      "type": "intelligent-core",
+      "description": "14 domain specialists and tactical assistants"
+    },
+    "8032": {
+      "service": "collective",
+      "type": "intelligent-core",
+      "description": "Collective intelligence with privacy-preserving agents"
+    },
+    "8031": {
+      "service": "predictive",
+      "type": "intelligent-core",
+      "description": "Risk forecasting and scenario simulation"
+    },
+    "8038": {
+      "service": "community_intelligence",
+      "type": "intelligent-core",
+      "description": "Community knowledge and peer learning"
+    },
+    "8039": {
+      "service": "event_intelligence",
+      "type": "intelligent-core",
+      "description": "Real-time event pattern detection"
+    },
+    "8041": {
+      "service": "workflow-engine",
+      "type": "intelligent-core",
+      "description": "BPMN workflow execution engine"
+    },
+    "8050": {
+      "service": "system-bcm-service",
+      "type": "intelligent-core",
+      "description": "Production BCM self-application service"
+    },
+    "8001": {
+      "service": "bia-service",
+      "type": "platform-service",
+      "iso_clause": "8.2",
+      "description": "Business Impact Analysis service"
+    },
+    "8002": {
+      "service": "risk-service",
+      "type": "platform-service",
+      "iso_clause": "8.3",
+      "description": "Risk Assessment & Treatment service"
+    },
+    "8003": {
+      "service": "compliance-service",
+      "type": "platform-service",
+      "iso_clause": "9.1",
+      "description": "ISO 22301 Compliance Monitoring"
+    },
+    "8004": {
+      "service": "planning-service",
+      "type": "platform-service",
+      "iso_clause": "8.4",
+      "description": "BC Plan Development & Journey Planning"
+    },
+    "8005": {
+      "service": "response-service",
+      "type": "platform-service",
+      "iso_clause": "8.4",
+      "description": "Incident Response & Crisis Management"
+    },
+    "8006": {
+      "service": "documents-service",
+      "type": "platform-service",
+      "iso_clause": "7.5",
+      "description": "Document Management & Living Docs"
+    },
+    "8007": {
+      "service": "governance-service",
+      "type": "platform-service",
+      "iso_clause": "5.0",
+      "description": "Leadership & Governance"
+    },
+    "8008": {
+      "service": "validation-service",
+      "type": "platform-service",
+      "iso_clause": "8.5",
+      "description": "Exercise & Testing"
+    },
+    "8009": {
+      "service": "learning-service",
+      "type": "platform-service",
+      "iso_clause": "7.3",
+      "description": "Training & Awareness"
+    },
+    "8010": {
+      "service": "bcm-coordination-service",
+      "type": "platform-service",
+      "iso_clause": null,
+      "description": "Cross-service BCM coordination"
+    },
+    "8011": {
+      "service": "community-service",
+      "type": "platform-service",
+      "iso_clause": null,
+      "description": "Community & Knowledge sharing"
+    },
+    "8012": {
+      "service": "monitoring",
+      "type": "platform-service",
+      "iso_clause": "9.0",
+      "description": "Performance Monitoring & Analytics"
+    }
+  },
+  "documentation": {
+    "platform_docs": {
+      "path": "docs/",
+      "files": [
+        "INDEX.md",
+        "README.md",
+        "EXECUTIVE_SUMMARY.md",
+        "GETTING_STARTED.md",
+        "DEPLOYMENT_GUIDE.md",
+        "STANDARDS_COMPLIANCE.md",
+        "ARCHITECTURE.md",
+        "API_REFERENCE.md",
+        "COMPLETE_DOCUMENTATION_MAP.md"
+      ],
+      "size": "~350 KB",
+      "file_count": 9
+    },
+    "comprehensive_docs": {
+      "path": "comprehensive-platform-docs/",
+      "files": [
+        "AI_FOUNDATION_CAPABILITIES.md",
+        "AI_ORCHESTRATION_CAPABILITIES.md",
+        "DOMAIN_EXPERTISE_CAPABILITIES.md",
+        "PREDICTIVE_INTELLIGENCE_CAPABILITIES.md",
+        "INFRASTRUCTURE_ORCHESTRATION_COMPLETE.md",
+        "BUSINESS_PROCESS_SCENARIOS_COMPLETE.md",
+        "ALL_USAGE_SCENARIOS_CATALOG.md",
+        "MASTER_INDEX.md"
+      ],
+      "size": "~426 KB",
+      "file_count": 8,
+      "description": "570+ usage scenarios, AI capabilities, 18 infrastructure patterns"
+    },
+    "infrastructure_tools": {
+      "path": "infrastructure/tools/",
+      "categories": {
+        "catalogs": [
+          "TOOLS_CATALOG_INDEX.md",
+          "TOOLS_COMPREHENSIVE_CATALOG.md"
+        ],
+        "analyzers": 10,
+        "generators": 5,
+        "scripts": 8
+      },
+      "size": "~187 KB",
+      "description": "Automation tools, analyzers, documentation generators"
+    },
+    "archive": {
+      "path": "_archive/docs-old-backup/",
+      "sections": 13,
+      "file_count": 111,
+      "size": "~2.1 MB",
+      "description": "Historical documentation for reference"
+    },
+    "module_docs": {
+      "path": "intelligent-core/{module}/docs/",
+      "pattern": "Each module has: ARCHITECTURE.md, TECHNICAL_SPECIFICATION.md, BUSINESS_LOGIC.md, API.md, INTEGRATION.md, DEPLOYMENT.md",
+      "estimated_files": 98
+    },
+    "service_docs": {
+      "path": "platform-services/{service}/docs/",
+      "pattern": "Each service has: TECHNICAL_SPECIFICATION.md, API.md, BUSINESS_LOGIC.md, INTEGRATION.md, DEPLOYMENT.md",
+      "estimated_files": 72
+    }
+  },
+  "statistics": {
+    "total_services": 12,
+    "total_modules": 11,
+    "total_infrastructure_components": 6,
+    "total_dependencies": 74,
+    "total_ports": 20,
+    "total_documentation_files": "~320+",
+    "iso_clauses_covered": 10
+  }
+}

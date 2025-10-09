@@ -1,438 +1,540 @@
-# 🏗️ AI-Powered BCM Platform
+# AI-Platform-ISO v2.0
 
-**AI-Powered Business Continuity Management Platform** - Production-ready платформа для управления непрерывностью бизнеса с AI intelligence.
+**Business Continuity Management Platform with AI Intelligence**
+**ISO 22301:2019 Compliant | Healthcare-Focused | Non-Commercial**
 
-**Version:** 8.2 Final
-**Status:** Production Architecture ✅
-**Date:** 2025-10-06
-
----
-
-## 🚀 Quick Start
-
-**✅ Temporal Cloud Setup Complete!**
-
-**Status:**
-- [x] Python 3.11.13 installed
-- [x] Temporal CLI 1.4.1 installed
-- [x] Temporal Cloud connected
-- [x] Sample project tested
-- [ ] **Next:** Start Phase 2 - Workflow Intelligence Engine (8-12 дней)
-
-**Start Here:**
-
-1. **[intelligent-core/workflow_intelligence/README.md](intelligent-core/workflow_intelligence/README.md)** ⭐⭐⭐ - **Workflow Intelligence Engine**
-   - Temporal Cloud setup complete
-   - Ready to start Phase 2 development
-   - Core Workflow Engine + Case Library + Governance
-
-2. **[doc-project/CORRECT_SETUP_WITH_TEMPORAL.md](doc-project/CORRECT_SETUP_WITH_TEMPORAL.md)** - Full deployment guide
-   - Основано на `арх2.md`
-   - 5 фаз deployment (20-30 дней)
-
-3. **[infrastructure/README.md](infrastructure/README.md)** - Infrastructure overview
-4. **[infrastructure/TECHNICAL_GUIDE.md](infrastructure/TECHNICAL_GUIDE.md)** - Technical guide
-5. **[infrastructure/OVERVIEW.md](infrastructure/OVERVIEW.md)** - Architecture overview
+[![Status](https://img.shields.io/badge/Status-Phase%201%20Complete-green)]()
+[![ISO](https://img.shields.io/badge/ISO%2022301-2019-blue)]()
+[![License](https://img.shields.io/badge/License-Non--Commercial-orange)]()
 
 ---
 
-## 📋 О проекте
+## 🎯 Quick Start
 
-### Что это?
+### For New Users
+```bash
+# 1. Clone repository
+git clone <repository-url>
+cd AI-Platform-ISO
 
-AI-Powered BCM Platform - это **полнофункциональная платформа** для управления непрерывностью бизнеса (Business Continuity Management) с встроенным искусственным интеллектом.
+# 2. Read documentation
+open docs/README.md
+open docs/GETTING_STARTED.md
 
-**Основные возможности:**
-
-1. **12 BCM модулей:**
-   - Business Impact Analysis (BIA)
-   - Risk Management
-   - Compliance Management
-   - Document Management
-   - Incident Response
-   - Validation & Testing
-   - Governance
-   - Planning
-   - Learning & Training
-   - Community
-
-2. **AI Intelligence:**
-   - Workflow automation
-   - Predictive analytics
-   - AI experts (domain knowledge)
-   - Learning system
-   - Recommendation engine
-
-3. **Production Infrastructure:**
-   - Microservices architecture
-   - Event-driven messaging
-   - Vector database (RAG)
-   - Real-time WebSocket
-   - Monitoring & observability
-
----
-
-## 🏗️ Архитектура
-
-### Layered Architecture (5 слоев)
-
-```
-┌─────────────────────────────────────────────────────┐
-│  Layer 5: Human Interface                           │
-│           (Web App + API Gateway)                    │
-├─────────────────────────────────────────────────────┤
-│  Layer 4: Platform Services                         │
-│           (12 BCM Microservices)                     │
-├─────────────────────────────────────────────────────┤
-│  Layer 3: Intelligent Core                          │
-│           (AI + Workflow Intelligence)               │
-├─────────────────────────────────────────────────────┤
-│  Layer 2: Shared Libraries                          │
-│           (Auth, DB, Cache, EventBus)                │
-├─────────────────────────────────────────────────────┤
-│  Layer 1: Infrastructure                            │
-│           (Database, Redis, Qdrant, EventBus)        │
-└─────────────────────────────────────────────────────┘
+# 3. Start Phase 1 Infrastructure
+open PHASE1_QUICK_START.md
 ```
 
-**Deployment Order:** Layer 1 → Layer 2 → Layer 3 → Layer 4 → Layer 5
+### For Developers
+```bash
+# Deploy monitoring stack
+cd infrastructure/observability
+docker-compose -f docker-compose.monitoring.yml up -d
 
-**Подробнее:** [infrastructure/OVERVIEW.md](infrastructure/OVERVIEW.md)
+# Start infrastructure coordinator
+cd infrastructure/eventbus/coordination
+python3 infrastructure_coordinator.py
+```
+
+### For Architects
+- [Complete Architecture](docs/ARCHITECTURE.md)
+- [Phase 1 Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md)
+- [Governance Gap](doc-project/PHASE1_GOVERNANCE_GAP_SUMMARY.md)
 
 ---
 
-## 📁 Структура проекта
+## 📊 Project Status
+
+### ✅ Phase 1: Infrastructure Coordination (COMPLETE)
+
+**Completed (2025-10-09):**
+- Health Monitoring with EventBus integration
+- Auto-Recovery Service (exponential backoff)
+- Resource Optimizer (5-minute cycles)
+- Infrastructure Coordinator
+- Metrics API (Prometheus integration)
+- Event Catalog (133 events)
+- Comprehensive documentation
+
+**Status:** ✅ Technically complete
+**Governance:** ⚠️ Requires governance layer (see critical analysis)
+
+**Quick Links:**
+- [Phase 1 Complete Summary](doc-project/PHASE_1_COMPLETE_SUMMARY.md)
+- [Deployment Guide](infrastructure/observability/PHASE1_DEPLOYMENT_GUIDE.md)
+- [Critical Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md)
+- [Quick Start](PHASE1_QUICK_START.md)
+
+---
+
+## 🏗️ Architecture
+
+### 4-Level Coordination Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│ PROGRAM LEVEL (Strategic)                   │
+│ Goal Setting | Policy Definition | KPIs     │
+└─────────────────┬───────────────────────────┘
+                  │ (Goals & Policies)
+                  ↓
+┌─────────────────────────────────────────────┐
+│ CENTER LEVEL (Coordination)                 │
+│ Decision Center | Context | Priorities      │
+└─────────────────┬───────────────────────────┘
+                  │ (Decisions & Context)
+                  ↓
+┌─────────────────────────────────────────────┐
+│ CORE LEVEL (Intelligence) - 11 Modules      │
+│ AI Orchestrator | Workflows | Expertise     │
+│ Predictive | Collective | System BCM        │
+└─────────────────┬───────────────────────────┘
+                  │ (Insights & Recommendations)
+                  ↓
+┌─────────────────────────────────────────────┐
+│ INFRASTRUCTURE LEVEL - ✅ Phase 1 Complete  │
+│ Health Monitor | Auto-Recovery | Optimizer  │
+│ Metrics API | EventBus | Observability      │
+└─────────────────┬───────────────────────────┘
+                  │ (Monitoring & Actions)
+                  ↓
+┌─────────────────────────────────────────────┐
+│ SERVICES LEVEL - 12 BCM Services            │
+│ BIA | Risk | Planning | Compliance | etc.   │
+└─────────────────────────────────────────────┘
+```
+
+### Technology Stack
+
+**Infrastructure:**
+- EventBus: Redis Streams + RabbitMQ
+- Database: PostgreSQL (Supabase)
+- Monitoring: Prometheus + Grafana
+- Security: Vault + JWT
+- Orchestration: Docker + Docker Compose
+
+**Intelligent Core:**
+- AI: OpenAI GPT-4, Anthropic Claude
+- ML: Scikit-learn, TensorFlow
+- Workflows: Temporal
+- RAG: Qdrant vector database
+- NLP: spaCy, transformers
+
+**Platform Services:**
+- FastAPI (Python 3.9+)
+- AsyncIO event-driven
+- ISO 22301 compliant
+
+---
+
+## 📁 Project Structure
 
 ```
 AI-Platform-ISO/
+├── infrastructure/           # Infrastructure Layer
+│   ├── eventbus/            # ✅ Redis Streams + EventBus
+│   │   ├── coordination/    # ✅ Phase 1 Services
+│   │   └── events/          # ✅ Event Catalog (133 events)
+│   ├── observability/       # ✅ Prometheus + Grafana
+│   ├── database/            # PostgreSQL + migrations
+│   └── security/            # Vault + auth
 │
-├── infrastructure/          # Layer 1: Infrastructure services
-│   ├── database/           # PostgreSQL + Supabase (43 migrations)
-│   ├── eventbus/           # Event-driven messaging (Redis Streams)
-│   ├── vector-db/          # Qdrant Cloud (RAG + semantic search)
-│   ├── monitoring/         # Prometheus + Grafana
-│   ├── security/           # API Gateway + Auth
-│   └── ...                 # 20+ infrastructure services
+├── intelligent-core/         # AI Intelligence Layer
+│   ├── orchestration/       # AI Orchestrator + Metrics API
+│   ├── workflow_intelligence/ # Temporal workflows
+│   ├── expertise-center/    # 14 AI specialists
+│   ├── ai-foundation/       # LLM, RAG, ML
+│   ├── predictive/          # ML predictions
+│   ├── collective/          # 347+ case library
+│   └── system-bcm-service/  # Platform BCM (port 8050)
 │
-├── shared/                 # Layer 2: Shared libraries (11,248 LOC)
-│   ├── auth/              # JWT + RBAC
-│   ├── database/          # Async DB + connection pooling
-│   ├── cache/             # Redis cache
-│   ├── eventbus/          # EventBus client
-│   ├── integrations/      # RAG, Knowledge, ML Platform
-│   └── ...
+├── platform-services/        # BCM Services
+│   ├── bia-service/         # Business Impact Analysis
+│   ├── risk-service/        # Risk Assessment
+│   ├── compliance-service/  # ISO 22301 Compliance
+│   ├── planning-service/    # BC Planning
+│   ├── governance-service/  # Governance
+│   ├── learning-service/    # Training
+│   └── ... (6 more)
 │
-├── intelligent-core/       # Layer 3: AI Intelligence
-│   ├── workflow_intelligence/   # Workflow Engine (THE BRAIN)
-│   ├── ai_experts/             # Domain knowledge experts
-│   ├── coordination-center/    # AI → Tools orchestration
-│   ├── learning-system/        # Learning from outcomes
-│   ├── predictive/             # Predictive analytics
-│   └── ...
+├── docs/                     # Platform Documentation
+│   ├── 13 sections          # Organized documentation
+│   └── 125+ files           # Complete platform docs
 │
-├── platform-services/      # Layer 4: Business services (12)
-│   ├── bia-service/        # Business Impact Analysis (3,405 LOC)
-│   ├── risk-service/       # Risk Management (2,156 LOC)
-│   ├── compliance-service/ # Compliance (1,789 LOC)
-│   └── ...                 # +8 more services
+├── doc-project/              # Project Documentation
+│   ├── PHASE_1_COMPLETE_SUMMARY.md
+│   ├── PHASE1_CRITICAL_ANALYSIS.md ⚠️ IMPORTANT
+│   ├── PHASE1_GOVERNANCE_GAP_SUMMARY.md
+│   └── ... (277 files)
 │
-├── human-interface/        # Layer 5: User interfaces
-│   ├── api-gateway/       # GraphQL/REST API
-│   └── web-app/           # React/Vue Web App
-│
-├── tools/                 # Development tools
-├── tests/                 # Testing infrastructure
-├── ISO-22301-Library/     # BCM knowledge base
-│
-├── .env.example           # Environment variables template
-├── docker-compose.yml     # Docker Compose config
-├── SETUP_ALGORITHM.md     # ⭐ Setup guide
-└── README.md              # This file
+└── comprehensive-platform-docs/  # AI Capabilities
+    └── 570+ usage scenarios
 ```
 
 ---
 
-## 🚀 Deployment
+## 🚀 Features
 
-### Prerequisites
+### ✅ Infrastructure Level (Phase 1)
 
-```bash
-# System requirements
-Docker >= 24.0
-Docker Compose >= 2.20
-Python >= 3.11
-PostgreSQL >= 14
-Redis >= 7.0
-Node.js >= 18 (for web app)
+**Health Monitoring:**
+- 30-second health checks for critical services
+- Event-driven status change detection
+- Publishes: `infrastructure.health.*` events
 
-# Resources
-Min 8GB RAM
-Min 4 CPU cores
-Min 50GB disk space
-```
+**Auto-Recovery:**
+- Exponential backoff recovery strategies
+- Supports: restart, failover, circuit_breaker
+- Publishes: `infrastructure.recovery.*` events
+- ⚠️ **NEEDS:** Escalation mechanism (see critical analysis)
 
-### Quick Setup (для нетерпеливых)
+**Resource Optimization:**
+- 5-minute optimization cycles
+- CPU/Memory/Disk utilization analysis
+- Efficiency score calculation (0-100)
+- Publishes: `infrastructure.optimization.completed`
 
-```bash
-# 1. Clone
-git clone <repo-url>
-cd AI-Platform-ISO
+**Observability:**
+- Prometheus metrics on port 9091
+- Grafana dashboards
+- AlertManager integration
+- Complete event catalog
 
-# 2. Configure
-cp .env.example .env
-nano .env  # Fill in credentials
+### 🧠 Intelligent Core
 
-# 3. Start foundation
-docker-compose up -d postgres redis
+**AI Orchestrator:**
+- 6-step cognitive loop
+- Multi-agent coordination
+- Context management
+- Decision making
 
-# 4. Apply migrations
-cd infrastructure/database
-python apply_migrations_simple.py
+**Expertise Center:**
+- 14 AI specialists (Database, Security, Performance, etc.)
+- Domain expertise consultation
+- Best practices recommendations
 
-# 5. Initialize Qdrant
-cd ../vector-db
-pip install -r requirements.txt
-python qdrant/init_collections.py
+**Workflow Intelligence:**
+- Temporal workflow orchestration
+- State machines
+- Saga patterns
+- Distributed transactions
 
-# 6. Start infrastructure
-cd ../eventbus && python -m eventbus.main &
-cd ../security/api-gateway && uvicorn main:app --port 3001 &
+**Predictive Intelligence:**
+- ML-based predictions (87% accuracy)
+- Anomaly detection
+- Trend analysis
+- Forecasting
 
-# 7. Start platform services
-./infrastructure/scripts/start_platform_services.sh
+**Collective Intelligence:**
+- 347+ anonymized case library
+- Pattern recognition
+- Peer learning
 
-# 8. Health check
-./infrastructure/scripts/health_check_all.sh
-```
+### 📋 BCM Platform Services
 
-### Proper Setup (рекомендуется)
-
-**Следуй пошаговому алгоритму:**
-
-📖 **[SETUP_ALGORITHM.md](SETUP_ALGORITHM.md)** ⭐
-
-- 7 фаз deployment
-- 40-54 часа (1-2 недели)
-- Validation на каждом шаге
-- Production-ready конфигурация
-
----
-
-## 📚 Документация
-
-### Основная документация
-
-| Документ | Описание |
-|----------|----------|
-| **[SETUP_ALGORITHM.md](SETUP_ALGORITHM.md)** ⭐ | Пошаговый алгоритм настройки |
-| [infrastructure/DEPLOYMENT_ROADMAP.md](infrastructure/DEPLOYMENT_ROADMAP.md) | Детальный deployment roadmap |
-| [infrastructure/OVERVIEW.md](infrastructure/OVERVIEW.md) | Обзор архитектуры |
-| [infrastructure/TECHNICAL_GUIDE.md](infrastructure/TECHNICAL_GUIDE.md) | Техническое руководство |
-| [infrastructure/QUICK_REFERENCE.md](infrastructure/QUICK_REFERENCE.md) | Быстрая справка |
-| [infrastructure/INDEX.md](infrastructure/INDEX.md) | Полный индекс документации |
-
-### По компонентам
-
-| Компонент | Документация |
-|-----------|--------------|
-| **EventBus** | [eventbus/QUICKSTART.md](infrastructure/eventbus/QUICKSTART.md) |
-| **Vector DB** | [vector-db/QUICKSTART.md](infrastructure/vector-db/QUICKSTART.md) |
-| **Notifications** | [notification-service/QUICK_START.md](infrastructure/notification-service/QUICK_START.md) |
-| **Database** | [database/README.md](infrastructure/database/README.md) |
-| **Monitoring** | [monitoring/README.md](infrastructure/monitoring/README.md) |
-
-### Архитектурная документация
-
-- [doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md](doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md) - Полная спецификация архитектуры V8.2
-
----
-
-## 🔧 Development
-
-### Start Development Environment
-
-```bash
-# Terminal 1: Infrastructure
-docker-compose up -d
-
-# Terminal 2: EventBus
-cd infrastructure/eventbus
-python -m eventbus.main
-
-# Terminal 3: API Gateway
-cd infrastructure/security/api-gateway
-uvicorn main:app --port 3001 --reload
-
-# Terminal 4: Platform Services
-./infrastructure/scripts/start_platform_services.sh
-
-# Terminal 5: Web App
-cd human-interface/web-app
-npm run dev
-```
-
-### Run Tests
-
-```bash
-# Unit tests
-pytest tests/unit/ -v
-
-# Integration tests
-pytest tests/integration/ -v
-
-# E2E tests
-pytest tests/e2e/ -v
-
-# Health check
-./infrastructure/scripts/health_check_all.sh
-```
-
-### Code Quality
-
-```bash
-# Linting
-ruff check .
-
-# Type checking
-mypy .
-
-# Format
-black .
-ruff format .
-```
-
----
-
-## 🌟 Key Features
-
-### 1. AI-Powered Workflows
-- Automatic workflow generation
-- Context-aware recommendations
-- Learning from outcomes
-- Predictive risk assessment
-
-### 2. Semantic Search (RAG)
-- Knowledge base search (ISO standards, BCI guidelines)
-- Case library search (workflow patterns)
-- Document search
-- Powered by Qdrant Vector DB
-
-### 3. Real-time Collaboration
-- WebSocket for live updates
-- Event-driven notifications
-- Multi-user workflows
-- Activity streams
-
-### 4. Compliance Automation
-- ISO 22301 compliance tracking
-- Automated compliance checks
-- Audit trail
-- Evidence collection
-
-### 5. Production-Ready Infrastructure
-- Microservices architecture
-- Event-driven messaging
-- Horizontal scaling
-- Monitoring & observability
-- Automated backups
-- Security hardening
+**12 ISO 22301 Compliant Services:**
+1. BIA Service (Clause 8.2.2)
+2. Risk Service (Clause 6.1)
+3. Planning Service (Clause 8.3)
+4. Plans Service (Clause 8.4)
+5. Compliance Service (Clause 9.2, 10.1, 10.2)
+6. Validation Service (Clause 8.5)
+7. Documents Service (Clause 7.5)
+8. Response Service (Clause 8.4)
+9. Learning Service (Clause 7.2)
+10. Governance Service (Clause 5.3, 7.1, 7.3)
+11. Community Service (Clause 7.4)
+12. Simulation Service
 
 ---
 
 ## 📊 Statistics
 
-**Code Base:**
-- **Infrastructure:** 20+ services
-- **Platform Services:** 12 microservices (~18,000 LOC)
-- **Shared Library:** 11,248 LOC, 57 files
-- **Intelligent Core:** AI + Workflow + Domain expertise
-- **Database Migrations:** 43 migrations (006-041)
-- **Total:** ~50,000+ LOC
+### Platform
+- **Services:** 23 total (12 platform + 11 intelligent-core)
+- **Ports:** 20+ mapped services
+- **Events:** 133 event types
+- **API Endpoints:** 150+
+- **ISO Coverage:** 10/10 clauses (ISO 22301)
 
-**Technologies:**
-- **Backend:** Python 3.11, FastAPI, PostgreSQL, Redis
-- **AI:** OpenAI, Anthropic Claude, RAG (Qdrant)
-- **Frontend:** React/Vue, Next.js
-- **Infrastructure:** Docker, Docker Compose, Kubernetes-ready
-- **Monitoring:** Prometheus, Grafana
-- **Auth:** JWT, Supabase Auth, Keycloak (SSO)
+### AI Capabilities
+- **AI Modules:** 11
+- **AI Specialists:** 14
+- **Case Library:** 347+ anonymized cases
+- **Usage Scenarios:** 570+
+- **Prediction Accuracy:** 87% average
+
+### Documentation
+- **Total Files:** 420+ documents
+- **Platform Docs:** 125+ files
+- **Project Docs:** 277 files
+- **Code Documentation:** Comprehensive
+
+---
+
+## ⚠️ Critical Governance Gap
+
+**READ THIS:** [Phase 1 Critical Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md)
+
+### Key Issues Identified:
+
+1. **❌ No Decision Center** - System operates autonomously
+2. **❌ No Accountability** - Not reporting to higher levels
+3. **❌ No Goal Management** - Goals hardcoded by developer
+4. **❌ Weak AI Integration** - Not using existing AI capabilities
+5. **❌ No Escalation** - Auto-recovery can loop indefinitely
+
+### Governance Maturity: 20/100
+
+```
+Decision Making:     ████░░░░░░ 20/100  ❌
+Accountability:      ██░░░░░░░░ 10/100  ❌
+Goal Management:     ███░░░░░░░ 15/100  ❌
+Policy Compliance:   ███░░░░░░░ 25/100  ❌
+AI Integration:      ████░░░░░░ 40/100  ⚠️
+
+Overall:             ███░░░░░░░ 20/100  ❌ CRITICAL
+```
+
+### Required Before Production:
+
+**MUST HAVE (Blockers):**
+- [ ] Minimal Decision Center
+- [ ] Escalation mechanism
+- [ ] Audit logging (ISO 22301)
+- [ ] Policy configuration (YAML)
+
+**SHOULD HAVE:**
+- [ ] AI Orchestrator integration
+- [ ] Workflow Intelligence integration
+- [ ] Expertise Center consultation
+
+**See:** [Governance Gap Summary](doc-project/PHASE1_GOVERNANCE_GAP_SUMMARY.md)
+
+---
+
+## 🎯 Roadmap
+
+### ✅ Phase 1: Infrastructure Level (COMPLETE)
+- Health monitoring
+- Auto-recovery
+- Resource optimization
+- Metrics & observability
+
+### 🔄 Phase 1.1: Minimal Governance (URGENT - 1-2 days)
+- [ ] Minimal Decision Center
+- [ ] Escalation mechanism
+- [ ] Enhanced audit logging
+- [ ] Policy configuration
+
+### 🔄 Phase 1.5: AI Integration (IMPORTANT - 1 week)
+- [ ] AI Orchestrator integration
+- [ ] Expertise Center consultation
+- [ ] Workflow Intelligence for complex recovery
+- [ ] Predictive analytics
+
+### 🔜 Phase 2: Core Level Coordination (2 weeks)
+- [ ] Workflow Intelligence coordination
+- [ ] AI Foundation coordination
+- [ ] Expertise Center coordination
+- [ ] Proactive intelligence
+
+### 🔜 Phase 3: Center Level Orchestration (3 weeks)
+- [ ] Decision Center (full version)
+- [ ] Context Aggregator
+- [ ] Priority Engine
+- [ ] Conflict Resolution
+
+### 🔜 Phase 4: Program Level Governance (4 weeks)
+- [ ] Strategic Planning
+- [ ] Resource Allocation
+- [ ] Compliance Oversight
+- [ ] Business Alignment
+
+---
+
+## 📚 Documentation
+
+### Getting Started
+- [Platform README](docs/README.md)
+- [Getting Started Guide](docs/GETTING_STARTED.md)
+- [Architecture Overview](docs/ARCHITECTURE.md)
+
+### Phase 1 Documentation
+- [Quick Start Guide](PHASE1_QUICK_START.md) - Deploy in 3 commands
+- [Complete Summary](doc-project/PHASE_1_COMPLETE_SUMMARY.md) - Full details
+- [Deployment Guide](infrastructure/observability/PHASE1_DEPLOYMENT_GUIDE.md) - Step-by-step
+- [Infrastructure Events](infrastructure/eventbus/events/INFRASTRUCTURE_EVENTS.md) - Event catalog
+
+### ⚠️ Critical Analysis
+- [Critical Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md) - Deep dive into issues
+- [Governance Gap Summary](doc-project/PHASE1_GOVERNANCE_GAP_SUMMARY.md) - Quick overview
+- [Integration Plan](doc-project/PHASE_1_INTEGRATION_PLAN.md) - Original plan
+
+### Technical Documentation
+- [EventBus Architecture](infrastructure/eventbus/ARCHITECTURE.md)
+- [AI Orchestrator](docs/ai-capabilities/AI_ORCHESTRATION_CAPABILITIES.md)
+- [API Reference](docs/API_REFERENCE.md)
+- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+
+---
+
+## 🔧 Development
+
+### Prerequisites
+- Python 3.9+
+- Docker & Docker Compose
+- PostgreSQL (or Supabase)
+- Redis
+- Node.js 16+ (for EventCatalog)
+
+### Environment Variables
+```bash
+DATABASE_URL="postgresql://user:pass@host:5432/db"
+REDIS_URL="redis://localhost:6379"
+SUPABASE_URL="https://xxx.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY="xxx"
+OPENAI_API_KEY="sk-xxx"
+ANTHROPIC_API_KEY="sk-ant-xxx"
+```
+
+### Local Development
+```bash
+# Start infrastructure
+cd infrastructure/observability
+docker-compose -f docker-compose.monitoring.yml up -d
+
+# Start metrics API
+cd intelligent-core/orchestration/api
+python3 metrics_api.py
+
+# Start infrastructure coordinator
+cd infrastructure/eventbus/coordination
+python3 infrastructure_coordinator.py
+```
+
+### Access Points
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000 (admin/admin123)
+- Metrics API: http://localhost:9091
+- EventCatalog: http://localhost:3001 (npm run dev)
+- System BCM: http://localhost:8050
 
 ---
 
 ## 🤝 Contributing
 
-**Setup для разработчиков:**
+**Note:** This is a non-commercial social impact project for healthcare BCM.
 
-1. Прочитай [SETUP_ALGORITHM.md](SETUP_ALGORITHM.md)
-2. Настрой development environment
-3. Изучи [infrastructure/TECHNICAL_GUIDE.md](infrastructure/TECHNICAL_GUIDE.md)
-4. Проверь service-specific README
+### Project Philosophy
+1. **Healthcare Focus** - Designed for healthcare BCM needs
+2. **Non-Commercial** - Social impact, not profit
+3. **ISO Compliance** - Strict ISO 22301:2019 adherence
+4. **AI-Powered** - Leverage AI for better BCM
+5. **Community-Driven** - Learning from practice
 
-**Code style:**
-- Follow PEP 8 (Python)
-- Use type hints
-- Write tests
-- Document changes
+### Development Principles
+- Choreography over Orchestration (Infrastructure level)
+- Event-Driven Architecture
+- Microservices patterns
+- ISO 22301 compliance by design
+- Comprehensive documentation
+
+---
+
+## 📞 Support & Contact
+
+### Documentation
+- Project Index: [PROJECT_INDEX.md](PROJECT_INDEX.md)
+- Platform Docs: [docs/](docs/)
+- Project Docs: [doc-project/](doc-project/)
+
+### Issues & Feedback
+- GitHub Issues: (configure repository URL)
+- Documentation Feedback: See docs README
+
+### Community
+- Healthcare BCM practitioners
+- ISO 22301 consultants
+- Humanitarian organizations
+- Non-profit healthcare providers
 
 ---
 
 ## 📄 License
 
-[Specify your license here]
+**Non-Commercial Use Only**
+
+This platform is designed for:
+- Healthcare organizations
+- Humanitarian aid organizations
+- Non-profit BCM practitioners
+- Educational institutions
+- ISO 22301 consultants (non-commercial)
+
+Commercial use requires separate licensing.
 
 ---
 
-## 📞 Support
+## 🙏 Acknowledgments
 
-**Questions?**
-- Check [SETUP_ALGORITHM.md](SETUP_ALGORITHM.md)
-- Review [infrastructure/TECHNICAL_GUIDE.md](infrastructure/TECHNICAL_GUIDE.md)
-- Check [infrastructure/INDEX.md](infrastructure/INDEX.md) for full docs index
+**Built With:**
+- EventBus Architecture (Redis Streams)
+- AI Foundation (OpenAI, Anthropic)
+- Temporal Workflows
+- Prometheus & Grafana
+- ISO 22301:2019 Framework
 
-**Found a bug?**
-- Check logs
-- Review troubleshooting guide
-- Document the issue
-
----
-
-## 🗺️ Roadmap
-
-### Completed ✅
-- ✅ Infrastructure foundation (Database, Redis, Qdrant)
-- ✅ EventBus (event-driven messaging)
-- ✅ API Gateway + Auth
-- ✅ 12 Platform services
-- ✅ AI Intelligence layer
-- ✅ Vector DB (RAG)
-- ✅ Monitoring stack
-
-### In Progress ⏳
-- ⏳ Notification service configuration
-- ⏳ WebSocket real-time updates
-- ⏳ Message queue setup
-
-### Planned 📋
-- 📋 Kubernetes deployment
-- 📋 Advanced ML models
-- 📋 Multi-tenant support
-- 📋 Mobile app
-- 📋 Advanced analytics dashboards
+**Special Thanks:**
+- Healthcare BCM community
+- ISO Technical Committee
+- Open-source contributors
 
 ---
 
-## 🎯 Quick Links
+## 🚨 Important Notes
 
-- **Setup Guide:** [SETUP_ALGORITHM.md](SETUP_ALGORITHM.md) ⭐
-- **Architecture:** [infrastructure/OVERVIEW.md](infrastructure/OVERVIEW.md)
-- **Technical Guide:** [infrastructure/TECHNICAL_GUIDE.md](infrastructure/TECHNICAL_GUIDE.md)
-- **Full Docs Index:** [infrastructure/INDEX.md](infrastructure/INDEX.md)
-- **Architecture Spec:** [doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md](doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md)
+### Before Production Deployment:
+
+1. **READ:** [Phase 1 Critical Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md)
+2. **IMPLEMENT:** Phase 1.1 Minimal Governance (see Governance Gap Summary)
+3. **VERIFY:** All database migrations applied
+4. **CONFIGURE:** Environment variables
+5. **TEST:** Integration tests
+6. **REVIEW:** Security configuration
+
+### Known Limitations:
+
+- **No Decision Center** - System operates autonomously (⚠️ RISK)
+- **No Escalation** - Auto-recovery may loop indefinitely (⚠️ RISK)
+- **Limited AI Integration** - Not using full AI capabilities
+- **Hardcoded Goals** - Goals not from governance layer
+- **No Accountability** - Not reporting to higher levels
+
+**See Governance Gap Summary for complete analysis.**
 
 ---
 
-**Built with ❤️ using AI + Modern Software Architecture**
+## 📊 Project Status Summary
 
-**Last Updated:** 2025-10-06
-**Version:** 8.2 Final
-**Status:** Production Ready ✅
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Infrastructure Level | ✅ Complete | Phase 1 done |
+| Governance Layer | ❌ Missing | Phase 1.1 needed |
+| AI Integration | ⚠️ Partial | Phase 1.5 needed |
+| Core Level | 🔜 Planned | Phase 2 |
+| Center Level | 🔜 Planned | Phase 3 |
+| Program Level | 🔜 Planned | Phase 4 |
+| **Production Ready** | ⚠️ **After 1.1** | Governance required |
+
+---
+
+**Version:** 2.0.0-phase1
+**Last Updated:** 2025-10-09
+**Status:** Phase 1 Complete, Governance Layer Required
+
+**Next Steps:** Implement Phase 1.1 Minimal Governance → See [Governance Gap Summary](doc-project/PHASE1_GOVERNANCE_GAP_SUMMARY.md)
+
+---
+
+**🤖 Built with AI Partnership | 🏥 For Healthcare BCM | 🌍 Social Impact Project**

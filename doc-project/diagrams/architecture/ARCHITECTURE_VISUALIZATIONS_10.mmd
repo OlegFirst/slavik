@@ -1,0 +1,94 @@
+graph TB
+    subgraph "Event Publishers (40+ events)"
+        AI_FOUND_P[AI Foundation<br/>━━━━━━━━━━━<br/>• ai.llm.routed<br/>• ai.rag.queried<br/>• ai.learning.feedback_received]
+
+        WF_INT_P[Workflow Intelligence<br/>━━━━━━━━━━━<br/>• workflow.*.started<br/>• workflow.*.completed<br/>• workflow.*.failed<br/>• workflow.state_changed]
+
+        AI_OPT_P[AI Optimizer<br/>━━━━━━━━━━━<br/>• workflow.optimization.completed<br/>• ml.model.trained]
+
+        EVENT_INT_P[Event Intelligence<br/>━━━━━━━━━━━<br/>• event.analyzed<br/>• event.pattern_detected<br/>• event.anomaly_detected]
+
+        AI_ORCH_P[AI Orchestration<br/>━━━━━━━━━━━<br/>• orchestration.decision_made<br/>• orchestration.service.*<br/>• ai.decision.*<br/>• (10+ events)]
+
+        COORD_P[Coordination Center<br/>━━━━━━━━━━━<br/>• coordination.execution.*<br/>• coordination.approval_required]
+
+        EXPERT_P[Expertise Center<br/>━━━━━━━━━━━<br/>• expert.analysis.completed<br/>• expert.recommendation.*]
+
+        COMM_INT_P[Community Intelligence<br/>━━━━━━━━━━━<br/>• community.case.approved<br/>• community.contribution.*<br/>• community.review.*]
+
+        COLLECTIVE_P[Collective<br/>━━━━━━━━━━━<br/>• collective.agent.created<br/>• collective.org.stuck_detected]
+
+        PREDICT_P[Predictive<br/>━━━━━━━━━━━<br/>• prediction.journey.generated<br/>• prediction.certification.estimated<br/>• prediction.recommendation.generated<br/>• (8+ events)]
+
+        PLATFORM_P[Platform Services<br/>━━━━━━━━━━━<br/>• bia.created<br/>• risk.escalated<br/>• compliance.audit.*<br/>• validation.alert.*<br/>• (20+ events)]
+    end
+
+    subgraph "RabbitMQ EventBus"
+        EXCHANGE[Topic Exchange<br/>'platform_events'<br/>━━━━━━━━━━━<br/>Routing: Topic-based<br/>Durable: Yes<br/>Auto-delete: No]
+
+        subgraph "Queues"
+            Q_ORCH[orchestration_queue<br/>Pattern: *.*]
+            Q_EVENT[event_intelligence_queue<br/>Pattern: *.*]
+            Q_COORD[coordination_queue<br/>Pattern: orchestration.*<br/>Pattern: workflow.action_required]
+            Q_EXPERT[expertise_queue<br/>Pattern: workflow.*.started<br/>Pattern: user.question]
+            Q_COMM[community_queue<br/>Pattern: workflow.stuck<br/>Pattern: user.inactive]
+            Q_COLLECT[collective_queue<br/>Pattern: workflow.no_progress<br/>Pattern: validation.failure]
+            Q_PREDICT[predictive_queue<br/>Pattern: workflow.*.completed<br/>Pattern: organization.milestone.*]
+            Q_PLATFORM[platform_queue<br/>Pattern: bia.*<br/>Pattern: risk.*<br/>Pattern: compliance.*]
+        end
+    end
+
+    subgraph "Event Subscribers (25+ patterns)"
+        AI_ORCH_S[AI Orchestration<br/>Subscribes: ALL events *.*<br/>(Context Aggregation)]
+
+        EVENT_INT_S[Event Intelligence<br/>Subscribes: ALL events *.*<br/>(Auto-Discovery)]
+
+        COORD_S[Coordination Center<br/>Subscribes: orchestration.*<br/>workflow.action_required]
+
+        EXPERT_S[Expertise Center<br/>Subscribes: workflow.*.started<br/>user.question]
+
+        COMM_INT_S[Community Intelligence<br/>Subscribes: workflow.stuck<br/>user.inactive]
+
+        COLLECTIVE_S[Collective<br/>Subscribes: workflow.no_progress<br/>validation.failure]
+
+        PREDICT_S[Predictive<br/>Subscribes: workflow.*.completed<br/>organization.milestone.*<br/>user.activity.logged]
+
+        AI_OPT_S[AI Optimizer<br/>Subscribes: workflow.execution.completed]
+    end
+
+    %% Publishers to Exchange
+    AI_FOUND_P -->|publish| EXCHANGE
+    WF_INT_P -->|publish| EXCHANGE
+    AI_OPT_P -->|publish| EXCHANGE
+    EVENT_INT_P -->|publish| EXCHANGE
+    AI_ORCH_P -->|publish| EXCHANGE
+    COORD_P -->|publish| EXCHANGE
+    EXPERT_P -->|publish| EXCHANGE
+    COMM_INT_P -->|publish| EXCHANGE
+    COLLECTIVE_P -->|publish| EXCHANGE
+    PREDICT_P -->|publish| EXCHANGE
+    PLATFORM_P -->|publish| EXCHANGE
+
+    %% Exchange to Queues
+    EXCHANGE -->|route *.*| Q_ORCH
+    EXCHANGE -->|route *.*| Q_EVENT
+    EXCHANGE -->|route| Q_COORD
+    EXCHANGE -->|route| Q_EXPERT
+    EXCHANGE -->|route| Q_COMM
+    EXCHANGE -->|route| Q_COLLECT
+    EXCHANGE -->|route| Q_PREDICT
+    EXCHANGE -->|route| Q_PLATFORM
+
+    %% Queues to Subscribers
+    Q_ORCH -->|deliver| AI_ORCH_S
+    Q_EVENT -->|deliver| EVENT_INT_S
+    Q_COORD -->|deliver| COORD_S
+    Q_EXPERT -->|deliver| EXPERT_S
+    Q_COMM -->|deliver| COMM_INT_S
+    Q_COLLECT -->|deliver| COLLECTIVE_S
+    Q_PREDICT -->|deliver| PREDICT_S
+    Q_PLATFORM -->|deliver| AI_OPT_S
+
+    style EXCHANGE fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style AI_ORCH_S fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style EVENT_INT_S fill:#f8d7da,stroke:#dc3545,stroke-width:2px

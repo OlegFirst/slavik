@@ -1,0 +1,46 @@
+flowchart TD
+    Start([Start Risk Assessment]) --> Type{Risk Source}
+    
+    Type -->|Manual| Manual[User Identifies Risk]
+    Type -->|AI Discovered| AI_Disc[AI Auto-Discovery]
+    Type -->|BIA Derived| BIA_Risk[From BIA Analysis]
+    
+    Manual --> Describe[Describe Risk]
+    AI_Disc --> Describe
+    BIA_Risk --> Describe
+    
+    Describe --> Impact[Assess Impact<br/>1-5 Scale]
+    Impact --> Likelihood[Assess Likelihood<br/>1-5 Scale]
+    
+    Likelihood --> AI_Analyze[AI Analysis]
+    AI_Analyze --> Heatmap[Position on Risk Heatmap]
+    
+    Heatmap --> Priority{Risk Level}
+    Priority -->|High 15-25| Critical[Critical - Immediate Action]
+    Priority -->|Medium 8-14| Moderate[Moderate - Plan Required]
+    Priority -->|Low 1-7| Low[Low - Monitor]
+    
+    Critical --> Mitigate[Define Mitigation]
+    Moderate --> Mitigate
+    Low --> Monitor[Add to Watch List]
+    
+    Mitigate --> AI_Suggest[AI Mitigation Suggestions]
+    AI_Suggest --> Strategy[Select Strategy]
+    
+    Strategy --> Assign[Assign Owner]
+    Assign --> Timeline[Set Timeline]
+    Timeline --> Save[Save Risk]
+    
+    Save --> Notify[Notify Stakeholders]
+    Monitor --> Save
+    
+    Notify --> Event[EventBus: Risk.Created]
+    Event --> Done([Risk Registered])
+    
+    style Start fill:#4CAF50
+    style Critical fill:#F44336
+    style Moderate fill:#FF9800
+    style Low fill:#FFEB3B
+    style AI_Analyze fill:#2196F3
+    style AI_Suggest fill:#2196F3
+    style Done fill:#4CAF50

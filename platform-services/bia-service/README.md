@@ -1,293 +1,266 @@
 # BIA Service - Business Impact Analysis
 
-**ISO 22301 Clause 8.2.2**
+**Type**: Platform Service
+**Port**: 8012
+**Status**: Active
+**Version**: 1.0.0
+**ISO 22301 Clause**: 8.2.2 - Business Impact Analysis
 
-Unified architecture microservice for comprehensive Business Impact Analysis.
+## Overview
 
----
+The BIA Service provides comprehensive Business Impact Analysis capabilities aligned with ISO 22301:2019 Clause 8.2.2 requirements. It enables organizations to identify critical business processes, assess their impact during disruptions, and define appropriate recovery objectives (RTO, RPO, MTPD).
 
-## ✅ MIGRATION STATUS
+This service combines traditional BIA methodology with AI-powered intelligence to suggest recovery objectives and discover process dependencies automatically.
 
-**Source:** `/Users/MD/ISO-22301—копия/services/SERVICES/BCM/bia/main.py` (695 lines)
-**Target:** `/Users/MD/AI-Platform-ISO/services/bcm/bia/` (unified architecture)
-**Status:** ✅ **COMPLETE - NO FUNCTIONALITY LOST**
+## Business Capabilities
 
-### What Was Preserved:
-- ✅ All 8 Enums (CriticalityLevel, ProcessStatus, etc.)
-- ✅ All 6 Models (BIAProcess, AIRTOSuggestion, etc.)
-- ✅ All 12 BIA endpoints
-- ✅ All 8 Supply Chain endpoints (supply_chain_api.py)
-- ✅ All helper functions (calculate_criticality_score, etc.)
-- ✅ Event publishing (bcm.bia.started, bcm.bia.completed, etc.)
-- ✅ AI integration (RTO suggestions, dependency discovery)
-- ✅ WHO Essential Services tiers (healthcare)
-- ✅ In-memory storage (original behavior)
+The BIA Service delivers the following business value:
 
----
+- **Critical Process Identification**: Automated criticality scoring with WHO tier classification for healthcare organizations
+- **Recovery Objectives Definition**: Define and validate RTO (Recovery Time Objective), RPO (Recovery Point Objective), and MTPD (Maximum Tolerable Period of Disruption)
+- **Financial Impact Assessment**: Multi-period financial impact analysis from 1 hour to 1 month
+- **Dependency Mapping**: Comprehensive upstream/downstream process, technology, and supplier dependencies
+- **AI-Powered Analysis**: Intelligent RTO/RPO suggestions based on criticality, industry benchmarks, and historical data
+- **Supply Chain BCM**: Critical supplier management and supply chain risk assessment
+- **Multi-Industry Support**: Healthcare (WHO tiers), Financial Services, Manufacturing, IT, Retail, and more
 
-## 📁 Structure
+## API Endpoints
 
-```
-bia/
-├── __init__.py
-├── main.py                      # FastAPI app with lifespan
-├── config.py                    # Settings (inherits from shared/)
-├── models/
-│   ├── __init__.py
-│   ├── enums.py                 # 8 Enums
-│   └── domain.py                # 6 Pydantic Models
-├── api/
-│   ├── __init__.py
-│   └── routes.py                # 12 endpoints (thin layer)
-├── services/
-│   ├── __init__.py
-│   ├── bia_service.py           # Core business logic
-│   ├── ai_service.py            # AI integration
-│   └── report_service.py        # Reporting & analytics
-├── repositories/
-│   ├── __init__.py
-│   └── bia_repository.py        # Data access (in-memory)
-├── utils/
-│   ├── __init__.py
-│   └── calculations.py          # Helper functions
-├── supply_chain_api.py          # Supply Chain BCM (619 lines)
-├── supply_chain_schemas.py      # Supply Chain models (473 lines)
-├── requirements.txt
-└── README.md
-```
+The service exposes 16 RESTful API endpoints across multiple categories:
 
----
+### Process Management
+- POST /api/bia/processes - Create BIA process
+- GET /api/bia/processes - List processes with filtering
+- GET /api/bia/processes/{id} - Get process details
+- PUT /api/bia/processes/{id} - Update process
+- DELETE /api/bia/processes/{id} - Delete process
+- POST /api/bia/processes/{id}/complete - Mark as completed
 
-## 🚀 Quick Start
+### AI-Powered Analysis
+- POST /api/bia/processes/{id}/suggest-rto - AI RTO/RPO/MTPD suggestions
+- POST /api/bia/processes/{id}/discover-dependencies - AI dependency discovery
 
-### Local Development
+### Bulk Operations
+- POST /api/bia/processes/bulk - Bulk create processes
+- PATCH /api/bia/processes/bulk - Bulk update processes
+- DELETE /api/bia/processes/bulk - Bulk delete processes
+- POST /api/bia/processes/bulk/validate - Validate before import
+
+### Reporting
+- GET /api/bia/reports/summary - Executive summary report
+- GET /api/bia/reports/critical-processes - Critical processes report
+- GET /api/bia/reports/dependencies - Dependencies mapping report
+
+### Health & Monitoring
+- GET /health - Health check endpoint
+- GET /metrics/cache - Cache performance metrics
+- GET /api/compliance/check - ISO 22301 compliance status
+
+For detailed API documentation, see [docs/API.md](docs/API.md).
+
+## Installation
+
+### Prerequisites
+
+- Python 3.11 or higher
+- PostgreSQL 14+ or SQLite (for development)
+- Redis 7.0+ (for caching)
+- RabbitMQ 3.12+ (for event bus, optional)
+
+### Local Development Setup
 
 ```bash
-cd /Users/MD/AI-Platform-ISO/services/bcm/bia
+# Navigate to service directory
+cd platform-services/bia-service
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run service
+# Set up environment variables (copy from .env.example)
+cp .env.example .env
+
+# Run database migrations (if using PostgreSQL)
+alembic upgrade head
+
+# Start the service
 python main.py
 ```
 
-Service runs on **Port 8012**
+The service will start on port 8012 by default.
 
-### Docker
+### Docker Deployment
 
 ```bash
-# From project root
+# Build Docker image
+docker build -t bia-service:latest .
+
+# Run with Docker Compose
 docker-compose up bia-service
 ```
 
----
-
-## 📡 API Endpoints (12 + 8)
-
-### Core BIA (12 endpoints)
-
-1. `POST /api/bia/processes` - Create BIA process
-2. `GET /api/bia/processes` - List processes (with filters)
-3. `GET /api/bia/processes/{id}` - Get process
-4. `PUT /api/bia/processes/{id}` - Update process
-5. `DELETE /api/bia/processes/{id}` - Delete process
-6. `POST /api/bia/processes/{id}/complete` - Mark completed
-7. `POST /api/bia/processes/{id}/suggest-rto` - AI RTO suggestion
-8. `POST /api/bia/processes/{id}/discover-dependencies` - AI dependency discovery
-9. `GET /api/bia/reports/summary` - Summary report
-10. `GET /api/bia/reports/critical-processes` - Critical processes
-11. `GET /api/bia/reports/dependencies` - Dependency graph
-12. `GET /health` - Health check
-
-### Supply Chain BCM (8 endpoints)
-
-From `supply_chain_api.py` (integrated automatically if available)
-
----
-
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
 ```bash
-# Service
+# Service Configuration
 BIA_SERVICE_PORT=8012
+BIA_SERVICE_VERSION=1.0.0
+BIA_LOG_LEVEL=INFO
 
-# Database (future)
-DATABASE_URL=postgresql+asyncpg://user:pass@host/db
+# Database Configuration
+DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/bcm_platform
+DB_POOL_SIZE=20
+DB_MAX_OVERFLOW=10
+DB_ECHO=false
 
-# EventBus
-EVENTBUS_URL=http://eventbus:8001
+# Authentication
+JWT_SECRET=your-secret-key-change-in-production
+
+# Redis Cache
+REDIS_URL=redis://localhost:6379/0
+
+# EventBus Configuration
+EVENTBUS_URL=amqp://guest:guest@localhost:5672
+FEATURE_EVENTBUS=true
 
 # AI Services
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
+AI_ENABLED=true
 
-# Features
-BIA_WHO_TIER_ENABLED=true
-BIA_SUPPLY_CHAIN_ENABLED=true
+# Feature Flags
+WHO_TIER_ENABLED=true
+SUPPLY_CHAIN_ENABLED=true
+
+# CORS Configuration
+CORS_ENABLED=true
+CORS_ORIGINS=http://localhost:3000,http://localhost:8000
 ```
 
-### Config File
+### Event Subscriptions
 
-See `config.py` - inherits from `shared.config.BaseServiceSettings`
+The BIA Service subscribes to the following EventBus topics:
 
----
+- `governance.organization.created` - Auto-create BIA template for new organizations
+- `risk.critical_risk_identified` - Link critical risks to BIA processes
 
-## 🎯 Features
+## Dependencies
 
-### ISO 22301 Compliance
-- ✅ Clause 8.2.2: Business Impact Analysis
-- ✅ Criticality assessment (5-level scale)
-- ✅ Recovery objectives (RTO/RPO/MTPD)
-- ✅ Resource requirements
-- ✅ Dependency mapping
+### Internal Dependencies
 
-### AI-Powered Intelligence
-- ✅ AI-suggested RTO/RPO/MTPD
-- ✅ Automated dependency discovery
-- ✅ Industry benchmarks
-- ✅ Rule-based fallbacks
+- **Database**: PostgreSQL (tables: bia_processes, bia_dependencies, bia_impacts)
+- **Cache**: Redis (for high-performance caching)
+- **Event Bus**: RabbitMQ via infrastructure/eventbus service
+- **Shared Libraries**:
+  - shared/database - Database connection management
+  - shared/auth - JWT authentication and RBAC
+  - shared/eventbus - Event publishing/subscribing
+  - shared/cache - Redis caching layer
 
-### Healthcare-Specific
-- ✅ WHO Essential Services tiers
-- ✅ Patient safety impact levels
-- ✅ Regulatory impact assessment
-- ✅ Critical care process identification
+### External Dependencies
 
-### Supply Chain BCM
-- ✅ 8 dedicated endpoints
-- ✅ Supplier criticality analysis
-- ✅ EY research integration
-- ✅ 20% faster recovery metrics
+- **AI Orchestration Service** (port 8002) - For AI-powered RTO suggestions and dependency discovery
+- **API Gateway** (port 8000) - For external API access
+- **Workflow Intelligence** - For audit logging and compliance checking
 
----
+### Python Package Dependencies
 
-## 📊 Data Models
+Key dependencies include:
+- FastAPI 0.104.1
+- SQLAlchemy 2.0+ (async support)
+- Pydantic 2.5+
+- asyncpg (PostgreSQL driver)
+- redis-py (Redis client)
+- aio-pika (RabbitMQ async client)
 
-### Main Models (6)
-1. **BIAProcess** - Core business process
-2. **BIAProcessCreate** - Creation DTO
-3. **AIRTOSuggestion** - AI recommendations
-4. **BIASummaryReport** - Tenant summary
-5. **Dependency** - Process dependencies
-6. **ImpactAssessment** - Time-based impact
+See `requirements.txt` for complete list.
 
-### Enums (8)
-1. CriticalityLevel (5 levels)
-2. ProcessStatus (3 states)
-3. ReputationalImpact (5 levels)
-4. RegulatoryImpact (5 levels)
-5. PatientSafetyImpact (5 levels - healthcare)
-6. WHOTier (4 tiers - healthcare)
-7. GeographicalScope (4 scopes)
-8. IndustryType (10 industries)
+## Standards Compliance
 
----
+### ISO 22301:2019 - Clause 8.2.2 Requirements
 
-## 🔄 Event Publishing
+This service implements all mandatory requirements from ISO 22301:2019 Clause 8.2.2 (Business Impact Analysis):
 
-### Events Published
+**Criticality Assessment** (8.2.2.a)
+- Five-level criticality classification (CRITICAL, HIGH, MEDIUM, LOW, NEGLIGIBLE)
+- Automated criticality scoring based on multiple factors
+- WHO Essential Services tier classification for healthcare (Tier 1-4)
 
-1. **bcm.bia.started** - BIA process created
-2. **bcm.bia.completed** - BIA process completed
-3. **bcm.bia.critical_process_identified** - Critical process found (score >= 4)
+**Recovery Objectives** (8.2.2.b)
+- RTO (Recovery Time Objective) in hours
+- RPO (Recovery Point Objective) in hours
+- MTPD (Maximum Tolerable Period of Disruption) in hours
+- Peak period analysis with different RTOs
 
-### Events Subscribed
+**Resource Requirements** (8.2.2.c)
+- Personnel requirements (minimum staff levels)
+- Facilities and equipment
+- Technology and systems
+- Information and data
+- Materials and supplies
 
-1. **governance.organization.created** - Auto-create BIA template
-2. **risk.critical_risk_identified** - Link to BIA process
+**Dependency Identification** (8.2.2.d)
+- Upstream/downstream process dependencies
+- Technology dependencies with criticality rating
+- Supplier dependencies
+- External service dependencies
 
----
+**Impact Analysis** (8.2.2.e)
+- Financial impact (multi-period: 1h, 4h, 8h, 24h, 1 week, 1 month)
+- Operational impact
+- Reputational impact (5 levels)
+- Regulatory impact (5 levels)
+- Patient safety impact (healthcare-specific, 5 levels)
 
-## 🧪 Testing
+**Additional Features**
+- Alternative procedures documentation
+- Legal/regulatory compliance tracking
+- Recovery strategies per process
+- Integration with risk assessments
+
+## Development
+
+### Project Structure
+
+```
+bia-service/
+├── api/                    # API routes (thin layer)
+├── database/              # Database connection and models
+├── models/                # Domain models and enums
+├── repositories/          # Data access layer
+├── services/              # Business logic
+├── utils/                 # Utility functions
+├── docs/                  # Documentation
+├── tests/                 # Unit and integration tests
+├── config.py              # Service configuration
+├── main.py                # Application entry point
+└── requirements.txt       # Python dependencies
+```
+
+### Running Tests
 
 ```bash
-# Check health
-curl http://localhost:8012/health
+# Run all tests
+pytest
 
-# Create BIA process
-curl -X POST http://localhost:8012/api/bia/processes \
-  -H "Content-Type: application/json" \
-  -d '{
-    "tenant_id": "tenant_123",
-    "name": "Payment Processing",
-    "criticality": "critical",
-    "industry": "financial",
-    "rto_hours": 4,
-    "rpo_hours": 1,
-    "mtpd_hours": 8
-  }'
+# Run with coverage
+pytest --cov=. --cov-report=html
 
-# Get summary report
-curl "http://localhost:8012/api/bia/reports/summary?tenant_id=tenant_123"
+# Run specific test file
+pytest tests/test_bia_service.py
 ```
 
----
+## License
 
-## 📈 Migration Notes
-
-### From Original (695 lines monolithic)
-- ✅ Split into 18 files (unified architecture)
-- ✅ Services layer added (business logic separation)
-- ✅ Repository pattern (data access abstraction)
-- ✅ Dependency injection
-- ✅ Lifespan management
-- ✅ EventBus integration
-- ✅ Shared config inheritance
-
-### Storage
-- **Current:** In-memory (dict-based, original behavior)
-- **Future:** PostgreSQL migration planned
-- **Code Ready:** Repository pattern supports easy DB swap
-
-### What Changed
-- ❌ **NOTHING!** All 12+8 endpoints work identically
-- ✅ Better organized code
-- ✅ Easier to test
-- ✅ Easier to maintain
-- ✅ Ready for team collaboration
+Proprietary - AI-Platform-ISO
 
 ---
 
-## 🐛 Troubleshooting
-
-### Import Errors
-```bash
-# Make sure shared/ is in PYTHONPATH
-export PYTHONPATH="/Users/MD/AI-Platform-ISO:$PYTHONPATH"
-```
-
-### Supply Chain Not Loading
-```bash
-# Check if supply_chain_api.py exists
-ls supply_chain_api.py
-
-# Disable in config if needed
-export BIA_SUPPLY_CHAIN_ENABLED=false
-```
-
----
-
-## ✅ Checklist: Functionality Verification
-
-- [x] All 8 Enums present
-- [x] All 6 Models present
-- [x] All 12 BIA endpoints working
-- [x] All 8 Supply Chain endpoints included
-- [x] Event publishing works
-- [x] AI integration preserved
-- [x] WHO tiers calculation
-- [x] Financial impact timeline
-- [x] Dependency discovery
-- [x] Critical process identification
-- [x] Summary reports
-- [x] Dependency graph
-- [x] Multi-tenancy (tenant_id validation)
-- [x] Access control (403 checks)
-- [x] In-memory storage working
-
----
-
-**Status:** ✅ Production Ready | **ISO 22301:** Clause 8.2.2 | **Port:** 8012
+**Last Updated**: 2025-10-09
+**Maintainer**: AI Platform Team
+**Documentation**: [Complete Documentation Index](docs/README.md)

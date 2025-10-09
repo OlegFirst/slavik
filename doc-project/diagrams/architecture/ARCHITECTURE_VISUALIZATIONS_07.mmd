@@ -1,0 +1,52 @@
+sequenceDiagram
+    participant User
+    participant API_GW as API Gateway
+    participant AI_Found as AI Foundation<br/>8040
+    participant Expert as Expertise Center<br/>8035
+    participant WF_Int as Workflow Intelligence<br/>8037
+    participant Comm as Community Intelligence<br/>8030
+    participant Qdrant as Qdrant Vector DB
+    participant DB as PostgreSQL
+
+    User->>API_GW: "Analyze my BIA process for compliance gaps"
+    API_GW->>AI_Found: POST /api/v1/llm/route<br/>{query, context}
+
+    Note over AI_Found: 1. Select LLM Provider<br/>2. RAG Pipeline Activation
+
+    AI_Found->>Qdrant: Query embeddings:<br/>generate_embedding(query)
+    Qdrant->>AI_Found: Similar vectors (top 10)
+
+    AI_Found->>DB: Retrieve full documents<br/>for vector IDs
+    DB->>AI_Found: Domain knowledge docs
+
+    AI_Found->>AI_Found: Construct RAG context:<br/>query + retrieved_docs
+
+    AI_Found->>Expert: Route to BIA Specialist<br/>{query, rag_context}
+
+    Note over Expert: BIA Specialist<br/>(Tactical Assistant)
+
+    Expert->>WF_Int: GET /cases/search<br/>{type: bia, filters}
+    WF_Int->>DB: Query case_library
+    DB->>WF_Int: Similar BIA cases
+    WF_Int->>Expert: Case patterns + metadata
+
+    Expert->>Comm: GET /api/v1/community/cases<br/>{domain: bia}
+    Comm->>DB: Query contributions
+    DB->>Comm: Community-approved cases
+    Comm->>Expert: Community insights
+
+    Expert->>Expert: Synthesize analysis:<br/>1. RAG knowledge<br/>2. Case patterns<br/>3. Community insights<br/>4. ISO 22301 requirements
+
+    Expert->>AI_Found: Generate response via LLM<br/>{synthesized_context}
+
+    AI_Found->>AI_Found: Call Anthropic Claude:<br/>- Temperature: 0.3<br/>- Max tokens: 2000<br/>- System prompt: BIA expert
+
+    AI_Found->>Expert: LLM response
+    Expert->>Expert: Post-process:<br/>- Add citations<br/>- Format for ISO compliance<br/>- Add recommendations
+
+    Expert->>API_GW: Structured analysis:<br/>{gaps, recommendations, citations}
+    API_GW->>User: Analysis report
+
+    Note over Expert: Log interaction for learning
+    Expert->>AI_Found: POST /api/v1/learning/feedback<br/>{useful: true}
+    AI_Found->>DB: Store feedback

@@ -1,0 +1,37 @@
+graph TB
+    subgraph "Synchronous HTTP/REST"
+        AI_OPT_HTTP[AI Optimizer] -->|GET /cases/search| WF_INT_HTTP[Workflow Intelligence]
+        AI_OPT_HTTP -->|POST /query_expert| EXPERT_HTTP[Expertise Center]
+        AI_OPT_HTTP -->|POST /api/v1/llm/route| AI_FOUND_HTTP[AI Foundation]
+
+        COMM_INT_HTTP[Community Intelligence] -->|POST /cases/add| WF_INT_HTTP
+
+        PREDICT_HTTP[Predictive] -->|GET /cases/search| WF_INT_HTTP
+        PREDICT_HTTP -->|GET /api/v1/community/timeline/predict| COMM_INT_HTTP
+
+        COORD_HTTP[Coordination Center] -->|POST /api/v1/workflow/start| WF_INT_HTTP
+
+        EXPERT_H2[Expertise Center] -->|POST /api/v1/llm/route| AI_FOUND_HTTP
+        EXPERT_H2 -->|GET /cases/search| WF_INT_HTTP
+    end
+
+    subgraph "Asynchronous EventBus"
+        WF_INT_EVENT[Workflow Intelligence] -.publishes.-> EVENTBUS[RabbitMQ EventBus]
+        EVENTBUS -.subscribes.-> AI_OPT_EVENT[AI Optimizer]
+        EVENTBUS -.subscribes.-> EXPERT_EVENT[Expertise Center]
+        EVENTBUS -.subscribes.-> PREDICT_EVENT[Predictive]
+        EVENTBUS -.subscribes.-> COMM_INT_EVENT[Community Intelligence]
+        EVENTBUS -.subscribes.-> COLLECTIVE_EVENT[Collective]
+    end
+
+    subgraph "Platform Client (Unified)"
+        PLATFORM_CLIENT[Platform Client<br/>from shared/<br/>━━━━━━━━━━━<br/>Unified interface for:<br/>• ai.ask<br/>• experts.query_expert<br/>• workflows.search_cases<br/>• community.get_timeline]
+
+        SERVICE_A[Any Service] -->|uses| PLATFORM_CLIENT
+        PLATFORM_CLIENT -->|abstracts| AI_FOUND_HTTP
+        PLATFORM_CLIENT -->|abstracts| WF_INT_HTTP
+        PLATFORM_CLIENT -->|abstracts| EXPERT_HTTP
+    end
+
+    style EVENTBUS fill:#d6d8db,stroke:#6c757d,stroke-width:3px
+    style PLATFORM_CLIENT fill:#e1f5ff,stroke:#0066cc,stroke-width:3px

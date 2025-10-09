@@ -1,0 +1,53 @@
+graph TD
+    Start[User Logs In] --> Dashboard[View Dashboard]
+    Dashboard --> Journey{Choose Action}
+    
+    Journey --> BIA[Start BIA]
+    Journey --> Risk[Assess Risks]
+    Journey --> Plan[Create BC Plan]
+    Journey --> Exercise[Run Exercise]
+    
+    BIA --> BIA1[Identify Critical Functions]
+    BIA1 --> BIA2[Analyze Dependencies]
+    BIA2 --> BIA3[Determine RTOs/RPOs]
+    BIA3 --> BIA4[AI Recommendations]
+    BIA4 --> BIA_Done[BIA Complete]
+    
+    Risk --> Risk1[Identify Risks]
+    Risk1 --> Risk2[Assess Impact/Likelihood]
+    Risk2 --> Risk3[AI Risk Analysis]
+    Risk3 --> Risk4[Mitigation Strategies]
+    Risk4 --> Risk_Done[Risk Assessment Complete]
+    
+    Plan --> Plan1{Plan Type}
+    Plan1 -->|Template| Plan2[Select Template]
+    Plan1 -->|AI Generated| Plan3[AI Generate Plan]
+    Plan1 -->|Blank| Plan4[Create from Scratch]
+    Plan2 --> Plan5[Customize Plan]
+    Plan3 --> Plan5
+    Plan4 --> Plan5
+    Plan5 --> Plan6[Review & Approve]
+    Plan6 --> Plan_Done[Plan Published]
+    
+    Exercise --> Ex1[Select Scenario]
+    Ex1 --> Ex2[Configure Parameters]
+    Ex2 --> Ex3[Run Digital Twin Simulation]
+    Ex3 --> Ex4[Review Results]
+    Ex4 --> Ex5[AI Insights]
+    Ex5 --> Ex_Done[Exercise Complete]
+    
+    BIA_Done --> Dashboard
+    Risk_Done --> Dashboard
+    Plan_Done --> Dashboard
+    Ex_Done --> Dashboard
+    
+    style Start fill:#4CAF50
+    style Dashboard fill:#2196F3
+    style BIA_Done fill:#4CAF50
+    style Risk_Done fill:#4CAF50
+    style Plan_Done fill:#4CAF50
+    style Ex_Done fill:#4CAF50
+    style BIA4 fill:#FF9800
+    style Risk3 fill:#FF9800
+    style Plan3 fill:#FF9800
+    style Ex5 fill:#FF9800

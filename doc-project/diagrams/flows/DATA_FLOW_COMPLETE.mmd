@@ -1,0 +1,44 @@
+flowchart TD
+    User[User Input] --> UI[Web Interface]
+    UI --> API[API Gateway]
+    
+    API --> Validate[Validation Layer]
+    Validate --> |Invalid| Error[Return Error]
+    Validate --> |Valid| Route[Route to Service]
+    
+    Route --> Service[Platform Service]
+    Service --> Check{Needs AI?}
+    
+    Check -->|Yes| AI[AI Foundation]
+    Check -->|No| Direct[Direct Processing]
+    
+    AI --> RAG[RAG Query]
+    RAG --> Qdrant[(Qdrant Vector DB)]
+    Qdrant --> Context[Retrieve Context]
+    
+    AI --> LLM[LLM Reasoning]
+    Context --> LLM
+    LLM --> AI_Result[AI Response]
+    
+    AI_Result --> Combine[Combine Results]
+    Direct --> Combine
+    
+    Combine --> DB[(PostgreSQL)]
+    DB --> Event[Publish Event]
+    Event --> Redis[(Redis/RabbitMQ)]
+    
+    Redis --> Downstream[Downstream Services]
+    Downstream --> Process[Process Event]
+    
+    Process --> Update[(Update Data)]
+    Update --> Notify[Notify Users]
+    
+    Combine --> Response[Build Response]
+    Response --> UI
+    UI --> User
+    
+    style User fill:#4CAF50
+    style AI fill:#FF9800
+    style LLM fill:#2196F3
+    style Qdrant fill:#9C27B0
+    style Redis fill:#F44336

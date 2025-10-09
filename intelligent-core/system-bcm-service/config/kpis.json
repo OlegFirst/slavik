@@ -1,0 +1,55 @@
+{
+  "module": "system-bcm-service",
+  "version": "1.0.0",
+  "kpis": {
+    "response_time_ms": {
+      "target_value": 200.0,
+      "tolerance": 0.25,
+      "unit": "ms",
+      "priority": "high",
+      "description": "API response time"
+    },
+    "uptime_percent": {
+      "target_value": 99.9,
+      "tolerance": 0.001,
+      "unit": "%",
+      "priority": "critical",
+      "description": "Service availability"
+    },
+    "mttr_minutes": {
+      "target_value": 15.0,
+      "tolerance": 0.2,
+      "unit": "minutes",
+      "priority": "high",
+      "description": "Mean Time To Recovery"
+    },
+    "error_rate_percent": {
+      "target_value": 0.1,
+      "tolerance": 0.5,
+      "unit": "%",
+      "priority": "high",
+      "description": "Error rate threshold"
+    },
+    "cpu_utilization_percent": {
+      "target_value": 70.0,
+      "tolerance": 0.15,
+      "unit": "%",
+      "priority": "medium",
+      "description": "CPU utilization target"
+    },
+    "memory_utilization_percent": {
+      "target_value": 75.0,
+      "tolerance": 0.15,
+      "unit": "%",
+      "priority": "medium",
+      "description": "Memory utilization target"
+    },
+    "auto_recovery_success_rate": {
+      "target_value": 95.0,
+      "tolerance": 0.05,
+      "unit": "%",
+      "priority": "high",
+      "description": "Auto-recovery success rate"
+    }
+  }
+}

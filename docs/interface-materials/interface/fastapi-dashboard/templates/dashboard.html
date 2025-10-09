@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Platform ISO - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .navbar-menu a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .navbar-menu a:hover {
+            color: #1e3c72;
+        }
+
+        .navbar-menu a.active {
+            color: #1e3c72;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 2px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            color: #718096;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card .value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        .stat-card.success .value { color: #48bb78; }
+        .stat-card.warning .value { color: #ed8936; }
+        .stat-card.danger .value { color: #e53e3e; }
+
+        /* Services Grid */
+        .services-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.healthy {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-badge.unhealthy {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .status-badge.unknown {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .service-url {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .service-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .metric {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .action-btn {
+            padding: 20px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            color: #2d3748;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: #1e3c72;
+            color: white;
+        }
+
+        .action-btn .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Refresh button */
+        .refresh-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">🤖 AI Platform ISO</div>
+        <ul class="navbar-menu">
+            <li><a href="/" class="active">Dashboard</a></li>
+            <li><a href="/tools">Tools</a></li>
+            <li><a href="/monitoring">Monitoring</a></li>
+            <li><a href="http://localhost:3000" target="_blank">Grafana</a></li>
+            <li><a href="http://localhost:9090" target="_blank">Prometheus</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 Platform Dashboard</h1>
+            <p>Real-time monitoring and management of AI Platform ISO</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card success">
+                <h3>Total Services</h3>
+                <div class="value" id="total-services">-</div>
+                <div class="label">Platform Components</div>
+            </div>
+            <div class="stat-card success">
+                <h3>Healthy Services</h3>
+                <div class="value" id="healthy-services">-</div>
+                <div class="label">Operational</div>
+            </div>
+            <div class="stat-card danger">
+                <h3>Issues</h3>
+                <div class="value" id="unhealthy-services">-</div>
+                <div class="label">Need Attention</div>
+            </div>
+            <div class="stat-card">
+                <h3>Uptime</h3>
+                <div class="value" id="uptime">99.9%</div>
+                <div class="label">Last 30 days</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <h2 class="section-title">⚡ Quick Actions</h2>
+        <div class="quick-actions">
+            <a href="/tools" class="action-btn">
+                <div class="icon">🔧</div>
+                <div>Run Analysis Tools</div>
+            </a>
+            <a href="/monitoring" class="action-btn">
+                <div class="icon">📊</div>
+                <div>View Metrics</div>
+            </a>
+            <a href="http://localhost:3000" target="_blank" class="action-btn">
+                <div class="icon">📈</div>
+                <div>Open Grafana</div>
+            </a>
+            <a href="http://localhost:9090" target="_blank" class="action-btn">
+                <div class="icon">🔍</div>
+                <div>Open Prometheus</div>
+            </a>
+        </div>
+
+        <!-- Services Section -->
+        <h2 class="section-title">🚀 Platform Services</h2>
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading services status...</p>
+        </div>
+        <div class="services-grid" id="services-grid" style="display: none;"></div>
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn" onclick="loadData()" title="Refresh">🔄</button>
+
+    <script>
+        let refreshInterval;
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            // Auto-refresh every 30 seconds
+            refreshInterval = setInterval(loadData, 30000);
+        });
+
+        async function loadData() {
+            try {
+                const response = await fetch('/api/services/status');
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('total-services').textContent = data.total || 0;
+                document.getElementById('healthy-services').textContent = data.healthy || 0;
+                document.getElementById('unhealthy-services').textContent = data.unhealthy || 0;
+
+                // Render services
+                renderServices(data.services);
+
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('services-grid').style.display = 'grid';
+
+            } catch (error) {
+                console.error('Failed to load data:', error);
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: #fed7d7;">Failed to load services status</p>
+                    <p style="font-size: 14px; opacity: 0.8;">Please ensure all services are running</p>
+                `;
+            }
+        }
+
+        function renderServices(services) {
+            const grid = document.getElementById('services-grid');
+            grid.innerHTML = '';
+
+            const serviceGroups = {
+                'AI Office Infrastructure': [
+                    'analytics_specialist',
+                    'mio_manager',
+                    'ai_orchestrator'
+                ],
+                'Intelligent Core': [
+                    'workflow_intelligence',
+                    'community_intelligence',
+                    'collective',
+                    'predictive',
+                    'ai_foundation'
+                ],
+                'Observability': [
+                    'prometheus',
+                    'grafana',
+                    'alertmanager'
+                ]
+            };
+
+            for (const [groupName, serviceNames] of Object.entries(serviceGroups)) {
+                // Add group header
+                const groupHeader = document.createElement('div');
+                groupHeader.style.gridColumn = '1 / -1';
+                groupHeader.style.color = 'white';
+                groupHeader.style.fontSize = '20px';
+                groupHeader.style.fontWeight = '600';
+                groupHeader.style.marginTop = '20px';
+                groupHeader.style.marginBottom = '10px';
+                groupHeader.textContent = groupName;
+                grid.appendChild(groupHeader);
+
+                // Add services in group
+                for (const serviceName of serviceNames) {
+                    const service = services[serviceName];
+                    if (!service) continue;
+
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+
+                    const statusClass = service.status === 'healthy' ? 'healthy' :
+                                      service.status === 'unreachable' ? 'unknown' : 'unhealthy';
+
+                    card.innerHTML = `
+                        <div class="service-header">
+                            <div class="service-name">${formatServiceName(serviceName)}</div>
+                            <div class="status-badge ${statusClass}">${service.status}</div>
+                        </div>
+                        <div class="service-url">${service.url}</div>
+                        ${service.response_time_ms ? `
+                            <div class="service-metrics">
+                                <div class="metric">
+                                    <div class="metric-label">Response Time</div>
+                                    <div class="metric-value">${Math.round(service.response_time_ms)}ms</div>
+                                </div>
+                                ${service.data?.version ? `
+                                    <div class="metric">
+                                        <div class="metric-label">Version</div>
+                                        <div class="metric-value">${service.data.version}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                        ${service.error ? `
+                            <div style="color: #e53e3e; font-size: 12px; margin-top: 10px;">
+                                Error: ${service.error}
+                            </div>
+                        ` : ''}
+                    `;
+
+                    grid.appendChild(card);
+                }
+            }
+        }
+
+        function formatServiceName(name) {
+            return name
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        }
+    </script>
+</body>
+</html>

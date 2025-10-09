@@ -1,0 +1,161 @@
+graph TB
+    subgraph "PostgreSQL: bcm_platform"
+        subgraph "Shared Schemas (public)"
+            AUDIT[audit_logs<br/>━━━━━━━━━━━<br/>All DML operations<br/>User context<br/>Change tracking]
+
+            CHANGE[change_history<br/>━━━━━━━━━━━<br/>Field-level changes<br/>DeepDiff-based<br/>Audit trail]
+
+            TENANT[tenant_config<br/>━━━━━━━━━━━<br/>Tenant metadata<br/>Configuration<br/>Subscription tier]
+        end
+
+        subgraph "BIA Schema"
+            BIA_P[bia_processes]
+            BIA_A[bia_assessments]
+            BIA_R[bia_resources]
+            BIA_D[bia_dependencies]
+        end
+
+        subgraph "Risk Schema"
+            RISK_R[risks]
+            RISK_A[risk_assessments]
+            RISK_T[risk_treatments]
+            RISK_C[risk_controls]
+            RISK_M[risk_monitoring]
+        end
+
+        subgraph "Compliance Schema"
+            COMP_A[audits]
+            COMP_E[audit_evidence]
+            COMP_F[audit_findings]
+            COMP_N[nonconformities]
+            COMP_C[corrective_actions]
+            COMP_I[improvements]
+        end
+
+        subgraph "Governance Schema"
+            GOV_P[governance_policies]
+            GOV_S[governance_stakeholders]
+            GOV_R[governance_responsibilities]
+            GOV_C[governance_context]
+            GOV_D[governance_decisions]
+        end
+
+        subgraph "Documents Schema"
+            DOC_D[documents]
+            DOC_V[document_versions]
+            DOC_A[document_approvals]
+            DOC_AC[document_access]
+            DOC_T[document_templates]
+        end
+
+        subgraph "Validation Schema"
+            VAL_K[validation_kpis]
+            VAL_M[validation_metrics]
+            VAL_A[validation_alerts]
+            VAL_T[validation_thresholds]
+        end
+
+        subgraph "Planning Schema"
+            PLAN_S[strategies]
+            PLAN_R[strategy_resources]
+            PLAN_C[cost_benefit_analyses]
+        end
+
+        subgraph "Plans Schema"
+            PLANS_P[plans]
+            PLANS_PR[procedures]
+            PLANS_R[plan_resources]
+            PLANS_E[plan_exercises]
+        end
+
+        subgraph "Response Schema"
+            RESP_I[incidents]
+            RESP_T[incident_timeline]
+            RESP_TM[incident_teams]
+            RESP_E[incident_escalations]
+            RESP_L[lessons_learned]
+        end
+
+        subgraph "Learning Schema"
+            LEARN_P[training_programs]
+            LEARN_E[training_enrollments]
+            LEARN_A[training_assessments]
+            LEARN_C[training_certifications]
+        end
+
+        subgraph "Workflow Schema"
+            WF_I[workflow_instances]
+            WF_S[workflow_states]
+            WF_T[workflow_transitions]
+            WF_C[case_library]
+        end
+
+        subgraph "Community Schema"
+            COMM_CONT[contributions]
+            COMM_REV[peer_reviews]
+            COMM_REP[reputation_scores]
+            COMM_CASE[case_library<br/>(shared)]
+        end
+
+        subgraph "Collective Schema"
+            COLL_A[collective_agents]
+            COLL_S[stuck_detection_signals]
+            COLL_E[anonymized_experiences]
+        end
+
+        subgraph "Predictive Schema"
+            PRED_P[predictions]
+            PRED_J[journey_timelines]
+            PRED_R[proactive_recommendations]
+            PRED_D[expert_demand_forecasts]
+        end
+
+        subgraph "Simulation Schema"
+            SIM_S[simulations]
+            SIM_SC[simulation_scenarios]
+            SIM_R[simulation_results]
+            SIM_DT[digital_twin_organizations]
+        end
+    end
+
+    subgraph "Redis Cache"
+        REDIS_WM[Working Memory<br/>TTL: 1 hour<br/>━━━━━━━━━━━<br/>AI Orchestration state]
+
+        REDIS_WF[Workflow State Cache<br/>TTL: 24 hours<br/>━━━━━━━━━━━<br/>Active workflows]
+
+        REDIS_SESS[Session Cache<br/>TTL: 8 hours<br/>━━━━━━━━━━━<br/>User sessions]
+
+        REDIS_RATE[Rate Limit Counters<br/>TTL: Variable<br/>━━━━━━━━━━━<br/>API rate limiting]
+    end
+
+    subgraph "Qdrant Vector DB"
+        QDRANT_KB[knowledge_base_embeddings<br/>Dimension: 768<br/>━━━━━━━━━━━<br/>Domain knowledge vectors]
+
+        QDRANT_CASE[case_library_vectors<br/>Dimension: 768<br/>━━━━━━━━━━━<br/>Workflow case embeddings]
+
+        QDRANT_DOC[domain_knowledge_vectors<br/>Dimension: 768<br/>━━━━━━━━━━━<br/>ISO 22301 documentation]
+    end
+
+    %% Shared table relationships
+    BIA_P -.logs to.-> AUDIT
+    RISK_R -.logs to.-> AUDIT
+    COMP_A -.logs to.-> AUDIT
+
+    BIA_P -.tracks changes.-> CHANGE
+    RISK_R -.tracks changes.-> CHANGE
+
+    %% Cross-schema relationships (via application)
+    WF_C -.syncs with.-> COMM_CASE
+
+    %% Cache relationships
+    WF_I -.caches in.-> REDIS_WF
+
+    %% Vector relationships
+    DOC_D -.embeds to.-> QDRANT_DOC
+    WF_C -.embeds to.-> QDRANT_CASE
+
+    style AUDIT fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style WF_C fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style COMM_CASE fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style REDIS_WM fill:#d1ecf1,stroke:#17a2b8,stroke-width:2px
+    style QDRANT_KB fill:#e7f3ff,stroke:#0088cc,stroke-width:2px

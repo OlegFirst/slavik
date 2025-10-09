@@ -1,0 +1,49 @@
+graph TB
+    Request[User Request] --> Intent[Intent Detection]
+    
+    Intent --> Route{Request Type}
+    
+    Route -->|Simple Query| RAG[RAG Pipeline]
+    Route -->|Complex Analysis| Multi[Multi-Agent]
+    Route -->|Workflow| BPMN[BPMN Engine]
+    
+    RAG --> Qdrant[(Qdrant)]
+    Qdrant --> Retrieve[Retrieve Documents]
+    Retrieve --> Rank[Rerank Results]
+    Rank --> LLM1[LLM Context]
+    LLM1 --> Answer1[Generate Answer]
+    
+    Multi --> Specialist1[Domain Expert 1]
+    Multi --> Specialist2[Domain Expert 2]
+    Multi --> Specialist3[Domain Expert 3]
+    
+    Specialist1 --> Analysis1[Risk Analysis]
+    Specialist2 --> Analysis2[Compliance Check]
+    Specialist3 --> Analysis3[BIA Insights]
+    
+    Analysis1 --> Synthesize[Synthesize Results]
+    Analysis2 --> Synthesize
+    Analysis3 --> Synthesize
+    
+    Synthesize --> LLM2[LLM Synthesis]
+    LLM2 --> Answer2[Comprehensive Answer]
+    
+    BPMN --> WF[Workflow Engine]
+    WF --> Task1[Execute Task 1]
+    Task1 --> Task2[Execute Task 2]
+    Task2 --> Task3[Execute Task 3]
+    Task3 --> Complete[Workflow Complete]
+    Complete --> Answer3[Workflow Result]
+    
+    Answer1 --> Response[Build Response]
+    Answer2 --> Response
+    Answer3 --> Response
+    
+    Response --> Cache[Cache Result]
+    Cache --> User[Return to User]
+    
+    style Intent fill:#2196F3
+    style LLM1 fill:#FF9800
+    style LLM2 fill:#FF9800
+    style Qdrant fill:#9C27B0
+    style User fill:#4CAF50

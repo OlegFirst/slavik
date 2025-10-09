@@ -1,0 +1,34 @@
+graph TB
+    subgraph "Total API Endpoints: 332+"
+        subgraph "Intelligent Core: 260+"
+            AI_FOUND_E[AI Foundation<br/>108 endpoints<br/>━━━━━━━━━━━<br/>/api/v1/llm/*<br/>/api/v1/rag/*<br/>/api/v1/learning/*]
+
+            AI_ORCH_E[AI Orchestration<br/>75 endpoints<br/>━━━━━━━━━━━<br/>/api/v1/ai/*<br/>/api/v1/platform/*<br/>/api/v1/scenario/*]
+
+            WF_INT_E[Workflow Intelligence<br/>11+ endpoints<br/>━━━━━━━━━━━<br/>/api/v1/workflow/*<br/>/cases/*<br/>/analyze<br/>/recommend]
+
+            EVENT_INT_E[Event Intelligence<br/>17 endpoints<br/>━━━━━━━━━━━<br/>/discovery/*<br/>/patterns/*]
+
+            COMM_INT_E[Community Intelligence<br/>37 endpoints<br/>━━━━━━━━━━━<br/>/api/v1/community/*]
+
+            OTHERS_E[Other IC Services<br/>12+ endpoints<br/>━━━━━━━━━━━<br/>Various specialized APIs]
+        end
+
+        subgraph "Platform Services: 72+"
+            CORE_BCM_E[Core BCM Services<br/>6 services × ~30 endpoints<br/>━━━━━━━━━━━<br/>BIA, Risk, Compliance<br/>Governance, Documents, Validation]
+
+            PLANNING_E[Planning & Execution<br/>3 services × ~25 endpoints<br/>━━━━━━━━━━━<br/>Planning, Plans, Response]
+
+            INTEL_E[Intelligence Services<br/>3 services × ~30 endpoints<br/>━━━━━━━━━━━<br/>Learning, Living Docs, Simulation]
+        end
+
+        subgraph "Common Endpoints (All Services)"
+            HEALTH_E[Health & Monitoring<br/>━━━━━━━━━━━<br/>GET /health<br/>GET /metrics<br/>GET /ready]
+
+            DOCS_E[Documentation<br/>━━━━━━━━━━━<br/>GET /<br/>GET /docs<br/>GET /redoc<br/>GET /openapi.json]
+        end
+    end
+
+    style AI_FOUND_E fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style AI_ORCH_E fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style CORE_BCM_E fill:#d4edda,stroke:#28a745,stroke-width:2px

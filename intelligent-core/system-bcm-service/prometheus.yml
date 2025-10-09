@@ -1,0 +1,44 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'system-bcm-monitor'
+
+scrape_configs:
+  # System BCM Service metrics
+  - job_name: 'system-bcm'
+    static_configs:
+      - targets: ['system-bcm:8050']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Platform services (если они есть)
+  - job_name: 'platform-services'
+    static_configs:
+      - targets:
+          - 'api-gateway:8000'
+          - 'workflow-intelligence:8001'
+          - 'rag-service:8002'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+
+  # Redis metrics (если exporter установлен)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 15s
+
+  # PostgreSQL metrics (если exporter установлен)
+  - job_name: 'postgresql'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 15s
+
+# Alerting rules
+rule_files:
+  - 'alerts.yml'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']

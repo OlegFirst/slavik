@@ -10,6 +10,21 @@
 
 This directory contains the complete BCM knowledge library with **320+ business flows** from all major sources.
 
+### ⭐ NEW: Comprehensive Platform Documentation
+
+In addition to the 320+ business flows, we now have **comprehensive platform documentation** (570+ usage scenarios, AI capabilities, infrastructure patterns) available at:
+
+**Location**: `/doc-project/comprehensive-platform-docs/`
+
+**Contents**:
+- **AI Capabilities** (4 docs): LLM, RAG, ML, Self-Learning, Orchestration, Specialists, Predictive
+- **Infrastructure Patterns** (1 doc): 18 patterns (Event Bus, Saga, Circuit Breaker, Deployment)
+- **Business Scenarios** (2 docs): 10 detailed end-to-end examples + 570+ usage scenarios
+
+**For RAG Integration**: Use `load_comprehensive_docs.py` script to load all documentation into Qdrant.
+
+See: [MASTER_INDEX.md](/doc-project/comprehensive-platform-docs/MASTER_INDEX.md) for full details.
+
 ### Files in This Directory:
 
 **1. COMPLETE_KNOWLEDGE_LIBRARY_CATALOG.md** (31 KB)

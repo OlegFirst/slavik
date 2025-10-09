@@ -1,0 +1,72 @@
+sequenceDiagram
+    participant OrgA as Organization A<br/>(Stuck)
+    participant Collective as Collective<br/>8032
+    participant Comm as Community Intelligence<br/>8030
+    participant AI_Found as AI Foundation<br/>8040
+    participant DB as PostgreSQL
+    participant EventBus as RabbitMQ
+
+    Note over OrgA: No progress for 7+ days<br/>5 validation failures<br/>AI confidence: 0.55
+
+    OrgA->>EventBus: workflow.no_progress
+    OrgA->>EventBus: validation.failure (5x)
+
+    EventBus-->>Collective: SUBSCRIBE events
+
+    Note over Collective: Stuck Detection Engine<br/>Threshold: 4+ signals
+
+    Collective->>Collective: Calculate stuck score:<br/>- Days without progress: 7<br/>- Validation failures: 5<br/>- Low confidence: 0.55<br/>- Frustration indicators: 2<br/><br/>Score: 4.5 (STUCK)
+
+    Collective->>DB: INSERT stuck_detection_signals
+    Collective->>EventBus: PUBLISH collective.org.stuck_detected
+
+    Collective->>Comm: GET /api/v1/community/cases<br/>{industry, size, challenge_type}
+
+    Note over Comm: Find similar organizations
+
+    Comm->>DB: Query:<br/>SELECT * FROM case_library<br/>WHERE industry = 'Healthcare'<br/>  AND size = '1000-5000'<br/>  AND challenge = 'BIA supplier mapping'<br/>  AND status = 'COMPLETED'
+
+    DB->>Comm: 7 matching organizations
+    Comm->>Collective: 7 successful cases
+
+    Note over Collective: K-Anonymity Check<br/>Minimum: 5 orgs<br/>Found: 7 orgs ✓
+
+    Collective->>Collective: Anonymization (Layer 1):<br/>- Remove org names<br/>- Remove specific geography<br/>- Remove outliers<br/>- Remove unique identifiers
+
+    Collective->>Collective: Aggregation (Layer 2):<br/>- Common approaches: 5/7 used dependency mapping<br/>- Avg timeline: 45 days<br/>- Success factors: Tier 1 suppliers first<br/>- Common tools: CMDB integration
+
+    Collective->>Collective: Privacy Risk Calculation:<br/>Re-identification risk: 0.12 (LOW)<br/>K-anonymity: 5<br/>Generalization level: 3
+
+    Note over Collective: Create Collective Agent<br/>Expiration: 7 days
+
+    Collective->>AI_Found: POST /api/v1/llm/route<br/>{create_agent_personality}
+
+    AI_Found->>AI_Found: Generate agent with Claude:<br/>- Temperature: 0.3<br/>- Persona: Collective wisdom<br/>- Knowledge: Aggregated experiences<br/>- Constraints: Privacy-first
+
+    AI_Found->>Collective: Agent LLM config
+
+    Collective->>DB: INSERT collective_agents<br/>{id, experiences, expires_at}
+    Collective->>DB: INSERT anonymized_experiences<br/>{agent_id, aggregated_data}
+
+    Collective->>EventBus: PUBLISH collective.agent.created
+
+    Collective->>OrgA: Agent ready:<br/>{agent_id, expiration}
+
+    Note over OrgA: Chat with Collective Agent
+
+    OrgA->>Collective: GET /api/v1/collective-agents/{id}/chat<br/>"How did others solve supplier mapping?"
+
+    Collective->>AI_Found: LLM query with agent context
+    AI_Found->>AI_Found: Generate response:<br/>"Organizations that solved this challenge<br/>typically started with Tier 1 suppliers.<br/>5/7 used dependency mapping tools.<br/>Average completion: 45 days.<br/><br/>Common approach:<br/>1. Identify critical suppliers<br/>2. Map dependencies<br/>3. Assess impact tiers<br/>4. Use CMDB integration"
+
+    AI_Found->>Collective: Agent response
+    Collective->>OrgA: Anonymous wisdom
+
+    Note over OrgA: Problem solved!<br/>Progress resumed
+
+    OrgA->>EventBus: workflow.progress.resumed
+
+    Note over Collective: Agent Lifecycle<br/>Day 7: Auto-expire
+
+    Collective->>DB: UPDATE collective_agents<br/>SET expired = true
+    Collective->>DB: DELETE anonymized_experiences

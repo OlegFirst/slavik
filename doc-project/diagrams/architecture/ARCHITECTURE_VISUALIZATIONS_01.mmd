@@ -1,0 +1,169 @@
+graph TB
+    subgraph "User Layer"
+        UI[Web Dashboard<br/>Port 3001]
+        API_GW[API Gateway<br/>Port 8000]
+    end
+
+    subgraph "Intelligent Core - The Brain"
+        subgraph "Foundation Layer"
+            AI_FOUND[AI Foundation<br/>Port 8040<br/>LLM/RAG/ML]
+            SHARED[Shared Utilities<br/>EventBus/Clients]
+        end
+
+        subgraph "Intelligence & Orchestration"
+            WF_INT[Workflow Intelligence<br/>Port 8037<br/>BPMN Engine]
+            AI_ORCH[AI Orchestration<br/>Port 8030<br/>Decision Brain]
+            COORD[Coordination Center<br/>Port 8034<br/>Intent→API]
+            WF_ENG[Workflow Engine<br/>Port 8036<br/>BPMN 2.0]
+            AI_OPT[AI Workflow Optimizer<br/>Port 8038<br/>ML Optimization]
+            EVENT_INT[Event Intelligence<br/>Port 8039<br/>Auto-Discovery]
+        end
+
+        subgraph "Domain Expertise"
+            EXPERT[Expertise Center<br/>Port 8035<br/>22 AI Specialists]
+            COMM_INT[Community Intelligence<br/>Port 8030<br/>Peer Review]
+            COLLECTIVE[Collective<br/>Port 8032<br/>Anonymous Collab]
+        end
+
+        subgraph "Predictive Layer"
+            PREDICT[Predictive Service<br/>Port 8031<br/>Journey Prediction]
+        end
+    end
+
+    subgraph "Platform Services - BCM Core"
+        subgraph "Core BCM Services"
+            BIA[BIA Service<br/>Port 8012]
+            RISK[Risk Service<br/>Port 8040]
+            COMP[Compliance Service<br/>Port 8014]
+            GOV[Governance Service<br/>Port 8013]
+            DOC[Documents Service<br/>Port 8024]
+            VAL[Validation Service<br/>Port 8022]
+        end
+
+        subgraph "Planning & Execution"
+            PLAN[Planning Service<br/>Port 8011]
+            PLANS[Plans Service<br/>Port 8023]
+            RESP[Response Service<br/>Port 8041]
+        end
+
+        subgraph "Intelligence Services"
+            LEARN[Learning Service<br/>Port 8021]
+            LIVING[Living Docs<br/>Port 8034]
+            SIM[Simulation<br/>Port 8031+]
+        end
+
+        subgraph "Coordination"
+            BCM_COORD[BCM Coordination<br/>Port 8070]
+        end
+    end
+
+    subgraph "Infrastructure Layer"
+        subgraph "Databases"
+            PG[(PostgreSQL<br/>Port 5432<br/>bcm_platform)]
+            REDIS[(Redis<br/>Port 6379<br/>Cache)]
+            QDRANT[(Qdrant<br/>Port 6333<br/>Vector DB)]
+        end
+
+        subgraph "Message Queue"
+            RABBIT[RabbitMQ<br/>Port 5672<br/>EventBus Backend]
+        end
+
+        subgraph "Observability"
+            PROM[Prometheus<br/>Port 9090]
+            GRAF[Grafana<br/>Port 3000]
+            LOKI[Loki<br/>Logs]
+        end
+
+        subgraph "Gateway & Auth"
+            SEC_GW[Security Gateway<br/>Port 8888]
+            AUTH[Auth Service<br/>JWT/OAuth]
+        end
+    end
+
+    %% User to System
+    UI --> API_GW
+    API_GW --> AI_ORCH
+
+    %% Foundation Dependencies
+    AI_ORCH --> AI_FOUND
+    WF_INT --> AI_FOUND
+    AI_OPT --> AI_FOUND
+    EVENT_INT --> AI_FOUND
+    EXPERT --> AI_FOUND
+    COMM_INT --> AI_FOUND
+    COLLECTIVE --> AI_FOUND
+    PREDICT --> AI_FOUND
+
+    %% Orchestration Flow
+    AI_ORCH --> COORD
+    COORD --> WF_INT
+    WF_INT --> WF_ENG
+    AI_ORCH -.monitors.-> EVENT_INT
+
+    %% Intelligence Flow
+    WF_INT --> AI_OPT
+    AI_OPT --> EXPERT
+    WF_INT --> COMM_INT
+    COMM_INT --> COLLECTIVE
+    WF_INT --> PREDICT
+
+    %% Platform Services Integration
+    AI_ORCH --> BCM_COORD
+    BCM_COORD --> BIA
+    BCM_COORD --> RISK
+    BCM_COORD --> COMP
+    BCM_COORD --> GOV
+    BCM_COORD --> DOC
+    BCM_COORD --> VAL
+    BCM_COORD --> PLAN
+    BCM_COORD --> PLANS
+    BCM_COORD --> RESP
+    BCM_COORD --> LEARN
+    BCM_COORD --> LIVING
+    BCM_COORD --> SIM
+
+    %% All Services to Infrastructure
+    AI_FOUND -.-> PG
+    WF_INT -.-> PG
+    EXPERT -.-> QDRANT
+    DOC -.-> QDRANT
+
+    AI_ORCH -.-> REDIS
+    COORD -.-> REDIS
+
+    BIA -.-> PG
+    RISK -.-> PG
+    COMP -.-> PG
+    GOV -.-> PG
+    DOC -.-> PG
+    VAL -.-> PG
+    PLAN -.-> PG
+    PLANS -.-> PG
+    RESP -.-> PG
+    LEARN -.-> PG
+
+    %% EventBus
+    SHARED -.-> RABBIT
+    AI_ORCH -.-> RABBIT
+    WF_INT -.-> RABBIT
+    EVENT_INT -.-> RABBIT
+    BIA -.-> RABBIT
+    RISK -.-> RABBIT
+
+    %% Monitoring
+    AI_ORCH -.metrics.-> PROM
+    WF_INT -.metrics.-> PROM
+    BIA -.metrics.-> PROM
+    PROM --> GRAF
+
+    %% Security
+    API_GW --> SEC_GW
+    SEC_GW --> AUTH
+
+    style AI_FOUND fill:#e1f5ff
+    style AI_ORCH fill:#fff3cd
+    style WF_INT fill:#d4edda
+    style EXPERT fill:#cce5ff
+    style PG fill:#f8d7da
+    style REDIS fill:#d1ecf1
+    style RABBIT fill:#d6d8db

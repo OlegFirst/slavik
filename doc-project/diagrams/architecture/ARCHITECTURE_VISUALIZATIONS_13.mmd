@@ -1,0 +1,66 @@
+graph LR
+    subgraph "Intelligent Core Services"
+        AI_FOUND_DB[AI Foundation]
+        WF_INT_DB[Workflow Intelligence]
+        AI_OPT_DB[AI Optimizer]
+        EVENT_INT_DB[Event Intelligence]
+        EXPERT_DB[Expertise Center]
+        COMM_INT_DB[Community Intelligence]
+        COLLECTIVE_DB[Collective]
+        PREDICT_DB[Predictive]
+    end
+
+    subgraph "Platform Services"
+        BIA_DB[BIA Service]
+        RISK_DB[Risk Service]
+        COMP_DB[Compliance Service]
+        GOV_DB[Governance Service]
+        DOC_DB[Documents Service]
+        VAL_DB[Validation Service]
+        PLAN_DB[Planning Service]
+        PLANS_DB[Plans Service]
+        RESP_DB[Response Service]
+        LEARN_DB[Learning Service]
+    end
+
+    subgraph "Databases"
+        PG[(PostgreSQL<br/>bcm_platform)]
+        REDIS[(Redis)]
+        QDRANT[(Qdrant)]
+    end
+
+    %% PostgreSQL connections
+    AI_FOUND_DB -->|Working Memory| PG
+    WF_INT_DB -->|Workflows, Cases| PG
+    AI_OPT_DB -->|ML Models, Executions| PG
+    EVENT_INT_DB -->|Patterns, Registry| PG
+    COMM_INT_DB -->|Contributions, Reviews| PG
+    COLLECTIVE_DB -->|Agents, Signals| PG
+    PREDICT_DB -->|Predictions, Timelines| PG
+
+    BIA_DB -->|bia schema| PG
+    RISK_DB -->|risk schema| PG
+    COMP_DB -->|compliance schema| PG
+    GOV_DB -->|governance schema| PG
+    DOC_DB -->|documents schema| PG
+    VAL_DB -->|validation schema| PG
+    PLAN_DB -->|planning schema| PG
+    PLANS_DB -->|plans schema| PG
+    RESP_DB -->|response schema| PG
+    LEARN_DB -->|learning schema| PG
+
+    %% Redis connections
+    AI_FOUND_DB -.cache.-> REDIS
+    WF_INT_DB -.cache.-> REDIS
+    BIA_DB -.cache.-> REDIS
+    RISK_DB -.cache.-> REDIS
+
+    %% Qdrant connections
+    AI_FOUND_DB -.vectors.-> QDRANT
+    EXPERT_DB -.vectors.-> QDRANT
+    DOC_DB -.vectors.-> QDRANT
+    LEARN_DB -.vectors.-> QDRANT
+
+    style PG fill:#f8d7da,stroke:#dc3545,stroke-width:3px
+    style REDIS fill:#d1ecf1,stroke:#17a2b8,stroke-width:3px
+    style QDRANT fill:#e7f3ff,stroke:#0088cc,stroke-width:3px

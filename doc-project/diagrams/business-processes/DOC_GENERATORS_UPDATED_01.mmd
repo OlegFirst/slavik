@@ -1,0 +1,22 @@
+graph TD
+    A[Project Agent CLI] --> B[Architecture Module]
+    A --> C[Test Generator Module]
+    A --> D[Security Module]
+    A --> E[Quality Module]
+
+    B --> F[/tools/analyzers/module_scanner.py]
+    B --> G[/tools/analyzers/dependency_validator.py]
+    B --> H[/tools/analyzers/api_mapper.py]
+    B --> I[/tools/analyzers/business_logic_mapper.py]
+
+    C --> J[AST Analyzer]
+    C --> K[Test Template Generator]
+
+    F --> L[Module Reports]
+    G --> M[Dependency Reports]
+    H --> N[API Map]
+    I --> O[Business Logic Map]
+
+    C --> P[Generated Tests]
+    D --> Q[Security Reports]
+    E --> R[Quality Reports]

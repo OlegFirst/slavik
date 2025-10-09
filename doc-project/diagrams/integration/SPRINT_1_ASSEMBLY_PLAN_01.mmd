@@ -1,0 +1,9 @@
+graph TD
+    A[Claude #3: Temporal] -->|Temporal Config| B[Claude #2: workflow_intelligence]
+    C[Claude #1: ai-foundation] -->|RAG/ML/LLM| B
+    C -->|RAG/ML/LLM| D[Claude #4: expertise-center]
+    C -->|RAG/ML/LLM| E[Claude #5: community_intelligence]
+    C -->|Qdrant Config| F[Claude #3: Infrastructure]
+    G[shared/] -->|Database/Cache/Auth| B
+    G -->|Database/Cache/Auth| D
+    G -->|Database/Cache/Auth| E

@@ -1,0 +1,67 @@
+graph TD
+    subgraph "Input Sources"
+        A1[Codebase Files]
+        A2[Running Services]
+        A3[API Map]
+    end
+
+    subgraph "Analyzers (Missing)"
+        B1[module_scanner.py]
+        B2[AST Analyzer]
+    end
+
+    subgraph "Doc Generators"
+        C1[ai_documentation_generator.py]
+        C2[documentation_generator.py]
+        C3[event_catalog_generator.py]
+        C4[api_docs_generator.py]
+        C5[prometheus_config_generator.py]
+        C6[test_generator.py]
+        C7[ui_blueprint_gen.py]
+    end
+
+    subgraph "Output Artifacts"
+        D1[README.md + API.md]
+        D2[ARCHITECTURE.md]
+        D3[EVENTS.md + EVENT_FLOW.md]
+        D4[API docs + Postman]
+        D5[prometheus.yml]
+        D6[Test files]
+        D7[UI Blueprints]
+    end
+
+    subgraph "AI Colleagues (Potential)"
+        E1[Living Docs Service]
+        E2[Documents Specialist]
+        E3[MIO Manager]
+        E4[AI Office Orchestrator]
+    end
+
+    A1 --> B1
+    A1 --> B2
+    A2 --> C4
+    A3 --> C5
+
+    B1 --> C1
+    B1 --> C2
+    B2 --> C6
+    B2 --> C7
+
+    A1 --> C3
+
+    C1 --> D1
+    C2 --> D1
+    C2 --> D2
+    C3 --> D3
+    C4 --> D4
+    C5 --> D5
+    C6 --> D6
+    C7 --> D7
+
+    E1 -.->|Может интегрировать| C1
+    E2 -.->|Может вызывать| C1
+    E2 -.->|Может вызывать| C2
+    E3 -.->|Может автоматизировать| C5
+    E3 -.->|Может автоматизировать| C3
+    E4 -.->|Может координировать| C1
+    E4 -.->|Может координировать| C3

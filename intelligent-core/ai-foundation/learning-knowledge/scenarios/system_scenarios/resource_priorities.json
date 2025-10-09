@@ -1,0 +1,588 @@
+{
+  "scenario_id": "system_resources_001",
+  "scenario_name": "Platform Resource Prioritization",
+  "level": "system",
+  "target": "AI-Platform-ISO",
+  "goal": "resource_optimization",
+  "description": "Resource allocation priorities to ensure critical services survive under contention",
+  "version": "1.0.0",
+  "created": "2025-10-09",
+  "priority": "critical",
+
+  "service_tiers": [
+    {
+      "tier": "tier_1_critical",
+      "description": "Essential for platform survival - must never fail",
+      "services": [
+        {
+          "service_name": "event-bus",
+          "criticality": "absolute",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "2_cores",
+              "maximum": "4_cores",
+              "shares": 2048,
+              "quota": "80%"
+            },
+            "memory": {
+              "minimum": "4GB",
+              "maximum": "8GB",
+              "oom_score_adj": -1000,
+              "swappiness": 0
+            },
+            "network": {
+              "bandwidth_minimum": "100Mbps",
+              "priority": "highest",
+              "qos_class": "expedited_forwarding"
+            },
+            "disk_io": {
+              "iops_minimum": 1000,
+              "priority": "realtime",
+              "cache_priority": "keep_hot"
+            }
+          },
+          "degradation_behavior": "never_degrade",
+          "under_contention": "throttle_all_lower_tiers"
+        },
+        {
+          "service_name": "api-gateway",
+          "criticality": "absolute",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "2_cores",
+              "maximum": "4_cores",
+              "shares": 2048,
+              "quota": "80%"
+            },
+            "memory": {
+              "minimum": "2GB",
+              "maximum": "4GB",
+              "oom_score_adj": -900,
+              "swappiness": 0
+            },
+            "network": {
+              "bandwidth_minimum": "100Mbps",
+              "priority": "highest",
+              "qos_class": "expedited_forwarding"
+            },
+            "disk_io": {
+              "iops_minimum": 500,
+              "priority": "high",
+              "cache_priority": "keep_hot"
+            }
+          },
+          "degradation_behavior": "enable_circuit_breakers",
+          "under_contention": "reduce_response_payload_size"
+        },
+        {
+          "service_name": "postgresql",
+          "criticality": "absolute",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "2_cores",
+              "maximum": "4_cores",
+              "shares": 2048,
+              "quota": "80%"
+            },
+            "memory": {
+              "minimum": "4GB",
+              "maximum": "8GB",
+              "oom_score_adj": -1000,
+              "swappiness": 0
+            },
+            "network": {
+              "bandwidth_minimum": "50Mbps",
+              "priority": "highest",
+              "qos_class": "expedited_forwarding"
+            },
+            "disk_io": {
+              "iops_minimum": 2000,
+              "priority": "realtime",
+              "cache_priority": "keep_hot"
+            }
+          },
+          "degradation_behavior": "never_degrade",
+          "under_contention": "kill_slow_queries"
+        },
+        {
+          "service_name": "workflow-intelligence",
+          "criticality": "absolute",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "1_core",
+              "maximum": "3_cores",
+              "shares": 1536,
+              "quota": "60%"
+            },
+            "memory": {
+              "minimum": "2GB",
+              "maximum": "4GB",
+              "oom_score_adj": -800,
+              "swappiness": 0
+            },
+            "network": {
+              "bandwidth_minimum": "50Mbps",
+              "priority": "high",
+              "qos_class": "assured_forwarding"
+            },
+            "disk_io": {
+              "iops_minimum": 500,
+              "priority": "high",
+              "cache_priority": "keep_warm"
+            }
+          },
+          "degradation_behavior": "queue_non_critical_workflows",
+          "under_contention": "pause_tier_3_workflows"
+        }
+      ],
+      "total_resource_reservation": {
+        "cpu": "50%_of_total",
+        "memory": "60%_of_total",
+        "network": "70%_of_bandwidth",
+        "disk_io": "60%_of_iops"
+      }
+    },
+    {
+      "tier": "tier_2_important",
+      "description": "Important for platform intelligence - degrade gracefully",
+      "services": [
+        {
+          "service_name": "rag-system",
+          "criticality": "important",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "1_core",
+              "maximum": "3_cores",
+              "shares": 1024,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "2GB",
+              "maximum": "6GB",
+              "oom_score_adj": 0,
+              "swappiness": 10
+            },
+            "network": {
+              "bandwidth_minimum": "20Mbps",
+              "priority": "medium",
+              "qos_class": "assured_forwarding"
+            },
+            "disk_io": {
+              "iops_minimum": 200,
+              "priority": "medium",
+              "cache_priority": "keep_warm"
+            }
+          },
+          "degradation_behavior": "switch_to_cached_embeddings",
+          "under_contention": [
+            "reduce_top_k_results",
+            "disable_reranking",
+            "use_smaller_llm_model"
+          ]
+        },
+        {
+          "service_name": "analytics-specialist",
+          "criticality": "important",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "500m",
+              "maximum": "2_cores",
+              "shares": 512,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "1GB",
+              "maximum": "3GB",
+              "oom_score_adj": 100,
+              "swappiness": 20
+            },
+            "network": {
+              "bandwidth_minimum": "10Mbps",
+              "priority": "medium",
+              "qos_class": "best_effort"
+            },
+            "disk_io": {
+              "iops_minimum": 100,
+              "priority": "medium",
+              "cache_priority": "evictable"
+            }
+          },
+          "degradation_behavior": "pause_non_urgent_analysis",
+          "under_contention": [
+            "stop_scenario_generation",
+            "pause_pattern_detection",
+            "queue_analysis_tasks"
+          ]
+        },
+        {
+          "service_name": "monitoring",
+          "criticality": "important",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "500m",
+              "maximum": "1_core",
+              "shares": 512,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "1GB",
+              "maximum": "2GB",
+              "oom_score_adj": 50,
+              "swappiness": 10
+            },
+            "network": {
+              "bandwidth_minimum": "10Mbps",
+              "priority": "medium",
+              "qos_class": "best_effort"
+            },
+            "disk_io": {
+              "iops_minimum": 100,
+              "priority": "medium",
+              "cache_priority": "keep_warm"
+            }
+          },
+          "degradation_behavior": "increase_scrape_interval",
+          "under_contention": [
+            "reduce_metrics_retention",
+            "sample_metrics_instead_of_full",
+            "disable_non_critical_dashboards"
+          ]
+        }
+      ],
+      "total_resource_reservation": {
+        "cpu": "30%_of_total",
+        "memory": "30%_of_total",
+        "network": "20%_of_bandwidth",
+        "disk_io": "25%_of_iops"
+      }
+    },
+    {
+      "tier": "tier_3_optional",
+      "description": "Nice to have - pause if needed",
+      "services": [
+        {
+          "service_name": "background-jobs",
+          "criticality": "optional",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "0",
+              "maximum": "1_core",
+              "shares": 256,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "256MB",
+              "maximum": "1GB",
+              "oom_score_adj": 500,
+              "swappiness": 60
+            },
+            "network": {
+              "bandwidth_minimum": "0",
+              "priority": "lowest",
+              "qos_class": "best_effort"
+            },
+            "disk_io": {
+              "iops_minimum": 0,
+              "priority": "idle",
+              "cache_priority": "evict_first"
+            }
+          },
+          "degradation_behavior": "pause_immediately",
+          "under_contention": [
+            "stop_all_background_tasks",
+            "queue_for_later",
+            "resume_when_resources_available"
+          ]
+        },
+        {
+          "service_name": "cleanup-tasks",
+          "criticality": "optional",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "0",
+              "maximum": "500m",
+              "shares": 128,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "128MB",
+              "maximum": "512MB",
+              "oom_score_adj": 600,
+              "swappiness": 80
+            },
+            "network": {
+              "bandwidth_minimum": "0",
+              "priority": "lowest",
+              "qos_class": "best_effort"
+            },
+            "disk_io": {
+              "iops_minimum": 0,
+              "priority": "idle",
+              "cache_priority": "evict_first"
+            }
+          },
+          "degradation_behavior": "pause_immediately",
+          "under_contention": "skip_until_off_peak"
+        },
+        {
+          "service_name": "reporting",
+          "criticality": "optional",
+          "resource_guarantees": {
+            "cpu": {
+              "minimum": "0",
+              "maximum": "1_core",
+              "shares": 256,
+              "quota": "best_effort"
+            },
+            "memory": {
+              "minimum": "256MB",
+              "maximum": "1GB",
+              "oom_score_adj": 400,
+              "swappiness": 40
+            },
+            "network": {
+              "bandwidth_minimum": "0",
+              "priority": "low",
+              "qos_class": "best_effort"
+            },
+            "disk_io": {
+              "iops_minimum": 0,
+              "priority": "low",
+              "cache_priority": "evictable"
+            }
+          },
+          "degradation_behavior": "queue_reports",
+          "under_contention": "generate_during_off_peak_hours"
+        }
+      ],
+      "total_resource_reservation": {
+        "cpu": "20%_of_total",
+        "memory": "10%_of_total",
+        "network": "10%_of_bandwidth",
+        "disk_io": "15%_of_iops"
+      }
+    }
+  ],
+
+  "resource_contention_policies": [
+    {
+      "contention_type": "cpu_saturation",
+      "detection": "cpu_usage_>90%_for_5min",
+      "response": [
+        {
+          "action": "throttle_tier_3",
+          "effect": "pause_background_jobs_and_cleanup",
+          "expected_relief": "10-20%_cpu"
+        },
+        {
+          "action": "throttle_tier_2",
+          "effect": "degrade_analytics_and_monitoring",
+          "expected_relief": "20-30%_cpu",
+          "trigger": "cpu_still_>85%_after_5min"
+        },
+        {
+          "action": "alert_critical",
+          "effect": "notify_oncall_for_scaling",
+          "trigger": "cpu_still_>80%_after_tier_2_throttle"
+        }
+      ]
+    },
+    {
+      "contention_type": "memory_pressure",
+      "detection": "memory_usage_>85%",
+      "response": [
+        {
+          "action": "clear_caches",
+          "effect": "free_embedding_and_query_caches",
+          "expected_relief": "5-10%_memory"
+        },
+        {
+          "action": "kill_tier_3_services",
+          "effect": "stop_background_jobs",
+          "expected_relief": "5-10%_memory"
+        },
+        {
+          "action": "degrade_tier_2_services",
+          "effect": "reduce_rag_cache_size",
+          "expected_relief": "10-15%_memory",
+          "trigger": "memory_still_>80%"
+        },
+        {
+          "action": "emergency_restart_tier_1",
+          "effect": "rolling_restart_critical_services",
+          "trigger": "memory_>95%_or_oom_imminent"
+        }
+      ]
+    },
+    {
+      "contention_type": "network_saturation",
+      "detection": "network_bandwidth_>90%",
+      "response": [
+        {
+          "action": "enable_qos",
+          "effect": "enforce_network_priorities",
+          "expected_relief": "traffic_shaping_active"
+        },
+        {
+          "action": "throttle_tier_3_network",
+          "effect": "rate_limit_background_traffic",
+          "expected_relief": "10-20%_bandwidth"
+        },
+        {
+          "action": "compress_responses",
+          "effect": "enable_gzip_compression",
+          "expected_relief": "30-50%_bandwidth"
+        }
+      ]
+    },
+    {
+      "contention_type": "disk_io_saturation",
+      "detection": "disk_iops_>90%_or_io_wait_>20%",
+      "response": [
+        {
+          "action": "pause_tier_3_disk_operations",
+          "effect": "stop_background_writes",
+          "expected_relief": "10-20%_iops"
+        },
+        {
+          "action": "enable_write_coalescing",
+          "effect": "batch_database_writes",
+          "expected_relief": "20-30%_iops"
+        },
+        {
+          "action": "enable_io_scheduler_priorities",
+          "effect": "prioritize_tier_1_io",
+          "expected_relief": "tier_1_latency_improvement"
+        }
+      ]
+    }
+  ],
+
+  "dynamic_resource_allocation": {
+    "enabled": true,
+    "adjustment_interval": "30s",
+    "strategies": [
+      {
+        "strategy": "predictive_scaling",
+        "description": "Predict resource needs based on historical patterns",
+        "inputs": [
+          "time_of_day",
+          "day_of_week",
+          "recent_usage_trend",
+          "scheduled_workflows"
+        ],
+        "actions": [
+          "pre_allocate_resources",
+          "warm_caches",
+          "scale_services_proactively"
+        ]
+      },
+      {
+        "strategy": "reactive_scaling",
+        "description": "React to current resource usage",
+        "thresholds": {
+          "scale_up": "usage_>75%_for_5min",
+          "scale_down": "usage_<40%_for_15min"
+        },
+        "actions": [
+          "adjust_cpu_shares",
+          "adjust_memory_limits",
+          "adjust_replica_count"
+        ]
+      },
+      {
+        "strategy": "workload_based",
+        "description": "Allocate based on active workload type",
+        "workload_profiles": {
+          "high_rag_usage": {
+            "increase": "rag_system_resources",
+            "decrease": "analytics_resources"
+          },
+          "high_workflow_execution": {
+            "increase": "workflow_intelligence_resources",
+            "decrease": "background_job_resources"
+          },
+          "maintenance_mode": {
+            "increase": "cleanup_and_background_resources",
+            "decrease": "user_facing_resources"
+          }
+        }
+      }
+    ]
+  },
+
+  "resource_monitoring": {
+    "metrics": [
+      {
+        "metric": "cpu_usage_per_service",
+        "collection_interval": "10s",
+        "alert_thresholds": {
+          "warning": "75%",
+          "critical": "90%"
+        }
+      },
+      {
+        "metric": "memory_usage_per_service",
+        "collection_interval": "10s",
+        "alert_thresholds": {
+          "warning": "80%",
+          "critical": "90%"
+        }
+      },
+      {
+        "metric": "network_bandwidth_per_service",
+        "collection_interval": "10s",
+        "alert_thresholds": {
+          "warning": "70%",
+          "critical": "85%"
+        }
+      },
+      {
+        "metric": "disk_io_per_service",
+        "collection_interval": "10s",
+        "alert_thresholds": {
+          "warning": "75%",
+          "critical": "90%"
+        }
+      },
+      {
+        "metric": "resource_contention_events",
+        "collection_interval": "1m",
+        "alert_thresholds": {
+          "warning": "5_events_per_hour",
+          "critical": "20_events_per_hour"
+        }
+      }
+    ],
+    "dashboards": [
+      "resource_allocation_overview",
+      "tier_performance_comparison",
+      "contention_event_timeline",
+      "efficiency_metrics"
+    ]
+  },
+
+  "learning_from_practice": {
+    "measurement_interval": "1h",
+    "metrics_to_track": [
+      "resource_efficiency_per_tier",
+      "contention_frequency",
+      "degradation_impact_on_users",
+      "tier_1_availability",
+      "resource_waste_percentage"
+    ],
+    "improvement_triggers": [
+      "tier_1_service_degraded",
+      "contention_events_>10_per_day",
+      "resource_waste_>30%",
+      "false_contention_alerts"
+    ],
+    "optimization_strategies": [
+      "adjust_tier_boundaries",
+      "refine_resource_guarantees",
+      "optimize_degradation_behavior",
+      "improve_contention_detection"
+    ],
+    "feedback_loop": "automatically_adjust_resource_allocations_based_on_usage_patterns"
+  }
+}

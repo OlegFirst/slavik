@@ -1,0 +1,108 @@
+graph TB
+    subgraph "Kubernetes Cluster"
+        subgraph "Namespace: infrastructure"
+            subgraph "StatefulSets"
+                PG_SS[postgresql-cluster<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>Storage: 100Gi PVC<br/>Service: postgres-svc:5432]
+
+                REDIS_SS[redis-cluster<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>Mode: Sentinel<br/>Service: redis-svc:6379]
+
+                RABBIT_SS[rabbitmq-cluster<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>Plugin: management<br/>Service: rabbitmq-svc:5672]
+
+                QDRANT_SS[qdrant-cluster<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>Storage: 50Gi PVC<br/>Service: qdrant-svc:6333]
+            end
+        end
+
+        subgraph "Namespace: intelligent-core"
+            subgraph "Deployments"
+                AI_FOUND_D[ai-foundation<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>CPU: 2000m, Mem: 4Gi<br/>Service: ai-foundation-svc:8040]
+
+                WF_INT_D[workflow-intelligence<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>CPU: 2000m, Mem: 4Gi<br/>Service: workflow-intelligence-svc:8037]
+
+                AI_ORCH_D[ai-orchestration<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>CPU: 1000m, Mem: 2Gi<br/>Service: ai-orchestration-svc:8030]
+
+                EXPERT_D[expertise-center<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>CPU: 1000m, Mem: 2Gi<br/>Service: expertise-center-svc:8035]
+
+                MORE_IC_D[+ 7 more IC deployments<br/>━━━━━━━━━━━<br/>Replicas: 1-2 each]
+            end
+
+            subgraph "Services (ClusterIP)"
+                IC_SVCS[All services expose:<br/>• Port for HTTP<br/>• /health endpoint<br/>• /metrics endpoint]
+            end
+        end
+
+        subgraph "Namespace: platform-services"
+            subgraph "Deployments"
+                BIA_D[bia-service<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>CPU: 500m, Mem: 1Gi<br/>Service: bia-svc:8012]
+
+                RISK_D[risk-service<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>CPU: 500m, Mem: 1Gi<br/>Service: risk-svc:8040]
+
+                MORE_PS_D[+ 10 more BCM deployments<br/>━━━━━━━━━━━<br/>Replicas: 1-2 each]
+            end
+        end
+
+        subgraph "Namespace: gateway"
+            subgraph "Ingress"
+                INGRESS[Nginx Ingress Controller<br/>━━━━━━━━━━━<br/>• TLS termination<br/>• Rate limiting<br/>• Path-based routing]
+            end
+
+            subgraph "API Gateway"
+                GW_D[api-gateway<br/>━━━━━━━━━━━<br/>Replicas: 3<br/>Service: api-gateway-svc:8000]
+            end
+        end
+
+        subgraph "Namespace: monitoring"
+            PROM_D[Prometheus<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>Storage: 50Gi PVC<br/>Retention: 30d]
+
+            GRAF_D[Grafana<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>Storage: 10Gi PVC<br/>Datasource: Prometheus]
+
+            LOKI_D[Loki<br/>━━━━━━━━━━━<br/>Replicas: 2<br/>Storage: 100Gi PVC<br/>Log aggregation]
+        end
+    end
+
+    subgraph "External"
+        USERS[Users / Clients]
+        DNS[DNS:<br/>api.bcm-platform.com]
+    end
+
+    %% External to Cluster
+    USERS --> DNS
+    DNS --> INGRESS
+
+    %% Ingress routing
+    INGRESS -->|/api/v1/ai/*| AI_FOUND_D
+    INGRESS -->|/api/v1/workflow/*| WF_INT_D
+    INGRESS -->|/api/v1/bia/*| BIA_D
+    INGRESS -->|/api/v1/risk/*| RISK_D
+
+    %% IC to Infrastructure
+    AI_FOUND_D --> PG_SS
+    AI_FOUND_D --> REDIS_SS
+    AI_FOUND_D --> QDRANT_SS
+
+    WF_INT_D --> PG_SS
+    WF_INT_D --> REDIS_SS
+    WF_INT_D --> RABBIT_SS
+
+    AI_ORCH_D --> AI_FOUND_D
+    AI_ORCH_D --> REDIS_SS
+
+    EXPERT_D --> AI_FOUND_D
+    EXPERT_D --> QDRANT_SS
+
+    %% Platform to Infrastructure
+    BIA_D --> PG_SS
+    BIA_D --> REDIS_SS
+
+    RISK_D --> PG_SS
+    RISK_D --> REDIS_SS
+
+    %% Monitoring
+    PROM_D -.scrapes.-> AI_FOUND_D
+    PROM_D -.scrapes.-> WF_INT_D
+    PROM_D -.scrapes.-> BIA_D
+    GRAF_D --> PROM_D
+
+    style INGRESS fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style PG_SS fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style REDIS_SS fill:#d1ecf1,stroke:#17a2b8,stroke-width:2px
+    style PROM_D fill:#e7f3ff,stroke:#0088cc,stroke-width:2px

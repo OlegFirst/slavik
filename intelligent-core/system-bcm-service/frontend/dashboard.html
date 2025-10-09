@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System BCM Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .success { background-color: #10b981; }
+        .warning { background-color: #f59e0b; }
+        .error { background-color: #ef4444; }
+    </style>
+</head>
+<body class="p-4">
+    <!-- Header -->
+    <div class="glass rounded-lg shadow-xl p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">System BCM Dashboard</h1>
+                    <p class="text-purple-200">Real-time platform health monitoring</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="status-indicator success"></div>
+                <span class="text-white font-medium">Live</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <!-- Total Cycles -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </div>
+                <span class="text-sm text-green-300" id="cycle-trend">+0%</span>
+            </div>
+            <div class="text-3xl font-bold text-white mb-1" id="total-cycles">-</div>
+            <div class="text-sm text-purple-200">BCM Cycles</div>
+            <div class="mt-2 text-xs text-purple-300">
+                <span id="success-rate">-</span>% success rate
+            </div>
+        </div>
+
+        <!-- Recoveries -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm text-green-300" id="recovery-trend">-</span>
+            </div>
+            <div class="text-3xl font-bold text-white mb-1" id="total-recoveries">-</div>
+            <div class="text-sm text-purple-200">Recovery Executions</div>
+            <div class="mt-2 text-xs text-purple-300">
+                <span id="rto-compliance">-</span>% RTO compliance
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-yellow-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm text-yellow-300" id="insights-new">+0</span>
+            </div>
+            <div class="text-3xl font-bold text-white mb-1" id="total-insights">-</div>
+            <div class="text-sm text-purple-200">Insights Generated</div>
+            <div class="mt-2 text-xs text-purple-300">
+                <span id="insights-pending">-</span> pending action
+            </div>
+        </div>
+
+        <!-- Platform Health -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm font-medium" id="health-status">-</span>
+            </div>
+            <div class="text-3xl font-bold text-white mb-1" id="health-score">-</div>
+            <div class="text-sm text-purple-200">Platform Health</div>
+            <div class="mt-2 text-xs text-purple-300">
+                <span id="healthy-services">-</span> / <span id="total-services">-</span> services
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Cycle Duration Chart -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <h2 class="text-xl font-bold text-white mb-4">Cycle Duration Trend</h2>
+            <canvas id="cycleDurationChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- RTO Compliance Chart -->
+        <div class="glass rounded-lg shadow-xl p-6">
+            <h2 class="text-xl font-bold text-white mb-4">RTO Compliance Rate</h2>
+            <canvas id="rtoComplianceChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="glass rounded-lg shadow-xl p-6 mb-6">
+        <h2 class="text-xl font-bold text-white mb-4">Recent Activity</h2>
+        <div id="recent-activity" class="space-y-3">
+            <!-- Activity items will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Platform Services -->
+    <div class="glass rounded-lg shadow-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">Platform Services Health</h2>
+        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Service cards will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Action Buttons (Floating) -->
+    <div class="fixed bottom-8 right-8 flex flex-col space-y-4">
+        <button onclick="triggerCycle()" class="glass hover:bg-white hover:bg-opacity-20 text-white font-bold py-3 px-6 rounded-lg shadow-xl transition-all duration-200 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Trigger Cycle</span>
+        </button>
+        <button onclick="refreshData()" class="glass hover:bg-white hover:bg-opacity-20 text-white font-bold py-3 px-6 rounded-lg shadow-xl transition-all duration-200 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Refresh</span>
+        </button>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8050/management';
+        let cycleDurationChart, rtoComplianceChart;
+
+        // Initialize charts
+        function initCharts() {
+            const chartConfig = {
+                type: 'line',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            };
+
+            cycleDurationChart = new Chart(
+                document.getElementById('cycleDurationChart'),
+                {
+                    ...chartConfig,
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Duration (seconds)',
+                            data: [],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4
+                        }]
+                    }
+                }
+            );
+
+            rtoComplianceChart = new Chart(
+                document.getElementById('rtoComplianceChart'),
+                {
+                    type: 'bar',
+                    options: chartConfig.options,
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'RTO Compliance (%)',
+                            data: [],
+                            backgroundColor: '#10b981',
+                            borderColor: '#059669',
+                            borderWidth: 1
+                        }]
+                    }
+                }
+            );
+        }
+
+        // Fetch dashboard stats
+        async function fetchDashboardStats() {
+            try {
+                const response = await axios.get(`${API_BASE}/dashboard/stats`);
+                const stats = response.data;
+
+                // Update stat cards
+                document.getElementById('total-cycles').textContent = stats.total_cycles;
+                document.getElementById('success-rate').textContent = stats.success_rate.toFixed(1);
+                document.getElementById('cycle-trend').textContent = `+${(Math.random() * 20).toFixed(0)}%`;
+
+                document.getElementById('total-recoveries').textContent = stats.total_recoveries;
+                document.getElementById('rto-compliance').textContent = stats.rto_compliance_rate.toFixed(1);
+                document.getElementById('recovery-trend').textContent = `${stats.recovery_success_rate.toFixed(0)}% success`;
+
+                document.getElementById('total-insights').textContent = stats.total_insights;
+                document.getElementById('insights-pending').textContent = stats.insights_pending;
+                document.getElementById('insights-new').textContent = `+${stats.insights_pending}`;
+
+                document.getElementById('health-score').textContent = `${stats.platform_health_score.toFixed(0)}%`;
+                document.getElementById('healthy-services').textContent = stats.healthy_services;
+                document.getElementById('total-services').textContent = stats.total_services;
+
+                // Update health status
+                const healthStatus = document.getElementById('health-status');
+                if (stats.platform_health_score >= 90) {
+                    healthStatus.textContent = '✓ Healthy';
+                    healthStatus.className = 'text-sm text-green-300';
+                } else if (stats.platform_health_score >= 70) {
+                    healthStatus.textContent = '⚠ Degraded';
+                    healthStatus.className = 'text-sm text-yellow-300';
+                } else {
+                    healthStatus.textContent = '✗ Critical';
+                    healthStatus.className = 'text-sm text-red-300';
+                }
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+            }
+        }
+
+        // Fetch recent cycles
+        async function fetchRecentCycles() {
+            try {
+                const response = await axios.get(`${API_BASE}/cycles?limit=10`);
+                const cycles = response.data;
+
+                // Update charts
+                const labels = cycles.map((c, i) => `Cycle ${cycles.length - i}`).reverse();
+                const durations = cycles.map(c => c.duration_seconds || 0).reverse();
+
+                cycleDurationChart.data.labels = labels;
+                cycleDurationChart.data.datasets[0].data = durations;
+                cycleDurationChart.update();
+
+                const rtoRates = cycles.map(c => c.rto_compliance_rate || 0).reverse();
+                rtoComplianceChart.data.labels = labels;
+                rtoComplianceChart.data.datasets[0].data = rtoRates;
+                rtoComplianceChart.update();
+
+                // Update recent activity
+                updateRecentActivity(cycles.slice(0, 5));
+            } catch (error) {
+                console.error('Failed to fetch cycles:', error);
+            }
+        }
+
+        // Update recent activity
+        function updateRecentActivity(cycles) {
+            const container = document.getElementById('recent-activity');
+            container.innerHTML = cycles.map(cycle => `
+                <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 ${cycle.status === 'completed' ? 'bg-green-400' : 'bg-yellow-400'} rounded-full"></div>
+                        <div>
+                            <div class="text-white font-medium">BCM Cycle ${cycle.cycle_id}</div>
+                            <div class="text-xs text-purple-200">${new Date(cycle.started_at).toLocaleString()}</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-purple-200">
+                        ${cycle.duration_seconds ? `${cycle.duration_seconds.toFixed(1)}s` : '-'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fetch platform health
+        async function fetchPlatformHealth() {
+            try {
+                const response = await axios.get(`${API_BASE}/health/current`);
+                const services = response.data;
+
+                const container = document.getElementById('services-grid');
+                container.innerHTML = services.map(service => `
+                    <div class="p-4 bg-white bg-opacity-10 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-white font-medium text-sm truncate">${service.service_name}</div>
+                            <div class="w-3 h-3 ${service.status === 'healthy' ? 'bg-green-400' : 'bg-red-400'} rounded-full"></div>
+                        </div>
+                        <div class="text-xs text-purple-200">
+                            ${service.response_time_ms ? `${service.response_time_ms.toFixed(0)}ms` : '-'}
+                        </div>
+                        <div class="text-xs text-purple-300 mt-1">${service.tier}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to fetch health:', error);
+            }
+        }
+
+        // Trigger BCM cycle
+        async function triggerCycle() {
+            try {
+                await axios.post(`${API_BASE}/cycles/trigger`);
+                alert('BCM Cycle triggered successfully!');
+                setTimeout(refreshData, 2000);
+            } catch (error) {
+                alert('Failed to trigger cycle: ' + error.message);
+            }
+        }
+
+        // Refresh all data
+        async function refreshData() {
+            await Promise.all([
+                fetchDashboardStats(),
+                fetchRecentCycles(),
+                fetchPlatformHealth()
+            ]);
+        }
+
+        // Initialize
+        window.onload = () => {
+            initCharts();
+            refreshData();
+            // Auto-refresh every 30 seconds
+            setInterval(refreshData, 30000);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+groups:
+  - name: system_bcm_alerts
+    interval: 30s
+    rules:
+      # ========================================================================
+      # Service Health Alerts
+      # ========================================================================
+
+      - alert: SystemBCMServiceDown
+        expr: system_bcm_running == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: system-bcm
+          category: availability
+        annotations:
+          summary: "System BCM Service is down"
+          description: "System BCM Service has been down for more than 1 minute. Platform self-recovery is disabled."
+          runbook: "Check service logs, restart if needed: docker-compose restart system-bcm"
+          impact: "Platform cannot self-recover from failures"
+
+      - alert: SystemBCMEventBusDisconnected
+        expr: system_bcm_eventbus_connected == 0
+        for: 2m
+        labels:
+          severity: high
+          service: system-bcm
+          category: integration
+        annotations:
+          summary: "System BCM EventBus disconnected"
+          description: "System BCM cannot communicate with EventBus (Redis). Real-time recovery disabled."
+          runbook: "Check Redis health, verify network connectivity"
+          impact: "Auto-recovery will not trigger on platform events"
+
+      # ========================================================================
+      # Cycle Performance Alerts
+      # ========================================================================
+
+      - alert: SystemBCMCycleFailed
+        expr: increase(system_bcm_cycle_failures_total[1h]) > 0
+        for: 5m
+        labels:
+          severity: high
+          service: system-bcm
+          category: functionality
+        annotations:
+          summary: "System BCM cycle failed"
+          description: "BCM cycle has failed {{ $value }} times in the last hour"
+          runbook: "Check service logs for errors, verify scenario files integrity"
+          impact: "Platform is not applying BCM to itself"
+
+      - alert: SystemBCMCycleTooSlow
+        expr: system_bcm_cycle_duration_seconds > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: performance
+        annotations:
+          summary: "System BCM cycle is too slow"
+          description: "BCM cycle took {{ $value }}s (normal: <5s)"
+          runbook: "Check system resources, review scenario complexity"
+          impact: "Delayed BCM execution may miss critical windows"
+
+      - alert: SystemBCMCycleStalled
+        expr: (time() - system_bcm_last_cycle_timestamp) > 86400 * 1.5
+        for: 1h
+        labels:
+          severity: high
+          service: system-bcm
+          category: functionality
+        annotations:
+          summary: "System BCM cycle stalled"
+          description: "No BCM cycle in {{ $value }}s (expected: 24h)"
+          runbook: "Check scheduler, verify service is not frozen"
+          impact: "Platform BCM knowledge becoming stale"
+
+      # ========================================================================
+      # Learning & Improvement Alerts
+      # ========================================================================
+
+      - alert: SystemBCMNoInsightsGenerated
+        expr: rate(system_bcm_insights_generated[24h]) == 0
+        for: 1h
+        labels:
+          severity: warning
+          service: system-bcm
+          category: learning
+        annotations:
+          summary: "System BCM not generating insights"
+          description: "No learning insights generated in 24 hours"
+          runbook: "Check learning engine, verify practice data quality"
+          impact: "Platform not learning from practice"
+
+      - alert: SystemBCMLowConfidence
+        expr: system_bcm_learning_confidence < 0.5
+        for: 30m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: learning
+        annotations:
+          summary: "System BCM learning confidence low"
+          description: "Learning confidence is {{ $value }} (threshold: 0.5)"
+          runbook: "Review learning data quality, check for anomalies"
+          impact: "Improvements may not be reliable"
+
+      - alert: SystemBCMNoImprovements
+        expr: rate(system_bcm_improvements_total[7d]) == 0
+        for: 1h
+        labels:
+          severity: info
+          service: system-bcm
+          category: learning
+        annotations:
+          summary: "System BCM not applying improvements"
+          description: "No improvements applied in 7 days - platform may be optimal or learning is stuck"
+          runbook: "Review learning results, check if platform is already optimal"
+          impact: "Platform not evolving (may be good or bad)"
+
+      # ========================================================================
+      # Recovery Alerts
+      # ========================================================================
+
+      - alert: SystemBCMRecoveryFailed
+        expr: increase(system_bcm_recovery_failures_total[1h]) > 2
+        for: 5m
+        labels:
+          severity: critical
+          service: system-bcm
+          category: recovery
+        annotations:
+          summary: "Multiple recovery failures"
+          description: "{{ $value }} recovery procedures failed in the last hour"
+          runbook: "Check platform health, review failed recovery logs"
+          impact: "Platform may not recover from failures automatically"
+
+      - alert: SystemBCMRecoveryTooSlow
+        expr: system_bcm_recovery_duration_seconds > 600
+        for: 1m
+        labels:
+          severity: high
+          service: system-bcm
+          category: recovery
+        annotations:
+          summary: "Recovery procedure too slow"
+          description: "Recovery took {{ $value }}s (target: varies by procedure)"
+          runbook: "Check system resources, review recovery procedure steps"
+          impact: "Extended downtime during failures"
+
+      - alert: SystemBCMHighRecoveryRate
+        expr: rate(system_bcm_recoveries_total[1h]) > 5
+        for: 15m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: stability
+        annotations:
+          summary: "High recovery rate detected"
+          description: "{{ $value }} recoveries/hour - platform may be unstable"
+          runbook: "Investigate root cause of frequent failures"
+          impact: "Platform instability, need root cause analysis"
+
+      # ========================================================================
+      # Resource Alerts
+      # ========================================================================
+
+      - alert: SystemBCMHighMemoryUsage
+        expr: container_memory_usage_bytes{container="system-bcm"} / container_spec_memory_limit_bytes{container="system-bcm"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: resources
+        annotations:
+          summary: "System BCM high memory usage"
+          description: "Memory usage at {{ $value | humanizePercentage }}"
+          runbook: "Check for memory leaks, consider increasing memory limit"
+          impact: "Service may become slow or crash"
+
+      - alert: SystemBCMHighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{container="system-bcm"}[5m]) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: resources
+        annotations:
+          summary: "System BCM high CPU usage"
+          description: "CPU usage at {{ $value | humanizePercentage }}"
+          runbook: "Check for CPU-intensive operations, optimize if needed"
+          impact: "Service performance degradation"
+
+      # ========================================================================
+      # Data Quality Alerts
+      # ========================================================================
+
+      - alert: SystemBCMScenarioLoadFailed
+        expr: system_bcm_scenario_load_errors > 0
+        for: 1m
+        labels:
+          severity: high
+          service: system-bcm
+          category: data
+        annotations:
+          summary: "Failed to load BCM scenarios"
+          description: "{{ $value }} scenario files failed to load"
+          runbook: "Check scenario file integrity, validate JSON syntax"
+          impact: "Incomplete BCM execution, missing procedures"
+
+      - alert: SystemBCMInvalidMetrics
+        expr: system_bcm_invalid_metrics_count > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: data
+        annotations:
+          summary: "Invalid metrics detected"
+          description: "{{ $value }} invalid metrics in last 5 minutes"
+          runbook: "Check metric collection, verify data sources"
+          impact: "Inaccurate learning and decision-making"
+
+      # ========================================================================
+      # Integration Alerts
+      # ========================================================================
+
+      - alert: SystemBCMPlatformServicesUnhealthy
+        expr: system_bcm_platform_services_healthy / system_bcm_platform_services_total < 0.8
+        for: 5m
+        labels:
+          severity: high
+          service: system-bcm
+          category: integration
+        annotations:
+          summary: "Many platform services unhealthy"
+          description: "Only {{ $value | humanizePercentage }} of platform services are healthy"
+          runbook: "Check platform-wide health, investigate service failures"
+          impact: "Limited BCM effectiveness, recovery may fail"
+
+      # ========================================================================
+      # Predictive Alerts
+      # ========================================================================
+
+      - alert: SystemBCMPredictedFailure
+        expr: system_bcm_failure_prediction_score > 0.7
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+          category: predictive
+        annotations:
+          summary: "Platform failure predicted"
+          description: "Failure prediction score: {{ $value }} (threshold: 0.7)"
+          runbook: "Review prediction details, take preventive action"
+          impact: "Potential platform failure in near future"
+
+  # ==========================================================================
+  # Platform-Wide BCM Alerts (triggered by System BCM)
+  # ==========================================================================
+
+  - name: platform_bcm_alerts
+    interval: 30s
+    rules:
+
+      - alert: PlatformCriticalProcessDown
+        expr: system_bcm_critical_process_status{tier="tier_1_critical"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Critical platform process down: {{ $labels.process }}"
+          description: "Tier-1 critical process {{ $labels.process }} is down"
+          runbook: "Trigger emergency recovery: curl -X POST 'http://system-bcm:8050/recovery/trigger?service={{ $labels.process }}&incident_type=failure'"
+          impact: "Major platform functionality impaired"
+
+      - alert: PlatformRTOExceeded
+        expr: system_bcm_actual_rto_seconds > system_bcm_target_rto_seconds
+        for: 1m
+        labels:
+          severity: high
+          category: performance
+        annotations:
+          summary: "RTO exceeded for {{ $labels.process }}"
+          description: "Actual RTO: {{ $value }}s, Target: {{ $labels.target_rto }}s"
+          runbook: "Review recovery procedure, optimize if needed"
+          impact: "BCM targets not met, business impact possible"
+
+      - alert: PlatformHighPriorityRiskMaterialized
+        expr: system_bcm_risk_materialized{risk_score>=7} > 0
+        for: 1m
+        labels:
+          severity: critical
+          category: risk
+        annotations:
+          summary: "High-priority risk materialized: {{ $labels.risk_name }}"
+          description: "Risk {{ $labels.risk_name }} (score: {{ $labels.risk_score }}) has occurred"
+          runbook: "Execute mitigation plan, activate incident response"
+          impact: "Significant platform risk event"
+
+      - alert: PlatformResourceContentionCritical
+        expr: system_bcm_resource_contention{severity="critical"} > 0
+        for: 2m
+        labels:
+          severity: high
+          category: resources
+        annotations:
+          summary: "Critical resource contention: {{ $labels.resource_type }}"
+          description: "{{ $labels.resource_type }} contention at critical level"
+          runbook: "Apply resource priorities, throttle tier-2 and tier-3 services"
+          impact: "Platform performance degradation"

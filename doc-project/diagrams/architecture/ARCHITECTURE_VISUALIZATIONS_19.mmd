@@ -1,0 +1,84 @@
+graph TB
+    subgraph "Infrastructure Layer"
+        subgraph "Databases"
+            PG_I[PostgreSQL 15<br/>━━━━━━━━━━━<br/>Port: 5432<br/>Database: bcm_platform<br/>Schemas: 13+<br/>Tables: 80+<br/>Extensions:<br/>• uuid-ossp<br/>• pgcrypto<br/>• pg_trgm]
+
+            REDIS_I[Redis 7<br/>━━━━━━━━━━━<br/>Port: 6379<br/>Databases:<br/>0: Working Memory<br/>1: Workflow Cache<br/>2: Sessions<br/>3: Rate Limits<br/>Persistence: RDB + AOF]
+
+            QDRANT_I[Qdrant<br/>━━━━━━━━━━━<br/>Port: 6333<br/>Collections:<br/>• knowledge_base (768d)<br/>• case_library (768d)<br/>• domain_knowledge (768d)<br/>Distance: Cosine]
+        end
+
+        subgraph "Message Queue"
+            RABBIT_I[RabbitMQ 3.12<br/>━━━━━━━━━━━<br/>Ports: 5672 (AMQP), 15672 (UI)<br/>Exchange: platform_events (topic)<br/>Queues: 8+ queues<br/>Plugins:<br/>• management<br/>• prometheus<br/>Persistence: Durable]
+        end
+
+        subgraph "Gateway & Security"
+            API_GW_I[API Gateway<br/>━━━━━━━━━━━<br/>Port: 8000<br/>Features:<br/>• JWT validation<br/>• Rate limiting<br/>• Request routing<br/>• Response caching<br/>• CORS handling]
+
+            SEC_GW_I[Security Gateway<br/>━━━━━━━━━━━<br/>Port: 8888<br/>Features:<br/>• Authentication<br/>• Authorization<br/>• Audit logging<br/>• Threat detection]
+
+            AUTH_I[Auth Service<br/>━━━━━━━━━━━<br/>Features:<br/>• JWT/OAuth<br/>• RBAC<br/>• Session management<br/>• Password hashing]
+        end
+
+        subgraph "Observability"
+            PROM_I[Prometheus<br/>━━━━━━━━━━━<br/>Port: 9090<br/>Features:<br/>• Metrics collection (15s)<br/>• Time-series storage<br/>• Alerting rules<br/>• Service discovery<br/>Retention: 30 days]
+
+            GRAF_I[Grafana<br/>━━━━━━━━━━━<br/>Port: 3000<br/>Dashboards:<br/>• System overview<br/>• Service metrics<br/>• Database perf<br/>• EventBus flow<br/>Data source: Prometheus]
+
+            LOKI_I[Loki<br/>━━━━━━━━━━━<br/>Log aggregation<br/>Integration: Promtail<br/>Retention: 14 days]
+        end
+
+        subgraph "Service Discovery & Config"
+            CONSUL_I[Consul<br/>━━━━━━━━━━━<br/>Port: 8500<br/>Features:<br/>• Service registry<br/>• Health checks<br/>• KV store<br/>• DNS interface]
+
+            CONFIG_I[Config Server<br/>━━━━━━━━━━━<br/>Features:<br/>• Centralized config<br/>• Environment profiles<br/>• Encryption<br/>• Hot reload]
+        end
+
+        subgraph "Runtime"
+            DOCKER_I[Docker<br/>━━━━━━━━━━━<br/>Engine: 24.0+<br/>Compose: 2.20+<br/>Networks:<br/>• intelligent-core-net<br/>• platform-services-net<br/>• infrastructure-net]
+
+            K8S_I[Kubernetes<br/>━━━━━━━━━━━<br/>Version: 1.28+<br/>Namespaces:<br/>• infrastructure<br/>• intelligent-core<br/>• platform-services<br/>• monitoring]
+        end
+
+        subgraph "Storage"
+            VOLUMES_I[Docker Volumes<br/>━━━━━━━━━━━<br/>• postgres-data<br/>• redis-data<br/>• rabbitmq-data<br/>• qdrant-data<br/>• grafana-data<br/>• document-uploads]
+
+            PVC_I[Persistent Volume Claims<br/>━━━━━━━━━━━<br/>• postgres-pvc: 100Gi<br/>• redis-pvc: 10Gi<br/>• qdrant-pvc: 50Gi<br/>• logs-pvc: 100Gi]
+        end
+
+        subgraph "Networking"
+            NGINX_I[Nginx Ingress<br/>━━━━━━━━━━━<br/>Features:<br/>• Load balancing<br/>• SSL/TLS termination<br/>• Path routing<br/>• Rate limiting]
+
+            SERVICE_MESH_I[Service Mesh (Optional)<br/>━━━━━━━━━━━<br/>Istio/Linkerd<br/>Features:<br/>• mTLS<br/>• Traffic management<br/>• Observability<br/>• Circuit breakers]
+        end
+    end
+
+    %% All services depend on infrastructure
+    PG_I -.provides.-> ALL_SERVICES[All Services]
+    REDIS_I -.provides.-> ALL_SERVICES
+    RABBIT_I -.provides.-> ALL_SERVICES
+    QDRANT_I -.provides.-> AI_SERVICES[AI Services]
+
+    API_GW_I --> SEC_GW_I
+    SEC_GW_I --> AUTH_I
+
+    PROM_I -.scrapes.-> ALL_SERVICES
+    GRAF_I --> PROM_I
+    LOKI_I -.collects.-> ALL_SERVICES
+
+    CONSUL_I -.registers.-> ALL_SERVICES
+    CONFIG_I -.configures.-> ALL_SERVICES
+
+    DOCKER_I -.runs.-> ALL_SERVICES
+    K8S_I -.orchestrates.-> ALL_SERVICES
+
+    VOLUMES_I -.persists.-> PG_I
+    VOLUMES_I -.persists.-> REDIS_I
+    PVC_I -.persists.-> PG_I
+
+    style PG_I fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style REDIS_I fill:#d1ecf1,stroke:#17a2b8,stroke-width:2px
+    style RABBIT_I fill:#d6d8db,stroke:#6c757d,stroke-width:2px
+    style QDRANT_I fill:#e7f3ff,stroke:#0088cc,stroke-width:2px
+    style API_GW_I fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style PROM_I fill:#e7f3ff,stroke:#0088cc,stroke-width:2px

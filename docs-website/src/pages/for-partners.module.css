@@ -1,0 +1,355 @@
+.hero {
+  background: linear-gradient(135deg, var(--ifm-color-primary-darker) 0%, var(--ifm-color-primary) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 4rem;
+}
+
+.intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.benefit {
+  background: var(--ifm-color-success-lighter);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--ifm-color-success);
+  font-weight: 500;
+}
+
+.targetAudience {
+  background: var(--ifm-color-emphasis-100);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.functionCard {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.functionCard:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.functionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.functionIcon {
+  font-size: 3rem;
+}
+
+.functionHeader h3 {
+  margin: 0;
+  color: var(--ifm-color-primary);
+}
+
+.functionDesc {
+  font-size: 1.1rem;
+  color: var(--ifm-color-emphasis-800);
+  margin-bottom: 1.5rem;
+}
+
+.featuresList {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.featuresList ul {
+  margin: 0.5rem 0 0 1.5rem;
+  padding: 0;
+}
+
+.featuresList li {
+  margin: 0.5rem 0;
+}
+
+.businessValue {
+  background: var(--ifm-color-info-lighter);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--ifm-color-info);
+  margin-bottom: 1rem;
+}
+
+.metric {
+  background: var(--ifm-color-warning-lighter);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--ifm-color-warning);
+  margin-bottom: 1rem;
+}
+
+.example {
+  background: var(--ifm-color-emphasis-200);
+  padding: 1rem;
+  border-radius: 8px;
+  font-style: italic;
+  border-left: 4px solid var(--ifm-color-primary);
+}
+
+.outcomesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.outcomeCategory {
+  background: var(--ifm-color-emphasis-100);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-top: 4px solid var(--ifm-color-primary);
+}
+
+.outcomeCategory h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary-darker);
+}
+
+.outcomeCategory ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.outcomeCategory li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.outcomeCategory li:last-child {
+  border-bottom: none;
+}
+
+.roiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.roiCard {
+  background: var(--ifm-color-emphasis-100);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid var(--ifm-color-emphasis-300);
+}
+
+.roiCard h3 {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
+}
+
+.roiCard ul {
+  list-style: none;
+  padding: 0;
+}
+
+.roiCard li {
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.roiTotal {
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.roiResult {
+  background: linear-gradient(135deg, var(--ifm-color-success-darker) 0%, var(--ifm-color-success) 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.roiResult h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+}
+
+.roiPercent {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.storyCard {
+  background: var(--ifm-color-emphasis-100);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 6px solid var(--ifm-color-success);
+}
+
+.storyCard h3 {
+  color: var(--ifm-color-success-darker);
+  margin-top: 0;
+}
+
+.storyResults {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.storyResults ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.storyResults li {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.differentiatorsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.differentiatorCard {
+  background: var(--ifm-color-primary-lighter);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.differentiatorCard h3 {
+  color: var(--ifm-color-primary-darker);
+  margin-top: 0;
+}
+
+.differentiatorCard p {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.differentiatorCard ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.differentiatorCard li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.differentiatorCard li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--ifm-color-success);
+  font-weight: bold;
+}
+
+.ctaSection {
+  text-align: center;
+  background: var(--ifm-color-emphasis-100);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  margin-top: 3rem;
+}
+
+.ctaSection h2 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--ifm-color-primary);
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .outcomesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .roiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .differentiatorsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .functionCard {
+    padding: 1.5rem;
+  }
+
+  .functionIcon {
+    font-size: 2rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,130 @@
+name: Automated Knowledge Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'intelligent-core/**'
+      - 'platform-services/**'
+      - 'infrastructure/**'
+      - 'doc-project/**'
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Pipeline mode'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - analyze
+          - docs
+          - index
+
+jobs:
+  automated-knowledge-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history for analysis
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || echo "No requirements.txt found"
+          pip install anthropic sentence-transformers qdrant-client redis
+
+      - name: Run Automated Knowledge Pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          MODE="${{ github.event.inputs.mode }}"
+          if [ -z "$MODE" ]; then
+            MODE="full"
+          fi
+
+          python3 infrastructure/AI-office-infrastructure/analytics-specialist/workflows/automated_knowledge_pipeline.py --${MODE}
+
+      - name: Upload pipeline reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: pipeline-reports-${{ github.sha }}
+          path: |
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/pipeline_report_*.json
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/state_machine.json
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/edge_cases.json
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/behavioral_patterns.json
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/user_scenarios.json
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/generated_rules.py
+            infrastructure/AI-office-infrastructure/analytics-specialist/reports/generated_workflows.py
+          retention-days: 30
+
+      - name: Comment on PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'infrastructure/AI-office-infrastructure/analytics-specialist/reports/';
+
+            // Find latest pipeline report
+            const files = fs.readdirSync(reportPath).filter(f => f.startsWith('pipeline_report_'));
+            if (files.length === 0) return;
+
+            const latestReport = files.sort().reverse()[0];
+            const report = JSON.parse(fs.readFileSync(reportPath + latestReport, 'utf8'));
+
+            const comment = `## 🤖 Automated Knowledge Pipeline Results
+
+            **Status:** ${report.pipeline_run.success ? '✅ Success' : '❌ Failed'}
+            **Duration:** ${report.pipeline_run.duration_seconds.toFixed(2)}s
+            **Stages Completed:** ${report.stages.completed}/${report.stages.total}
+
+            ### Outputs
+            ${Object.entries(report.outputs).map(([stage, data]) =>
+              `- **${stage}**: ${JSON.stringify(data, null, 2)}`
+            ).join('\n')}
+
+            ${report.errors.length > 0 ? `### ⚠️ Errors\n${report.errors.map(e => `- ${e}`).join('\n')}` : ''}
+
+            [View full report](../artifacts)`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Automated Knowledge Pipeline Failed',
+              body: `Pipeline failed for commit ${context.sha}\n\n[View run](${context.payload.repository.html_url}/actions/runs/${context.runId})`,
+              labels: ['automation', 'pipeline', 'bug']
+            });

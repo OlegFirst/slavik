@@ -1,0 +1,497 @@
+# Goals + Rules Configuration for Workflow Intelligence
+# Version: 1.0.0
+# Last Updated: 2025-10-09
+
+# ============================================================================
+# GOALS: Positive targets that guide optimization
+# - Dynamically adjusted based on context
+# - Used for recommendations and improvement suggestions
+# - Not blocking, but tracked and reported
+# ============================================================================
+
+goals:
+  # USER-LEVEL GOALS
+  # Goals for users working on BCM processes
+  user_goals:
+    bia_completion:
+      description: "Complete Business Impact Analysis efficiently"
+      metrics:
+        target_completion_days: 7
+        target_quality_score: 85  # 0-100 scale
+        target_completeness_percent: 100
+      optimization_strategy: "suggest_faster_path"
+      fallback_days: 14  # Grace period before escalation
+
+    risk_assessment:
+      description: "Thorough risk assessment with actionable controls"
+      metrics:
+        target_completion_days: 5
+        target_risks_identified_min: 5
+        target_controls_coverage_percent: 90
+        target_residual_risk_max: 0.3  # 0.0 - 1.0 scale
+      optimization_strategy: "suggest_critical_risks_first"
+
+    bc_planning:
+      description: "Actionable Business Continuity plans"
+      metrics:
+        target_completion_days: 10
+        target_strategies_count_min: 3
+        target_plan_completeness_percent: 95
+        target_test_coverage_percent: 100
+      optimization_strategy: "template_based_acceleration"
+
+    incident_response:
+      description: "Fast and effective incident response"
+      metrics:
+        target_detection_time_minutes: 5
+        target_initial_response_minutes: 15
+        target_resolution_time_hours: 4
+        target_stakeholder_notification_minutes: 10
+      optimization_strategy: "playbook_driven"
+
+    continuous_improvement:
+      description: "Regular review and improvement cycles"
+      metrics:
+        target_review_frequency_days: 90
+        target_lesson_learned_capture_percent: 100
+        target_improvement_actions_completion_percent: 80
+      optimization_strategy: "case_library_driven"
+
+  # SYSTEM-LEVEL GOALS
+  # Goals for Workflow Intelligence itself
+  system_goals:
+    performance:
+      description: "Fast and responsive workflow execution"
+      metrics:
+        target_response_time_ms: 200
+        target_state_transition_time_ms: 100
+        target_validation_time_ms: 50
+        target_uptime_percent: 99.9
+      optimization_strategy: "auto_scale_if_slow"
+      alert_threshold_ms: 500
+
+    accuracy:
+      description: "High accuracy in ML recommendations"
+      metrics:
+        target_ml_accuracy_percent: 87
+        target_case_match_relevance_score: 0.85  # 0.0 - 1.0
+        target_false_positive_rate_percent: 5
+      optimization_strategy: "continuous_training"
+      retrain_trigger_accuracy_drop_percent: 5
+
+    governance_compliance:
+      description: "System follows its own governance rules"
+      metrics:
+        target_rule_compliance_percent: 100
+        target_goal_achievement_percent: 80
+        target_self_audit_frequency_hours: 24
+        target_escalation_resolution_time_hours: 4
+      optimization_strategy: "self_healing"
+
+    resource_efficiency:
+      description: "Optimal resource utilization"
+      metrics:
+        target_cpu_utilization_percent: 70  # Not too low, not maxed
+        target_memory_utilization_percent: 75
+        target_temporal_workflow_queue_size: 100
+        target_cache_hit_rate_percent: 90
+      optimization_strategy: "dynamic_scaling"
+
+    case_library_quality:
+      description: "High-quality anonymized case library"
+      metrics:
+        target_case_count_min: 347
+        target_k_anonymity_min: 5
+        target_case_freshness_days: 180  # Cases updated within 6 months
+        target_diversity_score: 0.7  # Industry/size/geography diversity
+      optimization_strategy: "active_learning"
+
+  # COMPONENT-LEVEL GOALS
+  # Goals for other platform components that Workflow Intelligence monitors
+  component_goals:
+    ai_foundation:
+      description: "AI Foundation provides quality AI services"
+      metrics:
+        target_llm_response_time_seconds: 3
+        target_llm_quality_score: 0.85
+        target_rag_relevance_score: 0.90
+        target_vector_db_query_time_ms: 100
+      optimization_strategy: "model_selection"
+
+    bia_service:
+      description: "BIA Service availability and performance"
+      metrics:
+        target_api_response_time_ms: 300
+        target_uptime_percent: 99.5
+        target_data_consistency_score: 1.0
+        target_concurrent_users_supported: 100
+      optimization_strategy: "health_monitoring"
+
+    temporal_cloud:
+      description: "Temporal Cloud workflow durability"
+      metrics:
+        target_workflow_success_rate_percent: 99
+        target_workflow_retry_count_max: 3
+        target_workflow_latency_ms: 500
+      optimization_strategy: "circuit_breaker"
+
+  # PLATFORM-LEVEL GOALS
+  # Goals for the entire AI-Platform-ISO
+  platform_goals:
+    user_satisfaction:
+      description: "Users successfully achieve BCM maturity"
+      metrics:
+        target_iso_certification_rate_percent: 70
+        target_user_retention_rate_percent: 85
+        target_nps_score: 50  # Net Promoter Score
+        target_time_to_value_days: 30
+      optimization_strategy: "journey_optimization"
+
+    system_resilience:
+      description: "Platform applies BCM to itself (eat own dog food)"
+      metrics:
+        target_mttr_minutes: 15  # Mean Time To Recovery
+        target_auto_recovery_success_rate_percent: 95
+        target_zero_data_loss_incidents: 0
+        target_security_audit_score: 95
+      optimization_strategy: "infrastructure_coordination"
+
+    ai_effectiveness:
+      description: "AI Intelligence provides measurable value"
+      metrics:
+        target_ai_recommendation_acceptance_rate_percent: 60
+        target_ai_time_savings_percent: 40
+        target_ai_quality_improvement_percent: 25
+      optimization_strategy: "human_feedback_learning"
+
+# ============================================================================
+# RULES: Constraints that must be enforced
+# - Hierarchical: Constitution → Compliance → Organization → Best Practice → ML
+# - Constitution rules cannot be overridden
+# - Compliance rules can be overridden with justification
+# - Rules apply recursively: User, System, Components, Platform
+# ============================================================================
+
+rules:
+  # CONSTITUTION RULES
+  # Core platform logic - UNCHANGEABLE
+  constitution:
+    - id: const_001
+      name: "No data loss"
+      description: "Zero tolerance for data loss under any circumstances"
+      severity: CRITICAL
+      applies_to: [user, system, component, platform]
+      validation: "postgresql_wal_retention && backup_verified"
+
+    - id: const_002
+      name: "No unauthorized access"
+      description: "All access must be authenticated and authorized"
+      severity: CRITICAL
+      applies_to: [user, system, component, platform]
+      validation: "jwt_valid && rbac_check_passed"
+
+    - id: const_003
+      name: "Audit trail integrity"
+      description: "All actions must be logged with tamper-proof audit trail"
+      severity: CRITICAL
+      applies_to: [user, system, component, platform]
+      validation: "audit_log_signed && immutable_storage"
+
+    - id: const_004
+      name: "Privacy by design"
+      description: "PII must be encrypted, anonymized, or excluded"
+      severity: CRITICAL
+      applies_to: [user, system, component, platform]
+      validation: "pii_encrypted || k_anonymity >= 5"
+
+    - id: const_005
+      name: "Graceful degradation"
+      description: "System must degrade gracefully, never catastrophically fail"
+      severity: CRITICAL
+      applies_to: [system, component, platform]
+      validation: "circuit_breaker_enabled && fallback_defined"
+
+  # COMPLIANCE RULES
+  # ISO 22301, NIST, WHO - CAN be overridden with justification
+  compliance:
+    iso_22301:
+      - id: iso_8_2_2_001
+        name: "BIA financial impact required"
+        description: "ISO 22301:2019 Clause 8.2.2 - Financial impact must be assessed"
+        severity: HIGH
+        applies_to: [user]
+        can_override: true
+        override_requires: ["ciso_approval", "documented_justification"]
+        validation: "bia_data.financial_impact is not None"
+
+      - id: iso_8_2_2_002
+        name: "BIA RTO definition required"
+        description: "ISO 22301:2019 Clause 8.2.2 - RTO must be defined"
+        severity: HIGH
+        applies_to: [user]
+        can_override: false
+        validation: "bia_data.rto_hours is not None && bia_data.rto_hours > 0"
+
+      - id: iso_8_2_2_003
+        name: "BIA RPO definition required"
+        description: "ISO 22301:2019 Clause 8.2.2 - RPO must be defined"
+        severity: HIGH
+        applies_to: [user]
+        can_override: false
+        validation: "bia_data.rpo_hours is not None && bia_data.rpo_hours > 0"
+
+      - id: iso_8_3_001
+        name: "BC strategies must address all critical activities"
+        description: "ISO 22301:2019 Clause 8.3 - Strategies for all critical activities"
+        severity: HIGH
+        applies_to: [user]
+        can_override: true
+        override_requires: ["risk_owner_approval"]
+        validation: "len(bc_plan.strategies) >= len(bia_data.critical_processes)"
+
+      - id: iso_8_5_001
+        name: "BC plans must be exercised annually"
+        description: "ISO 22301:2019 Clause 8.5 - Annual testing required"
+        severity: MEDIUM
+        applies_to: [user, system]
+        can_override: true
+        override_requires: ["bcm_manager_approval"]
+        validation: "last_exercise_date <= 365 days ago"
+
+    nist_sp_800_34:
+      - id: nist_cp_001
+        name: "Contingency plan testing"
+        description: "NIST SP 800-34 - Test contingency plans annually"
+        severity: MEDIUM
+        applies_to: [user, system]
+        can_override: true
+        validation: "last_test_date <= 365 days ago"
+
+    who_healthcare:
+      - id: who_001
+        name: "Patient care continuity"
+        description: "WHO Healthcare BCM - Patient care has priority"
+        severity: CRITICAL
+        applies_to: [user]
+        can_override: false
+        validation: "patient_care_processes.rto_hours <= 4"
+
+  # ORGANIZATION RULES
+  # Corporate-specific policies - Configurable per organization
+  organization:
+    - id: org_001
+      name: "RTO minimum threshold"
+      description: "Organization policy: Minimum RTO is 15 minutes"
+      severity: MEDIUM
+      applies_to: [user]
+      can_override: true
+      override_requires: ["business_unit_head_approval"]
+      validation: "rto_minutes >= 15"
+      configurable: true
+      default_value: 15
+
+    - id: org_002
+      name: "Workflow performance SLA"
+      description: "Organization policy: Workflow transitions < 5 seconds"
+      severity: MEDIUM
+      applies_to: [system]
+      can_override: false
+      validation: "transition_time_seconds < 5.0"
+      configurable: true
+      default_value: 5.0
+
+    - id: org_003
+      name: "AI recommendation threshold"
+      description: "Organization policy: Only show AI recommendations > 70% confidence"
+      severity: LOW
+      applies_to: [system, component]
+      can_override: true
+      validation: "ai_confidence >= 0.70"
+      configurable: true
+      default_value: 0.70
+
+  # BEST PRACTICE RULES
+  # Learned from Case Library (347+ cases)
+  best_practice:
+    - id: bp_001
+      name: "Financial services RTO guideline"
+      description: "Case Library insight: Financial services typically need RTO < 4h"
+      severity: LOW
+      applies_to: [user]
+      source: "case_library"
+      source_case_count: 47
+      can_override: true
+      validation: "industry == 'finance' implies rto_hours <= 4"
+
+    - id: bp_002
+      name: "Healthcare RTO guideline"
+      description: "Case Library insight: Healthcare critical processes RTO < 2h"
+      severity: MEDIUM
+      applies_to: [user]
+      source: "case_library"
+      source_case_count: 63
+      can_override: true
+      validation: "industry == 'healthcare' && critical == true implies rto_hours <= 2"
+
+    - id: bp_003
+      name: "Multi-dependency warning"
+      description: "Case Library insight: Processes with >10 dependencies are high risk"
+      severity: LOW
+      applies_to: [user]
+      source: "case_library"
+      source_case_count: 28
+      can_override: true
+      validation: "len(dependencies) > 10 triggers warning"
+
+  # ML-DRIVEN RULES
+  # Adaptive rules from ML analysis (87% accuracy)
+  ml_driven:
+    - id: ml_001
+      name: "Anomaly detection - RTO/RPO mismatch"
+      description: "ML model detected: RPO > RTO is unusual and likely error"
+      severity: MEDIUM
+      applies_to: [user]
+      model: "anomaly_detector_v2"
+      accuracy: 0.91
+      can_override: true
+      validation: "rpo_hours <= rto_hours"
+
+    - id: ml_002
+      name: "Performance degradation prediction"
+      description: "ML model predicts: Workflow will exceed 5s based on complexity"
+      severity: MEDIUM
+      applies_to: [system]
+      model: "performance_predictor_v1"
+      accuracy: 0.84
+      can_override: false
+      validation: "predicted_transition_time < 5.0"
+      action: "suggest_optimization"
+
+    - id: ml_003
+      name: "Quality score prediction"
+      description: "ML model predicts: Current BIA will score < 70% quality"
+      severity: LOW
+      applies_to: [user]
+      model: "quality_predictor_v1"
+      accuracy: 0.87
+      can_override: true
+      validation: "predicted_quality_score >= 0.70"
+      action: "suggest_improvements"
+
+# ============================================================================
+# GOAL-RULE COORDINATION
+# How goals and rules work together
+# ============================================================================
+
+coordination:
+  decision_priority:
+    description: "When goals conflict with rules, rules take precedence"
+    hierarchy:
+      - Constitution Rules (always enforced)
+      - Compliance Rules (enforced unless overridden)
+      - Goals (guide optimization)
+      - Organization Rules (enforced based on config)
+      - Best Practice Rules (suggestions)
+      - ML-Driven Rules (adaptive guidance)
+
+  goal_driven_optimization:
+    description: "Goals drive proactive optimization suggestions"
+    strategies:
+      suggest_faster_path:
+        trigger: "goal_progress < 50% && time_remaining < 50%"
+        action: "ml_recommendations.suggest_similar_case_shortcuts"
+
+      template_based_acceleration:
+        trigger: "goal_progress < 30% && time_remaining < 30%"
+        action: "workflow_intelligence.suggest_templates"
+
+      auto_scale_if_slow:
+        trigger: "performance_metric < goal_target"
+        action: "infrastructure_coordinator.scale_up"
+
+      self_healing:
+        trigger: "rule_violation_detected && can_auto_fix"
+        action: "workflow_intelligence.auto_remediate"
+
+  rule_violation_handling:
+    constitution:
+      action: BLOCK
+      escalate: true
+      notify: ["platform_team", "security_team"]
+
+    compliance:
+      action: BLOCK_OR_OVERRIDE
+      escalate: true
+      notify: ["compliance_officer"]
+      require_justification: true
+
+    organization:
+      action: WARN_OR_BLOCK
+      escalate: false
+      notify: ["bcm_manager"]
+
+    best_practice:
+      action: WARN
+      escalate: false
+      notify: ["user"]
+
+    ml_driven:
+      action: SUGGEST
+      escalate: false
+      notify: ["user"]
+
+# ============================================================================
+# RECURSIVE APPLICATION
+# How goals/rules apply at different levels
+# ============================================================================
+
+recursive_application:
+  user_level:
+    description: "Goals and rules for user-created workflows"
+    applies:
+      - User creates BIA → Check ISO 22301 rules
+      - User defines RTO → Check organization policy
+      - User completes workflow → Track against completion goal
+
+  system_level:
+    description: "Goals and rules for Workflow Intelligence itself"
+    applies:
+      - State transition time → Check performance goal
+      - ML recommendation confidence → Check accuracy goal
+      - Rule validation execution → Check governance compliance goal
+      - Self-audit frequency → Check system goal
+    examples:
+      - "if transition_time > 5.0: self.escalate_performance_issue()"
+      - "if ml_accuracy < 0.82: self.trigger_model_retraining()"
+
+  component_level:
+    description: "Goals and rules for other platform components"
+    applies:
+      - AI Foundation response time → Check component goal
+      - BIA Service API latency → Check component goal
+      - Temporal Cloud workflow success rate → Check component goal
+    examples:
+      - "if ai_foundation.response_time > 5.0: notify_ai_team()"
+      - "if bia_service.uptime < 0.99: infrastructure_coordinator.recover()"
+
+  platform_level:
+    description: "Goals and rules for entire AI-Platform-ISO"
+    applies:
+      - MTTR across all services → Check platform resilience goal
+      - User certification rate → Check platform success goal
+      - Zero data loss incidents → Check constitution rule
+    examples:
+      - "if mttr_minutes > 15: decision_center.escalate_to_cto()"
+      - "if data_loss_detected: constitution_rule_violated()"
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  version: "1.0.0"
+  created: "2025-10-09"
+  author: "Platform Team"
+  governance_maturity_target: 80  # Target score (current: 20)
+  review_frequency_days: 90
+  next_review: "2026-01-09"

@@ -1,0 +1,60 @@
+graph LR
+    subgraph "Port Allocation"
+        subgraph "Infrastructure (Core)"
+            P_5432[5432: PostgreSQL]
+            P_6379[6379: Redis]
+            P_5672[5672: RabbitMQ AMQP]
+            P_15672[15672: RabbitMQ UI]
+            P_6333[6333: Qdrant]
+        end
+
+        subgraph "Gateway & Auth"
+            P_8000[8000: API Gateway]
+            P_8888[8888: Security Gateway]
+            P_3001[3001: Dashboard UI]
+        end
+
+        subgraph "Intelligent Core (8030-8040)"
+            P_8030[8030: AI Orchestration]
+            P_8031[8031: Predictive]
+            P_8032[8032: Collective]
+            P_8034[8034: Coordination Center]
+            P_8035[8035: Expertise Center]
+            P_8036[8036: Workflow Engine]
+            P_8037[8037: Workflow Intelligence]
+            P_8038[8038: AI Optimizer]
+            P_8039[8039: Event Intelligence]
+            P_8040[8040: AI Foundation]
+        end
+
+        subgraph "Platform Services (8011-8024, 8040-8041)"
+            P_8011[8011: Planning]
+            P_8012[8012: BIA]
+            P_8013[8013: Governance]
+            P_8014[8014: Compliance]
+            P_8021[8021: Learning]
+            P_8022[8022: Validation]
+            P_8023[8023: Plans]
+            P_8024[8024: Documents]
+            P_8040_PS[8040: Risk]
+            P_8041[8041: Response]
+        end
+
+        subgraph "Monitoring (9000s, 3000s)"
+            P_9090[9090: Prometheus]
+            P_3000[3000: Grafana]
+            P_3100[3100: Loki]
+            P_8500[8500: Consul]
+        end
+
+        subgraph "Simulation & Community"
+            P_8031_SIM[8031+: Simulation]
+            P_8032_COMM[8032-8033: Community]
+            P_8070[8070: BCM Coordination]
+        end
+    end
+
+    style P_5432 fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style P_8000 fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style P_8037 fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style P_9090 fill:#e7f3ff,stroke:#0088cc,stroke-width:2px

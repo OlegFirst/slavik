@@ -1,0 +1,44 @@
+sequenceDiagram
+    actor User
+    participant UI as BIA Interface
+    participant API as API Gateway
+    participant BIA as BIA Service
+    participant AI as AI Foundation
+    participant DB as PostgreSQL
+    participant Event as EventBus
+    
+    User->>UI: Start BIA Wizard
+    UI->>API: GET /bia/wizard/start
+    API->>BIA: Initialize BIA Session
+    BIA->>DB: Create BIA Record
+    BIA->>Event: Publish(BIA.Started)
+    BIA-->>UI: Session ID + Step 1
+    
+    User->>UI: Enter Critical Functions
+    UI->>API: POST /bia/functions
+    API->>BIA: Save Functions
+    BIA->>AI: Analyze Functions
+    AI-->>BIA: AI Recommendations
+    BIA->>Event: Publish(BIA.FunctionsAnalyzed)
+    BIA-->>UI: Step 2 + AI Insights
+    
+    User->>UI: Define Dependencies
+    UI->>API: POST /bia/dependencies
+    API->>BIA: Save Dependencies
+    BIA->>AI: Dependency Graph Analysis
+    AI-->>BIA: Dependency Map
+    BIA->>Event: Publish(BIA.DependenciesAnalyzed)
+    BIA-->>UI: Step 3 + Visualization
+    
+    User->>UI: Set RTOs/RPOs
+    UI->>API: POST /bia/objectives
+    API->>BIA: Save Objectives
+    BIA->>AI: Validate Objectives
+    AI-->>BIA: Validation + Suggestions
+    BIA->>DB: Update BIA Record
+    BIA->>Event: Publish(BIA.Completed)
+    BIA-->>UI: BIA Report + Next Steps
+    
+    Note over Event: Triggers downstream services
+    Event->>Risk Service: Auto-create risk scenarios
+    Event->>Planning Service: Suggest BC plans

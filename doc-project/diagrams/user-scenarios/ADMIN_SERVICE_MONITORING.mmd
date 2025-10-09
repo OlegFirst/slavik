@@ -1,0 +1,53 @@
+graph TB
+    subgraph "Admin Dashboard"
+        Admin[Administrator]
+        Dashboard[Admin Dashboard]
+    end
+    
+    subgraph "Service Monitoring"
+        Services[23 Services Status]
+        Health[Health Checks]
+        Metrics[Real-time Metrics]
+        Logs[Centralized Logs]
+    end
+    
+    subgraph "Infrastructure"
+        DB[(PostgreSQL)]
+        Redis[(Redis)]
+        Rabbit[(RabbitMQ)]
+        Qdrant[(Qdrant)]
+        Prom[Prometheus]
+        Graf[Grafana]
+    end
+    
+    subgraph "Management Actions"
+        Restart[Restart Service]
+        Scale[Scale Service]
+        Config[Update Config]
+        Backup[Trigger Backup]
+    end
+    
+    Admin --> Dashboard
+    Dashboard --> Services
+    Dashboard --> Health
+    Dashboard --> Metrics
+    Dashboard --> Logs
+    
+    Services --> |Monitor| DB
+    Services --> |Monitor| Redis
+    Services --> |Monitor| Rabbit
+    Services --> |Monitor| Qdrant
+    
+    Metrics --> Prom
+    Prom --> Graf
+    Graf --> Dashboard
+    
+    Dashboard --> Restart
+    Dashboard --> Scale
+    Dashboard --> Config
+    Dashboard --> Backup
+    
+    style Admin fill:#E91E63
+    style Dashboard fill:#2196F3
+    style Prom fill:#FF9800
+    style Graf fill:#FF9800

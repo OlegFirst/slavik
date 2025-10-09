@@ -1,0 +1,85 @@
+graph TB
+    subgraph "Infrastructure Containers"
+        PG_C[postgres<br/>━━━━━━━━━━━<br/>Image: postgres:15<br/>Port: 5432<br/>Volumes: pg-data]
+
+        REDIS_C[redis<br/>━━━━━━━━━━━<br/>Image: redis:7-alpine<br/>Port: 6379<br/>Volumes: redis-data]
+
+        RABBIT_C[rabbitmq<br/>━━━━━━━━━━━<br/>Image: rabbitmq:3-management<br/>Ports: 5672, 15672<br/>Volumes: rabbit-data]
+
+        QDRANT_C[qdrant<br/>━━━━━━━━━━━<br/>Image: qdrant/qdrant<br/>Port: 6333<br/>Volumes: qdrant-data]
+
+        PROM_C[prometheus<br/>━━━━━━━━━━━<br/>Image: prom/prometheus<br/>Port: 9090<br/>Config: prometheus.yml]
+
+        GRAF_C[grafana<br/>━━━━━━━━━━━<br/>Image: grafana/grafana<br/>Port: 3000<br/>Volumes: grafana-data]
+    end
+
+    subgraph "Intelligent Core Containers"
+        AI_FOUND_C[ai-foundation<br/>━━━━━━━━━━━<br/>Build: ./intelligent-core/ai-foundation<br/>Port: 8040<br/>Depends: postgres, redis, qdrant]
+
+        WF_INT_C[workflow-intelligence<br/>━━━━━━━━━━━<br/>Build: ./intelligent-core/workflow_intelligence<br/>Port: 8037<br/>Depends: postgres, redis, rabbitmq]
+
+        AI_ORCH_C[ai-orchestration<br/>━━━━━━━━━━━<br/>Build: ./intelligent-core/orchestration/ai-orchestration<br/>Port: 8030<br/>Depends: postgres, redis, ai-foundation]
+
+        COORD_C[coordination-center<br/>━━━━━━━━━━━<br/>Build: ./intelligent-core/orchestration/coordination-center<br/>Port: 8034<br/>Depends: ai-orchestration]
+
+        EXPERT_C[expertise-center<br/>━━━━━━━━━━━<br/>Build: ./intelligent-core/expertise-center<br/>Port: 8035<br/>Depends: ai-foundation, qdrant]
+
+        MORE_IC[+ 6 more IC services<br/>━━━━━━━━━━━<br/>Ports: 8031, 8032, 8036, 8038, 8039]
+    end
+
+    subgraph "Platform Services Containers"
+        BIA_C[bcm-bia-service<br/>━━━━━━━━━━━<br/>Build: ./platform-services/bia-service<br/>Port: 8012<br/>Depends: postgres, redis]
+
+        RISK_C[bcm-risk-service<br/>━━━━━━━━━━━<br/>Build: ./platform-services/risk-service<br/>Port: 8040<br/>Depends: postgres, redis]
+
+        MORE_PS[+ 10 more BCM services<br/>━━━━━━━━━━━<br/>Ports: 8011, 8013-8024, 8041]
+    end
+
+    subgraph "Gateway & Interface"
+        API_GW_C[api-gateway<br/>━━━━━━━━━━━<br/>Build: ./infrastructure/gateway<br/>Port: 8000<br/>Depends: all services]
+
+        UI_C[fastapi-dashboard<br/>━━━━━━━━━━━<br/>Build: ./interface/fastapi-dashboard<br/>Port: 3001<br/>Depends: api-gateway]
+    end
+
+    %% Infrastructure dependencies
+    AI_FOUND_C --> PG_C
+    AI_FOUND_C --> REDIS_C
+    AI_FOUND_C --> QDRANT_C
+
+    WF_INT_C --> PG_C
+    WF_INT_C --> REDIS_C
+    WF_INT_C --> RABBIT_C
+
+    AI_ORCH_C --> PG_C
+    AI_ORCH_C --> REDIS_C
+    AI_ORCH_C --> AI_FOUND_C
+
+    COORD_C --> AI_ORCH_C
+
+    EXPERT_C --> AI_FOUND_C
+    EXPERT_C --> QDRANT_C
+
+    BIA_C --> PG_C
+    BIA_C --> REDIS_C
+
+    RISK_C --> PG_C
+    RISK_C --> REDIS_C
+
+    %% Gateway
+    API_GW_C --> AI_ORCH_C
+    API_GW_C --> WF_INT_C
+    API_GW_C --> BIA_C
+    API_GW_C --> RISK_C
+
+    UI_C --> API_GW_C
+
+    %% Monitoring
+    PROM_C -.scrapes.-> AI_ORCH_C
+    PROM_C -.scrapes.-> WF_INT_C
+    PROM_C -.scrapes.-> BIA_C
+    GRAF_C --> PROM_C
+
+    style PG_C fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style REDIS_C fill:#d1ecf1,stroke:#17a2b8,stroke-width:2px
+    style RABBIT_C fill:#d6d8db,stroke:#6c757d,stroke-width:2px
+    style API_GW_C fill:#fff3cd,stroke:#ffc107,stroke-width:3px

@@ -1,0 +1,271 @@
+# Automated Knowledge Pipeline Configuration
+# ==========================================
+
+pipeline:
+  name: "Automated Knowledge Pipeline"
+  version: "1.0.0"
+  description: "Automated system analysis, documentation, and knowledge integration"
+
+  # Execution modes
+  modes:
+    full:
+      enabled: true
+      stages:
+        - system_analysis
+        - pattern_extraction
+        - documentation_generation
+        - rules_generation
+        - rag_integration
+        - event_catalog
+
+    analyze:
+      enabled: true
+      stages:
+        - system_analysis
+        - pattern_extraction
+
+    docs:
+      enabled: true
+      stages:
+        - documentation_generation
+
+    index:
+      enabled: true
+      stages:
+        - rag_integration
+
+  # Stage configurations
+  stages:
+    system_analysis:
+      enabled: true
+      timeout_seconds: 300
+      outputs:
+        - state_machine.json
+        - edge_cases.json
+
+      # System state detection
+      state_detection:
+        sources:
+          - database  # PostgreSQL journey states
+          - events    # Redis Streams
+          - github    # Workflow logs
+
+        # Core states to analyze
+        state_categories:
+          - journey_states
+          - incident_states
+          - service_health_states
+          - workflow_execution_states
+
+    pattern_extraction:
+      enabled: true
+      timeout_seconds: 300
+      outputs:
+        - behavioral_patterns.json
+
+      # Pattern sources
+      sources:
+        - event_bus
+        - database_logs
+        - github_workflows
+
+      # Pattern types
+      pattern_types:
+        - user_flow        # Happy path flows
+        - error_recovery   # Error handling patterns
+        - resource_usage   # Resource consumption patterns
+        - timing_patterns  # Duration and timing analysis
+
+      # Frequency thresholds
+      thresholds:
+        high_frequency: 100    # >100 occurrences = high frequency
+        medium_frequency: 10   # 10-100 = medium
+        low_frequency: 1       # <10 = low
+
+    documentation_generation:
+      enabled: true
+      timeout_seconds: 600
+      outputs:
+        - user_scenarios.json
+        - module_docs/
+
+      # AI generation
+      ai_generation:
+        enabled: true
+        model: "claude-3-5-sonnet-20241022"
+        max_tokens: 2000
+
+      # Scenario format
+      scenario_format: "gherkin"  # Given-When-Then
+
+      # Documentation types
+      doc_types:
+        - README.md
+        - API.md
+        - ARCHITECTURE.md
+        - USER_SCENARIOS.md
+
+    rules_generation:
+      enabled: true
+      timeout_seconds: 300
+      outputs:
+        - generated_rules.py
+        - generated_workflows.py
+
+      # Output formats
+      formats:
+        - python        # Python validation rules
+        - temporal      # Temporal workflows
+
+      # Rules categories
+      rule_categories:
+        - validation    # Input validation rules
+        - business      # Business logic rules
+        - saga          # Saga compensation rules
+
+    rag_integration:
+      enabled: true
+      timeout_seconds: 600
+      outputs:
+        - qdrant_collections.json
+
+      # Qdrant configuration
+      qdrant:
+        url: "${QDRANT_URL}"
+        api_key: "${QDRANT_API_KEY}"
+
+        # Collections to update
+        collections:
+          - name: "platform_capabilities"
+            chunk_size: 1000
+            overlap: 200
+
+          - name: "platform_patterns"
+            chunk_size: 1000
+            overlap: 200
+
+          - name: "platform_scenarios"
+            chunk_size: 500
+            overlap: 100
+
+      # Embedding model
+      embedding:
+        model: "sentence-transformers/all-mpnet-base-v2"
+        dimension: 768
+
+      # Documents to index
+      document_sources:
+        - /doc-project/comprehensive-platform-docs/
+        - /infrastructure/AI-office-infrastructure/analytics-specialist/reports/user_scenarios.json
+        - /infrastructure/events/EVENTS.md
+
+    event_catalog:
+      enabled: true
+      timeout_seconds: 300
+      outputs:
+        - infrastructure/events/EVENTS.md
+        - infrastructure/events/events_catalog.json
+        - infrastructure/events/EVENT_FLOW.md
+
+      # Scan directories
+      scan_dirs:
+        - intelligent-core/
+        - platform-services/
+        - infrastructure/
+
+      # Event patterns to detect
+      patterns:
+        publish:
+          - "eventbus.publish("
+          - "publish_event("
+          - "EventPublisher.publish("
+
+        subscribe:
+          - "eventbus.subscribe("
+          - "@event_handler("
+          - ".on("
+
+# Scheduling
+scheduling:
+  enabled: true
+
+  # Cron schedules
+  schedules:
+    daily_full_pipeline:
+      cron: "0 2 * * *"  # 02:00 UTC daily
+      mode: "full"
+
+    hourly_analysis:
+      cron: "0 * * * *"  # Every hour
+      mode: "analyze"
+
+# Notifications
+notifications:
+  enabled: true
+
+  channels:
+    - type: "github_issue"
+      on_failure: true
+      on_success: false
+      labels:
+        - "automation"
+        - "pipeline"
+
+    - type: "slack"
+      on_failure: true
+      on_success: false
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+
+# Integration with existing services
+integrations:
+  mio_manager:
+    enabled: true
+    api_url: "http://localhost:8003"
+    endpoints:
+      - "/api/v1/automation/trigger"
+
+  analytics_specialist:
+    enabled: true
+    api_url: "http://localhost:8007"
+    endpoints:
+      - "/api/v1/analyze"
+      - "/api/v1/reports"
+
+  monitoring:
+    enabled: true
+    api_url: "http://localhost:8009"
+    metrics_prefix: "pipeline"
+
+# Output configuration
+output:
+  base_dir: "infrastructure/AI-office-infrastructure/analytics-specialist/reports"
+
+  # Retention
+  retention:
+    pipeline_reports_days: 90
+    analysis_reports_days: 30
+    logs_days: 7
+
+  # Formats
+  formats:
+    - json
+    - markdown
+
+# Performance
+performance:
+  max_workers: 4  # Parallel processing
+  batch_size: 100  # Batch size for document processing
+  cache_enabled: true
+  cache_ttl_seconds: 3600
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s [%(levelname)s] %(message)s"
+  outputs:
+    - console
+    - file
+  file:
+    path: "automated_knowledge_pipeline.log"
+    max_bytes: 10485760  # 10MB
+    backup_count: 5

@@ -1,0 +1,226 @@
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--ifm-color-primary-lighter) 0%, var(--ifm-color-primary-darker) 100%);
+  color: white;
+}
+
+.hero__title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero__subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.features {
+  padding: 4rem 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metricCard {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 8px;
+  background: var(--ifm-color-emphasis-100);
+  border: 2px solid var(--ifm-color-primary-lighter);
+}
+
+.metricValue {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.metricLabel {
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.featureCard {
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.featureCard h3 {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.featureCard p {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.featureBenefit {
+  padding: 0.75rem;
+  background: var(--ifm-color-success-lighter);
+  border-radius: 4px;
+  color: var(--ifm-color-success-darker);
+  margin-top: 1rem;
+}
+
+.successStory {
+  background: var(--ifm-color-info-lighter);
+  padding: 2rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--ifm-color-info);
+  margin-bottom: 2rem;
+}
+
+.successStory h3 {
+  color: var(--ifm-color-info-darker);
+  margin-bottom: 1rem;
+}
+
+.storyContent p {
+  margin-bottom: 1rem;
+}
+
+.storyContent ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.storyContent ul li {
+  padding: 0.5rem 0;
+}
+
+.techStack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 8px;
+}
+
+.techCategory h4 {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.techTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techTags span {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.architectureHighlight {
+  background: var(--ifm-color-primary-lighter);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.architectureHighlight h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--ifm-color-primary-darker);
+}
+
+.layersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.layer {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.layer h4 {
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.layer p {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
+  }
+
+  .viewToggle {
+    flex-direction: column;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,192 @@
+# System BCM - Alert Rules
+# Add this to your Prometheus alert rules
+
+groups:
+  - name: system-bcm-critical
+    interval: 30s
+    rules:
+      - alert: SystemBCMServiceDown
+        expr: system_bcm_running == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: system-bcm
+        annotations:
+          summary: "System BCM Service is down"
+          description: "System BCM service has been down for more than 1 minute"
+          impact: "Platform cannot self-recover from failures"
+          action: "Check System BCM container: docker logs system-bcm-service"
+
+      - alert: BCMCycleFailing
+        expr: increase(system_bcm_cycle_total[5m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+          service: system-bcm
+        annotations:
+          summary: "BCM Cycle is failing"
+          description: "No successful BCM cycles in the last 5 minutes"
+          impact: "Platform health monitoring degraded"
+          action: "Check logs and trigger manual cycle"
+
+      - alert: CriticalServiceDown
+        expr: system_bcm_service_available{tier="critical"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: system-bcm
+        annotations:
+          summary: "Critical service {{ $labels.service }} is down"
+          description: "Critical service {{ $labels.service }} unavailable for 1 minute"
+          impact: "Platform functionality severely impacted"
+          action: "Trigger recovery: curl -X POST http://localhost:8050/recovery/trigger"
+
+      - alert: CascadeFailureDetected
+        expr: count(system_bcm_service_available{tier="critical"} == 0) >= 2
+        for: 30s
+        labels:
+          severity: critical
+          service: system-bcm
+        annotations:
+          summary: "Cascade failure detected"
+          description: "Multiple critical services failing simultaneously"
+          impact: "Platform-wide outage imminent"
+          action: "Execute cascade prevention procedure immediately"
+
+  - name: system-bcm-high
+    interval: 1m
+    rules:
+      - alert: RecoveryProcedureFailing
+        expr: rate(system_bcm_recovery_success_total[5m]) < rate(system_bcm_recovery_total[5m]) * 0.8
+        for: 3m
+        labels:
+          severity: high
+          service: system-bcm
+        annotations:
+          summary: "Recovery procedures failing"
+          description: "Recovery success rate below 80% for 3 minutes"
+          impact: "Auto-recovery not working effectively"
+          action: "Review recovery logs and procedures"
+
+      - alert: RTOTargetMissed
+        expr: system_bcm_rto_met_total / system_bcm_recovery_total < 0.8
+        for: 1m
+        labels:
+          severity: high
+          service: system-bcm
+        annotations:
+          summary: "RTO targets being missed"
+          description: "RTO compliance below 80%"
+          impact: "Recovery taking longer than expected"
+          action: "Review and optimize recovery procedures"
+
+      - alert: HighPriorityRiskDetected
+        expr: system_bcm_high_priority_risks > 5
+        for: 5m
+        labels:
+          severity: high
+          service: system-bcm
+        annotations:
+          summary: "High priority risks detected"
+          description: "{{ $value }} high-priority risks identified"
+          impact: "Platform stability at risk"
+          action: "Review risk assessment and apply mitigations"
+
+      - alert: ResourceContentionCritical
+        expr: system_bcm_resource_contention_events > 10
+        for: 2m
+        labels:
+          severity: high
+          service: system-bcm
+        annotations:
+          summary: "Resource contention detected"
+          description: "{{ $value }} resource contention events in 2 minutes"
+          impact: "Platform performance degraded"
+          action: "Apply resource priorities and scale if needed"
+
+  - name: system-bcm-warning
+    interval: 2m
+    rules:
+      - alert: BCMCycleSlow
+        expr: system_bcm_cycle_duration_seconds > 25
+        for: 10m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "BCM Cycle running slow"
+          description: "Cycle duration {{ $value }}s (target: <30s)"
+          impact: "BCM cycles taking longer than expected"
+          action: "Review cycle performance and optimize if needed"
+
+      - alert: LearningEffectivenessLow
+        expr: system_bcm_learning_effectiveness < 0.7
+        for: 30m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "Learning effectiveness low"
+          description: "Learning effectiveness {{ $value }} below 70%"
+          impact: "System not learning effectively from practice"
+          action: "Review learning parameters and insights generated"
+
+      - alert: InsightsNotGenerated
+        expr: increase(system_bcm_insights_generated_total[1h]) == 0
+        for: 1h
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "No insights generated"
+          description: "No new insights in the last hour"
+          impact: "System may not be detecting patterns"
+          action: "Check pattern detection and learning engine"
+
+      - alert: ServiceResponseTimeSlow
+        expr: avg_over_time(system_bcm_service_response_time[5m]) > 1.0
+        for: 10m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "Service {{ $labels.service }} responding slowly"
+          description: "Average response time {{ $value }}s (target: <1s)"
+          impact: "Service performance degraded"
+          action: "Check service logs and resource usage"
+
+      - alert: EventBusDisconnected
+        expr: system_bcm_eventbus_connected == 0
+        for: 2m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "EventBus disconnected"
+          description: "System BCM not connected to EventBus"
+          impact: "Cannot receive/publish platform events"
+          action: "Check Redis connection and restart if needed"
+
+      - alert: MemoryUsageHigh
+        expr: system_bcm_memory_usage_percent > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "Memory usage high"
+          description: "Memory usage {{ $value }}% (threshold: 80%)"
+          impact: "Risk of OOM errors"
+          action: "Check for memory leaks and restart if needed"
+
+      - alert: CPUUsageHigh
+        expr: system_bcm_cpu_usage_percent > 70
+        for: 5m
+        labels:
+          severity: warning
+          service: system-bcm
+        annotations:
+          summary: "CPU usage high"
+          description: "CPU usage {{ $value }}% (threshold: 70%)"
+          impact: "Performance may be impacted"
+          action: "Check for CPU-intensive operations"
