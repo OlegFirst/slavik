@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Platform ISO 22301</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-600: #525252;
+            --gray-800: #262626;
+            --gray-900: #171717;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gray-50);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        h1, h2 { font-weight: 600; letter-spacing: -0.02em; }
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; margin-bottom: 32px; text-align: center; }
+        h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        p { font-size: 1rem; line-height: 1.6; color: var(--gray-600); }
+
+        header {
+            background: var(--gray-900);
+            color: white;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            padding: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--gray-800);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav a:hover { color: var(--gray-900); }
+
+        section { padding: 60px 24px; }
+        section:nth-child(even) { background: white; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+        .card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            padding: 24px;
+        }
+
+        .card:hover {
+            border-color: var(--gray-600);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 32px 0;
+        }
+
+        .stat { text-align: center; min-width: 120px; }
+        .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-label { font-size: 0.9rem; color: var(--gray-600); }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .box {
+            padding: 24px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 60px 24px;
+            background: var(--gray-900);
+            color: white;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--gray-900);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .split { grid-template-columns: 1fr; }
+            .stat-number { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>AI Platform ISO 22301</h1>
+    <p>Business Continuity Management System</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#stats">Показатели</a></li>
+        <li><a href="#philosophy">BCM</a></li>
+        <li><a href="#features">Возможности</a></li>
+        <li><a href="#audiences">Аудитории</a></li>
+        <li><a href="#ai">AI</a></li>
+        <li><a href="#tech">Технологии</a></li>
+        <li><a href="#contact">Контакты</a></li>
+    </ul>
+</nav>
+
+<section id="stats">
+    <div class="container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">1745</div>
+                <div class="stat-label">Документов</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">23</div>
+                <div class="stat-label">Микросервисов</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">347</div>
+                <div class="stat-label">Кейсов</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">87%</div>
+                <div class="stat-label">Точность AI</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="philosophy">
+    <div class="container">
+        <h2>Философия BCM</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 32px;">
+            Кризисы неизбежны. Вопрос не ЕСЛИ, а КОГДА. Организации выбирают: реагировать в хаосе или быть готовыми.
+        </p>
+
+        <div class="split">
+            <div class="box">
+                <h3>Без подготовки</h3>
+                <p style="margin: 12px 0;">Кризис → Хаос → Прерывание услуг → Тяжелые последствия</p>
+            </div>
+
+            <div class="box">
+                <h3>С ISO 22301</h3>
+                <p style="margin: 12px 0;">Кризис → План активирован → Услуги работают → Быстрое восстановление</p>
+            </div>
+        </div>
+
+        <div style="padding: 20px; background: var(--gray-100); border-radius: 6px; text-align: center;">
+            <strong>ISO 22301 = Систематическая подготовка | Международный стандарт</strong>
+        </div>
+    </div>
+</section>
+
+<section id="features">
+    <div class="container">
+        <h2>Ключевые возможности</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>AI-анализ (BIA)</h3>
+                <p>Автоматический анализ процессов. 87% точность. 14 AI-специалистов.</p>
+            </div>
+
+            <div class="card">
+                <h3>Автоотчетность</h3>
+                <p>ISO 22301 за 1 клик. Gap-анализ за 45 минут вместо 4-6 недель.</p>
+            </div>
+
+            <div class="card">
+                <h3>Оценка рисков</h3>
+                <p>Предиктивная аналитика. 347+ кейсов в базе знаний.</p>
+            </div>
+
+            <div class="card">
+                <h3>Симуляции</h3>
+                <p>Цифровой двойник. Monte Carlo. TheHive интеграция.</p>
+            </div>
+
+            <div class="card">
+                <h3>Мониторинг 24/7</h3>
+                <p>Prometheus + Grafana. EventBus архитектура.</p>
+            </div>
+
+            <div class="card">
+                <h3>Коллективный интеллект</h3>
+                <p>Обучение на 347+ анонимизированных кризисов.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="audiences">
+    <div class="container">
+        <h2>Для кого</h2>
+
+        <div class="grid">
+            <div class="card">
+                <h3>BCM Менеджеры</h3>
+                <p style="margin-bottom: 12px;">AI-помощник 24/7. Автогенерация планов. В 4-8x быстрее.</p>
+            </div>
+
+            <div class="card">
+                <h3>Аудиторы</h3>
+                <p style="margin-bottom: 12px;">Gap-анализ за 45 минут. Автопроверка ISO. 87% точность.</p>
+            </div>
+
+            <div class="card">
+                <h3>Руководство</h3>
+                <p style="margin-bottom: 12px;">70% снижение затрат. Сертификация за 3-6 месяцев. Dashboard метрик.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="ai">
+    <div class="container">
+        <h2>Ценность AI</h2>
+
+        <div class="split">
+            <div class="box">
+                <h3>Скорость</h3>
+                <table>
+                    <tr><td>Gap-анализ</td><td><strong>45 мин</strong></td></tr>
+                    <tr><td>BIA анализ</td><td><strong>2-3 недели</strong></td></tr>
+                    <tr><td>Планы</td><td><strong>4-6 недель</strong></td></tr>
+                </table>
+                <p style="text-align: center; font-weight: 700; margin-top: 12px;">В 4-8 раз быстрее</p>
+            </div>
+
+            <div class="box">
+                <h3>Экономия</h3>
+                <table>
+                    <tr><td>Консультанты</td><td><strong>-80%</strong></td></tr>
+                    <tr><td>Время персонала</td><td><strong>-70%</strong></td></tr>
+                    <tr><td>Рутина</td><td><strong>-85%</strong></td></tr>
+                </table>
+                <p style="text-align: center; font-weight: 700; margin-top: 12px;">70% общая экономия</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="tech">
+    <div class="container">
+        <h2>Технологии</h2>
+
+        <div class="grid">
+            <div class="box">
+                <h3>Backend</h3>
+                <p>Python 3.9+ / FastAPI</p>
+            </div>
+            <div class="box">
+                <h3>Frontend</h3>
+                <p>Next.js 14 / React / TypeScript</p>
+            </div>
+            <div class="box">
+                <h3>Database</h3>
+                <p>PostgreSQL / Qdrant / Redis</p>
+            </div>
+            <div class="box">
+                <h3>AI</h3>
+                <p>Claude / GPT-4 / Scikit-learn</p>
+            </div>
+            <div class="box">
+                <h3>Events</h3>
+                <p>Redis Streams / RabbitMQ</p>
+            </div>
+            <div class="box">
+                <h3>Monitoring</h3>
+                <p>Prometheus / Grafana</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+            <h3 style="text-align: center; margin-bottom: 16px;">Архитектура</h3>
+            <div class="mermaid">
+graph LR
+    WEB[Web Next.js] --> GW[Gateway FastAPI]
+    GW --> SRV[12 BCM Services]
+    SRV --> CORE[AI Core]
+    CORE --> DB[(PostgreSQL)]
+    CORE --> VEC[(Qdrant)]
+    SRV --> EVENT[EventBus]
+            </div>
+        </div>
+
+        <div class="stats" style="margin-top: 24px;">
+            <div class="stat">
+                <div class="stat-number">23</div>
+                <div class="stat-label">Микросервисов</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">133</div>
+                <div class="stat-label">Событий</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">AI-First</div>
+                <div class="stat-label">Архитектура</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>MCP Protocol</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 32px; color: var(--gray-600);">
+            Универсальный протокол для интеграции AI систем. Plug-and-play вместо месяцев разработки.
+        </p>
+
+        <div class="split">
+            <div class="box">
+                <h3>Традиционно</h3>
+                <p>6-12 месяцев интеграции. Vendor lock-in. Высокая стоимость.</p>
+            </div>
+            <div class="box">
+                <h3>С MCP</h3>
+                <p>Часы вместо месяцев. Любой AI провайдер. Коллективный интеллект.</p>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="box"><p>От экспертной зависимости → К AI-помощникам для всех</p></div>
+            <div class="box"><p>От статичных планов → К динамическому обучению</p></div>
+            <div class="box"><p>От изоляции → К коллективному интеллекту</p></div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Интеграции</h2>
+
+        <div class="grid">
+            <div class="box">
+                <h3>CRM/ERP</h3>
+                <p>Salesforce, SAP, Dynamics, 1C, Oracle</p>
+            </div>
+            <div class="box">
+                <h3>Desktop</h3>
+                <p>Excel, Word, PDF, CSV</p>
+            </div>
+            <div class="box">
+                <h3>Коммуникации</h3>
+                <p>Slack, Teams, Telegram, Email</p>
+            </div>
+            <div class="box">
+                <h3>Cloud</h3>
+                <p>Azure, AWS, Google Cloud, On-Premise</p>
+            </div>
+            <div class="box">
+                <h3>AI</h3>
+                <p>Claude, GPT-4, Gemini, Azure OpenAI</p>
+            </div>
+            <div class="box">
+                <h3>Storage</h3>
+                <p>PostgreSQL, Redis, Qdrant, S3</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="cta">
+    <div class="container">
+        <h2 style="color: white;">Готовы начать?</h2>
+        <p style="margin-bottom: 24px; color: #d4d4d4;">
+            Запросите демонстрацию платформы
+        </p>
+
+        <div>
+            <a href="mailto:info@ai-platform-iso.com" class="btn btn-primary">Связаться</a>
+            <a href="http://localhost:3333" target="_blank" class="btn btn-secondary">Демо</a>
+        </div>
+
+        <div class="stats" style="margin-top: 32px;">
+            <div class="stat">
+                <div class="stat-number" style="color: white; font-size: 1.2rem;">MVP</div>
+                <div class="stat-label" style="color: #a3a3a3;">localhost:3333</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" style="color: white; font-size: 1.2rem;">Docs</div>
+                <div class="stat-label" style="color: #a3a3a3;">localhost:4000</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" style="color: white; font-size: 1.2rem;">API</div>
+                <div class="stat-label" style="color: #a3a3a3;">localhost:8888/docs</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
