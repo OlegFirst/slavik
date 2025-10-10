@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Flows - AI-Platform-ISO</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="features.html">Features</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="technology.html">Technology</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="mvp.html">MVP Demo</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 3rem 2rem;">
+    <div class="container">
+      <h1>Business Flows</h1>
+      <p>233 documented business flows implementing ISO 22301 requirements</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>User Onboarding Flow</h2>
+      <div class="mermaid">
+graph TD
+    A[New User Registration] --> B[Create Account]
+    B --> C[Email Verification]
+    C --> D[Create/Join Organization]
+    D --> E{Role Assignment}
+    E -->|Admin| F[Full Access]
+    E -->|Manager| G[Department Access]
+    E -->|User| H[Limited Access]
+    F --> I[Onboarding Wizard]
+    G --> I
+    H --> I
+    I --> J[Setup BCM Context]
+    J --> K[Define Critical Processes]
+    K --> L[Complete Initial BIA]
+    L --> M[Dashboard Ready]
+
+    style A fill:#e0e7ff
+    style M fill:#f0fdf4
+      </div>
+
+      <div class="card mt-2">
+        <h3>Onboarding Steps</h3>
+        <ol style="color: var(--medium-text);">
+          <li><strong>Registration:</strong> User provides email, password, organization name</li>
+          <li><strong>Verification:</strong> Email confirmation link sent and verified</li>
+          <li><strong>Organization Setup:</strong> Define industry, size, country, BCM maturity</li>
+          <li><strong>Role Assignment:</strong> RBAC roles assigned (Admin, BCM Manager, Auditor, User)</li>
+          <li><strong>Context Definition:</strong> Stakeholders, scope, interested parties (ISO 4.1, 4.2)</li>
+          <li><strong>Process Identification:</strong> AI suggests industry-specific critical processes</li>
+          <li><strong>Initial BIA:</strong> Guided wizard for first Business Impact Analysis</li>
+          <li><strong>Dashboard Activation:</strong> Personalized dashboard with recommended next steps</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>BIA Creation Workflow</h2>
+      <div class="mermaid">
+graph TD
+    A[Start BIA] --> B[Define Scope]
+    B --> C[Select Collection Method]
+    C --> D{Method Type}
+    D -->|Questionnaire| E[Generate Questions]
+    D -->|Interview| F[Schedule Sessions]
+    D -->|Document| G[Upload Files]
+    E --> H[Distribute to Stakeholders]
+    F --> H
+    G --> I[AI Extract Data]
+    I --> H
+    H --> J[Collect Responses]
+    J --> K[AI Analyze Responses]
+    K --> L[Identify Critical Processes]
+    L --> M[Calculate RTO/RPO]
+    M --> N[Map Dependencies]
+    N --> O[Assess Financial Impact]
+    O --> P[Generate Report]
+    P --> Q[Management Review]
+    Q --> R{Approved?}
+    R -->|Yes| S[Publish BIA]
+    R -->|No| T[Revise]
+    T --> L
+    S --> U[Update BC Strategy]
+
+    style A fill:#e0e7ff
+    style S fill:#f0fdf4
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Data Collection Methods</h3>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Questionnaire:</strong> AI-generated industry-specific questions</li>
+            <li><strong>Interview:</strong> Structured sessions with process owners</li>
+            <li><strong>Document Analysis:</strong> OCR + AI extraction from existing docs</li>
+            <li><strong>Workshop:</strong> Facilitated group sessions</li>
+            <li><strong>Observation:</strong> On-site process observation</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>BIA Outputs</h3>
+          <ul style="color: var(--medium-text);">
+            <li>Critical process inventory</li>
+            <li>RTO/RPO requirements per process</li>
+            <li>Dependency map (upstream/downstream)</li>
+            <li>Financial impact estimates (hourly/daily)</li>
+            <li>Resource requirements</li>
+            <li>Recovery priority ranking</li>
+            <li>Executive summary report</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Risk Assessment Process</h2>
+      <div class="mermaid">
+graph TD
+    A[Initiate Risk Assessment] --> B[Define Context]
+    B --> C[Identify Threats]
+    C --> D[Identify Vulnerabilities]
+    D --> E[AI Suggest Additional Risks]
+    E --> F[For Each Risk]
+    F --> G[Assess Likelihood]
+    G --> H[Assess Impact]
+    H --> I[Calculate Risk Score]
+    I --> J[Plot on 5x5 Matrix]
+    J --> K{Risk Level}
+    K -->|High| L[Immediate Treatment]
+    K -->|Medium| M[Plan Treatment]
+    K -->|Low| N[Monitor]
+    L --> O[Design Controls]
+    M --> O
+    O --> P[Implement Mitigation]
+    P --> Q[Reassess Residual Risk]
+    Q --> R[Document & Report]
+    N --> R
+    R --> S[Management Approval]
+
+    style A fill:#e0e7ff
+    style S fill:#f0fdf4
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3 class="text-center">Risk Assessment Methods</h3>
+        <div class="grid grid-3">
+          <div>
+            <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">Qualitative</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">5x5 matrix (likelihood × impact). Fast, suitable for initial assessment.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">Quantitative (FAIR)</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">Financial impact calculation. Loss event frequency × magnitude.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">Monte Carlo</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">Probabilistic simulation. 10,000+ iterations for range estimation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Compliance Monitoring Flow</h2>
+      <div class="mermaid">
+graph LR
+    A[ISO 22301 Requirements] --> B[Implementation Tracking]
+    B --> C[Evidence Collection]
+    C --> D[Automated Gap Analysis]
+    D --> E{Gaps Found?}
+    E -->|Yes| F[Create Improvement Actions]
+    E -->|No| G[Audit Ready]
+    F --> H[Assign Responsibilities]
+    H --> I[Track Progress]
+    I --> J[Verify Completion]
+    J --> B
+    G --> K[Schedule Internal Audit]
+    K --> L[Conduct Audit]
+    L --> M[Document Findings]
+    M --> N{Non-Conformities?}
+    N -->|Yes| O[NC/CAPA Process]
+    N -->|No| P[Certification Ready]
+    O --> Q[Root Cause Analysis]
+    Q --> R[Corrective Actions]
+    R --> S[Effectiveness Check]
+    S --> B
+
+    style A fill:#e0e7ff
+    style P fill:#f0fdf4
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Incident Response Workflow</h2>
+      <div class="mermaid">
+graph TD
+    A[Incident Detected] --> B[Alert Triggered]
+    B --> C[Incident Commander Assigned]
+    C --> D[Assess Severity]
+    D --> E{Severity Level}
+    E -->|Critical| F[Activate BC Plan]
+    E -->|Major| G[Escalate to Management]
+    E -->|Minor| H[Standard Response]
+    F --> I[Notify Response Team]
+    G --> I
+    I --> J[Retrieve Procedures]
+    J --> K[Execute Response Plan]
+    K --> L[Real-time Status Updates]
+    L --> M[Resource Coordination]
+    M --> N[Stakeholder Communication]
+    N --> O{Crisis Resolved?}
+    O -->|No| P[Adjust Strategy]
+    P --> K
+    O -->|Yes| Q[Recovery Phase]
+    Q --> R[Restore Services]
+    R --> S[After-Action Review]
+    S --> T[Document Lessons]
+    T --> U[Update Plans]
+    U --> V[Close Incident]
+
+    style A fill:#fee2e2
+    style V fill:#f0fdf4
+      </div>
+
+      <div class="card mt-2">
+        <h3>Automated Incident Features</h3>
+        <ul style="color: var(--medium-text);">
+          <li><strong>Event Intelligence:</strong> Pattern detection triggers automatic incident creation</li>
+          <li><strong>Smart Routing:</strong> AI assigns incident commander based on type and availability</li>
+          <li><strong>Plan Retrieval:</strong> Relevant BC plans auto-surfaced based on affected processes</li>
+          <li><strong>Team Notification:</strong> Automated alerts via email, SMS, Slack, Teams</li>
+          <li><strong>Real-time Dashboard:</strong> Live incident status, task progress, resource allocation</li>
+          <li><strong>Communication Templates:</strong> Pre-approved messages for stakeholders</li>
+          <li><strong>Documentation:</strong> Timeline, decisions, actions automatically logged</li>
+          <li><strong>Learning Loop:</strong> Lessons learned fed back to AI for improved future responses</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Complete Flow Statistics</h2>
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h4>233</h4>
+            <p>Total Business Flows</p>
+          </div>
+          <div class="stat-item">
+            <h4>58</h4>
+            <p>ISO 22301 Mandatory</p>
+          </div>
+          <div class="stat-item">
+            <h4>150+</h4>
+            <p>Platform Implemented</p>
+          </div>
+          <div class="stat-item">
+            <h4>25+</h4>
+            <p>Best Practice Patterns</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Critical Flows for Certification</h3>
+          <ol style="color: var(--medium-text);">
+            <li>Organizational context determination (ISO 4)</li>
+            <li>Leadership commitment demonstration (ISO 5)</li>
+            <li>Business Impact Analysis execution (ISO 8.2.2)</li>
+            <li>Risk assessment performance (ISO 8.2.3)</li>
+            <li>BC strategy development (ISO 8.3)</li>
+            <li>Testing and exercise (ISO 8.5)</li>
+            <li>Management review (ISO 9.3)</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>High-Value Automation Flows</h3>
+          <ol style="color: var(--medium-text);">
+            <li>AI-powered BIA process suggestions</li>
+            <li>Automated RTO/RPO calculation</li>
+            <li>Intelligent risk scoring with FAIR</li>
+            <li>Real-time compliance gap analysis</li>
+            <li>Automated plan generation from templates</li>
+            <li>Exercise scenario generation with AI</li>
+            <li>Predictive incident detection</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          Comprehensive Business Continuity Management platform.
+        </p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="features.html">Features</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="mvp.html">MVP Demo</a>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <a href="contact.html">Contact</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+</body>
+</html>

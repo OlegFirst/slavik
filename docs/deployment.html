@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deployment Guide - AI-Platform-ISO</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="features.html">Features</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="technology.html">Technology</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="mvp.html">MVP Demo</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 3rem 2rem;">
+    <div class="container">
+      <h1>Deployment Guide</h1>
+      <p>4-phase phased startup strategy for zero-conflict deployment</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Deployment Strategy: Bottom-Up Approach</h2>
+      <p class="section-subtitle">Launch services layer by layer to avoid port conflicts and dependency issues</p>
+
+      <div class="grid grid-4">
+        <div class="card">
+          <h3>Phase 1</h3>
+          <p style="color: var(--primary-color); font-weight: 600;">Infrastructure Layer</p>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">PostgreSQL, Redis, RabbitMQ, Qdrant</p>
+          <p style="font-size: 0.875rem; margin-top: 0.5rem;"><strong>Time:</strong> 5 minutes</p>
+        </div>
+        <div class="card">
+          <h3>Phase 2</h3>
+          <p style="color: var(--primary-color); font-weight: 600;">Platform Services</p>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">BIA, Risk, Compliance, etc.</p>
+          <p style="font-size: 0.875rem; margin-top: 0.5rem;"><strong>Time:</strong> 10 minutes</p>
+        </div>
+        <div class="card">
+          <h3>Phase 3</h3>
+          <p style="color: var(--primary-color); font-weight: 600;">Intelligent Core</p>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">AI modules, workflow intelligence</p>
+          <p style="font-size: 0.875rem; margin-top: 0.5rem;"><strong>Time:</strong> 10 minutes</p>
+        </div>
+        <div class="card">
+          <h3>Phase 4</h3>
+          <p style="color: var(--primary-color); font-weight: 600;">Interface Layer</p>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Web app, API gateway</p>
+          <p style="font-size: 0.875rem; margin-top: 0.5rem;"><strong>Time:</strong> 5 minutes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Phase 1: Infrastructure Layer</h2>
+      <p class="section-subtitle">Start the foundation services first (5 minutes)</p>
+
+      <div class="card">
+        <h3>Docker Compose Launch</h3>
+        <pre><code># Start all infrastructure services
+docker run -d --name postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=bcm_platform \
+  -p 5432:5432 \
+  postgres:15
+
+docker run -d --name redis \
+  -p 6379:6379 \
+  redis:7
+
+docker run -d --name rabbitmq \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  rabbitmq:3-management
+
+docker run -d --name qdrant \
+  -p 6333:6333 \
+  qdrant/qdrant
+
+# Verification
+docker ps | grep -E "postgres|redis|rabbitmq|qdrant"
+sleep 10  # Wait for services to be ready</code></pre>
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Health Checks</h3>
+          <pre><code># PostgreSQL
+psql -h localhost -U postgres -d bcm_platform -c "SELECT 1;"
+
+# Redis
+redis-cli ping
+
+# RabbitMQ
+curl http://localhost:15672/
+
+# Qdrant
+curl http://localhost:6333/</code></pre>
+        </div>
+        <div class="card">
+          <h3>Ports Used</h3>
+          <ul style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>5432:</strong> PostgreSQL</li>
+            <li><strong>6379:</strong> Redis</li>
+            <li><strong>5672:</strong> RabbitMQ (AMQP)</li>
+            <li><strong>15672:</strong> RabbitMQ (UI)</li>
+            <li><strong>6333:</strong> Qdrant</li>
+            <li><strong>9090:</strong> Prometheus (optional)</li>
+            <li><strong>3001:</strong> Grafana (optional)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Phase 2: Platform Services</h2>
+      <p class="section-subtitle">Launch BCM services on ports 8001-8012 (10 minutes)</p>
+
+      <div class="card">
+        <h3>Start Essential Services</h3>
+        <pre><code># Required services (6 core services)
+cd /path/to/AI-Platform-ISO/platform-services
+
+# BIA Service (Port 8001)
+cd bia-service && uvicorn main:app --host 0.0.0.0 --port 8001 &
+
+# Risk Service (Port 8002)
+cd ../risk-service && uvicorn main:app --host 0.0.0.0 --port 8002 &
+
+# Compliance Service (Port 8003)
+cd ../compliance-service && uvicorn main:app --host 0.0.0.0 --port 8003 &
+
+# Governance Service (Port 8004)
+cd ../governance-service && uvicorn main:app --host 0.0.0.0 --port 8004 &
+
+# Documents Service (Port 8005)
+cd ../documents-service && uvicorn main:app --host 0.0.0.0 --port 8005 &
+
+# Validation Service (Port 8006)
+cd ../validation-service && uvicorn main:app --host 0.0.0.0 --port 8006 &
+
+# Verification
+lsof -i :8001-8006 | grep LISTEN</code></pre>
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Environment Variables</h3>
+          <pre><code># .env file for each service
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/bcm_platform
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://guest:guest@localhost:5672
+ANTHROPIC_API_KEY=your_key_here
+JWT_SECRET=your_secret_here
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_key</code></pre>
+        </div>
+        <div class="card">
+          <h3>Service Health Check</h3>
+          <pre><code># Check all services
+for port in {8001..8006}; do
+  echo "Checking port $port:"
+  curl http://localhost:$port/health
+done
+
+# Alternative: Check API docs
+open http://localhost:8001/docs</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Phase 3: Intelligent Core</h2>
+      <p class="section-subtitle">Launch AI modules (10 minutes, optional)</p>
+
+      <div class="card">
+        <h3>Start AI Modules</h3>
+        <pre><code>cd /path/to/AI-Platform-ISO/intelligent-core
+
+# AI Foundation (Core)
+cd ai-foundation && python main.py --port 8020 &
+
+# Workflow Intelligence (Port 8037)
+cd ../workflow_intelligence && python main.py --port 8037 &
+
+# Expertise Center (Port 8036)
+cd ../expertise-center && python main.py --port 8036 &
+
+# Predictive Analytics (Port 8031)
+cd ../predictive && python main.py --port 8031 &
+
+# Community Intelligence (Port 8038)
+cd ../community_intelligence && python main.py --port 8038 &
+
+# Event Intelligence (Port 8039)
+cd ../event_intelligence && python main.py --port 8039 &</code></pre>
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3 class="text-center">AI Module Dependencies</h3>
+        <p style="text-align: center; max-width: 700px; margin: 1rem auto; color: var(--medium-text);">
+          AI modules require <strong>Qdrant (port 6333)</strong> for vector storage and
+          <strong>Redis (port 6379)</strong> for caching. Ensure Phase 1 completed successfully
+          before starting these modules.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Phase 4: Interface Layer</h2>
+      <p class="section-subtitle">Launch frontend and API gateway (5 minutes)</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>API Gateway</h3>
+          <pre><code>cd /path/to/AI-Platform-ISO/infrastructure/gateway
+
+# Start gateway on port 8080
+uvicorn main:app --host 0.0.0.0 --port 8080 &
+
+# Verify
+curl http://localhost:8080/health</code></pre>
+        </div>
+        <div class="card">
+          <h3>Web Application</h3>
+          <pre><code>cd /path/to/AI-Platform-ISO/interface/web-app
+
+# Install dependencies (first time only)
+npm install
+
+# Start development server
+npm run dev
+
+# Production build
+npm run build && npm start</code></pre>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <h3>Access the Platform</h3>
+        <ul style="color: var(--medium-text); margin-top: 0.5rem;">
+          <li><strong>Web App:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+          <li><strong>API Gateway:</strong> <a href="http://localhost:8080" target="_blank">http://localhost:8080</a></li>
+          <li><strong>API Documentation:</strong> <a href="http://localhost:8080/docs" target="_blank">http://localhost:8080/docs</a></li>
+          <li><strong>RabbitMQ UI:</strong> <a href="http://localhost:15672" target="_blank">http://localhost:15672</a> (guest/guest)</li>
+          <li><strong>Prometheus:</strong> <a href="http://localhost:9090" target="_blank">http://localhost:9090</a> (if running)</li>
+          <li><strong>Grafana:</strong> <a href="http://localhost:3001" target="_blank">http://localhost:3001</a> (if running)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Production Deployment</h2>
+      <p class="section-subtitle">Kubernetes deployment with high availability</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Kubernetes Setup</h3>
+          <pre><code># Create namespace
+kubectl create namespace bcm-platform
+
+# Deploy infrastructure
+kubectl apply -f k8s/infrastructure/
+
+# Deploy services
+kubectl apply -f k8s/services/
+
+# Deploy intelligent core
+kubectl apply -f k8s/intelligent-core/
+
+# Deploy interface
+kubectl apply -f k8s/interface/
+
+# Check status
+kubectl get pods -n bcm-platform</code></pre>
+        </div>
+        <div class="card">
+          <h3>Scaling Configuration</h3>
+          <pre><code># Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: bia-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bia-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70</code></pre>
+        </div>
+      </div>
+
+      <div class="card mt-2">
+        <h3>Environment Configuration</h3>
+        <p style="color: var(--medium-text); margin-bottom: 1rem;">Use Kubernetes Secrets for sensitive data:</p>
+        <pre><code># Create secrets
+kubectl create secret generic db-credentials \
+  --from-literal=url=postgresql://user:pass@host:5432/db \
+  -n bcm-platform
+
+kubectl create secret generic api-keys \
+  --from-literal=anthropic-key=sk-ant-... \
+  --from-literal=jwt-secret=... \
+  -n bcm-platform
+
+# Reference in deployment
+env:
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: db-credentials
+        key: url</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Troubleshooting</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Port Conflicts</h3>
+          <pre><code># Find process using port
+lsof -i :8001
+
+# Kill process
+kill -9 <PID>
+
+# Use alternative port
+uvicorn main:app --port 8101</code></pre>
+        </div>
+        <div class="card">
+          <h3>Service Not Starting</h3>
+          <pre><code># Check logs
+tail -f logs/service.log
+
+# Verify environment
+cat .env
+
+# Test database connection
+psql -h localhost -U postgres</code></pre>
+        </div>
+        <div class="card">
+          <h3>Database Issues</h3>
+          <pre><code># Check PostgreSQL
+docker logs postgres
+
+# Reset database
+docker rm -f postgres
+# Then restart Phase 1
+
+# Run migrations
+alembic upgrade head</code></pre>
+        </div>
+        <div class="card">
+          <h3>Network Issues</h3>
+          <pre><code># Check Docker network
+docker network ls
+docker network inspect bridge
+
+# Ping services
+curl http://localhost:8001/health
+
+# Check DNS
+nslookup localhost</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Shutdown Procedure</h2>
+      <div class="card">
+        <h3>Graceful Shutdown (Reverse Order)</h3>
+        <pre><code># Stop interface
+pkill -f "npm start"
+pkill -f "uvicorn.*8080"
+
+# Stop intelligent core
+pkill -f "python main.py --port 80"
+
+# Stop platform services
+pkill -f "uvicorn main:app --port 800"
+
+# Stop infrastructure
+docker stop postgres redis rabbitmq qdrant
+docker rm postgres redis rabbitmq qdrant
+
+# Verify all stopped
+docker ps
+lsof -i :3000,8080,5432,6379</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">Deployment guide for production and development.</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="mvp.html">MVP Demo</a>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <a href="contact.html">Contact</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+</body>
+</html>

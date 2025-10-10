@@ -415,10 +415,38 @@ python3 infrastructure_coordinator.py
 
 ### Access Points
 - Prometheus: http://localhost:9090
-- Grafana: http://localhost:3000 (admin/admin123)
+- Grafana: http://localhost:3001 (admin/admin)
 - Metrics API: http://localhost:9091
-- EventCatalog: http://localhost:3001 (npm run dev)
+- EventCatalog: http://localhost:3002 (npm run dev)
 - System BCM: http://localhost:8050
+- **Admin Panel**: http://localhost:3000 ([Setup Guide](docs/ADMIN_PANEL_CONSOLIDATION_PLAN.md))
+
+### 🖥️ Admin Control Center
+
+**Location**: `/interface/admin_panel/`
+
+Unified administrative dashboard for platform management and monitoring.
+
+**Quick Start**:
+```bash
+cd interface/admin_panel
+npm install
+npm run dev
+# Open http://localhost:3000
+```
+
+**Features**:
+- Real-time service monitoring
+- AI organisms management
+- System configuration
+- PDCA analytics (planned)
+- Alert management (planned)
+- User & role management (planned)
+
+**Documentation**:
+- [Monitoring System Specification](docs/TZ_MONITORING_ADMIN_PANEL.md) - Complete technical specification
+- [Consolidation Plan](docs/ADMIN_PANEL_CONSOLIDATION_PLAN.md) - Setup and integration guide
+- [Quick Reference](docs/QUICK_REFERENCE_INDEX.md) - Complete documentation index
 
 ---
 

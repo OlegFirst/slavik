@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Platform Demo - AI-Platform-ISO</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="features.html">Features</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="technology.html">Technology</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="mvp.html">MVP Demo</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" style="padding: 3rem 2rem;">
+    <div class="container">
+      <h1>MVP Platform Demo</h1>
+      <p>Fully working BCM platform with AI integration - ready to deploy</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>MVP Overview</h2>
+      <p class="section-subtitle">Production-ready minimum viable product implementing core BCM functionality</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Backend</h3>
+          <p style="color: var(--medium-text); margin: 0.5rem 0;"><strong>http://localhost:8888</strong></p>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li>FastAPI + Python 3.11</li>
+            <li>Supabase PostgreSQL (managed)</li>
+            <li>JWT authentication</li>
+            <li>Claude AI integration</li>
+            <li>Swagger/OpenAPI docs at <code>/docs</code></li>
+            <li>Row-Level Security (RLS)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Frontend</h3>
+          <p style="color: var(--medium-text); margin: 0.5rem 0;"><strong>http://localhost:3333</strong></p>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li>Next.js 14 + TypeScript</li>
+            <li>Tailwind CSS styling</li>
+            <li>Zustand state management</li>
+            <li>React Hook Form</li>
+            <li>Real-time updates</li>
+            <li>Mobile responsive</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Implemented Features</h2>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Authentication</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>User registration</li>
+            <li>Login with JWT tokens</li>
+            <li>Protected routes</li>
+            <li>Session management</li>
+            <li>Password hashing (bcrypt)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Organizations</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>Create organization</li>
+            <li>Industry selection</li>
+            <li>Company size tracking</li>
+            <li>Business process management</li>
+            <li>AI process generation</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>BIA Module</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>Create BIA analysis</li>
+            <li>Add critical processes</li>
+            <li>Define criticality levels</li>
+            <li>AI-powered RTO/RPO calc</li>
+            <li>Dependency mapping</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Questionnaires</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>Auto-generate questions</li>
+            <li>Distribute to stakeholders</li>
+            <li>Collect responses</li>
+            <li>AI analysis of answers</li>
+            <li>Generate recommendations</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>AI Integration</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>Claude API (Anthropic)</li>
+            <li>Process suggestions by industry</li>
+            <li>RTO/RPO calculation</li>
+            <li>BIA questionnaire analysis</li>
+            <li>Natural language queries</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Data Management</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem; margin-top: 0.5rem;">
+            <li>Multi-tenant architecture</li>
+            <li>Row-Level Security</li>
+            <li>Audit logging</li>
+            <li>Version tracking</li>
+            <li>Data export</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Database Schema</h2>
+      <p class="section-subtitle">PostgreSQL schema with RLS for data security</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Core Tables</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li><strong>user_profiles:</strong> User accounts and metadata</li>
+            <li><strong>organizations:</strong> Company information</li>
+            <li><strong>organization_departments:</strong> Department structure</li>
+            <li><strong>organization_processes:</strong> Business processes</li>
+            <li><strong>bia_analyses:</strong> BIA records</li>
+            <li><strong>bia_processes:</strong> Critical processes in BIA</li>
+            <li><strong>bia_dependencies:</strong> Process dependencies</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Supporting Tables</h3>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li><strong>bia_questions:</strong> Questionnaire items</li>
+            <li><strong>bia_answers:</strong> Stakeholder responses</li>
+            <li><strong>bia_findings:</strong> Analysis results</li>
+            <li><strong>ai_prompts:</strong> AI prompt templates</li>
+            <li><strong>ai_logs:</strong> AI usage tracking</li>
+            <li><strong>audit_log:</strong> All user actions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3>Row-Level Security (RLS)</h3>
+        <p style="max-width: 800px; margin: 1rem auto; color: var(--medium-text);">
+          Every table has RLS policies ensuring users can only access their organization's data.
+          Admins see all data, managers see department data, users see assigned data.
+          Enforced at database level for maximum security.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>API Endpoints</h2>
+      <p class="section-subtitle">RESTful API with automatic OpenAPI documentation</p>
+
+      <h3 style="margin-top: 2rem;">Authentication</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/auth/register</td>
+            <td>Create new user account</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/auth/login</td>
+            <td>Login and get JWT token</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">GET</span></td>
+            <td>/api/auth/me</td>
+            <td>Get current user profile</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 2rem;">Organizations</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/organizations</td>
+            <td>Create organization</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">GET</span></td>
+            <td>/api/organizations/my</td>
+            <td>Get my organization</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">GET</span></td>
+            <td>/api/organizations/{id}</td>
+            <td>Get organization details</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">PATCH</span></td>
+            <td>/api/organizations/{id}</td>
+            <td>Update organization</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/organizations/{id}/processes/generate-ai</td>
+            <td>AI generate processes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 2rem;">BIA</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/bia?org_id={id}</td>
+            <td>Create BIA analysis</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">GET</span></td>
+            <td>/api/bia?org_id={id}</td>
+            <td>List all BIA analyses</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">GET</span></td>
+            <td>/api/bia/{id}</td>
+            <td>Get BIA details</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/bia/{id}/processes</td>
+            <td>Add process to BIA</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/bia/{id}/questionnaire/generate</td>
+            <td>Generate questionnaire</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-port">POST</span></td>
+            <td>/api/bia/{id}/ai/calculate-rto</td>
+            <td>AI calculate RTO/RPO</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>User Workflows</h2>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>1. Getting Started</h3>
+          <ol style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li>Register account at <code>/register</code></li>
+            <li>Login with credentials</li>
+            <li>Create organization</li>
+            <li>Select industry (Healthcare, Finance, etc.)</li>
+            <li>Add company size and location</li>
+            <li>Dashboard activated</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>2. Creating BIA</h3>
+          <ol style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li>Click "Create New BIA"</li>
+            <li>Name the analysis (e.g., "Q1 2025 BIA")</li>
+            <li>Select collection method</li>
+            <li>AI suggests processes for industry</li>
+            <li>Review and add processes</li>
+            <li>Set criticality levels</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>3. AI-Powered RTO/RPO</h3>
+          <ol style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li>Open BIA process details</li>
+            <li>Click "Calculate RTO (AI)"</li>
+            <li>AI analyzes industry standards</li>
+            <li>Considers process criticality</li>
+            <li>Returns RTO/RPO recommendations</li>
+            <li>Accept or modify values</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>4. Questionnaire Flow</h3>
+          <ol style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li>Generate BIA questionnaire</li>
+            <li>AI creates relevant questions</li>
+            <li>Distribute to stakeholders</li>
+            <li>Collect responses</li>
+            <li>AI analyzes answers</li>
+            <li>View findings and recommendations</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Technology Stack</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Backend Technologies</h3>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Python 3.11+</strong> - Core language</li>
+            <li><strong>FastAPI</strong> - API framework</li>
+            <li><strong>Pydantic</strong> - Data validation</li>
+            <li><strong>Supabase Client</strong> - Database access</li>
+            <li><strong>Anthropic SDK</strong> - Claude AI</li>
+            <li><strong>python-jose</strong> - JWT handling</li>
+            <li><strong>bcrypt</strong> - Password hashing</li>
+            <li><strong>httpx</strong> - Async HTTP</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Frontend Technologies</h3>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Next.js 14</strong> - React framework</li>
+            <li><strong>TypeScript</strong> - Type safety</li>
+            <li><strong>Tailwind CSS</strong> - Styling</li>
+            <li><strong>Zustand</strong> - State management</li>
+            <li><strong>Axios</strong> - API client</li>
+            <li><strong>React Hook Form</strong> - Forms</li>
+            <li><strong>React Hot Toast</strong> - Notifications</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="card">
+        <h3>Local Development Setup</h3>
+        <pre><code># 1. Clone repository
+git clone https://github.com/yourusername/AI-Platform-ISO
+cd AI-Platform-ISO/mvp-platform
+
+# 2. Setup backend
+cd backend
+cp .env.example .env
+# Edit .env with your Supabase and Anthropic credentials
+pip install -r requirements.txt
+python main.py  # Runs on port 8888
+
+# 3. Setup frontend (new terminal)
+cd ../frontend
+cp .env.local.example .env.local
+# Edit .env.local: NEXT_PUBLIC_API_URL=http://localhost:8888
+npm install
+npm run dev  # Runs on port 3333
+
+# 4. Access application
+# Frontend: http://localhost:3333
+# API Docs: http://localhost:8888/docs</code></pre>
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Environment Variables</h3>
+          <pre><code># Backend .env
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-secret-here
+ANTHROPIC_API_KEY=sk-ant-...</code></pre>
+        </div>
+        <div class="card">
+          <h3>Frontend .env.local</h3>
+          <pre><code>NEXT_PUBLIC_API_URL=http://localhost:8888</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--background-alt);">
+    <div class="container text-center">
+      <h2>Ready to Try?</h2>
+      <p style="max-width: 600px; margin: 1rem auto; color: var(--medium-text);">
+        The MVP is production-ready and can be deployed to your environment today.
+        Full source code, database schema, and deployment scripts included.
+      </p>
+      <div style="margin-top: 2rem;">
+        <a href="#" class="btn btn-primary">Download MVP</a>
+        <a href="deployment.html" class="btn btn-secondary" style="margin-left: 1rem;">Deployment Guide</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">Production-ready MVP platform.</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <a href="contact.html">Contact</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+</body>
+</html>

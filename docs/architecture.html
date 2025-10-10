@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture - AI-Platform-ISO</title>
+  <meta name="description" content="4-layer architecture with 21 microservices, 17 AI modules, and event-driven communication">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="features.html">Features</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="technology.html">Technology</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="mvp.html">MVP Demo</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="hero" style="padding: 3rem 2rem;">
+    <div class="container">
+      <h1>Platform Architecture</h1>
+      <p>4-layer modular architecture designed for scalability, resilience, and AI-powered intelligence</p>
+    </div>
+  </section>
+
+  <!-- 4-Layer Architecture Diagram -->
+  <section>
+    <div class="container">
+      <h2>4-Layer Architecture Overview</h2>
+      <p class="section-subtitle">
+        Clean separation of concerns with event-driven communication between layers
+      </p>
+
+      <div class="mermaid">
+graph TB
+    subgraph Layer4["Layer 4: Interface"]
+        WebApp["Next.js Web App<br/>Port 3000"]
+        AdminPanel["Admin Panel<br/>Port 3002"]
+        APIGateway["API Gateway<br/>Port 8080"]
+    end
+
+    subgraph Layer3["Layer 3: Intelligent Core (17 Modules)"]
+        AIFoundation["AI Foundation<br/>LLM, RAG, ML"]
+        WorkflowIntel["Workflow Intelligence<br/>Port 8037"]
+        ExpertiseCenter["Expertise Center<br/>14 AI Specialists<br/>Port 8036"]
+        Collective["Collective Intelligence<br/>Port 8032"]
+        Predictive["Predictive Analytics<br/>Port 8031"]
+        Community["Community Intelligence<br/>Port 8038"]
+        EventIntel["Event Intelligence<br/>Port 8039"]
+    end
+
+    subgraph Layer2["Layer 2: Platform Services (21 Services)"]
+        BIA["BIA Service<br/>Port 8001"]
+        Risk["Risk Service<br/>Port 8002"]
+        Compliance["Compliance<br/>Port 8003"]
+        Plans["Plans Service<br/>Port 8011"]
+        Response["Response<br/>Port 8007"]
+        Governance["Governance<br/>Port 8004"]
+        Documents["Documents<br/>Port 8005"]
+        Validation["Validation<br/>Port 8006"]
+    end
+
+    subgraph Layer1["Layer 1: Infrastructure"]
+        PostgreSQL["PostgreSQL<br/>Port 5432<br/>Supabase"]
+        Redis["Redis Cache<br/>Port 6379"]
+        RabbitMQ["RabbitMQ<br/>EventBus<br/>Port 5672"]
+        Qdrant["Qdrant<br/>Vector DB<br/>Port 6333"]
+        Prometheus["Prometheus<br/>Port 9090"]
+    end
+
+    WebApp --> APIGateway
+    AdminPanel --> APIGateway
+    APIGateway --> WorkflowIntel
+    APIGateway --> ExpertiseCenter
+
+    WorkflowIntel --> BIA
+    WorkflowIntel --> Risk
+    WorkflowIntel --> Compliance
+    ExpertiseCenter --> AIFoundation
+    Predictive --> Risk
+    EventIntel --> RabbitMQ
+
+    BIA --> PostgreSQL
+    Risk --> PostgreSQL
+    Compliance --> PostgreSQL
+    Plans --> PostgreSQL
+    Response --> PostgreSQL
+
+    AIFoundation --> Qdrant
+    AIFoundation --> Redis
+    WorkflowIntel --> Redis
+    BIA --> Redis
+
+    EventIntel --> RabbitMQ
+    Response --> RabbitMQ
+
+    style Layer4 fill:#e0e7ff
+    style Layer3 fill:#dbeafe
+    style Layer2 fill:#f0fdf4
+    style Layer1 fill:#fef3c7
+      </div>
+
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Design Principles</h3>
+          <ul style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>Separation of Concerns:</strong> Each layer has clear responsibilities</li>
+            <li><strong>Event-Driven:</strong> Asynchronous communication via EventBus</li>
+            <li><strong>Microservices:</strong> Independent deployment and scaling</li>
+            <li><strong>AI-First:</strong> Intelligence embedded at core, not bolted on</li>
+            <li><strong>API Gateway:</strong> Single entry point, routing, auth</li>
+            <li><strong>Observability:</strong> Prometheus metrics, distributed tracing</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Key Characteristics</h3>
+          <ul style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>Scalable:</strong> Each service scales independently</li>
+            <li><strong>Resilient:</strong> Fault isolation, circuit breakers</li>
+            <li><strong>Extensible:</strong> Plugin architecture for new modules</li>
+            <li><strong>Real-time:</strong> WebSocket support for live updates</li>
+            <li><strong>Multi-tenant:</strong> Row-level security in database</li>
+            <li><strong>Cloud-native:</strong> Containerized, Kubernetes-ready</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EventBus Architecture -->
+  <section>
+    <div class="container">
+      <h2>EventBus Communication Pattern</h2>
+      <p class="section-subtitle">
+        Event-driven architecture enables real-time processing and loose coupling
+      </p>
+
+      <div class="mermaid">
+graph LR
+    subgraph Publishers
+        BIAService[BIA Service]
+        RiskService[Risk Service]
+        ResponseService[Response Service]
+    end
+
+    subgraph EventBus["EventBus (Redis + RabbitMQ)"]
+        Topics[Event Topics:<br/>bia.created<br/>risk.assessed<br/>incident.detected<br/>compliance.violated]
+    end
+
+    subgraph Subscribers
+        EventIntel[Event Intelligence]
+        Notifications[Notification Service]
+        Monitoring[Monitoring]
+        Workflow[Workflow Intelligence]
+    end
+
+    BIAService -->|Publish| Topics
+    RiskService -->|Publish| Topics
+    ResponseService -->|Publish| Topics
+
+    Topics -->|Subscribe| EventIntel
+    Topics -->|Subscribe| Notifications
+    Topics -->|Subscribe| Monitoring
+    Topics -->|Subscribe| Workflow
+
+    style EventBus fill:#fef3c7
+    style Publishers fill:#dbeafe
+    style Subscribers fill:#f0fdf4
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3>Event Types (80+ Defined)</h3>
+        <div class="grid grid-3">
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">BIA Events</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>bia.created</li>
+              <li>bia.process.added</li>
+              <li>bia.rto.calculated</li>
+              <li>bia.completed</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Risk Events</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>risk.identified</li>
+              <li>risk.assessed</li>
+              <li>risk.threshold.exceeded</li>
+              <li>mitigation.required</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Incident Events</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>incident.detected</li>
+              <li>incident.escalated</li>
+              <li>response.activated</li>
+              <li>recovery.completed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Port Map -->
+  <section>
+    <div class="container">
+      <h2>Deployment Port Map</h2>
+      <p class="section-subtitle">
+        Complete port allocation for all services (no conflicts)
+      </p>
+
+      <h3 style="margin-top: 2rem;">Layer 1: Infrastructure</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Port</th>
+            <th>Status</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td><span class="badge badge-port">5432</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Primary database (Supabase)</td>
+          </tr>
+          <tr>
+            <td><strong>Redis</strong></td>
+            <td><span class="badge badge-port">6379</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Cache + EventBus backend</td>
+          </tr>
+          <tr>
+            <td><strong>RabbitMQ</strong></td>
+            <td><span class="badge badge-port">5672</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Message queue + EventBus</td>
+          </tr>
+          <tr>
+            <td><strong>RabbitMQ UI</strong></td>
+            <td><span class="badge badge-port">15672</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Management interface</td>
+          </tr>
+          <tr>
+            <td><strong>API Gateway</strong></td>
+            <td><span class="badge badge-port">8080</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Unified API routing</td>
+          </tr>
+          <tr>
+            <td><strong>Qdrant</strong></td>
+            <td><span class="badge badge-port">6333</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Vector database for RAG</td>
+          </tr>
+          <tr>
+            <td><strong>Prometheus</strong></td>
+            <td><span class="badge badge-port">9090</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Metrics collection</td>
+          </tr>
+          <tr>
+            <td><strong>Grafana</strong></td>
+            <td><span class="badge badge-port">3001</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Metrics visualization</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 2rem;">Layer 2: Platform Services</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Port</th>
+            <th>Status</th>
+            <th>ISO Clauses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>BIA Service</strong></td>
+            <td><span class="badge badge-port">8001</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>8.2.2</td>
+          </tr>
+          <tr>
+            <td><strong>Risk Service</strong></td>
+            <td><span class="badge badge-port">8002</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>8.2.3</td>
+          </tr>
+          <tr>
+            <td><strong>Compliance Service</strong></td>
+            <td><span class="badge badge-port">8003</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>9.2, 10.1, 10.2</td>
+          </tr>
+          <tr>
+            <td><strong>Governance Service</strong></td>
+            <td><span class="badge badge-port">8004</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>4, 5, 7</td>
+          </tr>
+          <tr>
+            <td><strong>Documents Service</strong></td>
+            <td><span class="badge badge-port">8005</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>7.5</td>
+          </tr>
+          <tr>
+            <td><strong>Validation Service</strong></td>
+            <td><span class="badge badge-port">8006</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>8.5</td>
+          </tr>
+          <tr>
+            <td><strong>Response Service</strong></td>
+            <td><span class="badge badge-port">8007</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>8.4</td>
+          </tr>
+          <tr>
+            <td><strong>Community Service</strong></td>
+            <td><span class="badge badge-port">8008</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>All</td>
+          </tr>
+          <tr>
+            <td><strong>Learning Service</strong></td>
+            <td><span class="badge badge-port">8009</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>7.2, 10.2</td>
+          </tr>
+          <tr>
+            <td><strong>Planning Service</strong></td>
+            <td><span class="badge badge-port">8010</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>8.3</td>
+          </tr>
+          <tr>
+            <td><strong>Plans Service</strong></td>
+            <td><span class="badge badge-port">8011</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>8.4.2</td>
+          </tr>
+          <tr>
+            <td><strong>BIA Service (alt)</strong></td>
+            <td><span class="badge badge-port">8012</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Alternative port</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 2rem;">Layer 3: Intelligent Core</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Port</th>
+            <th>Status</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Predictive</strong></td>
+            <td><span class="badge badge-port">8031</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Risk forecasting</td>
+          </tr>
+          <tr>
+            <td><strong>Collective</strong></td>
+            <td><span class="badge badge-port">8032</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Privacy-preserving agents</td>
+          </tr>
+          <tr>
+            <td><strong>Expertise Center</strong></td>
+            <td><span class="badge badge-port">8036</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>14 AI specialists</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Intelligence</strong></td>
+            <td><span class="badge badge-port">8037</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Temporal Cloud orchestration</td>
+          </tr>
+          <tr>
+            <td><strong>Community Intelligence</strong></td>
+            <td><span class="badge badge-port">8038</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Peer learning</td>
+          </tr>
+          <tr>
+            <td><strong>Event Intelligence</strong></td>
+            <td><span class="badge badge-port">8039</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Pattern detection</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 2rem;">Layer 4: Interface</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Port</th>
+            <th>Status</th>
+            <th>Technology</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Web App</strong></td>
+            <td><span class="badge badge-port">3000</span></td>
+            <td><span class="badge badge-required">Required</span></td>
+            <td>Next.js 14</td>
+          </tr>
+          <tr>
+            <td><strong>Admin Panel</strong></td>
+            <td><span class="badge badge-port">3002</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Next.js 14</td>
+          </tr>
+          <tr>
+            <td><strong>Control Center</strong></td>
+            <td><span class="badge badge-port">3003</span></td>
+            <td><span class="badge badge-optional">Optional</span></td>
+            <td>Next.js 14</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Data Flow -->
+  <section>
+    <div class="container">
+      <h2>Data Flow Example: BIA Process</h2>
+      <p class="section-subtitle">
+        End-to-end flow showing all layers working together
+      </p>
+
+      <div class="mermaid">
+sequenceDiagram
+    participant User as User (Web App)
+    participant Gateway as API Gateway
+    participant Workflow as Workflow Intelligence
+    participant BIA as BIA Service
+    participant AI as AI Foundation
+    participant DB as PostgreSQL
+    participant EventBus as EventBus
+
+    User->>Gateway: Create BIA Analysis
+    Gateway->>Workflow: Route request
+    Workflow->>BIA: Create BIA
+    BIA->>DB: Store BIA record
+    BIA->>EventBus: Publish bia.created
+    EventBus->>Workflow: Event received
+    Workflow->>AI: Generate process suggestions
+    AI->>BIA: Return AI suggestions
+    BIA->>DB: Update BIA with processes
+    BIA->>EventBus: Publish bia.processes.added
+    BIA->>Gateway: Return BIA data
+    Gateway->>User: Display BIA
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          Comprehensive Business Continuity Management platform with AI-powered intelligence.
+        </p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules & Services</a>
+        <a href="features.html">Features</a>
+        <a href="technology.html">Technology Stack</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="deployment.html">Deployment Guide</a>
+        <a href="mvp.html">MVP Demo</a>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <a href="contact.html">Contact</a>
+        <a href="#">GitHub</a>
+        <a href="#">API Documentation</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. MIT License.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+</body>
+</html>
