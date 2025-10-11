@@ -55,7 +55,7 @@ class CommunityIntelligenceConfig(BaseSettings):
     MAX_REVIEWS_PENDING: int = Field(default=5, description="Max pending reviews per user")
 
     # Service settings
-    PORT: int = Field(default=8030, description="Service port")
+    PORT: int = Field(default=8035, description="Service port")
     DEBUG: bool = Field(default=False, description="Debug mode")
     CORS_ORIGINS: List[str] = Field(
         default=["http://localhost:3000", "http://localhost:3001"],

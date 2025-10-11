@@ -3,7 +3,7 @@ Community Intelligence Service
 
 Transforms passive case collection into active community-driven knowledge creation.
 
-Port: 8030
+Port: 8035
 """
 
 from fastapi import FastAPI, Depends

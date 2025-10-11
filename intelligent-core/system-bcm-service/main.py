@@ -49,6 +49,9 @@ from instincts.survival import start_survival_instinct
 sys.path.insert(0, str(Path(__file__).parent.parent / "ai-foundation"))
 from memory.memory_system import create_memory_system
 
+# Import ResourceTracker
+from utils.resource_tracker import create_resource_tracker
+
 # Logging
 logging.basicConfig(
     level=logging.INFO,
@@ -76,6 +79,7 @@ class ServiceState:
         self.coordinator = None
         self.survival = None
         self.memory = None
+        self.resource_tracker = None  # NEW: Resource monitoring
         self.scheduler_task = None
         self.running = False
         self.last_cycle_time = None
@@ -608,6 +612,23 @@ async def get_metrics():
         knowledge_shared = integration_metrics.get("knowledge_shared_with_community", 0)
         metrics.append(f"system_bcm_knowledge_shared {knowledge_shared}")
 
+    # ✅ NEW: ResourceTracker metrics
+    if state.resource_tracker:
+        stats = state.resource_tracker.get_stats()
+        metrics.append(f"system_bcm_resource_snapshots_total {stats.get('total_snapshots', 0)}")
+        metrics.append(f"system_bcm_resource_deficit_events {stats.get('deficit_events', 0)}")
+        metrics.append(f"system_bcm_resource_surplus_events {stats.get('surplus_events', 0)}")
+
+        # Resource state: deficit=2, normal=1, surplus=0
+        resource_state = state.resource_tracker.detect_resource_state()
+        state_value = {"deficit": 2, "normal": 1, "surplus": 0}.get(resource_state, 1)
+        metrics.append(f"system_bcm_resource_state {state_value}")
+
+        # Available resources
+        available = state.resource_tracker.get_available_resources()
+        metrics.append(f"system_bcm_cpu_available_percent {available.get('cpu_percent', 0)}")
+        metrics.append(f"system_bcm_memory_available_mb {available.get('memory_mb', 0)}")
+
     return "\n".join(metrics)
 
 
@@ -640,6 +661,23 @@ async def get_memory_stats():
     return state.memory.get_system_stats()
 
 
+@app.get("/resources/status")
+async def get_resource_status():
+    """Get ResourceTracker status (NEW!)"""
+    if not state.resource_tracker:
+        raise HTTPException(status_code=503, detail="ResourceTracker not initialized")
+
+    return {
+        "available": state.resource_tracker.get_available_resources(),
+        "state": state.resource_tracker.detect_resource_state(),
+        "stats": state.resource_tracker.get_stats(),
+        "predictions": {
+            "cpu_deficit_seconds": state.resource_tracker.predict_deficit('cpu_percent', 90.0),
+            "memory_deficit_seconds": state.resource_tracker.predict_deficit('memory_percent', 90.0)
+        }
+    }
+
+
 # ============================================================================
 # Startup/Shutdown
 # ============================================================================
@@ -649,16 +687,7 @@ async def startup():
     """Service startup - INTEGRATED version"""
     logger.info("🚀 System BCM Service Starting (INTEGRATED)...")
 
-    # Initialize INTEGRATED coordinator
-    state.coordinator = SystemBCMCoordinator()
-    await state.coordinator.initialize()
-    logger.info("✅ Integrated coordinator initialized")
-    logger.info("   ✅ Connected to learning-knowledge")
-    logger.info("   ✅ Connected to Expertise Center")
-    logger.info("   ✅ Connected to Collective Intelligence")
-    logger.info("   ✅ Connected to RAG + LLM")
-
-    # Setup EventBus (coordinator has its own, but we need one for API events)
+    # Setup EventBus (coordinator needs it, we need it for API events)
     await setup_eventbus()
 
     # Initialize Memory System
@@ -682,6 +711,25 @@ async def startup():
         memory_system=state.memory
     )
     logger.info("✅ Survival Instinct activated (with memory)")
+
+    # Start ResourceTracker (NEW!)
+    resource_history_path = Path(__file__).parent / "data" / "resource_history.json"
+    state.resource_tracker = await create_resource_tracker(
+        snapshot_interval_seconds=60.0,
+        history_size=100,
+        storage_path=str(resource_history_path)
+    )
+    logger.info("✅ Resource Tracker activated (60s snapshots)")
+
+    # Initialize INTEGRATED coordinator WITH ResourceTracker (NEW!)
+    state.coordinator = SystemBCMCoordinator(resource_tracker=state.resource_tracker)
+    await state.coordinator.initialize()
+    logger.info("✅ Integrated coordinator initialized")
+    logger.info("   ✅ Connected to learning-knowledge")
+    logger.info("   ✅ Connected to Expertise Center")
+    logger.info("   ✅ Connected to Collective Intelligence")
+    logger.info("   ✅ Connected to RAG + LLM")
+    logger.info("   ✅ Using ResourceTracker for resource monitoring")
 
     # Start scheduler
     state.running = True
@@ -710,6 +758,10 @@ async def shutdown():
     # Stop Survival Instinct
     if state.survival:
         state.survival.stop()
+
+    # Stop ResourceTracker
+    if state.resource_tracker:
+        state.resource_tracker.stop()
 
     # Stop Memory System
     if state.memory:
@@ -741,6 +793,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8050,
+        port=8052,
         log_level="info"
     )
