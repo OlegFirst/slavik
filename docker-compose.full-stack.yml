@@ -1,0 +1,558 @@
+version: '3.8'
+
+# AI Platform ISO - Full Stack Docker Compose
+# Orchestrates all 47 services with proper dependency management
+# Date: 2025-10-11
+
+networks:
+  ai-platform:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+services:
+  # ============================================================================
+  # LAYER 0: Core Infrastructure (No Dependencies)
+  # ============================================================================
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-platform-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ai-platform
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================================================
+  # LAYER 1: Runtime Services (Depend on Redis)
+  # ============================================================================
+
+  service-discovery:
+    build:
+      context: ./infrastructure/runtime/service-discovery
+      dockerfile: Dockerfile
+    container_name: ai-platform-service-discovery
+    ports:
+      - "8500:8500"
+    environment:
+      - PORT=8500
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  message-queue:
+    build:
+      context: ./infrastructure/runtime/message-queue
+      dockerfile: Dockerfile
+    container_name: ai-platform-message-queue
+    ports:
+      - "8061:8061"
+    environment:
+      - MESSAGE_QUEUE_PORT=8061
+      - MESSAGE_QUEUE_HOST=0.0.0.0
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8061/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  realtime-websocket:
+    build:
+      context: ./infrastructure/runtime/realtime-websocket
+      dockerfile: Dockerfile
+    container_name: ai-platform-realtime-websocket
+    ports:
+      - "8053:8053"
+    environment:
+      - PORT=8053
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - ai-platform
+    depends_on:
+      redis:
+        condition: service_healthy
+      message-queue:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8053/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # ============================================================================
+  # LAYER 2: Intelligent Core Services (Depend on Layer 1)
+  # ============================================================================
+
+  workflow-engine:
+    build:
+      context: ./intelligent-core/workflow-engine
+      dockerfile: Dockerfile
+    container_name: ai-platform-workflow-engine
+    ports:
+      - "8036:8036"
+    environment:
+      - PORT=8036
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+      - SERVICE_DISCOVERY_URL=http://service-discovery:8500
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      message-queue:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8036/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  ai-orchestration:
+    build:
+      context: ./intelligent-core/orchestration/ai-orchestration
+      dockerfile: Dockerfile
+    container_name: ai-platform-ai-orchestration
+    ports:
+      - "8031:8031"
+    environment:
+      - PORT=8031
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      message-queue:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8031/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  coordination-center:
+    build:
+      context: ./intelligent-core/orchestration/coordination-center
+      dockerfile: Dockerfile
+    container_name: ai-platform-coordination-center
+    ports:
+      - "8032:8032"
+    environment:
+      - PORT=8032
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      ai-orchestration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8032/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  system-bcm-service:
+    build:
+      context: ./intelligent-core/system-bcm-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-system-bcm
+    ports:
+      - "8052:8052"
+    environment:
+      - PORT=8052
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8052/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  community-intelligence:
+    build:
+      context: ./intelligent-core/community_intelligence
+      dockerfile: Dockerfile
+    container_name: ai-platform-community-intelligence
+    ports:
+      - "8035:8035"
+    environment:
+      - COMMUNITY_PORT=8035
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8035/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # ============================================================================
+  # LAYER 3: Platform Services (Depend on Layer 2)
+  # ============================================================================
+
+  bia-service:
+    build:
+      context: ./platform-services/bia-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-bia-service
+    ports:
+      - "8010:8010"
+    environment:
+      - PORT=8010
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+      ai-orchestration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  compliance-service:
+    build:
+      context: ./platform-services/compliance-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-compliance-service
+    ports:
+      - "8011:8011"
+    environment:
+      - PORT=8011
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  governance-service:
+    build:
+      context: ./platform-services/governance-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-governance-service
+    ports:
+      - "8012:8012"
+    environment:
+      - PORT=8012
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  risk-service:
+    build:
+      context: ./platform-services/risk-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-risk-service
+    ports:
+      - "8013:8013"
+    environment:
+      - PORT=8013
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8013/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  response-service:
+    build:
+      context: ./platform-services/response-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-response-service
+    ports:
+      - "8014:8014"
+    environment:
+      - PORT=8014
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  documents-service:
+    build:
+      context: ./platform-services/documents-service
+      dockerfile: Dockerfile
+    container_name: ai-platform-documents-service
+    ports:
+      - "8015:8015"
+    environment:
+      - PORT=8015
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8015/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  plans-service:
+    build:
+      context: ./platform-services/plans_service
+      dockerfile: Dockerfile
+    container_name: ai-platform-plans-service
+    ports:
+      - "8016:8016"
+    environment:
+      - PORT=8016
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      workflow-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8016/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # ============================================================================
+  # LAYER 4: AI Office Infrastructure (Depend on Layer 2)
+  # ============================================================================
+
+  orchestrator:
+    build:
+      context: ./infrastructure/AI-office-infrastructure/orchestrator
+      dockerfile: Dockerfile
+    container_name: ai-platform-orchestrator
+    ports:
+      - "8059:8059"
+    environment:
+      - PORT=8059
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - ai-platform
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      ai-orchestration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8059/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  agent-router:
+    build:
+      context: ./infrastructure/AI-office-infrastructure/agent-router
+      dockerfile: Dockerfile
+    container_name: ai-platform-agent-router
+    ports:
+      - "8057:8057"
+    environment:
+      - PORT=8057
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      orchestrator:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8057/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  analytics-specialist:
+    build:
+      context: ./infrastructure/AI-office-infrastructure/analytics-specialist
+      dockerfile: Dockerfile
+    container_name: ai-platform-analytics-specialist
+    ports:
+      - "8058:8058"
+    environment:
+      - PORT=8058
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - ai-platform
+    depends_on:
+      agent-router:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8058/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # ============================================================================
+  # LAYER 5: Observability (Monitor All Layers)
+  # ============================================================================
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ai-platform-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/observability/prometheus-local.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - ai-platform
+    depends_on:
+      - service-discovery
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ai-platform-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/observability/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - ai-platform
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+# ============================================================================
+# Usage:
+# ============================================================================
+# Start all services:
+#   docker-compose -f docker-compose.full-stack.yml up -d
+#
+# Start specific layers:
+#   docker-compose -f docker-compose.full-stack.yml up -d redis service-discovery
+#   docker-compose -f docker-compose.full-stack.yml up -d workflow-engine ai-orchestration
+#
+# View logs:
+#   docker-compose -f docker-compose.full-stack.yml logs -f
+#
+# Stop all:
+#   docker-compose -f docker-compose.full-stack.yml down
+#
+# View status:
+#   docker-compose -f docker-compose.full-stack.yml ps
