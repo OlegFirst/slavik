@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>AI Platform ISO - Service Catalog (47 Services)</title>
+    <style>
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .search-container input,
+        .search-container select {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-container input {
+            flex: 1;
+        }
+
+        .search-container select {
+            min-width: 200px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .service-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+            border-color: var(--accent);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-header h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .service-code {
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: var(--success); color: white; }
+        .status-dev { background: var(--accent); color: white; }
+        .status-planned { background: var(--warning); color: white; }
+        .status-deprecated { background: var(--danger); color: white; }
+        .status-unknown { background: #6b7280; color: white; }
+
+        .service-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .service-footer {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tag,
+        .framework-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+    </style>
+</head>
+<body>
+    <header class='main-header'>
+        <div class='container'>
+            <h1>🏢 AI Platform ISO - Service Catalog</h1>
+            <p class='subtitle'>41 Services | Version 3.0.0</p>
+        </div>
+    </header>
+    <div class='container'>
+        <div class='stats-grid'>
+            <div class='stat-card'><h3>41</h3><p>Total Services</p></div>
+            <div class='stat-card'><h3>9</h3><p>Categories</p></div>
+            <div class='stat-card'><h3>38</h3><p>Services with Ports</p></div>
+            <div class='stat-card'><h3>23</h3><p>Production Services</p></div>
+        </div>
+        <div class='search-container'>
+            <input type='text' id='searchInput' placeholder='🔍 Search services...' onkeyup='filterServices()'>
+            <select id='categoryFilter' onchange='filterServices()'>
+                <option value='all'>All Categories</option>
+                <option value='database_infrastructure'>Database Infrastructure</option>
+                <option value='runtime_services'>Runtime Services</option>
+                <option value='gateway_layer'>Gateway Layer</option>
+                <option value='observability'>Observability</option>
+                <option value='eventbus_core'>Eventbus Core</option>
+                <option value='security'>Security</option>
+                <option value='ai_office'>Ai Office</option>
+                <option value='platform_services'>Platform Services</option>
+                <option value='intelligent_core'>Intelligent Core</option>
+            </select>
+        </div>
+        <div class='services-grid' id='servicesGrid'>
+
+            <div class='service-card' data-name='agent-router Agent Router - Request Routing & Load Balancing' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 Agent Router - Request Routing & Load Balancing</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>agent-router</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8057</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Intelligent request routing, load balancing, and circuit breaker for AI Office team coordination.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='ai-foundation AI Foundation - Core AI Infrastructure' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 AI Foundation - Core AI Infrastructure</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>ai-foundation</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8040</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Core AI infrastructure providing LLM routing, RAG (Retrieval Augmented Generation), ML models, self-learning, and context building for all platform services.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='ai-orchestration AI Orchestrator - The Brain' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 AI Orchestrator - The Brain</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>ai-orchestration</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8002</span>
+                    <span><strong>Version:</strong> 3.0.0</span>
+                </div>
+                <p class='service-description'>Autonomous AI decision-making system with 4-layer memory, safety-first architecture, and self-evolution capabilities. Aggregates context from multiple sources, assesses priority, selects strategies fr...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='ai_workflow_optimizer AI Workflow Optimizer' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 AI Workflow Optimizer</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>ai_workflow_optimizer</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8038</span>
+                    <span><strong>Version:</strong> 2.0.0</span>
+                </div>
+                <p class='service-description'>ML-powered workflow optimization service that analyzes business process performance, identifies bottlenecks, predicts execution times, detects anomalies, and recommends optimization strategies using m...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='analytics-specialist Analytics Specialist - Platform Intelligence' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 Analytics Specialist - Platform Intelligence</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>analytics-specialist</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8056</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Platform-wide analytics, metrics discovery, dependency mapping, and bottleneck detection using AI-powered code analysis.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='api-gateway AI-Powered API Gateway' data-category='gateway_layer'>
+                <div class='service-header'>
+                    <h3>🔒 AI-Powered API Gateway</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>api-gateway</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8000</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Unified API gateway with intelligent routing, authentication, rate limiting, and AI-powered request optimization.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Gateway Layer</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='auth-service Authentication & Authorization Service' data-category='security'>
+                <div class='service-header'>
+                    <h3>🔐 Authentication & Authorization Service</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>auth-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8001</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>JWT-based authentication and RBAC authorization service for platform-wide access control.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Security</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='bia-service BIA Service - Business Impact Analysis' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 BIA Service - Business Impact Analysis</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>bia-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8012</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Comprehensive Business Impact Analysis service aligned with ISO 22301:2019 Clause 8.2.2. Provides RTO/RPO/MTPD calculations, financial impact assessment, dependency mapping, and AI-powered analysis.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='collective Collective Intelligence Agent Networks' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Collective Intelligence Agent Networks</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>collective</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8034</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>Privacy-preserving knowledge sharing across organizations through temporary AI agents synthesized from anonymized collective wisdom. Enables organizations to benefit from proven solutions without comp...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='community-intelligence Community Intelligence - Peer Knowledge Sharing' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Community Intelligence - Peer Knowledge Sharing</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>community-intelligence</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8030</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Community-driven knowledge creation service enabling peer-reviewed knowledge sharing through automated workflow integration, expert validation, reputation systems, and searchable case library.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='compliance-service Compliance Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Compliance Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>compliance-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8014</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>Comprehensive compliance management for ISO 22301. Manages assessments, gap analysis, evidence collection, nonconformity management (RCA), internal audits, and continual improvement initiatives.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='coordination-center Multi-Agent Coordination Center' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Multi-Agent Coordination Center</h3>
+                    <span class='badge status-planned'>PLANNED</span>
+                </div>
+                <p class='service-code'>coordination-center</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8033</span>
+                    <span><strong>Version:</strong> 1.0.0-planned</span>
+                </div>
+                <p class='service-description'>Multi-agent coordination and collaboration hub. Manages agent teams, task allocation, inter-agent communication, and collaborative problem-solving. PLANNED for Q1 2026. Will provide dynamic team forma...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='database-managers Unified Database Access Layer' data-category='database_infrastructure'>
+                <div class='service-header'>
+                    <h3>💾 Unified Database Access Layer</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>database-managers</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> None</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Centralized database access library providing unified API for all database operations across the platform.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Database Infrastructure</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='db-intelligence DB Intelligence - Database Performance Specialist' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 DB Intelligence - Database Performance Specialist</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>db-intelligence</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8051</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Deep database performance analysis, query optimization, and admin operations for PostgreSQL. AI-powered recommendations using LLM + pg_stat_statements.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='devops-agent DevOps Agent - Infrastructure & Platform Compliance' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 DevOps Agent - Infrastructure & Platform Compliance</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>devops-agent</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8058</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>AI-powered infrastructure management with platform compliance toolkit. Monitors containers, validates compliance, and provides auto-remediation.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='documents-service Documents Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Documents Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>documents-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8024</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>Enterprise document lifecycle management with AI/NLP capabilities, approval workflows, version control, and retention policies. Implements ISO 22301 Clause 7.5 - Documented Information Management.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='event-intelligence Event Intelligence & Self-Healing' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Event Intelligence & Self-Healing</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>event-intelligence</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8032</span>
+                    <span><strong>Version:</strong> 2.0.0</span>
+                </div>
+                <p class='service-description'>Intelligent event analysis, pattern detection, domain detection, error analysis, and automated code healing for platform stability and resilience. Subscribes to all platform events, identifies pattern...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='eventbus Platform EventBus (Clean Architecture)' data-category='eventbus_core'>
+                <div class='service-header'>
+                    <h3>📡 Platform EventBus (Clean Architecture)</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>eventbus</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> None</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Clean architecture event system supporting choreography pattern for loosely-coupled microservices communication.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Eventbus Core</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='expertise-center Expertise Center - Domain Specialists & AI Assistants' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Expertise Center - Domain Specialists & AI Assistants</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>expertise-center</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> None</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Domain-specific expertise and specialized AI assistants for Business Continuity Management. Implements tactical assistants for BIA, compliance, governance, risk, and other BCM domains.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='governance-service Governance Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Governance Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>governance-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8025</span>
+                    <span><strong>Version:</strong> 2.0.0</span>
+                </div>
+                <p class='service-description'>Organizational governance framework implementation for BCM. Manages stakeholder engagement, decision-making processes, organizational context analysis, governance structures, and accountability tracki...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='grafana Grafana Dashboards' data-category='observability'>
+                <div class='service-header'>
+                    <h3>📊 Grafana Dashboards</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>grafana</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 3000</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Visualization and analytics platform with 18 pre-configured dashboards for monitoring platform health, services, and business metrics.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Observability</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='learning-service Learning Service - Training & Competence Management' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Learning Service - Training & Competence Management</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>learning-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8021</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>ISO 22301 Training & Competence Management service for BCM awareness, training programs, competency assessments, and gamification.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='message-queue Platform Message Queue (RabbitMQ)' data-category='runtime_services'>
+                <div class='service-header'>
+                    <h3>⚙️ Platform Message Queue (RabbitMQ)</h3>
+                    <span class='badge status-planned'>PLANNED</span>
+                </div>
+                <p class='service-code'>message-queue</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 5672</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Asynchronous message queue for task distribution, job processing, and reliable message delivery across microservices.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Runtime Services</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='mio-manager MIO Manager - Platform Observatory & Coordinator' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 MIO Manager - Platform Observatory & Coordinator</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>mio-manager</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8046</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>EYES Observatory pattern - monitors platform-wide health, coordinates AI Office team, and publishes events via EventBus (choreography pattern). Does NOT command services - observes and reports.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='planning-service Planning Service - BC Strategy Development' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Planning Service - BC Strategy Development</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>planning-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8011</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Business Continuity Strategy development and selection service aligned with ISO 22301:2019 Clause 8.3 requirements. Provides cost-benefit analysis, resource planning, and approval workflows for BC str...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='plans-service Plans Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Plans Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>plans-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8023</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>Business Continuity Plans & Procedures management service. Manages BC plans, procedures, resources, plan lifecycle, reviews, and activations. Implements ISO 22301 Clause 8.4 requirements for BC plans ...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='postgresql BCM Platform Database (PostgreSQL via Supabase)' data-category='database_infrastructure'>
+                <div class='service-header'>
+                    <h3>💾 BCM Platform Database (PostgreSQL via Supabase)</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>postgresql</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 5432</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Primary relational database for the entire AI-powered BCM platform. Provides 29 schemas for modular architecture with Row-Level Security (RLS) for multi-tenancy. Manages all business data, user profil...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Database Infrastructure</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='predictive Predictive Journey Service' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Predictive Journey Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>predictive</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8031</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>AI-powered forecasting for BCM journeys. Predicts milestones, certification timelines, expert demands, and challenges using pattern matching, statistical analysis, and machine learning. Generates dail...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='project-agent Project & Code Quality Agent' data-category='ai_office'>
+                <div class='service-header'>
+                    <h3>🤖 Project & Code Quality Agent</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>project-agent</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8060</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Project management + code quality analysis + testing coverage. AI-powered test generation and compliance validation.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Ai Office</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='prometheus Prometheus Metrics Server' data-category='observability'>
+                <div class='service-header'>
+                    <h3>📊 Prometheus Metrics Server</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>prometheus</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 9090</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Time-series database and metrics collection system for platform-wide monitoring. Scrapes metrics from all services and stores them for querying and alerting.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Observability</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='qdrant BCM Vector Search (Qdrant Cloud)' data-category='database_infrastructure'>
+                <div class='service-header'>
+                    <h3>💾 BCM Vector Search (Qdrant Cloud)</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>qdrant</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 443</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Vector database for semantic search, RAG (Retrieval-Augmented Generation), case library, and AI agent memory.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Database Infrastructure</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='realtime-websocket Real-time WebSocket Service' data-category='runtime_services'>
+                <div class='service-header'>
+                    <h3>⚙️ Real-time WebSocket Service</h3>
+                    <span class='badge status-unknown'>RUNNING</span>
+                </div>
+                <p class='service-code'>realtime-websocket</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8050</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Real-time communications, live updates, and collaborative features for BCM Platform. Provides WebSocket connections for chat, notifications, and event streaming.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Runtime Services</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='redis Platform Redis Cache' data-category='database_infrastructure'>
+                <div class='service-header'>
+                    <h3>💾 Platform Redis Cache</h3>
+                    <span class='badge status-unknown'>RUNNING</span>
+                </div>
+                <p class='service-code'>redis</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 6379</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>In-memory data store providing caching, session storage, rate limiting, and pub/sub messaging for the entire platform.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Database Infrastructure</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='response-service Response Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Response Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>response-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8027</span>
+                    <span><strong>Version:</strong> 1.0.0</span>
+                </div>
+                <p class='service-description'>Comprehensive incident response management. Manages incidents, response actions, response teams, communications, timeline tracking, recovery metrics (RTO/RPO), escalation, and reporting.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='risk-service Risk Service' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Risk Service</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>risk-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8026</span>
+                    <span><strong>Version:</strong> 2.0.0</span>
+                </div>
+                <p class='service-description'>Comprehensive risk management including risk identification, assessment, treatment planning, monitoring, and reporting. Provides risk matrices, heat maps, and integration with mitigation workflows.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='service-discovery Service Discovery v2.0 - Unified Catalog + Registry' data-category='runtime_services'>
+                <div class='service-header'>
+                    <h3>⚙️ Service Discovery v2.0 - Unified Catalog + Registry</h3>
+                    <span class='badge status-unknown'>RUNNING</span>
+                </div>
+                <p class='service-code'>service-discovery</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8500</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Complete service discovery, registry, health monitoring, and Service Catalog integration. Provides unified view combining static catalog with dynamic runtime data.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Runtime Services</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='system-bcm-service System BCM Service - Platform Self-Application of Business Continuity' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 System BCM Service - Platform Self-Application of Business Continuity</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>system-bcm-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8050</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Production service that applies BCM to the platform itself in real-time. Continuously monitors platform health, executes BCM cycles every 24 hours, triggers automatic recovery procedures, and learns f...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='validation-service Validation Service - Exercises, Audits, Reviews & CAPA' data-category='platform_services'>
+                <div class='service-header'>
+                    <h3>🏢 Validation Service - Exercises, Audits, Reviews & CAPA</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>validation-service</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8022</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>ISO 22301 Validation Module covering Exercises (8.5), Performance Monitoring (9.1), Internal Audits (9.2), Management Reviews (9.3), and Continuous Improvement & CAPA (10).
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Platform Services</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='vault HashiCorp Vault - Secrets Manager' data-category='security'>
+                <div class='service-header'>
+                    <h3>🔐 HashiCorp Vault - Secrets Manager</h3>
+                    <span class='badge status-unknown'>CONFIGURED</span>
+                </div>
+                <p class='service-code'>vault</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8200</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Centralized secrets management with encryption as a service, dynamic secrets, and audit logging.
+...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Security</span>
+                    <span class='framework-tag'>N/A</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='workflow-engine Unified Workflow Engine' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Unified Workflow Engine</h3>
+                    <span class='badge status-unknown'>ACTIVE</span>
+                </div>
+                <p class='service-code'>workflow-engine</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8030</span>
+                    <span><strong>Version:</strong> 2.0.0</span>
+                </div>
+                <p class='service-description'>Domain-agnostic BPMN 2.0 workflow engine for orchestrating complex business processes. Executes workflows designed by Workflow Intelligence, provides AI-powered recommendations for stuck workflows, su...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+
+            <div class='service-card' data-name='workflow-intelligence Workflow Intelligence Engine - Cognitive Backbone' data-category='intelligent_core'>
+                <div class='service-header'>
+                    <h3>🧠 Workflow Intelligence Engine - Cognitive Backbone</h3>
+                    <span class='badge status-active'>PRODUCTION</span>
+                </div>
+                <p class='service-code'>workflow-intelligence</p>
+                <div class='service-meta'>
+                    <span><strong>Port:</strong> 8037</span>
+                    <span><strong>Version:</strong> N/A</span>
+                </div>
+                <p class='service-description'>Cognitive backbone of the AI-Platform-ISO system providing intelligent workflow orchestration, case-based reasoning, PDCA lifecycle tracking, and ML-powered recommendations for Business Continuity Man...</p>
+                <div class='service-footer'>
+                    <span class='category-tag'>Intelligent Core</span>
+                    <span class='framework-tag'>FastAPI</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function filterServices() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const cards = document.querySelectorAll('.service-card');
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                const category = card.getAttribute('data-category');
+
+                const matchesSearch = name.includes(searchInput);
+                const matchesCategory = categoryFilter === 'all' || category === categoryFilter;
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+    </script>
+</body>
+</html>

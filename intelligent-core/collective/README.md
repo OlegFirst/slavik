@@ -4,7 +4,7 @@
 **Domain**: Intelligent-Core
 **Status**: Active
 **Version**: 1.0.0
-**Port**: 8032
+**Port**: 8034
 
 ## Overview
 
@@ -34,7 +34,7 @@ This module transforms individual organizational struggles into collective learn
 ## Technical Architecture
 
 ```
-Collective Intelligence (Port 8032)
+Collective Intelligence (Port 8034)
 ├── Stuck Detection
 │   ├── Progress Monitoring
 │   ├── Signal Aggregation (6 signals)
@@ -114,27 +114,27 @@ AGENT_EXPIRY_DAYS=7   # Agent lifespan
 python -m collective.main
 
 # Or with uvicorn
-uvicorn collective.main:app --host 0.0.0.0 --port 8032
+uvicorn collective.main:app --host 0.0.0.0 --port 8034
 ```
 
-The service will start on `http://localhost:8032`
+The service will start on `http://localhost:8034`
 
 ### API Documentation
 
 Interactive API documentation:
-- **Swagger UI**: http://localhost:8032/docs
-- **ReDoc**: http://localhost:8032/redoc
+- **Swagger UI**: http://localhost:8034/docs
+- **ReDoc**: http://localhost:8034/redoc
 
 ### Example Usage
 
 **Check if Organization is Stuck**
 ```bash
-curl http://localhost:8032/api/v1/stuck-detection/check?module=bia
+curl http://localhost:8034/api/v1/stuck-detection/check?module=bia
 ```
 
 **Create Collective Agent**
 ```bash
-curl -X POST http://localhost:8032/api/v1/collective-agents/create \
+curl -X POST http://localhost:8034/api/v1/collective-agents/create \
   -H "Content-Type: application/json" \
   -d '{
     "problem_type": "supply_chain_complexity",
@@ -144,7 +144,7 @@ curl -X POST http://localhost:8032/api/v1/collective-agents/create \
 
 **Chat with Collective Agent**
 ```bash
-curl -X POST http://localhost:8032/api/v1/collective-agents/{agent_id}/chat \
+curl -X POST http://localhost:8034/api/v1/collective-agents/{agent_id}/chat \
   -H "Content-Type: application/json" \
   -d '{
     "message": "How did you map Tier 2 supplier dependencies?"
@@ -320,10 +320,10 @@ risk_score = (
 
 ```bash
 # Service health
-curl http://localhost:8032/health
+curl http://localhost:8034/health
 
 # Detailed metrics
-curl http://localhost:8032/health/detailed
+curl http://localhost:8034/health/detailed
 ```
 
 ### Metrics
@@ -422,6 +422,6 @@ Proprietary - AI-Platform-ISO
 
 ## Quick Links
 
-- **Service Health**: http://localhost:8032/health
-- **API Docs**: http://localhost:8032/docs
-- **Metrics**: http://localhost:8032/metrics
+- **Service Health**: http://localhost:8034/health
+- **API Docs**: http://localhost:8034/docs
+- **Metrics**: http://localhost:8034/metrics

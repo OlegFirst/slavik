@@ -1,0 +1,390 @@
+# ============================================
+# SERVICE INFORMATION - Collective Intelligence
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: collective
+display_name: "Collective Intelligence Agent Networks"
+version: "1.0.0"
+description: "Privacy-preserving knowledge sharing across organizations through temporary AI agents synthesized from anonymized collective wisdom. Enables organizations to benefit from proven solutions without compromising confidentiality using k-anonymity principles (minimum k=5)."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/collective-intelligence"
+business_process: "Privacy-Preserving Collective Learning & Knowledge Sharing"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8034
+
+endpoints:
+  base_url: "http://localhost:8034"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/v1"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Automatic stuck organization detection (7-day progress monitoring)"
+  - "Privacy-preserving collective agent creation (k-anonymity k≥5)"
+  - "Multi-layer anonymization (4 layers: org, journey, pattern, metrics)"
+  - "Temporary agent lifecycle management (7-day expiration)"
+  - "Aggregate statistical framing without source attribution"
+  - "Conversational chat interface with source protection"
+  - "Re-identification risk scoring and validation"
+  - "Success-driven case selection (≥80% success rate)"
+  - "Case library integration for solver identification"
+
+features:
+  - name: "Stuck Detection"
+    description: "Multi-signal detection of organizations requiring assistance"
+    endpoints: 3
+    signals:
+      - "Days no progress (7+ days) = +3 points"
+      - "Validation failures (5+) = +2 points"
+      - "Low AI confidence (<0.6) = +2 points"
+      - "Repeated questions (3+) = +1 point"
+      - "Document review cycles (5+) = +1 point"
+      - "Frustration score (>0.7) = +2 points"
+    scoring:
+      - "Score 0-3: On track"
+      - "Score 4-6: Stuck, help recommended"
+      - "Score 7+: Seriously stuck, immediate intervention"
+
+  - name: "Collective Agent Creation"
+    description: "Synthesize anonymous collective wisdom agents"
+    endpoints: 5
+    workflow:
+      - "Query case library (min 5 cases, ≥80% success)"
+      - "Apply 4-layer anonymization"
+      - "Calculate re-identification risk (must be ≤0.3)"
+      - "Configure LLM agent with collective knowledge"
+      - "Activate with 7-day auto-expiration"
+
+  - name: "Privacy System"
+    description: "Multi-layer privacy protection"
+    endpoints: 3
+    layers:
+      - "Layer 1: Organization anonymization (names, locations, dept terms)"
+      - "Layer 2: Journey anonymization (dates, durations, tool names)"
+      - "Layer 3: Pattern anonymization (person names, products, org terms)"
+      - "Layer 4: Metric anonymization (rounding, ranges, relative comparisons)"
+
+  - name: "Chat Interface"
+    description: "Conversational interface with collective agents"
+    endpoints: 2
+    features:
+      - "Statistical framing (e.g., '5 out of 7 organizations...')"
+      - "Source attribution prevention"
+      - "Session management (Redis-backed)"
+      - "Conversation audit logging"
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "agents_created_total"
+    type: "counter"
+    description: "Total collective agents created"
+    target: "> 50/month"
+    prometheus_metric: "collective_agents_created_total"
+
+  - name: "agents_active"
+    type: "gauge"
+    description: "Currently active agents"
+    target: "10-50 concurrent"
+    prometheus_metric: "collective_agents_active"
+
+  - name: "stuck_detections_total"
+    type: "counter"
+    description: "Stuck organizations detected"
+    target: "> 30/month"
+    prometheus_metric: "collective_stuck_detections_total"
+
+  - name: "chat_messages_total"
+    type: "counter"
+    description: "Total chat messages processed"
+    target: "> 500/month"
+    prometheus_metric: "collective_chat_messages_total"
+
+  - name: "privacy_violations_total"
+    type: "counter"
+    description: "Privacy violations detected (should be 0)"
+    target: "0"
+    prometheus_metric: "collective_privacy_violations_total"
+
+  - name: "stuck_detection_latency"
+    type: "histogram"
+    description: "Stuck detection response time"
+    target: "< 100ms (P95)"
+    prometheus_metric: "collective_stuck_detection_seconds"
+
+  - name: "agent_creation_time"
+    type: "histogram"
+    description: "Time to create collective agent"
+    target: "< 5s"
+    prometheus_metric: "collective_agent_creation_seconds"
+
+  - name: "chat_response_time"
+    type: "histogram"
+    description: "Chat response latency (includes LLM)"
+    target: "< 2s"
+    prometheus_metric: "collective_chat_response_seconds"
+
+  - name: "risk_score_p95"
+    type: "gauge"
+    description: "95th percentile re-identification risk score"
+    target: "< 0.3 (safe threshold)"
+    prometheus_metric: "collective_risk_score_p95"
+
+  - name: "k_anonymity_min"
+    type: "gauge"
+    description: "Minimum k-anonymity across all agents"
+    target: ">= 5"
+    prometheus_metric: "collective_k_anonymity_min"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "redis>=5.0.0"
+    - "httpx>=0.25.0"
+    - "anthropic>=0.8.0"  # Claude for agent LLM
+    - "prometheus-client>=0.19.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Case library access and agent storage"
+      required: true
+
+    - name: "redis"
+      version: "6+"
+      purpose: "Agent session management"
+      required: true
+
+    - name: "anthropic-api"
+      version: "Claude 3.5+"
+      purpose: "Collective agent conversation LLM"
+      required: true
+
+    - name: "case_library"
+      purpose: "Historical case repository for solver identification"
+      required: true
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "organization.stuck.detected"
+        source: "monitoring"
+        action: "Validate stuck status and offer collective help"
+
+      - event: "journey.milestone.completed"
+        source: "workflow_intelligence"
+        action: "Update progress tracking for stuck detection"
+
+    publishes:
+      - event: "collective.agent.created"
+        target: "orchestrator,notification_service"
+        data: "agent_id, problem_type, source_count, k_anonymity"
+
+      - event: "collective.help.accepted"
+        target: "governance_service,analytics"
+        data: "org_id, agent_id, problem_type"
+
+      - event: "privacy.violation.detected"
+        target: "security,compliance_service"
+        data: "violation_type, risk_score, agent_id"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/v1/stuck-detection/check"
+        methods: ["GET"]
+        consumers: ["admin_panel", "workflow_intelligence"]
+        description: "Check if organization is stuck"
+
+      - endpoint: "/api/v1/collective-agents/create"
+        methods: ["POST"]
+        consumers: ["orchestrator", "admin_panel"]
+        description: "Create collective agent from case library"
+
+      - endpoint: "/api/v1/collective-agents/{id}/chat"
+        methods: ["POST"]
+        consumers: ["admin_panel", "user_interface"]
+        description: "Chat with collective agent"
+
+    consumes:
+      - service: "case_library"
+        endpoint: "/api/cases/search"
+        purpose: "Find solver organizations for agent creation"
+
+      - service: "ai-foundation"
+        endpoint: "/api/llm/chat"
+        purpose: "LLM routing for agent conversations"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Port conflict with event_intelligence (both using 8032)"
+    severity: "high"
+    workaround: "Changed collective to port 8034"
+    tracking: "COLL-001"
+
+  - issue: "Agent creation fails if <5 organizations with similar problem"
+    severity: "medium"
+    workaround: "Expand search criteria or wait for more case submissions"
+    tracking: "Expected behavior (k-anonymity requirement)"
+
+  - issue: "High privacy risk score (>0.3) blocks agent creation"
+    severity: "low"
+    workaround: "Increase anonymization level or require more source orgs"
+    tracking: "Expected behavior (privacy protection)"
+
+limitations:
+  - "Minimum 5 organizations required (k-anonymity guarantee)"
+  - "Agent lifespan limited to 7 days (configurable)"
+  - "Source organizations must have ≥80% success rate"
+  - "Re-identification risk must be ≤0.3"
+  - "Depends on case library size and quality"
+  - "LLM API rate limits apply (Anthropic)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "collective-intelligence:latest"
+    ports:
+      - "8034:8034"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm_platform"
+      - name: "REDIS_URL"
+        example: "redis://localhost:6379"
+      - name: "ANTHROPIC_API_KEY"
+        example: "sk-ant-..."
+      - name: "EVENTBUS_URL"
+        example: "http://localhost:8001"
+
+    optional:
+      - name: "MIN_ORGS_FOR_AGENT"
+        description: "k-anonymity threshold"
+        default: "5"
+
+      - name: "MAX_RISK_SCORE"
+        description: "Re-identification risk threshold"
+        default: "0.3"
+
+      - name: "AGENT_EXPIRY_DAYS"
+        description: "Agent lifespan in days"
+        default: "7"
+
+      - name: "SUCCESS_RATE_THRESHOLD"
+        description: "Minimum success rate for source cases"
+        default: "0.8"
+
+  startup_command: "python -m collective.main"
+
+  requirements:
+    cpu: "1.0 cores"
+    memory: "2GB (includes LLM caching)"
+    disk: "5GB (agent sessions + audit logs)"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8034/docs"
+  technical_spec: "./docs/TECHNICAL_SPECIFICATION.md"
+  architecture: "./docs/ARCHITECTURE.md"
+  privacy_guide: "./docs/PRIVACY.md"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "AI Platform Architect"
+  slack_channel: "#intelligent-core"
+  privacy_officer: "Data Protection Team"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "k-anonymity"
+      description: "Minimum k=5 for all collective agents"
+      status: "compliant"
+
+    - name: "GDPR"
+      description: "No PII in agent data, right to erasure supported"
+      status: "compliant"
+
+    - name: "ISO 22301:2019"
+      description: "Clause 7.4 (Knowledge), Clause 10.2 (Improvement)"
+      status: "compliant"
+
+    - name: "ISO/IEC/IEEE 26514:2022"
+      description: "Software documentation standards"
+      status: "compliant"
+
+  privacy_features:
+    - "4-layer anonymization pipeline"
+    - "Re-identification risk scoring"
+    - "Source attribution prevention"
+    - "Audit trail for privacy compliance"
+    - "Data minimization principles"
+    - "Temporary agent lifecycle (7 days)"
+
+# ============================================
+# 13. USE CASES
+# ============================================
+use_cases:
+  - scenario: "BIA Dependency Mapping Struggle"
+    description: "Organization stuck for 14 days on supply chain mapping"
+    detection: "Score = 6 (days:3, failures:2, confidence:2)"
+    action: "Create collective agent from 7 healthcare organizations"
+    result: "User learns phased approach, completes in 3 days"
+    privacy: "Source organizations never revealed"
+
+  - scenario: "Executive Engagement Challenge"
+    description: "Organization struggling to secure executive sponsorship"
+    detection: "Repeated questions on same topic"
+    action: "Agent synthesizes 8 successful engagement patterns"
+    result: "Statistical guidance ('5 out of 8 used business impact demos')"
+    privacy: "No individual organization's approach identified"
+
+  - scenario: "Progress Benchmarking"
+    description: "User asks 'Is my BIA timeline normal?'"
+    response: "Collective agent shows anonymized aggregate statistics"
+    data: "12 similar organizations, median 42 days, your 38 days"
+    privacy: "Minimum 12 orgs (>>5), aggregate stats only"

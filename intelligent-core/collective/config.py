@@ -33,7 +33,7 @@ class CollectiveConfig(BaseSettings):
     MAX_RISK_SCORE: float = Field(default=0.7, description="Maximum acceptable re-identification risk")
 
     # Service settings
-    PORT: int = Field(default=8032, description="Service port")
+    PORT: int = Field(default=8034, description="Service port")
     DEBUG: bool = Field(default=False, description="Debug mode")
     CORS_ORIGINS: List[str] = Field(
         default=["http://localhost:3000", "http://localhost:3001"],

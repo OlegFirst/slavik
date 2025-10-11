@@ -1,0 +1,42 @@
+Service,Display Name,Port,Category,Status,Framework
+database-managers,Unified Database Access Layer,None,database_infrastructure,production,N/A
+eventbus,Platform EventBus (Clean Architecture),None,eventbus_core,production,N/A
+expertise-center,Expertise Center - Domain Specialists & AI Assistants,None,intelligent_core,production,N/A
+qdrant,BCM Vector Search (Qdrant Cloud),443,database_infrastructure,production,N/A
+grafana,Grafana Dashboards,3000,observability,production,N/A
+postgresql,BCM Platform Database (PostgreSQL via Supabase),5432,database_infrastructure,production,N/A
+message-queue,Platform Message Queue (RabbitMQ),5672,runtime_services,planned,N/A
+redis,Platform Redis Cache,6379,database_infrastructure,running,N/A
+api-gateway,AI-Powered API Gateway,8000,gateway_layer,production,N/A
+auth-service,Authentication & Authorization Service,8001,security,production,N/A
+ai-orchestration,AI Orchestrator - The Brain,8002,intelligent_core,active,FastAPI
+planning-service,Planning Service - BC Strategy Development,8011,platform_services,production,FastAPI
+bia-service,BIA Service - Business Impact Analysis,8012,platform_services,production,FastAPI
+compliance-service,Compliance Service,8014,platform_services,active,FastAPI
+learning-service,Learning Service - Training & Competence Management,8021,platform_services,production,FastAPI
+validation-service,Validation Service - Exercises, Audits, Reviews & CAPA,8022,platform_services,production,FastAPI
+plans-service,Plans Service,8023,platform_services,active,FastAPI
+documents-service,Documents Service,8024,platform_services,active,FastAPI
+governance-service,Governance Service,8025,platform_services,active,FastAPI
+risk-service,Risk Service,8026,platform_services,active,FastAPI
+response-service,Response Service,8027,platform_services,active,FastAPI
+community-intelligence,Community Intelligence - Peer Knowledge Sharing,8030,intelligent_core,production,FastAPI
+workflow-engine,Unified Workflow Engine,8030,intelligent_core,active,FastAPI
+predictive,Predictive Journey Service,8031,intelligent_core,active,FastAPI
+event-intelligence,Event Intelligence & Self-Healing,8032,intelligent_core,active,FastAPI
+coordination-center,Multi-Agent Coordination Center,8033,intelligent_core,planned,FastAPI
+collective,Collective Intelligence Agent Networks,8034,intelligent_core,active,FastAPI
+workflow-intelligence,Workflow Intelligence Engine - Cognitive Backbone,8037,intelligent_core,production,FastAPI
+ai_workflow_optimizer,AI Workflow Optimizer,8038,intelligent_core,active,FastAPI
+ai-foundation,AI Foundation - Core AI Infrastructure,8040,intelligent_core,production,FastAPI
+mio-manager,MIO Manager - Platform Observatory & Coordinator,8046,ai_office,production,N/A
+realtime-websocket,Real-time WebSocket Service,8050,runtime_services,running,N/A
+system-bcm-service,System BCM Service - Platform Self-Application of Business Continuity,8050,intelligent_core,production,FastAPI
+db-intelligence,DB Intelligence - Database Performance Specialist,8051,ai_office,production,N/A
+analytics-specialist,Analytics Specialist - Platform Intelligence,8056,ai_office,production,N/A
+agent-router,Agent Router - Request Routing & Load Balancing,8057,ai_office,production,N/A
+devops-agent,DevOps Agent - Infrastructure & Platform Compliance,8058,ai_office,production,N/A
+project-agent,Project & Code Quality Agent,8060,ai_office,production,N/A
+vault,HashiCorp Vault - Secrets Manager,8200,security,configured,N/A
+service-discovery,Service Discovery v2.0 - Unified Catalog + Registry,8500,runtime_services,running,N/A
+prometheus,Prometheus Metrics Server,9090,observability,production,N/A

@@ -1,0 +1,389 @@
+# ============================================
+# SERVICE INFORMATION - AI Workflow Optimizer
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: ai_workflow_optimizer
+display_name: "AI Workflow Optimizer"
+version: "2.0.0"
+description: "ML-powered workflow optimization service that analyzes business process performance, identifies bottlenecks, predicts execution times, detects anomalies, and recommends optimization strategies using machine learning algorithms."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/workflow-optimization"
+business_process: "ML-Powered Workflow Performance Optimization"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8038
+
+endpoints:
+  base_url: "http://localhost:8038"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/v1"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "ML-based workflow performance prediction (Random Forest)"
+  - "Bottleneck detection and resource optimization"
+  - "Anomaly detection using Isolation Forest"
+  - "Workflow clustering and pattern recognition (K-Means)"
+  - "Execution time forecasting with confidence intervals"
+  - "Automated optimization strategy recommendation"
+  - "Model training and auto-tuning"
+  - "Performance metrics tracking and analysis"
+  - "Historical workflow data analysis"
+
+features:
+  - name: "Performance Prediction"
+    description: "ML-based workflow execution time prediction"
+    endpoints: 3
+    algorithms:
+      - "Random Forest Regressor for time prediction"
+      - "Feature importance analysis"
+      - "Confidence interval calculation"
+    metrics:
+      - "Mean Absolute Error (MAE)"
+      - "Root Mean Squared Error (RMSE)"
+      - "R² score"
+
+  - name: "Bottleneck Detection"
+    description: "Identify and analyze workflow bottlenecks"
+    endpoints: 2
+    features:
+      - "Step-level performance analysis"
+      - "Resource utilization tracking"
+      - "Critical path identification"
+      - "Optimization recommendations"
+
+  - name: "Anomaly Detection"
+    description: "Detect unusual workflow behavior patterns"
+    endpoints: 2
+    algorithm: "Isolation Forest"
+    features:
+      - "Real-time anomaly scoring"
+      - "Historical pattern comparison"
+      - "Alert generation for anomalies"
+
+  - name: "Workflow Clustering"
+    description: "Group similar workflows for pattern analysis"
+    endpoints: 2
+    algorithm: "K-Means clustering"
+    features:
+      - "Automatic cluster count optimization"
+      - "Workflow similarity scoring"
+      - "Pattern-based recommendations"
+
+  - name: "Optimization Strategies"
+    description: "Generate ML-driven optimization recommendations"
+    endpoints: 3
+    strategies:
+      - "Resource reallocation"
+      - "Step parallelization"
+      - "Caching opportunities"
+      - "Timeout adjustments"
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total optimization requests"
+    target: "> 200/day"
+    prometheus_metric: "workflow_optimizer_requests_total"
+
+  - name: "prediction_accuracy"
+    type: "gauge"
+    description: "ML prediction accuracy (R² score)"
+    target: "> 0.85"
+    prometheus_metric: "workflow_optimizer_prediction_r2"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 500ms"
+    prometheus_metric: "workflow_optimizer_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed optimization requests"
+    target: "< 2%"
+    prometheus_metric: "workflow_optimizer_error_rate"
+
+  - name: "model_mae"
+    type: "gauge"
+    description: "Mean Absolute Error of prediction model"
+    target: "< 10% of average execution time"
+    prometheus_metric: "workflow_optimizer_model_mae"
+
+  - name: "bottlenecks_detected"
+    type: "counter"
+    description: "Total bottlenecks detected"
+    target: "Track trends"
+    prometheus_metric: "workflow_optimizer_bottlenecks_total"
+
+  - name: "anomalies_detected"
+    type: "counter"
+    description: "Workflow anomalies detected"
+    target: "< 5% of total workflows"
+    prometheus_metric: "workflow_optimizer_anomalies_total"
+
+  - name: "optimization_success_rate"
+    type: "gauge"
+    description: "Percentage of successful optimizations applied"
+    target: "> 75%"
+    prometheus_metric: "workflow_optimizer_success_rate"
+
+  - name: "model_training_time"
+    type: "histogram"
+    description: "Time to train ML models"
+    target: "< 30s"
+    prometheus_metric: "workflow_optimizer_training_seconds"
+
+  - name: "active_models"
+    type: "gauge"
+    description: "Number of active ML models"
+    target: "3-5 models"
+    prometheus_metric: "workflow_optimizer_active_models"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy>=2.0.0"
+    - "pydantic>=2.4.0"
+    - "scikit-learn>=1.3.0"  # ML algorithms
+    - "pandas>=2.0.0"  # Data analysis
+    - "numpy>=1.24.0"  # Numerical computing
+    - "joblib>=1.3.0"  # Model persistence
+    - "prometheus-client>=0.19.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Workflow performance data storage"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      purpose: "Model caching and session management"
+      required: false
+
+  ml_libraries:
+    - "RandomForestRegressor (sklearn) - Performance prediction"
+    - "IsolationForest (sklearn) - Anomaly detection"
+    - "KMeans (sklearn) - Workflow clustering"
+    - "StandardScaler (sklearn) - Feature normalization"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "workflow.instance.completed"
+        source: "workflow_engine"
+        action: "Collect performance data for ML training"
+
+      - event: "workflow.instance.failed"
+        source: "workflow_engine"
+        action: "Analyze failure patterns for optimization"
+
+      - event: "workflow.bottleneck.detected"
+        source: "monitoring"
+        action: "Generate optimization recommendations"
+
+    publishes:
+      - event: "optimization.recommendation.generated"
+        target: "workflow_engine,admin_panel"
+        data: "workflow_id, optimization_type, expected_improvement"
+
+      - event: "anomaly.detected"
+        target: "monitoring,response_service"
+        data: "workflow_id, anomaly_score, detection_time"
+
+      - event: "model.retrained"
+        target: "orchestrator,analytics"
+        data: "model_type, accuracy, training_time"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/v1/predict/execution-time"
+        methods: ["POST"]
+        consumers: ["workflow_engine", "admin_panel"]
+        description: "Predict workflow execution time"
+
+      - endpoint: "/api/v1/optimize/bottlenecks"
+        methods: ["POST"]
+        consumers: ["workflow_engine", "orchestrator"]
+        description: "Detect and optimize bottlenecks"
+
+      - endpoint: "/api/v1/detect/anomalies"
+        methods: ["POST"]
+        consumers: ["monitoring", "response_service"]
+        description: "Detect workflow anomalies"
+
+      - endpoint: "/api/v1/cluster/workflows"
+        methods: ["GET"]
+        consumers: ["analytics", "admin_panel"]
+        description: "Get workflow clustering analysis"
+
+      - endpoint: "/api/v1/models/train"
+        methods: ["POST"]
+        consumers: ["orchestrator", "admin_panel"]
+        description: "Trigger model retraining"
+
+    consumes:
+      - service: "workflow_engine"
+        endpoint: "/api/workflow/instances/{id}/metrics"
+        purpose: "Fetch workflow performance metrics"
+
+      - service: "platform_client"
+        endpoint: "/api/workflows/history"
+        purpose: "Access historical workflow data for training"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Model accuracy degrades with <100 training samples"
+    severity: "medium"
+    workaround: "Use default models until sufficient data collected"
+    tracking: "OPT-001"
+
+  - issue: "Clustering requires minimum 10 workflows per cluster"
+    severity: "low"
+    workaround: "Reduce cluster count or wait for more data"
+    tracking: "OPT-002"
+
+limitations:
+  - "Requires minimum 100 workflow instances for accurate prediction"
+  - "Model retraining can take 30s for large datasets"
+  - "Anomaly detection requires 50+ baseline workflows"
+  - "Clustering limited to 10 clusters maximum"
+  - "Feature engineering manual (not auto-ML yet)"
+  - "No deep learning models (only classical ML)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "ai-workflow-optimizer:latest"
+    ports:
+      - "8038:8038"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        example: "postgresql://postgres:postgres@localhost:5432/bcm_ai_optimizer"
+
+    optional:
+      - name: "REDIS_URL"
+        description: "Redis for model caching"
+        default: "redis://localhost:6379"
+
+      - name: "MIN_TRAINING_SAMPLES"
+        description: "Minimum samples for model training"
+        default: "100"
+
+      - name: "MODEL_RETRAIN_INTERVAL"
+        description: "Hours between automatic model retraining"
+        default: "24"
+
+      - name: "ANOMALY_THRESHOLD"
+        description: "Anomaly score threshold (0-1)"
+        default: "0.7"
+
+  startup_command: "python main.py"
+
+  requirements:
+    cpu: "2.0 cores (ML training intensive)"
+    memory: "4GB (models + data processing)"
+    disk: "10GB (training data + models)"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8038/docs"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "ML Platform Engineer"
+  slack_channel: "#intelligent-core"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "ISO/IEC/IEEE 26514:2022"
+      description: "Software documentation standards"
+      status: "compliant"
+
+    - name: "ISO/IEC/IEEE 42010:2011"
+      description: "Architecture description"
+      status: "compliant"
+
+    - name: "ISO 22301:2019"
+      description: "BCM workflow optimization (where applicable)"
+      status: "compliant"
+
+# ============================================
+# 13. ML MODELS
+# ============================================
+ml_models:
+  - name: "Performance Predictor"
+    algorithm: "Random Forest Regressor"
+    features: ["step_count", "resource_usage", "data_size", "complexity_score"]
+    target: "execution_time_seconds"
+    accuracy: "> 85% (R²)"
+    retraining: "Daily (automatic)"
+
+  - name: "Anomaly Detector"
+    algorithm: "Isolation Forest"
+    features: ["execution_time", "step_durations", "resource_consumption", "failure_rate"]
+    threshold: "0.7 (anomaly score)"
+    retraining: "Weekly (automatic)"
+
+  - name: "Workflow Clusterer"
+    algorithm: "K-Means"
+    features: ["workflow_pattern", "complexity", "duration", "resource_profile"]
+    clusters: "3-10 (auto-optimized)"
+    retraining: "On-demand"
+
+# ============================================
+# 14. CODE METRICS
+# ============================================
+code_metrics:
+  total_lines_of_code: 1701
+  python_files: 2
+  classes: 10
+  functions: 2
+  api_endpoints: 12
+  dependencies: 28
