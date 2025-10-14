@@ -4,7 +4,7 @@
 # Version: 2.0.0 (Production)
 
 ace_service:
-  name: ace-service
+  name: ace_service
   display_name: ACE Service - Agentic Context Engineering
   registration:
     type: learning_infrastructure
@@ -287,7 +287,7 @@ ace_service:
         - pattern_detection
 
   client_library:
-    location: /infrastructure/ace-service/ace_client.py
+    location: /infrastructure/ace_service/ace_client.py
     class: ACEClient
     language: Python
     async: true
@@ -397,7 +397,7 @@ ace_service:
       - Cross-task knowledge transfer
 
   deployment:
-    location: /Users/MD/AI-Platform-ISO/infrastructure/ace-service/
+    location: /Users/MD/AI-Platform-ISO/infrastructure/ace_service/
     files:
       - main.py (900+ lines) - FastAPI service
       - ace_client.py (500+ lines) - Client library
@@ -419,17 +419,17 @@ ace_service:
       tables_created: 5 (3 tables + 2 views)
 
   documentation:
-    main: /infrastructure/ace-service/README.md
-    quick_start: /infrastructure/ace-service/QUICKSTART.md
-    integration_guide: /infrastructure/ace-service/INTEGRATION_GUIDE.md
+    main: /infrastructure/ace_service/README.md
+    quick_start: /infrastructure/ace_service/QUICKSTART.md
+    integration_guide: /infrastructure/ace_service/INTEGRATION_GUIDE.md
     architecture: /doc-project/ACE_CENTRALIZED_ARCHITECTURE.md
     summary_english: /doc-project/ACE_INTEGRATION_COMPLETE.md
     summary_russian: /doc-project/ACE_READY_RU.md
     cleanup_report: /doc-project/ACE_CLEANUP_SUMMARY_RU.md
-    structure: /infrastructure/ace-service/PROJECT_STRUCTURE.md
+    structure: /infrastructure/ace_service/PROJECT_STRUCTURE.md
 
   testing:
-    integration_tests: /infrastructure/ace-service/test_ace_integration.py
+    integration_tests: /infrastructure/ace_service/test_ace_integration.py
     test_coverage:
       - Generator functionality
       - Reflector analysis
@@ -509,7 +509,7 @@ ace_service:
     - version: 2.0.0
       date: '2025-10-15'
       status: Production
-      location: /infrastructure/ace-service/
+      location: /infrastructure/ace_service/
       scope: All platform modules
       storage: Supabase PostgreSQL
       changes:

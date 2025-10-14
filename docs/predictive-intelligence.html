@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predictive Intelligence - AI-Platform-ISO</title>
+  <meta name="description" content="ML-powered forecasting and predictions: Risk forecasting, journey prediction, and proactive recommendations">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#3b82f6',
+        primaryTextColor: '#1e293b',
+        primaryBorderColor: '#2563eb',
+        lineColor: '#64748b',
+        secondaryColor: '#8b5cf6',
+        tertiaryColor: '#06b6d4',
+        background: '#ffffff',
+        mainBkg: '#f1f5f9',
+        secondBkg: '#e0e7ff',
+        textColor: '#1e293b',
+        fontSize: '14px'
+      }
+    });
+  </script>
+  <style>
+    .hero-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .hero-gradient h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .hero-gradient p {
+      font-size: 1.3rem;
+      opacity: 0.95;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      border: 2px solid #e0e7ff;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      color: var(--medium-text);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .ml-model-card {
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .ml-model-card h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+    .feature-tag {
+      background: #667eea;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      margin: 0.2rem;
+    }
+    .prediction-box {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-left: 4px solid #0ea5e9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .prediction-box h4 {
+      color: #0369a1;
+      margin-bottom: 0.8rem;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #bae6fd;
+    }
+    .metric-row:last-child {
+      border-bottom: none;
+    }
+    .metric-label {
+      font-weight: 600;
+      color: #0c4a6e;
+    }
+    .metric-value {
+      color: #075985;
+      font-family: 'Courier New', monospace;
+    }
+    .algorithm-badge {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+      margin: 0.5rem 0;
+      box-shadow: 0 2px 4px rgba(139,92,246,0.3);
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .comparison-box {
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid;
+    }
+    .comparison-box.traditional {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+    .comparison-box.predictive {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .comparison-box h3 {
+      margin-bottom: 1rem;
+    }
+    .comparison-box.traditional h3 {
+      color: #991b1b;
+    }
+    .comparison-box.predictive h3 {
+      color: #166534;
+    }
+    .use-case-card {
+      background: white;
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .use-case-card:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102,126,234,0.2);
+      transform: translateY(-2px);
+    }
+    .use-case-card h4 {
+      color: #667eea;
+      margin-bottom: 0.8rem;
+    }
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .code-example .keyword { color: #c792ea; }
+    .code-example .string { color: #c3e88d; }
+    .code-example .number { color: #f78c6c; }
+    .code-example .comment { color: #676e95; font-style: italic; }
+    .code-example .function { color: #82aaff; }
+    .mermaid {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="platform-overview.html">Platform</a>
+        <a href="service-catalog-visual.html">Services</a>
+        <a href="ai-foundation.html">AI Foundation</a>
+        <a href="workflow-intelligence.html">Workflow Intelligence</a>
+        <a href="expertise-center.html">Expertise Center</a>
+        <a href="predictive-intelligence.html" class="active">Predictive Intelligence</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient">
+    <div class="container">
+      <h1>Predictive Intelligence</h1>
+      <p>ML-Powered Forecasting & Proactive Recommendations</p>
+      <p style="font-size: 1.1rem; opacity: 0.9;">
+        See the future before it happens. Predict risks, forecast timelines, and receive proactive recommendations powered by machine learning.
+      </p>
+    </div>
+  </section>
+
+  <!-- Stats Overview -->
+  <section style="margin-top: -2rem; position: relative; z-index: 10;">
+    <div class="container">
+      <div class="grid grid-4">
+        <div class="stat-card">
+          <div class="stat-number">:8036</div>
+          <div class="stat-label">Service Port</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3</div>
+          <div class="stat-label">ML Models</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">~10ms</div>
+          <div class="stat-label">Prediction Latency</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">8</div>
+          <div class="stat-label">ML Features</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What is Predictive Intelligence? -->
+  <section id="what-is-predictive">
+    <div class="container">
+      <h2 class="text-center">What is Predictive Intelligence?</h2>
+      <p class="section-subtitle text-center">
+        Move from reactive response to proactive prevention
+      </p>
+
+      <div class="bg-alt" style="max-width: 900px; margin: 2rem auto; padding: 2rem; border-radius: 12px;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem;">The Shift in BCM Approach</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-box traditional">
+            <h3>Traditional BCM: Reactive</h3>
+            <ul style="color: #7f1d1d;">
+              <li><strong>Wait for problems</strong> to appear</li>
+              <li><strong>React</strong> when risks materialize</li>
+              <li><strong>Fix issues</strong> after they occur</li>
+              <li><strong>Learn</strong> from mistakes</li>
+              <li><strong>Manual</strong> timeline estimation</li>
+              <li><strong>Subjective</strong> risk assessment</li>
+            </ul>
+          </div>
+
+          <div class="comparison-box predictive">
+            <h3>Predictive BCM: Proactive</h3>
+            <ul style="color: #14532d;">
+              <li><strong>Predict problems</strong> before they happen</li>
+              <li><strong>Prevent risks</strong> from materializing</li>
+              <li><strong>Address issues</strong> before they occur</li>
+              <li><strong>Learn</strong> from collective intelligence</li>
+              <li><strong>ML-powered</strong> timeline forecasting</li>
+              <li><strong>Data-driven</strong> risk scoring</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 1.5rem; font-weight: 600; color: var(--primary-color);">
+          Predictive Intelligence transforms BCM from firefighting to fire prevention
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 Core Capabilities -->
+  <section id="core-capabilities">
+    <div class="container">
+      <h2 class="text-center">3 Core Capabilities</h2>
+      <p class="section-subtitle text-center">
+        ML-powered forecasting across three critical dimensions
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 style="color: #667eea;">1. Risk Forecasting</h3>
+          <p style="margin-bottom: 1rem;"><strong>Predict future risks before they materialize</strong></p>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Monte Carlo Simulation:</strong> 10,000+ iterations to model uncertainty</li>
+            <li><strong>Historical Patterns:</strong> Learn from 347+ real BCM cases</li>
+            <li><strong>Probability Scoring:</strong> 0-100% likelihood for each risk</li>
+            <li><strong>Impact Assessment:</strong> Predict financial and operational consequences</li>
+            <li><strong>Confidence Intervals:</strong> ±X% uncertainty ranges</li>
+          </ul>
+          <div style="margin-top: 1rem; padding: 1rem; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+            <strong>Example:</strong> "65% probability of IT failure in next 12 months, estimated impact $450K-$780K"
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="color: #8b5cf6;">2. Journey Prediction</h3>
+          <p style="margin-bottom: 1rem;"><strong>Forecast BCM implementation timeline and completion</strong></p>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Stage Duration:</strong> Predict hours needed for each phase</li>
+            <li><strong>Stuck Probability:</strong> Identify where organizations get blocked</li>
+            <li><strong>Expert Help Signals:</strong> Know when specialist support is needed</li>
+            <li><strong>Total Time Estimate:</strong> End-to-end completion forecast</li>
+            <li><strong>Real-time Updates:</strong> Re-predict as context changes</li>
+          </ul>
+          <div style="margin-top: 1rem; padding: 1rem; background: #ddd6fe; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+            <strong>Example:</strong> "BIA stage: 18 hours (±4h), 35% stuck probability, expert help recommended"
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="color: #06b6d4;">3. Proactive Recommendations</h3>
+          <p style="margin-bottom: 1rem;"><strong>Get guidance before problems occur</strong></p>
+          <ul style="color: var(--medium-text);">
+            <li><strong>Preventive Actions:</strong> Suggest interventions before issues arise</li>
+            <li><strong>Resource Allocation:</strong> Optimize team assignments predictively</li>
+            <li><strong>Risk Mitigation:</strong> Recommend controls for predicted threats</li>
+            <li><strong>Process Optimization:</strong> Identify efficiency improvements</li>
+            <li><strong>Training Needs:</strong> Detect competency gaps early</li>
+          </ul>
+          <div style="margin-top: 1rem; padding: 1rem; background: #cffafe; border-radius: 8px; border-left: 4px solid #06b6d4;">
+            <strong>Example:</strong> "Consider adding BCM specialist to team - 72% of similar orgs needed expert help at this stage"
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ML Models Deep Dive -->
+  <section id="ml-models">
+    <div class="container">
+      <h2 class="text-center">3 Machine Learning Models</h2>
+      <p class="section-subtitle text-center">
+        Production-grade ML infrastructure powering all predictions
+      </p>
+
+      <!-- Model 1: Workflow Predictor -->
+      <div class="ml-model-card">
+        <h3>Model 1: Workflow Predictor</h3>
+        <div class="algorithm-badge">Random Forest Regressor + Gradient Boosting</div>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.8rem;">What It Predicts:</h4>
+            <ul style="color: var(--medium-text);">
+              <li><strong>Stage Duration:</strong> Hours needed to complete current phase</li>
+              <li><strong>Stuck Probability:</strong> Likelihood (0-1) of getting blocked</li>
+              <li><strong>Expert Help Needed:</strong> Boolean flag for specialist support</li>
+              <li><strong>Total Completion Time:</strong> End-to-end timeline forecast</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.8rem;">Why These Algorithms?</h4>
+            <ul style="color: var(--medium-text);">
+              <li><strong>Random Forest:</strong> Handles non-linear relationships, robust to outliers</li>
+              <li><strong>Gradient Boosting:</strong> Corrects prediction errors iteratively</li>
+              <li><strong>Ensemble:</strong> Combines both for higher accuracy</li>
+              <li><strong>Scikit-learn:</strong> Production-proven ML framework</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="prediction-box" style="margin-top: 1.5rem;">
+          <h4>Real Prediction Example: Medium Healthcare Organization</h4>
+
+          <strong style="color: #0c4a6e; display: block; margin-bottom: 0.8rem;">Input Context:</strong>
+          <div class="metric-row">
+            <span class="metric-label">Organization Size:</span>
+            <span class="metric-value">500 employees (medium)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Industry:</span>
+            <span class="metric-value">Healthcare</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">BCM Maturity:</span>
+            <span class="metric-value">Level 2 (Developing)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Current Module:</span>
+            <span class="metric-value">BIA (Stage 3 of 7)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Complexity:</span>
+            <span class="metric-value">4/5 (High)</span>
+          </div>
+
+          <strong style="color: #0c4a6e; display: block; margin: 1.5rem 0 0.8rem;">ML Predictions:</strong>
+          <div class="metric-row" style="background: #f0f9ff; padding: 0.8rem; border-radius: 6px;">
+            <span class="metric-label">Stage Duration:</span>
+            <span class="metric-value" style="font-size: 1.1rem; color: #0369a1;">18 hours (±4h)</span>
+          </div>
+          <div class="metric-row" style="background: #fef3c7; padding: 0.8rem; border-radius: 6px;">
+            <span class="metric-label">Stuck Probability:</span>
+            <span class="metric-value" style="font-size: 1.1rem; color: #b45309;">35% (Medium Risk)</span>
+          </div>
+          <div class="metric-row" style="background: #fee2e2; padding: 0.8rem; border-radius: 6px;">
+            <span class="metric-label">Expert Help:</span>
+            <span class="metric-value" style="font-size: 1.1rem; color: #991b1b;">Recommended ⚠️</span>
+          </div>
+          <div class="metric-row" style="background: #e0e7ff; padding: 0.8rem; border-radius: 6px;">
+            <span class="metric-label">Total Time Remaining:</span>
+            <span class="metric-value" style="font-size: 1.1rem; color: #4338ca;">56 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Model 2: Anomaly Detector -->
+      <div class="ml-model-card">
+        <h3>Model 2: Anomaly Detector</h3>
+        <div class="algorithm-badge">Z-Score + Statistical Analysis</div>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.8rem;">What It Detects:</h4>
+            <ul style="color: var(--medium-text);">
+              <li><strong>Duration Anomalies:</strong> Tasks taking unusually long (Z > 2)</li>
+              <li><strong>Stagnation:</strong> No progress for >14 days</li>
+              <li><strong>Inactivity:</strong> No user activity for >7 days</li>
+              <li><strong>Activity Bursts:</strong> Sudden spikes (>20 actions/day)</li>
+              <li><strong>Data Quality Issues:</strong> Missing or inconsistent data</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: #667eea; margin-bottom: 0.8rem;">Why Z-Score?</h4>
+            <ul style="color: var(--medium-text);">
+              <li><strong>Statistical Rigor:</strong> Identifies outliers mathematically</li>
+              <li><strong>Threshold:</strong> Z > 2 = 95% confidence it's anomalous</li>
+              <li><strong>Real-time:</strong> Detects issues as they happen</li>
+              <li><strong>Interpretable:</strong> Clear explanation for each alert</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-example" style="margin-top: 1.5rem;">
+<span class="comment"># Anomaly Detection Algorithm</span>
+<span class="keyword">from</span> scipy <span class="keyword">import</span> stats
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">detect_anomalies</span>(duration_hours, historical_durations):
+    <span class="comment"># Calculate Z-score</span>
+    mean = np.<span class="function">mean</span>(historical_durations)
+    std = np.<span class="function">std</span>(historical_durations)
+    z_score = (duration_hours - mean) / std
+
+    <span class="comment"># Anomaly if Z > 2 (95% confidence)</span>
+    <span class="keyword">if</span> z_score > <span class="number">2</span>:
+        <span class="keyword">return</span> {
+            <span class="string">"anomaly"</span>: <span class="keyword">True</span>,
+            <span class="string">"z_score"</span>: z_score,
+            <span class="string">"severity"</span>: <span class="string">"high"</span> <span class="keyword">if</span> z_score > <span class="number">3</span> <span class="keyword">else</span> <span class="string">"medium"</span>,
+            <span class="string">"message"</span>: <span class="string">f"Duration {duration_hours}h is {z_score:.1f} std devs above normal"</span>
+        }
+
+    <span class="keyword">return</span> {<span class="string">"anomaly"</span>: <span class="keyword">False</span>}
+
+<span class="comment"># Example: BIA stage taking 42 hours (historical avg: 18h, std: 8h)</span>
+result = <span class="function">detect_anomalies</span>(<span class="number">42</span>, [<span class="number">15</span>, <span class="number">18</span>, <span class="number">20</span>, <span class="number">16</span>, <span class="number">22</span>, <span class="number">19</span>])
+<span class="comment"># → Z-score: 3.0 → High severity anomaly detected!</span>
+        </div>
+      </div>
+
+      <!-- Model 3: Training Pipeline -->
+      <div class="ml-model-card">
+        <h3>Model 3: Automated Training Pipeline</h3>
+        <div class="algorithm-badge">Continuous Learning System</div>
+
+        <p style="margin-top: 1rem; color: var(--medium-text);">
+          ML models aren't static - they continuously improve as more organizations use the platform.
+          The training pipeline automatically retrains models with new data.
+        </p>
+
+        <div class="grid grid-5" style="margin-top: 1.5rem;">
+          <div style="text-align: center;">
+            <div style="background: #667eea; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">1</div>
+            <strong style="color: #667eea;">Data Collection</strong>
+            <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Gather completed workflows from case library</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #8b5cf6; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">2</div>
+            <strong style="color: #8b5cf6;">Feature Engineering</strong>
+            <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Extract 8 ML features from each case</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #06b6d4; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">3</div>
+            <strong style="color: #06b6d4;">Train/Test Split</strong>
+            <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">80% training, 20% validation</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #10b981; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">4</div>
+            <strong style="color: #10b981;">Model Evaluation</strong>
+            <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">R² score, accuracy metrics</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #f59e0b; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">5</div>
+            <strong style="color: #f59e0b;">Model Persistence</strong>
+            <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Save to disk (pickle format)</p>
+          </div>
+        </div>
+
+        <div class="bg-alt" style="margin-top: 1.5rem; padding: 1.5rem; border-radius: 8px;">
+          <h4 style="margin-bottom: 1rem;">Model Performance Improves Over Time</h4>
+          <div class="grid grid-3">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: #ef4444;">72%</div>
+              <div style="color: var(--medium-text); font-size: 0.9rem;">R² Score (50 cases)</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;">85%</div>
+              <div style="color: var(--medium-text); font-size: 0.9rem;">R² Score (200 cases)</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 700; color: #10b981;">93%</div>
+              <div style="color: var(--medium-text); font-size: 0.9rem;">R² Score (500+ cases)</div>
+            </div>
+          </div>
+          <p style="text-align: center; margin-top: 1rem; font-weight: 600; color: var(--primary-color);">
+            More data = Better predictions. Your platform gets smarter with every organization.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 ML Features -->
+  <section id="ml-features">
+    <div class="container">
+      <h2 class="text-center">8 ML Features: What Powers Predictions</h2>
+      <p class="section-subtitle text-center">
+        Every prediction uses these 8 contextual features extracted from your organization
+      </p>
+
+      <div class="grid grid-2" style="gap: 1.5rem; margin-top: 2rem;">
+        <div class="card">
+          <div class="feature-tag">Feature 1</div>
+          <h3 style="margin-top: 1rem;">org_size</h3>
+          <p><strong>Type:</strong> Categorical (small / medium / large)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Larger organizations typically take longer for BCM implementation due to complexity,
+            more stakeholders, and more processes to analyze. Small orgs move faster but may lack resources.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Example:</strong> Healthcare clinic (50 staff) → small | Regional hospital (500 staff) → medium |
+            Hospital system (5000+ staff) → large
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 2</div>
+          <h3 style="margin-top: 1rem;">org_maturity</h3>
+          <p><strong>Type:</strong> Ordinal (1-5 scale)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Organizations with higher BCM maturity complete stages faster - they have
+            existing processes, trained staff, and institutional knowledge. Level 1 orgs need more guidance.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Scale:</strong> 1 = No BCM experience | 2 = Basic awareness | 3 = Developing | 4 = Established | 5 = Optimizing
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 3</div>
+          <h3 style="margin-top: 1rem;">industry</h3>
+          <p><strong>Type:</strong> Categorical (healthcare / finance / manufacturing / etc.)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Different industries have different regulatory requirements, risk profiles,
+            and BCM complexities. Healthcare has patient safety considerations, finance has data protection needs.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Supported:</strong> Healthcare, Finance, Manufacturing, Education, Government, Retail, Technology, Energy
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 4</div>
+          <h3 style="margin-top: 1rem;">stage_index</h3>
+          <p><strong>Type:</strong> Numeric (current position in workflow)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Early stages (BIA, Risk Assessment) tend to take longer as they're foundational.
+            Later stages build on previous work and move faster. This feature captures workflow position.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Example:</strong> BIA module has 7 stages → Currently at stage 3 → stage_index = 3
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 5</div>
+          <h3 style="margin-top: 1rem;">total_stages</h3>
+          <p><strong>Type:</strong> Numeric (workflow length)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Workflows with more stages are inherently more complex. BIA might have 7 stages,
+            while Plan Creation has 12. More stages = longer completion time and higher stuck probability.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Range:</strong> Typical BCM workflows have 5-15 stages depending on module complexity
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 6</div>
+          <h3 style="margin-top: 1rem;">complexity</h3>
+          <p><strong>Type:</strong> Ordinal (1-5 scale)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> User-assessed complexity rating. A simple Risk Assessment (complexity=2) will
+            complete faster than a comprehensive enterprise-wide BIA (complexity=5). Subjective but predictive.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Scale:</strong> 1 = Very simple | 2 = Simple | 3 = Moderate | 4 = Complex | 5 = Very complex
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 7</div>
+          <h3 style="margin-top: 1rem;">ai_usage_count</h3>
+          <p><strong>Type:</strong> Numeric (number of AI interactions)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Organizations that leverage AI assistance more frequently tend to move faster
+            and get unstuck quicker. This captures AI adoption level and correlates with completion speed.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Example:</strong> Org using 14 AI specialists heavily → ai_usage_count = 47 → Predicts faster completion
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feature-tag">Feature 8</div>
+          <h3 style="margin-top: 1rem;">challenges_count</h3>
+          <p><strong>Type:</strong> Numeric (issues encountered)</p>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            <strong>Why Important:</strong> Number of roadblocks, challenges, or issues reported during implementation.
+            Higher challenge count correlates with longer duration and higher stuck probability. Early warning signal.
+          </p>
+          <div style="margin-top: 1rem; padding: 0.8rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
+            <strong>Threshold:</strong> challenges_count > 5 → High risk of getting stuck, expert help strongly recommended
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-alt" style="margin-top: 2rem; padding: 2rem; border-radius: 12px;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem;">How Features Combine to Make Predictions</h3>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 1.5rem; color: var(--medium-text);">
+          ML models analyze all 8 features simultaneously to find patterns. For example, a large healthcare organization
+          (feature 1 + 3) with low maturity (feature 2) at a complex stage (feature 6) with few AI interactions (feature 7)
+          → High stuck probability prediction.
+        </p>
+        <div class="code-example">
+<span class="comment"># Feature Vector Example</span>
+features = {
+    <span class="string">"org_size"</span>: <span class="string">"medium"</span>,           <span class="comment"># 500 employees</span>
+    <span class="string">"org_maturity"</span>: <span class="number">2</span>,            <span class="comment"># Developing</span>
+    <span class="string">"industry"</span>: <span class="string">"healthcare"</span>,      <span class="comment"># Sector</span>
+    <span class="string">"stage_index"</span>: <span class="number">3</span>,             <span class="comment"># Current stage</span>
+    <span class="string">"total_stages"</span>: <span class="number">7</span>,            <span class="comment"># Workflow length</span>
+    <span class="string">"complexity"</span>: <span class="number">4</span>,              <span class="comment"># High complexity</span>
+    <span class="string">"ai_usage_count"</span>: <span class="number">12</span>,         <span class="comment"># Moderate AI adoption</span>
+    <span class="string">"challenges_count"</span>: <span class="number">3</span>         <span class="comment"># Some issues</span>
+}
+
+<span class="comment"># ML model predicts:</span>
+prediction = model.<span class="function">predict</span>(features)
+<span class="comment"># → duration: 18h, stuck_prob: 0.35, expert_help: True</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works: Flow Diagram -->
+  <section id="how-it-works">
+    <div class="container">
+      <h2 class="text-center">How Predictive Intelligence Works</h2>
+      <p class="section-subtitle text-center">
+        End-to-end prediction flow from context to recommendation
+      </p>
+
+      <div class="mermaid">
+graph TB
+    subgraph "1. Context Collection"
+        A[User Context] --> B[Organization Profile]
+        A --> C[Current Workflow State]
+        A --> D[Historical Activity]
+        B --> E[Extract 8 ML Features]
+        C --> E
+        D --> E
+    end
+
+    subgraph "2. ML Prediction"
+        E --> F[Feature Vector]
+        F --> G[Random Forest Model]
+        F --> H[Gradient Boosting Model]
+        G --> I[Ensemble Prediction]
+        H --> I
+        I --> J[Duration Forecast]
+        I --> K[Stuck Probability]
+        I --> L[Expert Help Signal]
+    end
+
+    subgraph "3. Anomaly Detection"
+        C --> M[Z-Score Calculator]
+        M --> N{Z > 2?}
+        N -->|Yes| O[Anomaly Alert]
+        N -->|No| P[Normal Range]
+    end
+
+    subgraph "4. Risk Forecasting"
+        B --> Q[Monte Carlo Simulator]
+        Q --> R[10,000 Iterations]
+        R --> S[Risk Probability Distribution]
+        S --> T[Confidence Intervals]
+    end
+
+    subgraph "5. Proactive Recommendations"
+        J --> U[Recommendation Engine]
+        K --> U
+        L --> U
+        O --> U
+        T --> U
+        U --> V[Preventive Actions]
+        U --> W[Resource Suggestions]
+        U --> X[Risk Mitigations]
+    end
+
+    subgraph "6. Delivery to User"
+        V --> Y[AI Orchestrator]
+        W --> Y
+        X --> Y
+        Y --> Z[User Interface]
+        Z --> AA[Dashboard Widgets]
+        Z --> AB[Real-time Alerts]
+        Z --> AC[Email Notifications]
+    end
+
+    style E fill:#667eea,color:#fff
+    style I fill:#8b5cf6,color:#fff
+    style O fill:#ef4444,color:#fff
+    style T fill:#f59e0b,color:#fff
+    style U fill:#06b6d4,color:#fff
+    style Y fill:#10b981,color:#fff
+      </div>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h4 style="color: #667eea;">Step 1-2: Collect & Predict</h4>
+          <p style="color: var(--medium-text);">
+            Extract 8 ML features from user context → Feed to ensemble ML models (Random Forest + Gradient Boosting)
+            → Get predictions: duration, stuck probability, expert help signal
+          </p>
+        </div>
+        <div class="card">
+          <h4 style="color: #f59e0b;">Step 3-4: Detect & Forecast</h4>
+          <p style="color: var(--medium-text);">
+            Calculate Z-scores to detect anomalies (duration outliers, stagnation, inactivity) →
+            Run Monte Carlo simulation for risk forecasting with confidence intervals
+          </p>
+        </div>
+        <div class="card">
+          <h4 style="color: #10b981;">Step 5-6: Recommend & Deliver</h4>
+          <p style="color: var(--medium-text);">
+            Combine all predictions → Generate proactive recommendations (preventive actions, resource suggestions, risk mitigations)
+            → Deliver via dashboard, alerts, and notifications
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Real Use Cases -->
+  <section id="use-cases">
+    <div class="container">
+      <h2 class="text-center">7 Real-World Use Cases</h2>
+      <p class="section-subtitle text-center">
+        When predictive intelligence transforms BCM implementation
+      </p>
+
+      <div class="use-case-card">
+        <h4>Use Case 1: Preventing Project Delays</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              Regional hospital starting BIA module. ML predicts 35% stuck probability at Stage 3 (Critical Services Identification).
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              System recommends adding BCM specialist to team before Stage 3. Hospital accepts recommendation.
+              Stage 3 completed in 15 hours vs predicted 24 hours without help. Project stays on schedule.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 2: Resource Optimization</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              Finance org with 3 parallel BCM projects. ML predicts Project A will need expert help in 2 days,
+              Project B is on track, Project C shows anomaly (stagnation for 10 days).
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              System reallocates BCM consultant from Project B → Project C immediately, schedules consultant for
+              Project A in 2 days. All projects complete within SLA vs 1 delayed project without predictions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 3: Budget Planning</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              CFO needs budget for next year's BCM program. Risk forecasting predicts 65% probability of
+              IT system failure, estimated impact $450K-$780K.
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              CFO allocates $150K for IT redundancy and backup systems (preventive investment).
+              Actual IT incident 8 months later: total downtime 4 hours vs predicted 48 hours without mitigation.
+              Saved $600K+ in incident costs.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 4: Early Warning System</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              Anomaly detector identifies BIA stage taking 42 hours (Z-score: 3.0, high severity).
+              Historical average for similar orgs: 18 hours.
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              System sends alert to BCM manager + project sponsor. Investigation reveals team struggling with
+              critical services definition. Expert brought in immediately. Stage completed in 48 hours total
+              vs >80 hours if issue undetected.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 5: Training Needs Prediction</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              ML detects organization has low ai_usage_count (only 3 AI interactions) despite having 14 AI specialists available.
+              Predicts 55% stuck probability due to underutilization of AI tools.
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              System recommends AI tools training session. Organization schedules 2-hour workshop.
+              ai_usage_count increases to 28 interactions next week. Stuck probability drops to 22%.
+              Project velocity increases 40%.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 6: Realistic Timeline Estimates</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              Exec team wants BIA completed in "2 weeks max". ML predicts 56 hours total duration (7 working days)
+              for similar healthcare org at maturity level 2.
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              BCM manager shows ML forecast to execs with confidence interval (±8h). Team agrees on realistic
+              8-day timeline with buffer. Project completes in 7.5 days. No missed deadlines, no team burnout,
+              stakeholder expectations properly set from start.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card">
+        <h4>Use Case 7: Continuous Improvement</h4>
+        <div class="grid grid-2" style="gap: 1.5rem; margin-top: 1rem;">
+          <div>
+            <p><strong>Scenario:</strong></p>
+            <p style="color: var(--medium-text);">
+              ML model has 200 completed BCM cases in training data. New organization completes their BIA.
+              Automated training pipeline retrains model with 201 cases.
+            </p>
+          </div>
+          <div>
+            <p><strong>Proactive Action:</strong></p>
+            <p style="color: var(--medium-text);">
+              Model R² score improves from 82% → 83%. Next organization gets slightly better predictions.
+              Each implementation makes the platform smarter. Collective intelligence grows continuously.
+              Platform value increases over time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance & Scalability -->
+  <section id="performance">
+    <div class="container">
+      <h2 class="text-center">Performance & Scalability</h2>
+      <p class="section-subtitle text-center">
+        Production-grade ML infrastructure built for enterprise scale
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 style="color: #667eea;">Prediction Latency</h3>
+          <div style="text-align: center; margin: 1.5rem 0;">
+            <div style="font-size: 3rem; font-weight: 700; color: #667eea;">~10ms</div>
+            <div style="color: var(--medium-text); margin-top: 0.5rem;">Total prediction time</div>
+          </div>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li><strong>Feature Extraction:</strong> <1ms (pure Python)</li>
+            <li><strong>Model Inference:</strong> 5-10ms (scikit-learn in-memory)</li>
+            <li><strong>Result Formatting:</strong> <1ms (JSON serialization)</li>
+            <li><strong>Network Overhead:</strong> 2-5ms (REST API)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="color: #8b5cf6;">Memory Footprint</h3>
+          <div style="text-align: center; margin: 1.5rem 0;">
+            <div style="font-size: 3rem; font-weight: 700; color: #8b5cf6;">50-100MB</div>
+            <div style="color: var(--medium-text); margin-top: 0.5rem;">Models in RAM</div>
+          </div>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li><strong>Random Forest:</strong> ~30MB (trained model)</li>
+            <li><strong>Gradient Boosting:</strong> ~20MB (trained model)</li>
+            <li><strong>Feature Scaler:</strong> <1MB (StandardScaler)</li>
+            <li><strong>Historical Stats:</strong> ~10MB (for anomaly detection)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="color: #06b6d4;">Scalability</h3>
+          <div style="text-align: center; margin: 1.5rem 0;">
+            <div style="font-size: 3rem; font-weight: 700; color: #06b6d4;">∞</div>
+            <div style="color: var(--medium-text); margin-top: 0.5rem;">Horizontal scaling</div>
+          </div>
+          <ul style="color: var(--medium-text); font-size: 0.9rem;">
+            <li><strong>Stateless Service:</strong> No session state, easy to replicate</li>
+            <li><strong>Load Balancing:</strong> Distribute requests across instances</li>
+            <li><strong>Model Caching:</strong> Load once per instance, reuse for all requests</li>
+            <li><strong>Auto-scaling:</strong> Spin up more pods under high load</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-alt" style="margin-top: 2rem; padding: 2rem; border-radius: 12px;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem;">Production Deployment Architecture</h3>
+        <div class="mermaid">
+graph LR
+    A[User Request] --> B[Load Balancer]
+    B --> C[Predictive Service Instance 1<br/>Port 8036]
+    B --> D[Predictive Service Instance 2<br/>Port 8037]
+    B --> E[Predictive Service Instance 3<br/>Port 8038]
+
+    C --> F[ML Models in Memory]
+    D --> G[ML Models in Memory]
+    E --> H[ML Models in Memory]
+
+    F --> I[Redis Cache<br/>Feature vectors]
+    G --> I
+    H --> I
+
+    F --> J[PostgreSQL<br/>Historical data]
+    G --> J
+    H --> J
+
+    style C fill:#667eea,color:#fff
+    style D fill:#667eea,color:#fff
+    style E fill:#667eea,color:#fff
+    style I fill:#ef4444,color:#fff
+    style J fill:#3b82f6,color:#fff
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration with Platform -->
+  <section id="integration">
+    <div class="container">
+      <h2 class="text-center">Integration with AI-Platform-ISO</h2>
+      <p class="section-subtitle text-center">
+        Predictive Intelligence connects to every layer of the platform
+      </p>
+
+      <div class="mermaid">
+graph TB
+    subgraph "Layer 3: Intelligent Core"
+        A[Predictive Service<br/>Port 8036]
+    end
+
+    subgraph "Data Sources"
+        B[AI Foundation<br/>Port 8031] -->|ML Models| A
+        C[Workflow Intelligence<br/>Port 8035] -->|Case Library| A
+        D[Collective Intelligence<br/>Port 8037] -->|347+ Cases| A
+        E[System BCM Service<br/>Port 8040] -->|Org Context| A
+    end
+
+    subgraph "Consumers"
+        A -->|Predictions| F[AI Orchestrator<br/>Port 8001]
+        A -->|Anomalies| G[EventBus<br/>Port 8004]
+        A -->|Recommendations| H[Expertise Center<br/>Port 8032-8045]
+        A -->|Forecasts| I[Admin Dashboard<br/>Port 3000]
+    end
+
+    subgraph "Infrastructure"
+        A -->|Cache Features| J[Redis<br/>Port 6379]
+        A -->|Store Results| K[PostgreSQL<br/>Port 5432]
+        A -->|Publish Events| L[RabbitMQ<br/>Port 5672]
+    end
+
+    style A fill:#667eea,color:#fff
+    style B fill:#3b82f6,color:#fff
+    style C fill:#8b5cf6,color:#fff
+    style D fill:#06b6d4,color:#fff
+    style F fill:#10b981,color:#fff
+    style G fill:#f59e0b,color:#fff
+      </div>
+
+      <div class="grid grid-4" style="margin-top: 2rem;">
+        <div class="card">
+          <h4 style="color: #3b82f6;">From AI Foundation</h4>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Pre-trained ML models</li>
+            <li>Feature engineering pipeline</li>
+            <li>Model evaluation metrics</li>
+            <li>Training data access</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="color: #8b5cf6;">From Workflow Intelligence</h4>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Completed workflow data</li>
+            <li>Stage duration history</li>
+            <li>Success/failure patterns</li>
+            <li>Bottleneck identification</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="color: #06b6d4;">From Collective Intelligence</h4>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>347+ anonymized cases</li>
+            <li>Cross-org benchmarks</li>
+            <li>Industry averages</li>
+            <li>Best practice patterns</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="color: #10b981;">To AI Orchestrator</h4>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Real-time predictions</li>
+            <li>Proactive recommendations</li>
+            <li>Risk alerts</li>
+            <li>Resource suggestions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Examples -->
+  <section id="api-examples">
+    <div class="container">
+      <h2 class="text-center">REST API Examples</h2>
+      <p class="section-subtitle text-center">
+        How to use Predictive Service programmatically
+      </p>
+
+      <h3>1. Get Journey Prediction</h3>
+      <div class="code-example">
+POST /api/v1/predict/journey
+Host: localhost:8036
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  <span class="string">"org_size"</span>: <span class="string">"medium"</span>,
+  <span class="string">"org_maturity"</span>: <span class="number">2</span>,
+  <span class="string">"industry"</span>: <span class="string">"healthcare"</span>,
+  <span class="string">"stage_index"</span>: <span class="number">3</span>,
+  <span class="string">"total_stages"</span>: <span class="number">7</span>,
+  <span class="string">"complexity"</span>: <span class="number">4</span>,
+  <span class="string">"ai_usage_count"</span>: <span class="number">12</span>,
+  <span class="string">"challenges_count"</span>: <span class="number">3</span>
+}
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"status"</span>: <span class="string">"success"</span>,
+  <span class="string">"predictions"</span>: {
+    <span class="string">"stage_duration_hours"</span>: <span class="number">18.2</span>,
+    <span class="string">"confidence_interval"</span>: [<span class="number">14.1</span>, <span class="number">22.3</span>],
+    <span class="string">"stuck_probability"</span>: <span class="number">0.35</span>,
+    <span class="string">"expert_help_needed"</span>: <span class="keyword">true</span>,
+    <span class="string">"total_completion_hours"</span>: <span class="number">56.4</span>
+  },
+  <span class="string">"recommendations"</span>: [
+    <span class="string">"Consider adding BCM specialist to team"</span>,
+    <span class="string">"Schedule AI tools training session"</span>,
+    <span class="string">"Review critical services definition with expert"</span>
+  ]
+}
+      </div>
+
+      <h3 style="margin-top: 2rem;">2. Detect Anomalies</h3>
+      <div class="code-example">
+POST /api/v1/detect/anomalies
+Host: localhost:8036
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  <span class="string">"workflow_id"</span>: <span class="string">"bia-2024-001"</span>,
+  <span class="string">"stage_id"</span>: <span class="string">"stage-3"</span>,
+  <span class="string">"current_duration_hours"</span>: <span class="number">42</span>
+}
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"status"</span>: <span class="string">"success"</span>,
+  <span class="string">"anomaly_detected"</span>: <span class="keyword">true</span>,
+  <span class="string">"severity"</span>: <span class="string">"high"</span>,
+  <span class="string">"z_score"</span>: <span class="number">3.0</span>,
+  <span class="string">"historical_average_hours"</span>: <span class="number">18.0</span>,
+  <span class="string">"historical_std_dev"</span>: <span class="number">8.0</span>,
+  <span class="string">"message"</span>: <span class="string">"Duration 42h is 3.0 standard deviations above normal"</span>,
+  <span class="string">"recommended_actions"</span>: [
+    <span class="string">"Investigate team blockers immediately"</span>,
+    <span class="string">"Consider bringing in BCM expert"</span>,
+    <span class="string">"Review process documentation"</span>
+  ]
+}
+      </div>
+
+      <h3 style="margin-top: 2rem;">3. Forecast Risks</h3>
+      <div class="code-example">
+POST /api/v1/forecast/risks
+Host: localhost:8036
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  <span class="string">"organization_id"</span>: <span class="string">"org-hospital-regional-001"</span>,
+  <span class="string">"risk_categories"</span>: [<span class="string">"IT"</span>, <span class="string">"operational"</span>, <span class="string">"reputational"</span>],
+  <span class="string">"forecast_horizon_months"</span>: <span class="number">12</span>,
+  <span class="string">"monte_carlo_iterations"</span>: <span class="number">10000</span>
+}
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"status"</span>: <span class="string">"success"</span>,
+  <span class="string">"risk_forecasts"</span>: [
+    {
+      <span class="string">"category"</span>: <span class="string">"IT"</span>,
+      <span class="string">"risk_name"</span>: <span class="string">"System Failure"</span>,
+      <span class="string">"probability"</span>: <span class="number">0.65</span>,
+      <span class="string">"impact_range_usd"</span>: [<span class="number">450000</span>, <span class="number">780000</span>],
+      <span class="string">"confidence"</span>: <span class="number">0.85</span>,
+      <span class="string">"recommendation"</span>: <span class="string">"Invest in IT redundancy and backup systems"</span>
+    },
+    {
+      <span class="string">"category"</span>: <span class="string">"operational"</span>,
+      <span class="string">"risk_name"</span>: <span class="string">"Staff Shortage"</span>,
+      <span class="string">"probability"</span>: <span class="number">0.42</span>,
+      <span class="string">"impact_range_usd"</span>: [<span class="number">120000</span>, <span class="number">340000</span>],
+      <span class="string">"confidence"</span>: <span class="number">0.78</span>,
+      <span class="string">"recommendation"</span>: <span class="string">"Build cross-training program"</span>
+    }
+  ]
+}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Revolutionary -->
+  <section id="why-revolutionary">
+    <div class="container">
+      <h2 class="text-center">Why Predictive Intelligence is Revolutionary</h2>
+      <p class="section-subtitle text-center">
+        The paradigm shift from reactive to proactive BCM
+      </p>
+
+      <div class="grid grid-2" style="gap: 2rem; margin-top: 2rem;">
+        <div class="card">
+          <h3 style="color: #667eea;">Traditional BCM Approach</h3>
+          <ul style="color: var(--medium-text); margin-top: 1rem;">
+            <li><strong>React to problems:</strong> Wait for issues to appear, then scramble to fix</li>
+            <li><strong>Subjective estimates:</strong> "2 weeks should be enough" based on gut feeling</li>
+            <li><strong>Learn from own mistakes:</strong> Only improve after painful failures</li>
+            <li><strong>Isolated knowledge:</strong> Each organization reinvents the wheel</li>
+            <li><strong>Manual monitoring:</strong> BCM manager checks status manually</li>
+            <li><strong>Fixed plans:</strong> Risk assessments become outdated quickly</li>
+            <li><strong>Late interventions:</strong> Bring in help only when project is already failing</li>
+          </ul>
+          <div style="margin-top: 1.5rem; padding: 1rem; background: #fee2e2; border-radius: 8px; border-left: 4px solid #ef4444;">
+            <strong>Result:</strong> High failure rates, missed deadlines, budget overruns, reactive culture
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="color: #10b981;">Predictive BCM Approach</h3>
+          <ul style="color: var(--medium-text); margin-top: 1rem;">
+            <li><strong>Prevent problems:</strong> Predict issues before they happen, take preventive action</li>
+            <li><strong>Data-driven forecasts:</strong> "56 hours ±8h" based on 347+ similar organizations</li>
+            <li><strong>Learn from collective:</strong> Benefit from wisdom of entire community</li>
+            <li><strong>Shared intelligence:</strong> Platform gets smarter with each implementation</li>
+            <li><strong>Automated monitoring:</strong> ML models watch for anomalies 24/7</li>
+            <li><strong>Dynamic forecasts:</strong> Risk predictions update as context changes</li>
+            <li><strong>Early interventions:</strong> Get help before stuck probability reaches 50%</li>
+          </ul>
+          <div style="margin-top: 1.5rem; padding: 1rem; background: #d1fae5; border-radius: 8px; border-left: 4px solid #10b981;">
+            <strong>Result:</strong> High success rates, on-time delivery, optimized budgets, proactive culture
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-alt" style="margin-top: 2rem; padding: 2rem; border-radius: 12px;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem;">The Compounding Effect</h3>
+        <p style="text-align: center; max-width: 900px; margin: 0 auto 2rem; color: var(--medium-text); font-size: 1.1rem;">
+          Every organization that uses the platform makes predictions better for everyone else.
+          This creates a virtuous cycle of continuous improvement.
+        </p>
+
+        <div class="grid grid-4">
+          <div style="text-align: center;">
+            <div style="background: #667eea; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">1</div>
+            <strong>Org Completes BCM</strong>
+            <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Hospital finishes BIA implementation</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #8b5cf6; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">2</div>
+            <strong>Data Added to Training</strong>
+            <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Case automatically added to collective intelligence</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #06b6d4; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">3</div>
+            <strong>Models Retrained</strong>
+            <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">ML pipeline retrains with new case</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #10b981; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">4</div>
+            <strong>Better Predictions</strong>
+            <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Next org gets more accurate forecasts</p>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 2rem; font-weight: 600; color: var(--primary-color); font-size: 1.2rem;">
+          Your success becomes everyone's advantage. Everyone's success makes you better.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Stack -->
+  <section id="tech-stack">
+    <div class="container">
+      <h2 class="text-center">Technical Stack</h2>
+      <p class="section-subtitle text-center">
+        Production-grade ML infrastructure
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>ML Framework</h3>
+          <ul style="color: var(--medium-text); margin-top: 1rem;">
+            <li><strong>Scikit-learn ≥1.4.0:</strong> Random Forest, Gradient Boosting, StandardScaler</li>
+            <li><strong>NumPy ≥1.26.0:</strong> Numerical operations, matrix math</li>
+            <li><strong>SciPy:</strong> Statistical functions, Z-score calculations</li>
+            <li><strong>Pandas:</strong> Data manipulation, feature engineering</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Model Persistence</h3>
+          <ul style="color: var(--medium-text); margin-top: 1rem;">
+            <li><strong>Pickle:</strong> Binary model serialization</li>
+            <li><strong>Model Versioning:</strong> Timestamp-based versions</li>
+            <li><strong>Rollback Support:</strong> Keep last 5 model versions</li>
+            <li><strong>A/B Testing:</strong> Compare model performance</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Infrastructure</h3>
+          <ul style="color: var(--medium-text); margin-top: 1rem;">
+            <li><strong>FastAPI:</strong> REST API framework</li>
+            <li><strong>PostgreSQL:</strong> Historical data storage</li>
+            <li><strong>Redis:</strong> Feature vector caching</li>
+            <li><strong>RabbitMQ:</strong> Event publishing</li>
+            <li><strong>Prometheus:</strong> Metrics (prediction latency, model accuracy)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Next Steps -->
+  <section id="next-steps">
+    <div class="container">
+      <h2 class="text-center">Explore More</h2>
+      <p class="section-subtitle text-center">
+        Predictive Intelligence is one part of the complete AI-powered BCM platform
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>AI Foundation</h3>
+          <p style="color: var(--medium-text); margin: 1rem 0;">
+            Dive deeper into the ML infrastructure: LLM Router (6 providers), RAG with Qdrant vector DB,
+            and the Learning & Knowledge System.
+          </p>
+          <a href="ai-foundation.html" class="btn btn-primary" style="display: inline-block;">Explore AI Foundation</a>
+        </div>
+
+        <div class="card">
+          <h3>Workflow Intelligence</h3>
+          <p style="color: var(--medium-text); margin: 1rem 0;">
+            See how predictions integrate with workflow orchestration: Unified Workflow Engine,
+            Case Library with 347+ cases, and PDCA lifecycle.
+          </p>
+          <a href="workflow-intelligence.html" class="btn btn-primary" style="display: inline-block;">Explore Workflow Intelligence</a>
+        </div>
+
+        <div class="card">
+          <h3>Expertise Center</h3>
+          <p style="color: var(--medium-text); margin: 1rem 0;">
+            Learn how 14 domain specialists use predictions: BIA Specialist, Risk Analyst,
+            Plan Creator, and 11 other tactical AI assistants.
+          </p>
+          <a href="expertise-center.html" class="btn btn-primary" style="display: inline-block;">Explore Expertise Center</a>
+        </div>
+      </div>
+
+      <div class="text-center" style="margin-top: 2rem;">
+        <a href="service-catalog-visual.html" class="btn btn-outline">View All 62 Services</a>
+        <a href="architecture.html" class="btn btn-outline" style="margin-left: 1rem;">Platform Architecture</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          Predictive Intelligence: ML-powered forecasting for proactive BCM.
+          See the future, prevent problems, optimize resources.
+        </p>
+      </div>
+
+      <div>
+        <h4>Intelligent Core</h4>
+        <a href="ai-foundation.html">AI Foundation</a>
+        <a href="workflow-intelligence.html">Workflow Intelligence</a>
+        <a href="expertise-center.html">Expertise Center</a>
+        <a href="predictive-intelligence.html">Predictive Intelligence</a>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="deployment.html">Deployment</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="business-flow.html">Business Flows</a>
+        <a href="mvp.html">MVP Demo</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. MIT License. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+</body>
+</html>
