@@ -24,6 +24,21 @@ sys.path.insert(0, str(ai_foundation_path))
 
 from generators.base_generator import BaseGenerator
 
+# Import metrics
+try:
+    from monitoring import GenerationMetricsContext, record_scenario_generated
+except ImportError:
+    # Fallback if metrics not available
+    class GenerationMetricsContext:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            return False
+    def record_scenario_generated(*args, **kwargs):
+        pass
+
 logger = logging.getLogger(__name__)
 
 
@@ -85,38 +100,45 @@ class L4WorkflowGenerator(BaseGenerator):
         Returns:
             Generated scenario or None if failed
         """
-        try:
-            # Build base context
-            context = self._build_context(item)
+        # Track metrics for L4 generation
+        with GenerationMetricsContext(level='l4', generator='l4_workflow'):
+            try:
+                # Build base context
+                context = self._build_context(item)
 
-            # Enhance with LLM if available
-            if self.llm_router:
-                try:
-                    enhanced_context = await self._generate_journey_with_llm(item, context)
-                    context.update(enhanced_context)
-                    logger.info(f"✨ LLM-enhanced context for workflow: {item['name']}")
-                except Exception as e:
-                    logger.warning(f"LLM enhancement failed for {item['name']}: {e}. Using fallback.")
+                # Enhance with LLM if available
+                if self.llm_router:
+                    try:
+                        enhanced_context = await self._generate_journey_with_llm(item, context)
+                        context.update(enhanced_context)
+                        logger.info(f"✨ LLM-enhanced context for workflow: {item['name']}")
+                    except Exception as e:
+                        logger.warning(f"LLM enhancement failed for {item['name']}: {e}. Using fallback.")
 
-            # Get template name
-            template_name = self._get_template_name(item)
+                # Get template name
+                template_name = self._get_template_name(item)
 
-            # Generate scenario from template
-            scenario = self.loader.create_scenario_from_template(
-                template_name,
-                context,
-                validate=True
-            )
+                # Generate scenario from template
+                scenario = self.loader.create_scenario_from_template(
+                    template_name,
+                    context,
+                    validate=True
+                )
 
-            # Add metadata
-            self._enrich_scenario(scenario, item)
+                # Add metadata
+                self._enrich_scenario(scenario, item)
 
-            return scenario
+                # Record successful generation
+                scenario_id = scenario.get('meta', {}).get('id', 'unknown')
+                record_scenario_generated('l4', 'l4_workflow', 'manual', count=1)
+                logger.info(f"📊 Metrics recorded for L4 scenario: {scenario_id}")
 
-        except Exception as e:
-            logger.error(f"Failed to generate scenario for {item.get('name', 'unknown')}: {e}", exc_info=True)
-            self.stats["failed"] += 1
-            return None
+                return scenario
+
+            except Exception as e:
+                logger.error(f"Failed to generate scenario for {item.get('name', 'unknown')}: {e}", exc_info=True)
+                self.stats["failed"] += 1
+                return None
 
     def _get_catalog(self) -> List[Dict[str, Any]]:
         """

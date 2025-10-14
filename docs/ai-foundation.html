@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Foundation - AI-Platform-ISO</title>
+  <meta name="description" content="Core AI infrastructure: LLM Router, RAG Pipeline, ML Models, Self-Learning Engine">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Services</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="ai-foundation.html" class="active">AI Foundation</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="documentation.html">Documentation</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4rem 0;">
+    <div class="container">
+      <h1 style="color: white;">AI Foundation</h1>
+      <p style="color: rgba(255,255,255,0.95); font-size: 1.2rem;">Core AI Infrastructure Powering the Entire Platform</p>
+      <p style="color: rgba(255,255,255,0.9);">LLM Router • RAG Pipeline • ML Models • Self-Learning • Context Builder</p>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section>
+    <div class="container">
+      <div class="text-center" style="max-width: 900px; margin: 0 auto;">
+        <h2>The AI Brain Behind Everything</h2>
+        <p class="section-subtitle">
+          AI Foundation is the central AI layer providing RAG (Retrieval-Augmented Generation),
+          LLM routing, ML predictions, and self-learning capabilities to ALL platform services.
+        </p>
+        <p>
+          <strong>Think of it as the "AI Operating System"</strong> - every intelligent feature
+          in the platform (from BIA analysis to risk predictions) uses AI Foundation under the hood.
+        </p>
+      </div>
+
+      <div class="stats" style="margin-top: 2rem;">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h4>5</h4>
+            <p>Core Components</p>
+          </div>
+          <div class="stat-item">
+            <h4>3</h4>
+            <p>LLM Providers</p>
+          </div>
+          <div class="stat-item">
+            <h4>4</h4>
+            <p>Vector Collections</p>
+          </div>
+          <div class="stat-item">
+            <h4>165-430ms</h4>
+            <p>RAG Query Latency</p>
+          </div>
+          <div class="stat-item">
+            <h4>3</h4>
+            <p>ML Models</p>
+          </div>
+          <div class="stat-item">
+            <h4>8</h4>
+            <p>Usage Integrations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Overview -->
+  <section id="architecture" class="bg-alt">
+    <div class="container">
+      <h2 class="text-center">5-Component Architecture</h2>
+      <p class="section-subtitle text-center">Modular AI infrastructure used across all services</p>
+
+      <div class="mermaid-container">
+        <pre class="mermaid">
+graph TB
+    subgraph "AI Foundation - Port :8031"
+        RAG[RAG Pipeline<br/>Retrieval-Augmented<br/>Generation]
+        LLM[LLM Router<br/>Multi-Model<br/>Orchestration]
+        ML[ML Models<br/>Predictions &<br/>Anomalies]
+        Learning[Learning Engine<br/>Self-Learning &<br/>Patterns]
+        Context[Context Builder<br/>Enrichment]
+    end
+
+    subgraph "External AI Services"
+        Qdrant[Qdrant Vector DB<br/>4 Collections]
+        Anthropic[Anthropic Claude<br/>Opus/Sonnet/Haiku]
+        OpenAI[OpenAI<br/>GPT-4/Embeddings]
+        Voyage[Voyage AI<br/>Embeddings]
+    end
+
+    subgraph "Platform Services Using AI"
+        WI[Workflow Intelligence]
+        EC[Expertise Center]
+        CI[Community Intelligence]
+        PS[Platform Services]
+    end
+
+    RAG --> Qdrant
+    RAG --> Voyage
+    RAG --> OpenAI
+    LLM --> Anthropic
+    LLM --> OpenAI
+    ML --> Learning
+
+    WI --> RAG
+    WI --> LLM
+    WI --> ML
+    EC --> RAG
+    EC --> LLM
+    CI --> RAG
+    PS --> ML
+
+    style RAG fill:#667eea,color:#fff
+    style LLM fill:#764ba2,color:#fff
+    style ML fill:#f093fb,color:#fff
+    style Learning fill:#4facfe,color:#fff
+    style Context fill:#00f2fe,color:#fff
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component 1: LLM Router -->
+  <section id="llm-router">
+    <div class="container">
+      <h2>1. LLM Router - Multi-Model Orchestration</h2>
+      <p class="section-subtitle">
+        Intelligent routing to Claude Opus, Sonnet, Haiku, or GPT-4 based on task complexity
+      </p>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>How It Works</h3>
+          <p>
+            LLM Router analyzes each request and automatically selects the best model:
+          </p>
+          <ul>
+            <li><strong>Strategic Analysis</strong> → Claude Opus (most powerful, complex reasoning)</li>
+            <li><strong>Content Generation</strong> → Claude Sonnet (balanced quality/speed)</li>
+            <li><strong>Quick Tasks</strong> → Claude Haiku or GPT-3.5 (fast responses)</li>
+            <li><strong>Embeddings</strong> → OpenAI text-embedding-3-large</li>
+          </ul>
+
+          <div class="bg-alt" style="padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            <h4>Provider Priority</h4>
+            <ol style="margin: 0.5rem 0;">
+              <li>Anthropic Claude (preferred)</li>
+              <li>OpenAI GPT (fallback)</li>
+              <li>Ollama (local - reserved)</li>
+            </ol>
+          </div>
+        </div>
+
+        <div>
+          <h3>Real-World Example</h3>
+          <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea;">
+            <p><strong>User Request:</strong> "Analyze my BIA results and provide recommendations"</p>
+            <p style="margin-top: 1rem;"><strong>What Happens:</strong></p>
+            <ol style="margin-top: 0.5rem;">
+              <li>LLM Router detects <code>task_type="strategic_analysis"</code></li>
+              <li>Selects <strong>Claude Opus</strong> (complex reasoning needed)</li>
+              <li>Sends system prompt + user context</li>
+              <li>Returns comprehensive analysis in 8-15 seconds</li>
+            </ol>
+          </div>
+
+          <h4 style="margin-top: 1.5rem;">Supported Models</h4>
+          <div class="service-tags">
+            <span class="service-tag">Claude Opus 4</span>
+            <span class="service-tag">Claude Sonnet 3.5</span>
+            <span class="service-tag">Claude Haiku 3.5</span>
+            <span class="service-tag">GPT-4 Turbo</span>
+            <span class="service-tag">GPT-3.5 Turbo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mermaid-container" style="margin-top: 2rem;">
+        <h3 class="text-center">LLM Request Flow</h3>
+        <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant Router as LLM Router
+    participant Claude as Anthropic Claude
+    participant GPT as OpenAI GPT
+
+    User->>Router: query(task_type="strategic_analysis")
+    Router->>Router: Select model based on task
+    Router->>Claude: messages.create(model="claude-opus")
+    Claude-->>Router: Response (8-15s)
+    Router-->>User: Formatted response
+
+    Note over Router,Claude: If Claude unavailable
+    Router->>GPT: chat.completions.create(model="gpt-4")
+    GPT-->>Router: Response
+    Router-->>User: Formatted response
+        </pre>
+      </div>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h4>Task-Based Routing</h4>
+          <p>Automatically selects optimal model for each task type</p>
+        </div>
+        <div class="card">
+          <h4>Multi-Provider</h4>
+          <p>No vendor lock-in - supports Anthropic, OpenAI, local models</p>
+        </div>
+        <div class="card">
+          <h4>Async API</h4>
+          <p>Non-blocking calls for high throughput</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component 2: RAG Pipeline -->
+  <section id="rag-pipeline" class="bg-alt">
+    <div class="container">
+      <h2>2. RAG Pipeline - Knowledge Retrieval</h2>
+      <p class="section-subtitle">
+        Retrieval-Augmented Generation: Semantic search + Vector DB + Reranking
+      </p>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>What is RAG?</h3>
+          <p>
+            RAG combines vector search with LLMs to provide accurate, contextual answers
+            grounded in your organization's knowledge base.
+          </p>
+
+          <h4 style="margin-top: 1.5rem;">4 Vector Collections</h4>
+          <ul>
+            <li><strong>bcm_knowledge</strong> - ISO 22301 standards, BCI guidelines</li>
+            <li><strong>workflow_cases</strong> - 347+ workflow execution cases</li>
+            <li><strong>documents</strong> - User-uploaded BCM documents</li>
+            <li><strong>business_scenarios</strong> - 570+ usage scenarios</li>
+          </ul>
+
+          <div class="bg-white" style="padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #e0e0e0;">
+            <h4>Hybrid Search</h4>
+            <p style="margin: 0.5rem 0;">Combines two approaches:</p>
+            <ul style="margin: 0.5rem 0;">
+              <li><strong>Vector Similarity:</strong> 70% weight (semantic meaning)</li>
+              <li><strong>Keyword Matching:</strong> 30% weight (exact terms)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h3>RAG Workflow</h3>
+          <div class="mermaid-container">
+            <pre class="mermaid">
+graph TD
+    Query[User Query:<br/>'What is BIA?']
+    Embed[Generate Embedding<br/>Voyage/OpenAI]
+    Search[Hybrid Search<br/>Vector 70% + Keyword 30%]
+    Rerank[Reranking<br/>Source Priority + Recency]
+    Diversity[Diversity Filter<br/>Remove Similar Results]
+    Results[Top Results<br/>with Context]
+
+    Query --> Embed
+    Embed --> Search
+    Search --> Rerank
+    Rerank --> Diversity
+    Diversity --> Results
+
+    style Query fill:#667eea,color:#fff
+    style Results fill:#4facfe,color:#fff
+            </pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 2rem;">Reranking Signals</h3>
+      <div class="grid grid-4">
+        <div class="card">
+          <h4>Base Score</h4>
+          <p><strong>65%</strong> weight</p>
+          <p>Initial vector + keyword score</p>
+        </div>
+        <div class="card">
+          <h4>Recency</h4>
+          <p><strong>20%</strong> weight</p>
+          <p>Prefer recent content (last 30 days = 1.0)</p>
+        </div>
+        <div class="card">
+          <h4>Source Priority</h4>
+          <p><strong>15%</strong> weight</p>
+          <p>ISO standards (1.0) > Guidelines (0.95) > Forums (0.5)</p>
+        </div>
+        <div class="card">
+          <h4>Context Boost</h4>
+          <p><strong>up to 0.2</strong></p>
+          <p>Industry, size, module match</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+        <h3>Real-World Example: BIA Query</h3>
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <div>
+            <p><strong>Query:</strong> "How do I identify critical business functions?"</p>
+            <ol style="margin-top: 0.5rem;">
+              <li>Generate embedding (Voyage AI, 100-300ms)</li>
+              <li>Search Qdrant (50-100ms, top 30 results)</li>
+              <li>Rerank by source + recency (10-20ms)</li>
+              <li>Apply diversity filter (5-10ms)</li>
+              <li>Return top 5 results</li>
+            </ol>
+            <p style="margin-top: 1rem;"><strong>Total Latency:</strong> 165-430ms</p>
+          </div>
+          <div>
+            <p><strong>Top Result:</strong></p>
+            <div style="background: white; padding: 1rem; border-radius: 4px; border-left: 4px solid #667eea;">
+              <p style="font-size: 0.9rem; margin: 0;">
+                <strong>Source:</strong> ISO 22301:2019 Clause 8.2.2<br>
+                <strong>Score:</strong> 0.92<br>
+                <strong>Content:</strong> "Critical business functions are determined through
+                Business Impact Analysis (BIA). Organizations should identify functions that,
+                if disrupted, would cause unacceptable harm..."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component 3: ML Models -->
+  <section id="ml-models">
+    <div class="container">
+      <h2>3. ML Models - Predictive Analytics</h2>
+      <p class="section-subtitle">
+        Machine learning for workflow predictions, anomaly detection, and intelligent recommendations
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Workflow Predictor</h3>
+          <p><strong>Algorithm:</strong> Random Forest Regressor + Gradient Boosting</p>
+          <p><strong>Predicts:</strong></p>
+          <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+            <li>Stage duration (hours)</li>
+            <li>Stuck probability (0-1)</li>
+            <li>Expert help needed (boolean)</li>
+            <li>Total completion time</li>
+          </ul>
+          <div class="service-tags" style="margin-top: 1rem;">
+            <span class="service-tag">Scikit-learn</span>
+            <span class="service-tag">8 Features</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Anomaly Detector</h3>
+          <p><strong>Algorithm:</strong> Z-Score + Statistical Analysis</p>
+          <p><strong>Detects:</strong></p>
+          <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+            <li>Duration anomalies (Z > 2)</li>
+            <li>Stagnation (>14 days)</li>
+            <li>Inactivity (>7 days)</li>
+            <li>Activity bursts (>20)</li>
+            <li>Data quality issues</li>
+          </ul>
+          <div class="service-tags" style="margin-top: 1rem;">
+            <span class="service-tag">Real-time</span>
+            <span class="service-tag">Severity Levels</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Training Pipeline</h3>
+          <p><strong>Process:</strong> Automated model retraining</p>
+          <p><strong>Features:</strong></p>
+          <ul style="margin-top: 0.5rem; font-size: 0.95rem;">
+            <li>Data collection from case library</li>
+            <li>Feature engineering</li>
+            <li>Train/test split (80/20)</li>
+            <li>Model evaluation (R², accuracy)</li>
+            <li>Model persistence (pickle)</li>
+          </ul>
+          <div class="service-tags" style="margin-top: 1rem;">
+            <span class="service-tag">Automated</span>
+            <span class="service-tag">Scheduled</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 2rem;">8 ML Features</h3>
+      <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+        <div class="grid grid-4">
+          <div>
+            <p><strong>1. org_size</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">small/medium/large</p>
+          </div>
+          <div>
+            <p><strong>2. org_maturity</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">1-5 scale</p>
+          </div>
+          <div>
+            <p><strong>3. industry</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">healthcare, finance, etc.</p>
+          </div>
+          <div>
+            <p><strong>4. stage_index</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">Current position</p>
+          </div>
+          <div>
+            <p><strong>5. total_stages</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">Workflow length</p>
+          </div>
+          <div>
+            <p><strong>6. complexity</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">1-5 scale</p>
+          </div>
+          <div>
+            <p><strong>7. ai_usage_count</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">AI interactions</p>
+          </div>
+          <div>
+            <p><strong>8. challenges_count</strong></p>
+            <p style="font-size: 0.9rem; color: #666;">Issues faced</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 8px;">
+        <h3>Prediction Example: Medium Healthcare Organization</h3>
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <div>
+            <h4>Input Context</h4>
+            <ul style="margin: 0.5rem 0;">
+              <li>Organization: 500 employees (medium)</li>
+              <li>Industry: Healthcare</li>
+              <li>BCM Maturity: Level 2</li>
+              <li>Module: BIA (Stage 3 of 7)</li>
+              <li>Complexity: 4/5</li>
+            </ul>
+          </div>
+          <div>
+            <h4>ML Predictions</h4>
+            <ul style="margin: 0.5rem 0;">
+              <li><strong>Stage Duration:</strong> 18 hours (±4h)</li>
+              <li><strong>Stuck Probability:</strong> 35%</li>
+              <li><strong>Expert Help:</strong> Recommended</li>
+              <li><strong>Total Time Remaining:</strong> 56 hours</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component 4: Learning Engine -->
+  <section id="learning-engine" class="bg-alt">
+    <div class="container">
+      <h2>4. Self-Learning Engine - Continuous Improvement</h2>
+      <p class="section-subtitle">
+        Platform learns from every workflow execution and improves recommendations over time
+      </p>
+
+      <div class="mermaid-container">
+        <h3 class="text-center">Learning Workflow</h3>
+        <pre class="mermaid">
+graph LR
+    WF[Workflow<br/>Complete] --> Anon[Anonymize<br/>PII Removal]
+    Anon --> Extract[Extract<br/>Patterns]
+    Extract --> Eval{Pattern<br/>Frequency > 10<br/>Success > 80%?}
+    Eval -->|Yes| Gen[Generate<br/>Rule]
+    Eval -->|No| Store[Store<br/>Pattern]
+    Gen --> Approve{Human<br/>Approval?}
+    Approve -->|Yes| Deploy[Deploy<br/>Rule]
+    Approve -->|No| Reject[Reject]
+    Deploy --> Update[Update<br/>Benchmarks]
+
+    style WF fill:#667eea,color:#fff
+    style Deploy fill:#4facfe,color:#fff
+        </pre>
+      </div>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h3>Pattern Extractor</h3>
+          <p>Identifies successful strategies and common challenges from historical workflows.</p>
+          <p style="margin-top: 1rem;"><strong>Extracts:</strong></p>
+          <ul style="font-size: 0.95rem;">
+            <li>Successful strategies</li>
+            <li>Common challenges</li>
+            <li>Optimal sequences</li>
+            <li>Resource patterns</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>Pattern Signature:</strong></p>
+          <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+            healthcare_medium_bia
+          </code>
+        </div>
+
+        <div class="card">
+          <h3>Rule Generator</h3>
+          <p>Converts patterns into actionable rules with evidence-based recommendations.</p>
+          <p style="margin-top: 1rem;"><strong>Generates:</strong></p>
+          <ul style="font-size: 0.95rem;">
+            <li>Recommendation rules</li>
+            <li>Troubleshooting rules</li>
+            <li>Workflow optimizations</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>Rule Evidence:</strong></p>
+          <ul style="font-size: 0.85rem;">
+            <li>Pattern frequency: 15+</li>
+            <li>Success rate: 85%</li>
+            <li>Sample size: 100+ cases</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Privacy-First</h3>
+          <p>All learning respects user privacy through automatic anonymization.</p>
+          <p style="margin-top: 1rem;"><strong>Removed Fields:</strong></p>
+          <ul style="font-size: 0.95rem;">
+            <li>user_id, user_name</li>
+            <li>user_email</li>
+            <li>org_name, org_id</li>
+            <li>Any PII data</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>Retained:</strong></p>
+          <p style="font-size: 0.95rem;">Industry, size, maturity, patterns, outcomes</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+        <h3>Example: Generated Rule</h3>
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea; margin-top: 1rem;">
+          <p><strong>Rule ID:</strong> rule_20250710_001</p>
+          <p><strong>Type:</strong> Recommendation</p>
+          <p style="margin-top: 1rem;"><strong>Condition:</strong></p>
+          <code style="background: #f0f0f0; padding: 0.5rem; border-radius: 4px; display: block; font-size: 0.85rem;">
+            industry = "healthcare" AND org_size = "medium" AND module = "bia"
+          </code>
+          <p style="margin-top: 1rem;"><strong>Recommendation:</strong></p>
+          <p style="font-size: 0.95rem;">
+            "For healthcare organizations of medium size conducting BIA, allocate 18-24 hours for data
+            collection phase. Engage clinical department heads early. Use standardized templates to
+            accelerate process. Schedule 2-3 validation meetings."
+          </p>
+          <p style="margin-top: 1rem;"><strong>Evidence:</strong></p>
+          <ul style="font-size: 0.9rem;">
+            <li>Pattern frequency: 23 cases</li>
+            <li>Success rate: 91%</li>
+            <li>Average time saved: 8 hours</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>Status:</strong> <span style="color: #4caf50; font-weight: 600;">✓ Approved & Deployed</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component 5: Context Builder -->
+  <section id="context-builder">
+    <div class="container">
+      <h2>5. Context Builder - Rich Context for AI</h2>
+      <p class="section-subtitle">
+        Aggregates organizational context, workflow history, and knowledge base for intelligent AI responses
+      </p>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>What is Context?</h3>
+          <p>
+            Context Builder enriches every AI request with relevant information about the organization,
+            user, and current workflow state to ensure accurate, personalized responses.
+          </p>
+
+          <h4 style="margin-top: 1.5rem;">Context Sources</h4>
+          <ul>
+            <li><strong>Organization Profile</strong> - Size, industry, maturity level</li>
+            <li><strong>User Profile</strong> - Role, permissions, preferences</li>
+            <li><strong>Workflow State</strong> - Current stage, progress, challenges</li>
+            <li><strong>Historical Data</strong> - Past workflows, outcomes, patterns</li>
+            <li><strong>Knowledge Base</strong> - Relevant ISO standards, guidelines</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Context Enrichment Flow</h3>
+          <div class="mermaid-container">
+            <pre class="mermaid">
+graph TD
+    Base[Base Context<br/>workflow_id, tenant_id]
+    Org[+ Organization<br/>Profile]
+    Hist[+ Historical<br/>Data]
+    RAG[+ RAG<br/>Knowledge]
+    User[+ User<br/>Context]
+    Rich[Rich Context<br/>for AI]
+
+    Base --> Org
+    Org --> Hist
+    Hist --> RAG
+    RAG --> User
+    User --> Rich
+
+    style Base fill:#667eea,color:#fff
+    style Rich fill:#4facfe,color:#fff
+            </pre>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+        <h3>Example: Enriched Context</h3>
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <div>
+            <h4>Base Context</h4>
+            <pre style="background: white; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;"><code>{
+  "workflow_id": "wf-123",
+  "tenant_id": "tenant-1",
+  "domain": "bcm",
+  "timestamp": "2025-10-15T10:30:00Z"
+}</code></pre>
+          </div>
+          <div>
+            <h4>Enriched Context</h4>
+            <pre style="background: white; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;"><code>{
+  ...base,
+  "organization": {
+    "size": "medium",
+    "industry": "healthcare",
+    "maturity": 2
+  },
+  "current_stage": "bia_data_collection",
+  "progress": 0.42,
+  "similar_cases": 23,
+  "relevant_knowledge": [...]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration & Usage -->
+  <section class="bg-alt">
+    <div class="container">
+      <h2 class="text-center">Platform Integration</h2>
+      <p class="section-subtitle text-center">
+        AI Foundation is used by 8+ platform services
+      </p>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>Services Using AI Foundation</h3>
+          <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: #667eea;">1. Workflow Intelligence</h4>
+              <p style="font-size: 0.95rem; color: #666;">Uses RAG + LLM + ML Predictor</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: #667eea;">2. Expertise Center</h4>
+              <p style="font-size: 0.95rem; color: #666;">14 specialists use RAG + LLM</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: #667eea;">3. Community Intelligence</h4>
+              <p style="font-size: 0.95rem; color: #666;">RAG for semantic search</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: #667eea;">4. AI Orchestration</h4>
+              <p style="font-size: 0.95rem; color: #666;">LLM Router for decision-making</p>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <h4 style="color: #667eea;">5. Platform Services</h4>
+              <p style="font-size: 0.95rem; color: #666;">ML models for predictions</p>
+            </div>
+            <div>
+              <h4 style="color: #667eea;">6-8. BIA, Risk, Plans</h4>
+              <p style="font-size: 0.95rem; color: #666;">Anomaly detection & recommendations</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Integration Example</h3>
+          <pre style="background: #2d2d2d; color: #f8f8f2; padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;"><code># expertise-center/base_specialist.py
+
+from ai_foundation import (
+    RAGPipeline,
+    LLMRouter,
+    ContextBuilder
+)
+
+class BCMAdvisor(BaseSpecialist):
+    def __init__(self):
+        self.rag = RAGPipeline()
+        self.llm = LLMRouter()
+        self.context_builder = ContextBuilder()
+
+    async def analyze(self, query, org_context):
+        # 1. Build rich context
+        context = await self.context_builder.build_context(
+            workflow_id="wf-123",
+            domain="bcm",
+            additional_context=org_context
+        )
+
+        # 2. Retrieve knowledge via RAG
+        knowledge = await self.rag.retrieve(
+            query=query,
+            context=context,
+            top_k=5
+        )
+
+        # 3. Query LLM with context + knowledge
+        response = await self.llm.query(
+            system_prompt="You are BCM expert...",
+            user_prompt=f"""
+            Context: {context}
+            Knowledge: {knowledge}
+            Query: {query}
+            """,
+            task_type="strategic_analysis"
+        )
+
+        return response</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance & Technical Specs -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Performance & Technical Specifications</h2>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h3>RAG Latency</h3>
+          <p style="font-size: 2rem; font-weight: 600; color: #667eea; margin: 1rem 0;">165-430ms</p>
+          <p style="font-size: 0.9rem;">
+            <strong>Breakdown:</strong><br>
+            • Embedding: 100-300ms<br>
+            • Vector search: 50-100ms<br>
+            • Reranking: 10-20ms<br>
+            • Diversity: 5-10ms
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>LLM Response Time</h3>
+          <p style="font-size: 2rem; font-weight: 600; color: #764ba2; margin: 1rem 0;">1-15s</p>
+          <p style="font-size: 0.9rem;">
+            <strong>By Model:</strong><br>
+            • Haiku: 1-3s<br>
+            • Sonnet: 3-8s<br>
+            • Opus: 8-15s<br>
+            • GPT-4: 3-10s
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>ML Prediction</h3>
+          <p style="font-size: 2rem; font-weight: 600; color: #4facfe; margin: 1rem 0;">~10ms</p>
+          <p style="font-size: 0.9rem;">
+            <strong>Breakdown:</strong><br>
+            • Feature extraction: <1ms<br>
+            • Model inference: 5-10ms<br>
+            • Memory: 50-100MB<br>
+            • (Models in RAM)
+          </p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 3rem; text-align: center;">Technical Stack</h3>
+      <div class="grid grid-4" style="margin-top: 1rem;">
+        <div class="card">
+          <h4>LLM Providers</h4>
+          <div class="service-tags">
+            <span class="service-tag">Anthropic ≥0.25.0</span>
+            <span class="service-tag">OpenAI ≥1.30.0</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Vector DB</h4>
+          <div class="service-tags">
+            <span class="service-tag">Qdrant ≥1.8.0</span>
+            <span class="service-tag">COSINE distance</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4>ML Framework</h4>
+          <div class="service-tags">
+            <span class="service-tag">Scikit-learn ≥1.4.0</span>
+            <span class="service-tag">NumPy ≥1.26.0</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Embeddings</h4>
+          <div class="service-tags">
+            <span class="service-tag">Voyage AI</span>
+            <span class="service-tag">OpenAI</span>
+            <span class="service-tag">SentenceTransformers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Separate from Workflow Intelligence? -->
+  <section class="bg-alt">
+    <div class="container">
+      <h2 class="text-center">Architecture Decision: Why Separate AI Foundation?</h2>
+      <p class="section-subtitle text-center">
+        V7 Improved Architecture - Clear separation of concerns
+      </p>
+
+      <div class="grid grid-2" style="margin-top: 2rem;">
+        <div style="background: white; padding: 2rem; border-radius: 8px;">
+          <h3>AI Foundation</h3>
+          <p><strong>= AI Infrastructure (used by ALL)</strong></p>
+          <ul style="margin-top: 1rem;">
+            <li>RAG pipeline</li>
+            <li>LLM routing</li>
+            <li>ML models</li>
+            <li>Self-learning engine</li>
+            <li>Context builder</li>
+          </ul>
+          <p style="margin-top: 1rem; color: #667eea; font-weight: 600;">
+            Provides AI capabilities as reusable infrastructure
+          </p>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 8px;">
+          <h3>Workflow Intelligence</h3>
+          <p><strong>= Workflow Logic Only</strong></p>
+          <ul style="margin-top: 1rem;">
+            <li>Workflow coordinator</li>
+            <li>PDCA cycle engine</li>
+            <li>Case library (347+ cases)</li>
+            <li>Workflow state management</li>
+            <li>Business process logic</li>
+          </ul>
+          <p style="margin-top: 1rem; color: #764ba2; font-weight: 600;">
+            Orchestrates workflows using AI Foundation
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h3>Benefits of Separation</h3>
+        <div class="grid grid-4">
+          <div class="card">
+            <h4>✓ Loose Coupling</h4>
+            <p>Services can use AI without depending on workflow logic</p>
+          </div>
+          <div class="card">
+            <h4>✓ Independent Scaling</h4>
+            <p>AI layer scales separately from workflow engine</p>
+          </div>
+          <div class="card">
+            <h4>✓ Reusability</h4>
+            <p>Same AI stack for BCM, HR, Finance domains</p>
+          </div>
+          <div class="card">
+            <h4>✓ Clear Separation</h4>
+            <p>Workflow = orchestration, AI = computation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Next Steps -->
+  <section>
+    <div class="container text-center">
+      <h2>Explore More Platform Intelligence</h2>
+      <p class="section-subtitle">
+        AI Foundation powers multiple intelligent systems
+      </p>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <a href="workflow-intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Workflow Intelligence</h3>
+          <p>The Brain: Coordinator, workflow engine, 347+ cases, PDCA automation</p>
+          <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
+        </a>
+
+        <a href="expertise-center.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Expertise Center</h3>
+          <p>14 tactical assistants for BIA, Risk, Plans, Response, Compliance</p>
+          <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
+        </a>
+
+        <a href="collective-intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Collective Intelligence</h3>
+          <p>Federated learning, peer network, 347+ anonymized cases</p>
+          <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
+        </a>
+      </div>
+
+      <div style="margin-top: 3rem;">
+        <a href="service-catalog-visual.html" class="btn btn-primary">View All 62 Services</a>
+        <a href="architecture.html" class="btn btn-outline">Platform Architecture</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          AI Foundation: Core intelligence infrastructure powering enterprise resilience.
+        </p>
+      </div>
+
+      <div>
+        <h4>Intelligence Layer</h4>
+        <a href="ai-foundation.html">AI Foundation</a>
+        <a href="workflow-intelligence.html">Workflow Intelligence</a>
+        <a href="expertise-center.html">Expertise Center</a>
+        <a href="collective-intelligence.html">Collective Intelligence</a>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="service-catalog-visual.html">Services Catalog</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="eventbus-choreography.html">EventBus</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment Guide</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Production-Ready AI Infrastructure for Enterprise BCM.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+  <script>
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#667eea',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#5568d3',
+        lineColor: '#667eea',
+        secondaryColor: '#764ba2',
+        tertiaryColor: '#f093fb'
+      }
+    });
+  </script>
+</body>
+</html>

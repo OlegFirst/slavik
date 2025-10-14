@@ -1,0 +1,225 @@
+{
+  "dashboard": {
+    "title": "Scenario Intelligence",
+    "tags": ["scenario-intelligence", "intelligent-core"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Scenarios Generated (Total)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(scenario_intelligence_scenarios_generated_total)",
+            "legendFormat": "Total"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Scenarios Executed (Total)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(scenario_intelligence_scenarios_executed_total)",
+            "legendFormat": "Total"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Execution Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_scenarios_executed_total{status=\"success\"}[5m])) / sum(rate(scenario_intelligence_scenarios_executed_total[5m])) * 100",
+            "legendFormat": "Success %"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 80, "color": "yellow"},
+                {"value": 95, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Active Operations",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(scenario_intelligence_generation_in_progress) + sum(scenario_intelligence_execution_in_progress)",
+            "legendFormat": "Active"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "Scenario Generation Rate (by Level)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_scenarios_generated_total[5m])) by (level)",
+            "legendFormat": "{{level}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+        "yaxes": [
+          {"format": "ops", "label": "Scenarios/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Scenario Execution Rate (by Status)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_scenarios_executed_total[5m])) by (status)",
+            "legendFormat": "{{status}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+        "yaxes": [
+          {"format": "ops", "label": "Executions/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Generation Duration (p50, p95, p99)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(scenario_intelligence_generation_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p50 {{level}}"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(scenario_intelligence_generation_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p95 {{level}}"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(scenario_intelligence_generation_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p99 {{level}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Execution Duration (p50, p95, p99)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(scenario_intelligence_execution_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p50 {{level}}"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(scenario_intelligence_execution_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p95 {{level}}"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(scenario_intelligence_execution_duration_seconds_bucket[5m])) by (le, level))",
+            "legendFormat": "p99 {{level}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Storage Operations (by Backend)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_storage_operations_total[5m])) by (backend, operation)",
+            "legendFormat": "{{backend}} - {{operation}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+        "yaxes": [
+          {"format": "ops", "label": "Operations/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "EventBus Events",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_eventbus_events_published_total[5m])) by (event_type)",
+            "legendFormat": "Published: {{event_type}}"
+          },
+          {
+            "expr": "sum(rate(scenario_intelligence_eventbus_events_received_total[5m])) by (event_type)",
+            "legendFormat": "Received: {{event_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+        "yaxes": [
+          {"format": "ops", "label": "Events/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Scenarios in Storage (by Level)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(scenario_intelligence_scenarios_in_storage) by (level, backend)",
+            "legendFormat": "{{level}} ({{backend}})"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 28},
+        "yaxes": [
+          {"format": "short", "label": "Count"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(scenario_intelligence_generation_errors_total[5m])) by (level)",
+            "legendFormat": "Generation: {{level}}"
+          },
+          {
+            "expr": "sum(rate(scenario_intelligence_eventbus_errors_total[5m])) by (error_type)",
+            "legendFormat": "EventBus: {{error_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 28},
+        "yaxes": [
+          {"format": "ops", "label": "Errors/sec"},
+          {"format": "short"}
+        ]
+      }
+    ]
+  }
+}

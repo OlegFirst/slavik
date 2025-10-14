@@ -1,0 +1,393 @@
+# Service Information for Service Catalog
+# Auto-discovery by infrastructure/tools/doc-generators/scan_services.py
+
+name: scenario-intelligence
+display_name: Scenario Intelligence System
+
+registration:
+  type: intelligent-core/orchestration
+  status: production_ready
+  version: 1.0.0
+  environment: production
+  category: intelligent-core
+
+description: |
+  Система сценарного интеллекта - верхний слой координации в intelligent-core.
+  Гибридная система управления поведением платформы через исполняемые сценарии,
+  объединяющая BPMN 2.0, Event Storming, ISO 22301, Google SRE, Netflix Chaos
+  Engineering и AWS Well-Architected Framework.
+
+  Поддерживает 4-уровневую иерархию сценариев:
+  - Level 1: Module (микросервисы и компоненты)
+  - Level 2: Subsystem (группы модулей)
+  - Level 3: Inter-system (взаимодействие между подсистемами)
+  - Level 4: User (полные E2E пользовательские workflows)
+
+capabilities:
+  - Scenario execution (YAML-based scenarios)
+  - BPMN Call Activity (synchronous scenario calls)
+  - Event Storming integration (pub/sub events)
+  - Netflix Chaos Engineering experiments
+  - ISO 22301 compliance checking and evidence generation
+  - Pattern detection and learning from executions
+  - Multi-level scenario hierarchy (Module → Subsystem → Inter-system → User)
+  - Scenario registry with multi-index search
+  - Behavioral testing (Gherkin/BDD format)
+  - SRE runbook execution
+  - AWS Well-Architected pillars validation
+
+features:
+  - 5 execution engines (Scenario, Call, Event, Chaos, Compliance)
+  - Hybrid storage (in-memory registry + PostgreSQL + Qdrant RAG)
+  - Learning system (execution recording, statistics, pattern detection)
+  - REST API (8 endpoints)
+  - YAML-based scenario definition language
+  - Variable substitution from context
+  - Timeout and retry policies
+  - Evidence generation with retention policies
+  - Progressive chaos rollout with abort conditions
+
+runtime:
+  port: 8060
+  protocol: HTTP/REST
+  host: 0.0.0.0
+  base_path: /
+  healthcheck: http://localhost:8060/health
+  metrics_port: 9090
+  metrics_path: /metrics
+
+dependencies:
+  required:
+    - Python 3.9+
+  python_packages:
+    - fastapi
+    - uvicorn
+    - pyyaml
+    - asyncio
+  optional:
+    - PostgreSQL (for persistent storage)
+    - Qdrant (for RAG semantic search)
+    - Redis (for distributed state)
+  services:
+    - EventBus (for event publishing)
+    - AI Orchestrator (for AI task execution)
+    - Workflow Intelligence (for workflow orchestration)
+    - Learning System (for pattern detection)
+
+integrations:
+  - service: PostgreSQL
+    integration_type: database
+    description: Persistent storage for scenarios, executions, statistics
+    schema: scenario_intelligence
+    tables: 10
+    rls_policies: 14
+    functions: 7
+    status: active
+    connection: Supabase Cloud
+
+  - service: Qdrant
+    integration_type: vector_db
+    description: RAG storage with embeddings for semantic scenario search
+    collection: scenario_intelligence
+    status: active
+    connection: Qdrant Cloud
+
+  - service: EventBus
+    integration_type: pub_sub
+    description: Publishes scenario.* events on execution
+    events:
+      - scenario.generated
+      - scenario.executed
+      - catalog.service.updated
+    status: active
+    connection: Redis Cloud
+
+  - service: Prometheus
+    integration_type: monitoring
+    description: Metrics collection and alerting
+    port: 9090
+    metrics_count: 12
+    status: active
+
+  - service: Grafana
+    integration_type: visualization
+    description: Monitoring dashboard
+    dashboard: scenario-intelligence
+    panels: 12
+    status: active
+
+  - service: MIO Manager
+    integration_type: monitoring
+    description: KPI aggregation and alerts
+    port: 8020
+    status: active
+
+  - service: AI Orchestrator
+    integration_type: orchestration
+    description: Executes AI tasks within scenarios
+    port: 8888
+    status: planned
+
+  - service: Workflow Intelligence
+    integration_type: orchestration
+    description: Orchestrates business processes via scenarios
+    status: planned
+
+  - service: Learning System
+    integration_type: ml
+    description: Learns patterns from scenario executions
+    status: planned
+
+  - service: Service Discovery
+    integration_type: registration
+    description: Registers as scenario-intelligence:8090
+    status: planned
+
+known_issues:
+  critical: []
+  warnings:
+    - LLM API keys needed for L4 generation (placeholders in .env)
+    - No authentication/authorization on API
+    - No distributed execution support
+  improvements:
+    - Add real LLM API keys for L4 generation
+    - Implement Pattern Detector
+    - Implement Predictor
+    - Implement Auto-Generator
+    - Add API authentication
+    - Add scenario versioning
+    - Add distributed execution
+    - Create full scenario catalog (93 scenarios)
+    - Add visual scenario editor
+
+limitations:
+  - Single instance only (no clustering)
+  - Multi-tenancy via RLS (basic implementation)
+  - No rate limiting on API
+  - No caching of scenario results
+  - LLM API keys required for L4 generation
+
+kpis:
+  # Generation Metrics
+  - name: scenario_intelligence_scenarios_generated_total
+    type: counter
+    description: Total scenarios generated
+    labels: [level, generator, trigger]
+
+  - name: scenario_intelligence_generation_errors_total
+    type: counter
+    description: Total generation errors
+    labels: [level, generator, error_type]
+
+  - name: scenario_intelligence_generation_duration_seconds
+    type: histogram
+    description: Duration of scenario generation
+    labels: [level, generator]
+    p95_target: 60
+
+  - name: scenario_intelligence_generation_in_progress
+    type: gauge
+    description: Active scenario generations
+    labels: [level]
+
+  # Execution Metrics
+  - name: scenario_intelligence_scenarios_executed_total
+    type: counter
+    description: Total scenarios executed
+    labels: [level, status]
+
+  - name: scenario_intelligence_execution_steps_total
+    type: counter
+    description: Total execution steps
+    labels: [status]
+
+  - name: scenario_intelligence_execution_duration_seconds
+    type: histogram
+    description: Duration of scenario execution
+    labels: [level]
+    p95_target: 5
+
+  - name: scenario_intelligence_execution_in_progress
+    type: gauge
+    description: Active scenario executions
+
+  # Storage Metrics
+  - name: scenario_intelligence_storage_operations_total
+    type: counter
+    description: Total storage operations
+    labels: [backend, operation, status]
+
+  - name: scenario_intelligence_storage_operation_duration_seconds
+    type: histogram
+    description: Duration of storage operations
+    labels: [backend, operation]
+    p95_target: 5
+
+  - name: scenario_intelligence_scenarios_in_storage
+    type: gauge
+    description: Number of scenarios in storage
+    labels: [backend, level]
+
+  # EventBus Metrics
+  - name: scenario_intelligence_eventbus_events_published_total
+    type: counter
+    description: Total EventBus events published
+    labels: [event_type]
+
+  - name: scenario_intelligence_eventbus_events_received_total
+    type: counter
+    description: Total EventBus events received
+    labels: [event_type]
+
+  - name: scenario_intelligence_eventbus_errors_total
+    type: counter
+    description: Total EventBus errors
+    labels: [error_type]
+
+eventbus:
+  subscribes:
+    - event: catalog.service.updated
+      priority: normal
+      handler: auto_regeneration_handler
+      description: Triggers scenario regeneration on service catalog changes
+      batch_window: 30s
+
+  publishes:
+    - event: scenario.generated
+      priority: normal
+      payload: {scenario_ids, level, generator, count, trigger, timestamp}
+      description: Published when scenarios are generated
+
+    - event: scenario.executed
+      priority: normal
+      payload: {scenario_id, execution_id, status, duration_ms, steps_executed, steps_failed, timestamp}
+      description: Published when scenario execution completes
+
+deployment:
+  how_to_run: |
+    cd /Users/MD/AI-Platform-ISO/intelligent-core/scenario-intelligence
+
+    # 1. Setup environment
+    ./setup_environment.sh
+
+    # 2. Edit .env with real credentials
+    nano .env
+
+    # 3. Test configuration
+    python3 config.py
+
+    # 4. Run full system test
+    python3 test_full_system.py
+
+    # 5. Start orchestrator API
+    cd /Users/MD/AI-Platform-ISO/infrastructure/tools/scenario_generators
+    PORT=8060 python3 -m api.main
+
+  docker: true
+  docker_compose_service: scenario-orchestrator
+
+  command: PORT=8060 python3 -m api.main
+
+  environment_variables:
+    PORT:
+      required: false
+      default: 8090
+
+    DATABASE_URL:
+      required: false
+      description: PostgreSQL connection for persistent storage
+      secret: true
+
+    QDRANT_URL:
+      required: false
+      description: Qdrant vector DB for RAG storage
+      default: http://localhost:6333
+
+    EVENTBUS_URL:
+      required: false
+      description: EventBus for event publishing
+      default: http://localhost:8002
+
+    LOG_LEVEL:
+      required: false
+      default: INFO
+
+ownership:
+  team: Intelligent Core Team
+  primary_contact: Scenario Intelligence
+  on_call: AI Platform Infrastructure
+
+documentation:
+  main: /intelligent-core/scenario-intelligence/README.md
+  architecture: /intelligent-core/scenario-intelligence/FULL_IMPLEMENTATION_ARCHITECTURE.md
+  design: /intelligent-core/scenario-intelligence/HYBRID_ARCHITECTURE_DESIGN.md
+  review: /intelligent-core/scenario-intelligence/EXPERT_REVIEW.md
+  deployment: /SCENARIO_INTELLIGENCE_DEPLOYMENT_READY.md
+  implementation: /SCENARIO_INTELLIGENCE_IMPLEMENTATION_COMPLETE.md
+  api: http://localhost:8060/docs (Swagger UI)
+  metrics: http://localhost:9090/metrics (Prometheus)
+  dashboard: http://localhost:3000/d/scenario-intelligence (Grafana)
+
+testing:
+  unit_tests: /intelligent-core/scenario-intelligence/tests/unit/
+  integration_tests: /intelligent-core/scenario-intelligence/tests/integration/
+  e2e_tests: /intelligent-core/scenario-intelligence/tests/e2e/
+  main_test: /intelligent-core/scenario-intelligence/test_full_system.py
+  coverage_target: 80
+  test_results: 6/6 tests passed (100%)
+  status: production_ready
+
+examples:
+  - path: /intelligent-core/scenario-intelligence/scenarios/level1-modules/vault/functional/store-secret.v1.0.0.yaml
+    description: Level 1 (Module) - Vault secret storage with ISO compliance
+
+  - path: /intelligent-core/scenario-intelligence/scenarios/level4-user/workflows/bia-complete-workflow.v1.0.0.yaml
+    description: Level 4 (User) - Complete BIA workflow with AI integration
+
+roadmap:
+  phase1:
+    name: Core Infrastructure
+    status: completed
+    completed_date: 2025-10-14
+    items:
+      - ✅ PostgreSQL schema with RLS (10 tables, 14 policies, 7 functions)
+      - ✅ Database integration with multi-storage
+      - ✅ Qdrant RAG storage integration
+      - ✅ EventBus integration with auto-regeneration
+      - ✅ Prometheus metrics (12 metrics)
+      - ✅ Grafana dashboard (12 panels)
+      - ✅ MIO Manager integration
+      - ✅ L4 AI-powered generation
+      - ✅ Execution Engine with validation
+      - ✅ Full system testing (100% pass)
+
+  phase2:
+    name: Scenario Catalog
+    status: in_progress
+    items:
+      - Generate full catalog (93 scenarios)
+      - L1 Platform scenarios (services)
+      - L1 Application scenarios (apps)
+      - L2 Subsystem scenarios
+      - L3 System scenarios
+      - L4 Workflow scenarios (15 AI-powered)
+
+  phase3:
+    name: Advanced Learning
+    status: planned
+    items:
+      - Pattern Detector implementation
+      - Predictor implementation
+      - Auto-Generator implementation
+      - Scenario recommendations
+
+  phase4:
+    name: Advanced Features
+    status: future
+    items:
+      - Visual scenario editor
+      - Scenario versioning and rollback
+      - A/B testing
+      - Distributed execution
+      - Real-time monitoring dashboard
+      - API authentication

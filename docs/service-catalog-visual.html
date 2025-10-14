@@ -559,7 +559,1570 @@
     </div>
   </section>
 
-  <!-- Continue with remaining subsystems... (truncated for brevity) -->
+  <!-- 3. Gateway Layer -->
+  <section id="gateway_layer" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">🚪</div>
+        <div class="subsystem-info">
+          <h2>Gateway Layer</h2>
+          <p>Unified API gateway with routing and load balancing</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>1</strong> Service
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-1" style="max-width: 700px;">
+        <!-- API Gateway -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">API Gateway</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8000</span>
+          </div>
+          <p class="service-description">
+            Unified API entry point providing authentication, authorization, rate limiting,
+            load balancing, and request routing to all platform services.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>JWT authentication & authorization</li>
+              <li>Rate limiting (token bucket, sliding window)</li>
+              <li>Load balancing (round-robin, least-connections)</li>
+              <li>Circuit breaker pattern</li>
+              <li>Request/response transformation</li>
+              <li>Service discovery integration</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">FastAPI</span>
+            <span class="service-tag">JWT Auth</span>
+            <span class="service-tag">Rate Limiting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Observability -->
+  <section id="observability" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">📊</div>
+        <div class="subsystem-info">
+          <h2>Observability</h2>
+          <p>Metrics, monitoring, visualization, alerting</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>2</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Prometheus -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Prometheus</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:9090</span>
+          </div>
+          <p class="service-description">
+            Time-series metrics database collecting data from all services via /metrics endpoints.
+            Powers alerting and monitoring dashboards.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Metrics scraping from 62 services</li>
+              <li>Time-series data storage</li>
+              <li>PromQL query language</li>
+              <li>Alerting rules engine</li>
+              <li>Service discovery integration</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Time-Series DB</span>
+            <span class="service-tag">Metrics</span>
+          </div>
+        </div>
+
+        <!-- Grafana -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Grafana</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:3000</span>
+          </div>
+          <p class="service-description">
+            Visualization platform with 18+ pre-configured dashboards for monitoring
+            platform health, performance, and business metrics.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>18+ pre-configured dashboards</li>
+              <li>Real-time metric visualization</li>
+              <li>Alert notifications (Slack, email)</li>
+              <li>Custom dashboard creation</li>
+              <li>Multi-datasource support</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Visualization</span>
+            <span class="service-tag">Dashboards</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. EventBus Core -->
+  <section id="eventbus_core" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">📡</div>
+        <div class="subsystem-info">
+          <h2>EventBus Core</h2>
+          <p>Event-driven choreography and inter-service communication</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>1</strong> Service
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-1" style="max-width: 700px;">
+        <!-- EventBus -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">EventBus</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8003</span>
+          </div>
+          <p class="service-description">
+            Clean architecture event system enabling choreography-based service coordination.
+            Supports multiple backends (Memory, Redis Streams) with pub/sub patterns.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Event publishing and subscription</li>
+              <li>Multiple backends (Memory, Redis Streams)</li>
+              <li>Event filtering by pattern</li>
+              <li>Async/await support</li>
+              <li>Type-safe event definitions</li>
+              <li>Priority-based routing</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Redis Streams</span>
+            <span class="service-tag">Pub/Sub</span>
+            <span class="service-tag">Choreography</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Security -->
+  <section id="security" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">🔒</div>
+        <div class="subsystem-info">
+          <h2>Security</h2>
+          <p>Authentication, authorization, secrets management</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>3</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- Auth Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Auth Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8001</span>
+          </div>
+          <p class="service-description">
+            JWT-based authentication and Role-Based Access Control (RBAC)
+            for all platform services and users.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>JWT token generation</li>
+              <li>RBAC (Role-Based Access Control)</li>
+              <li>User authentication</li>
+              <li>Session management</li>
+              <li>Token refresh</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">JWT</span>
+            <span class="service-tag">RBAC</span>
+          </div>
+        </div>
+
+        <!-- Vault -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">HashiCorp Vault</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8200</span>
+          </div>
+          <p class="service-description">
+            Secrets management and encryption as a service.
+            Stores API keys, passwords, certificates with audit logging.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Secrets storage (KV v2)</li>
+              <li>Dynamic secrets generation</li>
+              <li>Encryption as a service</li>
+              <li>Audit logging</li>
+              <li>Secret rotation</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">HashiCorp</span>
+            <span class="service-tag">Secrets</span>
+          </div>
+        </div>
+
+        <!-- Secrets Manager -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Secrets Manager</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">N/A</span>
+          </div>
+          <p class="service-description">
+            Additional secrets management layer providing simplified API
+            and integration with cloud secret managers.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Unified secrets API</li>
+              <li>Cloud provider integration</li>
+              <li>Secret versioning</li>
+              <li>Access policies</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Python Library</span>
+            <span class="service-tag">Cloud Integration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. AI Office -->
+  <section id="ai_office" class="subsystem-section" data-category="ai">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">🤖</div>
+        <div class="subsystem-info">
+          <h2>AI Office Infrastructure</h2>
+          <p>AI specialists, coordinators, and automation agents</p>
+        </div>
+        <div class="subsystem-badge">
+          <strong>7</strong> Services
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- MIO Manager -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">MIO Manager</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8046</span>
+          </div>
+          <p class="service-description">
+            Platform observatory and coordinator. Smart scheduler managing
+            health checks, deep analysis, and reporting cycles.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Observatory pattern (observe, never command)</li>
+              <li>Smart scheduler (multi-cycle monitoring)</li>
+              <li>Metrics coverage analysis</li>
+              <li>Health monitoring (60s checks)</li>
+              <li>Deep analysis (daily 3am)</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Observatory</span>
+            <span class="service-tag">Scheduler</span>
+            <span class="service-tag">Monitoring</span>
+          </div>
+        </div>
+
+        <!-- DB Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">DB Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8051</span>
+          </div>
+          <p class="service-description">
+            Database performance specialist analyzing query patterns,
+            suggesting optimizations, and monitoring database health.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Query performance analysis</li>
+              <li>Index recommendations</li>
+              <li>Slow query detection</li>
+              <li>Connection pool monitoring</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Database</span>
+            <span class="service-tag">Performance</span>
+          </div>
+        </div>
+
+        <!-- Analytics Specialist -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Analytics Specialist</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8045</span>
+          </div>
+          <p class="service-description">
+            Platform analytics expert providing insights into system behavior,
+            usage patterns, and optimization opportunities.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Usage analytics</li>
+              <li>Performance metrics aggregation</li>
+              <li>Trend analysis</li>
+              <li>Anomaly detection</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Analytics</span>
+            <span class="service-tag">Insights</span>
+          </div>
+        </div>
+
+        <!-- DevOps Agent -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">DevOps Agent</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8062</span>
+          </div>
+          <p class="service-description">
+            Infrastructure automation agent for deployment, scaling,
+            and configuration management.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Infrastructure scanning</li>
+              <li>Container health checks</li>
+              <li>Automated deployments</li>
+              <li>Configuration management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">DevOps</span>
+            <span class="service-tag">Automation</span>
+          </div>
+        </div>
+
+        <!-- Project Agent -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Project Agent</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8063</span>
+          </div>
+          <p class="service-description">
+            Project management agent tracking tasks, milestones,
+            and project health across the platform.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Task tracking</li>
+              <li>Milestone monitoring</li>
+              <li>Project health assessment</li>
+              <li>Team coordination</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Project Management</span>
+            <span class="service-tag">Tasks</span>
+          </div>
+        </div>
+
+        <!-- Agent Router -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Agent Router</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8052</span>
+          </div>
+          <p class="service-description">
+            AI agent request routing and load balancing across
+            multiple specialized AI agents.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Agent discovery</li>
+              <li>Request routing</li>
+              <li>Load balancing</li>
+              <li>Circuit breaker</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Router</span>
+            <span class="service-tag">Load Balancer</span>
+          </div>
+        </div>
+
+        <!-- AI Event Manager -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">AI Event Manager</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8055</span>
+          </div>
+          <p class="service-description">
+            Event Intelligence service learning patterns from EventBus,
+            suggesting optimizations, and detecting anomalies.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Event pattern learning</li>
+              <li>Anomaly detection</li>
+              <li>Event optimization suggestions</li>
+              <li>Self-healing recommendations</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Event Intelligence</span>
+            <span class="service-tag">Pattern Learning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Shared Libraries -->
+  <section id="shared_libraries" class="subsystem-section" data-category="infrastructure">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">📚</div>
+        <div class="subsystem-info">
+          <h2>Shared Libraries</h2>
+          <p>Common utilities, helpers, and test infrastructure</p>
+        </div>
+        <div class="subsystem-badge">
+          <strong>2</strong> Services
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Shared -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Shared Utilities</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">N/A</span>
+          </div>
+          <p class="service-description">
+            Common Python utilities providing database managers, configuration helpers,
+            and shared business logic across all services.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Database managers (PostgreSQL, Redis, Qdrant)</li>
+              <li>Configuration management</li>
+              <li>Logging utilities</li>
+              <li>Common data models</li>
+              <li>Validation helpers</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Python Library</span>
+            <span class="service-tag">Utilities</span>
+          </div>
+        </div>
+
+        <!-- Tests -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Test Infrastructure</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">N/A</span>
+          </div>
+          <p class="service-description">
+            Shared test infrastructure with fixtures, mocks, and utilities
+            for consistent testing across all services.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Test fixtures</li>
+              <li>Mock database managers</li>
+              <li>Integration test helpers</li>
+              <li>pytest configuration</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Testing</span>
+            <span class="service-tag">pytest</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Platform Services -->
+  <section id="platform_services" class="subsystem-section" data-category="business critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">📋</div>
+        <div class="subsystem-info">
+          <h2>Platform Services</h2>
+          <p>BCM business logic services (BIA, Risk, Plans, Compliance, etc.)</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>11</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- BIA Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">BIA Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8004</span>
+          </div>
+          <p class="service-description">
+            Business Impact Analysis service identifying critical functions,
+            dependencies, and recovery time objectives (RTOs).
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Critical function identification</li>
+              <li>RTO/RPO calculation</li>
+              <li>Dependency mapping</li>
+              <li>Impact assessment</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">ISO 22301</span>
+            <span class="service-tag">BIA</span>
+          </div>
+        </div>
+
+        <!-- Risk Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Risk Assessment</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8005</span>
+          </div>
+          <p class="service-description">
+            Risk assessment and management service for threat identification,
+            analysis, and mitigation strategies.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Threat identification</li>
+              <li>Risk scoring (likelihood × impact)</li>
+              <li>Mitigation strategies</li>
+              <li>Risk register management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Risk Management</span>
+            <span class="service-tag">ISO 22301</span>
+          </div>
+        </div>
+
+        <!-- Plans Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Plans Management</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8006</span>
+          </div>
+          <p class="service-description">
+            Business Continuity Plan (BCP) creation, management, and versioning.
+            Supports multiple plan types and scenarios.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>BCP creation and editing</li>
+              <li>Plan versioning</li>
+              <li>Scenario templates</li>
+              <li>Plan activation workflows</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">BCP</span>
+            <span class="service-tag">Planning</span>
+          </div>
+        </div>
+
+        <!-- Response Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Response Management</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8007</span>
+          </div>
+          <p class="service-description">
+            Incident response coordination, real-time crisis management,
+            and emergency communication.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Incident tracking</li>
+              <li>Response team coordination</li>
+              <li>Emergency notifications</li>
+              <li>Status updates</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Incident Response</span>
+            <span class="service-tag">Crisis Management</span>
+          </div>
+        </div>
+
+        <!-- Compliance Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Compliance Monitoring</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8008</span>
+          </div>
+          <p class="service-description">
+            ISO 22301 compliance tracking, gap analysis, and audit preparation.
+            Monitors all 10 ISO clauses.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>ISO 22301 clause tracking</li>
+              <li>Gap analysis</li>
+              <li>Audit trail generation</li>
+              <li>Compliance scoring</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">ISO 22301</span>
+            <span class="service-tag">Compliance</span>
+          </div>
+        </div>
+
+        <!-- Governance Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Governance Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8009</span>
+          </div>
+          <p class="service-description">
+            Governance framework management including policies, procedures,
+            roles, and responsibilities.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Policy management</li>
+              <li>Role & responsibility assignment</li>
+              <li>Approval workflows</li>
+              <li>Governance reporting</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Governance</span>
+            <span class="service-tag">Policies</span>
+          </div>
+        </div>
+
+        <!-- Documents Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Document Management</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8010</span>
+          </div>
+          <p class="service-description">
+            Document lifecycle management with version control, templates,
+            and document generation.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Document versioning</li>
+              <li>Template library</li>
+              <li>AI-powered generation</li>
+              <li>Access control</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Documents</span>
+            <span class="service-tag">Templates</span>
+          </div>
+        </div>
+
+        <!-- Learning Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Learning Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8011</span>
+          </div>
+          <p class="service-description">
+            Personnel training, competency tracking, and learning path management
+            for BCM skills development.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Training programs</li>
+              <li>Competency tracking</li>
+              <li>Learning paths</li>
+              <li>Assessment & certification</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Training</span>
+            <span class="service-tag">Learning</span>
+          </div>
+        </div>
+
+        <!-- Validation Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Validation Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8012</span>
+          </div>
+          <p class="service-description">
+            Testing, exercises, and drills management. Validates BCP effectiveness
+            through simulations and tabletop exercises.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Exercise planning</li>
+              <li>Tabletop exercises</li>
+              <li>Drill execution</li>
+              <li>Results analysis</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Testing</span>
+            <span class="service-tag">Exercises</span>
+          </div>
+        </div>
+
+        <!-- Planning Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Journey Planning</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8013</span>
+          </div>
+          <p class="service-description">
+            BCM journey planning and roadmap management guiding organizations
+            through ISO 22301 implementation.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Journey roadmap</li>
+              <li>Milestone tracking</li>
+              <li>Task dependencies</li>
+              <li>Progress monitoring</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Planning</span>
+            <span class="service-tag">Roadmap</span>
+          </div>
+        </div>
+
+        <!-- Process Analytics -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Process Analytics</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8014</span>
+          </div>
+          <p class="service-description">
+            Business process analytics providing insights into workflow efficiency,
+            bottlenecks, and optimization opportunities.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Process mining</li>
+              <li>Bottleneck detection</li>
+              <li>Efficiency metrics</li>
+              <li>Optimization recommendations</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Analytics</span>
+            <span class="service-tag">Process Mining</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Intelligent Core -->
+  <section id="intelligent_core" class="subsystem-section" data-category="ai critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">🧠</div>
+        <div class="subsystem-info">
+          <h2>Intelligent Core</h2>
+          <p>AI orchestration, learning, workflow intelligence, and domain expertise</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>12</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- Workflow Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Workflow Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8030</span>
+          </div>
+          <p class="service-description">
+            Central coordinator and "brain" of the platform. Temporal-based workflow
+            orchestration with case library of 347+ real-world cases.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Temporal workflow orchestration</li>
+              <li>Case library (347+ cases)</li>
+              <li>Pattern detection</li>
+              <li>Learning tracker</li>
+              <li>PDCA cycle management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Brain</span>
+            <span class="service-tag">Temporal</span>
+            <span class="service-tag">Coordinator</span>
+          </div>
+        </div>
+
+        <!-- AI Foundation -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">AI Foundation</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8031</span>
+          </div>
+          <p class="service-description">
+            Core AI infrastructure: LLM Router, RAG pipeline, embeddings,
+            and multi-model orchestration (OpenAI, Claude, Gemini, Local).
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Multi-model LLM routing</li>
+              <li>RAG with Qdrant</li>
+              <li>Embeddings generation</li>
+              <li>Context management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">LLM</span>
+            <span class="service-tag">RAG</span>
+            <span class="service-tag">Embeddings</span>
+          </div>
+        </div>
+
+        <!-- Expertise Center -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Expertise Center</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8032</span>
+          </div>
+          <p class="service-description">
+            14 domain-specific tactical assistants (BIA, Risk, Compliance, Response,
+            Governance, Training, Documents, etc.) with RAG specialization.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>14 tactical assistants</li>
+              <li>Domain-specific RAG</li>
+              <li>Multi-expert collaboration</li>
+              <li>Tactical intelligence</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Experts</span>
+            <span class="service-tag">Domain Knowledge</span>
+          </div>
+        </div>
+
+        <!-- Community Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Community Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8033</span>
+          </div>
+          <p class="service-description">
+            Federated learning network enabling privacy-preserving peer knowledge
+            sharing across 347+ organizational cases.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Federated learning</li>
+              <li>Privacy-preserving (GDPR/HIPAA)</li>
+              <li>Case anonymization</li>
+              <li>Collective intelligence</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Federated Learning</span>
+            <span class="service-tag">Privacy</span>
+          </div>
+        </div>
+
+        <!-- Workflow Engine -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Workflow Engine</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8034</span>
+          </div>
+          <p class="service-description">
+            BPMN 2.0 workflow execution engine managing business process
+            orchestration and PDCA cycles.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>BPMN 2.0 execution</li>
+              <li>PDCA cycle automation</li>
+              <li>Process state management</li>
+              <li>Workflow versioning</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">BPMN</span>
+            <span class="service-tag">PDCA</span>
+          </div>
+        </div>
+
+        <!-- AI Orchestration -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">AI Orchestration</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8002</span>
+          </div>
+          <p class="service-description">
+            Decision Center for autonomous AI decision-making, delegation,
+            and multi-agent coordination with safety monitoring.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Context aggregation</li>
+              <li>Priority assessment</li>
+              <li>Strategy selection</li>
+              <li>Safety monitoring</li>
+              <li>Delegation management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Decision Center</span>
+            <span class="service-tag">Orchestration</span>
+          </div>
+        </div>
+
+        <!-- Event Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Event Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8035</span>
+          </div>
+          <p class="service-description">
+            Self-healing and pattern detection service learning from platform events
+            to suggest optimizations and detect anomalies.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Pattern detection</li>
+              <li>Anomaly detection</li>
+              <li>Self-healing suggestions</li>
+              <li>Event correlation</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Self-Healing</span>
+            <span class="service-tag">Pattern Learning</span>
+          </div>
+        </div>
+
+        <!-- Predictive Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Predictive Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8036</span>
+          </div>
+          <p class="service-description">
+            ML-powered forecasting and predictions including risk forecasting,
+            journey prediction, and proactive recommendations.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Risk forecasting</li>
+              <li>Journey prediction</li>
+              <li>Proactive recommendations</li>
+              <li>ML model management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">ML</span>
+            <span class="service-tag">Forecasting</span>
+          </div>
+        </div>
+
+        <!-- Collective Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Collective Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8037</span>
+          </div>
+          <p class="service-description">
+            Collective agents providing assistance to stuck organizations,
+            detecting patterns across the network.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Stuck organization detection</li>
+              <li>Pattern-based assistance</li>
+              <li>Network intelligence</li>
+              <li>Collective recommendations</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Collective</span>
+            <span class="service-tag">Network Intelligence</span>
+          </div>
+        </div>
+
+        <!-- AI Workflow Optimizer -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">AI Workflow Optimizer</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8038</span>
+          </div>
+          <p class="service-description">
+            ML-powered workflow optimization analyzing execution patterns
+            and suggesting improvements.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Workflow analysis</li>
+              <li>Bottleneck detection</li>
+              <li>Optimization suggestions</li>
+              <li>Performance prediction</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Optimization</span>
+            <span class="service-tag">ML</span>
+          </div>
+        </div>
+
+        <!-- System BCM Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">System BCM Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8039</span>
+          </div>
+          <p class="service-description">
+            Platform self-application of BCM principles - the platform
+            managing its own business continuity.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Platform BIA</li>
+              <li>Platform risk assessment</li>
+              <li>Self-recovery plans</li>
+              <li>Platform resilience</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Meta-BCM</span>
+            <span class="service-tag">Self-Management</span>
+          </div>
+        </div>
+
+        <!-- Scenario Intelligence -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Scenario Intelligence</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8040</span>
+          </div>
+          <p class="service-description">
+            Scenario-based orchestration with 4-level hierarchy managing
+            complex multi-scenario planning and execution.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Scenario modeling</li>
+              <li>4-level hierarchy</li>
+              <li>Multi-scenario coordination</li>
+              <li>Scenario analysis</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Scenarios</span>
+            <span class="service-tag">Planning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. User Applications -->
+  <section id="user_applications" class="subsystem-section" data-category="applications">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">📱</div>
+        <div class="subsystem-info">
+          <h2>User Applications</h2>
+          <p>User-facing applications (4) and BCM modules (12)</p>
+        </div>
+        <div class="subsystem-badge">
+          <strong>16</strong> Apps & Modules
+        </div>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Main Applications (4)</h3>
+        <div class="grid grid-2">
+          <!-- BCM Portal -->
+          <div class="service-card">
+            <div class="service-header">
+              <div>
+                <h3 class="service-name">BCM Portal</h3>
+                <span class="service-status status-production">Production</span>
+              </div>
+              <span class="service-port">:3000</span>
+            </div>
+            <p class="service-description">
+              Main BCM management portal - unified interface for all BCM activities
+              including BIA, risk, plans, compliance, and reporting.
+            </p>
+            <div class="service-capabilities">
+              <h4>Key Features:</h4>
+              <ul>
+                <li>Unified BCM dashboard</li>
+                <li>All modules integrated</li>
+                <li>Real-time updates</li>
+                <li>Role-based access</li>
+              </ul>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Next.js 14</span>
+              <span class="service-tag">Main App</span>
+            </div>
+          </div>
+
+          <!-- Simulation Platform -->
+          <div class="service-card">
+            <div class="service-header">
+              <div>
+                <h3 class="service-name">Simulation Platform</h3>
+                <span class="service-status status-production">Production</span>
+              </div>
+              <span class="service-port">:3001</span>
+            </div>
+            <p class="service-description">
+              BCM exercises, drills, and simulations platform for testing
+              business continuity plans through realistic scenarios.
+            </p>
+            <div class="service-capabilities">
+              <h4>Key Features:</h4>
+              <ul>
+                <li>Tabletop exercises</li>
+                <li>Drill execution</li>
+                <li>Real-time scenarios</li>
+                <li>Performance analytics</li>
+              </ul>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Exercises</span>
+              <span class="service-tag">Simulations</span>
+            </div>
+          </div>
+
+          <!-- Expert Marketplace -->
+          <div class="service-card">
+            <div class="service-header">
+              <div>
+                <h3 class="service-name">Expert Marketplace</h3>
+                <span class="service-status status-production">Production</span>
+              </div>
+              <span class="service-port">:3002</span>
+            </div>
+            <p class="service-description">
+              Expert consultation marketplace connecting organizations with
+              BCM consultants, trainers, and auditors.
+            </p>
+            <div class="service-capabilities">
+              <h4>Key Features:</h4>
+              <ul>
+                <li>Expert directory</li>
+                <li>Booking system</li>
+                <li>Reviews & ratings</li>
+                <li>Video consultations</li>
+              </ul>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Marketplace</span>
+              <span class="service-tag">Consultants</span>
+            </div>
+          </div>
+
+          <!-- Digital Twin -->
+          <div class="service-card">
+            <div class="service-header">
+              <div>
+                <h3 class="service-name">Digital Twin</h3>
+                <span class="service-status status-production">Production</span>
+              </div>
+              <span class="service-port">:3003</span>
+            </div>
+            <p class="service-description">
+              Organization digital twin - virtual model representing
+              real-world organization structure, processes, and resilience.
+            </p>
+            <div class="service-capabilities">
+              <h4>Key Features:</h4>
+              <ul>
+                <li>Virtual organization model</li>
+                <li>Real-time synchronization</li>
+                <li>What-if scenarios</li>
+                <li>Resilience visualization</li>
+              </ul>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag">Digital Twin</span>
+              <span class="service-tag">Visualization</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">BCM Modules (12) - Powering Applications</h3>
+        <div class="bg-alt" style="padding: 1.5rem; border-radius: 0.75rem;">
+          <p style="margin-bottom: 1rem; color: var(--medium-text);">
+            12 specialized BCM modules providing core functionality to applications:
+          </p>
+          <div class="grid grid-4" style="gap: 0.5rem;">
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>BIA Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9000</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Risk Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9001</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Plans Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9002</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Response Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9003</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Validation Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9004</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Compliance Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9005</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Governance Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9006</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Learning Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9007</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Documents Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9008</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Planning Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9009</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Analytics Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9010</p>
+            </div>
+            <div style="padding: 0.75rem; background: white; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+              <strong>Monitoring Module</strong>
+              <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: var(--medium-text);">:9011</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Interface Layer -->
+  <section id="interface_layer" class="subsystem-section" data-category="applications">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">🖥️</div>
+        <div class="subsystem-info">
+          <h2>Interface Layer</h2>
+          <p>User interfaces and external integrations (planned)</p>
+        </div>
+        <div class="subsystem-badge">
+          <strong>3</strong> Services
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- MCP Interface -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">MCP Interface</h3>
+              <span class="service-status status-reserved">Reserved</span>
+            </div>
+            <span class="service-port">TBD</span>
+          </div>
+          <p class="service-description">
+            Model Context Protocol interface enabling AI assistants (Claude, ChatGPT)
+            to interact with the platform as MCP servers.
+          </p>
+          <div class="service-capabilities">
+            <h4>Planned Capabilities:</h4>
+            <ul>
+              <li>MCP server protocol</li>
+              <li>Tool definitions</li>
+              <li>Resource exposure</li>
+              <li>AI assistant integration</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">MCP</span>
+            <span class="service-tag">AI Integration</span>
+          </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Admin Panel</h3>
+              <span class="service-status status-reserved">Reserved</span>
+            </div>
+            <span class="service-port">TBD</span>
+          </div>
+          <p class="service-description">
+            System administration dashboard for platform configuration,
+            user management, and monitoring.
+          </p>
+          <div class="service-capabilities">
+            <h4>Planned Capabilities:</h4>
+            <ul>
+              <li>System configuration</li>
+              <li>User management</li>
+              <li>Service health monitoring</li>
+              <li>Audit logs</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Admin</span>
+            <span class="service-tag">Management</span>
+          </div>
+        </div>
+
+        <!-- Platform UI -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Platform UI</h3>
+              <span class="service-status status-reserved">Reserved</span>
+            </div>
+            <span class="service-port">TBD</span>
+          </div>
+          <p class="service-description">
+            End-user BCM interface (alternative to BCM Portal)
+            with simplified workflow for smaller organizations.
+          </p>
+          <div class="service-capabilities">
+            <h4>Planned Capabilities:</h4>
+            <ul>
+              <li>Simplified BCM workflow</li>
+              <li>Guided wizards</li>
+              <li>Mobile-first design</li>
+              <li>Quick actions</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">UI</span>
+            <span class="service-tag">Simplified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Call to Action -->
   <section style="background: var(--background-alt); padding: 4rem 0;">
