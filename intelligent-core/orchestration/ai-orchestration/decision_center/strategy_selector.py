@@ -21,7 +21,7 @@ import logging
 from typing import List, Optional
 from datetime import datetime
 
-from intelligent_core.ai_orchestration.models import (
+from .models import (
     Strategy, Priority, FullContext, PriorityLevel
 )
 

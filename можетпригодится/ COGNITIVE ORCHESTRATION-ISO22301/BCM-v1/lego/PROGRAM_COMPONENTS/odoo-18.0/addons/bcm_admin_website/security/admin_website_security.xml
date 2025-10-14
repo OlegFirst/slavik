@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Admin Group -->
+        <record id="group_bcm_admin" model="res.groups">
+            <field name="name">BCM Administrators</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+            <field name="comment">Full access to BCM admin website interface</field>
+        </record>
+
+        <!-- BCM Manager Group -->
+        <record id="group_bcm_manager" model="res.groups">
+            <field name="name">BCM Managers</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+            <field name="comment">Limited access to BCM admin interface</field>
+        </record>
+
+        <!-- Website Menu Items -->
+        <record id="website_menu_bcm_admin" model="website.menu">
+            <field name="name">BCM Admin</field>
+            <field name="url">/bcm/admin</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">50</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+
+        <record id="website_menu_bcm_modules" model="website.menu">
+            <field name="name">Modules</field>
+            <field name="url">/bcm/admin/modules</field>
+            <field name="parent_id" ref="website_menu_bcm_admin"/>
+            <field name="sequence">10</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+
+        <record id="website_menu_bcm_ai" model="website.menu">
+            <field name="name">AI Organs</field>
+            <field name="url">/bcm/admin/ai</field>
+            <field name="parent_id" ref="website_menu_bcm_admin"/>
+            <field name="sequence">20</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+    </data>
+</odoo>

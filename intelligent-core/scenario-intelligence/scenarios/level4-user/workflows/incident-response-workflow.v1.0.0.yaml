@@ -1,0 +1,455 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "incident-response-workflow"
+    version: "1.0.0"
+    level: 4  # User level - E2E workflow
+    type: "workflow"
+    pillar: "operational_excellence"
+    domain: "incident_management"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "product-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    product: "BCM Platform"
+    user_personas:
+      - "Incident Manager"
+      - "BCM Coordinator"
+      - "Crisis Team Member"
+    team: "product-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Complete Incident Response Workflow"
+    summary: "End-to-end incident response: Detection → Assessment → Response → Recovery → Post-incident review"
+    business_value: "Enable rapid, coordinated response to business disruptions following ISO 22301 standards"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Incident Response Workflow"
+
+    scenario: "Organization responds to cyber security incident"
+
+    given:
+      - "User is authenticated as Incident Manager"
+      - "BCM plan exists for affected business process"
+      - "Crisis team is defined"
+      - "Communication channels are configured"
+
+    when:
+      - "Incident is detected (e.g., ransomware attack)"
+      - "User triggers incident response workflow"
+      - "AI assesses incident severity and impact"
+      - "System activates relevant BCM plan"
+      - "Crisis team is notified automatically"
+      - "Response procedures are executed"
+      - "Recovery actions are tracked"
+      - "Post-incident review is conducted"
+
+    then:
+      - "Incident is registered and tracked"
+      - "Severity level is determined"
+      - "BCM plan is activated"
+      - "Crisis team is mobilized"
+      - "Response timeline is documented"
+      - "Recovery progress is monitored"
+      - "Post-incident report is generated"
+      - "Lessons learned are captured"
+      - "Compliance evidence is created"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 600  # 10 minutes for full workflow simulation
+    retry_policy:
+      max_retries: 1  # Limited retries for time-sensitive incident
+      backoff: linear
+
+    steps:
+      # ========== PHASE 1: Incident Detection & Authentication ==========
+      - id: "authenticate_incident_manager"
+        action: "http.post"
+        params:
+          url: "http://auth-service:8010/api/v1/auth/login"
+          body:
+            username: "{{username}}"
+            password: "{{password}}"
+        expect:
+          status: 200
+          response.token: "{{exists}}"
+          response.role: "incident_manager"
+        on_failure: "abort"
+
+      - id: "report_incident"
+        action: "http.post"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            incident_type: "{{incident_type}}"  # e.g., "cyber_attack"
+            title: "{{incident_title}}"
+            description: "{{incident_description}}"
+            detected_at: "{{timestamp}}"
+            reported_by: "{{steps.authenticate_incident_manager.result.user_id}}"
+            priority: "high"
+        expect:
+          status: 201
+          response.incident_id: "{{exists}}"
+
+      # ========== PHASE 2: AI-Powered Incident Assessment ==========
+      - id: "request_ai_incident_assessment"
+        action: "http.post"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            task_type: "incident_assessment"
+            incident_id: "{{steps.report_incident.result.incident_id}}"
+            organization_id: "{{organization_id}}"
+            incident_data:
+              type: "{{incident_type}}"
+              description: "{{incident_description}}"
+            assessment_scope:
+              - "severity_prediction"
+              - "impact_analysis"
+              - "affected_processes"
+              - "recommended_bcm_plan"
+        expect:
+          status: 201
+          response.task_id: "{{exists}}"
+
+      - id: "wait_for_ai_assessment"
+        action: "sleep"
+        params:
+          seconds: 10
+
+      - id: "get_ai_assessment"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks/{{steps.request_ai_incident_assessment.result.task_id}}/result"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+        expect:
+          status: 200
+          response.assessment: "{{exists}}"
+
+      # ========== PHASE 3: Update Incident with AI Assessment ==========
+      - id: "update_incident_with_assessment"
+        action: "http.patch"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents/{{steps.report_incident.result.incident_id}}"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            severity: "{{steps.get_ai_assessment.result.assessment.severity}}"
+            impact_level: "{{steps.get_ai_assessment.result.assessment.impact_level}}"
+            affected_processes: "{{steps.get_ai_assessment.result.assessment.affected_processes}}"
+            ai_assessment_id: "{{steps.request_ai_incident_assessment.result.task_id}}"
+        expect:
+          status: 200
+
+      # ========== PHASE 4: Activate BCM Plan ==========
+      - id: "find_relevant_bcm_plan"
+        action: "http.get"
+        params:
+          url: "http://plans-service:8003/api/v1/plans"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          query:
+            organization_id: "{{organization_id}}"
+            process_name: "{{steps.get_ai_assessment.result.assessment.affected_processes[0]}}"
+        expect:
+          status: 200
+          response.plan_id: "{{exists}}"
+
+      - id: "activate_bcm_plan"
+        action: "http.post"
+        params:
+          url: "http://plans-service:8003/api/v1/plans/{{steps.find_relevant_bcm_plan.result.plan_id}}/activate"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            incident_id: "{{steps.report_incident.result.incident_id}}"
+            activated_by: "{{steps.authenticate_incident_manager.result.user_id}}"
+            activation_reason: "Incident response: {{incident_title}}"
+        expect:
+          status: 200
+          response.activation_id: "{{exists}}"
+
+      # ========== PHASE 5: Notify Crisis Team ==========
+      - id: "get_crisis_team"
+        action: "http.get"
+        params:
+          url: "http://platform-api:8000/api/v1/organizations/{{organization_id}}/crisis-team"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+        expect:
+          status: 200
+          response.members: "{{exists}}"
+
+      - id: "notify_crisis_team"
+        action: "http.post"
+        params:
+          url: "http://notification-service:8015/api/v1/notifications/bulk"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            notification_type: "crisis_activation"
+            priority: "urgent"
+            incident_id: "{{steps.report_incident.result.incident_id}}"
+            bcm_plan_id: "{{steps.find_relevant_bcm_plan.result.plan_id}}"
+            recipients: "{{steps.get_crisis_team.result.members}}"
+            message: "Crisis team activation: {{incident_title}}"
+        expect:
+          status: 201
+
+      # ========== PHASE 6: Execute Response Procedures ==========
+      - id: "create_response_tasks"
+        action: "http.post"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents/{{steps.report_incident.result.incident_id}}/response-tasks"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            bcm_plan_id: "{{steps.find_relevant_bcm_plan.result.plan_id}}"
+            auto_generate_from_plan: true
+        expect:
+          status: 201
+          response.tasks_created: ">0"
+
+      - id: "track_response_progress"
+        action: "http.get"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents/{{steps.report_incident.result.incident_id}}/progress"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+        expect:
+          status: 200
+          response.status: "in_progress"
+
+      # ========== PHASE 7: Document Recovery Actions ==========
+      - id: "log_recovery_action"
+        action: "http.post"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents/{{steps.report_incident.result.incident_id}}/actions"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            action_type: "recovery"
+            description: "{{recovery_action_description}}"
+            performed_by: "{{steps.authenticate_incident_manager.result.user_id}}"
+            timestamp: "{{timestamp}}"
+        expect:
+          status: 201
+
+      # ========== PHASE 8: Generate Post-Incident Report ==========
+      - id: "generate_incident_report"
+        action: "http.post"
+        params:
+          url: "http://incident-service:8025/api/v1/incidents/{{steps.report_incident.result.incident_id}}/report"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            report_type: "post_incident_review"
+            include_timeline: true
+            include_response_actions: true
+            include_lessons_learned: true
+        expect:
+          status: 201
+          response.report_id: "{{exists}}"
+
+      # ========== PHASE 9: Compliance Evidence ==========
+      - id: "generate_compliance_evidence"
+        action: "http.post"
+        params:
+          url: "http://compliance-engine:8013/api/v1/evidence/generate"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            standard: "ISO_22301"
+            clause: "8.5"  # Incident response
+            incident_id: "{{steps.report_incident.result.incident_id}}"
+            report_id: "{{steps.generate_incident_report.result.report_id}}"
+        expect:
+          status: 201
+          response.evidence_id: "{{exists}}"
+
+      # ========== PHASE 10: Workflow Completion ==========
+      - id: "mark_workflow_complete"
+        action: "http.post"
+        params:
+          url: "http://workflow-intelligence:8020/api/v1/workflows/complete"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_incident_manager.result.token}}"
+          body:
+            workflow_type: "incident_response"
+            workflow_id: "{{steps.report_incident.result.incident_id}}"
+            status: "completed"
+            artifacts:
+              - incident_id: "{{steps.report_incident.result.incident_id}}"
+              - bcm_activation_id: "{{steps.activate_bcm_plan.result.activation_id}}"
+              - report_id: "{{steps.generate_incident_report.result.report_id}}"
+              - evidence_id: "{{steps.generate_compliance_evidence.result.evidence_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      # Level 3 scenarios
+      - scenario_id: "ai-assisted-bia-workflow"
+        level: 3
+        when: "ai_assessment"
+        parallel: false
+
+      # Level 2 scenarios
+      - scenario_id: "ai-office-coordination"
+        level: 2
+        when: "ai_analysis"
+        parallel: false
+
+      # Level 1 scenarios
+      - scenario_id: "audit-service-create-audit-log"
+        level: 1
+        when: "after_completion"
+        parallel: false
+
+    events:
+      emits:
+        - event_type: "workflow.incident_response.completed"
+          aggregate: "IncidentResponseWorkflow"
+          aggregate_id: "{{steps.report_incident.result.incident_id}}"
+          payload:
+            incident_id: "{{steps.report_incident.result.incident_id}}"
+            organization_id: "{{organization_id}}"
+            incident_type: "{{incident_type}}"
+            severity: "{{steps.get_ai_assessment.result.assessment.severity}}"
+            bcm_plan_activated: true
+            crisis_team_notified: true
+            artifacts_created:
+              - type: "incident"
+                id: "{{steps.report_incident.result.incident_id}}"
+              - type: "bcm_activation"
+                id: "{{steps.activate_bcm_plan.result.activation_id}}"
+              - type: "incident_report"
+                id: "{{steps.generate_incident_report.result.report_id}}"
+              - type: "compliance_evidence"
+                id: "{{steps.generate_compliance_evidence.result.evidence_id}}"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.4"
+          name: "Business continuity plans and procedures"
+          requirement: "Establish and maintain incident response procedures"
+
+        - id: "8.5"
+          name: "Incident response"
+          requirement: "Respond to disrupting incidents"
+
+        - id: "9.1"
+          name: "Monitoring, measurement, analysis and evaluation"
+          requirement: "Monitor and measure incident response performance"
+
+      evidence_generated:
+        - type: "incident_response_workflow"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "incident_id"
+            - "organization_id"
+            - "incident_type"
+            - "severity"
+            - "ai_assessment"
+            - "bcm_plan_activation"
+            - "crisis_team_notification"
+            - "response_timeline"
+            - "recovery_actions"
+            - "post_incident_report"
+            - "lessons_learned"
+
+  # ========== USER EXPERIENCE ==========
+  user_experience:
+    estimated_duration_minutes: 15
+    complexity: "high"
+    urgency: "critical"
+
+    steps_summary:
+      - step: 1
+        description: "Report incident"
+        estimated_time: "1min"
+
+      - step: 2
+        description: "AI assessment"
+        estimated_time: "2min"
+
+      - step: 3
+        description: "Activate BCM plan"
+        estimated_time: "2min"
+
+      - step: 4
+        description: "Notify crisis team"
+        estimated_time: "1min"
+
+      - step: 5
+        description: "Execute response procedures"
+        estimated_time: "5min"
+
+      - step: 6
+        description: "Generate post-incident report"
+        estimated_time: "3min"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "incident_response_workflow_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+          - "incident_type"
+          - "severity"
+
+      - name: "incident_response_workflows_total"
+        type: "counter"
+        labels:
+          - "incident_type"
+          - "severity"
+
+      - name: "crisis_team_notification_time_seconds"
+        type: "histogram"
+
+      - name: "bcm_plan_activation_time_seconds"
+        type: "histogram"
+
+    logs:
+      level: "INFO"
+      include:
+        - "workflow_id"
+        - "incident_id"
+        - "organization_id"
+        - "severity"
+
+  # ========== SLA ==========
+  sla:
+    target_detection_to_response_time_minutes: 5
+    target_crisis_team_notification_time_seconds: 60
+    target_bcm_plan_activation_time_minutes: 3
+    target_success_rate: 0.99
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "product-team"
+      changes:
+        - "Initial version"
+        - "Complete incident response workflow with AI assessment and BCM activation"

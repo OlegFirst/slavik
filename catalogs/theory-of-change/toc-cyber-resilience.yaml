@@ -1,0 +1,416 @@
+# Theory of Change: Cyber Resilience Improvement
+
+goal: "Build organizational cyber resilience capable of detecting, responding to, and recovering from cyber attacks"
+
+timeline: "12 months"
+
+# ====================
+# INPUTS
+# ====================
+inputs:
+  human_resources:
+    - 5 IT security specialists
+    - 3 network administrators
+    - 10 key system owners
+    - Executive sponsor (CISO)
+
+  financial:
+    budget: 250000
+    currency: "USD"
+    allocation:
+      - training: 50000
+      - tools: 100000
+      - consulting: 50000
+      - exercises: 50000
+
+  technology:
+    - SIEM system
+    - Backup infrastructure
+    - Security awareness platform
+    - Incident response tools
+
+  knowledge:
+    - ISO 27001 framework
+    - NIST Cybersecurity Framework
+    - Industry best practices
+    - Historical incident data
+
+# ====================
+# ACTIVITIES
+# ====================
+activities:
+  phase_1_assessment:
+    - Cyber risk assessment
+    - Current state analysis
+    - Gap identification
+    - Stakeholder interviews
+    duration_weeks: 4
+
+  phase_2_planning:
+    - Strategy development
+    - Roadmap creation
+    - Resource allocation
+    - KPI definition
+    duration_weeks: 4
+
+  phase_3_implementation:
+    - Security controls deployment
+    - Process documentation
+    - Tool configuration
+    - Integration with existing systems
+    duration_weeks: 16
+
+  phase_4_training:
+    - Security awareness training (all staff)
+    - Technical training (IT team)
+    - Incident response training
+    - Simulation exercises
+    duration_weeks: 8
+
+  phase_5_testing:
+    - Tabletop exercises
+    - Ransomware simulations
+    - Phishing campaigns
+    - Recovery drills
+    duration_weeks: 12
+
+  phase_6_optimization:
+    - Lessons learned integration
+    - Process refinement
+    - Continuous improvement
+    - Ongoing monitoring
+    duration_weeks: 8
+
+# ====================
+# OUTPUTS
+# ====================
+outputs:
+  documentation:
+    - Cyber security policy
+    - Incident response plan
+    - Recovery procedures
+    - Training materials
+
+  trained_personnel:
+    - 150 staff completed awareness training
+    - 18 staff completed technical training
+    - 8 certified incident responders
+
+  systems_deployed:
+    - SIEM operational
+    - Automated backup system
+    - Threat intelligence feeds
+    - Security monitoring dashboard
+
+  exercises_completed:
+    - 4 tabletop exercises
+    - 6 ransomware simulations
+    - 12 phishing campaigns
+    - 2 full-scale recovery drills
+
+# ====================
+# OUTCOMES
+# ====================
+outcomes:
+  short_term:
+    timeframe: "0-3 months"
+    results:
+      - Increased security awareness (baseline +40%)
+      - Faster threat detection (from 72h to 4h)
+      - Documented response procedures
+      - Baseline metrics established
+
+  medium_term:
+    timeframe: "3-9 months"
+    results:
+      - Incident response time reduced 60%
+      - 95% of staff recognize phishing
+      - Automated backup success rate 99%
+      - Recovery time objective met for critical systems
+
+  long_term:
+    timeframe: "9-12 months"
+    results:
+      - Zero successful ransomware attacks
+      - 99.9% system availability
+      - Mature security culture
+      - Proactive threat hunting capability
+
+# ====================
+# IMPACT
+# ====================
+impact:
+  organizational:
+    - Business continuity assured
+    - Customer trust maintained
+    - Competitive advantage gained
+    - Regulatory compliance achieved
+
+  financial:
+    - Avoided losses: $2M+ (estimated)
+    - Insurance premium reduction: 20%
+    - ROI: 350%
+
+  strategic:
+    - ISO 27001 certification
+    - Market differentiation
+    - Stakeholder confidence
+    - Innovation enablement
+
+# ====================
+# ASSUMPTIONS
+# ====================
+assumptions:
+  critical:
+    - Management commitment remains strong
+    - Budget allocated is sufficient
+    - Staff remain engaged throughout
+    - Technology investments deliver expected capabilities
+
+  important:
+    - External threat landscape remains similar
+    - Key personnel do not leave
+    - Third-party vendors remain reliable
+    - Regulatory requirements don't change drastically
+
+  validation_methods:
+    - Monthly executive reviews
+    - Quarterly budget reviews
+    - Continuous staff surveys
+    - Technology performance monitoring
+
+# ====================
+# RISKS
+# ====================
+risks:
+  high_probability_high_impact:
+    - risk: "Key personnel turnover"
+      likelihood: 60%
+      impact: "high"
+      mitigation:
+        - Cross-training program
+        - Knowledge documentation
+        - Retention bonuses
+        - Succession planning
+
+    - risk: "Budget constraints"
+      likelihood: 40%
+      impact: "high"
+      mitigation:
+        - Phased implementation
+        - Quick wins to demonstrate value
+        - Alternative funding sources
+        - Cost optimization
+
+  medium_risk:
+    - risk: "Technology integration issues"
+      likelihood: 50%
+      impact: "medium"
+      mitigation:
+        - Proof of concept before full deployment
+        - Vendor support agreements
+        - In-house expertise development
+
+    - risk: "Change resistance"
+      likelihood: 40%
+      impact: "medium"
+      mitigation:
+        - Change management program
+        - Communication strategy
+        - Early wins demonstration
+        - Leadership support
+
+  low_risk:
+    - risk: "Vendor discontinuation"
+      likelihood: 10%
+      impact: "medium"
+      mitigation:
+        - Multiple vendor strategy
+        - Open standards preference
+        - Exit strategy planning
+
+# ====================
+# INDICATORS & KPIs
+# ====================
+indicators:
+  input_indicators:
+    - budget_utilized_percentage:
+        target: 95%
+        measurement: "Monthly financial reports"
+
+    - training_hours_delivered:
+        target: 2000
+        measurement: "Training system logs"
+
+  process_indicators:
+    - activities_completed_on_time:
+        target: 90%
+        measurement: "Project management system"
+
+    - stakeholder_engagement_score:
+        target: 8/10
+        measurement: "Quarterly surveys"
+
+  output_indicators:
+    - personnel_trained:
+        target: 150
+        measurement: "Training completion records"
+
+    - systems_deployed:
+        target: 4
+        measurement: "Deployment checklist"
+
+    - exercises_conducted:
+        target: 24
+        measurement: "Exercise reports"
+
+  outcome_indicators:
+    - mean_time_to_detect:
+        baseline: 72_hours
+        target: 4_hours
+        measurement: "SIEM analytics"
+
+    - mean_time_to_respond:
+        baseline: 48_hours
+        target: 8_hours
+        measurement: "Incident response logs"
+
+    - phishing_click_rate:
+        baseline: 35%
+        target: 5%
+        measurement: "Simulated phishing campaigns"
+
+    - backup_success_rate:
+        baseline: 85%
+        target: 99%
+        measurement: "Backup system reports"
+
+    - rto_achievement_rate:
+        target: 100%
+        measurement: "Recovery drill results"
+
+  impact_indicators:
+    - security_incidents_per_month:
+        baseline: 12
+        target: 2
+        measurement: "Incident tracking system"
+
+    - system_availability:
+        baseline: 98.5%
+        target: 99.9%
+        measurement: "Monitoring system"
+
+    - compliance_score:
+        target: 100%
+        measurement: "Audit results"
+
+    - roi:
+        target: 300%
+        measurement: "Financial analysis"
+
+# ====================
+# CAUSAL PATHWAYS
+# ====================
+causal_pathways:
+  pathway_1:
+    name: "Detection Capability"
+    logic: |
+      Investment in SIEM + Training →
+      Faster threat detection →
+      Earlier response →
+      Reduced impact →
+      Business continuity
+
+  pathway_2:
+    name: "Response Readiness"
+    logic: |
+      Documented procedures + Training + Simulations →
+      Confident responders →
+      Effective incident handling →
+      Faster recovery →
+      Resilience
+
+  pathway_3:
+    name: "Cultural Change"
+    logic: |
+      Awareness training + Leadership support →
+      Security-conscious behavior →
+      Reduced human error →
+      Fewer incidents →
+      Lower risk
+
+# ====================
+# FEEDBACK LOOPS
+# ====================
+feedback_loops:
+  reinforcing_loops:
+    - loop: "Success breeds engagement"
+      description: |
+        Successful simulations →
+        Increased confidence →
+        Higher participation →
+        Better results →
+        More success
+
+  balancing_loops:
+    - loop: "Fatigue management"
+      description: |
+        More exercises →
+        Staff fatigue →
+        Reduced effectiveness →
+        Need to optimize frequency
+
+# ====================
+# SIMULATION SCENARIOS
+# ====================
+simulation_scenarios:
+  - scenario: "Ransomware attack simulation"
+    tests:
+      - Detection speed
+      - Response coordination
+      - Backup recovery
+      - Communication effectiveness
+
+  - scenario: "Data breach simulation"
+    tests:
+      - Incident classification
+      - Stakeholder notification
+      - Forensic investigation
+      - Regulatory reporting
+
+  - scenario: "DDoS attack simulation"
+    tests:
+      - Service continuity
+      - Mitigation effectiveness
+      - Customer communication
+      - Recovery procedures
+
+# ====================
+# SUCCESS CRITERIA
+# ====================
+success_criteria:
+  minimum_acceptable:
+    - 80% of training completed
+    - All critical systems have backup
+    - Incident response plan tested
+    - Mean time to detect < 12 hours
+
+  target:
+    - 95% of training completed
+    - 99% backup success rate
+    - Mean time to detect < 4 hours
+    - Zero successful attacks
+
+  stretch:
+    - 100% training completed
+    - 99.9% backup success rate
+    - Mean time to detect < 1 hour
+    - Proactive threat hunting
+
+metadata:
+  created_by: "CISO Office"
+  last_updated: "2025-10-12"
+  version: "1.0"
+  framework: "ISO 27001, NIST CSF"
+  organization_type: "enterprise"
+  industry: "multi-sector"

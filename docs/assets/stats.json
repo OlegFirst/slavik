@@ -1,0 +1,219 @@
+{
+  "generated_at": "2025-10-14T22:52:58.075872",
+  "services": {
+    "total": 62,
+    "platform": 46,
+    "applications": 16,
+    "by_category": {
+      "database_infrastructure": {
+        "count": 4,
+        "services": [
+          "postgresql",
+          "redis",
+          "qdrant",
+          "database_managers"
+        ]
+      },
+      "runtime_services": {
+        "count": 3,
+        "services": [
+          "service_discovery",
+          "realtime_websocket",
+          "message_queue"
+        ]
+      },
+      "gateway_layer": {
+        "count": 1,
+        "services": [
+          "api_gateway"
+        ]
+      },
+      "observability": {
+        "count": 2,
+        "services": [
+          "prometheus",
+          "grafana"
+        ]
+      },
+      "eventbus_core": {
+        "count": 1,
+        "services": [
+          "eventbus"
+        ]
+      },
+      "security": {
+        "count": 2,
+        "services": [
+          "auth_service",
+          "vault"
+        ]
+      },
+      "ai_office": {
+        "count": 6,
+        "services": [
+          "mio_manager",
+          "db_intelligence",
+          "analytics_specialist",
+          "devops_agent",
+          "project_agent",
+          "agent_router"
+        ]
+      },
+      "shared_libraries": {
+        "count": 2,
+        "services": [
+          "shared",
+          "tests"
+        ]
+      },
+      "platform_services": {
+        "count": 11,
+        "services": [
+          "planning_service",
+          "bia_service",
+          "learning_service",
+          "validation_service",
+          "plans_service",
+          "documents_service",
+          "governance_service",
+          "compliance_service",
+          "risk_service",
+          "response_service",
+          "simulation_service"
+        ]
+      },
+      "intelligent_core": {
+        "count": 12,
+        "services": [
+          "workflow_intelligence",
+          "ai_foundation",
+          "expertise_center",
+          "community_intelligence",
+          "workflow_engine",
+          "ai_orchestration",
+          "event_intelligence",
+          "predictive",
+          "coordination_center",
+          "collective",
+          "ai_workflow_optimizer",
+          "system_bcm_service"
+        ]
+      },
+      "interface_layer": {
+        "count": 3,
+        "services": [
+          "mcp_interface",
+          "admin_panel",
+          "platform_ui"
+        ]
+      },
+      "catalog_metadata": {
+        "count": 12,
+        "services": [
+          "total_services",
+          "active_services",
+          "planned_services",
+          "reserved_services",
+          "deprecated_services",
+          "categories",
+          "last_updated",
+          "generated_by",
+          "version",
+          "format",
+          "completion_status",
+          "changelog"
+        ]
+      },
+      "_merge_info": {
+        "count": 3,
+        "services": [
+          "merged_at",
+          "services_updated",
+          "source"
+        ]
+      }
+    }
+  },
+  "subsystems": {
+    "total": 12,
+    "list": [
+      "Database Infrastructure",
+      "Runtime Services",
+      "Gateway Layer",
+      "Observability",
+      "EventBus Core",
+      "Security",
+      "AI Office Infrastructure",
+      "Shared Libraries",
+      "Platform Services",
+      "Intelligent Core",
+      "User Applications",
+      "Interface Layer"
+    ]
+  },
+  "systems": {
+    "total": 19,
+    "list": [
+      "Система запуска и оркестрации",
+      "Система отказоустойчивости",
+      "Система безопасности",
+      "Система мониторинга и наблюдаемости",
+      "Система аналитики",
+      "Система хранения данных",
+      "API и коммуникации",
+      "Система обучения и знаний",
+      "Система предсказаний",
+      "AI Оркестрация",
+      "Коллективный AI",
+      "Система эволюции",
+      "BCM Business Logic",
+      "Workflow Management",
+      "Event-Driven Architecture",
+      "AI Foundation Infrastructure",
+      "DevOps & Infrastructure",
+      "Testing & Validation",
+      "User Interface Layer"
+    ]
+  },
+  "ports": {
+    "postgresql": 5432,
+    "redis": 6379,
+    "qdrant": 443,
+    "service_discovery": 8500,
+    "realtime_websocket": 8050,
+    "message_queue": 5672,
+    "api_gateway": 8000,
+    "prometheus": 9090,
+    "grafana": 3000,
+    "auth_service": 8001,
+    "vault": 8200,
+    "mio_manager": 8046,
+    "db_intelligence": 8051,
+    "analytics_specialist": 8056,
+    "devops_agent": 8058,
+    "project_agent": 8060,
+    "agent_router": 8057,
+    "planning_service": 8011,
+    "bia_service": 8012,
+    "learning_service": 8021,
+    "validation_service": 8022,
+    "plans_service": 8023,
+    "documents_service": 8024,
+    "governance_service": 8025,
+    "compliance_service": 8014,
+    "risk_service": 8026,
+    "response_service": 8027,
+    "simulation_service": 8095,
+    "workflow_intelligence": 8037,
+    "ai_foundation": 8040,
+    "community_intelligence": 8030,
+    "workflow_engine": 8030,
+    "ai_orchestration": 8002,
+    "event_intelligence": 8032,
+    "predictive": 8031,
+    "coordination_center": 8033,
+    "collective": 8034,
+    "ai_workflow_optimizer": 8038,
+    "system_bcm_service": 8050
+  }
+}

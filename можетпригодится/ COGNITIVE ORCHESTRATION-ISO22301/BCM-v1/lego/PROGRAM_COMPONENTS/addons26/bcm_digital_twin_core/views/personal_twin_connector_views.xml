@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Personal Twin Connector Tree View -->
+        <record id="view_personal_twin_connector_tree" model="ir.ui.view">
+            <field name="name">Personal Twin Connector Tree</field>
+            <field name="model">bcm.personal.twin.connector</field>
+            <field name="arch" type="xml">
+                <tree string="Personal Twin Connectors" decoration-danger="not is_active" decoration-success="is_active and connection_count > 0">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="digital_twin_id"/>
+                    <field name="is_active"/>
+                    <field name="connection_count"/>
+                    <field name="update_frequency"/>
+                    <field name="last_activity"/>
+                    <field name="total_sessions"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Personal Twin Connector Form View -->
+        <record id="view_personal_twin_connector_form" model="ir.ui.view">
+            <field name="name">Personal Twin Connector Form</field>
+            <field name="model">bcm.personal.twin.connector</field>
+            <field name="arch" type="xml">
+                <form string="Personal Twin Connector">
+                    <header>
+                        <button name="send_real_time_update" string="Send Test Update" type="object"
+                                class="oe_highlight" attrs="{'invisible': [('is_active', '=', False)]}"/>
+                        <button name="cleanup_inactive_sessions" string="Cleanup Sessions" type="object"/>
+                        <field name="is_active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_sessions" icon="fa-users">
+                                <field string="Active Connections" name="connection_count" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_metrics" icon="fa-line-chart">
+                                <field string="Total Sessions" name="total_sessions" widget="statinfo"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group name="basic_info">
+                                <field name="user_id" options="{'no_create': True}"/>
+                                <field name="digital_twin_id" options="{'no_create': True}"/>
+                                <field name="update_frequency"/>
+                                <field name="last_activity"/>
+                                <field name="last_update_sent"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Active Sessions" name="active_sessions">
+                                <group>
+                                    <field name="active_sessions" widget="json_widget" readonly="1"/>
+                                </group>
+                            </page>
+
+                            <page string="Widget Configurations" name="widget_configs">
+                                <group>
+                                    <field name="widget_configs" widget="json_widget"/>
+                                </group>
+                            </page>
+
+                            <page string="Dashboard Layouts" name="dashboard_layouts">
+                                <group>
+                                    <field name="dashboard_layouts" widget="json_widget"/>
+                                </group>
+                            </page>
+
+                            <page string="WebSocket Channels" name="websocket_channels">
+                                <group>
+                                    <field name="websocket_channels" widget="json_widget" readonly="1"/>
+                                </group>
+                            </page>
+
+                            <page string="Notification Settings" name="notification_settings">
+                                <group>
+                                    <field name="notification_settings" widget="json_widget"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Personal Twin Connector Search View -->
+        <record id="view_personal_twin_connector_search" model="ir.ui.view">
+            <field name="name">Personal Twin Connector Search</field>
+            <field name="model">bcm.personal.twin.connector</field>
+            <field name="arch" type="xml">
+                <search string="Search Personal Twin Connectors">
+                    <field name="name" filter_domain="[('name', 'ilike', self)]"/>
+                    <field name="user_id"/>
+                    <field name="digital_twin_id"/>
+
+                    <filter string="Active" name="filter_active" domain="[('is_active', '=', True)]"/>
+                    <filter string="Inactive" name="filter_inactive" domain="[('is_active', '=', False)]"/>
+                    <filter string="With Connections" name="filter_connected" domain="[('connection_count', '>', 0)]"/>
+                    <filter string="No Connections" name="filter_disconnected" domain="[('connection_count', '=', 0)]"/>
+
+                    <separator/>
+                    <filter string="Real-time Updates" name="filter_realtime" domain="[('update_frequency', '=', 'realtime')]"/>
+                    <filter string="High Frequency" name="filter_high_freq" domain="[('update_frequency', '=', 'high')]"/>
+                    <filter string="Medium Frequency" name="filter_medium_freq" domain="[('update_frequency', '=', 'medium')]"/>
+                    <filter string="Low Frequency" name="filter_low_freq" domain="[('update_frequency', '=', 'low')]"/>
+
+                    <separator/>
+                    <filter string="Recent Activity" name="filter_recent"
+                            domain="[('last_activity', '>=', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="This Week" name="filter_this_week"
+                            domain="[('last_activity', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Digital Twin" name="group_by_digital_twin" context="{'group_by': 'digital_twin_id'}"/>
+                        <filter string="Update Frequency" name="group_by_frequency" context="{'group_by': 'update_frequency'}"/>
+                        <filter string="Active Status" name="group_by_active" context="{'group_by': 'is_active'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Personal Twin Connector Kanban View -->
+        <record id="view_personal_twin_connector_kanban" model="ir.ui.view">
+            <field name="name">Personal Twin Connector Kanban</field>
+            <field name="model">bcm.personal.twin.connector</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="is_active" class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="digital_twin_id"/>
+                    <field name="is_active"/>
+                    <field name="connection_count"/>
+                    <field name="update_frequency"/>
+                    <field name="last_activity"/>
+                    <field name="total_sessions"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click #{!record.is_active.raw_value ? 'oe_kanban_color_9' : ''}">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <t t-esc="record.user_id.value"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#" data-toggle="dropdown" role="button" aria-label="Dropdown manage menu" title="Dropdown manage menu">
+                                            <i class="fa fa-ellipsis-v" role="img" aria-label="Manage menu"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="o_kanban_record_body">
+                                    <div class="o_kanban_tags">
+                                        <span t-if="record.digital_twin_id.value" class="badge badge-pill badge-info">
+                                            <i class="fa fa-cube"/> <t t-esc="record.digital_twin_id.value"/>
+                                        </span>
+                                        <span t-attf-class="badge badge-pill #{record.is_active.raw_value ? 'badge-success' : 'badge-secondary'}">
+                                            <i t-attf-class="fa #{record.is_active.raw_value ? 'fa-check-circle' : 'fa-times-circle'}"/>
+                                            <t t-if="record.is_active.raw_value">Active</t>
+                                            <t t-if="!record.is_active.raw_value">Inactive</t>
+                                        </span>
+                                        <span t-if="record.connection_count.raw_value > 0" class="badge badge-pill badge-primary">
+                                            <i class="fa fa-users"/> <t t-esc="record.connection_count.value"/> connections
+                                        </span>
+                                    </div>
+
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <span class="badge badge-light">
+                                                <i class="fa fa-clock-o"/> <t t-esc="record.update_frequency.value"/>
+                                            </span>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <span class="badge badge-light">
+                                                <i class="fa fa-history"/> <t t-esc="record.total_sessions.value"/> sessions
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Personal Twin Connector Action -->
+        <record id="action_personal_twin_connector" model="ir.actions.act_window">
+            <field name="name">Personal Twin Connectors</field>
+            <field name="res_model">bcm.personal.twin.connector</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Personal Twin Connector!
+                </p>
+                <p>
+                    Personal Twin Connectors manage the integration between users and their digital twins
+                    across multiple frontend interfaces including Web Portal v2, Admin Panel, and main Odoo.
+                </p>
+                <p>
+                    They provide real-time updates, customizable dashboards, and seamless multi-portal support
+                    for enhanced user experience and productivity.
+                </p>
+            </field>
+        </record>
+
+        <!-- Personal Twin Connector Menu -->
+        <menuitem id="menu_personal_twin_connector"
+                  name="Personal Twin Connectors"
+                  parent="menu_digital_twin_core"
+                  action="action_personal_twin_connector"
+                  sequence="15"/>
+
+        <!-- My Personal Twin Action (for users to access their own connector) -->
+        <record id="action_my_personal_twin_connector" model="ir.actions.act_window">
+            <field name="name">My Personal Twin</field>
+            <field name="res_model">bcm.personal.twin.connector</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="context">{'default_user_id': uid, 'search_default_filter_active': 1}</field>
+            <field name="limit">1</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Set up your Personal Digital Twin!
+                </p>
+                <p>
+                    Your Personal Digital Twin provides a personalized workspace with real-time updates,
+                    customizable dashboards, and seamless integration across all BCM platform interfaces.
+                </p>
+                <p>
+                    Configure your preferences, widget layouts, and notification settings to optimize
+                    your business continuity management experience.
+                </p>
+            </field>
+        </record>
+
+        <!-- My Personal Twin Menu (in user preferences or main menu) -->
+        <menuitem id="menu_my_personal_twin_connector"
+                  name="My Personal Twin"
+                  parent="menu_digital_twin_core"
+                  action="action_my_personal_twin_connector"
+                  sequence="5"/>
+
+    </data>
+</odoo>

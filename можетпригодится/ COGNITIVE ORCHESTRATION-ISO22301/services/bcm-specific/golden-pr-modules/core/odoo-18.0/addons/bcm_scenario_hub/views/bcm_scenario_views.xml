@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Scenario Tree View -->
+        <record id="view_bcm_scenario_tree" model="ir.ui.view">
+            <field name="name">bcm.scenario.tree</field>
+            <field name="model">bcm.scenario</field>
+            <field name="arch" type="xml">
+                <list string="Scenarios" decoration-success="status == 'published'" 
+                      decoration-warning="status == 'pending_review'" 
+                      decoration-muted="status == 'draft'">
+                    <field name="title"/>
+                    <field name="author_user_id"/>
+                    <field name="domains" widget="many2many_tags"/>
+                    <field name="tags" widget="many2many_tags"/>
+                    <field name="visibility"/>
+                    <field name="status"/>
+                    <field name="avg_rating" widget="priority" readonly="1"/>
+                    <field name="application_count"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Scenario Form View -->
+        <record id="view_bcm_scenario_form" model="ir.ui.view">
+            <field name="name">bcm.scenario.form</field>
+            <field name="model">bcm.scenario</field>
+            <field name="arch" type="xml">
+                <form string="Scenario">
+                    <header>
+                        <button name="action_submit_for_review" type="object" string="Submit for Review" 
+                                class="btn-primary" invisible="status != 'draft'"/>
+                        <button name="action_approve" type="object" string="Approve" 
+                                class="btn-success" invisible="status != 'pending_review'" 
+                                groups="bcm_scenario_hub.group_scenario_reviewer"/>
+                        <button name="action_reject_wizard" type="object" string="Reject" 
+                                class="btn-danger" invisible="status != 'pending_review'"
+                                groups="bcm_scenario_hub.group_scenario_reviewer"/>
+                        <button name="action_fork" type="object" string="🍴 Fork Scenario" 
+                                class="btn-outline-primary" invisible="status != 'published'"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,pending_review,published"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-star" invisible="status != 'published'">
+                                <field name="rating_count" widget="statinfo" string="Ratings"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-download" invisible="status != 'published'">
+                                <field name="application_count" widget="statinfo" string="Downloads"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="title" placeholder="Scenario Title"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="author_user_id" readonly="1"/>
+                                <field name="version"/>
+                                <field name="visibility" required="1"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="domains" widget="many2many_tags"/>
+                                <field name="tags" widget="many2many_tags"/>
+                                <field name="level"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Description">
+                                <field name="content_md" widget="html" placeholder="Detailed scenario description..."/>
+                            </page>
+                            
+                            <page string="Content">
+                                <group>
+                                </group>
+                                <separator string="Scenario Content"/>
+                                <field name="content_md" widget="html" placeholder="Scenario steps and procedures..."/>
+                            </page>
+                            
+                            <page string="Metadata">
+                                <group>
+                                    <group>
+                                        <field name="avg_rating" widget="priority" readonly="1"/>
+                                        <field name="application_count" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="create_date" readonly="1"/>
+                                        <field name="write_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Reviews" invisible="status not in ['pending_review', 'published', 'rejected']">
+                                <field name="review_ids" readonly="1" context="{'default_scenario_id': id}">
+                                    <list>
+                                        <field name="reviewer_id"/>
+                                        <field name="decision"/>
+                                        <field name="content_quality"/>
+                                        <field name="technical_accuracy"/>
+                                        <field name="compliance_iso22301"/>
+                                        <field name="created_at"/>
+                                    </list>
+                                </field>
+                            </page>
+                            
+                            <page string="Ratings" invisible="status != 'published'">
+                                <field name="rating_ids" readonly="1">
+                                    <list>
+                                        <field name="user_id"/>
+                                        <field name="stars"/>
+                                        <field name="comment"/>
+                                        <field name="create_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Scenario Kanban View -->
+        <record id="view_bcm_scenario_kanban" model="ir.ui.view">
+            <field name="name">bcm.scenario.kanban</field>
+            <field name="model">bcm.scenario</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" quick_create="false" group_create="false">
+                    <field name="id"/>
+                    <field name="title"/>
+                    <field name="author_user_id"/>
+                    <field name="status"/>
+                    <field name="avg_rating"/>
+                    <field name="application_count"/>
+                    <field name="domains"/>
+                    <field name="tags"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('res.users', 'image_128', record.author_user_id.raw_value)" 
+                                         t-att-title="record.author_user_id.value" t-att-alt="record.author_user_id.value"/>
+                                </div>
+                                
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="title"/>
+                                            </strong>
+                                        </div>
+                                        <div class="o_kanban_manage_button_section">
+                                            <a class="o_kanban_manage_toggle_button" href="#">
+                                                <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="o_kanban_record_body">
+                                        <field name="domains" widget="many2many_tags"/>
+                                        <field name="tags" widget="many2many_tags"/>
+                                    </div>
+                                    
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <span class="badge" t-att-class="record.status.raw_value == 'published' ? 'badge-success' : record.status.raw_value == 'pending_review' ? 'badge-warning' : 'badge-secondary'">
+                                                <field name="status"/>
+                                            </span>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="avg_rating" widget="priority" readonly="1"/>
+                                            <span class="text-muted ml-2">
+                                                <i class="fa fa-download"/> <field name="application_count"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Scenario Search View -->
+        <record id="view_bcm_scenario_search" model="ir.ui.view">
+            <field name="name">bcm.scenario.search</field>
+            <field name="model">bcm.scenario</field>
+            <field name="arch" type="xml">
+                <search string="Search Scenarios">
+                    <field name="title" string="Title"/>
+                    <field name="author_user_id" string="Author"/>
+                    <field name="domains"/>
+                    <field name="tags"/>
+                    <field name="content_md"/>
+                    
+                    <filter string="My Scenarios" name="my_scenarios" domain="[('author_user_id', '=', uid)]"/>
+                    <filter string="Published" name="published" domain="[('status', '=', 'published')]"/>
+                    <filter string="Pending Review" name="pending_review" domain="[('status', '=', 'pending_review')]"/>
+                    <filter string="Draft" name="draft" domain="[('status', '=', 'draft')]"/>
+                    
+                    <separator/>
+                    <filter string="Public" name="public" domain="[('visibility', '=', 'public')]"/>
+                    <filter string="Client Only" name="client_only" domain="[('visibility', '=', 'client_only')]"/>
+                    <filter string="Private" name="private" domain="[('visibility', '=', 'private')]"/>
+                    
+                    <separator/>
+                    <filter string="High Rated (4+ stars)" name="high_rated" domain="[('avg_rating', '>=', 4.0)]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                        <filter string="Author" name="group_author" context="{'group_by': 'author_user_id'}"/>
+                        <filter string="Visibility" name="group_visibility" context="{'group_by': 'visibility'}"/>
+                        <filter string="Domain" name="group_domain" context="{'group_by': 'domains'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_bcm_scenario" model="ir.actions.act_window">
+            <field name="name">Scenarios</field>
+            <field name="res_model">bcm.scenario</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="context">{'search_default_published': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No scenarios found. Let's create one!
+                </p>
+                <p>
+                    The Scenario Hub allows you to create, share, and collaborate on BCM scenarios.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bcm_scenario_my" model="ir.actions.act_window">
+            <field name="name">My Scenarios</field>
+            <field name="res_model">bcm.scenario</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_my_scenarios': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    You haven't created any scenarios yet.
+                </p>
+                <p>
+                    Click "Create" to start building your first BCM scenario!
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bcm_scenario_moderation" model="ir.actions.act_window">
+            <field name="name">Scenario Moderation</field>
+            <field name="res_model">bcm.scenario</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_pending_review': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No scenarios pending review.
+                </p>
+                <p>
+                    All submitted scenarios have been processed!
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

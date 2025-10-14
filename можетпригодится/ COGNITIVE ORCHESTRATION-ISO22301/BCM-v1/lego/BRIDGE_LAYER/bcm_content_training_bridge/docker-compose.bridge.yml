@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Bridge API Gateway Service
+  bcm_bridge_gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    container_name: bcm_bridge_gateway
+    ports:
+      - "8096:8096"
+    environment:
+      - SERVICE_NAME=bcm_bridge_gateway
+      - ODOO_URL=http://odoo:8069
+      - ODOO_DB=${ODOO_DB:-bcm_db}
+      - SCENARIO_ORCHESTRATOR_URL=http://scenario_orchestrator:8085
+      - EXERCISE_SIMULATOR_URL=http://exercise_simulators:8094
+      - DIGITAL_TWIN_URL=http://digital-twin-platform:3000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - bcm_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8096/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bridge.rule=PathPrefix(`/api/bridge`)"
+      - "traefik.http.services.bridge.loadbalancer.server.port=8096"
+
+  # Bridge Learning Analytics Service
+  bcm_learning_analytics:
+    build:
+      context: .
+      dockerfile: Dockerfile.analytics
+    container_name: bcm_learning_analytics
+    ports:
+      - "8097:8097"
+    environment:
+      - SERVICE_NAME=bcm_learning_analytics
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=${POSTGRES_DB:-bcm_db}
+      - POSTGRES_USER=${POSTGRES_USER:-bcm_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-bcm_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bcm_network
+    volumes:
+      - learning_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8097/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Bridge WebSocket Service for real-time updates
+  bcm_bridge_websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile.websocket
+    container_name: bcm_bridge_websocket
+    ports:
+      - "8098:8098"
+    environment:
+      - SERVICE_NAME=bcm_bridge_websocket
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ODOO_URL=http://odoo:8069
+      - JWT_SECRET=${JWT_SECRET:-bcm_bridge_secret}
+    depends_on:
+      - redis
+    networks:
+      - bcm_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8098/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  bcm_network:
+    external: true
+    name: iso-22301_bcm_network
+
+volumes:
+  learning_data:
+    name: bcm_learning_data

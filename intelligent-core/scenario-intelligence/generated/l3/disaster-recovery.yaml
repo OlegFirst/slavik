@@ -1,0 +1,875 @@
+meta:
+  id: l3-reliability-system-disaster-recovery
+  name: L3 Reliability System Test Scenarios
+  level: 3
+  category: reliability
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - Reliability & Resilience (system)
+  - Circuit Breaker Framework (system)
+  - Backup & Recovery (system)
+  - Health Monitoring (system)
+  source_item: disaster-recovery
+  generated_at: '2025-10-14T08:09:28.547265'
+description: 'Specialized L3 template for Reliability and Resilience systems testing.
+
+
+  Reliability systems ensure platform stability and availability through:
+
+  - Circuit breaker patterns for fault isolation
+
+  - Automatic retry strategies with exponential backoff
+
+  - Health monitoring and proactive recovery
+
+  - Backup and disaster recovery workflows
+
+  - Chaos engineering and fault injection
+
+  - SLA monitoring and alerting
+
+
+  This template generates comprehensive reliability test scenarios that validate
+
+  fault tolerance, recovery mechanisms, and system resilience under adverse conditions.
+
+  '
+systems_involved:
+- disaster-recovery
+- Service Discovery
+- EventBus
+- Health Monitor
+- Infrastructure Coordinator
+- Observability Stack
+test_scenarios:
+- name: Circuit Breaker Pattern Validation
+  scenario_id: l3-rel-circuit-breaker
+  description: Test circuit breaker behavior across failure modes
+  circuit_states:
+  - state: closed
+    description: Normal operation, requests pass through
+    tests:
+    - name: successful_requests
+      requests: 100
+      failure_rate: 0.0
+      expected:
+        state: closed
+        requests_allowed: 100
+        requests_rejected: 0
+    - name: occasional_failures
+      requests: 100
+      failure_rate: 0.03
+      threshold: 0.05
+      expected:
+        state: closed
+        requests_allowed: 100
+  - state: open
+    description: Failure threshold exceeded, fast-fail active
+    tests:
+    - name: exceed_failure_threshold
+      requests: 100
+      failure_rate: 0.1
+      threshold: 0.05
+      expected:
+        state: open
+        state_change_after_requests: 50
+        requests_rejected_fast: 50
+        error_response: service_unavailable
+    - name: fast_fail_active
+      circuit_state: open
+      requests: 50
+      expected:
+        requests_rejected: 50
+        rejection_latency_ms: < 1
+        error_response: circuit_breaker_open
+  - state: half_open
+    description: Testing if service recovered
+    tests:
+    - name: recovery_probe
+      circuit_state: open
+      wait_timeout: 30s
+      probe_requests: 5
+      success_rate: 1.0
+      expected:
+        state_transition: half_open -> closed
+        full_traffic_resumed: true
+    - name: recovery_failed
+      circuit_state: open
+      wait_timeout: 30s
+      probe_requests: 5
+      success_rate: 0.6
+      threshold: 0.8
+      expected:
+        state_transition: half_open -> open
+        timeout_reset: 30s
+  advanced_patterns:
+  - pattern: bulkhead_isolation
+    description: Isolate failures to prevent cascading
+    test:
+      thread_pools:
+      - name: critical_service_pool
+        size: 10
+        max_queue: 20
+      - name: non_critical_pool
+        size: 5
+        max_queue: 10
+      failure_scenario:
+        failing_service: non_critical
+        requests_to_failing: 100
+        requests_to_critical: 50
+      expected:
+        critical_service_unaffected: true
+        non_critical_pool_saturated: true
+        critical_pool_healthy: true
+  - pattern: fallback_mechanism
+    description: Graceful degradation with fallback
+    test:
+      primary_service: recommendation-engine
+      fallback: static_recommendations
+      primary_status: circuit_open
+      expected:
+        fallback_activated: true
+        response_returned: true
+        response_quality: degraded
+        user_experience: maintained
+  monitoring:
+  - metric: circuit_breaker_state
+    type: gauge
+    labels:
+    - service
+    - circuit
+    values:
+      closed: 0
+      open: 1
+      half_open: 0.5
+  - metric: circuit_breaker_transitions_total
+    type: counter
+    labels:
+    - service
+    - from_state
+    - to_state
+  - metric: requests_rejected_by_circuit_breaker_total
+    type: counter
+    labels:
+    - service
+    - reason
+- name: Retry Strategy and Backoff
+  scenario_id: l3-rel-retry-strategy
+  description: Test retry logic with exponential backoff and jitter
+  retry_policies:
+  - policy: exponential_backoff
+    configuration:
+      initial_delay: 100ms
+      max_delay: 30s
+      multiplier: 2.0
+      max_retries: 5
+    test_scenarios:
+    - name: transient_failure_recovery
+      failures:
+      - 1
+      - 2
+      expected:
+        total_attempts: 3
+        delays:
+        - 100ms
+        - 200ms
+        final_result: success
+        total_time: ~300ms
+    - name: permanent_failure
+      failures:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      expected:
+        total_attempts: 6
+        delays:
+        - 100ms
+        - 200ms
+        - 400ms
+        - 800ms
+        - 1600ms
+        final_result: failure
+        total_time: ~3100ms
+        error: max_retries_exceeded
+  - policy: exponential_backoff_with_jitter
+    configuration:
+      initial_delay: 100ms
+      max_delay: 10s
+      multiplier: 2.0
+      jitter: 0.3
+      max_retries: 3
+    test_scenarios:
+    - name: jitter_prevents_thundering_herd
+      concurrent_failures: 100
+      expected:
+        retry_times_distributed: true
+        peak_retry_load_reduced: true
+        jitter_range: 70ms-130ms
+  - policy: idempotency_awareness
+    test_scenarios:
+    - name: idempotent_operation
+      operation: GET
+      idempotent: true
+      failures:
+      - 1
+      expected:
+        retry_attempted: true
+        safe_to_retry: true
+    - name: non_idempotent_operation
+      operation: POST
+      idempotent: false
+      failures:
+      - 1
+      expected:
+        retry_attempted: false
+        error: non_idempotent_failure
+        manual_intervention_required: true
+    - name: idempotency_key_present
+      operation: POST
+      idempotency_key: uuid-12345
+      failures:
+      - 1
+      expected:
+        retry_attempted: true
+        safe_to_retry: true
+        duplicate_detection: true
+  retry_scenarios:
+  - scenario: database_connection_timeout
+    error_type: connection_timeout
+    retryable: true
+    max_retries: 3
+    expected_behavior: retry_with_backoff
+  - scenario: database_deadlock
+    error_type: deadlock_detected
+    retryable: true
+    max_retries: 5
+    expected_behavior: retry_immediately
+  - scenario: authentication_failure
+    error_type: 401_unauthorized
+    retryable: false
+    expected_behavior: fail_immediately
+  - scenario: rate_limit_exceeded
+    error_type: 429_too_many_requests
+    retry_after_header: 60s
+    retryable: true
+    expected_behavior: respect_retry_after_header
+  monitoring:
+  - metric: retries_total
+    labels:
+    - service
+    - operation
+    - attempt
+  - metric: retry_backoff_duration_seconds
+    labels:
+    - service
+    - attempt
+  - metric: permanent_failures_total
+    labels:
+    - service
+    - error_type
+- name: Health Monitoring and Recovery
+  scenario_id: l3-rel-health-monitoring
+  description: Test health check systems and automatic recovery
+  health_check_types:
+  - type: liveness_probe
+    description: Is the service running?
+    endpoint: /health/live
+    interval: 10s
+    timeout: 5s
+    tests:
+    - name: healthy_service
+      service_state: running
+      expected:
+        http_status: 200
+        response:
+          status: UP
+        action: none
+    - name: service_deadlock
+      service_state: deadlocked
+      consecutive_failures: 3
+      expected:
+        http_status: timeout
+        action: restart_service
+        recovery_time: < 30s
+    - name: service_crashed
+      service_state: crashed
+      expected:
+        http_status: connection_refused
+        action: restart_service
+        alert: critical
+  - type: readiness_probe
+    description: Is the service ready to accept traffic?
+    endpoint: /health/ready
+    interval: 5s
+    timeout: 3s
+    tests:
+    - name: fully_ready
+      dependencies:
+        database: connected
+        cache: connected
+        downstream_services: available
+      expected:
+        http_status: 200
+        response:
+          status: READY
+        traffic_routing: enabled
+    - name: dependency_unavailable
+      dependencies:
+        database: disconnected
+      expected:
+        http_status: 503
+        response:
+          status: NOT_READY
+          reason: database_unavailable
+        traffic_routing: disabled
+        retry_logic: attempt_reconnection
+    - name: startup_not_complete
+      service_state: starting
+      warm_up_time: 15s
+      elapsed_time: 5s
+      expected:
+        http_status: 503
+        response:
+          status: NOT_READY
+          reason: warming_up
+        traffic_routing: disabled
+  - type: startup_probe
+    description: Has the service finished starting?
+    endpoint: /health/startup
+    interval: 10s
+    timeout: 5s
+    failure_threshold: 30
+    tests:
+    - name: slow_startup
+      startup_time: 120s
+      expected:
+        probes_failed: 12
+        startup_completed: true
+        no_restart_triggered: true
+    - name: startup_failure
+      startup_time: infinity
+      expected:
+        probes_failed: 30
+        action: kill_and_restart
+        alert: startup_failure
+  health_check_aggregation:
+  - name: composite_health
+    components:
+    - component: database
+      weight: 10
+      status: UP
+    - component: cache
+      weight: 5
+      status: UP
+    - component: external_api
+      weight: 2
+      status: DOWN
+    calculation: weighted_average
+    expected:
+      overall_health: 0.88
+      status: DEGRADED
+      traffic_allowed: true
+  automatic_recovery:
+  - scenario: memory_leak_detection
+    symptoms:
+      memory_usage: increasing
+      rate: 100MB/hour
+      threshold: 2GB
+    detection_time: 18h
+    expected:
+      alert_triggered: true
+      action: scheduled_restart
+      restart_strategy: rolling
+      data_loss: false
+  - scenario: cpu_thrashing
+    symptoms:
+      cpu_usage: 100%
+      duration: 5m
+      request_latency: 10x_normal
+    expected:
+      action: restart_service
+      traffic_rerouted: true
+      incident_created: true
+  - scenario: dependency_recovery
+    symptoms:
+      database: reconnected
+      service_state: not_ready
+    expected:
+      action: trigger_readiness_recheck
+      traffic_restored_when_ready: true
+  monitoring:
+  - metric: health_check_status
+    labels:
+    - service
+    - probe_type
+    values:
+      up: 1
+      down: 0
+      degraded: 0.5
+  - metric: health_check_duration_seconds
+    labels:
+    - service
+    - probe_type
+  - metric: service_restarts_total
+    labels:
+    - service
+    - reason
+- name: Backup and Disaster Recovery
+  scenario_id: l3-rel-backup-recovery
+  description: Test backup strategies and disaster recovery procedures
+  backup_strategies:
+  - type: continuous_backup
+    target: PostgreSQL
+    method: WAL_archiving
+    frequency: real-time
+    retention: 30_days
+    tests:
+    - name: point_in_time_recovery
+      backup_state: continuous
+      failure_time: '2025-01-15T14:30:00Z'
+      recovery_target: '2025-01-15T14:29:00Z'
+      expected:
+        recovery_possible: true
+        data_loss: < 60s
+        rto: < 15m
+  - type: snapshot_backup
+    target: Redis
+    method: RDB_snapshots
+    frequency: 1h
+    retention: 7_days
+    tests:
+    - name: restore_from_snapshot
+      snapshot_age: 2h
+      expected:
+        recovery_possible: true
+        data_loss: up_to_2h
+        rto: < 5m
+  - type: application_backup
+    target: Qdrant
+    method: collection_snapshots
+    frequency: 6h
+    retention: 14_days
+    tests:
+    - name: collection_restore
+      snapshot_age: 12h
+      expected:
+        recovery_possible: true
+        embeddings_intact: true
+        rto: < 30m
+  disaster_recovery_scenarios:
+  - disaster: complete_database_loss
+    impact:
+      data_loss: all_primary_data
+      services_affected: 30
+    recovery_procedure:
+    - step: activate_disaster_recovery_plan
+      duration: 5m
+      actions:
+      - notify_incident_team
+      - assess_backup_status
+      - prepare_recovery_environment
+    - step: restore_from_backup
+      duration: 30m
+      actions:
+      - provision_new_database_instance
+      - restore_latest_full_backup
+      - apply_incremental_backups
+      - verify_data_integrity
+    - step: reconnect_services
+      duration: 15m
+      actions:
+      - update_connection_strings
+      - restart_dependent_services
+      - verify_service_health
+    - step: validate_recovery
+      duration: 10m
+      actions:
+      - run_data_integrity_checks
+      - verify_business_operations
+      - monitor_for_issues
+    expected:
+      total_rto: 60m
+      rpo: < 5m
+      services_restored: 30
+      data_integrity: verified
+  - disaster: datacenter_failure
+    impact:
+      availability_zone: down
+      services_affected: all
+    recovery_procedure:
+    - step: failover_to_secondary_region
+      duration: 2m
+      actions:
+      - update_dns_records
+      - activate_standby_replicas
+      - redirect_traffic
+    expected:
+      total_rto: 5m
+      rpo: < 1m
+      automatic_failover: true
+  - disaster: ransomware_attack
+    impact:
+      data_encrypted: true
+      backups_checked: not_affected
+    recovery_procedure:
+    - step: isolate_infected_systems
+      duration: 10m
+    - step: restore_from_clean_backups
+      duration: 45m
+      backup_source: 30_days_ago
+    - step: rebuild_affected_systems
+      duration: 120m
+    expected:
+      total_rto: 3h
+      rpo: 30_days
+      no_ransom_paid: true
+  backup_validation:
+  - validation: restore_testing
+    frequency: weekly
+    procedure:
+    - restore_to_test_environment
+    - run_integrity_checks
+    - verify_application_functionality
+    expected:
+      success_rate: 100%
+      test_duration: < 30m
+  - validation: backup_integrity_monitoring
+    frequency: daily
+    checks:
+    - backup_completion_status
+    - backup_size_validation
+    - corruption_detection
+    expected:
+      corrupt_backups: 0
+      failed_backups: 0
+  monitoring:
+  - metric: backup_success_total
+    labels:
+    - target
+    - type
+  - metric: backup_duration_seconds
+    labels:
+    - target
+    - type
+  - metric: recovery_time_seconds
+    labels:
+    - disaster_type
+  - metric: last_successful_backup_timestamp
+    labels:
+    - target
+- name: Chaos Engineering
+  scenario_id: l3-rel-chaos-engineering
+  description: Test system resilience through controlled chaos experiments
+  chaos_experiments:
+  - experiment: service_failure
+    description: Randomly kill services to test recovery
+    target: random_service
+    blast_radius: single_instance
+    duration: 5m
+    expected:
+    - service_discovery_updates: true
+    - traffic_reroutes_to_healthy_instances: true
+    - no_user_facing_errors: true
+    - service_auto_restarts: true
+    - recovery_time: < 30s
+  - experiment: network_latency
+    description: Inject network latency between services
+    target: service_mesh
+    latency_range: 100ms-500ms
+    duration: 10m
+    expected:
+    - timeouts_handled_gracefully: true
+    - circuit_breakers_may_activate: true
+    - degraded_performance_acceptable: true
+    - no_cascading_failures: true
+  - experiment: dependency_failure
+    description: Simulate downstream service failure
+    target: database
+    failure_type: complete_unavailability
+    duration: 3m
+    expected:
+    - connection_pool_exhausted: true
+    - circuit_breaker_opens: true
+    - fallback_mechanisms_activated: true
+    - error_messages_user_friendly: true
+    - recovery_automatic: true
+  - experiment: resource_exhaustion
+    description: Consume CPU/memory to simulate resource pressure
+    target: analytics_service
+    resources:
+      cpu: 95%
+      memory: 90%
+    duration: 5m
+    expected:
+    - performance_degraded: true
+    - service_remains_responsive: true
+    - autoscaling_triggers: true
+    - no_oom_kills: true
+  - experiment: cascading_failure
+    description: Test failure propagation limits
+    trigger_service: recommendation_engine
+    failure_type: complete_failure
+    expected:
+    - failure_contained_to_subsystem: true
+    - core_services_unaffected: true
+    - bulkhead_pattern_effective: true
+    - platform_remains_operational: true
+  - experiment: split_brain
+    description: Simulate network partition
+    partition:
+      group_a:
+      - service1
+      - service2
+      group_b:
+      - service3
+      - service4
+    duration: 2m
+    expected:
+    - consensus_protocol_prevents_split: true
+    - leader_election_successful: true
+    - data_consistency_maintained: true
+    - reconciliation_after_heal: true
+  chaos_experiment_guardrails:
+  - guardrail: blast_radius_limit
+    max_affected_services: 3
+    max_affected_instances: 30%
+  - guardrail: steady_state_validation
+    check_before: true
+    check_during: true
+    check_after: true
+    abort_if_steady_state_violated: true
+  - guardrail: business_hours_restriction
+    allowed_hours: 00:00-06:00
+    timezone: UTC
+  - guardrail: rollback_mechanism
+    automatic_rollback_on: user_impact
+    manual_abort_available: true
+  monitoring:
+  - metric: chaos_experiments_total
+    labels:
+    - experiment_type
+    - result
+  - metric: blast_radius_services
+    labels:
+    - experiment
+  - metric: recovery_time_seconds
+    labels:
+    - experiment
+    - component
+- name: SLA Monitoring and Alerting
+  scenario_id: l3-rel-sla-monitoring
+  description: Monitor SLA compliance and trigger alerts on violations
+  sla_definitions:
+  - service: api_gateway
+    sla:
+      availability: 99.9%
+      latency_p95: 200ms
+      latency_p99: 500ms
+      error_rate: < 0.1%
+    monitoring_window: 30d
+    tests:
+    - name: sla_met
+      actual_availability: 99.95%
+      actual_latency_p95: 180ms
+      actual_error_rate: 0.05%
+      expected:
+        sla_status: compliant
+        credits_owed: 0
+    - name: availability_violation
+      actual_availability: 99.85%
+      expected:
+        sla_status: violated
+        violation_type: availability
+        credits_owed: 10%
+    - name: latency_violation
+      actual_latency_p95: 250ms
+      expected:
+        sla_status: violated
+        violation_type: latency
+        alert_triggered: true
+  - service: ai_orchestration
+    sla:
+      availability: 99.5%
+      latency_p95: 2s
+      success_rate: '> 95%'
+    monitoring_window: 30d
+  error_budgets:
+  - service: api_gateway
+    target_availability: 99.9%
+    monthly_error_budget: 43m
+    current_usage:
+      downtime_consumed: 20m
+      budget_remaining: 23m
+      burn_rate: 0.5x
+    expected:
+      status: healthy
+      actions: []
+  - service: analytics_service
+    target_availability: 99.9%
+    monthly_error_budget: 43m
+    current_usage:
+      downtime_consumed: 50m
+      budget_remaining: -7m
+      burn_rate: 1.2x
+    expected:
+      status: violated
+      actions:
+      - freeze_new_features
+      - focus_on_reliability
+      - incident_postmortem_required
+  alert_policies:
+  - policy: burn_rate_alert
+    description: Alert when consuming error budget too fast
+    conditions:
+      burn_rate: '> 2x'
+      window: 1h
+    expected:
+      alert_severity: warning
+      action: investigate_incidents
+  - policy: sla_at_risk
+    description: Alert when approaching SLA violation
+    conditions:
+      budget_remaining: < 20%
+    expected:
+      alert_severity: high
+      action: implement_safeguards
+  - policy: sla_violated
+    description: Alert when SLA is violated
+    conditions:
+      sla_status: violated
+    expected:
+      alert_severity: critical
+      action: incident_response
+  monitoring:
+  - metric: sla_compliance
+    type: gauge
+    labels:
+    - service
+    - sla_type
+    values:
+      compliant: 1
+      violated: 0
+  - metric: error_budget_remaining_ratio
+    type: gauge
+    labels:
+    - service
+  - metric: sla_violations_total
+    type: counter
+    labels:
+    - service
+    - violation_type
+monitoring:
+  required_metrics:
+  - name: reliability_system_health
+    type: gauge
+    description: Overall reliability system health (0-1)
+    labels:
+    - component
+  - name: circuit_breaker_state
+    type: gauge
+    description: Circuit breaker state (0=closed, 1=open, 0.5=half-open)
+    labels:
+    - service
+    - circuit
+  - name: retries_total
+    type: counter
+    description: Total retry attempts
+    labels:
+    - service
+    - operation
+    - attempt
+  - name: health_check_status
+    type: gauge
+    description: Health check status (1=up, 0=down, 0.5=degraded)
+    labels:
+    - service
+    - probe_type
+  - name: backup_success_total
+    type: counter
+    description: Successful backups
+    labels:
+    - target
+    - type
+  - name: chaos_experiments_total
+    type: counter
+    description: Chaos experiments run
+    labels:
+    - experiment_type
+    - result
+  - name: sla_compliance
+    type: gauge
+    description: SLA compliance (1=compliant, 0=violated)
+    labels:
+    - service
+    - sla_type
+  - name: service_restarts_total
+    type: counter
+    description: Service restarts
+    labels:
+    - service
+    - reason
+  - name: recovery_time_seconds
+    type: histogram
+    description: Time to recover from failures
+    labels:
+    - failure_type
+    - component
+  - name: error_budget_remaining_ratio
+    type: gauge
+    description: Remaining error budget (0-1)
+    labels:
+    - service
+integration:
+  eventbus_events:
+    publishes:
+    - reliability.circuit.opened
+    - reliability.circuit.closed
+    - reliability.service.restarted
+    - reliability.health.degraded
+    - reliability.backup.completed
+    - reliability.recovery.started
+    - reliability.recovery.completed
+    - reliability.sla.violated
+    - reliability.chaos.started
+    - reliability.chaos.completed
+    subscribes:
+    - system.service.failed
+    - system.service.started
+    - monitoring.alert.triggered
+    - infrastructure.resource.exhausted
+  dependencies:
+  - service: service-discovery
+    purpose: Track service health and routing
+  - service: eventbus
+    purpose: Reliability event propagation
+  - service: observability
+    purpose: Metrics and alerting
+  - service: infrastructure-coordinator
+    purpose: Automatic recovery orchestration
+context_variables:
+  system_name: Name of reliability system (e.g., 'circuit-breaker-framework')
+  failure_thresholds: Circuit breaker failure thresholds
+  retry_policies: Retry policy configurations
+  backup_targets: Services/databases to backup
+  sla_targets: SLA targets for services
+  recovery_strategies: Automatic recovery strategies
+learning_integration:
+  collect_patterns:
+  - failure_patterns
+  - successful_recovery_strategies
+  - optimal_retry_configurations
+  - chaos_experiment_outcomes
+  feedback_to_learning_system:
+  - Update circuit breaker thresholds based on learned patterns
+  - Optimize retry strategies
+  - Improve recovery procedures
+  - Refine chaos experiments
+  recommendations:
+  - Suggest backup frequency adjustments
+  - Recommend SLA target updates
+  - Identify services needing reliability improvements

@@ -1,0 +1,169 @@
+{
+  "title": "Living Docs - AI Documentation",
+  "uid": "living-docs-detailed",
+  "tags": ["platform-services", "living-docs", "ai"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "AI Generations (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(increase(living_docs_ai_generations{status=\"success\"}[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "gauge",
+      "title": "Average Quality Score",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "targets": [
+        {
+          "expr": "avg(living_docs_quality_score) * 20",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "orange", "value": 70},
+              {"color": "green", "value": 85}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Personalization Requests (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(increase(living_docs_personalized_requests[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Search Queries (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(increase(living_docs_searches_total[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "AI Generation Rate by Type",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {
+          "expr": "sum(rate(living_docs_ai_generations[5m])) by (generation_type)",
+          "legendFormat": "{{generation_type}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Generation Duration (p95)",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(living_docs_ai_generation_duration_seconds_bucket[5m])) by (le, generation_type))",
+          "legendFormat": "{{generation_type}} (p95)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "piechart",
+      "title": "Cache Hit/Miss Distribution",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 12},
+      "targets": [
+        {
+          "expr": "sum(increase(living_docs_personalization_cache_hits[24h]))",
+          "legendFormat": "Cache Hits",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(increase(living_docs_personalization_cache_misses[24h]))",
+          "legendFormat": "Cache Misses",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Page Views",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 12},
+      "targets": [
+        {
+          "expr": "sum(rate(living_docs_page_views[5m]))",
+          "legendFormat": "Page Views/sec",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "Knowledge Gaps Detected",
+      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 12},
+      "targets": [
+        {
+          "expr": "living_docs_gaps_detected",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Improvements Queued",
+      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 16},
+      "targets": [
+        {
+          "expr": "living_docs_improvements_queued",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"}
+}

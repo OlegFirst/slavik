@@ -1,0 +1,205 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "ai-office-coordination"
+    version: "1.0.0"
+    level: 2  # Subsystem level
+    type: "integration"
+    pillar: "operational_excellence"
+    domain: "ai_orchestration"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "ai-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    subsystem: "ai-office-infrastructure"
+    modules:
+      - "orchestrator"
+      - "agent-router"
+      - "analytics-specialist"
+      - "mio-manager"
+      - "ai-event-manager"
+    team: "ai-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "AI Office Agent Coordination"
+    summary: "Test coordination between AI Office agents via EventBus and orchestrator"
+    business_value: "Ensure AI agents work together effectively for complex tasks"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "AI Office Coordination"
+
+    scenario: "Coordinate multiple AI agents for BIA analysis"
+
+    given:
+      - "AI Orchestrator is running"
+      - "Agent Router is running"
+      - "Analytics Specialist is running"
+      - "MIO Manager is running"
+      - "EventBus is available"
+
+    when:
+      - "User requests AI-assisted BIA analysis"
+      - "Orchestrator delegates to Analytics Specialist"
+      - "Analytics Specialist analyzes existing BIAs"
+      - "MIO Manager monitors task execution"
+
+    then:
+      - "Orchestrator receives request successfully"
+      - "Agent Router routes to correct agent"
+      - "Analytics Specialist completes analysis"
+      - "Results are returned to orchestrator"
+      - "MIO Manager logs execution metrics"
+      - "Overall status is success"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 120
+    retry_policy:
+      max_retries: 2
+      backoff: exponential
+
+    steps:
+      - id: "check_orchestrator"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+        on_failure: "abort"
+
+      - id: "check_agent_router"
+        action: "http.get"
+        params:
+          url: "http://agent-router:9001/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+        on_failure: "abort"
+
+      - id: "check_analytics_specialist"
+        action: "http.get"
+        params:
+          url: "http://analytics-specialist:9002/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+        on_failure: "abort"
+
+      - id: "submit_analysis_task"
+        action: "http.post"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks"
+          body:
+            task_type: "bia_analysis"
+            organization_id: "{{organization_id}}"
+            prompt: "Analyze existing BIAs and identify gaps"
+        expect:
+          status: 201
+          response.task_id: "{{exists}}"
+
+      - id: "wait_for_routing"
+        action: "sleep"
+        params:
+          seconds: 2
+
+      - id: "check_task_routed"
+        action: "http.get"
+        params:
+          url: "http://agent-router:9001/api/tasks/{{steps.submit_analysis_task.result.task_id}}"
+        expect:
+          status: 200
+          response.routed_to: "analytics-specialist"
+
+      - id: "wait_for_completion"
+        action: "sleep"
+        params:
+          seconds: 5
+
+      - id: "check_task_status"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks/{{steps.submit_analysis_task.result.task_id}}"
+        expect:
+          status: 200
+          response.status: "completed"
+
+      - id: "verify_mio_monitoring"
+        action: "http.get"
+        params:
+          url: "http://mio-manager:9004/api/tasks/{{steps.submit_analysis_task.result.task_id}}/metrics"
+        expect:
+          status: 200
+          response.monitored: true
+
+      - id: "verify_eventbus_events"
+        action: "http.get"
+        params:
+          url: "http://ai-event-manager:9005/api/events"
+          query:
+            task_id: "{{steps.submit_analysis_task.result.task_id}}"
+        expect:
+          status: 200
+          response.events_count: ">0"
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "ai.coordination.tested"
+          aggregate: "AIOffice"
+          aggregate_id: "ai-office-subsystem"
+          payload:
+            task_id: "{{steps.submit_analysis_task.result.task_id}}"
+            agents_involved:
+              - "orchestrator"
+              - "agent-router"
+              - "analytics-specialist"
+              - "mio-manager"
+            status: "{{steps.check_task_status.result.status}}"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "ai_coordination_duration_seconds"
+        type: "histogram"
+        labels:
+          - "subsystem"
+          - "task_type"
+
+      - name: "ai_coordination_success_total"
+        type: "counter"
+        labels:
+          - "task_type"
+
+      - name: "ai_agents_involved"
+        type: "gauge"
+        labels:
+          - "task_id"
+
+    logs:
+      level: "INFO"
+      include:
+        - "task_id"
+        - "agents_involved"
+        - "coordination_status"
+
+  # ========== SLA ==========
+  sla:
+    target_response_time_ms: 5000
+    target_success_rate: 0.95
+    max_agent_hops: 3
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "ai-team"
+      changes:
+        - "Initial version"
+        - "AI Office agent coordination test"

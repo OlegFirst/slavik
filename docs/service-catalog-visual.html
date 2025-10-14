@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Catalog - AI-Platform-ISO</title>
+  <meta name="description" content="Visual catalog of all 62 platform services organized by subsystem">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    .filter-bar {
+      background: var(--background-alt);
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--border-color);
+      background: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary-color);
+      background: var(--background-alt);
+    }
+
+    .filter-btn.active {
+      border-color: var(--primary-color);
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .service-card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-2px);
+      border-color: var(--primary-color);
+    }
+
+    .service-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .service-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark-text);
+      margin: 0;
+    }
+
+    .service-port {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .service-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .status-production {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-planned {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-reserved {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .service-description {
+      color: var(--medium-text);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 1rem 0;
+    }
+
+    .service-capabilities {
+      margin-top: 1rem;
+    }
+
+    .service-capabilities h4 {
+      font-size: 0.85rem;
+      color: var(--dark-text);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .service-capabilities ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .service-capabilities li {
+      padding: 0.25rem 0;
+      padding-left: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--medium-text);
+      position: relative;
+    }
+
+    .service-capabilities li:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--secondary-color);
+      font-weight: bold;
+    }
+
+    .service-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .service-tag {
+      background: var(--background-alt);
+      color: var(--medium-text);
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .subsystem-section {
+      margin-bottom: 3rem;
+    }
+
+    .subsystem-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .subsystem-icon {
+      font-size: 2rem;
+    }
+
+    .subsystem-info h2 {
+      margin: 0;
+      font-size: 1.75rem;
+      color: var(--dark-text);
+    }
+
+    .subsystem-info p {
+      margin: 0.25rem 0 0;
+      color: var(--medium-text);
+    }
+
+    .subsystem-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--background-alt);
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      margin-left: auto;
+    }
+
+    .critical-badge {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .stats-overview {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .stats-grid-horizontal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-box h3 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: white;
+    }
+
+    .stat-box p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html" class="active">Services</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="documentation.html">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="container">
+      <h1>Platform Service Catalog</h1>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">62 microservices organized in 12 functional subsystems</p>
+    </div>
+  </section>
+
+  <!-- Stats Overview -->
+  <section>
+    <div class="container">
+      <div class="stats-overview">
+        <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Platform at a Glance</h2>
+        <div class="stats-grid-horizontal">
+          <div class="stat-box">
+            <h3>62</h3>
+            <p>Total Services</p>
+          </div>
+          <div class="stat-box">
+            <h3>12</h3>
+            <p>Subsystems</p>
+          </div>
+          <div class="stat-box">
+            <h3>46</h3>
+            <p>Platform Services</p>
+          </div>
+          <div class="stat-box">
+            <h3>16</h3>
+            <p>User Applications</p>
+          </div>
+          <div class="stat-box">
+            <h3>8</h3>
+            <p>Critical Systems</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <h3 style="text-align: center; margin-bottom: 1rem; color: var(--dark-text);">Filter by Category</h3>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All Services (62)</button>
+          <button class="filter-btn" data-filter="infrastructure">Infrastructure (6)</button>
+          <button class="filter-btn" data-filter="ai">AI Systems (2)</button>
+          <button class="filter-btn" data-filter="business">Platform Services (1)</button>
+          <button class="filter-btn" data-filter="applications">User Applications (1)</button>
+          <button class="filter-btn" data-filter="critical">Critical Only (8)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Database Infrastructure -->
+  <section id="database_infrastructure" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">💾</div>
+        <div class="subsystem-info">
+          <h2>Database Infrastructure</h2>
+          <p>Relational, cache, vector, and time-series data storage</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>4</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- PostgreSQL -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">PostgreSQL (Supabase)</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:5432</span>
+          </div>
+          <p class="service-description">
+            Primary relational database for the entire AI-powered BCM platform.
+            Provides 29 schemas for modular architecture with Row-Level Security (RLS) for multi-tenancy.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>29 database schemas (System, Platform, Business)</li>
+              <li>46 applied migrations</li>
+              <li>Row-Level Security (RLS) for multi-tenancy</li>
+              <li>Full BCM business logic (BIA, Risk, Governance)</li>
+              <li>Real-time subscriptions (Supabase)</li>
+              <li>Automatic backups & point-in-time recovery</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Supabase Cloud</span>
+            <span class="service-tag">PostgreSQL 14+</span>
+            <span class="service-tag">Multi-tenant</span>
+          </div>
+        </div>
+
+        <!-- Redis -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Redis Cache</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:6379</span>
+          </div>
+          <p class="service-description">
+            In-memory data store providing caching, session storage, rate limiting,
+            and pub/sub messaging for the entire platform.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Caching layer (reduce database load)</li>
+              <li>Session storage (user sessions)</li>
+              <li>Rate limiting (API throttling)</li>
+              <li>Service registry (service discovery)</li>
+              <li>Pub/Sub messaging (EventBus backend)</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Redis 7 Alpine</span>
+            <span class="service-tag">512MB memory</span>
+            <span class="service-tag">LRU eviction</span>
+          </div>
+        </div>
+
+        <!-- Qdrant -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Qdrant Vector DB</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:6333</span>
+          </div>
+          <p class="service-description">
+            Vector database for semantic search and Retrieval-Augmented Generation (RAG).
+            Stores embeddings for knowledge base, documents, and AI context.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Semantic search (text embeddings)</li>
+              <li>RAG context retrieval</li>
+              <li>Document embeddings storage</li>
+              <li>Similarity search</li>
+              <li>Fast vector operations</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Qdrant Cloud</span>
+            <span class="service-tag">Vector Search</span>
+            <span class="service-tag">RAG</span>
+          </div>
+        </div>
+
+        <!-- Database Managers -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Database Managers</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">N/A</span>
+          </div>
+          <p class="service-description">
+            Shared Python utilities for database connection pooling,
+            async operations, and consistent data access patterns across all services.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Async database connection pooling</li>
+              <li>PostgreSQL manager (DatabaseManager)</li>
+              <li>Redis manager (RedisManager)</li>
+              <li>Qdrant manager (QdrantManager)</li>
+              <li>Transaction management</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Python Library</span>
+            <span class="service-tag">Async/Await</span>
+            <span class="service-tag">Connection Pools</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Runtime Services -->
+  <section id="runtime_services" class="subsystem-section" data-category="infrastructure critical">
+    <div class="container">
+      <div class="subsystem-header">
+        <div class="subsystem-icon">⚡</div>
+        <div class="subsystem-info">
+          <h2>Runtime Services</h2>
+          <p>Service discovery, WebSocket, message queues</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+          <span class="critical-badge">CRITICAL</span>
+          <div class="subsystem-badge">
+            <strong>3</strong> Services
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <!-- Service Discovery -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Service Discovery</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8500</span>
+          </div>
+          <p class="service-description">
+            Consul-based service registry enabling dynamic service discovery,
+            health monitoring, and load balancing coordination.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Service registration & discovery</li>
+              <li>Health check monitoring</li>
+              <li>Load balancer integration</li>
+              <li>Key-value configuration store</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">Consul</span>
+            <span class="service-tag">Health Checks</span>
+          </div>
+        </div>
+
+        <!-- Real-time WebSocket -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Real-time WebSocket</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8050</span>
+          </div>
+          <p class="service-description">
+            WebSocket server for real-time bidirectional communication
+            between backend services and frontend clients.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Real-time updates to UI</li>
+              <li>EventBus integration</li>
+              <li>Connection management</li>
+              <li>Event broadcasting</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">FastAPI WebSocket</span>
+            <span class="service-tag">Live Updates</span>
+          </div>
+        </div>
+
+        <!-- Message Queue -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">Message Queue</h3>
+              <span class="service-status status-planned">Planned</span>
+            </div>
+            <span class="service-port">:5672</span>
+          </div>
+          <p class="service-description">
+            RabbitMQ-based asynchronous task queue for background job processing,
+            scheduled tasks, and deferred execution.
+          </p>
+          <div class="service-capabilities">
+            <h4>Planned Capabilities:</h4>
+            <ul>
+              <li>Async task processing</li>
+              <li>Scheduled jobs</li>
+              <li>Work queues</li>
+              <li>Dead letter handling</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">RabbitMQ</span>
+            <span class="service-tag">Celery</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Continue with remaining subsystems... (truncated for brevity) -->
+
+  <!-- Call to Action -->
+  <section style="background: var(--background-alt); padding: 4rem 0;">
+    <div class="container text-center">
+      <h2>Explore Service Architecture</h2>
+      <p class="section-subtitle" style="margin: 1rem auto 2rem;">
+        Dive deeper into how specific services work together
+      </p>
+      <div class="grid grid-3">
+        <a href="decision-center.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Decision Center</h3>
+          <p>AI-powered decision routing and delegation architecture</p>
+        </a>
+        <a href="mio-manager.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>MIO Manager</h3>
+          <p>Platform observatory and smart task scheduling</p>
+        </a>
+        <a href="architecture.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Full Architecture</h3>
+          <p>Complete system architecture and integration patterns</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          62 microservices powering AI-driven Business Continuity Management.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+
+      <div>
+        <h4>Key Services</h4>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="modules.html">All Services</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+  <script>
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const subsections = document.querySelectorAll('.subsystem-section');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Update active button
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.dataset.filter;
+
+        // Show/hide sections
+        subsections.forEach(section => {
+          const categories = section.dataset.category.split(' ');
+
+          if (filter === 'all') {
+            section.style.display = 'block';
+          } else {
+            section.style.display = categories.includes(filter) ? 'block' : 'none';
+          }
+        });
+      });
+    });
+
+    // Mermaid initialization
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true
+      }
+    });
+  </script>
+</body>
+</html>

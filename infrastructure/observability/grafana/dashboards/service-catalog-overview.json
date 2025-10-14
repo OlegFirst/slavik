@@ -1,0 +1,731 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "service-catalog-overview",
+    "title": "Service Catalog Overview",
+    "tags": ["service-catalog", "service-discovery", "platform"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "templating": {
+      "list": [
+        {
+          "name": "service",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(service_health_status, service_name)",
+          "multi": true,
+          "includeAll": true,
+          "refresh": 1,
+          "allValue": ".*"
+        },
+        {
+          "name": "type",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(service_catalog_services_by_type, type)",
+          "multi": true,
+          "includeAll": true,
+          "refresh": 1,
+          "allValue": ".*"
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Total Services in Catalog",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_total_services",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background",
+          "graphMode": "none"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Registered Services (Running)",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_registered_services",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 10
+                },
+                {
+                  "color": "green",
+                  "value": 20
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background",
+          "graphMode": "area"
+        }
+      },
+      {
+        "id": 3,
+        "title": "Coverage Percentage",
+        "type": "gauge",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_coverage_percent",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 50
+                },
+                {
+                  "color": "green",
+                  "value": 80
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 4,
+        "title": "Healthy Services",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 0
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_healthy_services",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 10
+                },
+                {
+                  "color": "green",
+                  "value": 15
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 5,
+        "title": "Missing Services (In Catalog, Not Running)",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 4
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_missing_services",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 10
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 6,
+        "title": "Unknown Services (Running, Not in Catalog)",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 4
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_unknown_services",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 3
+                },
+                {
+                  "color": "red",
+                  "value": 5
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 7,
+        "title": "Services by Type",
+        "type": "piechart",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 4
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_services_by_type",
+            "refId": "A",
+            "legendFormat": "{{type}}"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "right"
+          },
+          "pieType": "pie",
+          "displayLabels": ["name", "percent"]
+        }
+      },
+      {
+        "id": 8,
+        "title": "Coverage Trend (Last 6 Hours)",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_coverage_percent",
+            "refId": "A",
+            "legendFormat": "Coverage %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Coverage %",
+              "axisPlacement": "auto"
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "Services by Status",
+        "type": "bargauge",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 12
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_services_by_status",
+            "refId": "A",
+            "legendFormat": "{{status}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "min": 0
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        }
+      },
+      {
+        "id": 10,
+        "title": "Service Health Status Details",
+        "type": "table",
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_health_status{service_name=~\"$service\",type=~\"$type\"}",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true,
+                "instance": true,
+                "job": true
+              },
+              "renameByName": {
+                "service_name": "Service",
+                "type": "Type",
+                "port": "Port",
+                "Value": "Health (1=healthy, 0.5=degraded, 0=unhealthy)"
+              }
+            }
+          }
+        ],
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Health (1=healthy, 0.5=degraded, 0=unhealthy)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": null
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.5
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": 11,
+        "title": "Service Registration Status",
+        "type": "table",
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 30
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_registration_status{service_name=~\"$service\",type=~\"$type\"}",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true,
+                "instance": true,
+                "job": true
+              },
+              "renameByName": {
+                "service_name": "Service",
+                "type": "Type",
+                "Value": "Registration (1=registered, 0=not_registered)"
+              }
+            }
+          }
+        ],
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Registration (1=registered, 0=not_registered)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": null
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "title": "Registered vs Missing Services Trend",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 40
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_registered_services",
+            "refId": "A",
+            "legendFormat": "Registered (Running)"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_missing_services",
+            "refId": "B",
+            "legendFormat": "Missing (Not Running)"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_unknown_services",
+            "refId": "C",
+            "legendFormat": "Unknown (Not in Catalog)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Count",
+              "axisPlacement": "auto"
+            }
+          }
+        }
+      },
+      {
+        "id": 13,
+        "title": "Healthy vs Unhealthy Services Trend",
+        "type": "timeseries",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_healthy_services",
+            "refId": "A",
+            "legendFormat": "Healthy"
+          },
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_registered_services - service_catalog_healthy_services",
+            "refId": "B",
+            "legendFormat": "Unhealthy/Degraded"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Count",
+              "axisPlacement": "auto"
+            }
+          }
+        }
+      },
+      {
+        "id": 14,
+        "title": "Catalog Export Operations",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 48
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_export_total",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      },
+      {
+        "id": 15,
+        "title": "Catalog Export Errors",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 48
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "service_catalog_export_errors",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 10
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 16,
+        "title": "Export Duration (p95)",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 48
+        },
+        "targets": [
+          {
+            "datasource": "Prometheus",
+            "expr": "histogram_quantile(0.95, service_catalog_export_duration_seconds_bucket)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 2
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        }
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "schemaVersion": 36,
+    "version": 1
+  }
+}

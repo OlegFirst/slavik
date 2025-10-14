@@ -1,0 +1,416 @@
+version: '3.8'
+
+# ============================================================================
+# AI-Powered BCM Platform - Production Docker Compose
+# ============================================================================
+# 12 logical containers for complete platform
+# Railway-ready configuration
+# ============================================================================
+
+services:
+  # ==========================================================================
+  # INFRASTRUCTURE LAYER
+  # ==========================================================================
+
+  redis:
+    image: redis:7-alpine
+    container_name: bcm-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # CORE SERVICES
+  # ==========================================================================
+
+  eventbus:
+    build:
+      context: ./infrastructure/runtime/eventbus
+      dockerfile: Dockerfile
+    container_name: bcm-eventbus
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - REDIS_URL=redis://redis:6379
+      - SERVICE_NAME=eventbus
+    volumes:
+      - eventbus-data:/data
+      - platform-logs:/var/log
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  platform-services:
+    build:
+      context: ./platform-services
+      dockerfile: Dockerfile
+    container_name: bcm-platform-services
+    ports:
+      - "8011-8027:8011-8027"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ALGORITHM=HS256
+      - EVENTBUS_URL=http://eventbus:8001
+    volumes:
+      - platform-logs:/var/log
+      - platform-uploads:/data/uploads
+    depends_on:
+      eventbus:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - bcm-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  intelligent-core:
+    build:
+      context: ./intelligent-core
+      dockerfile: Dockerfile.production
+    container_name: bcm-intelligent-core
+    ports:
+      - "8002:8002"
+      - "8028-8029:8028-8029"  # Workflow Intelligence, reserved
+      - "8035:8035"            # Community Intelligence (was 8030)
+      - "8036:8036"            # Workflow Engine (was 8030)
+      - "8031-8034:8031-8034"  # AI Orchestration, Event Intelligence, Collective
+      - "8037-8038:8037-8038"  # AI Workflow Optimizer
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+      - ML_MODEL_PATH=/models
+    volumes:
+      - platform-logs:/var/log
+      - ml-models:/models:ro
+    depends_on:
+      eventbus:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/app/healthcheck.sh"]
+      interval: 45s
+      timeout: 15s
+      retries: 3
+      start_period: 120s
+    restart: unless-stopped
+    networks:
+      - bcm-network
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '2.0'
+          memory: 2G
+
+  # ==========================================================================
+  # AI OFFICE & INFRASTRUCTURE
+  # ==========================================================================
+
+  ai-office:
+    build:
+      context: ./infrastructure/AI-office-infrastructure
+      dockerfile: Dockerfile
+    container_name: bcm-ai-office
+    ports:
+      - "8055-8060:8055-8060"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+    volumes:
+      - platform-logs:/var/log
+    depends_on:
+      eventbus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8057/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # MONITORING & OBSERVABILITY
+  # ==========================================================================
+
+  monitoring:
+    build:
+      context: ./infrastructure/observability
+      dockerfile: Dockerfile
+    container_name: bcm-monitoring
+    ports:
+      - "9090:9090"  # Prometheus
+      - "8050:8050"  # Monitoring Backend (keep as is)
+      - "8054:8054"  # Service Catalog (was 8052, moved to avoid conflict)
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - prometheus-data:/prometheus
+      - monitoring-logs:/var/log
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  # ==========================================================================
+  # SECURITY
+  # ==========================================================================
+
+  security:
+    build:
+      context: ./infrastructure/security
+      dockerfile: Dockerfile
+    container_name: bcm-security
+    ports:
+      - "8081:8081"  # Auth Service
+      - "8084:8084"  # Secrets Manager
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ALGORITHM=HS256
+    volumes:
+      - secrets-data:/secrets
+      - platform-logs:/var/log
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # RUNTIME SERVICES
+  # ==========================================================================
+
+  runtime:
+    build:
+      context: ./infrastructure/runtime
+      dockerfile: Dockerfile
+    container_name: bcm-runtime
+    ports:
+      - "8053:8053"  # Realtime WebSocket (was 8082, updated)
+      - "8061:8061"  # Message Queue (was 8085, updated)
+      - "8500:8500"  # Service Discovery (was 8086, updated)
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+    depends_on:
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8053/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # DATABASE SERVICES
+  # ==========================================================================
+
+  db-services:
+    build:
+      context: ./infrastructure/database-services
+      dockerfile: Dockerfile
+    container_name: bcm-db-services
+    ports:
+      - "8051:8051"  # DB Intelligence
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8051/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # API GATEWAY (Entry Point)
+  # ==========================================================================
+
+  gateway:
+    build:
+      context: ./infrastructure/gateway
+      dockerfile: Dockerfile
+    container_name: bcm-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - AUTH_SERVICE_URL=http://security:8081
+      - EVENTBUS_URL=http://eventbus:8001
+    depends_on:
+      platform-services:
+        condition: service_healthy
+      intelligent-core:
+        condition: service_healthy
+      security:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - bcm-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  # ==========================================================================
+  # INTERFACES (Frontend)
+  # ==========================================================================
+
+  interfaces:
+    build:
+      context: ./interface
+      dockerfile: Dockerfile
+    container_name: bcm-interfaces
+    ports:
+      - "3000:3000"  # Admin Panel
+      - "3001:3001"  # User Portal
+      - "3002:3002"  # Control Center
+    environment:
+      - API_URL=http://gateway:8000
+      - WS_URL=ws://runtime:8053
+    depends_on:
+      gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+  # ==========================================================================
+  # INTEGRATIONS (External Services)
+  # ==========================================================================
+
+  integrations:
+    build:
+      context: ./infrastructure/integration
+      dockerfile: Dockerfile
+    container_name: bcm-integrations
+    ports:
+      - "8087:8087"  # GitHub Integration
+      - "8088:8088"  # MCP Server
+      - "8089:8089"  # Partisia Contracts
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    depends_on:
+      eventbus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - bcm-network
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+
+volumes:
+  redis-data:
+    driver: local
+  eventbus-data:
+    driver: local
+  platform-logs:
+    driver: local
+  platform-uploads:
+    driver: local
+  ml-models:
+    driver: local
+  prometheus-data:
+    driver: local
+  monitoring-logs:
+    driver: local
+  secrets-data:
+    driver: local
+
+# ============================================================================
+# NETWORKS
+# ============================================================================
+
+networks:
+  bcm-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

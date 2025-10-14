@@ -66,7 +66,7 @@ async def lifespan(app: FastAPI):
 
         # Initialize Workflow Intelligence
         global workflow_storage, workflow_engine, ai_advisor, case_collector
-    global audit_logger, iso_checker, security_middleware
+        global audit_logger, iso_checker, security_middleware
         try:
             workflow_storage = PostgresStorageAdapter(settings.DATABASE_URL)
             await workflow_storage.connect()
@@ -77,31 +77,30 @@ async def lifespan(app: FastAPI):
             )
 
             case_collector = CaseCollector(storage_adapter=workflow_storage)
-        # Initialize Audit Logger
-        audit_logger = AuditLogger(storage_adapter=workflow_storage)
-        await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
 
-        # Initialize ISO Compliance Checker
-        iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+            # Initialize Audit Logger
+            audit_logger = AuditLogger(storage_adapter=workflow_storage)
+            await audit_logger.ensure_schema()
+            logger.info("✅ Audit logging initialized")
 
-        # Initialize Security Middleware
-        jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
-        security_middleware = WorkflowSecurityMiddleware(
-            audit_logger=audit_logger,
-            iso_checker=iso_checker,
-            jwt_secret=jwt_secret
-        )
-        logger.info("✅ Security middleware initialized")
+            # Initialize ISO Compliance Checker
+            iso_checker = ISO22301Checker()
+            logger.info("✅ ISO 22301 compliance checker initialized")
 
-        
+            # Initialize Security Middleware
+            jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
+            security_middleware = WorkflowSecurityMiddleware(
+                audit_logger=audit_logger,
+                iso_checker=iso_checker,
+                jwt_secret=jwt_secret
+            )
+            logger.info("✅ Security middleware initialized")
 
             # Set health metrics
             workflow_metrics.set_health("workflow_intelligence", True)
             workflow_metrics.set_health("database", True)
-        workflow_metrics.set_health("audit_logging", True)
-        workflow_metrics.set_health("iso_compliance", True)
+            workflow_metrics.set_health("audit_logging", True)
+            workflow_metrics.set_health("iso_compliance", True)
 
             logger.info("✅ Workflow Intelligence initialized (Plans module)")
         except Exception as e:

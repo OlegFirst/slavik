@@ -1,0 +1,708 @@
+meta:
+  id: l3-quality-system-testing-framework
+  name: L3 Quality System Test Scenarios
+  level: 3
+  category: quality
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - Quality Assurance (system)
+  - Testing & Validation (system)
+  - Code Quality (system)
+  - Performance Testing (system)
+  source_item: testing-framework
+  generated_at: '2025-10-14T08:09:29.000199'
+description: 'Specialized L3 template for Quality Assurance and Testing systems.
+
+
+  Quality systems ensure platform reliability and correctness through:
+
+  - Automated testing at multiple levels (unit, integration, e2e)
+
+  - Code quality analysis and enforcement
+
+  - Performance and load testing
+
+  - Test data management and fixtures
+
+  - Quality gates and release criteria
+
+  - Continuous quality monitoring
+
+
+  This template generates comprehensive quality test scenarios that validate
+
+  testing frameworks, quality metrics, and assurance processes.
+
+  '
+systems_involved:
+- testing-framework
+- CI/CD Pipeline
+- Test Runners
+- Code Analysis Tools
+- Performance Test Tools
+- EventBus
+test_scenarios:
+- name: Multi-Level Test Execution
+  scenario_id: l3-qual-test-execution
+  description: Test execution across unit, integration, and e2e levels
+  unit_testing:
+  - framework: pytest
+    tests:
+    - name: run_unit_tests
+      test_suite: services/bia-service/tests/unit
+      test_count: 250
+      expected:
+        all_passed: true
+        duration: < 30s
+        coverage: '> 85%'
+        failures: 0
+    - name: test_failure_reporting
+      test_suite: with_failures
+      failing_tests: 3
+      expected:
+        failures_reported: true
+        failure_details_captured: true
+        stack_traces_available: true
+        ci_pipeline_failed: true
+    - name: test_coverage_threshold
+      coverage_achieved: 78
+      coverage_threshold: 80
+      expected:
+        quality_gate_failed: true
+        alert_triggered: true
+        deployment_blocked: true
+  integration_testing:
+  - framework: pytest
+    tests:
+    - name: run_integration_tests
+      test_suite: services/bia-service/tests/integration
+      dependencies:
+      - postgres
+      - redis
+      - eventbus
+      test_count: 120
+      expected:
+        dependencies_available: true
+        all_passed: true
+        duration: < 5m
+        database_isolation: true
+    - name: dependency_unavailable
+      test_suite: integration
+      dependency: postgres
+      status: unavailable
+      expected:
+        tests_skipped_or_failed: true
+        error_message: dependency_not_available
+        ci_notified: true
+    - name: test_data_fixtures
+      fixtures:
+      - users
+      - organizations
+      - bias
+      expected:
+        fixtures_loaded: true
+        test_isolation: true
+        cleanup_after_tests: true
+  e2e_testing:
+  - framework: playwright
+    tests:
+    - name: critical_user_journeys
+      scenarios:
+      - user_login
+      - create_bia
+      - approve_bia
+      - generate_report
+      expected:
+        all_scenarios_passed: true
+        duration: < 15m
+        screenshots_captured: true
+        video_recorded_on_failure: true
+    - name: cross_browser_testing
+      browsers:
+      - chromium
+      - firefox
+      - webkit
+      expected:
+        all_browsers_tested: true
+        consistent_behavior: true
+    - name: mobile_responsive
+      viewports:
+      - mobile
+      - tablet
+      - desktop
+      expected:
+        all_viewports_tested: true
+        ui_renders_correctly: true
+  test_parallelization:
+  - scenario: parallel_execution
+    tests:
+    - name: run_tests_in_parallel
+      test_count: 400
+      workers: 8
+      expected:
+        execution_time: < 2m
+        all_isolated: true
+        speedup: ~8x
+    - name: load_balancing
+      tests_per_worker_variance: < 10%
+      expected:
+        workers_balanced: true
+        optimal_utilization: true
+  monitoring:
+  - metric: tests_executed_total
+    labels:
+    - level
+    - status
+  - metric: test_duration_seconds
+    labels:
+    - level
+    - suite
+  - metric: test_coverage_ratio
+    labels:
+    - service
+  - metric: test_failures_total
+    labels:
+    - level
+    - test_name
+- name: Code Quality Analysis
+  scenario_id: l3-qual-code-quality
+  description: Test code quality metrics and enforcement
+  static_analysis:
+  - tool: pylint
+    tests:
+    - name: code_style_check
+      target: services/bia-service
+      expected:
+        score: '> 8.0'
+        violations: < 10
+        blocking_issues: 0
+    - name: code_complexity
+      metric: cyclomatic_complexity
+      threshold: 10
+      expected:
+        max_complexity: < 10
+        complex_functions_flagged: true
+  - tool: mypy
+    tests:
+    - name: type_checking
+      target: services/bia-service
+      expected:
+        type_errors: 0
+        type_coverage: '> 90%'
+  - tool: bandit
+    tests:
+    - name: security_scan
+      target: services/*
+      expected:
+        critical_issues: 0
+        high_issues: 0
+        medium_issues: < 5
+  code_duplication:
+  - tool: jscpd
+    tests:
+    - name: detect_duplication
+      threshold: 3%
+      detected_duplication: 1.5%
+      expected:
+        quality_gate_passed: true
+    - name: excessive_duplication
+      threshold: 3%
+      detected_duplication: 5%
+      expected:
+        quality_gate_failed: true
+        refactoring_required: true
+  dependency_analysis:
+  - tool: safety
+    tests:
+    - name: vulnerable_dependencies
+      expected:
+        critical_vulnerabilities: 0
+        high_vulnerabilities: 0
+        update_recommendations: provided
+  - tool: pip-audit
+    tests:
+    - name: dependency_audit
+      expected:
+        known_vulnerabilities: 0
+        outdated_dependencies_flagged: true
+  code_review_automation:
+  - scenario: pr_quality_checks
+    tests:
+    - name: automated_pr_review
+      pr_changes:
+        files_changed: 5
+        lines_added: 150
+        lines_deleted: 30
+      expected:
+        code_quality_score: calculated
+        review_comments_generated: true
+        approval_required_if_score_low: true
+  monitoring:
+  - metric: code_quality_score
+    labels:
+    - service
+    - metric_type
+  - metric: code_violations_total
+    labels:
+    - service
+    - severity
+  - metric: dependency_vulnerabilities_total
+    labels:
+    - severity
+- name: Performance and Load Testing
+  scenario_id: l3-qual-performance-testing
+  description: Test system performance under load
+  load_testing:
+  - tool: locust
+    tests:
+    - name: normal_load
+      users: 500
+      spawn_rate: 10
+      duration: 5m
+      expected:
+        response_time_p50: < 100ms
+        response_time_p95: < 200ms
+        response_time_p99: < 500ms
+        error_rate: < 0.1%
+        throughput: '> 2000 rps'
+    - name: peak_load
+      users: 2000
+      spawn_rate: 50
+      duration: 10m
+      expected:
+        response_time_p95: < 500ms
+        error_rate: < 1%
+        no_crashes: true
+        degradation_graceful: true
+    - name: stress_test
+      users: 5000
+      spawn_rate: 100
+      duration: 5m
+      expected:
+        system_identifies_limits: true
+        breaking_point: identified
+        recovery_after_load: true
+  spike_testing:
+  - scenario: sudden_traffic_spike
+    tests:
+    - name: handle_traffic_burst
+      baseline_users: 100
+      spike_users: 2000
+      spike_duration: 1m
+      expected:
+        autoscaling_triggered: true
+        minimal_errors_during_scale: true
+        performance_degradation: < 2x
+  endurance_testing:
+  - scenario: sustained_load
+    tests:
+    - name: run_for_hours
+      users: 500
+      duration: 4h
+      expected:
+        no_memory_leaks: true
+        performance_stable: true
+        error_rate_consistent: true
+        resource_usage_stable: true
+  capacity_planning:
+  - scenario: determine_capacity
+    tests:
+    - name: find_max_users
+      users:
+      - 100
+      - 500
+      - 1000
+      - 2000
+      - 5000
+      sla_p95_latency: 200ms
+      expected:
+        max_capacity_identified: true
+        recommended_scaling_point: determined
+  performance_regression:
+  - scenario: detect_regression
+    tests:
+    - name: compare_with_baseline
+      current_p95: 250ms
+      baseline_p95: 200ms
+      threshold: 10%_degradation
+      expected:
+        regression_detected: true
+        alert_triggered: true
+        deployment_blocked: true
+  monitoring:
+  - metric: load_test_results
+    labels:
+    - test_type
+    - result
+  - metric: performance_regression_detected
+    labels:
+    - metric
+  - metric: load_test_duration_seconds
+    labels:
+    - test_type
+- name: Test Data Management
+  scenario_id: l3-qual-test-data
+  description: Test data generation, fixtures, and isolation
+  test_fixtures:
+  - framework: pytest_fixtures
+    tests:
+    - name: load_fixtures
+      fixtures:
+      - users
+      - organizations
+      - bias
+      - risks
+      expected:
+        fixtures_loaded: true
+        data_consistent: true
+        relationships_valid: true
+    - name: fixture_cleanup
+      test_execution: complete
+      expected:
+        test_data_removed: true
+        database_clean: true
+        no_side_effects: true
+  test_data_generation:
+  - tool: factory_boy
+    tests:
+    - name: generate_realistic_data
+      factory: UserFactory
+      count: 1000
+      expected:
+        users_created: 1000
+        data_realistic: true
+        unique_constraints_respected: true
+    - name: generate_related_data
+      factories:
+      - OrganizationFactory
+      - BIAFactory
+      expected:
+        relationships_created: true
+        referential_integrity: true
+  anonymized_production_data:
+  - scenario: import_production_subset
+    tests:
+    - name: anonymize_and_import
+      source: production_database
+      subset_size: 10%
+      expected:
+        data_imported: true
+        pii_anonymized: true
+        data_volume: 10%_of_production
+        statistical_properties_preserved: true
+  test_isolation:
+  - scenario: database_transactions
+    tests:
+    - name: rollback_after_test
+      test: modifies_database
+      expected:
+        changes_rolled_back: true
+        next_test_sees_clean_state: true
+  - scenario: namespace_isolation
+    tests:
+    - name: parallel_test_isolation
+      parallel_tests: 8
+      expected:
+        no_data_conflicts: true
+        each_test_isolated: true
+  monitoring:
+  - metric: test_fixtures_loaded_total
+    labels:
+    - fixture_name
+  - metric: test_data_generation_duration_seconds
+  - metric: test_isolation_violations_total
+- name: Quality Gates and Release Criteria
+  scenario_id: l3-qual-quality-gates
+  description: Test quality gate enforcement and release readiness
+  quality_gates:
+  - gate: unit_tests
+    criteria:
+    - metric: test_pass_rate
+      threshold: 100%
+      blocker: true
+    - metric: code_coverage
+      threshold: '> 80%'
+      blocker: true
+    tests:
+    - name: gate_passed
+      test_pass_rate: 1.0
+      code_coverage: 0.85
+      expected:
+        gate_status: passed
+        deployment_allowed: true
+    - name: gate_failed
+      test_pass_rate: 0.98
+      code_coverage: 0.75
+      expected:
+        gate_status: failed
+        deployment_blocked: true
+        notification_sent: true
+  - gate: security
+    criteria:
+    - metric: critical_vulnerabilities
+      threshold: '0'
+      blocker: true
+    - metric: high_vulnerabilities
+      threshold: < 3
+      blocker: true
+    tests:
+    - name: security_gate_passed
+      critical_vulns: 0
+      high_vulns: 1
+      expected:
+        gate_status: passed
+    - name: security_gate_failed
+      critical_vulns: 1
+      expected:
+        gate_status: failed
+        deployment_blocked: true
+        security_team_notified: true
+  - gate: performance
+    criteria:
+    - metric: response_time_p95
+      threshold: < 200ms
+      blocker: false
+    - metric: error_rate
+      threshold: < 0.1%
+      blocker: true
+    tests:
+    - name: performance_warning
+      p95_latency: 250ms
+      error_rate: 0.05
+      expected:
+        gate_status: warning
+        deployment_allowed: true
+        warning_logged: true
+  release_readiness:
+  - checklist:
+    - item: all_tests_passed
+      required: true
+    - item: code_reviewed
+      required: true
+    - item: documentation_updated
+      required: true
+    - item: security_scan_passed
+      required: true
+    - item: performance_validated
+      required: true
+    tests:
+    - name: release_ready
+      checklist_completion: 100%
+      expected:
+        release_approved: true
+        deployment_authorized: true
+    - name: release_not_ready
+      checklist_completion: 80%
+      missing:
+      - documentation_updated
+      expected:
+        release_blocked: true
+        missing_items_highlighted: true
+  manual_approval:
+  - scenario: production_deployment
+    tests:
+    - name: require_manual_approval
+      environment: production
+      automated_checks: all_passed
+      expected:
+        approval_requested: true
+        approvers:
+        - tech_lead
+        - product_manager
+        deployment_on_approval: true
+  monitoring:
+  - metric: quality_gates_evaluated_total
+    labels:
+    - gate_name
+    - result
+  - metric: releases_blocked_total
+    labels:
+    - blocking_gate
+  - metric: release_readiness_score
+    labels:
+    - version
+- name: Continuous Quality Monitoring
+  scenario_id: l3-qual-continuous-monitoring
+  description: Monitor quality metrics in production
+  production_quality_metrics:
+  - metric: error_rate
+    tests:
+    - name: monitor_error_rate
+      baseline: 0.05
+      current: 0.08
+      threshold: 2x_baseline
+      expected:
+        alert_triggered: false
+        within_acceptable_range: true
+    - name: error_rate_spike
+      baseline: 0.05
+      current: 0.15
+      threshold: 2x_baseline
+      expected:
+        alert_triggered: true
+        incident_created: true
+        rollback_considered: true
+  - metric: performance_degradation
+    tests:
+    - name: latency_increase
+      baseline_p95: 200ms
+      current_p95: 350ms
+      threshold: 50%_increase
+      expected:
+        alert_triggered: true
+        performance_investigation_started: true
+  synthetic_monitoring:
+  - scenario: synthetic_transactions
+    tests:
+    - name: critical_path_monitoring
+      transactions:
+      - user_login
+      - create_bia
+      - view_dashboard
+      frequency: 5m
+      expected:
+        transactions_successful: true
+        latency_within_sla: true
+        availability: '> 99.9%'
+  quality_trends:
+  - scenario: track_quality_over_time
+    tests:
+    - name: quality_improving
+      metrics_7_days_ago:
+        coverage: 75
+        bugs: 20
+      metrics_today:
+        coverage: 82
+        bugs: 12
+      expected:
+        trend: improving
+        team_recognized: true
+    - name: quality_degrading
+      metrics_7_days_ago:
+        coverage: 82
+        bugs: 12
+      metrics_today:
+        coverage: 78
+        bugs: 25
+      expected:
+        trend: degrading
+        alert_triggered: true
+        corrective_action_required: true
+  monitoring:
+  - metric: production_error_rate
+    labels:
+    - service
+    - error_type
+  - metric: synthetic_transaction_success_rate
+    labels:
+    - transaction
+  - metric: quality_trend_score
+    labels:
+    - metric_name
+monitoring:
+  required_metrics:
+  - name: quality_system_health
+    type: gauge
+    description: Overall quality system health (0-1)
+    labels:
+    - component
+  - name: tests_executed_total
+    type: counter
+    description: Tests executed
+    labels:
+    - level
+    - status
+  - name: test_duration_seconds
+    type: histogram
+    description: Test execution duration
+    labels:
+    - level
+    - suite
+  - name: test_coverage_ratio
+    type: gauge
+    description: Test coverage ratio (0-1)
+    labels:
+    - service
+  - name: code_quality_score
+    type: gauge
+    description: Code quality score (0-10)
+    labels:
+    - service
+    - metric_type
+  - name: code_violations_total
+    type: counter
+    description: Code quality violations
+    labels:
+    - service
+    - severity
+  - name: load_test_results
+    type: gauge
+    description: Load test results
+    labels:
+    - test_type
+    - metric
+  - name: quality_gates_evaluated_total
+    type: counter
+    description: Quality gates evaluated
+    labels:
+    - gate_name
+    - result
+  - name: releases_blocked_total
+    type: counter
+    description: Releases blocked by quality gates
+    labels:
+    - blocking_gate
+  - name: production_error_rate
+    type: gauge
+    description: Production error rate
+    labels:
+    - service
+    - error_type
+integration:
+  eventbus_events:
+    publishes:
+    - quality.test.completed
+    - quality.gate.failed
+    - quality.regression.detected
+    - quality.release.blocked
+    - quality.metric.threshold_exceeded
+    subscribes:
+    - cicd.build.completed
+    - cicd.deployment.requested
+    - monitoring.alert.triggered
+    - github.pr.opened
+  dependencies:
+  - service: ci-cd-pipeline
+    purpose: Test execution in pipeline
+  - service: test-runners
+    purpose: Test framework execution
+  - service: code-analysis-tools
+    purpose: Static code analysis
+  - service: performance-test-tools
+    purpose: Load and performance testing
+  - service: eventbus
+    purpose: Quality event propagation
+context_variables:
+  system_name: Name of quality system (e.g., 'qa-automation')
+  test_frameworks: Testing frameworks used
+  quality_tools: Code quality tools configured
+  performance_tools: Performance testing tools
+  quality_thresholds: Quality gate thresholds
+learning_integration:
+  collect_patterns:
+  - common_test_failures
+  - effective_test_strategies
+  - performance_bottlenecks
+  - quality_improvement_correlations
+  feedback_to_learning_system:
+  - Identify flaky tests
+  - Suggest test coverage improvements
+  - Recommend performance optimizations
+  - Predict quality issues
+  recommendations:
+  - Suggest additional test cases
+  - Recommend refactoring opportunities
+  - Identify testing gaps
+  - Propose quality improvements

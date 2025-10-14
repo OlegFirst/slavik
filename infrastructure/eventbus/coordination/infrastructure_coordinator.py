@@ -73,16 +73,16 @@ class InfrastructureCoordinator:
 
         # Import Phase 1.1 governance components
         if enable_governance:
-            from infrastructure.decision_center import (
+            from infrastructure.policy_engine import (
                 InfrastructureDecisionCenter,
                 EscalationManager,
                 NotificationService,
                 initialize_policy_engine
             )
-            from infrastructure.decision_center.notification_service import (
+            from infrastructure.policy_engine.notification_service import (
                 NotificationConfig, NotificationPriority
             )
-            from infrastructure.decision_center.escalation_manager import (
+            from infrastructure.policy_engine.escalation_manager import (
                 EscalationPolicy
             )
 
@@ -176,7 +176,7 @@ class InfrastructureCoordinator:
             logger.info("  ✅ Policy Engine loaded from YAML")
 
             # Print policy summary
-            from infrastructure.decision_center import get_policy_engine
+            from infrastructure.policy_engine import get_policy_engine
             engine = get_policy_engine()
             if engine and hasattr(engine, 'policies') and engine.policies:
                 recovery_policies = engine.policies.get('recovery', {})

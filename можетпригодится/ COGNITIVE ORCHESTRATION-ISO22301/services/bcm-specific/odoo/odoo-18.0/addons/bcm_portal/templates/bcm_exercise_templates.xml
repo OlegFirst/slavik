@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Exercise Request Form Template -->
+    <template id="portal_exercise_request_form" name="Exercise Request Form">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Request New Exercise</t>
+            </t>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        
+                        <!-- Success/Error Messages -->
+                        <t t-if="error_message">
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <strong>Error:</strong> <span t-esc="error_message"/>
+                            </div>
+                        </t>
+                        
+                        <t t-if="success_message">
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <strong>Success:</strong> <span t-esc="success_message"/>
+                            </div>
+                        </t>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa fa-clipboard-check me-2"></i>Request Exercise</h3>
+                                <p class="text-muted mb-0">Submit a request for a business continuity exercise</p>
+                            </div>
+                            <div class="card-body">
+                                <form action="/portal/exercise/submit" method="post" class="needs-validation" novalidate="true">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="exercise_type" class="form-label">Exercise Type <span class="text-danger">*</span></label>
+                                            <select name="exercise_type" id="exercise_type" class="form-select" required="true">
+                                                <option value="">Select exercise type...</option>
+                                                <option value="tabletop">Tabletop Exercise</option>
+                                                <option value="walkthrough">Walkthrough</option>
+                                                <option value="simulation">Simulation</option>
+                                                <option value="fullscale">Full-Scale Exercise</option>
+                                            </select>
+                                            <div class="invalid-feedback">Please select an exercise type.</div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <label for="preferred_datetime" class="form-label">Preferred Date/Time</label>
+                                            <input type="datetime-local" name="preferred_datetime" id="preferred_datetime" class="form-control"/>
+                                            <small class="form-text text-muted">Optional: Suggest your preferred date and time</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="scenario_description" class="form-label">Scenario Description <span class="text-danger">*</span></label>
+                                        <textarea name="scenario_description" id="scenario_description" class="form-control" rows="4" required="true" 
+                                                  placeholder="Describe the exercise scenario, objectives, or specific situation you want to test..."></textarea>
+                                        <div class="invalid-feedback">Please provide a scenario description.</div>
+                                        <small class="form-text text-muted">
+                                            Our AI will enhance your scenario with additional details and realistic elements.
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="participants" class="form-label">Participants</label>
+                                        <select name="participants" id="participants" class="form-select" multiple="true">
+                                            <t t-foreach="company_users" t-as="user">
+                                                <option t-att-value="user.id" t-esc="user.name"/>
+                                            </t>
+                                        </select>
+                                        <small class="form-text text-muted">
+                                            Hold Ctrl (Cmd on Mac) to select multiple participants. Leave empty to assign later.
+                                        </small>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card bg-light">
+                                                <div class="card-body">
+                                                    <h6 class="card-title"><i class="fa fa-info-circle me-2"></i>What happens next?</h6>
+                                                    <ul class="mb-0">
+                                                        <li>Your request will be reviewed by our BCM team</li>
+                                                        <li>AI will enhance your scenario with realistic elements</li>
+                                                        <li>A facilitator will be assigned to your exercise</li>
+                                                        <li>You'll receive an email notification when scheduled</li>
+                                                        <li>Exercise materials will be available for download</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg me-2">
+                                            <i class="fa fa-paper-plane me-2"></i>Submit Request
+                                        </button>
+                                        <a href="/portal/exercise/status" class="btn btn-secondary">
+                                            <i class="fa fa-list me-2"></i>View Status
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Bootstrap form validation
+                (function() {
+                    'use strict';
+                    window.addEventListener('load', function() {
+                        var forms = document.getElementsByClassName('needs-validation');
+                        var validation = Array.prototype.filter.call(forms, function(form) {
+                            form.addEventListener('submit', function(event) {
+                                if (form.checkValidity() === false) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }
+                                form.classList.add('was-validated');
+                            }, false);
+                        });
+                    }, false);
+                })();
+            </script>
+        </t>
+    </template>
+
+    <!-- Exercise Status Tracking Template -->
+    <template id="portal_exercise_status" name="Exercise Status">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Exercise Status</t>
+            </t>
+
+            <div class="container-fluid">
+                
+                <!-- Success Message -->
+                <t t-if="success_message">
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <span t-esc="success_message"/>
+                    </div>
+                </t>
+
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3><i class="fa fa-chart-line me-2"></i>Exercise Requests</h3>
+                            <a href="/portal/exercise/request" class="btn btn-primary">
+                                <i class="fa fa-plus me-2"></i>New Request
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Exercise Requests -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">My Exercise Requests</h5>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="not exercises">
+                            <div class="text-center py-4">
+                                <i class="fa fa-clipboard-list fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No exercise requests found.</p>
+                                <a href="/portal/exercise/request" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Create First Request
+                                </a>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Exercise Name</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Requested</th>
+                                            <th>Planned Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="exercises" t-as="exercise">
+                                            <tr>
+                                                <td>
+                                                    <strong t-esc="exercise.name"/>
+                                                    <t t-if="exercise.ai_generated">
+                                                        <span class="badge bg-info ms-2">AI Enhanced</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-secondary" t-esc="exercise.exercise_type.title()"/>
+                                                </td>
+                                                <td>
+                                                    <span t-attf-class="badge bg-#{exercise.state == 'requested' and 'warning' or exercise.state == 'scheduled' and 'primary' or exercise.state == 'completed' and 'success' or 'secondary'}">
+                                                        <t t-esc="exercise.state.title()"/>
+                                                    </span>
+                                                </td>
+                                                <td t-esc="exercise.create_date.strftime('%Y-%m-%d')"/>
+                                                <td>
+                                                    <t t-if="exercise.planned_date">
+                                                        <span t-esc="exercise.planned_date.strftime('%Y-%m-%d %H:%M')"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-muted">Not scheduled</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <t t-if="exercise.state in ['scheduled', 'completed']">
+                                                            <a t-attf-href="/portal/exercise/#{exercise.id}/download" class="btn btn-outline-primary" title="Download Materials">
+                                                                <i class="fa fa-download"></i>
+                                                            </a>
+                                                        </t>
+                                                        <t t-if="exercise.state == 'completed'">
+                                                            <a t-attf-href="/portal/exercise/#{exercise.id}/feedback" class="btn btn-outline-success" title="Submit Feedback">
+                                                                <i class="fa fa-comment"></i>
+                                                            </a>
+                                                        </t>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- All Company Exercises (for admins) -->
+                <t t-if="can_view_all">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">All Company Exercises</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Exercise Name</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Requested By</th>
+                                            <th>Requested</th>
+                                            <th>Participants</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="all_exercises" t-as="exercise">
+                                            <tr>
+                                                <td>
+                                                    <strong t-esc="exercise.name"/>
+                                                    <t t-if="exercise.ai_generated">
+                                                        <span class="badge bg-info ms-2">AI</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-secondary" t-esc="exercise.exercise_type.title()"/>
+                                                </td>
+                                                <td>
+                                                    <span t-attf-class="badge bg-#{exercise.state == 'requested' and 'warning' or exercise.state == 'scheduled' and 'primary' or exercise.state == 'completed' and 'success' or 'secondary'}">
+                                                        <t t-esc="exercise.state.title()"/>
+                                                    </span>
+                                                </td>
+                                                <td t-esc="exercise.requested_by.name if exercise.requested_by else 'System'"/>
+                                                <td t-esc="exercise.create_date.strftime('%Y-%m-%d')"/>
+                                                <td>
+                                                    <span class="badge bg-light text-dark" t-esc="len(exercise.participant_ids)"/>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <t t-if="exercise.state in ['scheduled', 'completed']">
+                                                            <a t-attf-href="/portal/exercise/#{exercise.id}/download" class="btn btn-outline-primary" title="Download Materials">
+                                                                <i class="fa fa-download"></i>
+                                                            </a>
+                                                        </t>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Exercise Feedback Form Template -->
+    <template id="portal_exercise_feedback" name="Exercise Feedback">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Exercise Feedback</t>
+            </t>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fa fa-comment me-2"></i>Exercise Feedback</h3>
+                                <p class="text-muted mb-0">
+                                    Please provide feedback for: <strong t-esc="exercise.name"/>
+                                </p>
+                            </div>
+                            <div class="card-body">
+                                <form action="/portal/exercise/{{ exercise.id }}/feedback" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <!-- Rating Sections -->
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Overall Exercise Rating</label>
+                                            <select name="exercise_rating" class="form-select">
+                                                <option value="5">5 - Excellent</option>
+                                                <option value="4">4 - Good</option>
+                                                <option value="3" selected="true">3 - Average</option>
+                                                <option value="2">2 - Poor</option>
+                                                <option value="1">1 - Very Poor</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Scenario Realism</label>
+                                            <select name="scenario_realism" class="form-select">
+                                                <option value="5">5 - Very Realistic</option>
+                                                <option value="4">4 - Realistic</option>
+                                                <option value="3" selected="true">3 - Somewhat Realistic</option>
+                                                <option value="2">2 - Unrealistic</option>
+                                                <option value="1">1 - Very Unrealistic</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Facilitator Rating</label>
+                                            <select name="facilitator_rating" class="form-select">
+                                                <option value="5">5 - Excellent</option>
+                                                <option value="4">4 - Good</option>
+                                                <option value="3" selected="true">3 - Average</option>
+                                                <option value="2">2 - Poor</option>
+                                                <option value="1">1 - Very Poor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Text Feedback -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Learning Objectives Achievement</label>
+                                        <textarea name="learning_objectives" class="form-control" rows="3" 
+                                                  placeholder="Were the learning objectives met? What did you learn?"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Suggested Improvements</label>
+                                        <textarea name="improvements" class="form-control" rows="3" 
+                                                  placeholder="How could this exercise be improved?"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Additional Comments</label>
+                                        <textarea name="additional_comments" class="form-control" rows="3" 
+                                                  placeholder="Any other feedback or comments?"></textarea>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-success btn-lg me-2">
+                                            <i class="fa fa-paper-plane me-2"></i>Submit Feedback
+                                        </button>
+                                        <a href="/portal/exercise/status" class="btn btn-secondary">
+                                            <i class="fa fa-arrow-left me-2"></i>Back to Status
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Exercise History Template -->
+    <template id="portal_exercise_history" name="Exercise History">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Exercise History</t>
+            </t>
+
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa fa-history me-2"></i>Completed Exercises</h3>
+                        <p class="text-muted mb-0">History of all completed business continuity exercises</p>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="not completed_exercises">
+                            <div class="text-center py-4">
+                                <i class="fa fa-clipboard-list fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No completed exercises found.</p>
+                                <a href="/portal/exercise/request" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Request New Exercise
+                                </a>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Exercise Name</th>
+                                            <th>Type</th>
+                                            <th>Completed Date</th>
+                                            <th>Participants</th>
+                                            <th>Feedback</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="completed_exercises" t-as="exercise">
+                                            <tr>
+                                                <td>
+                                                    <strong t-esc="exercise.name"/>
+                                                    <t t-if="exercise.ai_generated">
+                                                        <span class="badge bg-info ms-2">AI Enhanced</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-secondary" t-esc="exercise.exercise_type.title()"/>
+                                                </td>
+                                                <td t-esc="exercise.write_date.strftime('%Y-%m-%d')"/>
+                                                <td>
+                                                    <span class="badge bg-light text-dark" t-esc="len(exercise.participant_ids)"/>
+                                                </td>
+                                                <td>
+                                                    <t t-if="exercise.feedback_submitted">
+                                                        <span class="badge bg-success">Submitted</span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="badge bg-warning">Pending</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a t-attf-href="/portal/exercise/#{exercise.id}/download" class="btn btn-outline-primary" title="Download Materials">
+                                                            <i class="fa fa-download"></i>
+                                                        </a>
+                                                        <t t-if="not exercise.feedback_submitted">
+                                                            <a t-attf-href="/portal/exercise/#{exercise.id}/feedback" class="btn btn-outline-success" title="Submit Feedback">
+                                                                <i class="fa fa-comment"></i>
+                                                            </a>
+                                                        </t>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Exercise Portal Navigation Extension -->
+    <template id="exercise_portal_nav_extension" inherit_id="bcm_portal.bcm_portal_nav">
+        <xpath expr="//li[last()]" position="after">
+            <t t-if="page_name and page_name in ['exercise_request', 'exercise_status', 'exercise_feedback', 'exercise_history']">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fa fa-clipboard-check"/> Exercises
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/portal/exercise/request">
+                            <i class="fa fa-plus me-2"></i>Request Exercise
+                        </a></li>
+                        <li><a class="dropdown-item" href="/portal/exercise/status">
+                            <i class="fa fa-chart-line me-2"></i>Status Tracking
+                        </a></li>
+                        <li><a class="dropdown-item" href="/portal/exercise/history">
+                            <i class="fa fa-history me-2"></i>Exercise History
+                        </a></li>
+                    </ul>
+                </li>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Portal Home Menu Extension for Exercise -->
+    <template id="portal_my_home_menu_exercise" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div class="col-lg-6 mb-4" id="exercise_portal_category">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5><i class="fa fa-clipboard-check me-2"></i>BCM Exercises</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="/portal/exercise/request" class="btn btn-primary w-100">
+                                    <i class="fa fa-plus me-2"></i>Request
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="/portal/exercise/status" class="btn btn-outline-primary w-100">
+                                    <i class="fa fa-chart-line me-2"></i>Status
+                                </a>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <a href="/portal/exercise/history" class="btn btn-outline-secondary w-100">
+                                    <i class="fa fa-history me-2"></i>History
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <t t-set="user_exercises" t-value="request.env['bcm.exercise.management'].sudo().search_count([('company_id', '=', request.env.company.id), ('requested_by', '=', request.env.user.id)])"/>
+                        <t t-set="pending_exercises" t-value="request.env['bcm.exercise.management'].sudo().search_count([('company_id', '=', request.env.company.id), ('requested_by', '=', request.env.user.id), ('state', 'in', ['requested', 'pending'])])"/>
+                        
+                        <div class="mt-3 pt-3 border-top">
+                            <small class="text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>Your Requests:</span>
+                                    <span><strong t-esc="user_exercises"/></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Pending:</span>
+                                    <span><strong t-esc="pending_exercises"/></span>
+                                </div>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

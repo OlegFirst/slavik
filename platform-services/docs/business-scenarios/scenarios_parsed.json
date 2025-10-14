@@ -1,0 +1,3282 @@
+[
+  {
+    "title": "1.1 Start New BIA",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "org_id, scope, method (interview/questionnaire/hybrid)",
+    "outputs": "bia_id, workflow_created",
+    "events": "`bia.workflow.started`",
+    "components": "BIA Service → Orchestrator → Task Queue",
+    "description": "1.1 Start New BIA"
+  },
+  {
+    "title": "1.2 AI-Assisted BIA Planning",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "organization_profile, industry",
+    "outputs": "recommended_approach, estimated_duration, interview_targets",
+    "events": "`bia.approach.recommended`",
+    "components": "BIA Service → Orchestrator → AI Foundation (RAG + LLM)",
+    "description": "1.2 AI-Assisted BIA Planning"
+  },
+  {
+    "title": "1.3 Generate Interview Questions",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "department, process_type, industry",
+    "outputs": "customized_questions (25+ questions)",
+    "events": "`bia.questions.generated`",
+    "components": "BIA Service → RAG (ISO/WHO templates) → LLM (Claude Sonnet)",
+    "description": "1.3 Generate Interview Questions"
+  },
+  {
+    "title": "1.4 Conduct Interview with Real-Time AI Support",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "interview_session, answers",
+    "outputs": "ai_suggestions, follow_up_questions, missing_info_flags",
+    "events": "`bia.interview.in_progress`, `ai.suggestion.provided`",
+    "components": "BIA Service → AI Assistant (real-time) → LLM (Claude Haiku)",
+    "description": "1.4 Conduct Interview with Real-Time AI Support"
+  },
+  {
+    "title": "1.5 Auto-Analyze Questionnaires",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "questionnaire_responses (bulk)",
+    "outputs": "incomplete_responses, inconsistencies, extracted_dependencies",
+    "events": "`bia.questionnaires.analyzed`",
+    "components": "BIA Service → ML Engine (NLP) → PostgreSQL",
+    "description": "1.5 Auto-Analyze Questionnaires"
+  },
+  {
+    "title": "1.6 Build Dependency Graph",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "all_processes, interview_data, questionnaire_data",
+    "outputs": "dependency_graph (nodes + edges), critical_paths, circular_dependencies",
+    "events": "`bia.dependency_graph.created`",
+    "components": "BIA Service → AI Orchestrator (graph analysis) → Neo4j/PostgreSQL",
+    "description": "1.6 Build Dependency Graph"
+  },
+  {
+    "title": "1.7 ML-Powered RTO/RPO Recommendations",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "process, industry, regulatory_requirements, historical_data",
+    "outputs": "recommended_rto, recommended_rpo, confidence, rationale",
+    "events": "`bia.rto_recommendations.generated`",
+    "components": "BIA Service → Predictive Engine (Random Forest) → Case Library",
+    "description": "1.7 ML-Powered RTO/RPO Recommendations"
+  },
+  {
+    "title": "1.8 Generate BIA Report",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "bia_id, template_type (ISO/NIST/WHO)",
+    "outputs": "comprehensive_report (PDF/DOCX)",
+    "events": "`bia.report.generated`",
+    "components": "BIA Service → LLM (Claude Sonnet) → Living Docs",
+    "description": "1.8 Generate BIA Report"
+  },
+  {
+    "title": "1.9 Quality Check BIA Report",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "bia_report",
+    "outputs": "completeness_score, missing_items, recommendations",
+    "events": "`bia.quality_check.completed`",
+    "components": "BIA Service → Domain Specialist (BIA Expert) → Compliance check",
+    "description": "1.9 Quality Check BIA Report"
+  },
+  {
+    "title": "1.10 Update Existing BIA",
+    "service": "BIA",
+    "category": "Основные сценарии (Core)",
+    "inputs": "bia_id, changes (new processes, updated RTOs)",
+    "outputs": "updated_bia, version_history",
+    "events": "`bia.updated`",
+    "components": "BIA Service → Living Docs (version control) → Event Bus (notify downstream)",
+    "description": "#### Advanced сценарии"
+  },
+  {
+    "title": "1.11 Multi-Site BIA Coordination",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "organization_id (multi-site), site_list",
+    "outputs": "consolidated_bia, cross-site_dependencies",
+    "events": "`bia.multi_site.coordinated`",
+    "components": "BIA Service (×N sites) → Orchestrator (aggregation) → Conflict resolver",
+    "description": "1.11 Multi-Site BIA Coordination"
+  },
+  {
+    "title": "1.12 BIA Data Import from External System",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "external_data (CSV/Excel/API), mapping_rules",
+    "outputs": "imported_processes, validation_report",
+    "events": "`bia.data.imported`",
+    "components": "BIA Service → Data Integration Service → Validation Engine",
+    "description": "1.12 BIA Data Import from External System"
+  },
+  {
+    "title": "1.13 BIA Template Customization",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "industry, organization_size, regulatory_requirements",
+    "outputs": "customized_template, pre_filled_fields",
+    "events": "`bia.template.customized`",
+    "components": "BIA Service → AI Foundation (template generation) → Knowledge Base",
+    "description": "1.13 BIA Template Customization"
+  },
+  {
+    "title": "1.14 BIA Progress Tracking",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id",
+    "outputs": "completion_percentage, next_steps, blockers",
+    "events": "`bia.progress.updated`",
+    "components": "BIA Service → Dashboard → Task Queue (remaining tasks)",
+    "description": "1.14 BIA Progress Tracking"
+  },
+  {
+    "title": "1.15 BIA Approval Workflow",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id, approvers_list",
+    "outputs": "approval_status, comments, version_approved",
+    "events": "`bia.submitted_for_approval`, `bia.approved`, `bia.rejected`",
+    "components": "BIA Service → Workflow Engine → Notification Service",
+    "description": "1.15 BIA Approval Workflow"
+  },
+  {
+    "title": "1.16 BIA Comparison (Year-over-Year)",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id_current, bia_id_previous",
+    "outputs": "changes_summary, new_risks, improved_rtos",
+    "events": "`bia.comparison.completed`",
+    "components": "BIA Service → Analytics Engine → Visualization",
+    "description": "1.16 BIA Comparison (Year-over-Year)"
+  },
+  {
+    "title": "1.17 BIA Audit Trail",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id",
+    "outputs": "complete_history (who changed what when)",
+    "events": "`bia.audit_trail.requested`",
+    "components": "BIA Service → Event Sourcing (PostgreSQL) → Audit Log",
+    "description": "1.17 BIA Audit Trail"
+  },
+  {
+    "title": "1.18 BIA Integration with Asset Management",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id, asset_management_system_api",
+    "outputs": "synchronized_assets, dependency_updates",
+    "events": "`bia.assets.synchronized`",
+    "components": "BIA Service → Integration Service → External API",
+    "description": "1.18 BIA Integration with Asset Management"
+  },
+  {
+    "title": "1.19 BIA Monte Carlo Simulation",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_results, scenarios (best/worst/likely)",
+    "outputs": "rto_distribution, confidence_intervals",
+    "events": "`bia.simulation.completed`",
+    "components": "",
+    "description": "1.19 BIA Monte Carlo Simulation"
+  },
+  {
+    "title": "1.20 BIA Export for Compliance",
+    "service": "BIA",
+    "category": "Advanced сценарии",
+    "inputs": "bia_id, standard (ISO/NIST/SOC2)",
+    "outputs": "compliance_package (evidence + mappings)",
+    "events": "`bia.compliance_export.completed`",
+    "components": "BIA Service → Compliance Service → Document Generator",
+    "description": "#### Industry-Specific сценарии"
+  },
+  {
+    "title": "1.21 Healthcare BIA (WHO Guidelines)",
+    "service": "BIA",
+    "category": "Industry-Specific сценарии",
+    "inputs": "healthcare_org_id, clinical_services",
+    "outputs": "patient_centered_bia, vulnerable_population_analysis",
+    "events": "`bia.healthcare.completed`",
+    "components": "BIA Service → WHO Knowledge Flows → Healthcare Specialist",
+    "description": "1.21 Healthcare BIA (WHO Guidelines)"
+  },
+  {
+    "title": "1.22 Financial Services BIA (Regulatory Focus)",
+    "service": "BIA",
+    "category": "Industry-Specific сценарии",
+    "inputs": "financial_org_id, regulatory_requirements (MiFID II, SEC)",
+    "outputs": "regulatory_compliant_bia, trading_system_rto",
+    "events": "`bia.financial.completed`",
+    "components": "BIA Service → NIST Flows → Financial Specialist",
+    "description": "1.22 Financial Services BIA (Regulatory Focus)"
+  },
+  {
+    "title": "1.23 Manufacturing BIA (Supply Chain Focus)",
+    "service": "BIA",
+    "category": "Industry-Specific сценарии",
+    "inputs": "manufacturing_org_id, supply_chain_data",
+    "outputs": "supply_chain_dependencies, production_line_rto",
+    "events": "`bia.manufacturing.completed`",
+    "components": "BIA Service → Supply Chain Integration → Manufacturing Specialist",
+    "description": "1.23 Manufacturing BIA (Supply Chain Focus)"
+  },
+  {
+    "title": "1.24 Cloud/SaaS BIA (Digital Services)",
+    "service": "BIA",
+    "category": "Industry-Specific сценарии",
+    "inputs": "saas_org_id, cloud_infrastructure",
+    "outputs": "service_tier_rto, multi_tenant_impact",
+    "events": "`bia.saas.completed`",
+    "components": "BIA Service → Cloud Integration → SaaS Specialist",
+    "description": "1.24 Cloud/SaaS BIA (Digital Services)"
+  },
+  {
+    "title": "1.25 Retail BIA (Customer-Facing Focus)",
+    "service": "BIA",
+    "category": "Industry-Specific сценарии",
+    "inputs": "retail_org_id, store_locations, e_commerce",
+    "outputs": "customer_impact_analysis, omnichannel_dependencies",
+    "events": "`bia.retail.completed`",
+    "components": "BIA Service → Retail Specialist → Customer Impact Analyzer",
+    "description": "### 2. Risk Service - 22 сценария использования #### Core Risk Assessment сценарии"
+  },
+  {
+    "title": "2.1 Start Risk Assessment (from BIA)",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "bia_results, organization_profile",
+    "outputs": "risk_assessment_id, identified_risks",
+    "events": "`risk.assessment.started` (triggered by `bia.completed`)",
+    "components": "Risk Service → Event Bus (Saga Pattern) → BIA Service",
+    "description": "2.1 Start Risk Assessment (from BIA)"
+  },
+  {
+    "title": "2.2 ML-Powered Risk Likelihood Prediction",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk_description, industry, organization_size, historical_data",
+    "outputs": "likelihood_score (0-1), confidence, contributing_factors",
+    "events": "`risk.likelihood.predicted`",
+    "components": "Risk Service → Predictive Engine (Random Forest) → Case Library",
+    "description": "2.2 ML-Powered Risk Likelihood Prediction"
+  },
+  {
+    "title": "2.3 Risk Impact Analysis",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk, affected_processes (from BIA), dependencies",
+    "outputs": "financial_impact, operational_impact, reputational_impact, regulatory_impact",
+    "events": "`risk.impact.analyzed`",
+    "components": "Risk Service → BIA Service (dependency data) → Impact Calculator",
+    "description": "2.3 Risk Impact Analysis"
+  },
+  {
+    "title": "2.4 Risk Matrix Visualization",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "all_risks, likelihood_scores, impact_scores",
+    "outputs": "risk_matrix (5×5 grid), high_risks_list, risk_scores",
+    "events": "`risk.matrix.created`",
+    "components": "Risk Service → Visualization Engine → Dashboard",
+    "description": "2.4 Risk Matrix Visualization"
+  },
+  {
+    "title": "2.5 Risk Treatment Planning",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk_id, treatment_options (mitigate/transfer/accept/avoid)",
+    "outputs": "treatment_plan, actions, owners, deadlines, costs",
+    "events": "`risk.treatment_plan.created`",
+    "components": "Risk Service → Planning Service → Task Queue",
+    "description": "2.5 Risk Treatment Planning"
+  },
+  {
+    "title": "2.6 Risk Treatment Recommendations (AI)",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk, industry, similar_orgs",
+    "outputs": "recommended_treatments, success_rates, cost_estimates",
+    "events": "`risk.treatment.recommended`",
+    "components": "Risk Service → Collective Intelligence → Case Library",
+    "description": "2.6 Risk Treatment Recommendations (AI)"
+  },
+  {
+    "title": "2.7 Residual Risk Calculation",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk, treatment_plan",
+    "outputs": "residual_likelihood, residual_impact, residual_score",
+    "events": "`risk.residual.calculated`",
+    "components": "Risk Service → Risk Calculator → Compliance check",
+    "description": "2.7 Residual Risk Calculation"
+  },
+  {
+    "title": "2.8 Risk Register Maintenance",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "organization_id",
+    "outputs": "current_risk_register, changes_since_last_review",
+    "events": "`risk.register.updated`",
+    "components": "Risk Service → PostgreSQL → Living Docs",
+    "description": "2.8 Risk Register Maintenance"
+  },
+  {
+    "title": "2.9 Risk Review Workflow",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "risk_register, review_frequency (quarterly/annual)",
+    "outputs": "risks_requiring_review, status_updates",
+    "events": "`risk.review.due`, `risk.review.completed`",
+    "components": "Risk Service → Scheduled Tasks → Notification Service",
+    "description": "2.9 Risk Review Workflow"
+  },
+  {
+    "title": "2.10 Risk Reporting",
+    "service": "BIA",
+    "category": "Core Risk Assessment сценарии",
+    "inputs": "organization_id, reporting_period, audience (board/management/auditor)",
+    "outputs": "risk_report (executive/detailed), charts, recommendations",
+    "events": "`risk.report.generated`",
+    "components": "Risk Service → LLM (Claude Sonnet) → Document Generator",
+    "description": "#### Advanced Risk сценарии"
+  },
+  {
+    "title": "2.11 Third-Party Risk Assessment",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "vendor_list, critical_dependencies",
+    "outputs": "vendor_risk_scores, concentration_risks",
+    "events": "`risk.third_party.assessed`",
+    "components": "Risk Service → Integration Service (vendor data) → Scoring Engine",
+    "description": "2.11 Third-Party Risk Assessment"
+  },
+  {
+    "title": "2.12 Cyber Risk Assessment Integration",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "cybersecurity_framework (NIST CSF), vulnerabilities",
+    "outputs": "cyber_risks, it_recovery_requirements",
+    "events": "`risk.cyber.assessed`",
+    "components": "Risk Service → NIST Flows → Cybersecurity Integration",
+    "description": "2.12 Cyber Risk Assessment Integration"
+  },
+  {
+    "title": "2.13 Risk Appetite Definition",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "organization_profile, board_preferences",
+    "outputs": "risk_appetite_statement, thresholds, tolerance_levels",
+    "events": "`risk.appetite.defined`",
+    "components": "Risk Service → Governance Service → Board Dashboard",
+    "description": "2.13 Risk Appetite Definition"
+  },
+  {
+    "title": "2.14 Risk Scenario Analysis",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "scenario (e.g., \"pandemic\", \"cyber attack\"), organization_data",
+    "outputs": "scenario_impact, cascading_effects, mitigation_needs",
+    "events": "`risk.scenario.analyzed`",
+    "components": "Risk Service → Simulation Engine → Impact Analyzer",
+    "description": "2.14 Risk Scenario Analysis"
+  },
+  {
+    "title": "2.15 Risk Heat Map",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "all_risks, time_period",
+    "outputs": "heat_map_visualization, trend_analysis",
+    "events": "`risk.heat_map.created`",
+    "components": "Risk Service → Analytics Engine → Visualization",
+    "description": "2.15 Risk Heat Map"
+  },
+  {
+    "title": "2.16 Risk KRI (Key Risk Indicators) Monitoring",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "kri_definitions, real_time_data_sources",
+    "outputs": "kri_dashboard, threshold_breaches, alerts",
+    "events": "`risk.kri.threshold_breached`",
+    "components": "Risk Service → Monitoring Service → Alerting",
+    "description": "2.16 Risk KRI (Key Risk Indicators) Monitoring"
+  },
+  {
+    "title": "2.17 Risk Bow-Tie Analysis",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "risk, preventive_controls, detective_controls, mitigative_controls",
+    "outputs": "bow_tie_diagram, control_effectiveness",
+    "events": "`risk.bow_tie.created`",
+    "components": "Risk Service → Visualization Engine → Control Library",
+    "description": "2.17 Risk Bow-Tie Analysis"
+  },
+  {
+    "title": "2.18 Risk Aggregation (Portfolio View)",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "all_organizational_risks",
+    "outputs": "aggregated_risk_exposure, correlations, concentrations",
+    "events": "`risk.portfolio.analyzed`",
+    "components": "Risk Service → Analytics Engine → Executive Dashboard",
+    "description": "2.18 Risk Aggregation (Portfolio View)"
+  },
+  {
+    "title": "2.19 Risk-Based Audit Planning",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "risk_register, audit_resources",
+    "outputs": "audit_plan (prioritized by risk), audit_schedule",
+    "events": "`risk.audit_plan.created`",
+    "components": "Risk Service → Audit Service → Planning Service",
+    "description": "2.19 Risk-Based Audit Planning"
+  },
+  {
+    "title": "2.20 Risk Change Management",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "organizational_change (new project, M&A, etc.)",
+    "outputs": "change_related_risks, impact_assessment",
+    "events": "`risk.change.assessed`",
+    "components": "Risk Service → Change Management Integration → Impact Analyzer",
+    "description": "2.20 Risk Change Management"
+  },
+  {
+    "title": "2.21 Regulatory Risk Mapping",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "applicable_regulations (GDPR, HIPAA, SOX, etc.)",
+    "outputs": "regulatory_risk_matrix, compliance_gaps",
+    "events": "`risk.regulatory.mapped`",
+    "components": "Risk Service → Compliance Service → Regulatory Database",
+    "description": "2.21 Regulatory Risk Mapping"
+  },
+  {
+    "title": "2.22 Dynamic Risk Assessment (Real-Time)",
+    "service": "BIA",
+    "category": "Advanced Risk сценарии",
+    "inputs": "real_time_events (from monitoring), threat_intelligence",
+    "outputs": "updated_risk_scores, emerging_risks, alerts",
+    "events": "`risk.dynamic.updated`",
+    "components": "Risk Service → Event Intelligence → Monitoring Service",
+    "description": "### 3. Planning Service - 28 сценариев использования #### Journey Planning сценарии"
+  },
+  {
+    "title": "3.1 Create ISO 22301 Certification Journey",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "organization_profile, target_date, existing_maturity",
+    "outputs": "journey_plan, milestones (5+), estimated_duration",
+    "events": "`journey.created`",
+    "components": "Planning Service → Orchestrator (gap analysis) → Predictive Engine",
+    "description": "3.1 Create ISO 22301 Certification Journey"
+  },
+  {
+    "title": "3.2 Journey Timeline Prediction",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "organization_profile, resources, constraints",
+    "outputs": "predicted_timeline (48 weeks), confidence (87%), milestones",
+    "events": "`journey.timeline.predicted`",
+    "components": "Planning Service → Predictive Engine (ML) → Case Library",
+    "description": "3.2 Journey Timeline Prediction"
+  },
+  {
+    "title": "3.3 Journey Milestone Tracking",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "journey_id",
+    "outputs": "completed_milestones, upcoming_milestones, delays",
+    "events": "`journey.milestone.completed`, `journey.milestone.missed`",
+    "components": "Planning Service → Task Queue → Dashboard",
+    "description": "3.3 Journey Milestone Tracking"
+  },
+  {
+    "title": "3.4 Journey At-Risk Detection",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "journey_id, current_week, progress_percentage",
+    "outputs": "at_risk_flag, predicted_delay (weeks), risk_factors",
+    "events": "`journey.at_risk.detected`",
+    "components": "Planning Service → Predictive Engine → Notification Service",
+    "description": "3.4 Journey At-Risk Detection"
+  },
+  {
+    "title": "3.5 Journey Recovery Plan Generation",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "journey_id, current_status, target_date",
+    "outputs": "recovery_plan, actions (simplify/parallel/AI), time_saved",
+    "events": "`journey.recovery_plan.generated`",
+    "components": "Planning Service → AI Foundation (LLM Opus) → Case Library",
+    "description": "3.5 Journey Recovery Plan Generation"
+  },
+  {
+    "title": "3.6 Journey Progress Dashboard",
+    "service": "Planning",
+    "category": "Journey Planning сценарии",
+    "inputs": "journey_id",
+    "outputs": "visual_dashboard (progress, timeline, risks, tasks)",
+    "events": "`journey.dashboard.viewed`",
+    "components": "Planning Service → Dashboard Service → Analytics",
+    "description": "#### BC Plan Development сценарии"
+  },
+  {
+    "title": "3.7 Create BC Plan from Template",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "plan_type (IT/Crisis/Departmental), organization_data",
+    "outputs": "draft_plan (customized template)",
+    "events": "`plan.draft_created`",
+    "components": "Planning Service → RAG (templates) → LLM (Claude Sonnet)",
+    "description": "3.7 Create BC Plan from Template"
+  },
+  {
+    "title": "3.8 AI-Generated BC Plan",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "bia_results, risk_assessment, plan_type",
+    "outputs": "comprehensive_bc_plan (sections auto-filled)",
+    "events": "`plan.generated`",
+    "components": "Planning Service → LLM (Claude Sonnet) → Living Docs",
+    "description": "3.8 AI-Generated BC Plan"
+  },
+  {
+    "title": "3.9 BC Plan Review Workflow",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "plan_id, reviewers",
+    "outputs": "review_comments, approval_status, version_history",
+    "events": "`plan.submitted_for_review`, `plan.approved`",
+    "components": "Planning Service → Workflow Engine → Notification Service",
+    "description": "3.9 BC Plan Review Workflow"
+  },
+  {
+    "title": "3.10 BC Plan Activation (During Incident)",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "incident_id, affected_systems",
+    "outputs": "activated_plan, action_items, assigned_teams",
+    "events": "`plan.activated` (ISO 8.4.5)",
+    "components": "Planning Service → Response Service → Event Bus",
+    "description": "3.10 BC Plan Activation (During Incident)"
+  },
+  {
+    "title": "3.11 BC Plan Testing Schedule",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "all_plans, testing_frequency (annual/bi-annual)",
+    "outputs": "testing_schedule, assigned_exercises",
+    "events": "`plan.test.scheduled`",
+    "components": "Planning Service → Exercise Service → Task Queue",
+    "description": "3.11 BC Plan Testing Schedule"
+  },
+  {
+    "title": "3.12 BC Plan Maintenance (Periodic Review)",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "plan_id, review_frequency",
+    "outputs": "review_due_date, changes_since_last_review",
+    "events": "`plan.review.due`, `plan.updated`",
+    "components": "Planning Service → Scheduled Tasks → Living Docs",
+    "description": "3.12 BC Plan Maintenance (Periodic Review)"
+  },
+  {
+    "title": "3.13 BC Plan Version Control",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "plan_id, changes",
+    "outputs": "new_version, diff_report, rollback_option",
+    "events": "`plan.version.created`",
+    "components": "Planning Service → Living Docs (Git-like) → Audit Trail",
+    "description": "3.13 BC Plan Version Control"
+  },
+  {
+    "title": "3.14 BC Plan Dependencies Management",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "plan_id, linked_plans",
+    "outputs": "dependency_graph, coordination_requirements",
+    "events": "`plan.dependencies.updated`",
+    "components": "Planning Service → Dependency Analyzer → Visualization",
+    "description": "3.14 BC Plan Dependencies Management"
+  },
+  {
+    "title": "3.15 Multi-Plan Coordination",
+    "service": "Planning",
+    "category": "BC Plan Development сценарии",
+    "inputs": "incident_scenario, applicable_plans (IT + Crisis + Dept)",
+    "outputs": "coordinated_response, plan_sequence, handoffs",
+    "events": "`plans.coordinated`",
+    "components": "Planning Service → Orchestrator → Response Service",
+    "description": "#### Exercise Planning сценарии"
+  },
+  {
+    "title": "3.16 Create Exercise Plan",
+    "service": "Planning",
+    "category": "Exercise Planning сценарии",
+    "inputs": "exercise_type (TTX/Full-Scale/Drill), objectives, scenario",
+    "outputs": "exercise_plan, schedule, participant_list, resources",
+    "events": "`exercise.plan.created`",
+    "components": "",
+    "description": "3.16 Create Exercise Plan"
+  },
+  {
+    "title": "3.17 Exercise Scenario Generation (AI)",
+    "service": "Planning",
+    "category": "Exercise Planning сценарии",
+    "inputs": "industry, organization_profile, complexity_level",
+    "outputs": "realistic_scenario, injects (15+), expected_challenges",
+    "events": "`exercise.scenario.generated`",
+    "components": "Planning Service → AI Scenario Generator (LLM Opus) → Knowledge Base",
+    "description": "3.17 Exercise Scenario Generation (AI)"
+  },
+  {
+    "title": "3.18 Exercise Resource Planning",
+    "service": "Planning",
+    "category": "Exercise Planning сценарии",
+    "inputs": "exercise_plan, participant_count",
+    "outputs": "resource_requirements (rooms, equipment, observers), cost_estimate",
+    "events": "`exercise.resources.planned`",
+    "components": "Planning Service → Resource Manager → Budgeting",
+    "description": "3.18 Exercise Resource Planning"
+  },
+  {
+    "title": "3.19 Exercise Calendar Scheduling",
+    "service": "Planning",
+    "category": "Exercise Planning сценарии",
+    "inputs": "exercise_frequency (annual), all_plans_requiring_tests",
+    "outputs": "annual_exercise_calendar, notifications",
+    "events": "`exercise.calendar.created`",
+    "components": "Planning Service → Calendar Integration → Notification Service",
+    "description": "#### Strategy & Roadmap сценарии"
+  },
+  {
+    "title": "3.20 BCM Maturity Roadmap",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "current_maturity (Level 1-5), target_maturity, timeline",
+    "outputs": "maturity_roadmap, initiatives, investment_needs",
+    "events": "`roadmap.created`",
+    "components": "Planning Service → Maturity Assessment → Strategic Planning",
+    "description": "3.20 BCM Maturity Roadmap"
+  },
+  {
+    "title": "3.21 Budget Planning for BCM Program",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "planned_activities (BIA, Plans, Exercises, Tech), timeline",
+    "outputs": "budget_breakdown, cost_justification, ROI_analysis",
+    "events": "`budget.planned`",
+    "components": "Planning Service → Financial Planning → Executive Dashboard",
+    "description": "3.21 Budget Planning for BCM Program"
+  },
+  {
+    "title": "3.22 Resource Capacity Planning",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "planned_work (journey tasks), available_resources",
+    "outputs": "resource_allocation, capacity_gaps, hiring_needs",
+    "events": "`resources.planned`",
+    "components": "Planning Service → Resource Manager → HR Integration",
+    "description": "3.22 Resource Capacity Planning"
+  },
+  {
+    "title": "3.23 Stakeholder Engagement Plan",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "stakeholder_list, engagement_needs",
+    "outputs": "communication_plan, touchpoints, materials",
+    "events": "`stakeholder.plan.created`",
+    "components": "Planning Service → Communication Service → CRM Integration",
+    "description": "3.23 Stakeholder Engagement Plan"
+  },
+  {
+    "title": "3.24 Training & Awareness Plan",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "organization_size, training_needs (from gap analysis)",
+    "outputs": "training_calendar, materials, competency_matrix",
+    "events": "`training.plan.created`",
+    "components": "Planning Service → Learning Service → LMS Integration",
+    "description": "3.24 Training & Awareness Plan"
+  },
+  {
+    "title": "3.25 Project Plan for BCM Implementation",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "journey_plan, resources, dependencies",
+    "outputs": "detailed_project_plan (Gantt chart), critical_path, risks",
+    "events": "`project.plan.created`",
+    "components": "Planning Service → Project Management Integration → Task Queue",
+    "description": "3.25 Project Plan for BCM Implementation"
+  },
+  {
+    "title": "3.26 Change Management Plan",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "organizational_changes (new BCM program), stakeholders",
+    "outputs": "change_plan, communication_strategy, resistance_mitigation",
+    "events": "`change.plan.created`",
+    "components": "Planning Service → Change Management → Stakeholder Engagement",
+    "description": "3.26 Change Management Plan"
+  },
+  {
+    "title": "3.27 Continuous Improvement Plan",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "lessons_learned (from exercises, incidents), gaps",
+    "outputs": "improvement_initiatives, action_plan, success_metrics",
+    "events": "`improvement.plan.created`",
+    "components": "Planning Service → Learning Service → Task Queue",
+    "description": "3.27 Continuous Improvement Plan"
+  },
+  {
+    "title": "3.28 Strategic BCM Review (Annual)",
+    "service": "Planning",
+    "category": "Strategy & Roadmap сценарии",
+    "inputs": "past_year_performance, industry_trends, organizational_changes",
+    "outputs": "strategic_review_report, next_year_priorities",
+    "events": "`strategic.review.completed`",
+    "components": "Planning Service → Analytics → Executive Dashboard",
+    "description": "### 4. Compliance Service - 20 сценариев использования #### ISO 22301 Compliance сценарии"
+  },
+  {
+    "title": "4.1 Real-Time Compliance Monitoring",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "all_services_data (BIA, Risk, Plans, Exercises, etc.)",
+    "outputs": "compliance_dashboard (all clauses), overall_percentage",
+    "events": "`compliance.status.updated` (continuous)",
+    "components": "Compliance Service → All Services (evidence collectors) → Dashboard",
+    "description": "4.1 Real-Time Compliance Monitoring"
+  },
+  {
+    "title": "4.2 Gap Analysis (ISO 22301)",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "organization_id, current_documentation",
+    "outputs": "gaps_by_clause, priority_ranking, estimated_effort",
+    "events": "`compliance.gap_analysis.completed`",
+    "components": "Compliance Service → Document Scanner → ISO Knowledge",
+    "description": "4.2 Gap Analysis (ISO 22301)"
+  },
+  {
+    "title": "4.3 Clause-by-Clause Evidence Collection",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "iso_clause (e.g., 8.2.2 BIA), organization_id",
+    "outputs": "evidence_package (documents, records, data)",
+    "events": "`compliance.evidence.collected`",
+    "components": "Compliance Service → All Services → Document Repository",
+    "description": "4.3 Clause-by-Clause Evidence Collection"
+  },
+  {
+    "title": "4.4 Automated Evidence Gathering",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "audit_requirements, date_range",
+    "outputs": "comprehensive_evidence_package (ready for auditor)",
+    "events": "`compliance.evidence_package.created`",
+    "components": "Compliance Service → Event Sourcing (audit trail) → Document Generator",
+    "description": "4.4 Automated Evidence Gathering"
+  },
+  {
+    "title": "4.5 Compliance Dashboard (Multi-Standard)",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "organization_id, applicable_standards (ISO 22301, ISO 27001, SOC2)",
+    "outputs": "unified_dashboard, cross_standard_mappings",
+    "events": "`compliance.dashboard.viewed`",
+    "components": "Compliance Service → Multi-Standard Engine → Visualization",
+    "description": "4.5 Compliance Dashboard (Multi-Standard)"
+  },
+  {
+    "title": "4.6 Gap Remediation Plan",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "identified_gaps, target_date",
+    "outputs": "remediation_plan, tasks, owners, timeline",
+    "events": "`compliance.remediation.planned`",
+    "components": "Compliance Service → Planning Service → Task Queue",
+    "description": "4.6 Gap Remediation Plan"
+  },
+  {
+    "title": "4.7 Compliance Readiness Assessment",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "organization_id, target_audit_date",
+    "outputs": "readiness_score (0-100%), remaining_gaps, risk_areas",
+    "events": "`compliance.readiness.assessed`",
+    "components": "Compliance Service → Predictive Engine → Risk Analyzer",
+    "description": "4.7 Compliance Readiness Assessment"
+  },
+  {
+    "title": "4.8 Mock Audit Simulation",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "audit_type (internal/external), scope",
+    "outputs": "audit_findings, non_conformities, recommendations",
+    "events": "`compliance.mock_audit.completed`",
+    "components": "Compliance Service → Audit Specialist → Simulation Engine",
+    "description": "4.8 Mock Audit Simulation"
+  },
+  {
+    "title": "4.9 Certification Audit Preparation",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "certification_body, audit_date, scope",
+    "outputs": "audit_prep_checklist (47 tasks), evidence_package, site_readiness",
+    "events": "`compliance.audit_prep.completed`",
+    "components": "Compliance Service → All Services → Document Generator",
+    "description": "4.9 Certification Audit Preparation"
+  },
+  {
+    "title": "4.10 Post-Audit Action Plan",
+    "service": "Compliance",
+    "category": "ISO 22301 Compliance сценарии",
+    "inputs": "audit_findings, non_conformities, observations",
+    "outputs": "corrective_action_plan, timelines, verification_steps",
+    "events": "`compliance.action_plan.created`",
+    "components": "Compliance Service → Task Queue → Notification Service",
+    "description": "#### Continuous Compliance сценарии"
+  },
+  {
+    "title": "4.11 Compliance Monitoring Alerts",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "compliance_thresholds, real_time_data",
+    "outputs": "alerts (when compliance drops below threshold)",
+    "events": "`compliance.alert.triggered`",
+    "components": "Compliance Service → Monitoring Service → Alerting",
+    "description": "4.11 Compliance Monitoring Alerts"
+  },
+  {
+    "title": "4.12 Automated Compliance Reporting",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "reporting_period (monthly/quarterly/annual), audience",
+    "outputs": "compliance_report (executive/board/auditor format)",
+    "events": "`compliance.report.generated`",
+    "components": "Compliance Service → LLM (Claude Sonnet) → Document Generator",
+    "description": "4.12 Automated Compliance Reporting"
+  },
+  {
+    "title": "4.13 Management Review Automation",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "review_period, performance_data, incidents, changes",
+    "outputs": "management_review_pack (ISO 9.3), action_items",
+    "events": "`compliance.management_review.prepared`",
+    "components": "Compliance Service → All Services → Executive Dashboard",
+    "description": "4.13 Management Review Automation"
+  },
+  {
+    "title": "4.14 Regulatory Change Tracking",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "applicable_regulations, industry",
+    "outputs": "regulatory_updates, impact_assessment, action_needs",
+    "events": "`compliance.regulatory_change.detected`",
+    "components": "Compliance Service → Regulatory Database → Impact Analyzer",
+    "description": "4.14 Regulatory Change Tracking"
+  },
+  {
+    "title": "4.15 Compliance Training Tracking",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "training_requirements (ISO awareness, BCM roles)",
+    "outputs": "training_completion_status, gaps, due_dates",
+    "events": "`compliance.training.tracked`",
+    "components": "Compliance Service → Learning Service → LMS Integration",
+    "description": "4.15 Compliance Training Tracking"
+  },
+  {
+    "title": "4.16 Document Control Compliance",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "all_bcm_documents, ISO 7.5 requirements",
+    "outputs": "document_control_status, version_tracking, access_control",
+    "events": "`compliance.document_control.verified`",
+    "components": "Compliance Service → Document Service → Version Control",
+    "description": "4.16 Document Control Compliance"
+  },
+  {
+    "title": "4.17 Competency Matrix Tracking",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "bcm_roles, competency_requirements (ISO 7.2)",
+    "outputs": "competency_matrix, training_needs, certification_status",
+    "events": "`compliance.competency.tracked`",
+    "components": "Compliance Service → HR Integration → Training Service",
+    "description": "4.17 Competency Matrix Tracking"
+  },
+  {
+    "title": "4.18 Internal Audit Schedule & Execution",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "audit_program, risk_based_priorities",
+    "outputs": "audit_schedule, audit_reports, findings",
+    "events": "`compliance.internal_audit.scheduled`, `compliance.internal_audit.completed`",
+    "components": "Compliance Service → Audit Service → Reporting",
+    "description": "4.18 Internal Audit Schedule & Execution"
+  },
+  {
+    "title": "4.19 Supplier/Third-Party Compliance Monitoring",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "critical_suppliers, compliance_requirements",
+    "outputs": "supplier_compliance_status, gaps, risk_flags",
+    "events": "`compliance.supplier.monitored`",
+    "components": "Compliance Service → Risk Service → Supplier Database",
+    "description": "4.19 Supplier/Third-Party Compliance Monitoring"
+  },
+  {
+    "title": "4.20 Certification Maintenance",
+    "service": "Compliance",
+    "category": "Continuous Compliance сценарии",
+    "inputs": "certification_expiry_date, surveillance_audit_schedule",
+    "outputs": "maintenance_plan, surveillance_prep, recertification_planning",
+    "events": "`compliance.certification.maintained`",
+    "components": "Compliance Service → Planning Service → Calendar",
+    "description": "### 5. Response Service - 18 сценариев использования #### Incident Response сценарии"
+  },
+  {
+    "title": "5.1 Incident Detection & Auto-Creation",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "monitoring_alert, severity, affected_systems",
+    "outputs": "incident_id, incident_record",
+    "events": "`incident.detected` → `incident.created`",
+    "components": "Response Service → Monitoring Service → Event Bus",
+    "description": "5.1 Incident Detection & Auto-Creation"
+  },
+  {
+    "title": "5.2 Incident Classification & Prioritization",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident_details, bia_data (RTO/RPO), impact",
+    "outputs": "incident_classification (P1/P2/P3), priority_score",
+    "events": "",
+    "components": "",
+    "description": "5.2 Incident Classification & Prioritization"
+  },
+  {
+    "title": "5.3 Automatic BC Plan Activation",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident (critical severity), applicable_plan",
+    "outputs": "plan_activated, action_items, team_assignments",
+    "events": "`plan.activated` (ISO 8.4.5)",
+    "components": "Response Service → Planning Service → Orchestrator",
+    "description": "5.3 Automatic BC Plan Activation"
+  },
+  {
+    "title": "5.4 Team Mobilization & Notification",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident, response_team, on_call_schedule",
+    "outputs": "multi_channel_notifications (SMS, Phone, Slack, Email)",
+    "events": "`team.notified`, `team.acknowledged`",
+    "components": "Response Service → Notification Service → On-Call Management",
+    "description": "5.4 Team Mobilization & Notification"
+  },
+  {
+    "title": "5.5 Incident Coordination Dashboard",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident_id",
+    "outputs": "real_time_dashboard (status, RTO countdown, actions, team)",
+    "events": "`incident.dashboard.viewed`",
+    "components": "Response Service → Dashboard Service → Real-Time Updates",
+    "description": "5.5 Incident Coordination Dashboard"
+  },
+  {
+    "title": "5.6 RTO/RPO Tracking",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident, bia_targets (RTO/RPO)",
+    "outputs": "countdown_timer, progress_status, at_risk_alerts",
+    "events": "`rto.on_track`, `rto.at_risk`, `rto.exceeded`",
+    "components": "Response Service → BIA Service → Alerting",
+    "description": "5.6 RTO/RPO Tracking"
+  },
+  {
+    "title": "5.7 Action Item Management (During Incident)",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident, bc_plan_actions",
+    "outputs": "action_items_list, assignments, status_tracking",
+    "events": "`action.assigned`, `action.completed`",
+    "components": "Response Service → Task Queue → Team Collaboration",
+    "description": "5.7 Action Item Management (During Incident)"
+  },
+  {
+    "title": "5.8 Incident Communication (Internal)",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident, stakeholders, update_frequency",
+    "outputs": "status_updates, stakeholder_notifications",
+    "events": "`incident.update.sent`",
+    "components": "Response Service → Communication Service → Stakeholder List",
+    "description": "5.8 Incident Communication (Internal)"
+  },
+  {
+    "title": "5.9 Incident Communication (External)",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident (public-facing), crisis_communication_plan",
+    "outputs": "customer_notifications, media_statements, social_media_posts",
+    "events": "`crisis_communication.activated`",
+    "components": "Response Service → Communication Service → PR Integration",
+    "description": "5.9 Incident Communication (External)"
+  },
+  {
+    "title": "5.10 Incident Resolution & Closure",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident_id, resolution_details, rto_achieved",
+    "outputs": "incident_closed, resolution_time, success_metrics",
+    "events": "`incident.resolved`",
+    "components": "Response Service → Analytics → Reporting",
+    "description": "5.10 Incident Resolution & Closure"
+  },
+  {
+    "title": "5.11 Post-Incident Review (PIR)",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident, response_timeline, lessons_learned",
+    "outputs": "pir_report, action_items, plan_updates",
+    "events": "`pir.scheduled`, `pir.completed`",
+    "components": "Response Service → LLM (Claude Sonnet) → Learning Service",
+    "description": "5.11 Post-Incident Review (PIR)"
+  },
+  {
+    "title": "5.12 Incident Escalation",
+    "service": "Response",
+    "category": "Incident Response сценарии",
+    "inputs": "incident (worsening), escalation_criteria",
+    "outputs": "escalated_incident, senior_leadership_notified",
+    "events": "`incident.escalated`",
+    "components": "Response Service → Escalation Matrix → Notification Service",
+    "description": "#### Crisis Management сценарии"
+  },
+  {
+    "title": "5.13 Crisis Declaration",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "incident_severity, impact_assessment, duration_estimate",
+    "outputs": "crisis_declared, crisis_team_activated, crisis_plan_activated",
+    "events": "`crisis.declared`",
+    "components": "Response Service → Planning Service (Crisis Plan) → Executive Notification",
+    "description": "5.13 Crisis Declaration"
+  },
+  {
+    "title": "5.14 Crisis Management Team (CMT) Coordination",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "crisis, cmt_members, decision_log",
+    "outputs": "coordinated_response, decisions_documented",
+    "events": "`cmt.convened`, `cmt.decision.made`",
+    "components": "Response Service → Collaboration Platform → Decision Log",
+    "description": "5.14 Crisis Management Team (CMT) Coordination"
+  },
+  {
+    "title": "5.15 Situation Reporting (SitRep)",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "crisis, current_status, actions_taken, outlook",
+    "outputs": "sitrep_document, distribution_list",
+    "events": "`sitrep.created`, `sitrep.distributed`",
+    "components": "Response Service → Document Generator → Distribution",
+    "description": "5.15 Situation Reporting (SitRep)"
+  },
+  {
+    "title": "5.16 Media & Public Relations Management",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "crisis, media_inquiries, public_sentiment",
+    "outputs": "media_responses, press_releases, spokesperson_briefings",
+    "events": "`media.response.issued`",
+    "components": "Response Service → PR Service → Media Monitoring",
+    "description": "5.16 Media & Public Relations Management"
+  },
+  {
+    "title": "5.17 Recovery Coordination (Post-Crisis)",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "crisis_resolution, recovery_priorities",
+    "outputs": "recovery_plan, resource_allocation, timeline",
+    "events": "`recovery.initiated`",
+    "components": "Response Service → Planning Service → Resource Manager",
+    "description": "5.17 Recovery Coordination (Post-Crisis)"
+  },
+  {
+    "title": "5.18 Incident Analytics & Trending",
+    "service": "Response",
+    "category": "Crisis Management сценарии",
+    "inputs": "all_incidents (historical), date_range",
+    "outputs": "incident_trends, common_causes, improvement_areas",
+    "events": "`incident.analytics.generated`",
+    "components": "Response Service → Analytics Engine → Executive Dashboard",
+    "description": "### 6. Documents Service - 15 сценариев использования"
+  },
+  {
+    "title": "6.1 Living Documents (Auto-Updating Plans)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document (BC Plan), update_triggers (bia.updated, risk.updated)",
+    "outputs": "updated_document, change_suggestions, approval_request",
+    "events": "`document.auto_update.suggested`",
+    "components": "Documents Service → Event Bus (triggers) → LLM (generate updates)",
+    "description": "6.1 Living Documents (Auto-Updating Plans)"
+  },
+  {
+    "title": "6.2 Document Version Control",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, changes, author",
+    "outputs": "new_version, diff_report, version_history",
+    "events": "`document.version.created`",
+    "components": "Documents Service → Git-like Storage → Audit Trail",
+    "description": "6.2 Document Version Control"
+  },
+  {
+    "title": "6.3 Document Template Library",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document_type (BIA, BC Plan, Exercise Report), industry",
+    "outputs": "customized_template, pre_filled_sections",
+    "events": "`template.retrieved`",
+    "components": "Documents Service → RAG (Knowledge Base) → LLM",
+    "description": "6.3 Document Template Library"
+  },
+  {
+    "title": "6.4 Document Approval Workflow",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, approvers, approval_sequence",
+    "outputs": "approval_status, comments, audit_trail",
+    "events": "`document.submitted`, `document.approved`, `document.rejected`",
+    "components": "Documents Service → Workflow Engine → Notification Service",
+    "description": "6.4 Document Approval Workflow"
+  },
+  {
+    "title": "6.5 Document Search (Semantic)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "search_query, document_types, filters",
+    "outputs": "relevant_documents, snippets, relevance_scores",
+    "events": "`document.search.performed`",
+    "components": "Documents Service → Qdrant (vector search) → RAG",
+    "description": "6.5 Document Search (Semantic)"
+  },
+  {
+    "title": "6.6 Document Classification (Auto-Tagging)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "uploaded_document",
+    "outputs": "document_type, tags, metadata, storage_location",
+    "events": "`document.classified`",
+    "components": "Documents Service → ML Classifier → Storage",
+    "description": "6.6 Document Classification (Auto-Tagging)"
+  },
+  {
+    "title": "6.7 Document Access Control",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, user_role, permissions",
+    "outputs": "access_granted/denied, audit_log",
+    "events": "`document.accessed`",
+    "components": "Documents Service → RBAC Engine → Audit Trail",
+    "description": "6.7 Document Access Control"
+  },
+  {
+    "title": "6.8 Document Expiry & Review Tracking",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, review_frequency",
+    "outputs": "review_due_alerts, expiry_notifications",
+    "events": "`document.review.due`, `document.expired`",
+    "components": "Documents Service → Scheduled Tasks → Notification Service",
+    "description": "6.8 Document Expiry & Review Tracking"
+  },
+  {
+    "title": "6.9 Document Export (Multiple Formats)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document_id, format (PDF/DOCX/HTML)",
+    "outputs": "exported_document",
+    "events": "`document.exported`",
+    "components": "Documents Service → Format Converter → Storage",
+    "description": "6.9 Document Export (Multiple Formats)"
+  },
+  {
+    "title": "6.10 Document Comparison (Versions)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document_v1, document_v2",
+    "outputs": "diff_report, changes_highlighted",
+    "events": "",
+    "components": "",
+    "description": "6.10 Document Comparison (Versions)"
+  },
+  {
+    "title": "6.11 Document Archive Management",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "old_documents, retention_policy",
+    "outputs": "archived_documents, searchable_archive",
+    "events": "`document.archived`",
+    "components": "Documents Service → Archive Storage → Compliance",
+    "description": "6.11 Document Archive Management"
+  },
+  {
+    "title": "6.12 Document Collaboration (Real-Time)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, collaborators",
+    "outputs": "real_time_editing, comments, change_tracking",
+    "events": "`document.edited`, `comment.added`",
+    "components": "Documents Service → Collaboration Engine → WebSocket",
+    "description": "6.12 Document Collaboration (Real-Time)"
+  },
+  {
+    "title": "6.13 Document Import (Bulk)",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "file_upload (multiple), metadata",
+    "outputs": "imported_documents, classification_report",
+    "events": "",
+    "components": "",
+    "description": "6.13 Document Import (Bulk)"
+  },
+  {
+    "title": "6.14 Document Audit Trail",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document_id",
+    "outputs": "complete_history (created, viewed, edited, approved, shared)",
+    "events": "`document.audit_trail.requested`",
+    "components": "Documents Service → Event Sourcing → Audit Log",
+    "description": "6.14 Document Audit Trail"
+  },
+  {
+    "title": "6.15 Document Compliance Check",
+    "service": "Documents",
+    "category": "Crisis Management сценарии",
+    "inputs": "document, standard (ISO 22301/27001)",
+    "outputs": "compliance_status, missing_sections, recommendations",
+    "events": "`document.compliance.checked`",
+    "components": "Documents Service → Compliance Service → Standard Templates",
+    "description": "### 7. Exercise Service - 16 сценариев использования"
+  },
+  {
+    "title": "7.1 Create Exercise Plan",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_type (TTX/Drill/Full-Scale), objectives, plans_to_test",
+    "outputs": "exercise_plan, timeline, resources_needed",
+    "events": "`exercise.plan.created`",
+    "components": "Exercise Service → Planning Service → Resource Manager",
+    "description": "7.1 Create Exercise Plan"
+  },
+  {
+    "title": "7.2 AI Scenario Generation",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "industry, organization_profile, complexity, objectives",
+    "outputs": "realistic_scenario, initial_event, complications (15+ injects)",
+    "events": "`exercise.scenario.generated`",
+    "components": "Exercise Service → AI Scenario Generator (LLM Opus) → Knowledge Base",
+    "description": "7.2 AI Scenario Generation"
+  },
+  {
+    "title": "7.3 Exercise Scheduling & Invitations",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_plan, participants, date",
+    "outputs": "calendar_invites, pre_exercise_materials",
+    "events": "`exercise.scheduled`, `participants.invited`",
+    "components": "Exercise Service → Calendar Integration → Notification Service",
+    "description": "7.3 Exercise Scheduling & Invitations"
+  },
+  {
+    "title": "7.4 Pre-Exercise Briefing Materials",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_scenario, participant_roles",
+    "outputs": "briefing_packs, role_cards, expected_actions",
+    "events": "`exercise.briefing.created`",
+    "components": "Exercise Service → Document Generator → Distribution",
+    "description": "7.4 Pre-Exercise Briefing Materials"
+  },
+  {
+    "title": "7.5 Digital Twin Setup (for Full-Scale Exercise)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "organization_infrastructure, bia_data, dependencies",
+    "outputs": "digital_twin (simulated environment), components_mapped",
+    "events": "`digital_twin.created`",
+    "components": "Exercise Service → Digital Twin Engine → Infrastructure Data",
+    "description": "7.5 Digital Twin Setup (for Full-Scale Exercise)"
+  },
+  {
+    "title": "7.6 Exercise Execution (Real-Time)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_plan, participants, injects",
+    "outputs": "real_time_tracking, participant_actions_logged",
+    "events": "`exercise.started`, `inject.triggered`, `action.recorded`",
+    "components": "Exercise Service → Digital Twin (simulation) → Event Logger",
+    "description": "7.6 Exercise Execution (Real-Time)"
+  },
+  {
+    "title": "7.7 Inject Management (During Exercise)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_timeline, scripted_injects, adaptive_injects",
+    "outputs": "inject_delivery, participant_responses",
+    "events": "",
+    "components": "",
+    "description": "7.7 Inject Management (During Exercise)"
+  },
+  {
+    "title": "7.8 Real-Time Observer Notes (AI-Assisted)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_in_progress, participant_actions",
+    "outputs": "observer_notes, insights, gap_identification",
+    "events": "`observer.note.created`, `gap.identified`",
+    "components": "Exercise Service → AI Observer → Analytics",
+    "description": "7.8 Real-Time Observer Notes (AI-Assisted)"
+  },
+  {
+    "title": "7.9 Exercise Metrics Tracking",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_objectives, participant_actions, timings",
+    "outputs": "metrics_dashboard (RTO achieved, decision_quality, coordination)",
+    "events": "`exercise.metrics.updated`",
+    "components": "Exercise Service → Metrics Engine → Dashboard",
+    "description": "7.9 Exercise Metrics Tracking"
+  },
+  {
+    "title": "7.10 Post-Exercise Debrief (Hot Wash)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise, participant_feedback",
+    "outputs": "immediate_lessons, strengths, weaknesses",
+    "events": "",
+    "components": "",
+    "description": "7.10 Post-Exercise Debrief (Hot Wash)"
+  },
+  {
+    "title": "7.11 AI-Generated After-Action Report (AAR)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_data, metrics, observer_notes, participant_feedback",
+    "outputs": "comprehensive_aar (executive_summary, timeline, gaps, actions)",
+    "events": "`exercise.aar.generated`",
+    "components": "Exercise Service → LLM (Claude Sonnet) → Document Service",
+    "description": "7.11 AI-Generated After-Action Report (AAR)"
+  },
+  {
+    "title": "7.12 Exercise Gap Analysis",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_results, plan_requirements",
+    "outputs": "gaps_identified, severity, remediation_recommendations",
+    "events": "",
+    "components": "",
+    "description": "7.12 Exercise Gap Analysis"
+  },
+  {
+    "title": "7.13 Exercise Action Plan",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "aar, gaps, recommendations",
+    "outputs": "action_items (owners, deadlines), plan_updates",
+    "events": "",
+    "components": "",
+    "description": "7.13 Exercise Action Plan"
+  },
+  {
+    "title": "7.14 Exercise Lessons Learned (to Collective Intelligence)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "exercise_results, lessons",
+    "outputs": "anonymized_case (k=5), shared_to_community",
+    "events": "",
+    "components": "",
+    "description": "7.14 Exercise Lessons Learned (to Collective Intelligence)"
+  },
+  {
+    "title": "7.15 Exercise Program Management",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "all_plans, testing_requirements (ISO 9.2), schedule",
+    "outputs": "annual_exercise_program, compliance_status",
+    "events": "",
+    "components": "",
+    "description": "7.15 Exercise Program Management"
+  },
+  {
+    "title": "7.16 Exercise Comparison (Historical)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "current_exercise, previous_exercises",
+    "outputs": "trend_analysis, improvements, recurring_gaps",
+    "events": "",
+    "components": "",
+    "description": "### 8-12. Remaining Platform Services (Summary)"
+  },
+  {
+    "title": "8. Monitoring Service (12 сценариев)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Monitoring Service (12 сценариев)"
+  },
+  {
+    "title": "9. Notification Service (10 сценариев)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Notification Service (10 сценариев)"
+  },
+  {
+    "title": "10. Learning Service (14 сценариев)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "10. Learning Service (14 сценариев)"
+  },
+  {
+    "title": "11. Governance Service (11 сценариев)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Governance Service (11 сценариев)"
+  },
+  {
+    "title": "12. Validation Service (9 сценариев)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "## Intelligent Core Scenarios ### 1. Orchestration - 18 сценариев использования"
+  },
+  {
+    "title": "1.1 Cognitive Loop: MONITOR",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "all_active_journeys, service_health, events",
+    "outputs": "context_gathered (8+ sources), priorities_identified",
+    "events": "`orchestrator.monitoring.active`",
+    "components": "Orchestrator → All Services → Redis (Working Memory)",
+    "description": "1.1 Cognitive Loop: MONITOR"
+  },
+  {
+    "title": "1.2 Cognitive Loop: UNDERSTAND",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "gathered_context, priorities",
+    "outputs": "situation_analysis, risk_assessment, action_options",
+    "events": "`orchestrator.situation.analyzed`",
+    "components": "Orchestrator → AI Foundation (reasoning) → Domain Specialists",
+    "description": "1.2 Cognitive Loop: UNDERSTAND"
+  },
+  {
+    "title": "1.3 Cognitive Loop: DECIDE",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "situation_analysis, action_options, constraints",
+    "outputs": "selected_strategy, action_plan, confidence_score",
+    "events": "",
+    "components": "",
+    "description": "1.3 Cognitive Loop: DECIDE"
+  },
+  {
+    "title": "1.4 Cognitive Loop: ACT",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "action_plan, resources",
+    "outputs": "actions_executed (5 types: auto/delegate/escalate/wait/emergency)",
+    "events": "",
+    "components": "",
+    "description": "1.4 Cognitive Loop: ACT"
+  },
+  {
+    "title": "1.5 Cognitive Loop: MEASURE",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "executed_actions, outcomes",
+    "outputs": "results_measured, safety_checks (4 types), success_metrics",
+    "events": "",
+    "components": "",
+    "description": "1.5 Cognitive Loop: MEASURE"
+  },
+  {
+    "title": "1.6 Cognitive Loop: LEARN",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "measurements, outcomes, feedback",
+    "outputs": "patterns_learned, models_updated, knowledge_added",
+    "events": "`orchestrator.learning.completed`",
+    "components": "Orchestrator → Self-Learning Engine → Collective Intelligence",
+    "description": "1.6 Cognitive Loop: LEARN"
+  },
+  {
+    "title": "1.7 Workflow Stuck Detection",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "journey_state, 6_signals (no_activity, no_progress, low_engagement, etc.)",
+    "outputs": "stuck_detected, intervention_recommended",
+    "events": "",
+    "components": "",
+    "description": "1.7 Workflow Stuck Detection"
+  },
+  {
+    "title": "1.8 Intervention Strategy Selection",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "stuck_workflow, collective_intelligence_cases",
+    "outputs": "intervention_strategy, success_probability",
+    "events": "`orchestrator.intervention.planned`",
+    "components": "Orchestrator → Collective Intelligence → AI Foundation",
+    "description": "1.8 Intervention Strategy Selection"
+  },
+  {
+    "title": "1.9 Resource Optimization",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "active_workflows, available_resources, priorities",
+    "outputs": "optimized_allocation, bottleneck_resolution",
+    "events": "",
+    "components": "",
+    "description": "1.9 Resource Optimization"
+  },
+  {
+    "title": "1.10 Event Choreography Coordination",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "event (e.g., bia.completed), saga_definitions",
+    "outputs": "next_steps_triggered, saga_state_updated",
+    "events": "",
+    "components": "",
+    "description": "1.10 Event Choreography Coordination"
+  },
+  {
+    "title": "1.11 Saga Pattern Management",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "saga_id, steps, compensation_logic",
+    "outputs": "saga_executed, rollback_if_needed",
+    "events": "",
+    "components": "",
+    "description": "1.11 Saga Pattern Management"
+  },
+  {
+    "title": "1.12 Priority Assessment",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "multiple_tasks, business_impact, time_sensitivity, risk, resources",
+    "outputs": "prioritized_task_list, weights (business 30%, time 25%, risk 20%)",
+    "events": "",
+    "components": "",
+    "description": "1.12 Priority Assessment"
+  },
+  {
+    "title": "1.13 Cross-Service Coordination",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "complex_workflow (requires multiple services)",
+    "outputs": "coordinated_execution, handoffs_managed",
+    "events": "",
+    "components": "",
+    "description": "1.13 Cross-Service Coordination"
+  },
+  {
+    "title": "1.14 Safety Check: Constitutional AI",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "proposed_decision, iso_22301_principles",
+    "outputs": "alignment_verified, decision_approved/rejected",
+    "events": "",
+    "components": "",
+    "description": "1.14 Safety Check: Constitutional AI"
+  },
+  {
+    "title": "1.15 Safety Check: Loop Detection",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "execution_history, retry_count",
+    "outputs": "loop_detected/clear, max_retries_enforced (3)",
+    "events": "",
+    "components": "",
+    "description": "1.15 Safety Check: Loop Detection"
+  },
+  {
+    "title": "1.16 Safety Check: Hallucination Prevention",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "ai_generated_content, knowledge_base",
+    "outputs": "facts_verified (>80% match required)",
+    "events": "",
+    "components": "",
+    "description": "1.16 Safety Check: Hallucination Prevention"
+  },
+  {
+    "title": "1.17 Safety Check: Human-in-Loop",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "critical_decision, confidence_score",
+    "outputs": "approval_requested (if confidence <80%)",
+    "events": "",
+    "components": "",
+    "description": "1.17 Safety Check: Human-in-Loop"
+  },
+  {
+    "title": "1.18 Context Restoration (After Downtime)",
+    "service": "Exercise",
+    "category": "Crisis Management сценарии",
+    "inputs": "orchestrator_restart, redis_cache (may be empty)",
+    "outputs": "context_restored (from PostgreSQL + Event Sourcing)",
+    "events": "`orchestrator.context.restored`",
+    "components": "Orchestrator → PostgreSQL (Short-term Memory) → Event Sourcing",
+    "description": "### 2. AI Foundation - 24 сценария использования #### LLM Router сценарии"
+  },
+  {
+    "title": "2.1 Smart Routing: Strategic Planning",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "task_complexity=\"strategic\", prompt",
+    "outputs": "routed_to_claude_opus, deep_reasoning",
+    "events": "`llm.routed.opus`",
+    "components": "LLM Router → Claude Opus API",
+    "description": "2.1 Smart Routing: Strategic Planning"
+  },
+  {
+    "title": "2.2 Smart Routing: Balanced Tasks",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "task_complexity=\"balanced\", prompt (reports, plans)",
+    "outputs": "routed_to_claude_sonnet",
+    "events": "",
+    "components": "",
+    "description": "2.2 Smart Routing: Balanced Tasks"
+  },
+  {
+    "title": "2.3 Smart Routing: Fast Responses",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "task_complexity=\"simple\", prompt (Q&A, suggestions)",
+    "outputs": "routed_to_claude_haiku, fast_response (<2s)",
+    "events": "`llm.routed.haiku`",
+    "components": "LLM Router → Claude Haiku API",
+    "description": "2.3 Smart Routing: Fast Responses"
+  },
+  {
+    "title": "2.4 Fallback Provider (Rate Limit)",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "anthropic_rate_limit_exceeded",
+    "outputs": "fallback_to_openai_gpt4",
+    "events": "",
+    "components": "",
+    "description": "2.4 Fallback Provider (Rate Limit)"
+  },
+  {
+    "title": "2.5 LLM Response Caching",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "prompt (previously seen)",
+    "outputs": "cached_response (no API call)",
+    "events": "",
+    "components": "",
+    "description": "2.5 LLM Response Caching"
+  },
+  {
+    "title": "2.6 LLM Usage Tracking",
+    "service": "Exercise",
+    "category": "LLM Router сценарии",
+    "inputs": "all_llm_calls",
+    "outputs": "usage_metrics (tokens, cost, latency), quota_tracking",
+    "events": "",
+    "components": "",
+    "description": "#### RAG Pipeline сценарии"
+  },
+  {
+    "title": "2.7 RAG: Knowledge Retrieval (Hybrid Search)",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "query, collections, filters",
+    "outputs": "relevant_chunks (70% vector + 30% keyword), scores",
+    "events": "`rag.knowledge.retrieved`",
+    "components": "RAG Pipeline → Qdrant (vector) + PostgreSQL (keyword)",
+    "description": "2.7 RAG: Knowledge Retrieval (Hybrid Search)"
+  },
+  {
+    "title": "2.8 RAG: Context-Aware Search",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "query, context (industry, role, stage)",
+    "outputs": "filtered_results (context-relevant)",
+    "events": "",
+    "components": "",
+    "description": "2.8 RAG: Context-Aware Search"
+  },
+  {
+    "title": "2.9 RAG: Multi-Collection Query",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "query, collections=[bcm_business_flows, bcm_knowledge, bcm_cases]",
+    "outputs": "aggregated_results (ranked by relevance)",
+    "events": "",
+    "components": "",
+    "description": "2.9 RAG: Multi-Collection Query"
+  },
+  {
+    "title": "2.10 RAG: Semantic Search",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "natural_language_query",
+    "outputs": "semantically_similar_documents (embedding-based)",
+    "events": "`rag.semantic_search.performed`",
+    "components": "RAG Pipeline → Sentence Transformers (embeddings) → Qdrant",
+    "description": "2.10 RAG: Semantic Search"
+  },
+  {
+    "title": "2.11 RAG: Citation & Source Tracking",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "rag_results",
+    "outputs": "results_with_sources (file, line, confidence)",
+    "events": "",
+    "components": "",
+    "description": "2.11 RAG: Citation & Source Tracking"
+  },
+  {
+    "title": "2.12 RAG: Query Expansion",
+    "service": "Exercise",
+    "category": "RAG Pipeline сценарии",
+    "inputs": "short_query",
+    "outputs": "expanded_query (synonyms, related_terms)",
+    "events": "`rag.query.expanded`",
+    "components": "RAG Pipeline → Query Expander (LLM/NLP) → Search",
+    "description": "#### ML Models сценарии"
+  },
+  {
+    "title": "2.13 Journey Timeline Prediction",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "organization_profile, resources, historical_data",
+    "outputs": "predicted_milestones (90 days), confidence (87%)",
+    "events": "`ml.timeline.predicted`",
+    "components": "ML Models (Gradient Boosting) → Predictive Engine",
+    "description": "2.13 Journey Timeline Prediction"
+  },
+  {
+    "title": "2.14 Stuck Probability Prediction",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "journey_state, 6_signals",
+    "outputs": "stuck_probability (0-1), risk_factors",
+    "events": "",
+    "components": "",
+    "description": "2.14 Stuck Probability Prediction"
+  },
+  {
+    "title": "2.15 RTO Achievement Prediction",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "exercise_plan, team_readiness, historical_exercises",
+    "outputs": "rto_achievement_probability, predicted_actual_rto",
+    "events": "",
+    "components": "",
+    "description": "2.15 RTO Achievement Prediction"
+  },
+  {
+    "title": "2.16 Risk Likelihood Prediction",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "risk_description, industry, organization_size",
+    "outputs": "likelihood_score, confidence, contributing_factors",
+    "events": "",
+    "components": "",
+    "description": "2.16 Risk Likelihood Prediction"
+  },
+  {
+    "title": "2.17 Model Training (Weekly)",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "new_cases (last_7_days), validation_data",
+    "outputs": "updated_models, accuracy_metrics",
+    "events": "",
+    "components": "",
+    "description": "2.17 Model Training (Weekly)"
+  },
+  {
+    "title": "2.18 Feature Importance Analysis",
+    "service": "Exercise",
+    "category": "ML Models сценарии",
+    "inputs": "trained_model",
+    "outputs": "feature_importance_scores, insights",
+    "events": "",
+    "components": "",
+    "description": "#### Self-Learning Engine сценарии"
+  },
+  {
+    "title": "2.19 Daily Data Collection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "completed_workflows, incidents, exercises (last_24h)",
+    "outputs": "training_data_collected, data_quality_checked",
+    "events": "",
+    "components": "",
+    "description": "2.19 Daily Data Collection"
+  },
+  {
+    "title": "2.20 Weekly Model Retraining",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "training_data (last_7_days)",
+    "outputs": "retrained_models, accuracy_comparison (old vs new)",
+    "events": "",
+    "components": "",
+    "description": "2.20 Weekly Model Retraining"
+  },
+  {
+    "title": "2.21 Monthly Pattern Discovery",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "training_data (last_30_days)",
+    "outputs": "new_patterns_discovered, code_generation_suggestions",
+    "events": "`self_learning.patterns.discovered`",
+    "components": "Self-Learning Engine → Pattern Miner → Code Generator",
+    "description": "2.21 Monthly Pattern Discovery"
+  },
+  {
+    "title": "2.22 Quarterly Code Generation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "discovered_patterns, code_templates",
+    "outputs": "generated_code (new features), pull_requests",
+    "events": "",
+    "components": "",
+    "description": "2.22 Quarterly Code Generation"
+  },
+  {
+    "title": "2.23 Learn from Success",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "successful_journey, success_factors",
+    "outputs": "success_pattern_added, models_updated",
+    "events": "",
+    "components": "",
+    "description": "2.23 Learn from Success"
+  },
+  {
+    "title": "2.24 Learn from Failure",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "failed_workflow, failure_reasons",
+    "outputs": "failure_pattern_identified, prevention_rules_added",
+    "events": "",
+    "components": "",
+    "description": "### 3. Predictive Engine - 12 сценариев"
+  },
+  {
+    "title": "3.1 Certification Date Forecasting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.1 Certification Date Forecasting"
+  },
+  {
+    "title": "3.2 Challenge Prediction with Mitigation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.2 Challenge Prediction with Mitigation"
+  },
+  {
+    "title": "3.3 Resource Needs Forecasting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.3 Resource Needs Forecasting"
+  },
+  {
+    "title": "3.4 Budget Forecast",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.4 Budget Forecast"
+  },
+  {
+    "title": "3.5 Timeline Risk Assessment",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.5 Timeline Risk Assessment"
+  },
+  {
+    "title": "3.6 Milestone Completion Probability",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.6 Milestone Completion Probability"
+  },
+  {
+    "title": "3.7 Team Performance Prediction",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.7 Team Performance Prediction"
+  },
+  {
+    "title": "3.8 Service Degradation Prediction",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.8 Service Degradation Prediction"
+  },
+  {
+    "title": "3.9 Incident Likelihood Prediction",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.9 Incident Likelihood Prediction"
+  },
+  {
+    "title": "3.10 Compliance Risk Forecasting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.10 Compliance Risk Forecasting"
+  },
+  {
+    "title": "3.11 What-If Scenario Simulation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3.11 What-If Scenario Simulation"
+  },
+  {
+    "title": "3.12 Predictive Alerting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### 4. Collective Intelligence - 10 сценариев"
+  },
+  {
+    "title": "4.1 Case Search with K-Anonymity (k=5)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.1 Case Search with K-Anonymity (k=5)"
+  },
+  {
+    "title": "4.2 Anonymize & Share Success",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.2 Anonymize & Share Success"
+  },
+  {
+    "title": "4.3 Anonymize & Share Lessons Learned",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.3 Anonymize & Share Lessons Learned"
+  },
+  {
+    "title": "4.4 Success Pattern Analysis",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.4 Success Pattern Analysis"
+  },
+  {
+    "title": "4.5 Industry Benchmarking",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.5 Industry Benchmarking"
+  },
+  {
+    "title": "4.6 Cross-Industry Insights",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.6 Cross-Industry Insights"
+  },
+  {
+    "title": "4.7 Collective Wisdom Recommendations",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.7 Collective Wisdom Recommendations"
+  },
+  {
+    "title": "4.8 Privacy-Preserving Analytics",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.8 Privacy-Preserving Analytics"
+  },
+  {
+    "title": "4.9 Contribution Tracking (Anonymous)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4.9 Contribution Tracking (Anonymous)"
+  },
+  {
+    "title": "4.10 Case Library Search API",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### 5-10. Remaining Intelligent Core (Summary)"
+  },
+  {
+    "title": "5. Event Intelligence (8 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Event Intelligence (8 сценариев)"
+  },
+  {
+    "title": "6. Domain Specialists (14 specialists × ~5 scenarios each = 70 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Domain Specialists (14 specialists × ~5 scenarios each = 70 сценариев)"
+  },
+  {
+    "title": "7. Digital Twin (10 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Digital Twin (10 сценариев)"
+  },
+  {
+    "title": "8. Simulation Engine (8 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Simulation Engine (8 сценариев)"
+  },
+  {
+    "title": "9. Scenario Generator (6 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Scenario Generator (6 сценариев)"
+  },
+  {
+    "title": "10. Living Docs (7 сценариев)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "## Infrastructure Scenarios ### Event Bus - 12 сценариев"
+  },
+  {
+    "title": "1. Event Choreography (Service-to-Service)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Event Choreography (Service-to-Service)"
+  },
+  {
+    "title": "2. Saga Pattern (Distributed Transactions)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Saga Pattern (Distributed Transactions)"
+  },
+  {
+    "title": "3. Event Sourcing (Complete Audit Trail)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Event Sourcing (Complete Audit Trail)"
+  },
+  {
+    "title": "4. Dead Letter Queue (Failed Events)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Dead Letter Queue (Failed Events)"
+  },
+  {
+    "title": "5. Event Replay (Debugging/Recovery)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Event Replay (Debugging/Recovery)"
+  },
+  {
+    "title": "6. Event Filtering (Subscriber-Side)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Event Filtering (Subscriber-Side)"
+  },
+  {
+    "title": "7. Event Transformation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Event Transformation"
+  },
+  {
+    "title": "8. Event Aggregation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Event Aggregation"
+  },
+  {
+    "title": "9. Event Routing (Dynamic)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Event Routing (Dynamic)"
+  },
+  {
+    "title": "10. Event Prioritization",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "10. Event Prioritization"
+  },
+  {
+    "title": "11. Event Throttling",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Event Throttling"
+  },
+  {
+    "title": "12. Event Monitoring & Metrics",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Task Queue - 10 сценариев"
+  },
+  {
+    "title": "1. Priority Queue Processing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Priority Queue Processing"
+  },
+  {
+    "title": "2. Task Chaining (Sequential)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Task Chaining (Sequential)"
+  },
+  {
+    "title": "3. Scheduled Tasks (Cron-like)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Scheduled Tasks (Cron-like)"
+  },
+  {
+    "title": "4. Batch Processing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Batch Processing"
+  },
+  {
+    "title": "5. Task Retry with Backoff",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Task Retry with Backoff"
+  },
+  {
+    "title": "6. Task Cancellation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Task Cancellation"
+  },
+  {
+    "title": "7. Task Status Tracking",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Task Status Tracking"
+  },
+  {
+    "title": "8. Task Result Storage",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Task Result Storage"
+  },
+  {
+    "title": "9. Task Load Balancing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Task Load Balancing"
+  },
+  {
+    "title": "10. Task Monitoring & Metrics",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Circuit Breaker - 8 сценариев"
+  },
+  {
+    "title": "1. Circuit State Management (CLOSED/OPEN/HALF_OPEN)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Circuit State Management (CLOSED/OPEN/HALF_OPEN)"
+  },
+  {
+    "title": "2. Failure Threshold Detection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Failure Threshold Detection"
+  },
+  {
+    "title": "3. Auto-Recovery Testing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Auto-Recovery Testing"
+  },
+  {
+    "title": "4. Fallback Execution",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Fallback Execution"
+  },
+  {
+    "title": "5. Circuit Metrics Tracking",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Circuit Metrics Tracking"
+  },
+  {
+    "title": "6. Cascading Failure Prevention",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Cascading Failure Prevention"
+  },
+  {
+    "title": "7. Service Degradation Handling",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Service Degradation Handling"
+  },
+  {
+    "title": "8. Circuit Manual Override",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Monitoring - 15 сценариев"
+  },
+  {
+    "title": "1. Health Check Monitoring",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Health Check Monitoring"
+  },
+  {
+    "title": "2. Service Degradation Detection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Service Degradation Detection"
+  },
+  {
+    "title": "3. Auto-Recovery Triggering",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Auto-Recovery Triggering"
+  },
+  {
+    "title": "4. Metrics Collection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Metrics Collection"
+  },
+  {
+    "title": "5. Log Aggregation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Log Aggregation"
+  },
+  {
+    "title": "6. Distributed Tracing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Distributed Tracing"
+  },
+  {
+    "title": "7. Alerting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Alerting"
+  },
+  {
+    "title": "8. Dashboard Visualization",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Dashboard Visualization"
+  },
+  {
+    "title": "9. SLA Tracking",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. SLA Tracking"
+  },
+  {
+    "title": "10. Performance Monitoring",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "10. Performance Monitoring"
+  },
+  {
+    "title": "11. Capacity Monitoring",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Capacity Monitoring"
+  },
+  {
+    "title": "12. Predictive Monitoring",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "12. Predictive Monitoring"
+  },
+  {
+    "title": "13. Anomaly Detection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "13. Anomaly Detection"
+  },
+  {
+    "title": "14. Root Cause Analysis",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "14. Root Cause Analysis"
+  },
+  {
+    "title": "15. Incident Auto-Creation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Deployment - 8 сценариев"
+  },
+  {
+    "title": "1. Zero-Downtime Deployment",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Zero-Downtime Deployment"
+  },
+  {
+    "title": "2. Blue-Green Deployment",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Blue-Green Deployment"
+  },
+  {
+    "title": "3. Canary Release (5% → 25% → 50% → 100%)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Canary Release (5% → 25% → 50% → 100%)"
+  },
+  {
+    "title": "4. Rollback (Auto/Manual)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Rollback (Auto/Manual)"
+  },
+  {
+    "title": "5. Health Check Integration",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Health Check Integration"
+  },
+  {
+    "title": "6. Traffic Shifting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Traffic Shifting"
+  },
+  {
+    "title": "7. Deployment Metrics",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Deployment Metrics"
+  },
+  {
+    "title": "8. Deployment Audit Trail",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Database - 12 сценариев"
+  },
+  {
+    "title": "1. Multi-Tenant Data Isolation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Multi-Tenant Data Isolation"
+  },
+  {
+    "title": "2. Event Sourcing Storage",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Event Sourcing Storage"
+  },
+  {
+    "title": "3. Audit Trail Persistence",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Audit Trail Persistence"
+  },
+  {
+    "title": "4. Read Replica Routing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Read Replica Routing"
+  },
+  {
+    "title": "5. Query Optimization",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Query Optimization"
+  },
+  {
+    "title": "6. Connection Pooling",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Connection Pooling"
+  },
+  {
+    "title": "7. Backup & Restore",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Backup & Restore"
+  },
+  {
+    "title": "8. Data Migration",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Data Migration"
+  },
+  {
+    "title": "9. Schema Versioning",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Schema Versioning"
+  },
+  {
+    "title": "10. Data Archiving",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "10. Data Archiving"
+  },
+  {
+    "title": "11. Data Export",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Data Export"
+  },
+  {
+    "title": "12. Data Anonymization (k=5)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### API Gateway - 10 сценариев"
+  },
+  {
+    "title": "1. Request Routing",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. Request Routing"
+  },
+  {
+    "title": "2. Rate Limiting",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Rate Limiting"
+  },
+  {
+    "title": "3. Authentication",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. Authentication"
+  },
+  {
+    "title": "4. Authorization (RBAC)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Authorization (RBAC)"
+  },
+  {
+    "title": "5. Request/Response Transformation",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. Request/Response Transformation"
+  },
+  {
+    "title": "6. API Versioning",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. API Versioning"
+  },
+  {
+    "title": "7. Request Logging",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Request Logging"
+  },
+  {
+    "title": "8. Error Handling",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. Error Handling"
+  },
+  {
+    "title": "9. CORS Management",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. CORS Management"
+  },
+  {
+    "title": "10. API Analytics",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Security - 14 сценариев"
+  },
+  {
+    "title": "1. JWT Authentication",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. JWT Authentication"
+  },
+  {
+    "title": "2. OAuth 2.0 Integration",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. OAuth 2.0 Integration"
+  },
+  {
+    "title": "3. MFA (TOTP)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. MFA (TOTP)"
+  },
+  {
+    "title": "4. RBAC Enforcement",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. RBAC Enforcement"
+  },
+  {
+    "title": "5. API Key Management",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "5. API Key Management"
+  },
+  {
+    "title": "6. Encryption at Rest",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Encryption at Rest"
+  },
+  {
+    "title": "7. Encryption in Transit (TLS)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Encryption in Transit (TLS)"
+  },
+  {
+    "title": "8. K-Anonymity Enforcement",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. K-Anonymity Enforcement"
+  },
+  {
+    "title": "9. PII Removal",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. PII Removal"
+  },
+  {
+    "title": "10. Security Audit Trail",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "10. Security Audit Trail"
+  },
+  {
+    "title": "11. Threat Detection",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Threat Detection"
+  },
+  {
+    "title": "12. Vulnerability Scanning",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "12. Vulnerability Scanning"
+  },
+  {
+    "title": "13. Secrets Management (Vault)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "13. Secrets Management (Vault)"
+  },
+  {
+    "title": "14. Compliance Reporting (GDPR/HIPAA)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "## Cross-Component Scenarios ### Scenario Type 1: End-to-End Business Flows"
+  },
+  {
+    "title": "1. ISO 22301 Certification Journey (Uses 12 services + all intelligent core + all infrastructure)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "1. ISO 22301 Certification Journey (Uses 12 services + all intelligent core + all infrastructure)"
+  },
+  {
+    "title": "2. Real-Time Incident Response (Response + Monitoring + Event Bus + AI Assistant)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "2. Real-Time Incident Response (Response + Monitoring + Event Bus + AI Assistant)"
+  },
+  {
+    "title": "3. BIA Execution (BIA Service + AI Foundation + Task Queue)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "3. BIA Execution (BIA Service + AI Foundation + Task Queue)"
+  },
+  {
+    "title": "4. Exercise with Digital Twin (Exercise + Simulation + Digital Twin + Monitoring)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "4. Exercise with Digital Twin (Exercise + Simulation + Digital Twin + Monitoring)"
+  },
+  {
+    "title": "5. Compliance Audit Preparation (Compliance + All Services (evidence) + Documents + Reporting)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Scenario Type 2: AI-Powered Workflows"
+  },
+  {
+    "title": "6. Stuck Workflow Recovery (Orchestrator + Collective Intelligence + AI Assistant + Notification)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "6. Stuck Workflow Recovery (Orchestrator + Collective Intelligence + AI Assistant + Notification)"
+  },
+  {
+    "title": "7. Predictive Analytics Intervention (Predictive Engine + Orchestrator + Planning + Notification)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "7. Predictive Analytics Intervention (Predictive Engine + Orchestrator + Planning + Notification)"
+  },
+  {
+    "title": "8. AI-Assisted Plan Development (Planning + RAG + LLM + Living Docs)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "8. AI-Assisted Plan Development (Planning + RAG + LLM + Living Docs)"
+  },
+  {
+    "title": "9. Real-Time AI Support During Incident (Response + AI Assistant + RAG + LLM)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "9. Real-Time AI Support During Incident (Response + AI Assistant + RAG + LLM)"
+  },
+  {
+    "title": "10. Self-Learning System Evolution (Self-Learning + All Services (data) + ML Pipeline + Code Generator)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Scenario Type 3: Infrastructure Orchestration"
+  },
+  {
+    "title": "11. Service Failure & Auto-Recovery (Monitoring + Circuit Breaker + Auto-Recovery + Event Bus)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "11. Service Failure & Auto-Recovery (Monitoring + Circuit Breaker + Auto-Recovery + Event Bus)"
+  },
+  {
+    "title": "12. Zero-Downtime Deployment (Deployment + Blue-Green + Health Checks + Traffic Shifting)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "12. Zero-Downtime Deployment (Deployment + Blue-Green + Health Checks + Traffic Shifting)"
+  },
+  {
+    "title": "13. Saga Pattern Workflow (Event Bus + Orchestrator + Multiple Services + Compensation)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "13. Saga Pattern Workflow (Event Bus + Orchestrator + Multiple Services + Compensation)"
+  },
+  {
+    "title": "14. Event-Driven Coordination (Event Bus + All Services + Choreography)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "14. Event-Driven Coordination (Event Bus + All Services + Choreography)"
+  },
+  {
+    "title": "15. Distributed Transaction (Saga + Event Sourcing + Rollback + Audit Trail)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "### Scenario Type 4: Data & Analytics"
+  },
+  {
+    "title": "16. Collective Intelligence Sharing (Collective Intelligence + Case Library + Anonymization + k=5)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "16. Collective Intelligence Sharing (Collective Intelligence + Case Library + Anonymization + k=5)"
+  },
+  {
+    "title": "17. Real-Time Analytics Dashboard (All Services + Analytics Engine + Visualization + WebSocket)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "17. Real-Time Analytics Dashboard (All Services + Analytics Engine + Visualization + WebSocket)"
+  },
+  {
+    "title": "18. Predictive Monitoring (Monitoring + Event Intelligence + Predictive Engine + Alerting)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "18. Predictive Monitoring (Monitoring + Event Intelligence + Predictive Engine + Alerting)"
+  },
+  {
+    "title": "19. Compliance Dashboard (Compliance + All Services (evidence) + Real-Time Updates + Executive View)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "19. Compliance Dashboard (Compliance + All Services (evidence) + Real-Time Updates + Executive View)"
+  },
+  {
+    "title": "20. Executive Reporting (All Services + Analytics + LLM (report generation) + Document Service)",
+    "service": "Exercise",
+    "category": "Self-Learning Engine сценарии",
+    "inputs": "",
+    "outputs": "",
+    "events": "",
+    "components": "",
+    "description": "## Usage Matrix ### Component × Scenario Matrix (Top 20 Most-Used Components) | Component | # of Scenarios | Key Usage Types | |-----------|---------------|-----------------| | **Orchestrator** | 180+ | Journey mgmt, Cognitive loop, Coordination, Saga mgmt, Safety checks | | **Event Bus** | 150+ | Choreography, Saga, Event sourcing, DLQ, Real-time coordination | | **AI Foundation (LLM)** | 120+ | Report generation, Plan creation, Guidance, Scenario generation | | **AI Foundation (RAG)** | 110+ | Knowledge retrieval, Template search, Case search, Q&A | | **Task Queue** | 95+ | Priority tasks, Scheduled jobs, Batch processing, Chaining | | **Notification Service** | 90+ | Alerts, Status updates, Stakeholder comms, Multi-channel delivery | | **Planning Service** | 85+ | Journey planning, BC plans, Exercise plans, Roadmaps | | **BIA Service** | 78+ | BIA execution, Dependencies, RTO/RPO, Reports | | **Compliance Service** | 72+ | Compliance monitoring, Gap analysis, Evidence collection, Auditing | | **Documents Service** | 68+ | Living docs, Version control, Templates, Collaboration | | **Risk Service** | 65+ | Risk assessment, Treatment planning, Register mgmt, Reporting | | **Predictive Engine** | 60+ | Timeline prediction, Challenge forecast, Risk prediction, What-if | | **Response Service** | 55+ | Incident mgmt, Plan activation, RTO tracking, PIR, Crisis mgmt | | **Monitoring Service** | 52+ | Health checks, Metrics, Alerting, Auto-recovery, Tracing | | **Collective Intelligence** | 48+ | Case search, Anonymization, Success patterns, Benchmarking | | **Exercise Service** | 45+ | Exercise planning, Scenario gen, Execution, AAR, Metrics | | **Domain Specialists** | 42+ | Expert analysis, Quality review, Recommendations, Knowledge | | **Learning Service** | 38+ | Training, Competency tracking, Certification, Learning paths | | **Living Docs** | 35+ | Auto-updates, Document evolution, Smart templates | | **Digital Twin** | 32+ | Exercise simulation, What-if scenarios, Infrastructure modeling | ## Total Scenario Count ### By Category"
+  }
+]

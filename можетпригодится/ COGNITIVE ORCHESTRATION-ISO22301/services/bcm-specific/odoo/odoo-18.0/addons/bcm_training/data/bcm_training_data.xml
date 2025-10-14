@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Training Data -->
+
+        <!-- Simple training record -->
+        <record id="training_iso22301_basics" model="bcm.training">
+            <field name="name">ISO 22301 Fundamentals</field>
+            <field name="notes">Introduction to ISO 22301 Business Continuity Management</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,228 @@
+# BCM Platform MCP Server Configuration
+# Provides BCM-specific tools and APIs for Docker AI agents
+
+name: bcm-platform-organism
+version: 2.0.0
+description: "Digital BCM Organism MCP Server - AI-Enhanced Business Continuity with 8 specialized AI organs"
+
+# Enhanced server metadata
+metadata:
+  category: "ai-business-continuity"
+  tags:
+    - "iso-22301"
+    - "digital-organism"
+    - "ai-enhanced-bcm"
+    - "anthropic-integration"
+    - "chat-controlled"
+    - "business-continuity"
+    - "risk-management"
+    - "incident-response"
+    - "compliance-automation"
+    - "governance-intelligence"
+  license: "MIT"
+  documentation: "https://github.com/seh-foundation/iso-22301"
+  ai_capabilities:
+    - "governance_brain_anthropic"
+    - "emergency_response_local"
+    - "impact_oracle_digital_twin"
+    - "scenario_creator_creative"
+    - "compliance_guardian_automated"
+    - "performance_analyst_kpi"
+    - "learning_coach_adaptive"
+    - "lifecycle_monitor_health"
+
+# Environment variables required
+environment:
+  ODOO_URL:
+    description: "Odoo BCM platform URL"
+    required: true
+    default: "http://localhost:8069"
+
+  KEYCLOAK_URL:
+    description: "Keycloak authentication URL"
+    required: true
+    default: "http://localhost:8080"
+
+  POSTGRES_URL:
+    description: "PostgreSQL database connection"
+    required: true
+    default: "postgresql://odoo:postgres123@localhost:5432/bcm_platform"
+
+  REDIS_URL:
+    description: "Redis cache connection"
+    required: true
+    default: "redis://localhost:6379/0"
+
+# Tools provided by this MCP server
+tools:
+  # BCM Process Management
+  - name: "bcm_process_list"
+    description: "List all business processes with criticality ratings"
+    parameters:
+      tenant_id:
+        type: "string"
+        description: "Tenant identifier"
+        required: true
+
+  - name: "bcm_process_analyze"
+    description: "Analyze business process for BIA (Business Impact Analysis)"
+    parameters:
+      process_id:
+        type: "integer"
+        description: "Business process ID"
+        required: true
+      analysis_type:
+        type: "string"
+        description: "Type of analysis: bia, risk, dependencies"
+        enum: ["bia", "risk", "dependencies"]
+        required: true
+
+  # Incident Management
+  - name: "bcm_incident_create"
+    description: "Create new incident record in BCM system"
+    parameters:
+      title:
+        type: "string"
+        description: "Incident title"
+        required: true
+      description:
+        type: "string"
+        description: "Detailed incident description"
+        required: true
+      severity:
+        type: "string"
+        description: "Incident severity level"
+        enum: ["low", "medium", "high", "critical"]
+        required: true
+      category:
+        type: "string"
+        description: "Incident category"
+        enum: ["operational", "security", "natural_disaster", "technology", "human_error", "external_threat"]
+        required: true
+
+  - name: "bcm_incident_classify"
+    description: "AI-powered incident classification and severity assessment"
+    parameters:
+      incident_description:
+        type: "string"
+        description: "Raw incident description for classification"
+        required: true
+
+  # Risk Management
+  - name: "bcm_risk_assessment"
+    description: "Perform risk assessment for business process"
+    parameters:
+      process_id:
+        type: "integer"
+        description: "Business process ID"
+        required: true
+      risk_factors:
+        type: "array"
+        description: "Risk factors to assess"
+        items:
+          type: "string"
+          enum: ["operational", "financial", "regulatory", "reputation", "technology"]
+
+  # Compliance & Audit
+  - name: "bcm_compliance_check"
+    description: "Check compliance against ISO 22301 requirements"
+    parameters:
+      scope:
+        type: "string"
+        description: "Compliance check scope"
+        enum: ["full_audit", "specific_clause", "gap_analysis"]
+        required: true
+      clause_number:
+        type: "string"
+        description: "Specific ISO 22301 clause (if scope is specific_clause)"
+
+  - name: "bcm_audit_evidence"
+    description: "Gather audit evidence for compliance verification"
+    parameters:
+      audit_id:
+        type: "integer"
+        description: "Audit process ID"
+        required: true
+      evidence_type:
+        type: "string"
+        description: "Type of evidence to gather"
+        enum: ["documents", "records", "interviews", "observations"]
+
+  # PDCA Cycle Management
+  - name: "bcm_pdca_suggest"
+    description: "Suggest next best action in PDCA cycle"
+    parameters:
+      current_phase:
+        type: "string"
+        description: "Current PDCA phase"
+        enum: ["plan", "do", "check", "act"]
+        required: true
+      context:
+        type: "string"
+        description: "Business context"
+        required: true
+
+  # Integration Tools
+  - name: "bcm_odoo_query"
+    description: "Query Odoo BCM database directly"
+    parameters:
+      model:
+        type: "string"
+        description: "Odoo model name"
+        required: true
+      method:
+        type: "string"
+        description: "Query method"
+        enum: ["search", "read", "search_read"]
+        required: true
+      domain:
+        type: "array"
+        description: "Search domain filters"
+
+  - name: "bcm_keycloak_auth"
+    description: "Authenticate and manage BCM platform users"
+    parameters:
+      action:
+        type: "string"
+        description: "Authentication action"
+        enum: ["validate_token", "get_user_roles", "check_permissions"]
+        required: true
+      token:
+        type: "string"
+        description: "JWT token or user identifier"
+
+  - name: "bcm_redis_cache"
+    description: "Manage BCM platform cache and session data"
+    parameters:
+      operation:
+        type: "string"
+        description: "Cache operation"
+        enum: ["get", "set", "delete", "exists"]
+        required: true
+      key:
+        type: "string"
+        description: "Cache key"
+        required: true
+      value:
+        type: "string"
+        description: "Cache value (for set operation)"
+
+# Resource specifications
+resources:
+  cpu_limit: "500m"
+  memory_limit: "512Mi"
+
+# Security configuration
+security:
+  authentication_required: true
+  allowed_origins:
+    - "http://localhost:8000"  # AI Orchestrator
+    - "http://localhost:8089"  # MCP Gateway
+    - "http://localhost:8069"  # Odoo
+
+# Health check configuration
+health_check:
+  endpoint: "/health"
+  interval: 30
+  timeout: 10
+  retries: 3

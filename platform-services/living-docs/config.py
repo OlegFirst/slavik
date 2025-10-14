@@ -52,6 +52,25 @@ class LivingDocsConfig(BaseSettings):
         env="COLLECTIVE_INTELLIGENCE_URL"
     )
 
+    # Security - JWT
+    JWT_SECRET_KEY: str = Field(
+        default="change-this-in-production-use-strong-secret",
+        env="JWT_SECRET_KEY",
+        description="Secret key for JWT token signing"
+    )
+    JWT_ALGORITHM: str = Field(
+        default="HS256",
+        description="JWT signing algorithm"
+    )
+    JWT_EXPIRATION_MINUTES: int = Field(
+        default=60,
+        description="JWT token expiration in minutes"
+    )
+    JWT_REQUIRED_ENDPOINTS: bool = Field(
+        default=True,
+        description="Require JWT auth for protected endpoints"
+    )
+
     class Config:
         env_prefix = "LIVING_DOCS_"
         env_file = ".env"

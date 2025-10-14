@@ -1,0 +1,18 @@
+current directory: /Users/MD/ISO-22301/docs/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/MD/ISO-22301/docs/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250929-99703-ginhxd sitelibdir\=./.gem.20250929-99703-ginhxd clean
+
+current directory: /Users/MD/ISO-22301/docs/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250929-99703-ginhxd sitelibdir\=./.gem.20250929-99703-ginhxd
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+
+current directory: /Users/MD/ISO-22301/docs/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250929-99703-ginhxd sitelibdir\=./.gem.20250929-99703-ginhxd install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20250929-99703-ginhxd/racc
+
+current directory: /Users/MD/ISO-22301/docs/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250929-99703-ginhxd sitelibdir\=./.gem.20250929-99703-ginhxd clean

@@ -1,0 +1,617 @@
+"""
+L1 Platform Service Generator
+
+Generates test scenarios for all L1 platform services using golden_standard_l1.yaml template.
+
+This generator:
+1. Reads the service catalog
+2. For each platform service, generates a scenario using the L1 template
+3. Registers scenarios in the Registry
+4. Saves scenarios to filesystem and PostgreSQL
+"""
+
+import asyncio
+import logging
+from pathlib import Path
+from typing import List, Dict, Any
+import sys
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from template_loader import TemplateLoader
+from storage.registry import ScenarioRegistry
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+class L1PlatformGenerator:
+    """
+    Generator for L1 Platform Service scenarios.
+
+    Generates scenarios for all 46 platform services.
+    """
+
+    def __init__(
+        self,
+        template_loader: TemplateLoader,
+        registry: ScenarioRegistry,
+        output_dir: str = "generated/l1/services"
+    ):
+        """
+        Initialize generator.
+
+        Args:
+            template_loader: TemplateLoader instance
+            registry: ScenarioRegistry instance
+            output_dir: Directory for generated scenarios
+        """
+        self.loader = template_loader
+        self.registry = registry
+        self.output_dir = Path(output_dir)
+
+        # Create output directory
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        logger.info(f"L1PlatformGenerator initialized, output: {self.output_dir}")
+
+    def _get_service_catalog(self) -> List[Dict[str, Any]]:
+        """
+        Get platform services catalog.
+
+        In production, this would read from a catalog file or database.
+        For now, we define the services inline based on the architecture.
+
+        Returns:
+            List of service definitions
+        """
+        return [
+            # Infrastructure (11 services)
+            {
+                "name": "service-discovery",
+                "port": 8500,
+                "criticality": "critical",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": [],
+                "external_dependencies": ["consul"]
+            },
+            {
+                "name": "eventbus",
+                "port": 6379,
+                "criticality": "critical",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": ["redis"]
+            },
+            {
+                "name": "api-gateway",
+                "port": 8000,
+                "criticality": "critical",
+                "subsystem": "gateway",
+                "category": "infrastructure",
+                "internal_dependencies": ["service-discovery", "auth-service"],
+                "external_dependencies": []
+            },
+            {
+                "name": "realtime-websocket",
+                "port": 8080,
+                "criticality": "high",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": ["api-gateway", "eventbus"],
+                "external_dependencies": []
+            },
+            {
+                "name": "message-queue",
+                "port": 5672,
+                "criticality": "high",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": ["rabbitmq"]
+            },
+            {
+                "name": "balancer-service",
+                "port": 8010,
+                "criticality": "high",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": []
+            },
+            {
+                "name": "infrastructure-coordinator",
+                "port": 8015,
+                "criticality": "critical",
+                "subsystem": "runtime",
+                "category": "infrastructure",
+                "internal_dependencies": ["service-discovery", "eventbus"],
+                "external_dependencies": []
+            },
+            {
+                "name": "prometheus",
+                "port": 9090,
+                "criticality": "high",
+                "subsystem": "observability",
+                "category": "infrastructure",
+                "internal_dependencies": [],
+                "external_dependencies": []
+            },
+            {
+                "name": "grafana",
+                "port": 3000,
+                "criticality": "medium",
+                "subsystem": "observability",
+                "category": "infrastructure",
+                "internal_dependencies": ["prometheus"],
+                "external_dependencies": []
+            },
+            {
+                "name": "loki",
+                "port": 3100,
+                "criticality": "medium",
+                "subsystem": "observability",
+                "category": "infrastructure",
+                "internal_dependencies": [],
+                "external_dependencies": []
+            },
+            {
+                "name": "tempo",
+                "port": 3200,
+                "criticality": "medium",
+                "subsystem": "observability",
+                "category": "infrastructure",
+                "internal_dependencies": [],
+                "external_dependencies": []
+            },
+
+            # Security (3 services)
+            {
+                "name": "secrets-manager",
+                "port": 8200,
+                "criticality": "critical",
+                "subsystem": "security",
+                "category": "security",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": ["vault"]
+            },
+            {
+                "name": "auth-service",
+                "port": 8100,
+                "criticality": "critical",
+                "subsystem": "security",
+                "category": "security",
+                "internal_dependencies": ["secrets-manager"],
+                "external_dependencies": ["keycloak"]
+            },
+            {
+                "name": "policy-engine",
+                "port": 8181,
+                "criticality": "high",
+                "subsystem": "security",
+                "category": "security",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": []
+            },
+
+            # AI Office (8 services)
+            {
+                "name": "mio-manager",
+                "port": 8025,
+                "criticality": "critical",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["service-discovery", "eventbus"],
+                "external_dependencies": ["postgresql", "redis"]
+            },
+            {
+                "name": "ai-orchestrator",
+                "port": 8020,
+                "criticality": "critical",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["mio-manager", "eventbus"],
+                "external_dependencies": []
+            },
+            {
+                "name": "analytics-specialist",
+                "port": 8030,
+                "criticality": "high",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["ai-orchestrator", "eventbus"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "devops-agent",
+                "port": 8035,
+                "criticality": "medium",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["ai-orchestrator"],
+                "external_dependencies": []
+            },
+            {
+                "name": "project-agent",
+                "port": 8040,
+                "criticality": "medium",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["ai-orchestrator"],
+                "external_dependencies": []
+            },
+            {
+                "name": "agent-router",
+                "port": 8045,
+                "criticality": "high",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["ai-orchestrator"],
+                "external_dependencies": []
+            },
+            {
+                "name": "ai-event-manager",
+                "port": 8050,
+                "criticality": "high",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "db-intelligence",
+                "port": 8055,
+                "criticality": "medium",
+                "subsystem": "ai_office",
+                "category": "ai",
+                "internal_dependencies": ["ai-orchestrator"],
+                "external_dependencies": ["postgresql"]
+            },
+
+            # Intelligent Core (10 services)
+            {
+                "name": "ai-foundation",
+                "port": 9000,
+                "criticality": "critical",
+                "subsystem": "intelligent_core",
+                "category": "ai",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": ["qdrant", "openai"]
+            },
+            {
+                "name": "workflow-intelligence",
+                "port": 9010,
+                "criticality": "critical",
+                "subsystem": "intelligent_core",
+                "category": "intelligence",
+                "internal_dependencies": ["ai-foundation", "eventbus"],
+                "external_dependencies": ["postgresql", "temporal"]
+            },
+            {
+                "name": "predictive-analytics",
+                "port": 9020,
+                "criticality": "high",
+                "subsystem": "intelligent_core",
+                "category": "intelligence",
+                "internal_dependencies": ["ai-foundation"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "community-intelligence",
+                "port": 9030,
+                "criticality": "high",
+                "subsystem": "intelligent_core",
+                "category": "intelligence",
+                "internal_dependencies": ["ai-foundation"],
+                "external_dependencies": ["postgresql", "qdrant"]
+            },
+            {
+                "name": "collective-intelligence",
+                "port": 9040,
+                "criticality": "medium",
+                "subsystem": "intelligent_core",
+                "category": "intelligence",
+                "internal_dependencies": ["ai-foundation"],
+                "external_dependencies": []
+            },
+            {
+                "name": "scenario-intelligence",
+                "port": 9050,
+                "criticality": "high",
+                "subsystem": "intelligent_core",
+                "category": "intelligence",
+                "internal_dependencies": ["workflow-intelligence"],
+                "external_dependencies": ["postgresql", "qdrant"]
+            },
+            {
+                "name": "learning-system",
+                "port": 9060,
+                "criticality": "high",
+                "subsystem": "intelligent_core",
+                "category": "ai",
+                "internal_dependencies": ["ai-foundation"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "system-bcm",
+                "port": 9070,
+                "criticality": "high",
+                "subsystem": "intelligent_core",
+                "category": "business",
+                "internal_dependencies": ["workflow-intelligence"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "expertise-center",
+                "port": 9080,
+                "criticality": "medium",
+                "subsystem": "intelligent_core",
+                "category": "ai",
+                "internal_dependencies": ["ai-foundation"],
+                "external_dependencies": []
+            },
+            {
+                "name": "pdca-lifecycle",
+                "port": 9090,
+                "criticality": "medium",
+                "subsystem": "intelligent_core",
+                "category": "business",
+                "internal_dependencies": ["workflow-intelligence"],
+                "external_dependencies": []
+            },
+
+            # Integration Services (5 services)
+            {
+                "name": "github-integration",
+                "port": 7000,
+                "criticality": "medium",
+                "subsystem": "integration",
+                "category": "integration",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": ["github_api"]
+            },
+            {
+                "name": "mcp-server",
+                "port": 7010,
+                "criticality": "medium",
+                "subsystem": "integration",
+                "category": "integration",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": []
+            },
+            {
+                "name": "notification-service",
+                "port": 7020,
+                "criticality": "high",
+                "subsystem": "integration",
+                "category": "integration",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": ["smtp", "sms_gateway"]
+            },
+            {
+                "name": "webhook-service",
+                "port": 7030,
+                "criticality": "medium",
+                "subsystem": "integration",
+                "category": "integration",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": []
+            },
+            {
+                "name": "external-api-connector",
+                "port": 7040,
+                "criticality": "medium",
+                "subsystem": "integration",
+                "category": "integration",
+                "internal_dependencies": ["service-discovery"],
+                "external_dependencies": []
+            },
+
+            # BCM Platform Services (9 services)
+            {
+                "name": "bia-service",
+                "port": 10000,
+                "criticality": "critical",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["workflow-intelligence", "auth-service"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "risk-service",
+                "port": 10010,
+                "criticality": "critical",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["workflow-intelligence", "auth-service"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "response-service",
+                "port": 10020,
+                "criticality": "critical",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["workflow-intelligence", "auth-service"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "document-service",
+                "port": 10030,
+                "criticality": "high",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["auth-service"],
+                "external_dependencies": ["postgresql", "s3"]
+            },
+            {
+                "name": "validation-service",
+                "port": 10040,
+                "criticality": "high",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["policy-engine"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "compliance-service",
+                "port": 10050,
+                "criticality": "high",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["validation-service"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "audit-service",
+                "port": 10060,
+                "criticality": "critical",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["eventbus"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "reporting-service",
+                "port": 10070,
+                "criticality": "medium",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["document-service"],
+                "external_dependencies": ["postgresql"]
+            },
+            {
+                "name": "organization-service",
+                "port": 10080,
+                "criticality": "critical",
+                "subsystem": "bcm_platform",
+                "category": "business",
+                "internal_dependencies": ["auth-service"],
+                "external_dependencies": ["postgresql"]
+            }
+        ]
+
+    async def generate_one(self, service: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate scenario for one service.
+
+        Args:
+            service: Service definition
+
+        Returns:
+            Generated scenario
+        """
+        # Build context
+        context = {
+            "service_name": service["name"],
+            "port": service["port"],
+            "criticality": service["criticality"],
+            "subsystem_name": service["subsystem"],
+            "internal_dependencies": ", ".join(service.get("internal_dependencies", [])),
+            "external_dependencies": ", ".join(service.get("external_dependencies", []))
+        }
+
+        # Generate scenario from template
+        scenario = self.loader.create_scenario_from_template(
+            "golden_standard_l1.yaml",
+            context,
+            validate=True
+        )
+
+        # Add category to meta (for specialized routing later)
+        scenario["meta"]["category"] = service.get("category", "general")
+
+        return scenario
+
+    async def generate_all(self) -> List[str]:
+        """
+        Generate scenarios for all platform services.
+
+        Returns:
+            List of generated scenario IDs
+        """
+        logger.info("Starting L1 Platform Service scenario generation")
+
+        services = self._get_service_catalog()
+        logger.info(f"Found {len(services)} platform services to generate")
+
+        generated_ids = []
+
+        for service in services:
+            try:
+                # Generate scenario
+                scenario = await self.generate_one(service)
+
+                # Register in registry
+                success = await self.registry.register(scenario)
+
+                if not success:
+                    logger.error(f"Failed to register scenario for {service['name']}")
+                    continue
+
+                scenario_id = scenario["meta"]["id"]
+                generated_ids.append(scenario_id)
+
+                # Save to filesystem
+                output_file = self.output_dir / f"{service['name']}.yaml"
+                self._save_scenario_to_file(scenario, output_file)
+
+                logger.info(f"✅ Generated and saved: {service['name']} ({scenario_id})")
+
+            except Exception as e:
+                logger.error(f"❌ Failed to generate scenario for {service['name']}: {e}", exc_info=True)
+                continue
+
+        logger.info(f"\n📊 Generation complete: {len(generated_ids)}/{len(services)} scenarios generated")
+
+        return generated_ids
+
+    def _save_scenario_to_file(self, scenario: Dict[str, Any], filepath: Path):
+        """
+        Save scenario to YAML file.
+
+        Args:
+            scenario: Scenario dictionary
+            filepath: Output file path
+        """
+        import yaml
+
+        with open(filepath, 'w') as f:
+            yaml.dump(scenario, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+
+async def main():
+    """Run L1 Platform Generator"""
+    print("="*70)
+    print("L1 PLATFORM SERVICE GENERATOR")
+    print("="*70)
+
+    # Initialize systems
+    loader = TemplateLoader(templates_dir="templates")
+    registry = ScenarioRegistry()
+
+    # Create generator
+    generator = L1PlatformGenerator(loader, registry, output_dir="generated/l1/services")
+
+    # Generate all scenarios
+    generated_ids = await generator.generate_all()
+
+    # Get statistics
+    stats = await registry.get_statistics()
+
+    print("\n" + "="*70)
+    print("GENERATION SUMMARY")
+    print("="*70)
+    print(f"✅ Total scenarios generated: {len(generated_ids)}")
+    print(f"📊 Registry statistics:")
+    print(f"   Total scenarios: {stats['total_scenarios']}")
+    print(f"   By level: {stats['by_level']}")
+    print(f"   By type: {stats.get('by_type', {})}")
+    print("\n🎉 L1 Platform generation complete!")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

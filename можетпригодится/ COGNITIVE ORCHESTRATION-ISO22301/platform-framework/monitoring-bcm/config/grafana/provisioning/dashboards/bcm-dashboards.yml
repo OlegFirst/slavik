@@ -1,0 +1,39 @@
+# Grafana Dashboard Provisioning for BCM Platform
+apiVersion: 1
+
+providers:
+  # BCM Platform Core Dashboards
+  - name: 'bcm-platform-core'
+    orgId: 1
+    type: file
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/bcm-platform
+      
+  # System Monitoring Dashboards  
+  - name: 'system-monitoring'
+    orgId: 1
+    type: file
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/system
+      
+  # Integration Services Dashboards
+  - name: 'integration-services'
+    orgId: 1
+    type: file
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/integrations
+      
+  # Business Continuity Dashboards
+  - name: 'business-continuity'
+    orgId: 1
+    type: file
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/bcm-business

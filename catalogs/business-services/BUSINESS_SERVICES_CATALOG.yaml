@@ -1,0 +1,516 @@
+# ========================================================================
+# Business Services Catalog (Программные сервисы для пользователей)
+# ========================================================================
+# Version: 1.0.0
+# Created: 2025-10-12
+# Purpose: Catalog of BCM business services for end users
+#
+# This catalog describes business services that users interact with
+# (БЦМ услуги, которыми пользуются пользователи)
+# ========================================================================
+
+version: "1.0.0"
+created_date: "2025-10-12"
+total_services: 10
+active_services: 10
+
+# ========================================================================
+# BUSINESS SERVICES (Программные сервисы BCM)
+# ========================================================================
+
+business_services:
+  # ======================================================================
+  # 1. BIA SERVICE (Business Impact Analysis)
+  # ======================================================================
+  - id: "bia-service"
+    name: "Business Impact Analysis Service"
+    name_ru: "Сервис Анализа Влияния на Бизнес"
+    category: "bcm_core"
+    status: "production"
+
+    description:
+      summary: "Service for conducting Business Impact Analysis"
+      summary_ru: "Сервис для проведения Анализа Влияния на Бизнес"
+      purpose: "Enable organizations to identify critical business functions and assess impact of disruptions"
+      iso_22301_clause: "8.2.2 - Business Impact Analysis"
+
+    user_capabilities:
+      - "Create BIA projects"
+      - "Identify critical business functions"
+      - "Assess impact of disruptions (financial, operational, reputational)"
+      - "Determine Recovery Time Objectives (RTO)"
+      - "Determine Recovery Point Objectives (RPO)"
+      - "Generate BIA reports"
+      - "AI-powered impact predictions"
+
+    typical_workflows:
+      - workflow: "Create New BIA"
+        steps:
+          - "Create BIA project"
+          - "Identify business functions"
+          - "Assess criticality"
+          - "Calculate impact"
+          - "Set RTO/RPO"
+          - "Generate report"
+
+      - workflow: "Update Existing BIA"
+        steps:
+          - "Load BIA project"
+          - "Update business functions"
+          - "Reassess impact"
+          - "Regenerate report"
+
+    integrations:
+      - "Risk Assessment Service"
+      - "BCM Plans Service"
+      - "Compliance Monitoring"
+
+  # ======================================================================
+  # 2. RISK ASSESSMENT SERVICE
+  # ======================================================================
+  - id: "risk-service"
+    name: "Risk Assessment Service"
+    name_ru: "Сервис Оценки Рисков"
+    category: "bcm_core"
+    status: "production"
+
+    description:
+      summary: "Service for identifying and assessing BCM risks"
+      summary_ru: "Сервис для выявления и оценки рисков БНП"
+      purpose: "Enable organizations to identify, assess, and manage business continuity risks"
+      iso_22301_clause: "8.2.3 - Risk Assessment"
+
+    user_capabilities:
+      - "Identify risks (internal, external, cyber, natural disasters)"
+      - "Assess risk likelihood and impact"
+      - "Calculate risk priority (Risk Priority Number)"
+      - "Define risk mitigation strategies"
+      - "Track risk status over time"
+      - "Generate risk reports"
+      - "AI-powered risk predictions"
+
+    typical_workflows:
+      - workflow: "Create Risk Assessment"
+        steps:
+          - "Identify risk"
+          - "Assess likelihood"
+          - "Assess impact"
+          - "Calculate RPN"
+          - "Define mitigation"
+          - "Assign owner"
+
+      - workflow: "Monitor Risks"
+        steps:
+          - "Review risk register"
+          - "Update risk status"
+          - "Track mitigations"
+          - "Generate reports"
+
+    integrations:
+      - "BIA Service"
+      - "BCM Plans Service"
+      - "Incident Response"
+
+  # ======================================================================
+  # 3. BCM PLANS SERVICE
+  # ======================================================================
+  - id: "plans-service"
+    name: "BCM Plans Service"
+    name_ru: "Сервис Планов БНП"
+    category: "bcm_core"
+    status: "production"
+
+    description:
+      summary: "Service for creating and managing BCM plans"
+      summary_ru: "Сервис для создания и управления планами БНП"
+      purpose: "Enable organizations to create, maintain, and execute BCM plans"
+      iso_22301_clause: "8.3 - Business Continuity Strategy & Plans"
+
+    user_capabilities:
+      - "Create BCM plans (BCP, DRP, IRP)"
+      - "Define plan procedures and steps"
+      - "Assign roles and responsibilities"
+      - "Set activation triggers"
+      - "Version control for plans"
+      - "Plan testing and exercises"
+      - "Generate plan documentation"
+
+    typical_workflows:
+      - workflow: "Create BCM Plan"
+        steps:
+          - "Select plan type"
+          - "Define scope"
+          - "Add procedures"
+          - "Assign roles"
+          - "Set triggers"
+          - "Review and approve"
+
+      - workflow: "Activate Plan"
+        steps:
+          - "Trigger detected"
+          - "Activate plan"
+          - "Notify team"
+          - "Execute procedures"
+          - "Track progress"
+          - "Document results"
+
+    integrations:
+      - "BIA Service"
+      - "Risk Service"
+      - "Incident Response"
+      - "Validation Service"
+
+  # ======================================================================
+  # 4. INCIDENT RESPONSE SERVICE
+  # ======================================================================
+  - id: "response-service"
+    name: "Incident Response Service"
+    name_ru: "Сервис Реагирования на Инциденты"
+    category: "bcm_operations"
+    status: "production"
+
+    description:
+      summary: "Service for managing BCM incidents and responses"
+      summary_ru: "Сервис для управления инцидентами БНП и реагирования"
+      purpose: "Enable organizations to detect, respond to, and recover from disruptions"
+      iso_22301_clause: "8.4 - Incident Response"
+
+    user_capabilities:
+      - "Register incidents"
+      - "Classify incident severity"
+      - "Activate response procedures"
+      - "Coordinate response teams"
+      - "Track incident progress"
+      - "Document incident timeline"
+      - "Generate incident reports"
+      - "Post-incident review"
+
+    typical_workflows:
+      - workflow: "Handle Incident"
+        steps:
+          - "Detect/Report incident"
+          - "Classify severity"
+          - "Activate response"
+          - "Coordinate teams"
+          - "Execute procedures"
+          - "Track progress"
+          - "Close incident"
+          - "Post-review"
+
+    integrations:
+      - "BCM Plans Service"
+      - "Governance Service"
+      - "Learning Service"
+
+  # ======================================================================
+  # 5. COMPLIANCE MONITORING SERVICE
+  # ======================================================================
+  - id: "compliance-service"
+    name: "Compliance Monitoring Service"
+    name_ru: "Сервис Мониторинга Соответствия"
+    category: "governance"
+    status: "production"
+
+    description:
+      summary: "Service for monitoring ISO 22301 compliance"
+      summary_ru: "Сервис для мониторинга соответствия ISO 22301"
+      purpose: "Enable organizations to track and maintain ISO 22301 compliance"
+      iso_22301_clause: "9.1 - Monitoring, measurement, analysis and evaluation"
+
+    user_capabilities:
+      - "Track compliance requirements"
+      - "Monitor compliance status"
+      - "Generate compliance reports"
+      - "Identify compliance gaps"
+      - "Track corrective actions"
+      - "Schedule compliance audits"
+
+    typical_workflows:
+      - workflow: "Compliance Check"
+        steps:
+          - "Run compliance scan"
+          - "Identify gaps"
+          - "Generate report"
+          - "Assign remediation"
+          - "Track progress"
+
+    integrations:
+      - "Governance Service"
+      - "Validation Service"
+      - "Audit Service"
+
+  # ======================================================================
+  # 6. GOVERNANCE SERVICE
+  # ======================================================================
+  - id: "governance-service"
+    name: "Governance Service"
+    name_ru: "Сервис Управления"
+    category: "governance"
+    status: "production"
+
+    description:
+      summary: "Service for BCM governance and policies"
+      summary_ru: "Сервис для управления БНП и политик"
+      purpose: "Enable organizations to establish and maintain BCM governance"
+      iso_22301_clause: "5 - Leadership & 6 - Planning"
+
+    user_capabilities:
+      - "Define BCM policies"
+      - "Establish governance structure"
+      - "Define roles and responsibilities"
+      - "Set BCM objectives"
+      - "Track policy compliance"
+      - "Review and update policies"
+
+    typical_workflows:
+      - workflow: "Create Policy"
+        steps:
+          - "Draft policy"
+          - "Review by stakeholders"
+          - "Approve policy"
+          - "Publish policy"
+          - "Track compliance"
+
+    integrations:
+      - "Compliance Service"
+      - "Stakeholder Management"
+
+  # ======================================================================
+  # 7. LEARNING & TRAINING SERVICE
+  # ======================================================================
+  - id: "learning-service"
+    name: "Learning & Training Service"
+    name_ru: "Сервис Обучения и Тренингов"
+    category: "competence"
+    status: "production"
+
+    description:
+      summary: "Service for BCM training and competency development"
+      summary_ru: "Сервис для обучения БНП и развития компетенций"
+      purpose: "Enable organizations to train staff and develop BCM competencies"
+      iso_22301_clause: "7.2 - Competence & 7.3 - Awareness"
+
+    user_capabilities:
+      - "Create training programs"
+      - "Assign training to users"
+      - "Track training completion"
+      - "Assess competencies"
+      - "Generate training reports"
+      - "BCM certification programs"
+
+    typical_workflows:
+      - workflow: "Assign Training"
+        steps:
+          - "Identify training needs"
+          - "Create training program"
+          - "Assign to users"
+          - "Track completion"
+          - "Assess learning"
+
+    integrations:
+      - "Governance Service"
+      - "Knowledge Base"
+
+  # ======================================================================
+  # 8. VALIDATION & TESTING SERVICE
+  # ======================================================================
+  - id: "validation-service"
+    name: "Validation & Testing Service"
+    name_ru: "Сервис Валидации и Тестирования"
+    category: "bcm_operations"
+    status: "production"
+
+    description:
+      summary: "Service for BCM plan testing and exercises"
+      summary_ru: "Сервис для тестирования планов БНП и учений"
+      purpose: "Enable organizations to test and validate BCM plans"
+      iso_22301_clause: "8.5 - Exercising and testing"
+
+    user_capabilities:
+      - "Plan BCM exercises"
+      - "Schedule tests"
+      - "Execute tabletop exercises"
+      - "Run simulations"
+      - "Track exercise results"
+      - "Identify improvement areas"
+      - "Generate exercise reports"
+
+    typical_workflows:
+      - workflow: "Run Exercise"
+        steps:
+          - "Plan exercise"
+          - "Prepare scenario"
+          - "Notify participants"
+          - "Execute exercise"
+          - "Collect feedback"
+          - "Generate report"
+          - "Track improvements"
+
+    integrations:
+      - "BCM Plans Service"
+      - "Learning Service"
+
+  # ======================================================================
+  # 9. DOCUMENT MANAGEMENT SERVICE
+  # ======================================================================
+  - id: "documents-service"
+    name: "Document Management Service"
+    name_ru: "Сервис Управления Документами"
+    category: "support"
+    status: "production"
+
+    description:
+      summary: "Service for managing BCM documentation"
+      summary_ru: "Сервис для управления документацией БНП"
+      purpose: "Enable organizations to manage BCM documents and records"
+      iso_22301_clause: "7.5 - Documented information"
+
+    user_capabilities:
+      - "Upload documents"
+      - "Organize in folders"
+      - "Version control"
+      - "Access control"
+      - "Search documents"
+      - "Generate document reports"
+
+    typical_workflows:
+      - workflow: "Manage Documents"
+        steps:
+          - "Upload document"
+          - "Categorize"
+          - "Set permissions"
+          - "Share with team"
+          - "Track versions"
+
+    integrations:
+      - "All BCM Services"
+
+  # ======================================================================
+  # 10. PLANNING & JOURNEY SERVICE
+  # ======================================================================
+  - id: "planning-service"
+    name: "Planning & Journey Service"
+    name_ru: "Сервис Планирования и Пути"
+    category: "bcm_strategy"
+    status: "production"
+
+    description:
+      summary: "Service for planning BCM journey and implementation"
+      summary_ru: "Сервис для планирования пути БНП и внедрения"
+      purpose: "Enable organizations to plan their BCM implementation journey"
+      iso_22301_clause: "6 - Planning"
+
+    user_capabilities:
+      - "Create BCM journey"
+      - "Define milestones"
+      - "Track progress"
+      - "Predict timelines"
+      - "Resource planning"
+      - "Generate roadmap"
+
+    typical_workflows:
+      - workflow: "Create Journey"
+        steps:
+          - "Assess current state"
+          - "Define target state"
+          - "Create roadmap"
+          - "Set milestones"
+          - "Track progress"
+
+    integrations:
+      - "Predictive Service"
+      - "Governance Service"
+
+# ========================================================================
+# INTEGRATION MAP
+# ========================================================================
+integration_patterns:
+  # BIA-centric flow
+  - pattern: "BIA → Risk → Plans"
+    description: "Main BCM lifecycle flow"
+    services: ["bia-service", "risk-service", "plans-service"]
+
+  # Incident response flow
+  - pattern: "Response → Plans → Learning"
+    description: "Incident handling and learning"
+    services: ["response-service", "plans-service", "learning-service"]
+
+  # Governance flow
+  - pattern: "Governance → Compliance → Validation"
+    description: "Governance and compliance management"
+    services: ["governance-service", "compliance-service", "validation-service"]
+
+  # Journey flow
+  - pattern: "Planning → BIA → Risk → Plans → Validation"
+    description: "Complete BCM implementation journey"
+    services: ["planning-service", "bia-service", "risk-service", "plans-service", "validation-service"]
+
+# ========================================================================
+# USER ROLES
+# ========================================================================
+user_roles:
+  - role: "BCM Manager"
+    access: ["all services"]
+    primary_workflows:
+      - "Create BIA"
+      - "Assess risks"
+      - "Create plans"
+      - "Monitor compliance"
+
+  - role: "Risk Analyst"
+    access: ["risk-service", "bia-service", "compliance-service"]
+    primary_workflows:
+      - "Identify risks"
+      - "Assess impact"
+      - "Monitor risk status"
+
+  - role: "Incident Coordinator"
+    access: ["response-service", "plans-service", "documents-service"]
+    primary_workflows:
+      - "Handle incidents"
+      - "Activate plans"
+      - "Document response"
+
+  - role: "Compliance Officer"
+    access: ["compliance-service", "governance-service", "validation-service"]
+    primary_workflows:
+      - "Monitor compliance"
+      - "Generate reports"
+      - "Track audits"
+
+  - role: "BCM Administrator"
+    access: ["all services"]
+    primary_workflows:
+      - "Configure system"
+      - "Manage users"
+      - "Review analytics"
+
+# ========================================================================
+# STATISTICS
+# ========================================================================
+statistics:
+  total_services: 10
+  by_category:
+    bcm_core: 3          # BIA, Risk, Plans
+    bcm_operations: 2    # Response, Validation
+    governance: 2        # Compliance, Governance
+    competence: 1        # Learning
+    support: 1           # Documents
+    bcm_strategy: 1      # Planning
+
+  iso_22301_coverage:
+    clause_5_leadership: ["governance-service"]
+    clause_6_planning: ["planning-service", "governance-service"]
+    clause_7_support: ["learning-service", "documents-service"]
+    clause_8_operation: ["bia-service", "risk-service", "plans-service", "response-service", "validation-service"]
+    clause_9_performance: ["compliance-service"]
+
+# ========================================================================
+# METADATA
+# ========================================================================
+metadata:
+  generated_by: "Manual + Catalog Analysis"
+  generation_date: "2025-10-12"
+  version: "1.0.0"
+  source: "Platform Services + Business Analysis"
+  distinction: "Business services (for users) vs Platform services (infrastructure)"

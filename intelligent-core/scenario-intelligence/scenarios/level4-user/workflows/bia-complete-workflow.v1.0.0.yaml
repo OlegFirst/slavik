@@ -1,0 +1,156 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "user-bia-complete-workflow"
+    version: "1.0.0"
+    level: 4  # User level
+    type: "workflow"
+    pillar: "operational_excellence"
+    domain: "business_continuity"
+
+    created_at: "2025-01-15T10:00:00Z"
+    updated_at: "2025-01-15T10:00:00Z"
+    created_by: "bcm-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    subsystem: "platform-services"
+    team: "bcm-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Complete BIA workflow with AI assistance"
+    summary: "Hospital performs BIA with AI recommendations and compliance validation"
+    business_value: "ISO 22301 compliance + 4+ hours time savings per assessment"
+
+  # ========== USER CONTEXT ==========
+  context:
+    user_role: "bcm_manager"
+    organization: "city_hospital"
+    organization_type: "healthcare"
+    regulatory_requirements:
+      - "ISO_22301"
+      - "HIPAA"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "BIA Workflow with AI"
+
+    scenario: "BCM Manager creates BIA for hospital"
+
+    given:
+      - "User is authenticated as BCM Manager"
+      - "Organization is city_hospital"
+      - "Scope is emergency_department and surgery"
+
+    when:
+      - "User creates new BIA assessment"
+      - "User requests AI recommendations"
+      - "User reviews and accepts recommendations"
+
+    then:
+      - "BIA assessment is created"
+      - "AI recommendations are provided"
+      - "Critical processes are identified"
+      - "MTPD and RTO are calculated"
+      - "Compliance report is generated"
+
+  # ========== EXECUTION ==========
+  execution:
+    steps:
+      # Step 1: User creates BIA
+      - id: "user_create_bia"
+        action: "bia-service.create"
+        params:
+          name: "Q1 2025 Hospital BIA"
+          organization_id: "{{org_id}}"
+          scope:
+            - "emergency_department"
+            - "surgery"
+        expect:
+          status: 201
+          response_contains:
+            - "assessment_id"
+
+      # Step 2: AI recommendations (calls level 3 scenario)
+      - id: "ai_recommendations"
+        calls:
+          - scenario_id: "bia-ai-integration"
+            level: 3
+            params:
+              bia_id: "{{steps.user_create_bia.result.assessment_id}}"
+              industry: "healthcare"
+            output_mapping:
+              recommendations: "{{response.recommendations}}"
+
+      # Step 3: User accepts recommendations
+      - id: "user_accept"
+        action: "bia-service.add_processes"
+        params:
+          assessment_id: "{{steps.user_create_bia.result.assessment_id}}"
+          processes: "{{steps.ai_recommendations.result.recommendations}}"
+        expect:
+          status: 200
+
+      # Step 4: Generate compliance report
+      - id: "generate_report"
+        action: "documents-service.generate_bia_report"
+        params:
+          assessment_id: "{{steps.user_create_bia.result.assessment_id}}"
+          format: "ISO_22301_compliant"
+        expect:
+          status: 200
+          response_contains:
+            - "document_generated"
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "bia.assessment.completed"
+          aggregate: "BIAAssessment"
+          aggregate_id: "{{steps.user_create_bia.result.assessment_id}}"
+          payload:
+            assessment_id: "{{steps.user_create_bia.result.assessment_id}}"
+            critical_processes_count: 5
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.2.2"
+          name: "Business impact analysis"
+          requirement: "Conduct BIA periodically"
+
+        - id: "8.2.3"
+          name: "Impact analysis"
+          requirement: "Determine MTPD and RTO"
+
+      evidence_generated:
+        - type: "bia_report"
+          format: "PDF"
+          storage: "compliance_archive"
+          retention: "7 years"
+
+  # ========== BUSINESS VALUE ==========
+  business_metrics:
+    time_saved: "4 hours"  # vs manual BIA
+    compliance_coverage: "95%"
+    ai_recommendation_adoption: "80%"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "bia_workflow_duration_seconds"
+        type: "histogram"
+
+      - name: "ai_recommendation_adoption_rate"
+        type: "gauge"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-01-15"
+      author: "bcm-team"
+      changes:
+        - "Initial version with AI integration"

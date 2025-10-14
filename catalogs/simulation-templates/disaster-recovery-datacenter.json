@@ -1,0 +1,79 @@
+{
+  "id": "template_dr_datacenter_001",
+  "name": "Data Center Disaster Recovery",
+  "description": "Simulation of primary data center failure and failover to backup site",
+  "category": "disaster_recovery",
+  "exercise_type": "full_scale",
+  "difficulty": 5,
+  "duration_minutes": 240,
+  "organization_type": "any",
+  "organization_size": "large",
+
+  "parameters": {
+    "configurable_fields": [
+      "disaster_type",
+      "backup_site_readiness",
+      "data_replication_status",
+      "participant_count"
+    ],
+    "default_values": {
+      "disaster_type": "power_outage",
+      "backup_site_readiness": "warm_standby",
+      "data_replication_status": "sync",
+      "participant_count": 15
+    }
+  },
+
+  "scenario": {
+    "initial_situation": "Normal operations, primary data center active",
+
+    "incidents": [
+      {
+        "id": "inc_001",
+        "type": "primary_site_failure",
+        "timing_minutes": 10,
+        "severity": "critical",
+        "description": "Complete power failure at primary data center",
+        "affected_systems": ["all_primary_systems"]
+      },
+      {
+        "id": "inc_002",
+        "type": "failover_decision",
+        "timing_minutes": 30,
+        "severity": "critical",
+        "description": "Decision point: initiate failover to backup site"
+      },
+      {
+        "id": "inc_003",
+        "type": "data_sync_check",
+        "timing_minutes": 60,
+        "severity": "high",
+        "description": "Verify data synchronization and integrity"
+      }
+    ],
+
+    "affected_processes": [
+      {
+        "process": "core_services",
+        "criticality": "critical",
+        "rto_target": 4,
+        "rpo_target": 0
+      }
+    ],
+
+    "success_criteria": [
+      "Failover completed within RTO",
+      "No data loss beyond RPO",
+      "All critical services restored",
+      "Communication maintained"
+    ]
+  },
+
+  "metadata": {
+    "created_by": "builtin",
+    "version": "1.0",
+    "tags": ["disaster_recovery", "datacenter", "failover"],
+    "iso_22301_clauses": ["8.4"],
+    "last_updated": "2025-10-12"
+  }
+}

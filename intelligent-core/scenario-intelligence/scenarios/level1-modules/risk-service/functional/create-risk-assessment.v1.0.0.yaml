@@ -1,0 +1,213 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "risk-service-create-risk-assessment"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "security"
+    domain: "risk_management"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "risk-service"
+    subsystem: "platform-services"
+    team: "risk-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Create Risk Assessment"
+    summary: "Create a new risk assessment with likelihood and impact evaluation"
+    business_value: "Enable systematic risk identification and mitigation planning"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Risk Assessment Management"
+
+    scenario: "Create new risk assessment"
+
+    given:
+      - "Risk Service is running"
+      - "User has permission 'risk:create'"
+      - "Organization exists"
+      - "Risk data is valid"
+
+    when:
+      - "User creates risk assessment for 'Data Breach'"
+      - "Risk includes likelihood (1-5) and impact (1-5)"
+      - "Risk includes mitigation strategy"
+
+    then:
+      - "Risk assessment is created in database"
+      - "Risk score is calculated (likelihood × impact)"
+      - "Risk status is 'identified'"
+      - "Audit log entry is created"
+      - "Response status is 201"
+      - "Event 'risk.identified' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 30
+    retry_policy:
+      max_retries: 3
+      backoff: exponential
+
+    steps:
+      - id: "validate_permissions"
+        action: "risk.check_permission"
+        params:
+          user_id: "{{user_id}}"
+          permission: "risk:create"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "abort"
+
+      - id: "validate_organization"
+        action: "risk.validate_organization"
+        params:
+          organization_id: "{{organization_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "validate_input"
+        action: "risk.validate_input"
+        params:
+          risk_name: "{{risk_name}}"
+          likelihood: "{{likelihood}}"
+          impact: "{{impact}}"
+        expect:
+          valid: true
+          likelihood_in_range: true
+          impact_in_range: true
+        on_failure: "abort"
+
+      - id: "calculate_risk_score"
+        action: "risk.calculate_score"
+        params:
+          likelihood: "{{likelihood}}"
+          impact: "{{impact}}"
+        expect:
+          score: "{{exists}}"
+          score_range: "1-25"
+
+      - id: "create_risk_assessment"
+        action: "risk.create"
+        params:
+          organization_id: "{{organization_id}}"
+          risk_name: "{{risk_name}}"
+          description: "{{description}}"
+          likelihood: "{{likelihood}}"
+          impact: "{{impact}}"
+          risk_score: "{{steps.calculate_risk_score.result.score}}"
+          mitigation_strategy: "{{mitigation_strategy}}"
+          created_by: "{{user_id}}"
+        expect:
+          status: 201
+          risk_id: "{{exists}}"
+
+      - id: "create_audit_log"
+        action: "risk.log_audit"
+        params:
+          event: "risk_identified"
+          risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+          user_id: "{{user_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "risk.identified"
+          aggregate: "Risk"
+          aggregate_id: "{{steps.create_risk_assessment.result.risk_id}}"
+          payload:
+            risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            organization_id: "{{organization_id}}"
+            risk_name: "{{risk_name}}"
+            risk_score: "{{steps.calculate_risk_score.result.score}}"
+            status: "identified"
+            created_by: "{{user_id}}"
+
+      subscribes:
+        - event_type: "bia.created"
+          trigger_scenario: "risk-auto-analyze-from-bia"
+          condition:
+            financial_impact: ">100000"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.2.2"
+          name: "Business impact analysis and risk assessment"
+          requirement: "Perform systematic risk assessment"
+
+        - id: "8.2.3"
+          name: "Risk assessment"
+          requirement: "Document risks and mitigation strategies"
+
+        - id: "7.5.3"
+          name: "Control of documented information"
+          requirement: "Retain risk assessment documentation"
+
+      evidence_generated:
+        - type: "risk_assessment"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "organization_id"
+            - "risk_name"
+            - "likelihood"
+            - "impact"
+            - "risk_score"
+            - "mitigation_strategy"
+            - "created_by"
+            - "timestamp"
+
+        - type: "audit_log"
+          format: "JSON"
+          storage: "audit_logs"
+          retention: "7 years"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "risk_assessment_creation_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+
+      - name: "risk_assessments_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "risk_level"  # low, medium, high, critical
+
+      - name: "risk_score_distribution"
+        type: "histogram"
+        buckets: [1, 5, 10, 15, 20, 25]
+
+    logs:
+      level: "INFO"
+      include:
+        - "risk_id"
+        - "organization_id"
+        - "risk_score"
+        - "user_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "Risk assessment creation with score calculation"

@@ -347,7 +347,7 @@ class AutoRecovery:
         if self.escalation_manager:
             recovery_duration = (datetime.utcnow() - recovery_start_time).total_seconds()
 
-            from infrastructure.decision_center.escalation_manager import EscalationReason
+            from infrastructure.policy_engine.escalation_manager import EscalationReason
 
             logger.warning(f"🚨 All recovery attempts failed for {service_name} - ESCALATING")
 

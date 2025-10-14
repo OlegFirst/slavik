@@ -1,0 +1,311 @@
+
+🔍 Starting Python project structure audit...
+📁 Scanning: /Users/MD/AI-Platform-ISO
+
+Step 1: Finding directories with dashes...
+   Found 222 issues
+Step 2: Finding missing __init__.py files...
+   Found 602 issues
+Step 3: Generating fix plans...
+   Plans generated
+
+================================================================================
+PYTHON PROJECT STRUCTURE AUDIT REPORT
+================================================================================
+
+Project Root: /Users/MD/AI-Platform-ISO
+Date: 2025-10-14
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+🚨 CRITICAL ISSUES FOUND:
+   • Directories with dashes: 222
+   • Missing __init__.py files: 602
+
+📊 IMPACT:
+   • Affected modules cannot be imported
+   • Tests will fail
+   • Infrastructure coordinator cannot start
+
+⚠️  PRIORITY: HIGH - Blocks Phase 1.2 Verification Testing
+
+================================================================================
+ISSUE 1: DIRECTORIES WITH DASHES (Cannot be imported in Python)
+================================================================================
+
+Found 222 directories with dashes:
+
+HIGH PRIORITY (Infrastructure/Intelligent-Core):
+1. intelligent-core
+   → intelligent_core
+2. intelligent-core/workflow-engine
+   → intelligent-core.workflow_engine
+3. intelligent-core/expertise-center
+   → intelligent-core.expertise_center
+4. intelligent-core/expertise-center/ai-office
+   → intelligent-core.expertise-center.ai_office
+5. intelligent-core/expertise-center/ai-office/ВСМ-colleagues
+   → intelligent-core.expertise-center.ai-office.ВСМ_colleagues
+6. intelligent-core/expertise-center/ai-office/ВСМ-colleagues/project-intelligence
+   → intelligent-core.expertise-center.ai-office.ВСМ-colleagues.project_intelligence
+7. intelligent-core/ace-engine
+   → intelligent-core.ace_engine
+8. intelligent-core/workflow_intelligence/temporal-sample
+   → intelligent-core.workflow_intelligence.temporal_sample
+9. intelligent-core/ai-foundation
+   → intelligent-core.ai_foundation
+10. intelligent-core/ai-foundation/learning-knowledge
+   → intelligent-core.ai-foundation.learning_knowledge
+11. intelligent-core/scenario-intelligence
+   → intelligent-core.scenario_intelligence
+12. intelligent-core/orchestration/bcm-services-orchestrator
+   → intelligent-core.orchestration.bcm_services_orchestrator
+13. intelligent-core/orchestration/ai-orchestration
+   → intelligent-core.orchestration.ai_orchestration
+14. intelligent-core/orchestration/coordination-center
+   → intelligent-core.orchestration.coordination_center
+15. intelligent-core/orchestration/coordination-center/claude-integration
+   → intelligent-core.orchestration.coordination-center.claude_integration
+16. intelligent-core/system-bcm-service
+   → intelligent-core.system_bcm_service
+17. tests/unit/intelligent-core
+   → tests.unit.intelligent_core
+18. tests/unit/intelligent-core/workflow-engine
+   → tests.unit.intelligent-core.workflow_engine
+19. tests/unit/intelligent-core/expertise-center
+   → tests.unit.intelligent-core.expertise_center
+20. tests/unit/intelligent-core/expertise-center/ai-office
+   → tests.unit.intelligent-core.expertise-center.ai_office
+21. tests/unit/intelligent-core/expertise-center/ai-experts
+   → tests.unit.intelligent-core.expertise-center.ai_experts
+22. tests/unit/intelligent-core/ai-orchestration
+   → tests.unit.intelligent-core.ai_orchestration
+23. tests/unit/intelligent-core/system-bcm
+   → tests.unit.intelligent-core.system_bcm
+24. tests/unit/intelligent-core/community-intelligence
+   → tests.unit.intelligent-core.community_intelligence
+25. tests/unit/intelligent-core/ai-foundation
+   → tests.unit.intelligent-core.ai_foundation
+26. tests/unit/intelligent-core/ai-foundation/learning-knowledge
+   → tests.unit.intelligent-core.ai-foundation.learning_knowledge
+27. tests/unit/intelligent-core/workflow-intelligence
+   → tests.unit.intelligent-core.workflow_intelligence
+28. tests/unit/intelligent-core/coordination-center
+   → tests.unit.intelligent-core.coordination_center
+29. tests/unit/infrastructure/api-gateway
+   → tests.unit.infrastructure.api_gateway
+30. tests/unit/infrastructure/balancer-service
+   → tests.unit.infrastructure.balancer_service
+31. tests/unit/infrastructure/project-agent
+   → tests.unit.infrastructure.project_agent
+32. tests/unit/infrastructure/mio-manager
+   → tests.unit.infrastructure.mio_manager
+33. tests/integration/intelligent-core
+   → tests.integration.intelligent_core
+34. tests/performance/intelligent-core
+   → tests.performance.intelligent_core
+35. tests/e2e/intelligent-core
+   → tests.e2e.intelligent_core
+36. _archive/tests-original-2025-10-11/intelligent-core
+   → _archive.tests-original-2025-10-11.intelligent_core
+37. _archive/tests-original-2025-10-11/intelligent-core/workflow-engine
+   → _archive.tests-original-2025-10-11.intelligent-core.workflow_engine
+38. _archive/tests-original-2025-10-11/intelligent-core/ai-office
+   → _archive.tests-original-2025-10-11.intelligent-core.ai_office
+39. _archive/tests-original-2025-10-11/intelligent-core/ai-orchestration
+   → _archive.tests-original-2025-10-11.intelligent-core.ai_orchestration
+40. _archive/tests-original-2025-10-11/intelligent-core/expertise-service
+   → _archive.tests-original-2025-10-11.intelligent-core.expertise_service
+41. _archive/tests-original-2025-10-11/intelligent-core/learning-knowledge
+   → _archive.tests-original-2025-10-11.intelligent-core.learning_knowledge
+42. _archive/tests-original-2025-10-11/intelligent-core/temporal-sample
+   → _archive.tests-original-2025-10-11.intelligent-core.temporal_sample
+43. _archive/tests-original-2025-10-11/intelligent-core/system-bcm-service
+   → _archive.tests-original-2025-10-11.intelligent-core.system_bcm_service
+44. _archive/tests-original-2025-10-11/intelligent-core/coordination-center
+   → _archive.tests-original-2025-10-11.intelligent-core.coordination_center
+45. _archive/tests-original-2025-10-11/infrastructure/api-gateway
+   → _archive.tests-original-2025-10-11.infrastructure.api_gateway
+46. _archive/tests-original-2025-10-11/infrastructure/balancer-service
+   → _archive.tests-original-2025-10-11.infrastructure.balancer_service
+47. _archive/tests-original-2025-10-11/infrastructure/mio-manager
+   → _archive.tests-original-2025-10-11.infrastructure.mio_manager
+48. _archive/intelligent-core-old
+   → _archive.intelligent_core_old
+49. _archive/intelligent-core-old/ai-devops
+   → _archive.intelligent-core-old.ai_devops
+50. _archive/intelligent-core-old/living-docs
+   → _archive.intelligent-core-old.living_docs
+51. _archive/intelligent-core-old/simulation/digital-twin
+   → _archive.intelligent-core-old.simulation.digital_twin
+52. _archive/intelligent-core-old/workflow-intelligence-срань
+   → _archive.intelligent-core-old.workflow_intelligence_срань
+53. _archive/intelligent-core-old/devops-ai
+   → _archive.intelligent-core-old.devops_ai
+54. _archive/intelligent-core-old/devops-ai/agent-router
+   → _archive.intelligent-core-old.devops-ai.agent_router
+55. _archive/intelligent-core-old/devops-ai/project-agent
+   → _archive.intelligent-core-old.devops-ai.project_agent
+56. _archive/intelligent-core-old/devops-ai/project-agent/test-project
+   → _archive.intelligent-core-old.devops-ai.project-agent.test_project
+57. _archive/intelligent-core-old/devops-ai/mio-manager
+   → _archive.intelligent-core-old.devops-ai.mio_manager
+58. _archive/infrastructure-deprecated-20251010
+   → _archive.infrastructure_deprecated_20251010
+59. _archive/infrastructure-deprecated-20251010/api-gateway-security-duplicate
+   → _archive.infrastructure-deprecated-20251010.api_gateway_security_duplicate
+60. infrastructure/database/vector-db
+   → infrastructure.database.vector_db
+61. infrastructure/tools/docker-management
+   → infrastructure.tools.docker_management
+62. infrastructure/tools/doc-generators
+   → infrastructure.tools.doc_generators
+63. infrastructure/tools/scenario-generators
+   → infrastructure.tools.scenario_generators
+64. infrastructure/policy-engine
+   → infrastructure.policy_engine
+65. infrastructure/security/secrets-manager
+   → infrastructure.security.secrets_manager
+66. infrastructure/security/secrets-management
+   → infrastructure.security.secrets_management
+67. infrastructure/integration/mcp-server
+   → infrastructure.integration.mcp_server
+68. infrastructure/integration/github-integration
+   → infrastructure.integration.github_integration
+69. infrastructure/integration/partisia-contracts
+   → infrastructure.integration.partisia_contracts
+70. infrastructure/runtime/realtime-websocket
+   → infrastructure.runtime.realtime_websocket
+71. infrastructure/runtime/message-queue
+   → infrastructure.runtime.message_queue
+72. infrastructure/runtime/service-discovery
+   → infrastructure.runtime.service_discovery
+73. infrastructure/observability/monitoring-backend
+   → infrastructure.observability.monitoring_backend
+74. infrastructure/observability/notification-service
+   → infrastructure.observability.notification_service
+75. infrastructure/balancer-service
+   → infrastructure.balancer_service
+76. infrastructure/AI-office-infrastructure
+   → infrastructure.AI_office_infrastructure
+77. infrastructure/AI-office-infrastructure/db-intelligence
+   → infrastructure.AI-office-infrastructure.db_intelligence
+78. infrastructure/AI-office-infrastructure/ai-event-manager
+   → infrastructure.AI-office-infrastructure.ai_event_manager
+79. infrastructure/AI-office-infrastructure/devops-agent
+   → infrastructure.AI-office-infrastructure.devops_agent
+80. infrastructure/AI-office-infrastructure/devops-agent/tools/compliance-checks
+   → infrastructure.AI-office-infrastructure.devops-agent.tools.compliance_checks
+81. infrastructure/AI-office-infrastructure/analytics-specialist
+   → infrastructure.AI-office-infrastructure.analytics_specialist
+82. infrastructure/AI-office-infrastructure/agent-router
+   → infrastructure.AI-office-infrastructure.agent_router
+83. infrastructure/AI-office-infrastructure/project-agent
+   → infrastructure.AI-office-infrastructure.project_agent
+84. infrastructure/AI-office-infrastructure/project-agent/test-project
+   → infrastructure.AI-office-infrastructure.project-agent.test_project
+85. infrastructure/AI-office-infrastructure/mio-manager
+   → infrastructure.AI-office-infrastructure.mio_manager
+86. infrastructure/ace-service
+   → infrastructure.ace_service
+87. infrastructure/gateway/api-gateway
+   → infrastructure.gateway.api_gateway
+
+MEDIUM PRIORITY (134 items) - see audit_report.json for full list
+
+================================================================================
+ISSUE 2: MISSING __init__.py FILES
+================================================================================
+
+Found 602 directories missing __init__.py:
+
+HIGH PRIORITY (Top 20):
+1. intelligent-core/workflow-engine/workflow/api
+   Reason: has Python files
+2. intelligent-core/predictive/integrations
+   Reason: has Python files
+3. intelligent-core/predictive/api
+   Reason: has Python files
+4. intelligent-core/predictive/services
+   Reason: has Python files
+5. intelligent-core/expertise-center/ai-office
+   Reason: has Python files
+6. intelligent-core/expertise-center/ai-office/ВСМ-colleagues/project-intelligence
+   Reason: has Python files
+7. intelligent-core/expertise-center/ai-office/organs
+   Reason: has Python files
+8. intelligent-core/expertise-center/shared
+   Reason: has Python files
+9. intelligent-core/collective/models
+   Reason: has Python files
+10. intelligent-core/collective/api
+   Reason: has Python files
+11. intelligent-core/collective/services
+   Reason: has Python files
+12. intelligent-core/ai_workflow_optimizer
+   Reason: has Python files
+13. intelligent-core/ai_workflow_optimizer/integrations
+   Reason: has Python files
+14. intelligent-core/workflow_intelligence/temporal_workflows/workers
+   Reason: has Python files
+15. intelligent-core/workflow_intelligence/temporal-sample
+   Reason: has Python files
+16. intelligent-core/workflow_intelligence/production_modules
+   Reason: has Python files
+17. intelligent-core/event_intelligence/services
+   Reason: has Python files
+18. intelligent-core/ai-foundation/learning-knowledge/training
+   Reason: has Python subdirectories
+19. intelligent-core/ai-foundation/learning-knowledge/training/gamification
+   Reason: has Python files
+20. intelligent-core/ai-foundation/learning-knowledge/training/programs
+   Reason: has Python files
+
+   ... and 142 more (see audit_report.json)
+
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+1. IMMEDIATE ACTION (Day 1):
+   • Fix critical infrastructure directories:
+     - infrastructure/policy-engine → infrastructure/policy_engine
+     - infrastructure/AI-office-infrastructure → infrastructure/ai_office_infrastructure
+     - intelligent-core → intelligent_core
+   • Create missing __init__.py in infrastructure/ and intelligent-core/
+
+2. SHORT TERM (This Week):
+   • Fix all high-priority dash directories
+   • Create all high-priority __init__.py files
+   • Update imports in affected files
+
+3. MEDIUM TERM (Next Week):
+   • Fix remaining directories
+   • Standardize naming convention project-wide
+   • Add linting rules to prevent future issues
+
+================================================================================
+AUTOMATED TOOLS
+================================================================================
+
+Generated scripts:
+  • fix_dash_directories.sh - Rename all directories
+  • create_init_files.sh - Create all __init__.py files
+  • update_imports.py - Update imports after rename
+  • audit_report.json - Full details
+
+================================================================================
+
+
+✅ Detailed report saved to: /Users/MD/AI-Platform-ISO/infrastructure/tools/audit_report.json
+✅ Audit complete!
+
+📋 Next steps:
+   1. Review audit_report.json
+   2. Run fix_dash_directories.sh (CAREFUL - backs up first)
+   3. Run create_init_files.sh
+   4. Run update_imports.py
+   5. Test imports: python3 -m pytest

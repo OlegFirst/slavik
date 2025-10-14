@@ -1,0 +1,193 @@
+name: simulation-service
+display_name: Simulation Service
+version: 2.0.0
+status: production
+type: platform_service
+
+description: |
+  Unified simulation service for BCM exercises, scenario testing, and business impact analysis.
+  Provides 7 simulation engines, AI-powered scenario generation, and integration with platform intelligence.
+
+registration:
+  port: 8095
+  protocol: http
+  base_path: /api/v1
+  health_check: /health
+  metrics: /metrics
+
+capabilities:
+  - BCM Exercise Simulation (JaamSim, NICS integration)
+  - AI-Powered Scenario Generation (complexity 1-5)
+  - Monte Carlo Risk Analysis
+  - What-If Analysis
+  - BIA Queue Theory Simulation (Ciw library)
+  - Scenario Library Management
+  - Multi-engine orchestration
+  - Real-time execution monitoring
+  - Integration with Workflow Intelligence
+  - Integration with AI Foundation (RAG, LLM)
+
+engines:
+  - name: JaamSimEngine
+    type: discrete_event
+    description: Discrete-event simulation for complex BCM exercises
+  - name: MonteCarloEngine
+    type: probabilistic
+    description: Monte Carlo simulation for risk analysis
+  - name: ScenarioEngine
+    type: bcm_scenario
+    description: BCM scenario execution engine
+  - name: WhatIfEngine
+    type: analysis
+    description: What-if analysis for decision support
+  - name: BCMQueueSimulator
+    type: queue_theory
+    description: M/M/c queue modeling for BIA
+  - name: AdvancedBIAEngine
+    type: bia
+    description: Multi-resource BIA simulation
+
+api_endpoints:
+  - path: /health
+    method: GET
+    description: Service health check
+  - path: /simulations
+    method: GET
+    description: List simulations
+  - path: /simulations
+    method: POST
+    description: Create simulation
+  - path: /simulations/{id}
+    method: GET
+    description: Get simulation details
+  - path: /simulations/{id}/execute
+    method: POST
+    description: Execute simulation
+  - path: /scenarios
+    method: GET
+    description: List scenarios
+  - path: /scenarios
+    method: POST
+    description: Create scenario
+  - path: /scenarios/generate
+    method: POST
+    description: AI-generate scenario
+  - path: /library/scenarios
+    method: GET
+    description: Browse scenario library
+
+dependencies:
+  required:
+    - postgresql (database)
+    - redis (caching)
+    - eventbus (coordination)
+    - service-discovery (registration)
+  optional:
+    - ai-foundation (AI generation)
+    - workflow-intelligence (case library)
+    - predictive (demand forecasting)
+    - expertise-center (expert recommendations)
+
+integrations:
+  - name: eventbus
+    type: async_messaging
+    events_published:
+      - simulation.created
+      - simulation.started
+      - simulation.progress
+      - simulation.completed
+      - simulation.failed
+      - scenario.generated
+      - execution.started
+      - execution.completed
+    events_subscribed:
+      - scenario.execution.requested
+      - digital_twin.state.changed
+      - bia.analysis.requested
+      - workflow.scenario.required
+
+  - name: ai-foundation
+    type: http_client
+    endpoints_used:
+      - POST /rag/search
+      - POST /llm/generate
+
+  - name: workflow-intelligence
+    type: http_client
+    endpoints_used:
+      - POST /case_library/add
+      - GET /case_library/search
+
+  - name: jaamsim
+    type: external_process
+    description: JaamSim discrete-event simulation engine
+    path: /opt/jaamsim
+
+  - name: thehive
+    type: http_client
+    description: TheHive integration for BCM exercises
+    optional: true
+
+  - name: nics
+    type: http_client
+    description: NICS integration for emergency management
+    optional: true
+
+kpis:
+  - name: simulation_executions_total
+    type: counter
+    target: "> 100/day"
+    prometheus_metric: simulation_executions_total
+    description: Total number of simulation executions
+
+  - name: simulation_success_rate
+    type: gauge
+    target: "> 95%"
+    prometheus_metric: simulation_success_rate
+    description: Percentage of successful simulation executions
+
+  - name: simulation_duration_p95
+    type: histogram
+    target: "< 60s"
+    prometheus_metric: simulation_duration_seconds
+    description: 95th percentile simulation duration
+
+  - name: scenario_generation_quality
+    type: gauge
+    target: "> 0.8"
+    prometheus_metric: scenario_generation_quality_score
+    description: AI-generated scenario quality score
+
+  - name: active_simulations
+    type: gauge
+    target: "< 100"
+    prometheus_metric: simulation_active_count
+    description: Number of currently running simulations
+
+  - name: error_rate
+    type: gauge
+    target: "< 1%"
+    prometheus_metric: simulation_error_rate
+    description: Percentage of failed operations
+
+monitoring:
+  prometheus_enabled: true
+  grafana_dashboard: dashboards/simulation_service.json
+  alert_rules: alerts/simulation_service.yaml
+  log_level: INFO
+
+deployment:
+  docker_image: simulation-service:2.0.0
+  replicas: 2
+  resources:
+    cpu: "1.0"
+    memory: "1Gi"
+  environment:
+    DATABASE_URL: ${DATABASE_URL}
+    REDIS_URL: ${REDIS_URL}
+    EVENTBUS_URL: ${EVENTBUS_URL}
+    SERVICE_DISCOVERY_URL: ${SERVICE_DISCOVERY_URL}
+
+owner: platform-team
+maintainer: AI Platform Team
+documentation: /docs/simulation-service/README.md

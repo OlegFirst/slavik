@@ -1,0 +1,251 @@
+# Simulation Service Entry for SERVICE_CATALOG_DETAILED.yaml
+# To be merged into platform_services section
+
+  simulation_service:
+    name: simulation-service
+    display_name: Simulation Service
+    registration:
+      type: platform_service
+      status: production
+      port: 8095
+    description: |
+      Unified simulation service for BCM exercises, scenario testing, and business impact analysis.
+      Provides 7 simulation engines, AI-powered scenario generation, and integration with platform intelligence.
+
+      Supports discrete-event simulation, Monte Carlo analysis, what-if scenarios, BIA queue theory,
+      and BCM exercise orchestration with TheHive and NICS integration.
+
+    capabilities:
+      - BCM Exercise Simulation (JaamSim discrete-event engine)
+      - AI-Powered Scenario Generation (complexity 1-5, multi-category)
+      - Monte Carlo Risk Analysis (probabilistic modeling)
+      - What-If Analysis (decision support)
+      - BIA Queue Theory Simulation (M/M/c queues, Little's Law)
+      - Scenario Library Management (public & tenant-specific)
+      - Multi-engine orchestration
+      - Real-time execution monitoring
+      - Integration with Workflow Intelligence (case library)
+      - Integration with AI Foundation (RAG, LLM)
+      - TheHive integration for BCM exercises
+      - NICS integration for emergency management
+
+    simulation_engines:
+      - name: JaamSimEngine
+        type: discrete_event
+        description: JaamSim-based discrete-event simulation for complex BCM exercises
+        templates: 6 (IT failure, pandemic, disaster, cyber, supply chain, data breach)
+      - name: MonteCarloEngine
+        type: probabilistic
+        description: Monte Carlo simulation for probabilistic risk analysis
+      - name: ScenarioEngine
+        type: bcm_scenario
+        description: BCM scenario execution engine
+      - name: WhatIfEngine
+        type: analysis
+        description: What-if analysis for decision support
+      - name: BCMQueueSimulator
+        type: queue_theory
+        description: M/M/c queue modeling for BIA using Ciw library
+      - name: AdvancedBIAEngine
+        type: bia
+        description: Multi-resource BIA simulation
+      - name: JaamSimClient
+        type: bcm_exercise
+        description: BCM exercise orchestration with entity generation and monitoring
+
+    api_endpoints:
+      count: 31
+      routers: 6
+      endpoints:
+        - path: /health
+          method: GET
+          description: Service health check
+        - path: /simulations
+          method: GET
+          description: List simulations for tenant
+        - path: /simulations
+          method: POST
+          description: Create new simulation
+        - path: /simulations/{id}
+          method: GET
+          description: Get simulation details
+        - path: /simulations/{id}/execute
+          method: POST
+          description: Execute simulation
+        - path: /scenarios
+          method: GET
+          description: List scenarios
+        - path: /scenarios
+          method: POST
+          description: Create scenario
+        - path: /scenarios/generate
+          method: POST
+          description: AI-generate scenario with specified complexity
+        - path: /library/scenarios
+          method: GET
+          description: Browse scenario library (public + tenant scenarios)
+
+    runtime:
+      language: Python 3.11+
+      framework: FastAPI
+      database: PostgreSQL 14+ / Supabase (simulation schema)
+      cache: Redis 7+ (session management)
+      eventbus: Redis Streams (async coordination)
+      service_discovery: Consul (health checks, registration)
+      monitoring: Prometheus + Grafana
+      port: 8095
+
+    database:
+      schema: simulation
+      tables:
+        - simulations (main configuration and lifecycle)
+        - scenarios (BCM scenarios with AI generation support)
+        - executions (simulation execution history)
+        - results (time-series results)
+      rls_enabled: true
+      multi_tenancy: tenant_id isolation
+
+    dependencies:
+      required:
+        - postgresql (database storage)
+        - redis (caching)
+        - eventbus (async coordination)
+        - service-discovery (Consul registration)
+      optional:
+        - ai-foundation (AI scenario generation)
+        - workflow-intelligence (case library integration)
+        - predictive (demand forecasting)
+        - expertise-center (expert recommendations)
+        - jaamsim (external discrete-event simulator)
+        - thehive (BCM exercise platform)
+        - nics (emergency management system)
+
+    integrations:
+      eventbus:
+        purpose: Asynchronous coordination and event-driven architecture
+        subscribes:
+          - event: scenario.execution.requested
+            action: Execute scenario simulation
+            source: workflow_intelligence
+          - event: digital_twin.state.changed
+            action: Update active simulations with new state
+            source: digital_twin_service
+          - event: bia.analysis.requested
+            action: Run BIA simulation
+            source: bia_service
+          - event: workflow.scenario.required
+            action: Generate AI scenario
+            source: workflow_intelligence
+        publishes:
+          - event: simulation.created
+            priority: normal
+            targets: [knowledge_center, community_intelligence, workflow_intelligence]
+          - event: simulation.started
+            priority: high
+            targets: [ai_orchestrator, monitoring]
+          - event: simulation.progress
+            priority: normal
+            targets: [realtime_dashboard, ai_orchestrator]
+          - event: simulation.completed
+            priority: high
+            targets: [knowledge_center, community_intelligence, workflow_intelligence, predictive]
+          - event: simulation.failed
+            priority: critical
+            targets: [ai_orchestrator, monitoring, knowledge_center]
+          - event: scenario.generated
+            priority: normal
+            targets: [workflow_intelligence]
+          - event: execution.started
+            priority: normal
+            targets: [monitoring]
+          - event: execution.completed
+            priority: normal
+            targets: [workflow_intelligence, knowledge_center]
+
+      ai_foundation:
+        purpose: AI-powered scenario generation and RAG search
+        endpoints:
+          - POST /rag/search (search knowledge base for scenario templates)
+          - POST /llm/generate (generate scenario content)
+
+      workflow_intelligence:
+        purpose: Case library integration and workflow coordination
+        endpoints:
+          - POST /case_library/add (add simulation results as cases)
+          - GET /case_library/search (search similar cases)
+
+      jaamsim:
+        type: external_process
+        purpose: Discrete-event simulation engine
+        path: /opt/jaamsim
+        optional: true
+
+      thehive:
+        type: http_client
+        purpose: BCM exercise platform integration
+        optional: true
+
+      nics:
+        type: http_client
+        purpose: Emergency management system integration
+        optional: true
+
+    kpis:
+      - name: simulation_executions_total
+        type: counter
+        description: Total number of simulation executions
+        target: "> 100/day"
+        prometheus_metric: simulation_executions_total
+
+      - name: simulation_success_rate
+        type: gauge
+        description: Percentage of successful simulation executions
+        target: "> 95%"
+        prometheus_metric: simulation_success_rate
+
+      - name: simulation_duration_p95
+        type: histogram
+        description: 95th percentile simulation duration
+        target: "< 60s"
+        prometheus_metric: simulation_duration_seconds
+
+      - name: scenario_generation_quality
+        type: gauge
+        description: AI-generated scenario quality score (0-1)
+        target: "> 0.8"
+        prometheus_metric: scenario_generation_quality_score
+
+      - name: active_simulations
+        type: gauge
+        description: Number of currently running simulations
+        target: "< 100"
+        prometheus_metric: simulation_active_count
+
+      - name: error_rate
+        type: gauge
+        description: Percentage of failed operations
+        target: "< 1%"
+        prometheus_metric: simulation_error_rate
+
+    deployment:
+      docker_image: simulation-service:2.0.0
+      replicas: 2
+      resources:
+        cpu: "1.0"
+        memory: "1Gi"
+      environment:
+        - DATABASE_URL: ${DATABASE_URL}
+        - REDIS_URL: ${REDIS_URL}
+        - EVENTBUS_URL: ${EVENTBUS_URL}
+        - SERVICE_DISCOVERY_URL: ${SERVICE_DISCOVERY_URL}
+      health_check:
+        endpoint: /health
+        interval: 30s
+        timeout: 5s
+      port: 8095
+
+    owner: platform-team
+    maintainer: AI Platform Team
+    documentation: /docs/simulation-service/README.md
+    version: 2.0.0
+    last_updated: "2025-10-14"

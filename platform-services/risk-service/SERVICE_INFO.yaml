@@ -1,0 +1,336 @@
+# ============================================
+# SERVICE INFORMATION - Risk Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: risk-service
+display_name: "Risk Service"
+version: "2.0.0"
+description: "Comprehensive risk management including risk identification, assessment, treatment planning, monitoring, and reporting. Provides risk matrices, heat maps, and integration with mitigation workflows."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "platform-services"
+business_process: "Risk Assessment & Management (ISO 22301 Clause 8.2)"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8026
+
+endpoints:
+  base_url: "http://localhost:8026"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/risks"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Risk identification and cataloging"
+  - "Risk assessment (likelihood × impact matrix)"
+  - "Risk treatment planning (avoid, reduce, transfer, accept)"
+  - "Risk monitoring and tracking"
+  - "Risk heat maps and visualization"
+  - "Risk appetite and tolerance configuration"
+  - "Residual risk calculation"
+  - "Risk register management"
+  - "Risk reporting and dashboards"
+  - "Integration with BIA and mitigation plans"
+
+features:
+  - name: "Risk Identification"
+    description: "Identify and catalog risks from multiple sources"
+    endpoints: 6
+
+  - name: "Risk Assessment"
+    description: "Assess risks using configurable likelihood × impact matrix"
+    endpoints: 5
+
+  - name: "Risk Treatment"
+    description: "Plan and track risk treatment actions"
+    endpoints: 5
+
+  - name: "Risk Monitoring"
+    description: "Monitor risk status and effectiveness of controls"
+    endpoints: 5
+
+  - name: "Risk Reporting"
+    description: "Generate risk reports, heat maps, and dashboards"
+    endpoints: 8
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 800/day"
+    prometheus_metric: "risk_service_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 500ms"
+    prometheus_metric: "risk_service_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "risk_service_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.5%"
+    prometheus_metric: "risk_service_availability"
+
+  - name: "total_risks"
+    type: "gauge"
+    description: "Total number of identified risks"
+    target: "Track trends"
+    prometheus_metric: "risk_service_total_risks"
+
+  - name: "high_risks_count"
+    type: "gauge"
+    description: "Number of high/critical risks"
+    target: "< 10"
+    prometheus_metric: "risk_service_high_risks"
+
+  - name: "risk_treatment_coverage"
+    type: "gauge"
+    description: "Percentage of risks with treatment plans"
+    target: "> 95%"
+    prometheus_metric: "risk_service_treatment_coverage"
+
+  - name: "residual_risk_score"
+    type: "gauge"
+    description: "Average residual risk score"
+    target: "< 50"
+    prometheus_metric: "risk_service_residual_score"
+
+  - name: "control_effectiveness"
+    type: "gauge"
+    description: "Average control effectiveness rating"
+    target: "> 75%"
+    prometheus_metric: "risk_service_control_effectiveness"
+
+  - name: "risk_review_compliance"
+    type: "gauge"
+    description: "Percentage of risks reviewed on schedule"
+    target: "> 90%"
+    prometheus_metric: "risk_service_review_compliance"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "aio-pika>=9.3.0"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "redis>=5.0.0"
+    - "matplotlib>=3.7.0"  # Heat maps
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Primary database for risk data"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      port: 6379
+      purpose: "Caching risk assessments"
+      required: false
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for event-driven integration"
+      required: false
+
+  infrastructure:
+    - "PostgreSQL database (risk schema)"
+    - "Redis (optional caching)"
+    - "RabbitMQ (EventBus)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "bia.completed"
+        source: "bia_service"
+        action: "Identify risks from BIA impacts"
+
+      - event: "incident.declared"
+        source: "response_service"
+        action: "Create risk from incident"
+
+      - event: "compliance.gap.identified"
+        source: "compliance_service"
+        action: "Create compliance risk"
+
+    publishes:
+      - event: "risk.identified"
+        target: "plans_service,governance_service"
+        data: "risk_id, severity, category"
+
+      - event: "risk.critical.identified"
+        target: "governance_service,response_service"
+        data: "risk_id, impact, likelihood"
+
+      - event: "risk.treatment.completed"
+        target: "governance_service,compliance_service"
+        data: "risk_id, treatment_type, residual_risk"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/risks/assessments"
+        methods: ["GET", "POST", "PUT"]
+        consumers: ["admin_panel", "plans_service"]
+
+      - endpoint: "/api/risks/heat-map"
+        methods: ["GET"]
+        consumers: ["admin_panel", "governance_service"]
+
+      - endpoint: "/api/risks/register"
+        methods: ["GET"]
+        consumers: ["governance_service", "compliance_service"]
+
+    consumes:
+      - service: "bia_service"
+        endpoint: "/api/bia/analyses/{id}"
+        purpose: "Get impact data for risk assessment"
+
+      - service: "plans_service"
+        endpoint: "/api/plans/plans"
+        purpose: "Link mitigation plans to risks"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Risk matrix configuration limited to 5×5"
+    severity: "low"
+    workaround: "Custom matrix requires code changes"
+    tracking: "RISK-001"
+
+  - issue: "Heat map generation synchronous (slow for >100 risks)"
+    severity: "medium"
+    workaround: "Generate heat maps asynchronously"
+    tracking: "RISK-002"
+
+limitations:
+  - "Maximum 500 risks per tenant"
+  - "Risk matrix fixed at 5×5 (configurable values)"
+  - "Heat map limited to 200 risks (performance)"
+  - "No automated risk identification (manual only)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "risk-service:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8026:8026"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+
+    optional:
+      - name: "REDIS_URL"
+        description: "Redis connection string"
+        default: "redis://localhost:6379/0"
+
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        default: "amqp://guest:guest@localhost:5672/"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m risk.main"
+
+  requirements:
+    cpu: "0.5 cores"
+    memory: "512MB"
+    disk: "1GB"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8026/docs"
+  external_links:
+    - name: "ISO 22301 Clause 8.2 - Risk Assessment"
+      url: "https://www.iso.org/standard/75106.html"
+    - name: "ISO 31000 - Risk Management"
+      url: "https://www.iso.org/iso-31000-risk-management.html"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Platform Services Team"
+  tech_lead: "Platform Architect"
+  product_owner: "BCM Product Owner"
+  on_call: "platform-team@company.com"
+  slack_channel: "#platform-services"
+
+support:
+  incidents: "Create ticket in JIRA Platform project"
+  questions: "#platform-services Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  iso_22301:
+    - clause: "8.2"
+      description: "Business continuity risk assessment"
+      status: "compliant"
+
+    - clause: "6.1"
+      description: "Actions to address risks and opportunities"
+      status: "compliant"
+
+  iso_31000:
+    - description: "Risk management principles and guidelines"
+      status: "compliant"

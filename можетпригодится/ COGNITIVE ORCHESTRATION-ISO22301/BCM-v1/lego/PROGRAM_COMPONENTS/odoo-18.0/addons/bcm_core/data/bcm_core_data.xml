@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Core Configuration Data -->
+        <record id="bcm_core_config" model="ir.config_parameter">
+            <field name="key">bcm.core.version</field>
+            <field name="value">18.0.1.0.0</field>
+        </record>
+        
+        <record id="bcm_core_mode" model="ir.config_parameter">
+            <field name="key">bcm.core.mode</field>
+            <field name="value">production</field>
+        </record>
+        
+        <!-- Default Company BCM Settings -->
+        <record id="default_company_bcm_settings" model="ir.config_parameter">
+            <field name="key">bcm.default.company.settings</field>
+            <field name="value">{"iso_22301_enabled": true, "multitenancy": true}</field>
+        </record>
+    </data>
+</odoo>

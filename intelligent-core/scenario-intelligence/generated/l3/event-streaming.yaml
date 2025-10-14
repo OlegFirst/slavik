@@ -1,0 +1,543 @@
+meta:
+  id: l3-infra-event-streaming
+  level: 3
+  type: functional_system
+  category: infrastructure
+  system: event-streaming
+  icon: 🚀
+  template_version: 1.0.0
+  specialized_for: infrastructure_management
+  source_item: event-streaming
+  generated_at: '2025-10-14T08:09:28.343590'
+description:
+  summary: High-throughput event streaming and processing
+  purpose: Validate infrastructure management capabilities and platform lifecycle
+  focus_areas:
+  - Service orchestration and coordination
+  - Platform startup and shutdown sequences
+  - Infrastructure state management
+  - Resource provisioning and scaling
+system_info:
+  name: event-streaming
+  category: infrastructure
+  key_services:
+  - '{service_list}'
+  managed_resources:
+  - Services (62 total)
+  - Subsystems (12 total)
+  - Infrastructure components
+test_scenarios:
+- name: Complete Platform Startup Sequence
+  scenario_id: infra-startup-complete
+  priority: critical
+  execution_time: 15-20 minutes
+  description: Validate complete platform startup from cold state
+  startup_phases:
+    phase_1_foundation:
+      order: 1
+      components:
+      - PostgreSQL
+      - Redis
+      - Qdrant
+      success_criteria:
+      - All databases ready
+      - Health checks passing
+      - < 30s startup time
+    phase_2_infrastructure:
+      order: 2
+      depends_on:
+      - phase_1_foundation
+      components:
+      - Service Discovery
+      - EventBus
+      - API Gateway
+      success_criteria:
+      - Service registry operational
+      - Event routing active
+      - Gateway accepting requests
+    phase_3_core_services:
+      order: 3
+      depends_on:
+      - phase_2_infrastructure
+      components:
+      - Auth Service
+      - MIO Manager
+      - Database Managers
+      success_criteria:
+      - Authentication working
+      - Observatory active
+      - Data access operational
+    phase_4_ai_intelligence:
+      order: 4
+      depends_on:
+      - phase_3_core_services
+      components:
+      - AI Orchestration
+      - Workflow Intelligence
+      - Analytics Specialist
+      success_criteria:
+      - AI services responding
+      - Workflow engine ready
+      - Analytics collecting data
+    phase_5_business_services:
+      order: 5
+      depends_on:
+      - phase_4_ai_intelligence
+      components:
+      - BIA Service
+      - Risk Service
+      - Planning Service
+      success_criteria:
+      - Business logic operational
+      - APIs responding
+      - Workflows executable
+    phase_6_user_applications:
+      order: 6
+      depends_on:
+      - phase_5_business_services
+      components:
+      - BCM Portal
+      - Simulation Platform
+      success_criteria:
+      - UI accessible
+      - User can login
+      - Applications functional
+  steps:
+  - id: '1.1'
+    action: initiate_cold_start
+    expected:
+      all_services_stopped: true
+      databases_clean: true
+  - id: '1.2'
+    action: execute_startup_sequence
+    phases: 6
+    expected:
+      phase_order_respected: true
+      dependencies_satisfied: true
+      no_race_conditions: true
+      total_startup_time: < 5 minutes
+  - id: '1.3'
+    action: verify_service_registry
+    expected:
+      all_62_services_registered: true
+      health_checks_configured: true
+      metadata_correct: true
+  - id: '1.4'
+    action: verify_platform_operational
+    expected:
+      end_to_end_test_passes: true
+      user_can_login: true
+      api_calls_working: true
+- name: Service Dependency Management
+  scenario_id: infra-dependency-resolution
+  priority: critical
+  execution_time: 10-15 minutes
+  description: Validate dependency detection and resolution
+  dependency_scenarios:
+  - scenario: missing_dependency
+    service: bia-service
+    missing: postgresql
+    expected:
+      startup_blocked: true
+      clear_error_message: true
+      retry_on_availability: true
+  - scenario: circular_dependency
+    services:
+    - service_a
+    - service_b
+    expected:
+      detection: true
+      error_raised: true
+      resolution_suggested: true
+  - scenario: optional_dependency
+    service: analytics-service
+    missing: redis
+    expected:
+      startup_continues: true
+      degraded_mode: true
+      warning_logged: true
+  steps:
+  - id: '2.1'
+    action: build_dependency_graph
+    expected:
+      complete_graph_built: true
+      all_dependencies_identified: true
+      topological_sort_possible: true
+  - id: '2.2'
+    action: detect_circular_dependencies
+    expected:
+      circular_deps_found: false
+      validation_passed: true
+  - id: '2.3'
+    action: validate_startup_order
+    expected:
+      dependencies_start_first: true
+      dependents_start_after: true
+      parallel_start_where_possible: true
+  - id: '2.4'
+    action: test_missing_dependency_handling
+    simulate: database_unavailable
+    expected:
+      dependent_services_wait: true
+      timeout_after: 2 minutes
+      retry_automatic: true
+- name: Platform State Tracking and Management
+  scenario_id: infra-state-management
+  priority: high
+  execution_time: 12-15 minutes
+  description: Validate infrastructure state tracking
+  state_transitions:
+  - from: stopped
+    to: starting
+    trigger: platform_start
+    duration: < 5 minutes
+  - from: starting
+    to: healthy
+    trigger: all_services_ready
+    duration: automatic
+  - from: healthy
+    to: degraded
+    trigger: service_failure
+    duration: immediate
+  - from: degraded
+    to: healthy
+    trigger: service_recovery
+    duration: < 2 minutes
+  - from: healthy
+    to: stopping
+    trigger: graceful_shutdown
+    duration: < 3 minutes
+  - from: stopping
+    to: stopped
+    trigger: all_services_stopped
+    duration: automatic
+  steps:
+  - id: '3.1'
+    action: track_state_during_startup
+    expected:
+      state_transitions_logged: true
+      current_state_queryable: true
+      state_broadcast_via_eventbus: true
+  - id: '3.2'
+    action: test_degraded_state
+    kill_service: non_critical_service
+    expected:
+      state_changes_to_degraded: true
+      affected_services_identified: true
+      recovery_plan_suggested: true
+  - id: '3.3'
+    action: test_state_persistence
+    restart_state_manager: true
+    expected:
+      state_restored: true
+      no_state_loss: true
+- name: Dynamic Resource Management
+  scenario_id: infra-resource-scaling
+  priority: high
+  execution_time: 15-20 minutes
+  description: Validate resource provisioning and auto-scaling
+  scaling_scenarios:
+  - trigger: high_cpu_usage
+    threshold: '> 80%'
+    action: scale_up
+    expected:
+      new_instance_started: true
+      load_balanced: true
+      scaling_time: < 2 minutes
+  - trigger: low_cpu_usage
+    threshold: < 20%
+    action: scale_down
+    expected:
+      instance_gracefully_stopped: true
+      no_request_loss: true
+      scaling_time: < 3 minutes
+  - trigger: memory_pressure
+    threshold: '> 90%'
+    action: scale_up_memory
+    expected:
+      container_restarted_with_more_memory: true
+      state_preserved: true
+  steps:
+  - id: '4.1'
+    action: simulate_high_load
+    load: 200% capacity
+    duration: 5 minutes
+    expected:
+      auto_scaling_triggered: true
+      additional_instances_started: true
+      load_distributed: true
+  - id: '4.2'
+    action: verify_scaling_metrics
+    expected:
+      scaling_decisions_logged: true
+      resource_usage_tracked: true
+      cost_metrics_updated: true
+  - id: '4.3'
+    action: test_scale_down
+    reduce_load: 20% capacity
+    expected:
+      excess_instances_terminated: true
+      minimum_instances_maintained: true
+      no_service_disruption: true
+- name: Platform Graceful Shutdown
+  scenario_id: infra-shutdown-graceful
+  priority: critical
+  execution_time: 10-12 minutes
+  description: Validate coordinated platform shutdown
+  shutdown_sequence:
+    phase_1_user_apps:
+      order: 1
+      components:
+      - BCM Portal
+      - Simulation Platform
+      actions:
+      - Stop accepting new connections
+      - Finish active user sessions
+      - Save state
+    phase_2_business_services:
+      order: 2
+      components:
+      - BIA Service
+      - Risk Service
+      actions:
+      - Complete active workflows
+      - Flush event queues
+      - Close database connections
+    phase_3_ai_intelligence:
+      order: 3
+      components:
+      - AI Orchestration
+      - Analytics Specialist
+      actions:
+      - Stop AI agents
+      - Save learning state
+      - Archive active decisions
+    phase_4_core_services:
+      order: 4
+      components:
+      - MIO Manager
+      - EventBus
+      actions:
+      - Flush event queues
+      - Save observatory state
+      - Deregister services
+    phase_5_infrastructure:
+      order: 5
+      components:
+      - API Gateway
+      - Service Discovery
+      actions:
+      - Close connections
+      - Clear registrations
+    phase_6_databases:
+      order: 6
+      components:
+      - PostgreSQL
+      - Redis
+      actions:
+      - Flush writes
+      - Close connections
+      - Checkpoint data
+  steps:
+  - id: '5.1'
+    action: initiate_graceful_shutdown
+    expected:
+      shutdown_signal_broadcast: true
+      all_services_notified: true
+  - id: '5.2'
+    action: execute_shutdown_sequence
+    phases: 6
+    expected:
+      reverse_startup_order: true
+      active_work_completed: true
+      no_data_loss: true
+      total_shutdown_time: < 3 minutes
+  - id: '5.3'
+    action: verify_clean_shutdown
+    expected:
+      all_services_stopped: true
+      no_zombie_processes: true
+      resources_released: true
+- name: Infrastructure Metrics and Observability
+  scenario_id: infra-monitoring
+  priority: high
+  execution_time: 8-10 minutes
+  description: Validate infrastructure monitoring coverage
+  monitoring_coverage:
+    service_health:
+      metrics:
+      - service_up
+      - service_ready
+      - service_live
+      alerts:
+      - Service down
+      - Service degraded
+    resource_usage:
+      metrics:
+      - cpu_usage_percent
+      - memory_usage_bytes
+      - disk_usage_percent
+      - network_io_bytes
+      alerts:
+      - High CPU usage
+      - Memory pressure
+      - Disk space low
+    platform_state:
+      metrics:
+      - platform_state
+      - services_healthy_count
+      - services_degraded_count
+      - startup_duration_seconds
+      alerts:
+      - Platform degraded
+      - Slow startup
+  steps:
+  - id: '6.1'
+    action: verify_metrics_collection
+    expected:
+      all_infrastructure_metrics_collected: true
+      prometheus_scraping_working: true
+      metrics_exported: true
+  - id: '6.2'
+    action: verify_alerting_rules
+    expected:
+      alert_rules_configured: true
+      alert_manager_working: true
+  - id: '6.3'
+    action: test_alert_firing
+    trigger: high_cpu_condition
+    expected:
+      alert_fires: true
+      notification_sent: true
+      escalation_follows_policy: true
+- name: Infrastructure as Code Validation
+  scenario_id: infra-iac-validation
+  priority: medium
+  execution_time: 10-12 minutes
+  description: Validate infrastructure automation and IaC
+  iac_tests:
+  - test: docker_compose_validation
+    file: docker-compose.yml
+    expected:
+      valid_syntax: true
+      all_services_defined: true
+      networks_configured: true
+      volumes_configured: true
+  - test: kubernetes_manifests
+    files:
+    - k8s/*.yaml
+    expected:
+      valid_yaml: true
+      resources_defined: true
+      policies_applied: true
+  - test: terraform_plan
+    files:
+    - terraform/*.tf
+    expected:
+      plan_succeeds: true
+      no_changes_on_apply: true
+  steps:
+  - id: '7.1'
+    action: validate_iac_syntax
+    expected:
+      all_files_valid: true
+      linting_passes: true
+  - id: '7.2'
+    action: test_infrastructure_provisioning
+    environment: test
+    expected:
+      infrastructure_created: true
+      services_deployed: true
+      health_checks_pass: true
+  - id: '7.3'
+    action: test_infrastructure_updates
+    change: minor_config_change
+    expected:
+      rolling_update: true
+      no_downtime: true
+      rollback_possible: true
+- name: Infrastructure Disaster Recovery
+  scenario_id: infra-disaster-recovery
+  priority: critical
+  execution_time: 20-25 minutes
+  description: Validate disaster recovery procedures
+  disaster_scenarios:
+  - disaster: complete_datacenter_loss
+    recovery_steps:
+    - Failover to backup datacenter
+    - Restore from backups
+    - Verify data integrity
+    - Resume operations
+    rto: 4 hours
+    rpo: 15 minutes
+  - disaster: database_corruption
+    recovery_steps:
+    - Detect corruption
+    - Isolate affected data
+    - Restore from point-in-time backup
+    - Verify consistency
+    rto: 1 hour
+    rpo: 5 minutes
+  steps:
+  - id: '8.1'
+    action: simulate_datacenter_failure
+    expected:
+      failover_automatic: true
+      backup_site_operational: true
+      data_synchronized: true
+  - id: '8.2'
+    action: test_backup_restore
+    backup_type: full
+    expected:
+      restore_successful: true
+      data_integrity_verified: true
+      restore_time: < RTO
+  - id: '8.3'
+    action: verify_recovery_procedures
+    expected:
+      documented: true
+      tested_regularly: true
+      team_trained: true
+monitoring:
+  infrastructure_metrics:
+  - name: platform_state
+    type: gauge
+    values:
+    - stopped
+    - starting
+    - healthy
+    - degraded
+    - stopping
+  - name: services_total
+    type: gauge
+    value: 62
+  - name: services_healthy
+    type: gauge
+    threshold: '> 90%'
+  - name: startup_duration_seconds
+    type: histogram
+    threshold: < 300s
+  - name: shutdown_duration_seconds
+    type: histogram
+    threshold: < 180s
+  alerts:
+  - name: platform_degraded
+    condition: services_healthy < 90%
+    severity: critical
+  - name: slow_startup
+    condition: startup_duration > 300s
+    severity: warning
+  - name: infrastructure_unhealthy
+    condition: core_services_down > 0
+    severity: critical
+metadata:
+  template_version: 1.0.0
+  specialized_for: infrastructure_management
+  applicable_systems:
+  - startup_orchestration_system
+  - devops_infrastructure_system
+  key_differentiators:
+  - Focus on service orchestration
+  - Platform lifecycle management
+  - Infrastructure automation
+  - Disaster recovery

@@ -1,0 +1,5434 @@
+{
+  "metadata": {
+    "platform_name": "AI-Platform-ISO",
+    "version": "2.0.0",
+    "generated_at": "2025-10-11T01:52:41.718228Z",
+    "total_services": 13,
+    "categories": 2,
+    "schema_version": "1.0.0",
+    "generator": "generate_catalog.py"
+  },
+  "platform_services": {
+    "description": "Business Continuity Management platform services implementing ISO 22301 requirements",
+    "total": 6,
+    "services": [
+      {
+        "name": "compliance-service",
+        "display_name": "Compliance Service",
+        "version": "1.0.0",
+        "description": "Comprehensive compliance management for ISO 22301. Manages assessments, gap analysis, evidence collection, nonconformity management (RCA), internal audits, and continual improvement initiatives.",
+        "type": "platform-services",
+        "business_process": "Compliance Management (ISO 22301 Clauses 9.2, 10.1, 10.2)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8014
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8014",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/compliance"
+        },
+        "capabilities": [
+          "Compliance assessments against ISO 22301, HIPAA, SOC2, GDPR",
+          "Gap analysis and remediation tracking",
+          "Evidence collection and management",
+          "Internal audit planning and execution (Clause 9.2)",
+          "Nonconformity management with Root Cause Analysis (Clause 10.1)",
+          "Corrective and preventive actions (CAPA)",
+          "Continual improvement tracking (Clause 10.2)",
+          "Management review support",
+          "Compliance dashboard and reporting",
+          "Templates library (audit plans, checklists, reports)",
+          "Knowledge base for compliance best practices"
+        ],
+        "features": [
+          {
+            "name": "Compliance Assessments",
+            "description": "Multi-standard compliance assessments with scoring",
+            "endpoints": 8
+          },
+          {
+            "name": "Gap Analysis",
+            "description": "Identify and track compliance gaps",
+            "endpoints": 6
+          },
+          {
+            "name": "Evidence Management",
+            "description": "Collect and link evidence to requirements",
+            "endpoints": 6
+          },
+          {
+            "name": "Internal Audits",
+            "description": "Plan, execute, and report internal audits",
+            "endpoints": 8
+          },
+          {
+            "name": "Nonconformity Management",
+            "description": "Track nonconformities with RCA and CAPA",
+            "endpoints": 6
+          },
+          {
+            "name": "Continual Improvement",
+            "description": "PDCA cycles and improvement initiatives",
+            "endpoints": 6
+          },
+          {
+            "name": "Dashboard & Reporting",
+            "description": "Compliance metrics and executive dashboards",
+            "endpoints": 4
+          },
+          {
+            "name": "Templates & Knowledge Base",
+            "description": "Reusable templates and best practices",
+            "endpoints": 8
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 1000/day",
+            "prometheus_metric": "compliance_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 700ms",
+            "prometheus_metric": "compliance_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "compliance_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "compliance_service_availability"
+          },
+          {
+            "name": "overall_compliance_score",
+            "type": "gauge",
+            "description": "Overall compliance score (0-100)",
+            "target": "> 85",
+            "prometheus_metric": "compliance_service_overall_score"
+          },
+          {
+            "name": "open_gaps_count",
+            "type": "gauge",
+            "description": "Number of open compliance gaps",
+            "target": "< 10",
+            "prometheus_metric": "compliance_service_open_gaps"
+          },
+          {
+            "name": "audit_completion_rate",
+            "type": "gauge",
+            "description": "Percentage of planned audits completed",
+            "target": "> 90%",
+            "prometheus_metric": "compliance_service_audit_completion"
+          },
+          {
+            "name": "nonconformity_resolution_time",
+            "type": "histogram",
+            "description": "Average time to resolve nonconformities (days)",
+            "target": "< 30 days",
+            "prometheus_metric": "compliance_service_nc_resolution_days"
+          },
+          {
+            "name": "capa_effectiveness",
+            "type": "gauge",
+            "description": "Percentage of effective corrective actions",
+            "target": "> 80%",
+            "prometheus_metric": "compliance_service_capa_effectiveness"
+          },
+          {
+            "name": "evidence_coverage",
+            "type": "gauge",
+            "description": "Percentage of requirements with evidence",
+            "target": "> 95%",
+            "prometheus_metric": "compliance_service_evidence_coverage"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "redis>=5.0.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Primary database for compliance data",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Caching assessment results",
+              "required": false
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for event-driven integration",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (compliance schema)",
+            "Redis (optional caching)",
+            "RabbitMQ (EventBus)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "governance.policy.approved",
+                "source": "governance_service",
+                "action": "Update compliance requirements"
+              },
+              {
+                "event": "documents.published",
+                "source": "documents_service",
+                "action": "Link evidence to assessments"
+              },
+              {
+                "event": "risk.identified",
+                "source": "risk_service",
+                "action": "Create compliance gap if control missing"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "compliance.gap.identified",
+                "target": "governance_service,risk_service",
+                "data": "gap_id, severity, requirement, remediation_plan"
+              },
+              {
+                "event": "compliance.assessment.completed",
+                "target": "governance_service,documents_service",
+                "data": "assessment_id, score, gaps_count"
+              },
+              {
+                "event": "compliance.nonconformity.raised",
+                "target": "governance_service",
+                "data": "nc_id, severity, root_cause"
+              },
+              {
+                "event": "compliance.audit.completed",
+                "target": "governance_service,documents_service",
+                "data": "audit_id, findings_count, score"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/compliance/assessments",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "governance_service"
+                ]
+              },
+              {
+                "endpoint": "/api/compliance/dashboard",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel"
+                ]
+              },
+              {
+                "endpoint": "/api/compliance/iso-coverage",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "governance_service",
+                  "documents_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "documents_service",
+                "endpoint": "/api/documents/documents",
+                "purpose": "Link evidence documents to requirements"
+              },
+              {
+                "service": "governance_service",
+                "endpoint": "/api/governance/policies",
+                "purpose": "Get policy requirements for compliance"
+              },
+              {
+                "service": "orchestrator",
+                "endpoint": "/api/v1/decision",
+                "purpose": "AI assistance for gap analysis"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Manual evidence upload required (no auto-discovery)",
+            "severity": "medium",
+            "workaround": "Periodic manual evidence collection",
+            "tracking": "COMP-001"
+          },
+          {
+            "issue": "RCA templates limited to 5W2H and Fishbone",
+            "severity": "low",
+            "workaround": "Custom RCA can be added manually",
+            "tracking": "COMP-002"
+          }
+        ],
+        "limitations": [
+          "Supports ISO 22301, HIPAA, SOC2, GDPR (others require custom config)",
+          "Maximum 1000 requirements per assessment",
+          "Evidence files limited to 50MB each",
+          "Audit scheduling manual (no auto-scheduling)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "compliance-service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8014:8014"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              }
+            ],
+            "optional": [
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "default": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "default": "amqp://guest:guest@localhost:5672/"
+              },
+              {
+                "name": "ORCHESTRATOR_URL",
+                "description": "AI Orchestrator URL",
+                "default": "http://localhost:8002"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m compliance.main",
+          "requirements": {
+            "cpu": "0.5 cores",
+            "memory": "512MB",
+            "disk": "2GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8014/docs",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 9.2 - Internal Audit",
+              "url": "https://www.iso.org/standard/75106.html"
+            },
+            {
+              "name": "ISO 22301 Clause 10 - Improvement",
+              "url": "https://www.iso.org/standard/75106.html"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Platform project",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "9.2",
+              "description": "Internal audit",
+              "status": "compliant"
+            },
+            {
+              "clause": "10.1",
+              "description": "Nonconformity and corrective action",
+              "status": "compliant"
+            },
+            {
+              "clause": "10.2",
+              "description": "Continual improvement",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/compliance-service/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "governance-service",
+        "display_name": "Governance Service",
+        "version": "2.0.0",
+        "description": "Organizational governance framework implementation for BCM. Manages stakeholder engagement, decision-making processes, organizational context analysis, governance structures, and accountability tracking.",
+        "type": "platform-services",
+        "business_process": "Business Continuity Governance & Leadership (ISO 22301 Clause 5)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8025
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8025",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/governance"
+        },
+        "capabilities": [
+          "Stakeholder management and engagement tracking",
+          "Governance structure definition (roles, committees)",
+          "Decision-making process management",
+          "Organizational context analysis (PESTLE, SWOT)",
+          "BCM policy framework management",
+          "Accountability and responsibility tracking",
+          "Leadership commitment monitoring",
+          "Governance reporting and dashboards"
+        ],
+        "features": [
+          {
+            "name": "Stakeholder Management",
+            "description": "Identify, classify, and track stakeholder engagement",
+            "endpoints": 10
+          },
+          {
+            "name": "Governance Structures",
+            "description": "Define roles, committees, and organizational hierarchy",
+            "endpoints": 8
+          },
+          {
+            "name": "Policy Management",
+            "description": "BCM policy framework creation and approval",
+            "endpoints": 6
+          },
+          {
+            "name": "Context Analysis",
+            "description": "Environmental scanning (PESTLE, SWOT, risk landscape)",
+            "endpoints": 8
+          },
+          {
+            "name": "Decision Tracking",
+            "description": "Track governance decisions and accountability",
+            "endpoints": 8
+          },
+          {
+            "name": "Reporting & Analytics",
+            "description": "Governance dashboards and compliance reporting",
+            "endpoints": 6
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 500/day",
+            "prometheus_metric": "governance_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 600ms",
+            "prometheus_metric": "governance_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "governance_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "governance_service_availability"
+          },
+          {
+            "name": "active_stakeholders",
+            "type": "gauge",
+            "description": "Number of active stakeholders",
+            "target": "> 20",
+            "prometheus_metric": "governance_service_active_stakeholders"
+          },
+          {
+            "name": "stakeholder_engagement_rate",
+            "type": "gauge",
+            "description": "Percentage of stakeholders engaged in last 90 days",
+            "target": "> 80%",
+            "prometheus_metric": "governance_service_engagement_rate"
+          },
+          {
+            "name": "policy_review_compliance",
+            "type": "gauge",
+            "description": "Percentage of policies reviewed on schedule",
+            "target": "100%",
+            "prometheus_metric": "governance_service_policy_compliance"
+          },
+          {
+            "name": "governance_meeting_frequency",
+            "type": "counter",
+            "description": "Number of governance meetings per month",
+            "target": "> 4/month",
+            "prometheus_metric": "governance_service_meetings_total"
+          },
+          {
+            "name": "decision_implementation_rate",
+            "type": "gauge",
+            "description": "Percentage of decisions implemented on time",
+            "target": "> 85%",
+            "prometheus_metric": "governance_service_decision_implementation"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "redis>=5.0.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Primary database for governance data",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Caching and session management",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for event-driven integration",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (governance schema)",
+            "Redis (caching)",
+            "RabbitMQ (EventBus)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "compliance.gap.identified",
+                "source": "compliance_service",
+                "action": "Create governance action item"
+              },
+              {
+                "event": "risk.critical.identified",
+                "source": "risk_service",
+                "action": "Escalate to governance committee"
+              },
+              {
+                "event": "incident.major.declared",
+                "source": "response_service",
+                "action": "Notify governance stakeholders"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "governance.policy.created",
+                "target": "all_services",
+                "data": "policy_id, policy_type, approval_status"
+              },
+              {
+                "event": "governance.policy.approved",
+                "target": "compliance_service,documents_service",
+                "data": "policy_id, approved_by, approval_date"
+              },
+              {
+                "event": "governance.stakeholder.added",
+                "target": "all_services",
+                "data": "stakeholder_id, role, influence_level"
+              },
+              {
+                "event": "governance.decision.made",
+                "target": "all_services",
+                "data": "decision_id, decision_type, responsible_party"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/governance/stakeholders",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "compliance_service"
+                ]
+              },
+              {
+                "endpoint": "/api/governance/policies",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "documents_service",
+                  "compliance_service"
+                ]
+              },
+              {
+                "endpoint": "/api/governance/context-analysis",
+                "methods": [
+                  "GET",
+                  "POST"
+                ],
+                "consumers": [
+                  "risk_service",
+                  "planning_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "documents_service",
+                "endpoint": "/api/documents/documents",
+                "purpose": "Create and manage policy documents"
+              },
+              {
+                "service": "compliance_service",
+                "endpoint": "/api/compliance/assessments",
+                "purpose": "Get compliance status for governance reporting"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Stakeholder import from external systems manual",
+            "severity": "medium",
+            "workaround": "Manual CSV import",
+            "tracking": "GOV-001"
+          },
+          {
+            "issue": "No automated PESTLE data gathering",
+            "severity": "low",
+            "workaround": "Manual environmental scanning",
+            "tracking": "GOV-002"
+          }
+        ],
+        "limitations": [
+          "Maximum 500 stakeholders per tenant",
+          "Policy templates limited to predefined types",
+          "No multi-language support for governance documents",
+          "Decision tracking limited to text (no attachments)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "governance-service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8025:8025"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "example": "redis://localhost:6379/0"
+              }
+            ],
+            "optional": [
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "default": "amqp://guest:guest@localhost:5672/"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m governance.main",
+          "requirements": {
+            "cpu": "0.5 cores",
+            "memory": "512MB",
+            "disk": "1GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8025/docs",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 5 - Leadership",
+              "url": "https://www.iso.org/standard/75106.html"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Platform project",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "5.1",
+              "description": "Leadership and commitment",
+              "status": "compliant"
+            },
+            {
+              "clause": "5.2",
+              "description": "BC policy",
+              "status": "compliant"
+            },
+            {
+              "clause": "5.3",
+              "description": "Organizational roles, responsibilities, and authorities",
+              "status": "compliant"
+            },
+            {
+              "clause": "4.1",
+              "description": "Understanding the organization and its context",
+              "status": "compliant"
+            },
+            {
+              "clause": "4.2",
+              "description": "Understanding the needs and expectations of interested parties",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/governance-service/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "plans_service",
+        "display_name": "Plans Service",
+        "version": "1.0.0",
+        "description": "Business Continuity Plans & Procedures management service. Manages BC plans, procedures, resources, plan lifecycle, reviews, and activations. Implements ISO 22301 Clause 8.4 requirements.",
+        "type": "platform-services",
+        "business_process": "Business Continuity Planning (ISO 22301 Clause 8.4)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8023
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8023",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/plans"
+        },
+        "capabilities": [
+          "Business continuity plan management",
+          "Plan lifecycle workflow (Draft \u2192 Review \u2192 Approved \u2192 Active \u2192 Archived)",
+          "Procedure management with sequencing",
+          "Resource allocation and tracking (7 resource types)",
+          "Contact lists with call tree structure",
+          "Plan activation tracking and metrics",
+          "Plan review scheduling and workflow",
+          "Communication templates library",
+          "Plan templates (reusable structures)",
+          "ISO 22301 Clause 8.4 compliance"
+        ],
+        "features": [
+          {
+            "name": "Plan Management",
+            "description": "Create, update, approve, activate BC plans",
+            "endpoints": 10
+          },
+          {
+            "name": "Procedure Management",
+            "description": "Step-by-step procedures with dependencies",
+            "endpoints": 4
+          },
+          {
+            "name": "Resource Management",
+            "description": "Resource requirements and alternatives",
+            "endpoints": 2
+          },
+          {
+            "name": "Contact Lists",
+            "description": "Emergency contact management with call trees",
+            "endpoints": 2
+          },
+          {
+            "name": "Plan Activation",
+            "description": "Real incident activation and tracking",
+            "endpoints": 2
+          },
+          {
+            "name": "Plan Reviews",
+            "description": "Scheduled and post-incident reviews",
+            "endpoints": 2
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 1000/day",
+            "prometheus_metric": "plans_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 500ms",
+            "prometheus_metric": "plans_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "plans_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "plans_service_availability"
+          },
+          {
+            "name": "active_plans_count",
+            "type": "gauge",
+            "description": "Number of active BC plans",
+            "target": "> 10",
+            "prometheus_metric": "plans_service_active_plans"
+          },
+          {
+            "name": "plan_approval_time",
+            "type": "histogram",
+            "description": "Time from draft to approval",
+            "target": "< 7 days",
+            "prometheus_metric": "plans_service_approval_duration_seconds"
+          },
+          {
+            "name": "plan_review_compliance",
+            "type": "gauge",
+            "description": "Percentage of plans reviewed on schedule",
+            "target": "> 95%",
+            "prometheus_metric": "plans_service_review_compliance_percent"
+          },
+          {
+            "name": "plan_activation_count",
+            "type": "counter",
+            "description": "Number of plan activations (real incidents)",
+            "target": "Track trends",
+            "prometheus_metric": "plans_service_activations_total"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "python-jose[cryptography]>=3.3.0",
+            "passlib[bcrypt]>=1.7.4",
+            "python-multipart>=0.0.6",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "15+",
+              "purpose": "Primary database for plans, procedures, resources",
+              "required": true
+            },
+            {
+              "name": "eventbus",
+              "port": 8001,
+              "purpose": "Event-driven integration with other services",
+              "required": false
+            },
+            {
+              "name": "orchestrator",
+              "port": 8002,
+              "purpose": "AI orchestration for plan optimization",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database",
+            "Redis (optional, for caching)",
+            "EventBus (for event-driven workflows)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "strategy.approved",
+                "source": "planning_service",
+                "action": "Create plan from approved strategy"
+              },
+              {
+                "event": "bia.completed",
+                "source": "bia_service",
+                "action": "Update plan RTOs/RPOs from BIA"
+              },
+              {
+                "event": "risk.identified",
+                "source": "risk_service",
+                "action": "Create mitigation plan"
+              },
+              {
+                "event": "incident.declared",
+                "source": "response_service",
+                "action": "Activate relevant BC plans"
+              },
+              {
+                "event": "exercise.completed",
+                "source": "exercise_service",
+                "action": "Trigger post-exercise plan review"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "plan.created",
+                "target": "all_services",
+                "data": "plan_id, plan_type, owner"
+              },
+              {
+                "event": "plan.approved",
+                "target": "governance_service,compliance_service",
+                "data": "plan_id, approved_by, approval_date"
+              },
+              {
+                "event": "plan.activated",
+                "target": "response_service,orchestrator",
+                "data": "plan_id, incident_id, activation_time"
+              },
+              {
+                "event": "plan.review_due",
+                "target": "governance_service",
+                "data": "plan_id, due_date, last_review"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/plans/plans",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "response_service"
+                ]
+              },
+              {
+                "endpoint": "/api/plans/plans/{id}/activate-real",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "response_service",
+                  "orchestrator"
+                ]
+              },
+              {
+                "endpoint": "/api/plans/contact-lists",
+                "methods": [
+                  "GET",
+                  "POST"
+                ],
+                "consumers": [
+                  "response_service",
+                  "communication_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "planning_service",
+                "endpoint": "/api/planning/strategies/{id}",
+                "purpose": "Link plans to approved strategies"
+              },
+              {
+                "service": "bia_service",
+                "endpoint": "/api/bia/analyses/{id}",
+                "purpose": "Get RTO/RPO for plan creation"
+              },
+              {
+                "service": "risk_service",
+                "endpoint": "/api/risks/assessments/{id}",
+                "purpose": "Link plans to risk mitigation"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Plan versioning not implemented",
+            "severity": "medium",
+            "workaround": "Create new plan with version suffix",
+            "tracking": "PLAN-001"
+          },
+          {
+            "issue": "No automated plan testing",
+            "severity": "low",
+            "workaround": "Manual testing via exercises",
+            "tracking": "PLAN-002"
+          },
+          {
+            "issue": "Contact list synchronization manual",
+            "severity": "medium",
+            "workaround": "Periodic manual updates from HR system",
+            "tracking": "PLAN-003"
+          }
+        ],
+        "limitations": [
+          "Maximum 1000 procedures per plan (database constraint)",
+          "Contact lists limited to 500 contacts",
+          "Plan activation history retained for 2 years",
+          "No multi-language support for templates"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "plans_service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8023:8023"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://bcm:bcm@localhost:5432/bcm"
+              },
+              {
+                "name": "SECRET_KEY",
+                "description": "JWT secret key",
+                "example": "your-secret-key-min-32-characters"
+              }
+            ],
+            "optional": [
+              {
+                "name": "EVENTBUS_URL",
+                "description": "EventBus service URL",
+                "default": "http://localhost:8001"
+              },
+              {
+                "name": "ORCHESTRATOR_URL",
+                "description": "AI Orchestrator URL",
+                "default": "http://localhost:8002"
+              },
+              {
+                "name": "PLANNING_SERVICE_URL",
+                "description": "Planning service URL",
+                "default": "http://localhost:8022"
+              },
+              {
+                "name": "BIA_SERVICE_URL",
+                "description": "BIA service URL",
+                "default": "http://localhost:8020"
+              },
+              {
+                "name": "RISK_SERVICE_URL",
+                "description": "Risk service URL",
+                "default": "http://localhost:8024"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m plans_service.main",
+          "requirements": {
+            "cpu": "0.5 cores",
+            "memory": "512MB",
+            "disk": "1GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8023/docs",
+          "architecture": "./ARCHITECTURE.md",
+          "eventbus": "./EVENTBUS_INTEGRATION.md",
+          "auth": "./ENDPOINT_AUTH_SUMMARY.md",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 8.4",
+              "url": "https://www.iso.org/standard/75106.html"
+            },
+            {
+              "name": "BCI Good Practice Guidelines",
+              "url": "https://www.thebci.org/resource/good-practice-guidelines.html"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Platform project",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "database": {
+          "schema": "bcm",
+          "models": [
+            {
+              "name": "Plan",
+              "table": "plans",
+              "description": "Main plan entity with lifecycle workflow"
+            },
+            {
+              "name": "Procedure",
+              "table": "procedures",
+              "description": "Step-by-step procedures for plans"
+            },
+            {
+              "name": "PlanResource",
+              "table": "plan_resources",
+              "description": "Resource requirements for plans"
+            },
+            {
+              "name": "ContactList",
+              "table": "contact_lists",
+              "description": "Emergency contact lists with call trees"
+            },
+            {
+              "name": "PlanActivation",
+              "table": "plan_activations",
+              "description": "Plan activation tracking and metrics"
+            },
+            {
+              "name": "PlanReview",
+              "table": "plan_reviews",
+              "description": "Plan review tracking and findings"
+            },
+            {
+              "name": "CommunicationTemplate",
+              "table": "communication_templates",
+              "description": "Communication templates library"
+            },
+            {
+              "name": "PlanTemplate",
+              "table": "plan_templates",
+              "description": "Reusable plan templates"
+            }
+          ]
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "8.4.1",
+              "description": "BC plans established and documented",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.4.2",
+              "description": "Incident response structure",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.4.3",
+              "description": "Warning and communication",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.4.4",
+              "description": "BC plans and procedures",
+              "status": "compliant"
+            }
+          ],
+          "bci_practices": [
+            "PP5: Enabling Solutions"
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/plans_service/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "risk-service",
+        "display_name": "Risk Service",
+        "version": "2.0.0",
+        "description": "Comprehensive risk management including risk identification, assessment, treatment planning, monitoring, and reporting. Provides risk matrices, heat maps, and integration with mitigation workflows.",
+        "type": "platform-services",
+        "business_process": "Risk Assessment & Management (ISO 22301 Clause 8.2)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8026
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8026",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/risks"
+        },
+        "capabilities": [
+          "Risk identification and cataloging",
+          "Risk assessment (likelihood \u00d7 impact matrix)",
+          "Risk treatment planning (avoid, reduce, transfer, accept)",
+          "Risk monitoring and tracking",
+          "Risk heat maps and visualization",
+          "Risk appetite and tolerance configuration",
+          "Residual risk calculation",
+          "Risk register management",
+          "Risk reporting and dashboards",
+          "Integration with BIA and mitigation plans"
+        ],
+        "features": [
+          {
+            "name": "Risk Identification",
+            "description": "Identify and catalog risks from multiple sources",
+            "endpoints": 6
+          },
+          {
+            "name": "Risk Assessment",
+            "description": "Assess risks using configurable likelihood \u00d7 impact matrix",
+            "endpoints": 5
+          },
+          {
+            "name": "Risk Treatment",
+            "description": "Plan and track risk treatment actions",
+            "endpoints": 5
+          },
+          {
+            "name": "Risk Monitoring",
+            "description": "Monitor risk status and effectiveness of controls",
+            "endpoints": 5
+          },
+          {
+            "name": "Risk Reporting",
+            "description": "Generate risk reports, heat maps, and dashboards",
+            "endpoints": 8
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 800/day",
+            "prometheus_metric": "risk_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 500ms",
+            "prometheus_metric": "risk_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "risk_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "risk_service_availability"
+          },
+          {
+            "name": "total_risks",
+            "type": "gauge",
+            "description": "Total number of identified risks",
+            "target": "Track trends",
+            "prometheus_metric": "risk_service_total_risks"
+          },
+          {
+            "name": "high_risks_count",
+            "type": "gauge",
+            "description": "Number of high/critical risks",
+            "target": "< 10",
+            "prometheus_metric": "risk_service_high_risks"
+          },
+          {
+            "name": "risk_treatment_coverage",
+            "type": "gauge",
+            "description": "Percentage of risks with treatment plans",
+            "target": "> 95%",
+            "prometheus_metric": "risk_service_treatment_coverage"
+          },
+          {
+            "name": "residual_risk_score",
+            "type": "gauge",
+            "description": "Average residual risk score",
+            "target": "< 50",
+            "prometheus_metric": "risk_service_residual_score"
+          },
+          {
+            "name": "control_effectiveness",
+            "type": "gauge",
+            "description": "Average control effectiveness rating",
+            "target": "> 75%",
+            "prometheus_metric": "risk_service_control_effectiveness"
+          },
+          {
+            "name": "risk_review_compliance",
+            "type": "gauge",
+            "description": "Percentage of risks reviewed on schedule",
+            "target": "> 90%",
+            "prometheus_metric": "risk_service_review_compliance"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "redis>=5.0.0",
+            "matplotlib>=3.7.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Primary database for risk data",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Caching risk assessments",
+              "required": false
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for event-driven integration",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (risk schema)",
+            "Redis (optional caching)",
+            "RabbitMQ (EventBus)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "bia.completed",
+                "source": "bia_service",
+                "action": "Identify risks from BIA impacts"
+              },
+              {
+                "event": "incident.declared",
+                "source": "response_service",
+                "action": "Create risk from incident"
+              },
+              {
+                "event": "compliance.gap.identified",
+                "source": "compliance_service",
+                "action": "Create compliance risk"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "risk.identified",
+                "target": "plans_service,governance_service",
+                "data": "risk_id, severity, category"
+              },
+              {
+                "event": "risk.critical.identified",
+                "target": "governance_service,response_service",
+                "data": "risk_id, impact, likelihood"
+              },
+              {
+                "event": "risk.treatment.completed",
+                "target": "governance_service,compliance_service",
+                "data": "risk_id, treatment_type, residual_risk"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/risks/assessments",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "plans_service"
+                ]
+              },
+              {
+                "endpoint": "/api/risks/heat-map",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "governance_service"
+                ]
+              },
+              {
+                "endpoint": "/api/risks/register",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "governance_service",
+                  "compliance_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "bia_service",
+                "endpoint": "/api/bia/analyses/{id}",
+                "purpose": "Get impact data for risk assessment"
+              },
+              {
+                "service": "plans_service",
+                "endpoint": "/api/plans/plans",
+                "purpose": "Link mitigation plans to risks"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Risk matrix configuration limited to 5\u00d75",
+            "severity": "low",
+            "workaround": "Custom matrix requires code changes",
+            "tracking": "RISK-001"
+          },
+          {
+            "issue": "Heat map generation synchronous (slow for >100 risks)",
+            "severity": "medium",
+            "workaround": "Generate heat maps asynchronously",
+            "tracking": "RISK-002"
+          }
+        ],
+        "limitations": [
+          "Maximum 500 risks per tenant",
+          "Risk matrix fixed at 5\u00d75 (configurable values)",
+          "Heat map limited to 200 risks (performance)",
+          "No automated risk identification (manual only)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "risk-service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8026:8026"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              }
+            ],
+            "optional": [
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "default": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "default": "amqp://guest:guest@localhost:5672/"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m risk.main",
+          "requirements": {
+            "cpu": "0.5 cores",
+            "memory": "512MB",
+            "disk": "1GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8026/docs",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 8.2 - Risk Assessment",
+              "url": "https://www.iso.org/standard/75106.html"
+            },
+            {
+              "name": "ISO 31000 - Risk Management",
+              "url": "https://www.iso.org/iso-31000-risk-management.html"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Platform project",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "8.2",
+              "description": "Business continuity risk assessment",
+              "status": "compliant"
+            },
+            {
+              "clause": "6.1",
+              "description": "Actions to address risks and opportunities",
+              "status": "compliant"
+            }
+          ],
+          "iso_31000": [
+            {
+              "description": "Risk management principles and guidelines",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/risk-service/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "response-service",
+        "display_name": "Response Service",
+        "version": "1.0.0",
+        "description": "Comprehensive incident response management. Manages incidents, response actions, response teams, communications, timeline tracking, recovery metrics (RTO/RPO), escalation, and reporting.",
+        "type": "platform-services",
+        "business_process": "Incident Response & Recovery (ISO 22301 Clause 8.4)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8027
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8027",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/response"
+        },
+        "capabilities": [
+          "Incident lifecycle management (New \u2192 Active \u2192 Contained \u2192 Resolved \u2192 Closed)",
+          "Response action tracking and assignment",
+          "Response team management and coordination",
+          "Incident communications log",
+          "Chronological incident timeline",
+          "RTO/RPO tracking and validation",
+          "Automatic and manual incident escalation",
+          "Real-time incident dashboard",
+          "Comprehensive incident reports",
+          "Post-incident review process",
+          "Plan activation integration"
+        ],
+        "features": [
+          {
+            "name": "Incident Management",
+            "description": "Create, track, and manage incidents with full lifecycle",
+            "endpoints": 10
+          },
+          {
+            "name": "Response Actions",
+            "description": "Define, assign, and track response actions",
+            "endpoints": 5
+          },
+          {
+            "name": "Response Teams",
+            "description": "Manage incident response teams and roles",
+            "endpoints": 4
+          },
+          {
+            "name": "Communications",
+            "description": "Log and track all incident communications",
+            "endpoints": 3
+          },
+          {
+            "name": "Timeline Tracking",
+            "description": "Chronological incident event timeline",
+            "endpoints": 3
+          },
+          {
+            "name": "Recovery Metrics",
+            "description": "RTO/RPO tracking and validation",
+            "endpoints": 3
+          },
+          {
+            "name": "Escalation",
+            "description": "Automatic and manual incident escalation",
+            "endpoints": 2
+          },
+          {
+            "name": "Dashboard & Reporting",
+            "description": "Real-time analytics and incident reports",
+            "endpoints": 5
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 500/day",
+            "prometheus_metric": "response_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 400ms",
+            "prometheus_metric": "response_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "response_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.9%",
+            "prometheus_metric": "response_service_availability"
+          },
+          {
+            "name": "active_incidents_count",
+            "type": "gauge",
+            "description": "Number of currently active incidents",
+            "target": "< 5",
+            "prometheus_metric": "response_service_active_incidents"
+          },
+          {
+            "name": "mean_time_to_resolve",
+            "type": "histogram",
+            "description": "MTTR - Mean time to resolve incidents (hours)",
+            "target": "< 4 hours",
+            "prometheus_metric": "response_service_mttr_hours"
+          },
+          {
+            "name": "mean_time_to_acknowledge",
+            "type": "histogram",
+            "description": "MTTA - Mean time to acknowledge incidents (minutes)",
+            "target": "< 15 minutes",
+            "prometheus_metric": "response_service_mtta_minutes"
+          },
+          {
+            "name": "rto_achievement_rate",
+            "type": "gauge",
+            "description": "Percentage of incidents meeting RTO",
+            "target": "> 95%",
+            "prometheus_metric": "response_service_rto_achievement"
+          },
+          {
+            "name": "rpo_achievement_rate",
+            "type": "gauge",
+            "description": "Percentage of incidents meeting RPO",
+            "target": "> 95%",
+            "prometheus_metric": "response_service_rpo_achievement"
+          },
+          {
+            "name": "escalation_rate",
+            "type": "gauge",
+            "description": "Percentage of incidents escalated",
+            "target": "< 20%",
+            "prometheus_metric": "response_service_escalation_rate"
+          },
+          {
+            "name": "plan_activation_count",
+            "type": "counter",
+            "description": "Number of BC plan activations",
+            "target": "Track trends",
+            "prometheus_metric": "response_service_plan_activations_total"
+          },
+          {
+            "name": "incident_severity_distribution",
+            "type": "gauge",
+            "description": "Distribution of incidents by severity",
+            "target": "Track trends",
+            "prometheus_metric": "response_service_incidents_by_severity",
+            "labels": [
+              "severity"
+            ]
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "redis>=5.0.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Primary database for incident data",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Real-time incident state caching",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for incident notifications",
+              "required": true
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (response schema)",
+            "Redis (real-time state)",
+            "RabbitMQ (EventBus)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "monitoring.alert.critical",
+                "source": "monitoring_service",
+                "action": "Auto-create incident"
+              },
+              {
+                "event": "risk.critical.identified",
+                "source": "risk_service",
+                "action": "Create preventive incident"
+              },
+              {
+                "event": "plan.activated",
+                "source": "plans_service",
+                "action": "Link plan to incident"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "incident.declared",
+                "target": "all_services",
+                "data": "incident_id, severity, affected_services"
+              },
+              {
+                "event": "incident.major.declared",
+                "target": "governance_service,orchestrator",
+                "data": "incident_id, severity, estimated_impact"
+              },
+              {
+                "event": "incident.resolved",
+                "target": "all_services",
+                "data": "incident_id, resolution_time, rto_met"
+              },
+              {
+                "event": "incident.escalated",
+                "target": "governance_service",
+                "data": "incident_id, escalation_level, reason"
+              },
+              {
+                "event": "plan.activation.requested",
+                "target": "plans_service",
+                "data": "incident_id, plan_id"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/response/incidents",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "orchestrator",
+                  "monitoring_service"
+                ]
+              },
+              {
+                "endpoint": "/api/response/incidents/{id}/actions",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "orchestrator"
+                ]
+              },
+              {
+                "endpoint": "/api/response/dashboard",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel"
+                ],
+                "description": "Real-time incident analytics"
+              }
+            ],
+            "consumes": [
+              {
+                "service": "plans_service",
+                "endpoint": "/api/plans/plans/{id}/activate-real",
+                "purpose": "Activate BC plans during incidents"
+              },
+              {
+                "service": "bia_service",
+                "endpoint": "/api/bia/processes/{id}",
+                "purpose": "Get RTO/RPO for validation"
+              },
+              {
+                "service": "orchestrator",
+                "endpoint": "/api/v1/decision",
+                "purpose": "AI-assisted incident response"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "No automated incident detection (manual or webhook only)",
+            "severity": "medium",
+            "workaround": "Integrate with monitoring alerts",
+            "tracking": "RESP-001"
+          },
+          {
+            "issue": "Communication log not integrated with email/SMS",
+            "severity": "medium",
+            "workaround": "Manual logging of external communications",
+            "tracking": "RESP-002"
+          },
+          {
+            "issue": "Post-incident review workflow manual",
+            "severity": "low",
+            "workaround": "Manual review scheduling",
+            "tracking": "RESP-003"
+          }
+        ],
+        "limitations": [
+          "Maximum 100 concurrent active incidents",
+          "Timeline entries limited to 1000 per incident",
+          "Response teams limited to 50 members",
+          "No mobile push notifications (planned)",
+          "RTO/RPO validation assumes accurate timestamps"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "response-service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8027:8027"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "example": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "example": "amqp://guest:guest@localhost:5672/"
+              }
+            ],
+            "optional": [
+              {
+                "name": "ORCHESTRATOR_URL",
+                "description": "AI Orchestrator URL",
+                "default": "http://localhost:8002"
+              },
+              {
+                "name": "PLANS_SERVICE_URL",
+                "description": "Plans service URL",
+                "default": "http://localhost:8023"
+              },
+              {
+                "name": "BIA_SERVICE_URL",
+                "description": "BIA service URL",
+                "default": "http://localhost:8020"
+              },
+              {
+                "name": "AUTO_ESCALATE_CRITICAL",
+                "description": "Auto-escalate critical incidents",
+                "default": "true"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m response.main",
+          "requirements": {
+            "cpu": "1.0 cores (critical service)",
+            "memory": "512MB",
+            "disk": "2GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8027/docs",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 8.4 - Incident Response",
+              "url": "https://www.iso.org/standard/75106.html"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services",
+          "pagerduty": "response-service-oncall"
+        },
+        "support": {
+          "incidents": "Create P1 ticket in JIRA (critical service)",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "database": {
+          "schema": "response",
+          "models": [
+            {
+              "name": "Incident",
+              "table": "incidents",
+              "description": "Main incident entity with lifecycle state"
+            },
+            {
+              "name": "ResponseAction",
+              "table": "response_actions",
+              "description": "Response actions and assignments"
+            },
+            {
+              "name": "ResponseTeam",
+              "table": "response_teams",
+              "description": "Incident response team members"
+            },
+            {
+              "name": "Communication",
+              "table": "communications",
+              "description": "Incident communications log"
+            },
+            {
+              "name": "Timeline",
+              "table": "timeline",
+              "description": "Chronological incident events"
+            },
+            {
+              "name": "RecoveryMetrics",
+              "table": "recovery_metrics",
+              "description": "RTO/RPO tracking and validation"
+            }
+          ]
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "8.4",
+              "description": "BC plans and procedures - Incident response",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.4.2",
+              "description": "Incident response structure",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.4.3",
+              "description": "Warning and communication",
+              "status": "compliant"
+            },
+            {
+              "clause": "8.5",
+              "description": "Exercising and testing",
+              "status": "partial"
+            }
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/response-service/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "documents-service",
+        "display_name": "Documents Service",
+        "version": "1.0.0",
+        "description": "Enterprise document lifecycle management with AI/NLP capabilities, approval workflows, version control, and retention policies. Implements ISO 22301 Clause 7.5 - Documented Information Management.",
+        "type": "platform-services",
+        "business_process": "Document Management & Control (ISO 22301 Clause 7.5)",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8024
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8024",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/documents"
+        },
+        "capabilities": [
+          "Document lifecycle management (Draft \u2192 Review \u2192 Approved \u2192 Published \u2192 Archived)",
+          "AI/NLP document processing (extraction, classification, analysis, summarization)",
+          "Version control with diff comparison",
+          "Multi-stage approval workflows (5 stages with SLAs)",
+          "Retention policies (ISO 22301 + HIPAA compliance)",
+          "Security classification levels (5 levels)",
+          "Access control and audit logging",
+          "Document sharing and collaboration",
+          "File storage with integrity verification (SHA-256)",
+          "Event-driven integration with BCM platform"
+        ],
+        "features": [
+          {
+            "name": "Document CRUD",
+            "description": "Create, upload, read, update, delete documents with file management",
+            "endpoints": 7
+          },
+          {
+            "name": "Lifecycle Workflow",
+            "description": "State machine workflow with validation rules",
+            "endpoints": 2,
+            "states": "DRAFT, UNDER_REVIEW, APPROVED, PUBLISHED, ARCHIVED, SUPERSEDED, OBSOLETE"
+          },
+          {
+            "name": "Version Control",
+            "description": "Full version history with comparison and rollback",
+            "endpoints": 3
+          },
+          {
+            "name": "Sharing & Collaboration",
+            "description": "Secure document sharing with time-limited access",
+            "endpoints": 2
+          },
+          {
+            "name": "Approval Workflow",
+            "description": "Multi-stage approval chains with priority calculation",
+            "endpoints": 3,
+            "stages": 5
+          },
+          {
+            "name": "Retention Policies",
+            "description": "Automated archival and destruction per compliance requirements",
+            "endpoints": 3,
+            "retention_periods": [
+              "Policy: 7 years",
+              "Procedure: 5 years",
+              "Plans: 5 years",
+              "Risk assessments: 7 years",
+              "BIA: 7 years",
+              "Exercise reports: 5 years",
+              "Audit reports: 7 years"
+            ]
+          },
+          {
+            "name": "AI/NLP Processing",
+            "description": "Text extraction, auto-classification, entity recognition, summarization",
+            "processors": [
+              "DocumentExtractor (PDF, DOCX, Excel, OCR)",
+              "DocumentClassifier (ML-based type detection)",
+              "DocumentAnalyzer (NER, key phrases, summarization)",
+              "DocumentComparator (version diff)"
+            ]
+          },
+          {
+            "name": "Audit & Access Control",
+            "description": "Complete audit trail and classification-based access control",
+            "endpoints": 1
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 2000/day",
+            "prometheus_metric": "documents_service_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 800ms",
+            "prometheus_metric": "documents_service_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "documents_service_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "documents_service_availability"
+          },
+          {
+            "name": "total_documents",
+            "type": "gauge",
+            "description": "Total documents in system",
+            "target": "> 100",
+            "prometheus_metric": "documents_service_total_documents"
+          },
+          {
+            "name": "documents_by_status",
+            "type": "gauge",
+            "description": "Document count by lifecycle status",
+            "target": "Track distribution",
+            "prometheus_metric": "documents_service_documents_by_status",
+            "labels": [
+              "status"
+            ]
+          },
+          {
+            "name": "approval_sla_compliance",
+            "type": "gauge",
+            "description": "Percentage of approvals completed within SLA",
+            "target": "> 90%",
+            "prometheus_metric": "documents_service_approval_sla_compliance"
+          },
+          {
+            "name": "retention_compliance",
+            "type": "gauge",
+            "description": "Percentage of documents with valid retention policy",
+            "target": "100%",
+            "prometheus_metric": "documents_service_retention_compliance"
+          },
+          {
+            "name": "ai_processing_duration",
+            "type": "histogram",
+            "description": "AI/NLP processing duration",
+            "target": "< 5s",
+            "prometheus_metric": "documents_service_ai_processing_seconds"
+          },
+          {
+            "name": "file_storage_usage",
+            "type": "gauge",
+            "description": "Total file storage used (bytes)",
+            "target": "< 100GB",
+            "prometheus_metric": "documents_service_storage_bytes"
+          },
+          {
+            "name": "classification_accuracy",
+            "type": "gauge",
+            "description": "AI classification accuracy (verified)",
+            "target": "> 85%",
+            "prometheus_metric": "documents_service_classification_accuracy"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "PyMuPDF>=1.23.0",
+            "pdfplumber>=0.10.0",
+            "python-docx>=1.0.0",
+            "openpyxl>=3.1.0",
+            "pytesseract>=0.3.10",
+            "spacy>=3.7.0",
+            "scikit-learn>=1.3.0",
+            "openai>=1.0.0",
+            "python-multipart>=0.0.6"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "15+",
+              "purpose": "Primary database for documents metadata",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for event-driven integration",
+              "required": false
+            },
+            {
+              "name": "openai-api",
+              "purpose": "AI summarization and analysis",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (documents schema)",
+            "File storage (local or S3-compatible)",
+            "RabbitMQ (EventBus)",
+            "spaCy NLP models (en_core_web_sm)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "governance.policy.created",
+                "source": "governance_service",
+                "action": "Create policy document record"
+              },
+              {
+                "event": "governance.policy.updated",
+                "source": "governance_service",
+                "action": "Update policy document references"
+              },
+              {
+                "event": "plans.plan.created",
+                "source": "plans_service",
+                "action": "Link plan documents"
+              },
+              {
+                "event": "plans.plan.updated",
+                "source": "plans_service",
+                "action": "Update plan document references"
+              },
+              {
+                "event": "validation.exercise.completed",
+                "source": "validation_service",
+                "action": "Create exercise report document"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "document.uploaded",
+                "target": "all_services",
+                "data": "document_id, file_name, file_size, classification"
+              },
+              {
+                "event": "document.approved",
+                "target": "governance_service,compliance_service",
+                "data": "document_id, approved_by, approval_date"
+              },
+              {
+                "event": "document.published",
+                "target": "all_services",
+                "data": "document_id, version, publication_date"
+              },
+              {
+                "event": "document.archived",
+                "target": "governance_service,compliance_service",
+                "data": "document_id, archive_date, retention_policy"
+              },
+              {
+                "event": "document.shared",
+                "target": "governance_service",
+                "data": "document_id, shared_with, permissions"
+              },
+              {
+                "event": "document.version.created",
+                "target": "governance_service",
+                "data": "document_id, version, changes"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/documents/documents",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PATCH",
+                  "DELETE"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "governance_service",
+                  "plans_service"
+                ]
+              },
+              {
+                "endpoint": "/api/documents/documents/{id}/upload",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "admin_panel"
+                ],
+                "max_file_size": "100MB"
+              },
+              {
+                "endpoint": "/api/documents/documents/{id}/workflow/{action}",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "governance_service",
+                  "orchestrator"
+                ]
+              },
+              {
+                "endpoint": "/api/documents/plans/{id}/documents",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "plans_service"
+                ]
+              },
+              {
+                "endpoint": "/api/documents/iso-coverage",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "compliance_service",
+                  "governance_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "plans_service",
+                "endpoint": "/api/plans/plans/{id}",
+                "purpose": "Get plan details for document linking"
+              },
+              {
+                "service": "governance_service",
+                "endpoint": "/api/governance/policies/{id}",
+                "purpose": "Get policy details for compliance"
+              },
+              {
+                "service": "ai_intelligence",
+                "endpoint": "/api/ai/analyze",
+                "purpose": "AI document analysis and summarization"
+              },
+              {
+                "service": "orchestrator",
+                "endpoint": "/api/v1/decision",
+                "purpose": "AI decision support for document classification"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Large PDF processing slow (>50MB)",
+            "severity": "medium",
+            "workaround": "Use background processing for large files",
+            "tracking": "DOC-001"
+          },
+          {
+            "issue": "OCR quality depends on image resolution",
+            "severity": "low",
+            "workaround": "Recommend minimum 300 DPI for OCR",
+            "tracking": "DOC-002"
+          },
+          {
+            "issue": "AI summarization requires OpenAI API key",
+            "severity": "medium",
+            "workaround": "Falls back to extractive summarization without API key",
+            "tracking": "DOC-003"
+          },
+          {
+            "issue": "Version comparison memory intensive for large docs",
+            "severity": "low",
+            "workaround": "Limit comparison to documents < 10MB",
+            "tracking": "DOC-004"
+          }
+        ],
+        "limitations": [
+          "Maximum file size: 100MB (configurable)",
+          "Maximum 100 versions per document",
+          "OCR limited to English language",
+          "AI classification accuracy ~85% (requires manual verification)",
+          "Retention policies executed daily (not real-time)",
+          "File storage on local disk (S3 integration planned)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "documents-service:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8024:8024"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm_platform"
+              },
+              {
+                "name": "STORAGE_PATH",
+                "description": "File storage directory path",
+                "example": "./storage/documents"
+              }
+            ],
+            "optional": [
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "default": "amqp://guest:guest@localhost:5672/"
+              },
+              {
+                "name": "ORCHESTRATOR_URL",
+                "description": "AI Orchestrator URL",
+                "default": "http://localhost:8002"
+              },
+              {
+                "name": "AI_INTELLIGENCE_URL",
+                "description": "AI Intelligence service URL",
+                "default": "http://localhost:8000"
+              },
+              {
+                "name": "OPENAI_API_KEY",
+                "description": "OpenAI API key for summarization",
+                "example": "sk-..."
+              },
+              {
+                "name": "MAX_FILE_SIZE",
+                "description": "Maximum file upload size (bytes)",
+                "default": "104857600"
+              },
+              {
+                "name": "DEFAULT_RETENTION_YEARS",
+                "description": "Default retention period (years)",
+                "default": "7"
+              },
+              {
+                "name": "ARCHIVE_AFTER_DAYS",
+                "description": "Auto-archive documents after N days",
+                "default": "365"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "pre_deployment": [
+            "Install spaCy model: python -m spacy download en_core_web_sm",
+            "Create storage directory: mkdir -p ./storage/documents",
+            "Ensure PostgreSQL documents schema exists"
+          ],
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python main.py",
+          "requirements": {
+            "cpu": "1.0 cores (AI processing intensive)",
+            "memory": "1GB (2GB recommended for AI)",
+            "disk": "100GB (for file storage)"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8024/docs",
+          "architecture": "See README.md - 4-Tier Architecture",
+          "ai_processing": "See core/ directory - AI/NLP processors",
+          "workflows": "See workflows/ directory - State machines",
+          "external_links": [
+            {
+              "name": "ISO 22301 Clause 7.5",
+              "url": "https://www.iso.org/standard/75106.html"
+            },
+            {
+              "name": "spaCy NLP Documentation",
+              "url": "https://spacy.io/usage"
+            },
+            {
+              "name": "OpenAI API Documentation",
+              "url": "https://platform.openai.com/docs"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Platform Services Team",
+          "tech_lead": "Platform Architect",
+          "product_owner": "BCM Product Owner",
+          "on_call": "platform-team@company.com",
+          "slack_channel": "#platform-services"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Platform project",
+          "questions": "#platform-services Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "database": {
+          "schema": "documents",
+          "models": [
+            {
+              "name": "Document",
+              "table": "documents",
+              "description": "Main document entity with lifecycle state"
+            },
+            {
+              "name": "DocumentAccess",
+              "table": "document_access",
+              "description": "Complete audit trail of document access"
+            },
+            {
+              "name": "DocumentShare",
+              "table": "document_shares",
+              "description": "Document sharing and collaboration"
+            },
+            {
+              "name": "DocumentApproval",
+              "table": "document_approvals",
+              "description": "Approval workflow tracking with SLAs"
+            },
+            {
+              "name": "DocumentTag",
+              "table": "document_tags",
+              "description": "Taxonomy and categorization tags"
+            },
+            {
+              "name": "DocumentTagAssociation",
+              "table": "document_tag_associations",
+              "description": "Many-to-many document-tag relationships"
+            },
+            {
+              "name": "DocumentComparison",
+              "table": "document_comparisons",
+              "description": "Version diff tracking and comparison"
+            },
+            {
+              "name": "DocumentRetentionPolicy",
+              "table": "document_retention_policies",
+              "description": "Compliance retention policies (ISO 22301, HIPAA)"
+            }
+          ]
+        },
+        "compliance": {
+          "iso_22301": [
+            {
+              "clause": "7.5.1",
+              "description": "General requirements for documented information",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.2",
+              "description": "Creating and updating documents",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3",
+              "description": "Control of documented information",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3a",
+              "description": "Availability and suitability for use",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3b",
+              "description": "Adequate protection",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3c",
+              "description": "Distribution, access, retrieval",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3d",
+              "description": "Storage and preservation",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3e",
+              "description": "Control of changes (version control)",
+              "status": "compliant"
+            },
+            {
+              "clause": "7.5.3f",
+              "description": "Retention and disposition",
+              "status": "compliant"
+            }
+          ],
+          "hipaa": [
+            {
+              "requirement": "Minimum 6-year retention for health records",
+              "status": "compliant"
+            }
+          ]
+        },
+        "ai_features": {
+          "document_extraction": [
+            "PDF text extraction (PyMuPDF, pdfplumber)",
+            "DOCX processing (python-docx)",
+            "Excel processing (openpyxl)",
+            "Image OCR (pytesseract)",
+            "Page count, word count, metadata extraction"
+          ],
+          "document_classification": [
+            "Auto-classify document type (policy, procedure, plan, etc.)",
+            "Suggest classification level (public, internal, confidential)",
+            "Map to ISO 22301 clauses",
+            "Map to BCI GPG practices",
+            "Determine if controlled document",
+            "Determine if requires approval"
+          ],
+          "document_analysis": [
+            "Named entity recognition (spaCy)",
+            "Key phrase extraction (TF-IDF)",
+            "AI summarization (OpenAI GPT)",
+            "Readability analysis (Flesch-Kincaid)",
+            "ISO compliance keyword detection"
+          ],
+          "version_comparison": [
+            "Text diff generation",
+            "Similarity scoring",
+            "Track additions, deletions, modifications",
+            "Structural change detection"
+          ]
+        },
+        "_category": "platform-services",
+        "_source_file": "platform-services/documents-service/SERVICE_INFO.yaml"
+      }
+    ]
+  },
+  "intelligent_core": {
+    "description": "Intelligent automation and AI services for platform intelligence",
+    "total": 7,
+    "services": [
+      {
+        "name": "workflow-engine",
+        "display_name": "Unified Workflow Engine",
+        "version": "2.0.0",
+        "description": "Domain-agnostic BPMN 2.0 workflow orchestration engine with AI-powered recommendations, PostgreSQL persistence, event-driven architecture, and multi-tenancy support.",
+        "type": "intelligent-core/workflow-engine",
+        "business_process": "Workflow Orchestration & Process Automation",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8030
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8030",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/workflow"
+        },
+        "capabilities": [
+          "BPMN 2.0 visual workflow modeling",
+          "Workflow definition and deployment",
+          "Workflow instance execution and tracking",
+          "Task management (human tasks, service tasks)",
+          "AI-powered workflow recommendations",
+          "Event-driven workflow triggers",
+          "Workflow versioning and rollback",
+          "Multi-tenancy and isolation",
+          "PostgreSQL persistence with full audit trail",
+          "Real-time workflow monitoring",
+          "Workflow analytics and reporting"
+        ],
+        "features": [
+          {
+            "name": "BPMN 2.0 Engine",
+            "description": "Full BPMN 2.0 specification support with visual modeling",
+            "endpoints": 8
+          },
+          {
+            "name": "Workflow Lifecycle",
+            "description": "Deploy, start, pause, resume, cancel workflows",
+            "endpoints": 6
+          },
+          {
+            "name": "Task Management",
+            "description": "Human tasks, service tasks, and automated tasks",
+            "endpoints": 5
+          },
+          {
+            "name": "AI Recommendations",
+            "description": "Intelligent workflow optimization suggestions",
+            "endpoints": 3
+          },
+          {
+            "name": "Event Integration",
+            "description": "Event-driven workflow triggers and actions",
+            "endpoints": 4
+          },
+          {
+            "name": "Analytics & Monitoring",
+            "description": "Real-time dashboards and historical analytics",
+            "endpoints": 6
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of API requests processed",
+            "target": "> 1500/day",
+            "prometheus_metric": "workflow_engine_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 500ms",
+            "prometheus_metric": "workflow_engine_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed requests",
+            "target": "< 1%",
+            "prometheus_metric": "workflow_engine_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.9%",
+            "prometheus_metric": "workflow_engine_availability"
+          },
+          {
+            "name": "active_workflows",
+            "type": "gauge",
+            "description": "Number of active workflow instances",
+            "target": "Track trends",
+            "prometheus_metric": "workflow_engine_active_workflows"
+          },
+          {
+            "name": "workflow_completion_rate",
+            "type": "gauge",
+            "description": "Percentage of workflows completing successfully",
+            "target": "> 95%",
+            "prometheus_metric": "workflow_engine_completion_rate"
+          },
+          {
+            "name": "workflow_execution_time",
+            "type": "histogram",
+            "description": "Average workflow execution time",
+            "target": "< 5 minutes",
+            "prometheus_metric": "workflow_engine_execution_seconds"
+          },
+          {
+            "name": "task_queue_length",
+            "type": "gauge",
+            "description": "Number of pending tasks",
+            "target": "< 100",
+            "prometheus_metric": "workflow_engine_task_queue_length"
+          },
+          {
+            "name": "ai_recommendation_accuracy",
+            "type": "gauge",
+            "description": "Accuracy of AI workflow recommendations",
+            "target": "> 80%",
+            "prometheus_metric": "workflow_engine_ai_accuracy"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "redis>=5.0.0",
+            "bpmn-python>=0.0.17"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Workflow definitions and instance storage",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Task queue and caching",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for workflow events",
+              "required": true
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (workflow schema)",
+            "Redis (task queue)",
+            "RabbitMQ (EventBus)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "*.workflow.start.requested",
+                "source": "any_service",
+                "action": "Start workflow instance"
+              },
+              {
+                "event": "task.completed",
+                "source": "any_service",
+                "action": "Progress workflow to next step"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "workflow.started",
+                "target": "all_services",
+                "data": "workflow_id, instance_id, definition"
+              },
+              {
+                "event": "workflow.completed",
+                "target": "all_services",
+                "data": "workflow_id, instance_id, outcome"
+              },
+              {
+                "event": "workflow.failed",
+                "target": "orchestrator,monitoring",
+                "data": "workflow_id, instance_id, error"
+              },
+              {
+                "event": "task.assigned",
+                "target": "user_service,notification_service",
+                "data": "task_id, assignee, workflow_context"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/workflow/definitions",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "orchestrator"
+                ]
+              },
+              {
+                "endpoint": "/api/workflow/instances",
+                "methods": [
+                  "GET",
+                  "POST"
+                ],
+                "consumers": [
+                  "all_services"
+                ]
+              },
+              {
+                "endpoint": "/api/workflow/tasks",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "orchestrator"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "orchestrator",
+                "endpoint": "/api/v1/decision",
+                "purpose": "AI recommendations for workflow optimization"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "BPMN complex gateways not fully supported",
+            "severity": "medium",
+            "workaround": "Use simple gateways and manual steps",
+            "tracking": "WF-001"
+          },
+          {
+            "issue": "Workflow versioning requires manual migration",
+            "severity": "low",
+            "workaround": "Create new version, migrate instances manually",
+            "tracking": "WF-002"
+          }
+        ],
+        "limitations": [
+          "Maximum 50 concurrent workflow instances per tenant",
+          "BPMN 2.0 subset supported (core elements only)",
+          "Task queue limited to 1000 pending tasks",
+          "No visual BPMN designer (import XML only)",
+          "Workflow definitions stored as JSON (not native BPMN XML)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "workflow-engine:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8030:8030"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "example": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "example": "amqp://guest:guest@localhost:5672/"
+              }
+            ],
+            "optional": [
+              {
+                "name": "ORCHESTRATOR_URL",
+                "description": "AI Orchestrator URL",
+                "default": "http://localhost:8002"
+              },
+              {
+                "name": "MAX_CONCURRENT_WORKFLOWS",
+                "description": "Maximum concurrent workflows per tenant",
+                "default": "50"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m workflow.main",
+          "requirements": {
+            "cpu": "1.0 cores",
+            "memory": "1GB",
+            "disk": "5GB"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8030/docs",
+          "phase2_docs": "./PHASE_2_COMPLETE.md",
+          "external_links": [
+            {
+              "name": "BPMN 2.0 Specification",
+              "url": "https://www.omg.org/spec/BPMN/2.0/"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "product_owner": "Platform Product Owner",
+          "on_call": "intelligent-core@company.com",
+          "slack_channel": "#intelligent-core"
+        },
+        "support": {
+          "incidents": "Create ticket in JIRA Intelligent-Core project",
+          "questions": "#intelligent-core Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "description": "Software documentation standards",
+              "status": "compliant"
+            },
+            {
+              "name": "BPMN 2.0",
+              "description": "Business Process Model and Notation",
+              "status": "partial"
+            }
+          ]
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/workflow-engine/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "predictive",
+        "display_name": "Predictive Journey Service",
+        "version": "1.0.0",
+        "description": "AI-powered forecasting for BCM journeys. Predicts milestones, certification timelines, expert demands, and challenges using pattern matching, statistical analysis, and machine learning.",
+        "type": "intelligent-core/predictive",
+        "business_process": "Predictive Analytics & Forecasting",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8031
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8031",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/predictive"
+        },
+        "capabilities": [
+          "90-day journey timeline prediction (3-6 milestones)",
+          "ISO 22301 certification date forecasting",
+          "Expert marketplace demand forecasting",
+          "Daily proactive digest generation (8:00 AM schedule)",
+          "Challenge prediction with mitigation strategies",
+          "Cost estimation (size-adjusted internal staff time)",
+          "Similarity-based organizational matching",
+          "Confidence scoring (frequency and variance-based)"
+        ],
+        "features": [
+          {
+            "name": "Journey Predictor",
+            "description": "Forecasts BCM milestone timelines using similarity patterns",
+            "endpoints": 3
+          },
+          {
+            "name": "Certification Predictor",
+            "description": "Estimates ISO 22301 certification achievement dates",
+            "endpoints": 2
+          },
+          {
+            "name": "Demand Forecaster",
+            "description": "Predicts expert marketplace demand by specialty/region",
+            "endpoints": 3
+          },
+          {
+            "name": "Proactive Recommendations",
+            "description": "Daily personalized guidance and reminders",
+            "endpoints": 2
+          },
+          {
+            "name": "Challenge Predictor",
+            "description": "Identifies likely obstacles with mitigation",
+            "endpoints": 2
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total prediction requests",
+            "target": "> 300/day",
+            "prometheus_metric": "predictive_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile prediction time",
+            "target": "< 1s",
+            "prometheus_metric": "predictive_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed predictions",
+            "target": "< 2%",
+            "prometheus_metric": "predictive_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.5%",
+            "prometheus_metric": "predictive_availability"
+          },
+          {
+            "name": "prediction_accuracy",
+            "type": "gauge",
+            "description": "Overall prediction accuracy (verified)",
+            "target": "> 75%",
+            "prometheus_metric": "predictive_accuracy"
+          },
+          {
+            "name": "certification_forecast_accuracy",
+            "type": "gauge",
+            "description": "Certification date prediction accuracy",
+            "target": "> 80%",
+            "prometheus_metric": "predictive_cert_accuracy"
+          },
+          {
+            "name": "daily_digest_delivery_rate",
+            "type": "gauge",
+            "description": "Percentage of daily digests delivered on time",
+            "target": "100%",
+            "prometheus_metric": "predictive_digest_delivery_rate"
+          },
+          {
+            "name": "similarity_match_quality",
+            "type": "gauge",
+            "description": "Quality of organizational similarity matching",
+            "target": "> 0.7",
+            "prometheus_metric": "predictive_similarity_quality"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "apscheduler>=3.10.4",
+            "redis>=5.0.0",
+            "aio-pika>=9.3.0",
+            "scikit-learn>=1.3.0",
+            "pandas>=2.0.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Predictions storage (Supabase)",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "purpose": "EventBus messaging",
+              "required": true
+            },
+            {
+              "name": "case_library",
+              "purpose": "Historical case data for pattern matching",
+              "required": true
+            }
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "organization.onboarded",
+                "source": "user_service",
+                "action": "Generate initial predictions"
+              },
+              {
+                "event": "milestone.completed",
+                "source": "workflow_intelligence",
+                "action": "Update journey predictions"
+              },
+              {
+                "event": "certification.achieved",
+                "source": "compliance_service",
+                "action": "Validate and learn from prediction accuracy"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "prediction.generated",
+                "target": "user_service,notification_service",
+                "data": "prediction_type, forecast_data, confidence"
+              },
+              {
+                "event": "daily_digest.sent",
+                "target": "notification_service",
+                "data": "recipient, recommendations_count"
+              },
+              {
+                "event": "challenge.predicted",
+                "target": "governance_service,orchestrator",
+                "data": "challenge_type, probability, mitigation"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/predictive/journey/{org_id}",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "user_service"
+                ],
+                "description": "90-day journey timeline"
+              },
+              {
+                "endpoint": "/api/predictive/certification/{org_id}",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "compliance_service"
+                ]
+              },
+              {
+                "endpoint": "/api/predictive/demand",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "marketplace_service"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "workflow_intelligence",
+                "endpoint": "/api/cases/search",
+                "purpose": "Access case library for similarity matching"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Predictions require minimum 10 similar cases",
+            "severity": "medium",
+            "workaround": "Fall back to generic templates for new organizations",
+            "tracking": "PRED-001"
+          }
+        ],
+        "limitations": [
+          "Prediction accuracy depends on case library size (min 100 cases)",
+          "Daily digest fixed at 8:00 AM (timezone configurable)",
+          "Maximum 6 milestone predictions per forecast",
+          "Similarity matching limited to 5 organizational factors"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "predictive:latest",
+            "ports": [
+              "8031:8031"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "example": "redis://localhost:6379/0"
+              }
+            ],
+            "optional": [
+              {
+                "name": "DAILY_DIGEST_TIME",
+                "description": "Daily digest delivery time (HH:MM)",
+                "default": "08:00"
+              },
+              {
+                "name": "MIN_SIMILARITY_THRESHOLD",
+                "description": "Minimum similarity score for predictions",
+                "default": "0.6"
+              }
+            ]
+          },
+          "startup_command": "python -m predictive.main",
+          "requirements": {
+            "cpu": "1.0 cores",
+            "memory": "1GB",
+            "disk": "2GB"
+          }
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "slack_channel": "#intelligent-core"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/predictive/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "collective",
+        "display_name": "Collective Intelligence Agent Networks",
+        "version": "1.0.0",
+        "description": "Privacy-preserving knowledge sharing across organizations through temporary AI agents synthesized from anonymized collective wisdom. Enables organizations to benefit from proven solutions without compromising confidentiality using k-anonymity principles (minimum k=5).",
+        "type": "intelligent-core/collective-intelligence",
+        "business_process": "Privacy-Preserving Collective Learning & Knowledge Sharing",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8034
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8034",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/v1"
+        },
+        "capabilities": [
+          "Automatic stuck organization detection (7-day progress monitoring)",
+          "Privacy-preserving collective agent creation (k-anonymity k\u22655)",
+          "Multi-layer anonymization (4 layers: org, journey, pattern, metrics)",
+          "Temporary agent lifecycle management (7-day expiration)",
+          "Aggregate statistical framing without source attribution",
+          "Conversational chat interface with source protection",
+          "Re-identification risk scoring and validation",
+          "Success-driven case selection (\u226580% success rate)",
+          "Case library integration for solver identification"
+        ],
+        "features": [
+          {
+            "name": "Stuck Detection",
+            "description": "Multi-signal detection of organizations requiring assistance",
+            "endpoints": 3,
+            "signals": [
+              "Days no progress (7+ days) = +3 points",
+              "Validation failures (5+) = +2 points",
+              "Low AI confidence (<0.6) = +2 points",
+              "Repeated questions (3+) = +1 point",
+              "Document review cycles (5+) = +1 point",
+              "Frustration score (>0.7) = +2 points"
+            ],
+            "scoring": [
+              "Score 0-3: On track",
+              "Score 4-6: Stuck, help recommended",
+              "Score 7+: Seriously stuck, immediate intervention"
+            ]
+          },
+          {
+            "name": "Collective Agent Creation",
+            "description": "Synthesize anonymous collective wisdom agents",
+            "endpoints": 5,
+            "workflow": [
+              "Query case library (min 5 cases, \u226580% success)",
+              "Apply 4-layer anonymization",
+              "Calculate re-identification risk (must be \u22640.3)",
+              "Configure LLM agent with collective knowledge",
+              "Activate with 7-day auto-expiration"
+            ]
+          },
+          {
+            "name": "Privacy System",
+            "description": "Multi-layer privacy protection",
+            "endpoints": 3,
+            "layers": [
+              "Layer 1: Organization anonymization (names, locations, dept terms)",
+              "Layer 2: Journey anonymization (dates, durations, tool names)",
+              "Layer 3: Pattern anonymization (person names, products, org terms)",
+              "Layer 4: Metric anonymization (rounding, ranges, relative comparisons)"
+            ]
+          },
+          {
+            "name": "Chat Interface",
+            "description": "Conversational interface with collective agents",
+            "endpoints": 2,
+            "features": [
+              "Statistical framing (e.g., '5 out of 7 organizations...')",
+              "Source attribution prevention",
+              "Session management (Redis-backed)",
+              "Conversation audit logging"
+            ]
+          }
+        ],
+        "kpis": [
+          {
+            "name": "agents_created_total",
+            "type": "counter",
+            "description": "Total collective agents created",
+            "target": "> 50/month",
+            "prometheus_metric": "collective_agents_created_total"
+          },
+          {
+            "name": "agents_active",
+            "type": "gauge",
+            "description": "Currently active agents",
+            "target": "10-50 concurrent",
+            "prometheus_metric": "collective_agents_active"
+          },
+          {
+            "name": "stuck_detections_total",
+            "type": "counter",
+            "description": "Stuck organizations detected",
+            "target": "> 30/month",
+            "prometheus_metric": "collective_stuck_detections_total"
+          },
+          {
+            "name": "chat_messages_total",
+            "type": "counter",
+            "description": "Total chat messages processed",
+            "target": "> 500/month",
+            "prometheus_metric": "collective_chat_messages_total"
+          },
+          {
+            "name": "privacy_violations_total",
+            "type": "counter",
+            "description": "Privacy violations detected (should be 0)",
+            "target": "0",
+            "prometheus_metric": "collective_privacy_violations_total"
+          },
+          {
+            "name": "stuck_detection_latency",
+            "type": "histogram",
+            "description": "Stuck detection response time",
+            "target": "< 100ms (P95)",
+            "prometheus_metric": "collective_stuck_detection_seconds"
+          },
+          {
+            "name": "agent_creation_time",
+            "type": "histogram",
+            "description": "Time to create collective agent",
+            "target": "< 5s",
+            "prometheus_metric": "collective_agent_creation_seconds"
+          },
+          {
+            "name": "chat_response_time",
+            "type": "histogram",
+            "description": "Chat response latency (includes LLM)",
+            "target": "< 2s",
+            "prometheus_metric": "collective_chat_response_seconds"
+          },
+          {
+            "name": "risk_score_p95",
+            "type": "gauge",
+            "description": "95th percentile re-identification risk score",
+            "target": "< 0.3 (safe threshold)",
+            "prometheus_metric": "collective_risk_score_p95"
+          },
+          {
+            "name": "k_anonymity_min",
+            "type": "gauge",
+            "description": "Minimum k-anonymity across all agents",
+            "target": ">= 5",
+            "prometheus_metric": "collective_k_anonymity_min"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "redis>=5.0.0",
+            "httpx>=0.25.0",
+            "anthropic>=0.8.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Case library access and agent storage",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "6+",
+              "purpose": "Agent session management",
+              "required": true
+            },
+            {
+              "name": "anthropic-api",
+              "version": "Claude 3.5+",
+              "purpose": "Collective agent conversation LLM",
+              "required": true
+            },
+            {
+              "name": "case_library",
+              "purpose": "Historical case repository for solver identification",
+              "required": true
+            }
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "organization.stuck.detected",
+                "source": "monitoring",
+                "action": "Validate stuck status and offer collective help"
+              },
+              {
+                "event": "journey.milestone.completed",
+                "source": "workflow_intelligence",
+                "action": "Update progress tracking for stuck detection"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "collective.agent.created",
+                "target": "orchestrator,notification_service",
+                "data": "agent_id, problem_type, source_count, k_anonymity"
+              },
+              {
+                "event": "collective.help.accepted",
+                "target": "governance_service,analytics",
+                "data": "org_id, agent_id, problem_type"
+              },
+              {
+                "event": "privacy.violation.detected",
+                "target": "security,compliance_service",
+                "data": "violation_type, risk_score, agent_id"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/v1/stuck-detection/check",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "workflow_intelligence"
+                ],
+                "description": "Check if organization is stuck"
+              },
+              {
+                "endpoint": "/api/v1/collective-agents/create",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "orchestrator",
+                  "admin_panel"
+                ],
+                "description": "Create collective agent from case library"
+              },
+              {
+                "endpoint": "/api/v1/collective-agents/{id}/chat",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "user_interface"
+                ],
+                "description": "Chat with collective agent"
+              }
+            ],
+            "consumes": [
+              {
+                "service": "case_library",
+                "endpoint": "/api/cases/search",
+                "purpose": "Find solver organizations for agent creation"
+              },
+              {
+                "service": "ai-foundation",
+                "endpoint": "/api/llm/chat",
+                "purpose": "LLM routing for agent conversations"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Port conflict with event_intelligence (both using 8032)",
+            "severity": "high",
+            "workaround": "Changed collective to port 8034",
+            "tracking": "COLL-001"
+          },
+          {
+            "issue": "Agent creation fails if <5 organizations with similar problem",
+            "severity": "medium",
+            "workaround": "Expand search criteria or wait for more case submissions",
+            "tracking": "Expected behavior (k-anonymity requirement)"
+          },
+          {
+            "issue": "High privacy risk score (>0.3) blocks agent creation",
+            "severity": "low",
+            "workaround": "Increase anonymization level or require more source orgs",
+            "tracking": "Expected behavior (privacy protection)"
+          }
+        ],
+        "limitations": [
+          "Minimum 5 organizations required (k-anonymity guarantee)",
+          "Agent lifespan limited to 7 days (configurable)",
+          "Source organizations must have \u226580% success rate",
+          "Re-identification risk must be \u22640.3",
+          "Depends on case library size and quality",
+          "LLM API rate limits apply (Anthropic)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "collective-intelligence:latest",
+            "ports": [
+              "8034:8034"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm_platform"
+              },
+              {
+                "name": "REDIS_URL",
+                "example": "redis://localhost:6379"
+              },
+              {
+                "name": "ANTHROPIC_API_KEY",
+                "example": "sk-ant-..."
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "example": "http://localhost:8001"
+              }
+            ],
+            "optional": [
+              {
+                "name": "MIN_ORGS_FOR_AGENT",
+                "description": "k-anonymity threshold",
+                "default": "5"
+              },
+              {
+                "name": "MAX_RISK_SCORE",
+                "description": "Re-identification risk threshold",
+                "default": "0.3"
+              },
+              {
+                "name": "AGENT_EXPIRY_DAYS",
+                "description": "Agent lifespan in days",
+                "default": "7"
+              },
+              {
+                "name": "SUCCESS_RATE_THRESHOLD",
+                "description": "Minimum success rate for source cases",
+                "default": "0.8"
+              }
+            ]
+          },
+          "startup_command": "python -m collective.main",
+          "requirements": {
+            "cpu": "1.0 cores",
+            "memory": "2GB (includes LLM caching)",
+            "disk": "5GB (agent sessions + audit logs)"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8034/docs",
+          "technical_spec": "./docs/TECHNICAL_SPECIFICATION.md",
+          "architecture": "./docs/ARCHITECTURE.md",
+          "privacy_guide": "./docs/PRIVACY.md"
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "slack_channel": "#intelligent-core",
+          "privacy_officer": "Data Protection Team"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "k-anonymity",
+              "description": "Minimum k=5 for all collective agents",
+              "status": "compliant"
+            },
+            {
+              "name": "GDPR",
+              "description": "No PII in agent data, right to erasure supported",
+              "status": "compliant"
+            },
+            {
+              "name": "ISO 22301:2019",
+              "description": "Clause 7.4 (Knowledge), Clause 10.2 (Improvement)",
+              "status": "compliant"
+            },
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "description": "Software documentation standards",
+              "status": "compliant"
+            }
+          ],
+          "privacy_features": [
+            "4-layer anonymization pipeline",
+            "Re-identification risk scoring",
+            "Source attribution prevention",
+            "Audit trail for privacy compliance",
+            "Data minimization principles",
+            "Temporary agent lifecycle (7 days)"
+          ]
+        },
+        "use_cases": [
+          {
+            "scenario": "BIA Dependency Mapping Struggle",
+            "description": "Organization stuck for 14 days on supply chain mapping",
+            "detection": "Score = 6 (days:3, failures:2, confidence:2)",
+            "action": "Create collective agent from 7 healthcare organizations",
+            "result": "User learns phased approach, completes in 3 days",
+            "privacy": "Source organizations never revealed"
+          },
+          {
+            "scenario": "Executive Engagement Challenge",
+            "description": "Organization struggling to secure executive sponsorship",
+            "detection": "Repeated questions on same topic",
+            "action": "Agent synthesizes 8 successful engagement patterns",
+            "result": "Statistical guidance ('5 out of 8 used business impact demos')",
+            "privacy": "No individual organization's approach identified"
+          },
+          {
+            "scenario": "Progress Benchmarking",
+            "description": "User asks 'Is my BIA timeline normal?'",
+            "response": "Collective agent shows anonymized aggregate statistics",
+            "data": "12 similar organizations, median 42 days, your 38 days",
+            "privacy": "Minimum 12 orgs (>>5), aggregate stats only"
+          }
+        ],
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/collective/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "ai_workflow_optimizer",
+        "display_name": "AI Workflow Optimizer",
+        "version": "2.0.0",
+        "description": "ML-powered workflow optimization service that analyzes business process performance, identifies bottlenecks, predicts execution times, detects anomalies, and recommends optimization strategies using machine learning algorithms.",
+        "type": "intelligent-core/workflow-optimization",
+        "business_process": "ML-Powered Workflow Performance Optimization",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8038
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8038",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/v1"
+        },
+        "capabilities": [
+          "ML-based workflow performance prediction (Random Forest)",
+          "Bottleneck detection and resource optimization",
+          "Anomaly detection using Isolation Forest",
+          "Workflow clustering and pattern recognition (K-Means)",
+          "Execution time forecasting with confidence intervals",
+          "Automated optimization strategy recommendation",
+          "Model training and auto-tuning",
+          "Performance metrics tracking and analysis",
+          "Historical workflow data analysis"
+        ],
+        "features": [
+          {
+            "name": "Performance Prediction",
+            "description": "ML-based workflow execution time prediction",
+            "endpoints": 3,
+            "algorithms": [
+              "Random Forest Regressor for time prediction",
+              "Feature importance analysis",
+              "Confidence interval calculation"
+            ],
+            "metrics": [
+              "Mean Absolute Error (MAE)",
+              "Root Mean Squared Error (RMSE)",
+              "R\u00b2 score"
+            ]
+          },
+          {
+            "name": "Bottleneck Detection",
+            "description": "Identify and analyze workflow bottlenecks",
+            "endpoints": 2,
+            "features": [
+              "Step-level performance analysis",
+              "Resource utilization tracking",
+              "Critical path identification",
+              "Optimization recommendations"
+            ]
+          },
+          {
+            "name": "Anomaly Detection",
+            "description": "Detect unusual workflow behavior patterns",
+            "endpoints": 2,
+            "algorithm": "Isolation Forest",
+            "features": [
+              "Real-time anomaly scoring",
+              "Historical pattern comparison",
+              "Alert generation for anomalies"
+            ]
+          },
+          {
+            "name": "Workflow Clustering",
+            "description": "Group similar workflows for pattern analysis",
+            "endpoints": 2,
+            "algorithm": "K-Means clustering",
+            "features": [
+              "Automatic cluster count optimization",
+              "Workflow similarity scoring",
+              "Pattern-based recommendations"
+            ]
+          },
+          {
+            "name": "Optimization Strategies",
+            "description": "Generate ML-driven optimization recommendations",
+            "endpoints": 3,
+            "strategies": [
+              "Resource reallocation",
+              "Step parallelization",
+              "Caching opportunities",
+              "Timeout adjustments"
+            ]
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total optimization requests",
+            "target": "> 200/day",
+            "prometheus_metric": "workflow_optimizer_requests_total"
+          },
+          {
+            "name": "prediction_accuracy",
+            "type": "gauge",
+            "description": "ML prediction accuracy (R\u00b2 score)",
+            "target": "> 0.85",
+            "prometheus_metric": "workflow_optimizer_prediction_r2"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile response time",
+            "target": "< 500ms",
+            "prometheus_metric": "workflow_optimizer_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed optimization requests",
+            "target": "< 2%",
+            "prometheus_metric": "workflow_optimizer_error_rate"
+          },
+          {
+            "name": "model_mae",
+            "type": "gauge",
+            "description": "Mean Absolute Error of prediction model",
+            "target": "< 10% of average execution time",
+            "prometheus_metric": "workflow_optimizer_model_mae"
+          },
+          {
+            "name": "bottlenecks_detected",
+            "type": "counter",
+            "description": "Total bottlenecks detected",
+            "target": "Track trends",
+            "prometheus_metric": "workflow_optimizer_bottlenecks_total"
+          },
+          {
+            "name": "anomalies_detected",
+            "type": "counter",
+            "description": "Workflow anomalies detected",
+            "target": "< 5% of total workflows",
+            "prometheus_metric": "workflow_optimizer_anomalies_total"
+          },
+          {
+            "name": "optimization_success_rate",
+            "type": "gauge",
+            "description": "Percentage of successful optimizations applied",
+            "target": "> 75%",
+            "prometheus_metric": "workflow_optimizer_success_rate"
+          },
+          {
+            "name": "model_training_time",
+            "type": "histogram",
+            "description": "Time to train ML models",
+            "target": "< 30s",
+            "prometheus_metric": "workflow_optimizer_training_seconds"
+          },
+          {
+            "name": "active_models",
+            "type": "gauge",
+            "description": "Number of active ML models",
+            "target": "3-5 models",
+            "prometheus_metric": "workflow_optimizer_active_models"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy>=2.0.0",
+            "pydantic>=2.4.0",
+            "scikit-learn>=1.3.0",
+            "pandas>=2.0.0",
+            "numpy>=1.24.0",
+            "joblib>=1.3.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Workflow performance data storage",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "purpose": "Model caching and session management",
+              "required": false
+            }
+          ],
+          "ml_libraries": [
+            "RandomForestRegressor (sklearn) - Performance prediction",
+            "IsolationForest (sklearn) - Anomaly detection",
+            "KMeans (sklearn) - Workflow clustering",
+            "StandardScaler (sklearn) - Feature normalization"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "workflow.instance.completed",
+                "source": "workflow_engine",
+                "action": "Collect performance data for ML training"
+              },
+              {
+                "event": "workflow.instance.failed",
+                "source": "workflow_engine",
+                "action": "Analyze failure patterns for optimization"
+              },
+              {
+                "event": "workflow.bottleneck.detected",
+                "source": "monitoring",
+                "action": "Generate optimization recommendations"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "optimization.recommendation.generated",
+                "target": "workflow_engine,admin_panel",
+                "data": "workflow_id, optimization_type, expected_improvement"
+              },
+              {
+                "event": "anomaly.detected",
+                "target": "monitoring,response_service",
+                "data": "workflow_id, anomaly_score, detection_time"
+              },
+              {
+                "event": "model.retrained",
+                "target": "orchestrator,analytics",
+                "data": "model_type, accuracy, training_time"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/v1/predict/execution-time",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "workflow_engine",
+                  "admin_panel"
+                ],
+                "description": "Predict workflow execution time"
+              },
+              {
+                "endpoint": "/api/v1/optimize/bottlenecks",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "workflow_engine",
+                  "orchestrator"
+                ],
+                "description": "Detect and optimize bottlenecks"
+              },
+              {
+                "endpoint": "/api/v1/detect/anomalies",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "monitoring",
+                  "response_service"
+                ],
+                "description": "Detect workflow anomalies"
+              },
+              {
+                "endpoint": "/api/v1/cluster/workflows",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "analytics",
+                  "admin_panel"
+                ],
+                "description": "Get workflow clustering analysis"
+              },
+              {
+                "endpoint": "/api/v1/models/train",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "orchestrator",
+                  "admin_panel"
+                ],
+                "description": "Trigger model retraining"
+              }
+            ],
+            "consumes": [
+              {
+                "service": "workflow_engine",
+                "endpoint": "/api/workflow/instances/{id}/metrics",
+                "purpose": "Fetch workflow performance metrics"
+              },
+              {
+                "service": "platform_client",
+                "endpoint": "/api/workflows/history",
+                "purpose": "Access historical workflow data for training"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Model accuracy degrades with <100 training samples",
+            "severity": "medium",
+            "workaround": "Use default models until sufficient data collected",
+            "tracking": "OPT-001"
+          },
+          {
+            "issue": "Clustering requires minimum 10 workflows per cluster",
+            "severity": "low",
+            "workaround": "Reduce cluster count or wait for more data",
+            "tracking": "OPT-002"
+          }
+        ],
+        "limitations": [
+          "Requires minimum 100 workflow instances for accurate prediction",
+          "Model retraining can take 30s for large datasets",
+          "Anomaly detection requires 50+ baseline workflows",
+          "Clustering limited to 10 clusters maximum",
+          "Feature engineering manual (not auto-ML yet)",
+          "No deep learning models (only classical ML)"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "ai-workflow-optimizer:latest",
+            "ports": [
+              "8038:8038"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "example": "postgresql://postgres:postgres@localhost:5432/bcm_ai_optimizer"
+              }
+            ],
+            "optional": [
+              {
+                "name": "REDIS_URL",
+                "description": "Redis for model caching",
+                "default": "redis://localhost:6379"
+              },
+              {
+                "name": "MIN_TRAINING_SAMPLES",
+                "description": "Minimum samples for model training",
+                "default": "100"
+              },
+              {
+                "name": "MODEL_RETRAIN_INTERVAL",
+                "description": "Hours between automatic model retraining",
+                "default": "24"
+              },
+              {
+                "name": "ANOMALY_THRESHOLD",
+                "description": "Anomaly score threshold (0-1)",
+                "default": "0.7"
+              }
+            ]
+          },
+          "startup_command": "python main.py",
+          "requirements": {
+            "cpu": "2.0 cores (ML training intensive)",
+            "memory": "4GB (models + data processing)",
+            "disk": "10GB (training data + models)"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8038/docs"
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "ML Platform Engineer",
+          "slack_channel": "#intelligent-core"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "description": "Software documentation standards",
+              "status": "compliant"
+            },
+            {
+              "name": "ISO/IEC/IEEE 42010:2011",
+              "description": "Architecture description",
+              "status": "compliant"
+            },
+            {
+              "name": "ISO 22301:2019",
+              "description": "BCM workflow optimization (where applicable)",
+              "status": "compliant"
+            }
+          ]
+        },
+        "ml_models": [
+          {
+            "name": "Performance Predictor",
+            "algorithm": "Random Forest Regressor",
+            "features": [
+              "step_count",
+              "resource_usage",
+              "data_size",
+              "complexity_score"
+            ],
+            "target": "execution_time_seconds",
+            "accuracy": "> 85% (R\u00b2)",
+            "retraining": "Daily (automatic)"
+          },
+          {
+            "name": "Anomaly Detector",
+            "algorithm": "Isolation Forest",
+            "features": [
+              "execution_time",
+              "step_durations",
+              "resource_consumption",
+              "failure_rate"
+            ],
+            "threshold": "0.7 (anomaly score)",
+            "retraining": "Weekly (automatic)"
+          },
+          {
+            "name": "Workflow Clusterer",
+            "algorithm": "K-Means",
+            "features": [
+              "workflow_pattern",
+              "complexity",
+              "duration",
+              "resource_profile"
+            ],
+            "clusters": "3-10 (auto-optimized)",
+            "retraining": "On-demand"
+          }
+        ],
+        "code_metrics": {
+          "total_lines_of_code": 1701,
+          "python_files": 2,
+          "classes": 10,
+          "functions": 2,
+          "api_endpoints": 12,
+          "dependencies": 28
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/ai_workflow_optimizer/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "event_intelligence",
+        "display_name": "Event Intelligence & Self-Healing",
+        "version": "2.0.0",
+        "description": "Intelligent event analysis, pattern detection, domain detection, error analysis, and automated code healing for platform stability and resilience.",
+        "type": "intelligent-core/event-intelligence",
+        "business_process": "Event Analysis & Automated Healing",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8032
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8032",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/events"
+        },
+        "capabilities": [
+          "Real-time event stream analysis",
+          "Pattern detection and anomaly identification",
+          "Domain detection (auto-classify events by business domain)",
+          "Error analysis and root cause identification",
+          "Automated code healing and self-repair",
+          "Event correlation and clustering",
+          "Predictive error forecasting",
+          "Event-driven alerts and notifications",
+          "Historical event analytics"
+        ],
+        "features": [
+          {
+            "name": "Event Analysis",
+            "description": "Real-time analysis of platform events",
+            "endpoints": 5
+          },
+          {
+            "name": "Pattern Detection",
+            "description": "Identify patterns and anomalies in event streams",
+            "endpoints": 3
+          },
+          {
+            "name": "Domain Detection",
+            "description": "Auto-classify events by business domain",
+            "endpoints": 3
+          },
+          {
+            "name": "Error Analysis",
+            "description": "Root cause analysis for errors and failures",
+            "endpoints": 3
+          },
+          {
+            "name": "Self-Healing",
+            "description": "Automated code healing and repair mechanisms",
+            "endpoints": 3
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of events processed",
+            "target": "> 5000/day",
+            "prometheus_metric": "event_intelligence_requests_total"
+          },
+          {
+            "name": "response_time_p95",
+            "type": "histogram",
+            "description": "95th percentile event processing time",
+            "target": "< 200ms",
+            "prometheus_metric": "event_intelligence_response_time_ms"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed event processing",
+            "target": "< 0.5%",
+            "prometheus_metric": "event_intelligence_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.9%",
+            "prometheus_metric": "event_intelligence_availability"
+          },
+          {
+            "name": "pattern_detection_accuracy",
+            "type": "gauge",
+            "description": "Accuracy of pattern detection",
+            "target": "> 85%",
+            "prometheus_metric": "event_intelligence_pattern_accuracy"
+          },
+          {
+            "name": "self_healing_success_rate",
+            "type": "gauge",
+            "description": "Percentage of successfully healed errors",
+            "target": "> 70%",
+            "prometheus_metric": "event_intelligence_healing_success_rate"
+          },
+          {
+            "name": "domain_classification_accuracy",
+            "type": "gauge",
+            "description": "Accuracy of domain detection",
+            "target": "> 90%",
+            "prometheus_metric": "event_intelligence_domain_accuracy"
+          },
+          {
+            "name": "events_processed_total",
+            "type": "counter",
+            "description": "Total events processed",
+            "target": "Track trends",
+            "prometheus_metric": "event_intelligence_events_processed_total"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "redis>=5.0.0",
+            "aio-pika>=9.3.0",
+            "scikit-learn>=1.3.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Event storage and analytics",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "purpose": "Real-time event stream processing",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "purpose": "Event ingestion",
+              "required": true
+            }
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "*",
+                "source": "all_services",
+                "action": "Analyze all platform events"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "pattern.detected",
+                "target": "orchestrator,monitoring",
+                "data": "pattern_type, confidence, affected_services"
+              },
+              {
+                "event": "error.healed",
+                "target": "all_services",
+                "data": "error_type, healing_action, success"
+              },
+              {
+                "event": "anomaly.detected",
+                "target": "orchestrator,response_service",
+                "data": "anomaly_type, severity, context"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/events/analyze",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "orchestrator",
+                  "monitoring"
+                ]
+              },
+              {
+                "endpoint": "/api/events/patterns",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel"
+                ]
+              }
+            ]
+          }
+        },
+        "deployment": {
+          "docker": {
+            "image": "event-intelligence:latest",
+            "ports": [
+              "8032:8032"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "example": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "example": "amqp://guest:guest@localhost:5672/"
+              }
+            ]
+          },
+          "startup_command": "python -m event_intelligence.main",
+          "requirements": {
+            "cpu": "1.0 cores",
+            "memory": "1GB",
+            "disk": "5GB"
+          }
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "slack_channel": "#intelligent-core"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/event_intelligence/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "ai-orchestration",
+        "display_name": "AI Orchestrator - The Brain",
+        "version": "3.0.0",
+        "description": "Autonomous AI decision-making system with 4-layer memory, safety-first architecture, and self-evolution capabilities. Aggregates context, assesses priority, selects strategies, validates safety, and executes or delegates decisions.",
+        "type": "intelligent-core/orchestration",
+        "business_process": "AI Decision-Making & Autonomous Operations",
+        "status": "active",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8002
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8002",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/v1"
+        },
+        "capabilities": [
+          "Autonomous decision-making with multi-factor priority scoring",
+          "4-layer memory system (Working, Short-term, Long-term, Procedural)",
+          "Context aggregation from workflows, events, databases, external sources",
+          "Strategy selection from historical cases and learned patterns",
+          "Safety-first architecture (Constitution, Loop Detection, Hallucination Check)",
+          "Self-evolution on 3 levels (Data, Model, Code)",
+          "Crisis coordination and emergency response",
+          "Delegation to specialist agents",
+          "Performance optimization and auto-tuning",
+          "Constitutional AI governance"
+        ],
+        "features": [
+          {
+            "name": "Decision Center",
+            "description": "Context aggregation, priority assessment, strategy selection, delegation",
+            "components": [
+              "ContextAggregator",
+              "PriorityEngine",
+              "StrategySelector",
+              "DelegationManager"
+            ]
+          },
+          {
+            "name": "4-Layer Memory",
+            "description": "Working (Redis 1h), Short-term (PostgreSQL 30d), Long-term (Case Library), Procedural (ML Models)",
+            "components": [
+              "WorkingMemory",
+              "ShortTermMemory",
+              "LongTermMemory",
+              "ProceduralMemory"
+            ]
+          },
+          {
+            "name": "Safety Monitor",
+            "description": "Constitutional rules, loop detection, hallucination detection, control monitoring",
+            "components": [
+              "ConstitutionEnforcer",
+              "LoopDetector",
+              "HallucinationDetector",
+              "ControlMonitor"
+            ]
+          },
+          {
+            "name": "Evolution Engine",
+            "description": "Daily data evolution, weekly model evolution, monthly code evolution",
+            "components": [
+              "DataEvolution",
+              "ModelEvolution",
+              "CodeEvolution"
+            ]
+          },
+          {
+            "name": "Crisis Coordinator",
+            "description": "Emergency response coordination and escalation",
+            "components": [
+              "CrisisDetector",
+              "ResourceAllocator",
+              "CommunicationHub"
+            ]
+          },
+          {
+            "name": "Performance Optimizer",
+            "description": "Auto-tuning and performance evaluation",
+            "components": [
+              "PolicyEvaluator",
+              "PerformanceMonitor"
+            ]
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total number of decision requests",
+            "target": "> 2000/day",
+            "prometheus_metric": "orchestrator_requests_total"
+          },
+          {
+            "name": "decision_latency_p95",
+            "type": "histogram",
+            "description": "95th percentile decision latency",
+            "target": "< 100ms",
+            "prometheus_metric": "orchestrator_decision_latency_seconds"
+          },
+          {
+            "name": "error_rate",
+            "type": "gauge",
+            "description": "Percentage of failed decisions",
+            "target": "< 1%",
+            "prometheus_metric": "orchestrator_error_rate"
+          },
+          {
+            "name": "availability",
+            "type": "gauge",
+            "description": "Service uptime percentage",
+            "target": "> 99.9%",
+            "prometheus_metric": "orchestrator_availability"
+          },
+          {
+            "name": "auto_resolve_success_rate",
+            "type": "gauge",
+            "description": "Percentage of successfully auto-resolved issues",
+            "target": "> 85%",
+            "prometheus_metric": "orchestrator_auto_resolve_success_rate"
+          },
+          {
+            "name": "escalation_rate",
+            "type": "gauge",
+            "description": "Percentage of decisions escalated to humans",
+            "target": "< 30%",
+            "prometheus_metric": "orchestrator_escalation_rate"
+          },
+          {
+            "name": "safety_approval_rate",
+            "type": "gauge",
+            "description": "Percentage of decisions passing safety checks",
+            "target": "> 95%",
+            "prometheus_metric": "orchestrator_safety_approval_rate"
+          },
+          {
+            "name": "average_confidence",
+            "type": "gauge",
+            "description": "Average decision confidence score",
+            "target": "> 0.75",
+            "prometheus_metric": "orchestrator_avg_confidence"
+          },
+          {
+            "name": "memory_hit_rate",
+            "type": "gauge",
+            "description": "Percentage of decisions using memory strategies",
+            "target": "> 60%",
+            "prometheus_metric": "orchestrator_memory_hit_rate"
+          },
+          {
+            "name": "circuit_breaker_trips",
+            "type": "counter",
+            "description": "Number of circuit breaker activations",
+            "target": "< 5/hour",
+            "prometheus_metric": "orchestrator_circuit_breaker_trips_total"
+          },
+          {
+            "name": "crisis_detection_count",
+            "type": "counter",
+            "description": "Number of crises detected",
+            "target": "Track trends",
+            "prometheus_metric": "orchestrator_crises_detected_total"
+          },
+          {
+            "name": "pdca_cycles_completed",
+            "type": "counter",
+            "description": "PDCA continuous improvement cycles",
+            "target": "> 10/week",
+            "prometheus_metric": "orchestrator_pdca_cycles_total"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "pydantic-settings>=2.0.0",
+            "redis[hiredis]>=5.0.0",
+            "aio-pika>=9.3.0",
+            "httpx>=0.25.0",
+            "prometheus-client>=0.19.0",
+            "scikit-learn>=1.3.0",
+            "openai>=1.0.0",
+            "anthropic>=0.8.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Short-term memory and decision history",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "port": 6379,
+              "purpose": "Working memory (1-hour TTL)",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "port": 5672,
+              "purpose": "EventBus for real-time events",
+              "required": true
+            },
+            {
+              "name": "vector-db",
+              "purpose": "Long-term memory (case library)",
+              "required": false
+            }
+          ],
+          "infrastructure": [
+            "PostgreSQL database (orchestrator schema)",
+            "Redis (working memory)",
+            "RabbitMQ (EventBus)",
+            "Vector DB (optional, for semantic search)"
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "workflow.stuck",
+                "source": "workflow_engine",
+                "action": "Analyze and resolve workflow blockage"
+              },
+              {
+                "event": "service.degraded",
+                "source": "monitoring",
+                "action": "Assess impact and take corrective action"
+              },
+              {
+                "event": "incident.declared",
+                "source": "response_service",
+                "action": "Activate crisis coordination"
+              },
+              {
+                "event": "compliance.gap.identified",
+                "source": "compliance_service",
+                "action": "Generate remediation strategy"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "decision.made",
+                "target": "all_services",
+                "data": "decision_id, action, rationale, confidence"
+              },
+              {
+                "event": "decision.escalated",
+                "target": "governance_service,admin_panel",
+                "data": "decision_id, escalation_reason, priority"
+              },
+              {
+                "event": "crisis.detected",
+                "target": "response_service,governance_service",
+                "data": "crisis_id, severity, affected_services"
+              },
+              {
+                "event": "strategy.learned",
+                "target": "workflow_intelligence",
+                "data": "strategy_id, success_rate, context"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/v1/decision",
+                "methods": [
+                  "POST"
+                ],
+                "consumers": [
+                  "all_services"
+                ],
+                "description": "Request AI decision for situation"
+              },
+              {
+                "endpoint": "/api/v1/crisis/{id}/status",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "response_service",
+                  "admin_panel"
+                ]
+              },
+              {
+                "endpoint": "/api/v1/stats",
+                "methods": [
+                  "GET"
+                ],
+                "consumers": [
+                  "admin_panel",
+                  "monitoring"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "workflow_engine",
+                "endpoint": "/api/workflow/instances/{id}/status",
+                "purpose": "Get workflow context for decisions"
+              },
+              {
+                "service": "case_library",
+                "endpoint": "/api/cases/search",
+                "purpose": "Search historical cases for strategy selection"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Code evolution requires manual review (by design)",
+            "severity": "n/a",
+            "workaround": "This is a safety feature, not a bug",
+            "tracking": "N/A"
+          },
+          {
+            "issue": "High memory usage with large case libraries (>10k cases)",
+            "severity": "medium",
+            "workaround": "Use pagination and caching for case retrieval",
+            "tracking": "ORCH-001"
+          },
+          {
+            "issue": "Hallucination detector has 5% false positive rate",
+            "severity": "low",
+            "workaround": "Tune detection thresholds per use case",
+            "tracking": "ORCH-002"
+          }
+        ],
+        "limitations": [
+          "Maximum 100 concurrent decision requests",
+          "Working memory TTL fixed at 1 hour (configurable in future)",
+          "Constitution rules immutable (by design)",
+          "Code evolution requires human approval (safety requirement)",
+          "ML model retraining limited to weekly cycles"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "ai-orchestration:latest",
+            "dockerfile": "./Dockerfile",
+            "ports": [
+              "8002:8002"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "description": "PostgreSQL connection string",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/orchestrator"
+              },
+              {
+                "name": "REDIS_URL",
+                "description": "Redis connection string",
+                "example": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "description": "RabbitMQ connection URL",
+                "example": "amqp://guest:guest@localhost:5672/"
+              },
+              {
+                "name": "OPENAI_API_KEY",
+                "description": "OpenAI API key for AI capabilities",
+                "example": "sk-..."
+              }
+            ],
+            "optional": [
+              {
+                "name": "ANTHROPIC_API_KEY",
+                "description": "Anthropic Claude API key",
+                "example": "sk-ant-..."
+              },
+              {
+                "name": "ENABLE_SAFETY",
+                "description": "Enable safety monitoring",
+                "default": "true"
+              },
+              {
+                "name": "ENABLE_EVOLUTION",
+                "description": "Enable self-evolution",
+                "default": "true"
+              },
+              {
+                "name": "CONFIDENCE_THRESHOLD",
+                "description": "Minimum confidence for auto-execution",
+                "default": "0.7"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "description": "Logging level",
+                "default": "INFO"
+              }
+            ]
+          },
+          "health_checks": {
+            "liveness": "/health",
+            "readiness": "/health",
+            "startup": "/health"
+          },
+          "startup_command": "python -m orchestrator.main",
+          "requirements": {
+            "cpu": "2.0 cores (AI processing intensive)",
+            "memory": "4GB (memory system + ML models)",
+            "disk": "10GB (case library + models)"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md",
+          "api_docs": "http://localhost:8002/docs",
+          "examples": "./examples/",
+          "external_links": [
+            {
+              "name": "Constitutional AI Paper",
+              "url": "https://arxiv.org/abs/2212.08073"
+            },
+            {
+              "name": "OpenAI Function Calling",
+              "url": "https://platform.openai.com/docs/guides/function-calling"
+            }
+          ]
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "product_owner": "AI Product Owner",
+          "on_call": "ai-orchestration-oncall@company.com",
+          "slack_channel": "#intelligent-core",
+          "pagerduty": "ai-orchestration-oncall"
+        },
+        "support": {
+          "incidents": "Create P1 ticket in JIRA Orchestration project (critical service)",
+          "questions": "#intelligent-core Slack channel",
+          "documentation": "See README.md and /docs endpoint"
+        },
+        "safety_constitution": {
+          "immutable_rules": [
+            "Never modify user data without explicit permission",
+            "Never delete audit trail",
+            "Never modify production code without human review",
+            "Always escalate when confidence < 70%",
+            "Never bypass governance rules",
+            "Never expose sensitive data",
+            "Always maintain data integrity"
+          ],
+          "safety_layers": [
+            {
+              "name": "Constitution Enforcer",
+              "description": "Validates decisions against immutable rules"
+            },
+            {
+              "name": "Loop Detector",
+              "description": "Prevents infinite loops and oscillations"
+            },
+            {
+              "name": "Hallucination Detector",
+              "description": "Identifies AI-generated fabrications"
+            },
+            {
+              "name": "Control Monitor",
+              "description": "Prevents runaway AI and scope creep"
+            }
+          ]
+        },
+        "evolution_system": {
+          "data_evolution": {
+            "frequency": "Daily",
+            "automatic": true,
+            "actions": [
+              "Consolidate new cases",
+              "Update case library",
+              "Extract patterns",
+              "Clean old data"
+            ]
+          },
+          "model_evolution": {
+            "frequency": "Weekly",
+            "automatic": true,
+            "actions": [
+              "Retrain ML models",
+              "A/B test new versions",
+              "Auto-rollback if performance degrades",
+              "Track performance metrics"
+            ]
+          },
+          "code_evolution": {
+            "frequency": "Monthly",
+            "automatic": false,
+            "human_review_required": true,
+            "actions": [
+              "Analyze code performance",
+              "Generate improvement suggestions",
+              "Create pull requests",
+              "Require human approval before deployment"
+            ]
+          }
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "Constitutional AI Principles",
+              "description": "Alignment with human values and safety",
+              "status": "compliant"
+            },
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "description": "Software documentation standards",
+              "status": "compliant"
+            }
+          ]
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/orchestration/ai-orchestration/SERVICE_INFO.yaml"
+      },
+      {
+        "name": "coordination-center",
+        "display_name": "Multi-Agent Coordination Center",
+        "version": "1.0.0-planned",
+        "description": "Multi-agent coordination and collaboration hub. Manages agent teams, task allocation, inter-agent communication, and collaborative problem-solving. (PLANNED - Not yet implemented)",
+        "type": "intelligent-core/coordination",
+        "business_process": "Multi-Agent Coordination & Collaboration",
+        "status": "planned",
+        "runtime": {
+          "language": "python",
+          "framework": "FastAPI",
+          "version": "3.11+",
+          "port": 8033
+        },
+        "endpoints": {
+          "base_url": "http://localhost:8033",
+          "health": "/health",
+          "metrics": "/metrics",
+          "api_docs": "/docs",
+          "api_base": "/api/coordination"
+        },
+        "capabilities": [
+          "Multi-agent team formation and management",
+          "Dynamic task allocation and scheduling",
+          "Inter-agent communication protocols",
+          "Collaborative problem-solving strategies",
+          "Consensus building and conflict resolution",
+          "Agent capability discovery and matching",
+          "Workload balancing across agents",
+          "Coordination pattern learning",
+          "Agent performance tracking"
+        ],
+        "features": [
+          {
+            "name": "Team Formation",
+            "description": "Dynamic agent team creation based on task requirements",
+            "endpoints": 4
+          },
+          {
+            "name": "Task Allocation",
+            "description": "Intelligent task distribution among agents",
+            "endpoints": 5
+          },
+          {
+            "name": "Communication Hub",
+            "description": "Inter-agent messaging and information sharing",
+            "endpoints": 6
+          },
+          {
+            "name": "Consensus Engine",
+            "description": "Multi-agent decision consensus building",
+            "endpoints": 3
+          },
+          {
+            "name": "Performance Monitor",
+            "description": "Track agent and team performance",
+            "endpoints": 4
+          }
+        ],
+        "kpis": [
+          {
+            "name": "request_count",
+            "type": "counter",
+            "description": "Total coordination requests",
+            "target": "TBD",
+            "prometheus_metric": "coordination_requests_total"
+          },
+          {
+            "name": "agent_utilization",
+            "type": "gauge",
+            "description": "Average agent utilization percentage",
+            "target": "> 70%",
+            "prometheus_metric": "coordination_agent_utilization"
+          },
+          {
+            "name": "task_completion_rate",
+            "type": "gauge",
+            "description": "Percentage of tasks completed successfully",
+            "target": "> 90%",
+            "prometheus_metric": "coordination_task_completion_rate"
+          },
+          {
+            "name": "consensus_time",
+            "type": "histogram",
+            "description": "Time to reach multi-agent consensus",
+            "target": "< 30s",
+            "prometheus_metric": "coordination_consensus_seconds"
+          },
+          {
+            "name": "team_effectiveness",
+            "type": "gauge",
+            "description": "Overall team effectiveness score",
+            "target": "> 0.8",
+            "prometheus_metric": "coordination_team_effectiveness"
+          }
+        ],
+        "dependencies": {
+          "packages": [
+            "fastapi>=0.104.0",
+            "uvicorn[standard]>=0.24.0",
+            "sqlalchemy[asyncio]>=2.0.0",
+            "asyncpg>=0.29.0",
+            "pydantic>=2.4.0",
+            "redis>=5.0.0",
+            "aio-pika>=9.3.0",
+            "prometheus-client>=0.19.0"
+          ],
+          "services": [
+            {
+              "name": "postgresql",
+              "version": "14+",
+              "purpose": "Agent and task state storage",
+              "required": true
+            },
+            {
+              "name": "redis",
+              "version": "7+",
+              "purpose": "Real-time agent coordination",
+              "required": true
+            },
+            {
+              "name": "rabbitmq",
+              "version": "3.12+",
+              "purpose": "Inter-agent messaging",
+              "required": true
+            }
+          ]
+        },
+        "integrations": {
+          "eventbus": {
+            "subscribes": [
+              {
+                "event": "task.complex.detected",
+                "source": "orchestrator",
+                "action": "Form agent team for complex task"
+              },
+              {
+                "event": "agent.registered",
+                "source": "agent_registry",
+                "action": "Add agent to coordination pool"
+              }
+            ],
+            "publishes": [
+              {
+                "event": "team.formed",
+                "target": "orchestrator",
+                "data": "team_id, agents, task_allocation"
+              },
+              {
+                "event": "consensus.reached",
+                "target": "orchestrator,governance_service",
+                "data": "decision, participating_agents, confidence"
+              },
+              {
+                "event": "task.delegated",
+                "target": "agent_services",
+                "data": "task_id, assigned_agent, context"
+              }
+            ]
+          },
+          "rest_api": {
+            "provides": [
+              {
+                "endpoint": "/api/coordination/teams",
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "consumers": [
+                  "orchestrator",
+                  "admin_panel"
+                ]
+              },
+              {
+                "endpoint": "/api/coordination/tasks",
+                "methods": [
+                  "GET",
+                  "POST"
+                ],
+                "consumers": [
+                  "orchestrator"
+                ]
+              }
+            ],
+            "consumes": [
+              {
+                "service": "orchestrator",
+                "endpoint": "/api/v1/decision",
+                "purpose": "Request AI assistance for coordination decisions"
+              }
+            ]
+          }
+        },
+        "known_issues": [
+          {
+            "issue": "Service not yet implemented",
+            "severity": "n/a",
+            "workaround": "Use orchestrator for simple task delegation",
+            "tracking": "COORD-000"
+          }
+        ],
+        "limitations": [
+          "Service in planning phase",
+          "Implementation timeline: Q1 2026",
+          "Architecture under design"
+        ],
+        "deployment": {
+          "docker": {
+            "image": "coordination-center:latest",
+            "ports": [
+              "8033:8033"
+            ]
+          },
+          "environment_variables": {
+            "required": [
+              {
+                "name": "DATABASE_URL",
+                "example": "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+              },
+              {
+                "name": "REDIS_URL",
+                "example": "redis://localhost:6379/0"
+              },
+              {
+                "name": "EVENTBUS_URL",
+                "example": "amqp://guest:guest@localhost:5672/"
+              }
+            ]
+          },
+          "startup_command": "python -m coordination.main",
+          "requirements": {
+            "cpu": "2.0 cores (estimated)",
+            "memory": "2GB (estimated)",
+            "disk": "5GB (estimated)"
+          }
+        },
+        "documentation": {
+          "readme": "./README.md (to be created)",
+          "api_docs": "http://localhost:8033/docs (future)",
+          "design_docs": "./resources/"
+        },
+        "ownership": {
+          "team": "Intelligent Core Team",
+          "tech_lead": "AI Platform Architect",
+          "product_owner": "AI Product Owner",
+          "slack_channel": "#intelligent-core",
+          "status": "Planning phase - not yet staffed"
+        },
+        "compliance": {
+          "standards": [
+            {
+              "name": "ISO/IEC/IEEE 26514:2022",
+              "status": "planned"
+            }
+          ]
+        },
+        "_category": "intelligent-core",
+        "_source_file": "intelligent-core/coordination-center/SERVICE_INFO.yaml"
+      }
+    ]
+  },
+  "statistics": {
+    "by_status": {
+      "active": 12,
+      "planned": 1,
+      "deprecated": 0
+    },
+    "by_category": {
+      "platform-services": 6,
+      "intelligent-core": 7
+    },
+    "port_allocation": {
+      "platform_services": "8014, 8023-8027",
+      "intelligent_core": "8002, 8030-8034, 8038"
+    },
+    "total_endpoints": "313+"
+  },
+  "technology_stack": {
+    "languages": [
+      "Python 3.11+"
+    ],
+    "frameworks": [
+      "FastAPI (all services)",
+      "SQLAlchemy (async)",
+      "Pydantic 2.4+"
+    ],
+    "databases": [
+      "PostgreSQL 14+ (primary)",
+      "Redis 7+ (caching, queues)"
+    ],
+    "messaging": [
+      "RabbitMQ 3.12+ (EventBus)"
+    ],
+    "ai_ml": [
+      "OpenAI GPT",
+      "Anthropic Claude",
+      "scikit-learn",
+      "spaCy"
+    ],
+    "monitoring": [
+      "Prometheus (metrics)",
+      "Grafana (dashboards)"
+    ],
+    "standards": [
+      "ISO 22301:2019",
+      "BPMN 2.0",
+      "ISO/IEC/IEEE 26514:2022"
+    ]
+  },
+  "service_discovery": {
+    "url": "http://localhost:8500",
+    "api": "/v2/catalog/services",
+    "health_checks": "/health (all services)",
+    "integration": "Service Discovery v2.0"
+  },
+  "monitoring": {
+    "prometheus": "http://localhost:9090",
+    "grafana": "http://localhost:3000",
+    "metrics_endpoint": "/metrics (all services)"
+  }
+}

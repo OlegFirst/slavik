@@ -1,0 +1,169 @@
+{
+  "id": "template_bia_hospital_cyber_001",
+  "name": "Hospital BIA - Cyber Attack Scenario",
+  "description": "Business Impact Analysis exercise simulating a ransomware attack on hospital IT systems",
+  "category": "cyber_security",
+  "exercise_type": "functional",
+  "difficulty": 4,
+  "duration_minutes": 180,
+  "organization_type": "hospital",
+  "organization_size": "large",
+
+  "parameters": {
+    "configurable_fields": [
+      "incident_severity",
+      "affected_systems",
+      "participant_count",
+      "backup_availability"
+    ],
+    "default_values": {
+      "incident_severity": "critical",
+      "affected_systems": ["patient_records", "medication_management", "lab_systems"],
+      "participant_count": 10,
+      "backup_availability": "partial"
+    },
+    "constraints": {
+      "min_participants": 6,
+      "max_participants": 15,
+      "min_duration": 120,
+      "max_duration": 240
+    }
+  },
+
+  "scenario": {
+    "initial_situation": "Normal hospital operations, all systems running",
+
+    "incidents": [
+      {
+        "id": "inc_001",
+        "type": "ransomware_detected",
+        "timing_minutes": 15,
+        "severity": "critical",
+        "description": "Ransomware detected on file server, spreading to patient record systems",
+        "affected_systems": ["file_server", "patient_records"],
+        "indicators": [
+          "Files being encrypted",
+          "Ransom note displayed",
+          "System performance degradation"
+        ]
+      },
+      {
+        "id": "inc_002",
+        "type": "system_isolation",
+        "timing_minutes": 30,
+        "severity": "high",
+        "description": "IT team isolates infected systems, causing service disruption",
+        "affected_systems": ["patient_records", "medication_management"],
+        "impact": "Manual processes required"
+      },
+      {
+        "id": "inc_003",
+        "type": "backup_assessment",
+        "timing_minutes": 45,
+        "severity": "medium",
+        "description": "Backup systems assessed, some backups compromised",
+        "decision_point": "Decide on recovery strategy"
+      }
+    ],
+
+    "affected_processes": [
+      {
+        "process": "patient_admission",
+        "criticality": "critical",
+        "rto_target": 4,
+        "rpo_target": 1
+      },
+      {
+        "process": "medication_management",
+        "criticality": "critical",
+        "rto_target": 2,
+        "rpo_target": 0
+      },
+      {
+        "process": "lab_results",
+        "criticality": "high",
+        "rto_target": 8,
+        "rpo_target": 4
+      },
+      {
+        "process": "billing",
+        "criticality": "medium",
+        "rto_target": 24,
+        "rpo_target": 8
+      }
+    ],
+
+    "decision_points": [
+      {
+        "timing_minutes": 45,
+        "decision": "Recovery strategy selection",
+        "options": [
+          "Restore from clean backups (4 hours)",
+          "Rebuild systems from scratch (12 hours)",
+          "Negotiate with attackers (risky)"
+        ]
+      },
+      {
+        "timing_minutes": 90,
+        "decision": "Communication strategy",
+        "options": [
+          "Inform all patients immediately",
+          "Selective notification",
+          "Wait for full assessment"
+        ]
+      }
+    ],
+
+    "success_criteria": [
+      "Systems restored within RTO targets",
+      "No data loss beyond RPO",
+      "Effective communication maintained",
+      "Regulatory requirements followed",
+      "Documentation complete"
+    ],
+
+    "key_metrics": [
+      "time_to_detection",
+      "time_to_containment",
+      "time_to_recovery",
+      "data_loss_amount",
+      "communication_effectiveness",
+      "decision_quality"
+    ]
+  },
+
+  "resources": {
+    "required_roles": [
+      "IT Security Manager",
+      "Hospital Administrator",
+      "Clinical Director",
+      "Communications Manager",
+      "Legal Counsel",
+      "IT Operations"
+    ],
+    "required_tools": [
+      "Backup systems",
+      "Incident response plan",
+      "Communication channels",
+      "Alternative systems"
+    ]
+  },
+
+  "learning_objectives": [
+    "Test cyber incident response procedures",
+    "Validate backup and recovery processes",
+    "Assess communication effectiveness",
+    "Identify process dependencies",
+    "Improve incident handling"
+  ],
+
+  "metadata": {
+    "created_by": "builtin",
+    "version": "1.0",
+    "usage_count": 0,
+    "average_rating": null,
+    "tags": ["hospital", "cyber", "ransomware", "bia", "critical_systems"],
+    "iso_22301_clauses": ["8.4", "8.5"],
+    "last_updated": "2025-10-12"
+  }
+}

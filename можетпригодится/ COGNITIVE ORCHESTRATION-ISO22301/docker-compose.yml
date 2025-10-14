@@ -1,0 +1,214 @@
+version: '3.8'
+
+services:
+  # ============== DATA LAYER ==============
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: cognitive-postgres
+    environment:
+      POSTGRES_DB: cognitive_platform
+      POSTGRES_USER: cognitive
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-cognitive123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - cognitive-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cognitive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: cognitive-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - cognitive-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============== META LAYER ==============
+
+  # Event Store for learning
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: cognitive-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - cognitive-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cat/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Time-series for metrics
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: cognitive-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: cognitive
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD:-cognitive123}
+      DOCKER_INFLUXDB_INIT_ORG: cognitive-org
+      DOCKER_INFLUXDB_INIT_BUCKET: metrics
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN:-cognitive-token-123}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    ports:
+      - "8086:8086"
+    networks:
+      - cognitive-net
+
+  # ============== CORE SERVICES ==============
+
+  event-system:
+    build: ./core/event-system
+    container_name: cognitive-event-system
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      REDIS_URL: redis://redis:6379
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      INFLUX_URL: http://influxdb:8086
+      INFLUX_TOKEN: ${INFLUX_TOKEN:-cognitive-token-123}
+    depends_on:
+      - redis
+      - elasticsearch
+      - influxdb
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./core/event-system:/app
+      - /app/node_modules
+    networks:
+      - cognitive-net
+    restart: unless-stopped
+
+  service-registry:
+    build: ./core/service-registry
+    container_name: cognitive-service-registry
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      REDIS_URL: redis://redis:6379
+      EVENT_SYSTEM_URL: http://event-system:3000
+    depends_on:
+      - redis
+      - event-system
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./core/service-registry:/app
+      - /app/node_modules
+    networks:
+      - cognitive-net
+    restart: unless-stopped
+
+  # ============== MONITORING & OBSERVABILITY ==============
+
+  grafana:
+    image: grafana/grafana:10.1.5
+    container_name: cognitive-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+      GF_INSTALL_PLUGINS: redis-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+      - elasticsearch
+    networks:
+      - cognitive-net
+
+  # Distributed tracing for meta-analysis
+  jaeger:
+    image: jaegertracing/all-in-one:1.48
+    container_name: cognitive-jaeger
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: :9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    networks:
+      - cognitive-net
+
+  # ============== AI PREPARATION LAYER ==============
+
+  # Message queue for async AI processing
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: cognitive-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: cognitive
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-cognitive123}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - cognitive-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Vector database for AI embeddings (future)
+  weaviate:
+    image: semitechnologies/weaviate:1.21.3
+    container_name: cognitive-weaviate
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'none'
+      ENABLE_MODULES: ''
+      CLUSTER_HOSTNAME: 'node1'
+    ports:
+      - "8080:8080"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - cognitive-net
+
+networks:
+  cognitive-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  elasticsearch_data:
+  influxdb_data:
+  grafana_data:
+  rabbitmq_data:
+  weaviate_data:

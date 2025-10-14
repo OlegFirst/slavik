@@ -1,0 +1,656 @@
+meta:
+  id: l3-intelligence-system-pattern-recognition
+  name: L3 Intelligence System Test Scenarios
+  level: 3
+  category: intelligence
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - Workflow Intelligence (system)
+  - Process Analytics (system)
+  - Pattern Detection (system)
+  - Event Intelligence (system)
+  source_item: pattern-recognition
+  generated_at: '2025-10-14T08:09:28.804510'
+description: 'Specialized L3 template for Intelligence and Analytics systems testing.
+
+
+  Intelligence systems provide insight and optimization through:
+
+  - Workflow execution analysis and optimization
+
+  - Process bottleneck detection
+
+  - Pattern recognition from historical data
+
+  - Event correlation and causality analysis
+
+  - Predictive insights for resource planning
+
+  - Anomaly detection in business processes
+
+
+  This template generates comprehensive intelligence test scenarios that validate
+
+  analytical capabilities, pattern detection accuracy, and actionable insights generation.
+
+  '
+systems_involved:
+- pattern-recognition
+- EventBus
+- PostgreSQL
+- Qdrant
+- AI Orchestrator
+- Learning System
+test_scenarios:
+- name: Workflow Execution Analysis
+  scenario_id: l3-intel-workflow-analysis
+  description: Analyze workflow executions for optimization opportunities
+  workflow_metrics:
+  - workflow_type: bia_creation
+    executions: 100
+    metrics:
+      avg_duration: 45m
+      p95_duration: 75m
+      p99_duration: 120m
+      success_rate: 0.92
+      retry_rate: 0.15
+    analysis_expected:
+    - bottleneck_detected: true
+      bottleneck_stage: dependency_analysis
+      stage_duration: 30m
+      recommendation: parallelize_dependency_collection
+    - failure_pattern: timeout_in_external_api
+      frequency: 8
+      recommendation: increase_timeout_or_add_fallback
+  - workflow_type: risk_assessment
+    executions: 250
+    metrics:
+      avg_duration: 20m
+      p95_duration: 28m
+      success_rate: 0.98
+    analysis_expected:
+    - performance_rating: excellent
+      optimization_opportunities: minimal
+  step_level_analysis:
+  - workflow: incident_response
+    steps:
+    - step: detection
+      avg_duration: 30s
+      success_rate: 1.0
+      analysis: optimal
+    - step: assessment
+      avg_duration: 5m
+      success_rate: 0.95
+      analysis: acceptable
+    - step: notification
+      avg_duration: 45s
+      success_rate: 0.88
+      analysis: needs_improvement
+      failure_reasons:
+      - reason: email_delivery_failure
+        count: 8
+      - reason: sms_gateway_timeout
+        count: 4
+      recommendation: add_notification_fallback_channels
+  temporal_patterns:
+  - pattern: time_of_day_impact
+    analysis:
+      peak_hours:
+      - 09:00-11:00
+      - 14:00-16:00
+      off_peak_hours:
+      - 22:00-06:00
+      performance_delta: 30%_slower_during_peak
+      recommendation: scale_up_during_peak_hours
+  - pattern: day_of_week_impact
+    analysis:
+      monday_execution_time: 1.5x_average
+      friday_failure_rate: 2x_average
+      recommendation: investigate_weekend_data_staleness
+  monitoring:
+  - metric: workflow_analysis_executions_total
+    labels:
+    - workflow_type
+  - metric: bottlenecks_detected_total
+    labels:
+    - workflow_type
+    - stage
+  - metric: optimization_recommendations_generated
+    labels:
+    - workflow_type
+- name: Process Bottleneck Detection
+  scenario_id: l3-intel-bottleneck-detection
+  description: Identify and analyze process bottlenecks
+  bottleneck_types:
+  - type: resource_contention
+    detection:
+      symptom: queue_buildup
+      resource: database_connections
+      queue_depth: 150
+      avg_wait_time: 5s
+    analysis:
+      root_cause: connection_pool_too_small
+      current_pool_size: 20
+      recommended_pool_size: 50
+      expected_improvement: 80%_reduction_in_wait_time
+  - type: sequential_dependency
+    detection:
+      workflow: compliance_check
+      sequential_steps:
+      - fetch_data
+      - validate
+      - analyze
+      - report
+      total_duration: 25m
+      parallelizable_steps:
+      - validate
+      - analyze
+    analysis:
+      current_execution: sequential
+      recommended_execution: parallel
+      potential_time_saving: 40%
+  - type: external_api_latency
+    detection:
+      service: third_party_risk_api
+      avg_latency: 8s
+      p95_latency: 15s
+      timeout_rate: 0.05
+    analysis:
+      root_cause: external_service_performance
+      recommendations:
+      - implement_caching
+      - add_timeout_handling
+      - consider_alternative_provider
+      expected_improvement: 90%_cache_hit_rate
+  - type: data_processing_bottleneck
+    detection:
+      operation: bulk_report_generation
+      data_volume: 10000_records
+      processing_time: 15m
+      cpu_utilization: 100%
+    analysis:
+      root_cause: inefficient_algorithm
+      current_complexity: O(n²)
+      recommended_optimization: batch_processing
+      expected_improvement: 70%_faster
+  bottleneck_prioritization:
+  - bottleneck: database_connection_pool
+    impact_score: 9.5
+    frequency: high
+    affected_workflows: 12
+    priority: critical
+  - bottleneck: third_party_api_latency
+    impact_score: 7.0
+    frequency: medium
+    affected_workflows: 3
+    priority: high
+  - bottleneck: sequential_validation_steps
+    impact_score: 4.5
+    frequency: low
+    affected_workflows: 1
+    priority: medium
+  monitoring:
+  - metric: bottlenecks_detected_total
+    labels:
+    - type
+    - severity
+  - metric: bottleneck_impact_score
+    labels:
+    - bottleneck_id
+  - metric: bottleneck_resolution_time_seconds
+    labels:
+    - type
+- name: Pattern Recognition
+  scenario_id: l3-intel-pattern-recognition
+  description: Detect patterns from historical data
+  pattern_types:
+  - pattern: recurring_failures
+    detection:
+      workflow: data_export
+      failure_sequence:
+      - date: '2025-10-01'
+        time: 02:00
+        reason: database_timeout
+      - date: '2025-10-08'
+        time: 02:00
+        reason: database_timeout
+      - date: '2025-10-15'
+        time: 02:00
+        reason: database_timeout
+      pattern_identified: weekly_failure_at_2am
+      hypothesis: weekly_backup_job_contention
+      recommendation: reschedule_export_to_3am
+  - pattern: success_correlation
+    detection:
+      observation: workflows_with_pre_validation_succeed_more
+      success_rate_with_validation: 0.98
+      success_rate_without_validation: 0.85
+      confidence: 0.92
+      recommendation: make_pre_validation_mandatory
+  - pattern: seasonal_trends
+    detection:
+      metric: bia_creation_volume
+      trend: 20%_increase_in_q4
+      historical_data: 3_years
+      prediction: similar_increase_expected_q4_2025
+      recommendation: allocate_additional_resources_q4
+  - pattern: user_behavior
+    detection:
+      observation: bcm_specialists_batch_tasks_on_fridays
+      friday_volume: 3x_average
+      impact: degraded_performance_friday_afternoon
+      recommendation: load_balancing_or_capacity_increase
+  pattern_confidence:
+  - pattern_id: weekly_2am_failure
+    confidence: 0.95
+    supporting_evidence: 12
+    contradicting_evidence: 1
+    status: high_confidence
+  - pattern_id: user_timezone_correlation
+    confidence: 0.65
+    supporting_evidence: 5
+    contradicting_evidence: 3
+    status: needs_more_data
+  pattern_validation:
+  - pattern: database_timeout_at_2am
+    validation_method: a_b_test
+    test_group: reschedule_to_3am
+    control_group: keep_at_2am
+    test_duration: 4_weeks
+    expected:
+      pattern_confirmed: true
+      recommendation_validated: true
+      rollout_to_all: true
+  monitoring:
+  - metric: patterns_detected_total
+    labels:
+    - pattern_type
+  - metric: pattern_confidence_score
+    labels:
+    - pattern_id
+  - metric: pattern_validation_success_rate
+- name: Event Correlation and Causality
+  scenario_id: l3-intel-event-correlation
+  description: Correlate events to identify causal relationships
+  correlation_scenarios:
+  - scenario: incident_root_cause
+    events:
+    - time: '14:00:00'
+      type: deployment.completed
+      service: api-gateway
+    - time: '14:02:15'
+      type: monitoring.alert
+      metric: error_rate_spike
+    - time: '14:02:30'
+      type: user.complaint
+      issue: cannot_login
+    - time: '14:05:00'
+      type: incident.created
+      severity: high
+    correlation_analysis:
+      root_cause: deployment.completed
+      affected_event: monitoring.alert
+      time_delta: 2m 15s
+      confidence: 0.92
+      recommendation: rollback_deployment
+  - scenario: cascading_failure
+    events:
+    - time: '10:00'
+      type: database.connection_pool_exhausted
+    - time: '10:01'
+      type: service_a.timeout
+    - time: '10:02'
+      type: service_b.timeout
+    - time: '10:03'
+      type: load_balancer.circuit_breaker_open
+    - time: '10:05'
+      type: platform.degraded_performance
+    correlation_analysis:
+      root_cause: database.connection_pool_exhausted
+      cascade_chain:
+      - service_a
+      - service_b
+      - load_balancer
+      - platform
+      time_to_full_impact: 5m
+      recommendation: increase_database_connection_pool
+  causal_inference:
+  - hypothesis: deployment_causes_error_spike
+    evidence:
+      correlation_strength: 0.88
+      time_lag: < 5m
+      occurrences: 8
+    causal_score: 0.85
+    confidence: high
+    actionable: true
+  - hypothesis: friday_deployments_cause_more_incidents
+    evidence:
+      friday_incident_rate: 0.12
+      weekday_incident_rate: 0.05
+      sample_size: 52
+    causal_score: 0.72
+    confidence: medium
+    recommendation: avoid_friday_deployments
+  event_timeline_reconstruction:
+  - incident_id: inc-2025-10-13-001
+    timeline:
+    - t: T-10m
+      event: cpu_usage_climbing
+    - t: T-5m
+      event: memory_pressure_detected
+    - t: T-2m
+      event: gc_frequency_increased
+    - t: T-0m
+      event: service_crashed
+    - t: T+1m
+      event: auto_restart_triggered
+    - t: T+5m
+      event: service_stabilized
+    root_cause_analysis:
+      primary_cause: memory_leak
+      contributing_factors:
+      - inefficient_gc
+      - traffic_spike
+      preventive_actions:
+      - fix_memory_leak
+      - improve_gc_tuning
+  monitoring:
+  - metric: event_correlations_detected_total
+    labels:
+    - correlation_type
+  - metric: causal_relationships_identified_total
+  - metric: root_cause_detection_accuracy
+- name: Predictive Insights
+  scenario_id: l3-intel-predictive-insights
+  description: Generate predictive insights for planning
+  prediction_types:
+  - prediction: resource_exhaustion
+    model: time_series_forecast
+    current_metrics:
+      cpu_usage: 65%
+      memory_usage: 70%
+      disk_usage: 80%
+      growth_rate: 5%_per_week
+    predictions:
+    - resource: disk
+      exhaustion_date: '2025-11-15'
+      confidence: 0.88
+    - resource: memory
+      exhaustion_date: '2025-12-01'
+      confidence: 0.72
+    recommendations:
+    - action: provision_additional_disk
+      priority: high
+      by_date: '2025-11-01'
+    - action: optimize_memory_usage
+      priority: medium
+  - prediction:
+      failure_probability: 0.35
+      confidence: 0.82
+      risk_factors:
+      - incomplete_data
+      - novice_user
+      recommendations:
+      - assign_expert_support
+      - request_additional_data
+    model: classification
+    workflow: bia_creation
+    input_features:
+      organization_size: large
+      data_completeness: 0.75
+      user_experience_level: novice
+  - prediction: capacity_requirements
+    model: demand_forecasting
+    historical_demand: last_12_months
+    upcoming_events:
+    - q4_compliance_season
+    - new_customer_onboarding
+    predictions:
+      peak_load: 3x_current
+      peak_date: '2025-12-15'
+      capacity_needed: 12_additional_instances
+      confidence: 0.78
+    recommendations:
+    - scale_up_by_2025-12-01
+    - load_test_at_3x_capacity
+  - prediction:
+      incident_probability_7_days: 0.42
+      confidence: 0.68
+      risk_level: medium_high
+    model: risk_scoring
+    factors:
+      recent_deployments: 3
+      system_complexity: high
+      test_coverage: 0.75
+      last_incident: 7_days_ago
+    recommendations:
+    - increase_monitoring
+    - defer_non_critical_deployments
+    - improve_test_coverage
+  prediction_accuracy_tracking:
+  - prediction_id: pred_disk_exhaustion_2025_09
+    predicted_date: '2025-09-15'
+    actual_date: '2025-09-18'
+    error: 3_days
+    accuracy: 0.92
+    feedback: good_prediction
+  - prediction_id: pred_workflow_failure_bia_123
+    predicted_probability: 0.35
+    actual_outcome: success
+    calibration: overestimated_risk
+    model_update: adjust_weights
+  monitoring:
+  - metric: predictions_generated_total
+    labels:
+    - prediction_type
+    - model
+  - metric: prediction_accuracy
+    labels:
+    - prediction_type
+  - metric: prediction_confidence
+    labels:
+    - prediction_id
+  - metric: recommendations_generated_total
+    labels:
+    - recommendation_type
+- name: Anomaly Detection
+  scenario_id: l3-intel-anomaly-detection
+  description: Detect anomalies in business processes and system behavior
+  anomaly_types:
+  - type: statistical_outlier
+    detection:
+      metric: api_response_time
+      baseline_p95: 200ms
+      current_p95: 2000ms
+      standard_deviations: 5
+    analysis:
+      anomaly_detected: true
+      severity: high
+      possible_causes:
+      - database_slow_query
+      - network_latency
+      - resource_exhaustion
+      recommendation: investigate_immediately
+  - type: volume_anomaly
+    detection:
+      metric: workflow_execution_count
+      baseline_daily: 500
+      current_daily: 50
+      deviation: -90%
+    analysis:
+      anomaly_detected: true
+      severity: high
+      possible_causes:
+      - upstream_service_failure
+      - user_access_issue
+      - scheduled_maintenance_not_communicated
+      recommendation: check_system_availability
+  - type: pattern_break
+    detection:
+      pattern: weekly_report_generation_on_mondays
+      expected_event: report.generated
+      actual_event: none
+      deviation: pattern_broken
+    analysis:
+      anomaly_detected: true
+      severity: medium
+      possible_causes:
+      - scheduled_job_failed
+      - configuration_change
+      recommendation: check_scheduler_status
+  - type: behavioral_anomaly
+    detection:
+      user: user_12345
+      normal_activity: 5_workflows_per_day
+      current_activity: 50_workflows_in_1_hour
+      deviation: 10x_increase
+    analysis:
+      anomaly_detected: true
+      severity: medium
+      possible_causes:
+      - automated_script
+      - compromised_account
+      - legitimate_bulk_operation
+      recommendation: verify_user_intent
+  anomaly_scoring:
+  - anomaly_id: anom_2025_10_13_001
+    anomaly_score: 8.5
+    confidence: 0.88
+    severity: high
+    actionable: true
+    false_positive_probability: 0.12
+  anomaly_response:
+  - severity: critical
+    automated_actions:
+    - alert_ops_team
+    - capture_diagnostic_data
+    - initiate_incident_workflow
+    response_time: < 1m
+  - severity: high
+    automated_actions:
+    - alert_ops_team
+    - flag_for_investigation
+    response_time: < 5m
+  - severity: medium
+    automated_actions:
+    - log_anomaly
+    - notify_team_slack
+    response_time: < 15m
+  monitoring:
+  - metric: anomalies_detected_total
+    labels:
+    - type
+    - severity
+  - metric: anomaly_score
+    labels:
+    - anomaly_id
+  - metric: false_positive_rate
+    labels:
+    - detection_method
+monitoring:
+  required_metrics:
+  - name: intelligence_system_health
+    type: gauge
+    description: Overall intelligence system health (0-1)
+    labels:
+    - component
+  - name: workflow_analysis_executions_total
+    type: counter
+    description: Workflow analyses performed
+    labels:
+    - workflow_type
+  - name: bottlenecks_detected_total
+    type: counter
+    description: Bottlenecks detected
+    labels:
+    - type
+    - severity
+  - name: patterns_detected_total
+    type: counter
+    description: Patterns detected
+    labels:
+    - pattern_type
+  - name: event_correlations_detected_total
+    type: counter
+    description: Event correlations detected
+    labels:
+    - correlation_type
+  - name: predictions_generated_total
+    type: counter
+    description: Predictions generated
+    labels:
+    - prediction_type
+    - model
+  - name: anomalies_detected_total
+    type: counter
+    description: Anomalies detected
+    labels:
+    - type
+    - severity
+  - name: prediction_accuracy
+    type: gauge
+    description: Prediction accuracy (0-1)
+    labels:
+    - prediction_type
+  - name: pattern_confidence_score
+    type: histogram
+    description: Pattern detection confidence
+    labels:
+    - pattern_id
+  - name: recommendations_generated_total
+    type: counter
+    description: Optimization recommendations generated
+    labels:
+    - recommendation_type
+integration:
+  eventbus_events:
+    publishes:
+    - intelligence.workflow.analyzed
+    - intelligence.bottleneck.detected
+    - intelligence.pattern.detected
+    - intelligence.correlation.identified
+    - intelligence.prediction.generated
+    - intelligence.anomaly.detected
+    - intelligence.recommendation.created
+    subscribes:
+    - workflow.execution.started
+    - workflow.execution.completed
+    - workflow.execution.failed
+    - system.incident.created
+    - system.deployment.completed
+    - monitoring.metric.reported
+  dependencies:
+  - service: eventbus
+    purpose: Event stream processing
+  - service: postgresql
+    purpose: Historical data storage
+  - service: qdrant
+    purpose: Pattern similarity search
+  - service: ai-orchestrator
+    purpose: Predictive model execution
+  - service: learning-system
+    purpose: Pattern learning and feedback
+context_variables:
+  system_name: Name of intelligence system (e.g., 'workflow-intelligence')
+  analysis_types: Types of analysis performed
+  ml_models: Machine learning models used
+  event_sources: Event sources monitored
+  pattern_types: Pattern types detected
+learning_integration:
+  collect_patterns:
+  - effective_optimization_recommendations
+  - accurate_prediction_models
+  - successful_bottleneck_resolutions
+  - validated_causal_relationships
+  feedback_to_learning_system:
+  - Update prediction models based on accuracy
+  - Refine pattern detection algorithms
+  - Improve anomaly detection thresholds
+  - Enhance correlation analysis
+  recommendations:
+  - Suggest new analysis types
+  - Recommend model improvements
+  - Identify new pattern types to detect
+  - Propose optimization strategies

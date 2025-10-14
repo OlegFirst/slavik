@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Manager Group -->
+        <record id="group_bcm_manager" model="res.groups">
+            <field name="name">BCM Manager</field>
+            <field name="category_id" ref="base.module_category_services"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- BCM User Group -->
+        <record id="group_bcm_user" model="res.groups">
+            <field name="name">BCM User</field>
+            <field name="category_id" ref="base.module_category_services"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Defs_Incident_Sub"
+             targetNamespace="http://example.org/bcm-bpmn-sub">
+  <process id="Incident_Subprocess" name="Incident Handling — Subprocess" isExecutable="false">
+    <startEvent id="Start_Incident" name="Incident Opened"/>
+    <task id="Task_AIDraft" name="AI Draft Response"/>
+    <task id="Task_Execute" name="Execute Response & Comms"/>
+    <endEvent id="End_Incident" name="Incident Closed"/>
+    <sequenceFlow id="F1" sourceRef="Start_Incident" targetRef="Task_AIDraft"/>
+    <sequenceFlow id="F2" sourceRef="Task_AIDraft" targetRef="Task_Execute"/>
+    <sequenceFlow id="F3" sourceRef="Task_Execute" targetRef="End_Incident"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Dia_Incident">
+    <bpmndi:BPMNPlane id="Plane_Incident" bpmnElement="Incident_Subprocess">
+      <bpmndi:BPMNShape id="SH_ISStart" bpmnElement="Start_Incident"><dc:Bounds x="120" y="80" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ISDraft" bpmnElement="Task_AIDraft"><dc:Bounds x="190" y="70" width="200" height="56"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ISExec" bpmnElement="Task_Execute"><dc:Bounds x="410" y="70" width="220" height="56"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ISEnd" bpmnElement="End_Incident"><dc:Bounds x="650" y="80" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ED_ISF1" bpmnElement="F1"><di:waypoint x="156" y="98"/><di:waypoint x="190" y="98"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ED_ISF2" bpmnElement="F2"><di:waypoint x="390" y="98"/><di:waypoint x="410" y="98"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ED_ISF3" bpmnElement="F3"><di:waypoint x="630" y="98"/><di:waypoint x="650" y="98"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,269 @@
+# ============================================
+# SERVICE INFORMATION - Predictive Journey Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: predictive
+display_name: "Predictive Journey Service"
+version: "1.0.0"
+description: "AI-powered forecasting for BCM journeys. Predicts milestones, certification timelines, expert demands, and challenges using pattern matching, statistical analysis, and machine learning."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/predictive"
+business_process: "Predictive Analytics & Forecasting"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8031
+
+endpoints:
+  base_url: "http://localhost:8031"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/predictive"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "90-day journey timeline prediction (3-6 milestones)"
+  - "ISO 22301 certification date forecasting"
+  - "Expert marketplace demand forecasting"
+  - "Daily proactive digest generation (8:00 AM schedule)"
+  - "Challenge prediction with mitigation strategies"
+  - "Cost estimation (size-adjusted internal staff time)"
+  - "Similarity-based organizational matching"
+  - "Confidence scoring (frequency and variance-based)"
+
+features:
+  - name: "Journey Predictor"
+    description: "Forecasts BCM milestone timelines using similarity patterns"
+    endpoints: 3
+
+  - name: "Certification Predictor"
+    description: "Estimates ISO 22301 certification achievement dates"
+    endpoints: 2
+
+  - name: "Demand Forecaster"
+    description: "Predicts expert marketplace demand by specialty/region"
+    endpoints: 3
+
+  - name: "Proactive Recommendations"
+    description: "Daily personalized guidance and reminders"
+    endpoints: 2
+
+  - name: "Challenge Predictor"
+    description: "Identifies likely obstacles with mitigation"
+    endpoints: 2
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total prediction requests"
+    target: "> 300/day"
+    prometheus_metric: "predictive_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile prediction time"
+    target: "< 1s"
+    prometheus_metric: "predictive_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed predictions"
+    target: "< 2%"
+    prometheus_metric: "predictive_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.5%"
+    prometheus_metric: "predictive_availability"
+
+  - name: "prediction_accuracy"
+    type: "gauge"
+    description: "Overall prediction accuracy (verified)"
+    target: "> 75%"
+    prometheus_metric: "predictive_accuracy"
+
+  - name: "certification_forecast_accuracy"
+    type: "gauge"
+    description: "Certification date prediction accuracy"
+    target: "> 80%"
+    prometheus_metric: "predictive_cert_accuracy"
+
+  - name: "daily_digest_delivery_rate"
+    type: "gauge"
+    description: "Percentage of daily digests delivered on time"
+    target: "100%"
+    prometheus_metric: "predictive_digest_delivery_rate"
+
+  - name: "similarity_match_quality"
+    type: "gauge"
+    description: "Quality of organizational similarity matching"
+    target: "> 0.7"
+    prometheus_metric: "predictive_similarity_quality"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "apscheduler>=3.10.4"  # Daily digest scheduling
+    - "redis>=5.0.0"
+    - "aio-pika>=9.3.0"
+    - "scikit-learn>=1.3.0"  # ML predictions
+    - "pandas>=2.0.0"  # Data analysis
+    - "prometheus-client>=0.19.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Predictions storage (Supabase)"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      purpose: "EventBus messaging"
+      required: true
+
+    - name: "case_library"
+      purpose: "Historical case data for pattern matching"
+      required: true
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "organization.onboarded"
+        source: "user_service"
+        action: "Generate initial predictions"
+
+      - event: "milestone.completed"
+        source: "workflow_intelligence"
+        action: "Update journey predictions"
+
+      - event: "certification.achieved"
+        source: "compliance_service"
+        action: "Validate and learn from prediction accuracy"
+
+    publishes:
+      - event: "prediction.generated"
+        target: "user_service,notification_service"
+        data: "prediction_type, forecast_data, confidence"
+
+      - event: "daily_digest.sent"
+        target: "notification_service"
+        data: "recipient, recommendations_count"
+
+      - event: "challenge.predicted"
+        target: "governance_service,orchestrator"
+        data: "challenge_type, probability, mitigation"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/predictive/journey/{org_id}"
+        methods: ["GET"]
+        consumers: ["admin_panel", "user_service"]
+        description: "90-day journey timeline"
+
+      - endpoint: "/api/predictive/certification/{org_id}"
+        methods: ["GET"]
+        consumers: ["admin_panel", "compliance_service"]
+
+      - endpoint: "/api/predictive/demand"
+        methods: ["GET"]
+        consumers: ["marketplace_service"]
+
+    consumes:
+      - service: "workflow_intelligence"
+        endpoint: "/api/cases/search"
+        purpose: "Access case library for similarity matching"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Predictions require minimum 10 similar cases"
+    severity: "medium"
+    workaround: "Fall back to generic templates for new organizations"
+    tracking: "PRED-001"
+
+limitations:
+  - "Prediction accuracy depends on case library size (min 100 cases)"
+  - "Daily digest fixed at 8:00 AM (timezone configurable)"
+  - "Maximum 6 milestone predictions per forecast"
+  - "Similarity matching limited to 5 organizational factors"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "predictive:latest"
+    ports:
+      - "8031:8031"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+      - name: "REDIS_URL"
+        example: "redis://localhost:6379/0"
+
+    optional:
+      - name: "DAILY_DIGEST_TIME"
+        description: "Daily digest delivery time (HH:MM)"
+        default: "08:00"
+
+      - name: "MIN_SIMILARITY_THRESHOLD"
+        description: "Minimum similarity score for predictions"
+        default: "0.6"
+
+  startup_command: "python -m predictive.main"
+
+  requirements:
+    cpu: "1.0 cores"
+    memory: "1GB"
+    disk: "2GB"
+
+# ============================================
+# 10. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "AI Platform Architect"
+  slack_channel: "#intelligent-core"
+
+# ============================================
+# 11. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "ISO/IEC/IEEE 26514:2022"
+      status: "compliant"

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Application Category -->
+        <record id="module_category_business_continuity" model="ir.module.category">
+            <field name="name">Business Continuity Management</field>
+            <field name="description">BCM Platform modules</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- BCM Security Groups -->
+        <record id="group_bcm_user" model="res.groups">
+            <field name="name">BCM User</field>
+            <field name="category_id" ref="module_category_business_continuity"/>
+            <field name="comment">BCM users with standard access to view and create basic BCM records</field>
+        </record>
+
+        <record id="group_bcm_manager" model="res.groups">
+            <field name="name">BCM Manager</field>
+            <field name="category_id" ref="module_category_business_continuity"/>
+            <field name="implied_ids" eval="[(4, ref('group_bcm_user'))]"/>
+            <field name="comment">BCM managers with full access to all BCM functionality</field>
+        </record>
+    </data>
+</odoo>

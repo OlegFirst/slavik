@@ -7,10 +7,10 @@ Demonstrates safety monitoring features.
 
 import asyncio
 import logging
-from intelligent_core.ai_orchestration.models import (
+from .models import (
     Decision, FullContext, ActionType, PriorityLevel
 )
-from intelligent_core.ai_orchestration.safety import (
+from .safety import (
     SafetyMonitor, ConstitutionEnforcer, LoopDetector,
     HallucinationDetector, ControlMonitor
 )

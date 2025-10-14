@@ -1,0 +1,73 @@
+{
+  "instance_id": "bia_process_v1-20251012160132",
+  "process_id": "bia_process_v1",
+  "process_name": "Business Impact Analysis",
+  "process_status": "in_progress",
+  "timeline_entries": [
+    {
+      "sequence": 1,
+      "step_id": "identify_functions",
+      "step_name": "Identify Critical Functions",
+      "step_type": "form_input",
+      "executed_by": "john.doe@company.com",
+      "started_at": "2025-10-12T16:01:32.847723",
+      "completed_at": "2025-10-12T16:01:32.847858",
+      "duration_seconds": 0.0,
+      "status": "success",
+      "data_captured": {
+        "function_name": "Customer Support System",
+        "function_description": "24/7 customer support ticketing and resolution system"
+      },
+      "estimated_duration_minutes": 30,
+      "on_schedule": true
+    },
+    {
+      "sequence": 2,
+      "step_id": "assess_impact",
+      "step_name": "Assess Business Impact",
+      "step_type": "analysis",
+      "executed_by": "john.doe@company.com",
+      "started_at": "2025-10-12T16:01:32.847858",
+      "completed_at": "2025-10-12T16:01:32.847862",
+      "duration_seconds": 0.0,
+      "status": "success",
+      "data_captured": {
+        "impact_level": "critical",
+        "rto_hours": 4,
+        "rpo_hours": 1
+      },
+      "estimated_duration_minutes": 45,
+      "on_schedule": true
+    },
+    {
+      "sequence": 3,
+      "step_id": "identify_dependencies",
+      "step_name": "Identify Dependencies",
+      "step_type": "form_input",
+      "executed_by": "john.doe@company.com",
+      "started_at": "2025-10-12T16:01:32.847862",
+      "completed_at": "2025-10-12T16:01:32.847874",
+      "duration_seconds": 0.0,
+      "status": "success",
+      "data_captured": {
+        "dependencies": "CRM system, Knowledge base, Communication tools",
+        "resources": "Support staff, IT infrastructure, Network connectivity"
+      },
+      "estimated_duration_minutes": 25,
+      "on_schedule": true
+    }
+  ],
+  "total_duration_seconds": 0.0,
+  "average_step_duration_seconds": 0.0,
+  "total_steps_executed": 3,
+  "longest_step": {
+    "step_name": "Identify Critical Functions",
+    "duration_seconds": 0.0
+  },
+  "shortest_step": {
+    "step_name": "Identify Critical Functions",
+    "duration_seconds": 0.0
+  },
+  "started_at": "2025-10-12T16:01:32.847715",
+  "last_updated": "2025-10-12T16:01:32.847880"
+}

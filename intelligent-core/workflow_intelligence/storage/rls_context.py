@@ -4,10 +4,16 @@ Row Level Security (RLS) Context Manager
 """
 
 from contextlib import asynccontextmanager
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Any
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
+
+# Import asyncpg for type hints
+try:
+    import asyncpg
+except ImportError:
+    asyncpg = Any  # Fallback for when asyncpg not installed
 
 if TYPE_CHECKING:
     from shared.database import DatabaseManager

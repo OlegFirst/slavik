@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_exercise,access_bcm_exercise,model_bcm_exercise,base.group_user,1,1,1,0
+access_bcm_exercise_admin,access_bcm_exercise_admin,model_bcm_exercise,base.group_system,1,1,1,1
+access_bcm_exercise_record,access_bcm_exercise_record,model_bcm_exercise_record,base.group_user,1,1,1,0
+access_bcm_exercise_record_admin,access_bcm_exercise_record_admin,model_bcm_exercise_record,base.group_system,1,1,1,1

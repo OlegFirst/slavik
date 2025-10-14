@@ -1,0 +1,195 @@
+# ============================================================================
+# Intelligent Core Container - Production
+# ============================================================================
+# Contains: AI Orchestration, Workflow Intelligence, Community Intelligence,
+#           Predictive Service, Event Intelligence, Collective, AI Workflow Optimizer
+# Ports: 8002, 8028-8038
+# ============================================================================
+
+FROM python:3.11-slim AS base
+
+LABEL maintainer="AI Platform Team"
+LABEL version="1.0.0"
+LABEL description="Intelligent Core - AI/ML Services"
+
+# Environment
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONPATH=/app
+
+WORKDIR /app
+
+# ============================================================================
+# System Dependencies (ML libraries need build tools)
+# ============================================================================
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    gfortran \
+    libgomp1 \
+    libopenblas-dev \
+    liblapack-dev \
+    postgresql-client \
+    libpq-dev \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# ============================================================================
+# Python Dependencies
+# ============================================================================
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install supervisor
+RUN pip install supervisor
+
+# ============================================================================
+# Application Code
+# ============================================================================
+COPY . .
+
+# ============================================================================
+# Models Directory (can be mounted as volume)
+# ============================================================================
+RUN mkdir -p /models && chmod 755 /models
+
+# ============================================================================
+# Supervisor Configuration
+# ============================================================================
+RUN mkdir -p /var/log/supervisor /var/run/supervisor
+
+COPY <<EOF /etc/supervisord.conf
+[supervisord]
+nodaemon=true
+user=root
+logfile=/var/log/supervisor/supervisord.log
+pidfile=/var/run/supervisor/supervisord.pid
+
+[program:ai-orchestration]
+command=python3 orchestration/ai-orchestration/standalone_api.py
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/ai-orchestration.err.log
+stdout_logfile=/var/log/supervisor/ai-orchestration.out.log
+environment=PORT=8002,SERVICE_NAME=ai-orchestration
+
+[program:workflow-intelligence]
+command=python3 -m workflow_intelligence.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/workflow-intelligence.err.log
+stdout_logfile=/var/log/supervisor/workflow-intelligence.out.log
+environment=PORT=8028,SERVICE_NAME=workflow-intelligence
+
+[program:community-intelligence]
+command=python3 -m community_intelligence.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/community-intelligence.err.log
+stdout_logfile=/var/log/supervisor/community-intelligence.out.log
+environment=PORT=8030,SERVICE_NAME=community-intelligence
+
+[program:predictive-service]
+command=python3 -m predictive.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/predictive.err.log
+stdout_logfile=/var/log/supervisor/predictive.out.log
+environment=PORT=8031,SERVICE_NAME=predictive
+
+[program:event-intelligence]
+command=python3 -m event_intelligence.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/event-intelligence.err.log
+stdout_logfile=/var/log/supervisor/event-intelligence.out.log
+environment=PORT=8032,SERVICE_NAME=event-intelligence
+
+[program:collective]
+command=python3 -m collective.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/collective.err.log
+stdout_logfile=/var/log/supervisor/collective.out.log
+environment=PORT=8034,SERVICE_NAME=collective
+
+[program:ai-workflow-optimizer]
+command=python3 -m ai_workflow_optimizer.main
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/supervisor/ai-workflow-optimizer.err.log
+stdout_logfile=/var/log/supervisor/ai-workflow-optimizer.out.log
+environment=PORT=8038,SERVICE_NAME=ai-workflow-optimizer
+EOF
+
+# ============================================================================
+# Health Check Script
+# ============================================================================
+COPY <<'EOF' /app/healthcheck.sh
+#!/bin/bash
+# Check if all AI services are responding
+
+SERVICES=(
+    "8002:/health:ai-orchestration"
+    "8028:/health:workflow-intelligence"
+    "8030:/health:community-intelligence"
+    "8031:/health:predictive"
+    "8032:/health:event-intelligence"
+    "8034:/health:collective"
+    "8038:/health:ai-workflow-optimizer"
+)
+
+FAILED=0
+
+for service in "${SERVICES[@]}"; do
+    IFS=':' read -r port path name <<< "$service"
+    if ! curl -sf "http://localhost:${port}${path}" > /dev/null 2>&1; then
+        echo "❌ $name (port $port) health check failed"
+        FAILED=$((FAILED + 1))
+    fi
+done
+
+if [ $FAILED -gt 0 ]; then
+    echo "⚠️  $FAILED AI services unhealthy"
+    exit 1
+fi
+
+echo "✅ All AI services healthy"
+exit 0
+EOF
+
+RUN chmod +x /app/healthcheck.sh
+
+# ============================================================================
+# Non-root User
+# ============================================================================
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app /models /var/log/supervisor /var/run/supervisor
+
+USER appuser
+
+# ============================================================================
+# Ports
+# ============================================================================
+EXPOSE 8002 8028 8029 8030 8031 8032 8033 8034 8038
+
+# ============================================================================
+# Health Check (longer timeout for AI services)
+# ============================================================================
+HEALTHCHECK --interval=45s --timeout=15s --start-period=120s --retries=3 \
+  CMD /app/healthcheck.sh
+
+# ============================================================================
+# Startup
+# ============================================================================
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]

@@ -1,0 +1,103 @@
+scenario:
+  # Metadata
+  id: "chaos-vault-outage-recovery"
+  type: "system_test"
+  category: "chaos_engineering"
+  level: 2
+
+  # Description
+  description: "Test system resilience when Vault service fails unexpectedly"
+  business_value: "Ensure zero downtime during infrastructure failures"
+
+  # Chaos injection configuration
+  chaos_injection:
+    - action: "kill_service"
+      target: "vault-service"
+      duration: "30s"
+    - action: "network_delay"
+      target: "vault-service"
+      latency: "5000ms"
+      duration: "30s"
+
+  # Test steps
+  steps:
+    # Step 1: Normal operation baseline
+    - id: "normal_operation"
+      service: "llm-router"
+      action: "get_api_key"
+      expected:
+        status: 200
+        response_contains: ["api_key"]
+        source: "vault"
+
+    # Step 2: Inject chaos
+    - id: "chaos_start"
+      action: "inject_chaos"
+      params:
+        target: "vault-service"
+
+    # Step 3: System should gracefully degrade
+    - id: "degraded_operation"
+      service: "llm-router"
+      action: "get_api_key"
+      expected:
+        status: 200
+        response_contains: ["api_key"]
+        source: "cache_fallback"  # Must use cached key
+
+    # Step 4: Restore service
+    - id: "recovery"
+      action: "restore_service"
+      params:
+        target: "vault-service"
+
+    # Step 5: Verify full recovery
+    - id: "post_recovery"
+      service: "llm-router"
+      action: "get_api_key"
+      expected:
+        status: 200
+        source: "vault"
+
+  # Validation
+  assertions:
+    - type: "resilience"
+      check: "zero_user_errors"
+      during: "chaos_injection"
+      message: "No user-facing errors during Vault outage"
+
+    - type: "observability"
+      check: "alerts_fired"
+      expected_alerts:
+        - "VaultServiceDown"
+        - "FallbackModeActive"
+
+    - type: "recovery"
+      check: "automatic_recovery"
+      max_recovery_time: "60s"
+
+  # Prometheus metrics to collect
+  metrics:
+    - name: "error_rate_during_chaos"
+      prometheus_query: "rate(http_requests_total{status=~'5..'}[1m])"
+      alert_if: "> 0.01"
+
+    - name: "fallback_usage"
+      prometheus_query: "vault_fallback_cache_hits_total"
+      alert_if: "== 0"  # Should have used fallback
+
+    - name: "recovery_time"
+      prometheus_query: "vault_service_recovery_duration_seconds"
+      alert_if: "> 60"
+
+  # Post-execution actions
+  post_execution:
+    - action: "generate_chaos_report"
+      include:
+        - "failure_modes_tested"
+        - "fallback_mechanisms_used"
+        - "recovery_steps"
+
+    - action: "update_runbook"
+      runbook: "vault_outage_response"
+      lessons_learned: true

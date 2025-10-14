@@ -1,0 +1,369 @@
+{
+  "title": "Digital Twin - Synchronization & Quality",
+  "uid": "digital-twin-detailed",
+  "tags": ["platform-services", "digital-twin", "crm", "erp"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 100,
+      "panels": [],
+      "title": "Synchronization Status",
+      "type": "row"
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Sync Status",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
+      "targets": [
+        {
+          "expr": "digital_twin_sync_status",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {"text": "Pending", "color": "orange"},
+                "1": {"text": "Synced", "color": "green"}
+              }
+            }
+          ],
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Entity Count",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+      "targets": [
+        {
+          "expr": "digital_twin_entity_count",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "gauge",
+      "title": "Data Quality Score",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+      "targets": [
+        {
+          "expr": "digital_twin_data_quality_score",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "orange", "value": 70},
+              {"color": "green", "value": 90}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Pending Sync Operations",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+      "targets": [
+        {
+          "expr": "digital_twin_pending_operations",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 10},
+              {"color": "red", "value": 50}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
+      "id": 101,
+      "panels": [],
+      "title": "External Connections",
+      "type": "row"
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "CRM Connection (Salesforce)",
+      "gridPos": {"h": 4, "w": 8, "x": 0, "y": 6},
+      "targets": [
+        {
+          "expr": "digital_twin_crm_connection_status",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {"text": "Disconnected", "color": "red"},
+                "1": {"text": "Connected", "color": "green"}
+              }
+            }
+          ],
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "ERP Connection (Odoo)",
+      "gridPos": {"h": 4, "w": 8, "x": 8, "y": 6},
+      "targets": [
+        {
+          "expr": "digital_twin_erp_connection_status",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {"text": "Disconnected", "color": "red"},
+                "1": {"text": "Connected", "color": "green"}
+              }
+            }
+          ],
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Marketing Connection (HubSpot)",
+      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 6},
+      "targets": [
+        {
+          "expr": "digital_twin_marketing_connection_status",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {"text": "Disconnected", "color": "red"},
+                "1": {"text": "Connected", "color": "green"}
+              }
+            }
+          ],
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 10},
+      "id": 102,
+      "panels": [],
+      "title": "Sync Performance",
+      "type": "row"
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Sync Operations Rate",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 11},
+      "targets": [
+        {
+          "expr": "sum(rate(digital_twin_sync_operations_total[5m])) by (operation_type)",
+          "legendFormat": "{{operation_type}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Sync Duration (p95)",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 11},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(digital_twin_sync_duration_seconds_bucket[5m])) by (le, source))",
+          "legendFormat": "{{source}} (p95)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 19},
+      "id": 103,
+      "panels": [],
+      "title": "Entity Resolution & Matching",
+      "type": "row"
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "Entities Matched (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 20},
+      "targets": [
+        {
+          "expr": "sum(increase(digital_twin_entities_matched_total[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "type": "stat",
+      "title": "Match Conflicts (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 20},
+      "targets": [
+        {
+          "expr": "sum(increase(digital_twin_match_conflicts_total[24h]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 10},
+              {"color": "red", "value": 50}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 32,
+      "type": "gauge",
+      "title": "Match Accuracy",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 20},
+      "targets": [
+        {
+          "expr": "digital_twin_match_accuracy",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 75},
+              {"color": "green", "value": 90}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": "stat",
+      "title": "Unmatched Entities",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 20},
+      "targets": [
+        {
+          "expr": "digital_twin_unmatched_entities",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "type": "timeseries",
+      "title": "Entity Resolution Over Time",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24},
+      "targets": [
+        {
+          "expr": "sum(rate(digital_twin_entities_matched_total[5m]))",
+          "legendFormat": "Matched/sec",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(digital_twin_match_conflicts_total[5m]))",
+          "legendFormat": "Conflicts/sec",
+          "refId": "B"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"}
+}

@@ -2,6 +2,11 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
+# Alert rules
+rule_files:
+  - 'alerts/orchestrator-alerts.yml'
+  - 'alerts/scenario-intelligence-alerts.yml'
+
 scrape_configs:
   # Prometheus self-monitoring
   - job_name: 'prometheus'
@@ -34,4 +39,61 @@ scrape_configs:
   - job_name: 'ai_orchestrator'
     static_configs:
       - targets: ['ai_orchestrator:8000']
+    metrics_path: '/metrics'
+
+  # ==========================================
+  # Platform Services
+  # ==========================================
+
+  # Process Analytics
+  - job_name: 'process_analytics'
+    static_configs:
+      - targets: ['process-analytics:8780']
+
+  # Scenario Intelligence (Intelligent Core)
+  - job_name: 'scenario_intelligence'
+    static_configs:
+      - targets: ['scenario-intelligence:9090']
+    metrics_path: '/metrics'
+
+  # Scenario Orchestrator API (Infrastructure Tools)
+  - job_name: 'scenario_orchestrator'
+    static_configs:
+      - targets: ['scenario-orchestrator:8060']
+    metrics_path: '/metrics'
+
+  # Compliance Monitoring
+  - job_name: 'compliance_monitoring'
+    static_configs:
+      - targets: ['compliance-monitoring:8779']
+    metrics_path: '/metrics'
+
+  # Living Docs
+  - job_name: 'living_docs'
+    static_configs:
+      - targets: ['living-docs:8034']
+    metrics_path: '/metrics'
+
+  # Community Portal
+  - job_name: 'community_portal'
+    static_configs:
+      - targets: ['community-portal:8031']
+    metrics_path: '/metrics'
+
+  # Community Marketplace
+  - job_name: 'community_marketplace'
+    static_configs:
+      - targets: ['community-marketplace:8032']
+    metrics_path: '/metrics'
+
+  # Digital Twin
+  - job_name: 'digital_twin'
+    static_configs:
+      - targets: ['digital-twin:8090']
+    metrics_path: '/metrics'
+
+  # ML Pipeline (future)
+  - job_name: 'ml_pipeline'
+    static_configs:
+      - targets: ['ml-pipeline:8095']
     metrics_path: '/metrics'

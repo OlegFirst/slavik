@@ -14,7 +14,7 @@ class GovernanceServiceSettings(SharedSettings):
     """Governance Service settings"""
 
     SERVICE_NAME: str = "governance"
-    SERVICE_PORT: int = 8020
+    SERVICE_PORT: int = 8013
     SERVICE_VERSION: str = "1.0.0"
 
     # Governance specific

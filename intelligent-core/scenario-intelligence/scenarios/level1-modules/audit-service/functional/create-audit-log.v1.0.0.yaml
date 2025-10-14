@@ -1,0 +1,221 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "audit-service-create-audit-log"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "security"
+    domain: "audit_logging"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "audit-service"
+    subsystem: "governance"
+    team: "security-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Create Audit Log Entry"
+    summary: "Record immutable audit log entry for compliance and security tracking"
+    business_value: "Provide comprehensive audit trail for regulatory compliance and forensics"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Audit Logging"
+
+    scenario: "Create audit log entry"
+
+    given:
+      - "Audit Service is running"
+      - "Service has permission 'audit:write'"
+      - "Audit event data is valid"
+
+    when:
+      - "System creates audit log for 'bia_created' event"
+      - "Audit log includes actor, action, resource, timestamp"
+
+    then:
+      - "Audit log is stored immutably"
+      - "Audit log ID is generated (UUID)"
+      - "Audit log includes cryptographic hash for integrity"
+      - "Response status is 201"
+      - "Event 'audit.log.created' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 10
+    retry_policy:
+      max_retries: 5  # High retries for audit logs
+      backoff: exponential
+
+    steps:
+      - id: "validate_permissions"
+        action: "audit.check_permission"
+        params:
+          service_id: "{{service_id}}"
+          permission: "audit:write"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "retry"
+
+      - id: "validate_input"
+        action: "audit.validate_input"
+        params:
+          event_type: "{{event_type}}"
+          actor_id: "{{actor_id}}"
+          resource_type: "{{resource_type}}"
+          resource_id: "{{resource_id}}"
+        expect:
+          valid: true
+        on_failure: "abort"
+
+      - id: "generate_log_id"
+        action: "audit.generate_id"
+        params:
+          type: "uuid_v4"
+        expect:
+          log_id: "{{exists}}"
+
+      - id: "calculate_integrity_hash"
+        action: "audit.calculate_hash"
+        params:
+          event_type: "{{event_type}}"
+          actor_id: "{{actor_id}}"
+          resource_type: "{{resource_type}}"
+          resource_id: "{{resource_id}}"
+          timestamp: "{{timestamp}}"
+          algorithm: "SHA-256"
+        expect:
+          hash: "{{exists}}"
+
+      - id: "create_audit_log"
+        action: "audit.create_log"
+        params:
+          log_id: "{{steps.generate_log_id.result.log_id}}"
+          event_type: "{{event_type}}"
+          actor_id: "{{actor_id}}"
+          actor_type: "{{actor_type}}"
+          resource_type: "{{resource_type}}"
+          resource_id: "{{resource_id}}"
+          action: "{{action}}"
+          details: "{{details}}"
+          integrity_hash: "{{steps.calculate_integrity_hash.result.hash}}"
+          timestamp: "{{timestamp}}"
+        expect:
+          status: 201
+          log_id: "{{steps.generate_log_id.result.log_id}}"
+
+      - id: "store_to_immutable_storage"
+        action: "audit.store_immutable"
+        params:
+          log_id: "{{steps.generate_log_id.result.log_id}}"
+          log_data: "{{steps.create_audit_log.result}}"
+        expect:
+          status: 200
+          stored: true
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "audit.log.created"
+          aggregate: "AuditLog"
+          aggregate_id: "{{steps.generate_log_id.result.log_id}}"
+          payload:
+            log_id: "{{steps.generate_log_id.result.log_id}}"
+            event_type: "{{event_type}}"
+            actor_id: "{{actor_id}}"
+            resource_type: "{{resource_type}}"
+            resource_id: "{{resource_id}}"
+
+      subscribes:
+        - event_type: "bia.created"
+          trigger_scenario: "audit-log-bia-created"
+
+        - event_type: "risk.identified"
+          trigger_scenario: "audit-log-risk-identified"
+
+        - event_type: "document.stored"
+          trigger_scenario: "audit-log-document-stored"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "7.5.3"
+          name: "Control of documented information"
+          requirement: "Maintain comprehensive audit logs"
+
+        - id: "9.1.1"
+          name: "Monitoring, measurement, analysis and evaluation"
+          requirement: "Monitor and measure BCM activities"
+
+      evidence_generated:
+        - type: "audit_log"
+          format: "JSON"
+          storage: "immutable_audit_storage"
+          retention: "7 years"
+          includes:
+            - "log_id"
+            - "event_type"
+            - "actor_id"
+            - "resource_type"
+            - "resource_id"
+            - "action"
+            - "integrity_hash"
+            - "timestamp"
+
+  # ========== SECURITY ==========
+  security:
+    immutability: true
+    encryption_at_rest: true
+    hash_algorithm: "SHA-256"
+    retention_policy: "7 years"
+
+    integrity_checks:
+      - type: "hash_verification"
+        frequency: "daily"
+
+      - type: "chain_validation"
+        frequency: "weekly"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "audit_log_creation_duration_seconds"
+        type: "histogram"
+        labels:
+          - "event_type"
+
+      - name: "audit_logs_created_total"
+        type: "counter"
+        labels:
+          - "event_type"
+          - "actor_type"
+
+      - name: "audit_log_write_failures_total"
+        type: "counter"
+        labels:
+          - "reason"
+
+    logs:
+      level: "INFO"
+      include:
+        - "log_id"
+        - "event_type"
+        - "actor_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "Immutable audit logging with integrity hash"

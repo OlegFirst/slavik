@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Templates Data -->
+
+        <!-- Basic template record -->
+        <record id="template_bcp_basic" model="bcm_templates.record">
+            <field name="name">Basic BCP Template</field>
+            <field name="notes">Basic Business Continuity Plan Template</field>
+        </record>
+
+    </data>
+</odoo>

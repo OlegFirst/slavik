@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCM Philosophy - AI-Platform-ISO</title>
+  <meta name="description" content="Understanding Business Continuity Management and why it matters for healthcare resilience">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm-philosophy.html" class="active">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="service-catalog-visual.html">Services</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="documentation.html">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="container">
+      <h1>Business Continuity Management Philosophy</h1>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">Two Paths in Crisis: Fragile vs. Resilient</p>
+    </div>
+  </section>
+
+  <!-- The Challenge -->
+  <section>
+    <div class="container">
+      <h2>The Challenge: Inevitable Disruptions</h2>
+      <p class="section-subtitle">
+        Healthcare organizations face inevitable disruptions: epidemics, natural disasters, cyber attacks,
+        supply chain failures. <strong>Yet 92% of healthcare organizations lack comprehensive BCM plans.</strong>
+      </p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3 style="color: var(--secondary-color);">❌ WITHOUT BCM: Fragile</h3>
+          <ul style="margin-top: 1rem;">
+            <li>No clear plan when crisis hits</li>
+            <li>Confusion and delays</li>
+            <li>Improvisation under pressure</li>
+            <li>Services disrupted</li>
+            <li>Patients unable to access care</li>
+            <li>Staff overwhelmed</li>
+            <li>Community loses trust</li>
+            <li>Lives at risk</li>
+            <li>Recovery: 18-24 months</li>
+            <li><strong>Costs: 3-5× higher than preparation</strong></li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--primary-color);">
+          <h3 style="color: var(--primary-color);">✅ WITH BCM / ISO 22301: Resilient</h3>
+          <ul style="margin-top: 1rem;">
+            <li>Plan activated immediately</li>
+            <li>Trained response teams</li>
+            <li>Clear procedures</li>
+            <li>Services maintained</li>
+            <li>Critical care continues</li>
+            <li>Patients receive treatment</li>
+            <li>Staff protected and supported</li>
+            <li>Community reassured</li>
+            <li>Rapid recovery and learning</li>
+            <li><strong>Organization becomes stronger</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-alt mt-2 text-center">
+        <h3>Core Principle</h3>
+        <p style="max-width: 800px; margin: 1rem auto; font-size: 1.1rem;">
+          <strong>Crises are inevitable. The question is not IF, but WHEN.</strong>
+          <br><br>
+          Preparedness is not optional — it's our professional responsibility to the communities we serve.
+          BCM provides systematic preparation. ISO 22301 provides the proven international framework.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What is BCM -->
+  <section class="bg-alt">
+    <div class="container">
+      <h2>What is Business Continuity Management?</h2>
+      <p class="section-subtitle">BCM answers three critical questions</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>1️⃣ Which functions are critical?</h3>
+          <p><strong>Business Impact Analysis (BIA)</strong></p>
+          <ul style="margin-top: 1rem; font-size: 0.95rem;">
+            <li><strong>Critical:</strong> Emergency care (RTO: 0 min)</li>
+            <li><strong>Critical:</strong> Chronic patient treatment (RTO: 4 hours)</li>
+            <li><strong>Critical:</strong> Vaccination cold chain (RTO: 2 hours)</li>
+            <li><strong>Important:</strong> Scheduled appointments (RTO: 24 hours)</li>
+            <li><strong>Important:</strong> Administrative functions (RTO: 3 days)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>2️⃣ What can go wrong?</h3>
+          <p><strong>Risk Assessment</strong></p>
+          <ul style="margin-top: 1rem; font-size: 0.95rem;">
+            <li><strong>Epidemic:</strong> Infectious disease outbreak, staff infection</li>
+            <li><strong>Infrastructure:</strong> Power outage, water loss, heating</li>
+            <li><strong>Cyber:</strong> Ransomware, data breach</li>
+            <li><strong>Human:</strong> Mass illness, key personnel unavailable</li>
+            <li><strong>Logistics:</strong> Supply disruption, transport problems</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>3️⃣ How will we continue?</h3>
+          <p><strong>Business Continuity Plans (BCP)</strong></p>
+          <ul style="margin-top: 1rem; font-size: 0.95rem;">
+            <li><strong>Immediate</strong> (0-2 hours): Activate protocols, protect staff</li>
+            <li><strong>Short-term</strong> (2-24 hours): Mobilize resources</li>
+            <li><strong>Medium-term</strong> (1-7 days): Maintain operations</li>
+            <li><strong>Recovery:</strong> Document lessons, update plans</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resilience Cycle -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">The Continuous Resilience Cycle</h2>
+      <p class="section-subtitle text-center">
+        BCM is not a one-time project — it's a living system that strengthens your organization with every cycle
+      </p>
+
+      <div class="mermaid">
+graph TB
+    subgraph "PREPARE"
+        A1[Identify Critical Services]
+        A2[Assess Risks]
+        A3[Build Response Plans]
+        A4[Train Staff]
+        A5[Test Procedures]
+    end
+
+    subgraph "READY STATE"
+        B1[Continuous Monitoring]
+        B2[Early Warning Systems]
+        B3[Plans Accessible]
+        B4[Team Ready]
+        B5[Threat Detection]
+    end
+
+    subgraph "RESPOND"
+        C1[Activate Plan Immediately]
+        C2[Deploy Response Teams]
+        C3[Protect Critical Services]
+        C4[Support Staff]
+        C5[Communicate Clearly]
+    end
+
+    subgraph "RECOVER"
+        D1[Restore Services]
+        D2[Return to Normal]
+        D3[Support Staff Recovery]
+        D4[Stabilize Operations]
+        D5[Document Learnings]
+    end
+
+    subgraph "LEARN"
+        E1[What Worked Well?]
+        E2[What Needs Improvement?]
+        E3[Update Plans]
+        E4[Share Knowledge]
+        E5[System Becomes Stronger]
+    end
+
+    A5 --> B1
+    B5 --> C1
+    C5 --> D1
+    D5 --> E1
+    E5 --> A1
+
+    style A1 fill:#4A90E2,stroke:#2171C7,color:#fff
+    style B1 fill:#4A90E2,stroke:#2171C7,color:#fff
+    style C1 fill:#E85D75,stroke:#D43F57,color:#fff
+    style D1 fill:#E85D75,stroke:#D43F57,color:#fff
+    style E1 fill:#50C878,stroke:#3AA55F,color:#fff
+      </div>
+
+      <div class="bg-alt mt-2 text-center">
+        <h3>The Result</h3>
+        <p style="max-width: 700px; margin: 1rem auto; font-size: 1.1rem;">
+          <strong>Each crisis makes the system STRONGER</strong> through systematic learning and continuous improvement.
+          This is not just survival — it's <em>antifragility</em>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ISO 22301 -->
+  <section class="bg-alt">
+    <div class="container">
+      <h2>Why ISO 22301 Standard?</h2>
+
+      <div class="grid grid-2">
+        <div>
+          <h3>What ISO 22301 Provides</h3>
+
+          <div class="card mt-1">
+            <h4>✓ Proven Methodology</h4>
+            <p>Based on experience of thousands of organizations across industries over 40+ years.
+            You don't reinvent the wheel — you use what already proved effective.</p>
+          </div>
+
+          <div class="card mt-1">
+            <h4>✓ Comprehensive Coverage</h4>
+            <p>Systematic review of ALL aspects ensures nothing critical is forgotten.
+            The standard acts as a checklist from global best practices.</p>
+          </div>
+
+          <div class="card mt-1">
+            <h4>✓ Adaptability</h4>
+            <p>One standard — thousand implementations. Applicable to small clinics with 20 staff
+            and large hospitals with 5,000 personnel. Each fits its organization.</p>
+          </div>
+
+          <div class="card mt-1">
+            <h4>✓ Trust and Recognition</h4>
+            <p>Certification is a language of trust for donors, partners, regulators, community, and staff.
+            "They're ready to protect us in crisis."</p>
+          </div>
+        </div>
+
+        <div>
+          <h3>PDCA Continuous Improvement</h3>
+          <div class="mermaid">
+graph TD
+    P[PLAN<br/>Risk identification<br/>BIA analysis<br/>Create BCP] --> D[DO<br/>Implement plans<br/>Train teams<br/>Test]
+    D --> C[CHECK<br/>Exercises<br/>Audits<br/>Metrics<br/>Incidents]
+    C --> A[ACT<br/>Corrections<br/>Improvements<br/>Updates]
+    A --> P
+
+    style P fill:#4A90E2,stroke:#2171C7,color:#fff
+    style D fill:#50C878,stroke:#3AA55F,color:#fff
+    style C fill:#F5A623,stroke:#D68910,color:#fff
+    style A fill:#E85D75,stroke:#D43F57,color:#fff
+          </div>
+
+          <div class="bg-alt mt-1" style="padding: 1rem; border-radius: 8px;">
+            <p><strong>Each iteration makes organization stronger.</strong></p>
+            <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+              ISO 22301 integrates with WHO International Health Regulations (IHR),
+              CDC frameworks, and national pandemic preparedness plans.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Barrier -->
+  <section>
+    <div class="container">
+      <h2>The Barrier: Inequality of Preparedness</h2>
+      <p class="section-subtitle">
+        Traditional BCM implementation is proven and effective — but creates massive barriers to access
+      </p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Traditional BCM Implementation</h3>
+          <table style="width: 100%; margin-top: 1rem; font-size: 0.95rem;">
+            <tr>
+              <td><strong>Cost</strong></td>
+              <td>€100,000 - €150,000</td>
+            </tr>
+            <tr>
+              <td><strong>Timeline</strong></td>
+              <td>24 months (2 years)</td>
+            </tr>
+            <tr>
+              <td><strong>Expertise</strong></td>
+              <td>External consultants required</td>
+            </tr>
+            <tr>
+              <td><strong>Scalability</strong></td>
+              <td>Limited (consultant time)</td>
+            </tr>
+            <tr>
+              <td><strong>Knowledge</strong></td>
+              <td>Consultant-owned (leaves with them)</td>
+            </tr>
+          </table>
+
+          <div class="bg-alt mt-1" style="padding: 1rem; border-radius: 8px;">
+            <p><strong>Who Can Afford:</strong></p>
+            <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+              <li>Large hospitals with budgets</li>
+              <li>Government programs with grants</li>
+              <li>International organizations</li>
+            </ul>
+
+            <p style="margin-top: 1rem;"><strong>Who Cannot:</strong></p>
+            <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+              <li>Small and medium clinics</li>
+              <li>NGOs with limited funding</li>
+              <li>Community health centers</li>
+              <li>Programs in remote territories</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <h3 style="color: white;">The Result: Inequality</h3>
+
+          <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(10px);">
+            <h2 style="color: white; margin-bottom: 1rem;">95%+</h2>
+            <p style="font-size: 1.1rem;">
+              of healthcare organizations operate <strong>WITHOUT</strong> business continuity management
+            </p>
+          </div>
+
+          <div style="margin-top: 2rem; font-size: 1.05rem;">
+            <p><strong>This means:</strong></p>
+            <ul style="margin-top: 1rem;">
+              <li>Vulnerability to crises</li>
+              <li>Repeated mistakes</li>
+              <li>Preventable loss of life</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1.5rem; border: 2px solid white; border-radius: 8px;">
+            <p style="font-size: 1.15rem; font-weight: 600;">
+              Preparedness became a privilege of the wealthy, not a right for every organization serving its community.
+            </p>
+          </div>
+
+          <div style="margin-top: 2rem; text-align: center; font-size: 1.2rem; font-weight: 600;">
+            <p>This inequality is what we're solving.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="bg-alt">
+    <div class="container text-center">
+      <h2>Next: See How AI Changes Everything</h2>
+      <p class="section-subtitle">
+        Discover how our AI-powered platform democratizes BCM expertise,
+        making it accessible to organizations of any size or budget
+      </p>
+
+      <div style="margin-top: 2rem;">
+        <a href="platform-overview.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          Explore Platform Overview →
+        </a>
+      </div>
+
+      <div class="grid grid-3" style="margin-top: 3rem;">
+        <a href="service-catalog-visual.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Service Catalog</h3>
+          <p>Explore 62 services with visual diagrams</p>
+        </a>
+
+        <a href="decision-center.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Decision Center</h3>
+          <p>See how AI makes governance decisions</p>
+        </a>
+
+        <a href="mio-manager.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>MIO Manager</h3>
+          <p>Understand the Observatory pattern</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          Making Business Continuity Management accessible to all healthcare organizations.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+
+      <div>
+        <h4>Key Services</h4>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="modules.html">All Services</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#4A90E2',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#2171C7',
+        lineColor: '#333',
+        secondaryColor: '#50C878',
+        tertiaryColor: '#F5A623'
+      }
+    });
+  </script>
+</body>
+</html>

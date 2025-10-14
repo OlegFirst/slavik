@@ -1,0 +1,14 @@
+{
+  "github": {
+    "silent": true,
+    "enabled": false
+  },
+  "functions": {
+    "api/events/stream.ts": { "runtime": "edge" },
+    "api/odoo/health.ts": { "runtime": "edge" }
+  },
+  "routes": [
+    { "src": "/api/events/stream", "dest": "/api/events/stream.ts" },
+    { "src": "/api/odoo/health", "dest": "/api/odoo/health.ts" }
+  ]
+}

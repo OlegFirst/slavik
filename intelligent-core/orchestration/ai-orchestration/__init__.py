@@ -11,7 +11,7 @@ Autonomous decision-making system with:
 
 Quick Start:
     ```python
-    from intelligent_core.ai_orchestration import AIOrchestrator
+    from . import AIOrchestrator
 
     # Initialize orchestrator
     orchestrator = AIOrchestrator()
@@ -41,8 +41,8 @@ Safety:
     - Audit trail for all decisions
 """
 
-from intelligent_core.ai_orchestration.orchestrator import AIOrchestrator
-from intelligent_core.ai_orchestration.models import (
+from .orchestrator import AIOrchestrator
+from .models import (
     Decision,
     Strategy,
     Priority,

@@ -1,0 +1,247 @@
+{
+  "id": "bia_process_v1",
+  "name": "Business Impact Analysis",
+  "version": "1.0",
+  "description": "Comprehensive BIA process for critical business functions",
+  "start_step_id": "identify_functions",
+  "end_step_ids": [
+    "complete"
+  ],
+  "category": "bcm",
+  "owner": "BCM Team",
+  "tags": [
+    "bia",
+    "iso22301",
+    "critical"
+  ],
+  "iso_clause": "8.2.2",
+  "compliance_requirements": [
+    "ISO 22301:2019 - Clause 8.2"
+  ],
+  "steps": {
+    "identify_functions": {
+      "id": "identify_functions",
+      "name": "Identify Critical Functions",
+      "step_type": "form_input",
+      "description": "Identify and document critical business functions",
+      "next_steps": [
+        "assess_impact"
+      ],
+      "allowed_roles": [
+        "bia_analyst",
+        "bcm_manager"
+      ],
+      "document_template": null,
+      "ai_agent": null,
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": [
+        {
+          "name": "function_name",
+          "label": "Function Name",
+          "field_type": "text",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        },
+        {
+          "name": "function_description",
+          "label": "Function Description",
+          "field_type": "textarea",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        }
+      ]
+    },
+    "assess_impact": {
+      "id": "assess_impact",
+      "name": "Assess Business Impact",
+      "step_type": "analysis",
+      "description": "Analyze the impact of function disruption",
+      "next_steps": [
+        "identify_dependencies"
+      ],
+      "allowed_roles": [
+        "bia_analyst"
+      ],
+      "document_template": null,
+      "ai_agent": "analytics_specialist",
+      "estimated_duration_minutes": 45,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": [
+        {
+          "name": "impact_level",
+          "label": "Impact Level",
+          "field_type": "select",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": [
+            {
+              "value": "critical",
+              "label": "Critical"
+            },
+            {
+              "value": "high",
+              "label": "High"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "low",
+              "label": "Low"
+            }
+          ],
+          "help_text": null
+        },
+        {
+          "name": "rto_hours",
+          "label": "Recovery Time Objective (hours)",
+          "field_type": "number",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        },
+        {
+          "name": "rpo_hours",
+          "label": "Recovery Point Objective (hours)",
+          "field_type": "number",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        }
+      ]
+    },
+    "identify_dependencies": {
+      "id": "identify_dependencies",
+      "name": "Identify Dependencies",
+      "step_type": "form_input",
+      "description": "Document dependencies and resources",
+      "next_steps": [
+        "approval"
+      ],
+      "allowed_roles": [
+        "bia_analyst"
+      ],
+      "document_template": null,
+      "ai_agent": null,
+      "estimated_duration_minutes": 25,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": [
+        {
+          "name": "dependencies",
+          "label": "Key Dependencies",
+          "field_type": "textarea",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        },
+        {
+          "name": "resources",
+          "label": "Required Resources",
+          "field_type": "textarea",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        }
+      ]
+    },
+    "approval": {
+      "id": "approval",
+      "name": "Manager Approval",
+      "step_type": "approval",
+      "description": "BCM Manager reviews and approves the BIA",
+      "next_steps": [
+        "generate_report"
+      ],
+      "allowed_roles": [
+        "bcm_manager"
+      ],
+      "document_template": null,
+      "ai_agent": null,
+      "estimated_duration_minutes": 15,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": [
+        {
+          "name": "approved",
+          "label": "Approval Status",
+          "field_type": "select",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": [
+            {
+              "value": "approved",
+              "label": "Approved"
+            },
+            {
+              "value": "rejected",
+              "label": "Rejected"
+            },
+            {
+              "value": "needs_revision",
+              "label": "Needs Revision"
+            }
+          ],
+          "help_text": null
+        },
+        {
+          "name": "comments",
+          "label": "Comments",
+          "field_type": "textarea",
+          "description": null,
+          "required": false,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        }
+      ]
+    },
+    "generate_report": {
+      "id": "generate_report",
+      "name": "Generate BIA Report",
+      "step_type": "document_generation",
+      "description": "Generate comprehensive BIA report",
+      "next_steps": [
+        "complete"
+      ],
+      "allowed_roles": [
+        "bia_analyst"
+      ],
+      "document_template": "bia_report_template.docx",
+      "ai_agent": null,
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "auto_approve": true,
+      "form_fields": []
+    }
+  }
+}

@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  # Docker AI Unified BCM Service
+  bcm-ai-unified:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bcm-ai-unified
+    ports:
+      - "8000:8000"
+    environment:
+      - DOCKER_AI_MODE=enabled
+      - BCM_AI_SERVICES=orchestrator,bia_engine,document_processor,compliance_checker
+      - REDIS_URL=redis://redis:6379/0
+      - AI_WORKER_COUNT=4
+      - GPU_ACCELERATION=false  # Set to true if GPU available
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./models:/app/models  # For AI model storage
+      - ./logs:/app/logs      # For Docker AI logs
+    networks:
+      - bcm-ai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "ai.docker.service=bcm-unified"
+      - "ai.docker.type=agentic"
+      - "ai.docker.gpu=optional"
+
+  # Redis for AI caching
+  redis:
+    image: redis:7-alpine
+    container_name: bcm-ai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_ai_data:/data
+    networks:
+      - bcm-ai-network
+    command: redis-server --appendonly yes
+
+  # PostgreSQL for AI metadata
+  postgres:
+    image: postgres:15-alpine
+    container_name: bcm-ai-postgres
+    environment:
+      - POSTGRES_DB=bcm_ai
+      - POSTGRES_USER=ai_user
+      - POSTGRES_PASSWORD=ai_password
+    volumes:
+      - postgres_ai_data:/var/lib/postgresql/data
+    networks:
+      - bcm-ai-network
+    ports:
+      - "5433:5432"
+
+  # Docker AI Monitoring Dashboard
+  ai-dashboard:
+    image: grafana/grafana:latest
+    container_name: bcm-ai-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_FEATURE_TOGGLES_ENABLE=dashboards
+    volumes:
+      - grafana_ai_data:/var/lib/grafana
+    networks:
+      - bcm-ai-network
+    depends_on:
+      - bcm-ai-unified
+
+volumes:
+  redis_ai_data:
+  postgres_ai_data:
+  grafana_ai_data:
+
+networks:
+  bcm-ai-network:
+    driver: bridge
+    labels:
+      - "ai.docker.network=bcm-ai"

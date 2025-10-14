@@ -1,0 +1,204 @@
+{
+  "process": {
+    "id": "bia_process_v1",
+    "name": "Business Impact Analysis",
+    "version": "1.0",
+    "description": "Comprehensive BIA process for critical business functions",
+    "category": "bcm",
+    "owner": "BCM Team",
+    "tags": [
+      "bia",
+      "iso22301",
+      "critical"
+    ],
+    "iso_clause": "8.2.2",
+    "compliance_requirements": [
+      "ISO 22301:2019 - Clause 8.2"
+    ]
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "start",
+        "label": "Start: Business Impact Analysis",
+        "type": "start",
+        "shape": "ellipse",
+        "color": "#90EE90",
+        "font": {
+          "size": 16,
+          "bold": true
+        }
+      },
+      {
+        "id": "identify_functions",
+        "label": "Identify Critical Functions",
+        "type": "form_input",
+        "description": "Identify and document critical business functions",
+        "shape": "box",
+        "color": "#87CEEB",
+        "metadata": {
+          "allowed_roles": [
+            "bia_analyst",
+            "bcm_manager"
+          ],
+          "estimated_duration_minutes": 30,
+          "sla_hours": null,
+          "auto_approve": false,
+          "has_form": true,
+          "form_fields_count": 2
+        }
+      },
+      {
+        "id": "assess_impact",
+        "label": "Assess Business Impact",
+        "type": "analysis",
+        "description": "Analyze the impact of function disruption",
+        "shape": "box",
+        "color": "#DDA0DD",
+        "metadata": {
+          "allowed_roles": [
+            "bia_analyst"
+          ],
+          "estimated_duration_minutes": 45,
+          "sla_hours": null,
+          "auto_approve": false,
+          "has_form": true,
+          "form_fields_count": 3
+        }
+      },
+      {
+        "id": "identify_dependencies",
+        "label": "Identify Dependencies",
+        "type": "form_input",
+        "description": "Document dependencies and resources",
+        "shape": "box",
+        "color": "#87CEEB",
+        "metadata": {
+          "allowed_roles": [
+            "bia_analyst"
+          ],
+          "estimated_duration_minutes": 25,
+          "sla_hours": null,
+          "auto_approve": false,
+          "has_form": true,
+          "form_fields_count": 2
+        }
+      },
+      {
+        "id": "approval",
+        "label": "Manager Approval",
+        "type": "approval",
+        "description": "BCM Manager reviews and approves the BIA",
+        "shape": "box",
+        "color": "#FFD700",
+        "metadata": {
+          "allowed_roles": [
+            "bcm_manager"
+          ],
+          "estimated_duration_minutes": 15,
+          "sla_hours": null,
+          "auto_approve": false,
+          "has_form": true,
+          "form_fields_count": 2
+        }
+      },
+      {
+        "id": "generate_report",
+        "label": "Generate BIA Report",
+        "type": "document_generation",
+        "description": "Generate comprehensive BIA report",
+        "shape": "box",
+        "color": "#98FB98",
+        "metadata": {
+          "allowed_roles": [
+            "bia_analyst"
+          ],
+          "estimated_duration_minutes": 10,
+          "sla_hours": null,
+          "auto_approve": true,
+          "has_form": false,
+          "form_fields_count": 0
+        }
+      },
+      {
+        "id": "complete_end",
+        "label": "End: complete",
+        "type": "end",
+        "shape": "ellipse",
+        "color": "#FFB6C1",
+        "font": {
+          "size": 16,
+          "bold": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "identify_functions",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2
+      },
+      {
+        "from": "identify_functions",
+        "to": "assess_impact",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2,
+        "label": ""
+      },
+      {
+        "from": "assess_impact",
+        "to": "identify_dependencies",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2,
+        "label": ""
+      },
+      {
+        "from": "identify_dependencies",
+        "to": "approval",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2,
+        "label": ""
+      },
+      {
+        "from": "approval",
+        "to": "generate_report",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2,
+        "label": ""
+      },
+      {
+        "from": "generate_report",
+        "to": "complete_end",
+        "arrows": "to",
+        "color": "#333333",
+        "width": 2,
+        "label": ""
+      }
+    ]
+  },
+  "metadata": {
+    "total_steps": 5,
+    "start_step": "identify_functions",
+    "end_steps": [
+      "complete"
+    ],
+    "exported_at": "2025-10-12T16:01:32.848038"
+  },
+  "instances": [
+    {
+      "instance_id": "bia_process_v1-20251012160132",
+      "status": "in_progress",
+      "current_step_id": "approval",
+      "started_by": "john.doe@company.com",
+      "started_at": "2025-10-12T16:01:32.847715",
+      "completed_at": null,
+      "steps_completed": 3
+    }
+  ]
+}

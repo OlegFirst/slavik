@@ -7,7 +7,7 @@ Demonstrates basic AI Orchestrator usage.
 
 import asyncio
 import logging
-from intelligent_core.ai_orchestration import AIOrchestrator
+from . import AIOrchestrator
 
 # Setup logging
 logging.basicConfig(

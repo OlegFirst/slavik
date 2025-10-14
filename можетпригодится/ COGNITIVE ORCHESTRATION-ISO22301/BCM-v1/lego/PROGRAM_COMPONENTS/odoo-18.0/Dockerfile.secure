@@ -1,0 +1,89 @@
+# Secure Dockerfile for Odoo 18.0 with Complete BCM Platform
+# Addresses Docker Scout security concerns
+
+# Use distroless or hardened base image
+FROM odoo:18.0-slim as base
+
+# Create security-hardened environment
+USER root
+
+# Update base packages and install only essential dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-pip=23.0.1+dfsg-1 \
+    python3-dev=3.11.2-1+deb12u2 \
+    curl=7.88.1-10+deb12u7 \
+    git=1:2.39.2-1.1 \
+    build-essential=12.9 \
+    libssl-dev=3.0.11-1~deb12u2 \
+    libffi-dev=3.4.4-1 \
+    libxml2-dev=2.9.14+dfsg-1.3~deb12u1 \
+    libxslt1-dev=1.1.35-1 \
+    libjpeg-dev=1:2.1.5-2 \
+    libpng-dev=1.6.39-2 \
+    zlib1g-dev=1:1.2.13.dfsg-1 \
+    postgresql-client=15+248 \
+    redis-tools=7:7.0.8-4 \
+    ca-certificates=20230311 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
+
+# Create non-root user with minimal privileges
+RUN groupadd -r odoo-secure --gid=1001 && \
+    useradd -r -g odoo-secure --uid=1001 --home-dir=/opt/odoo --shell=/bin/bash odoo-secure
+
+# Set up secure directories with proper permissions
+RUN mkdir -p /opt/odoo/data /opt/odoo/logs /opt/odoo/config /opt/odoo/addons \
+    && mkdir -p /var/cache/pip \
+    && chown -R odoo-secure:odoo-secure /opt/odoo /var/cache/pip \
+    && chmod 750 /opt/odoo \
+    && chmod 755 /opt/odoo/data /opt/odoo/logs /opt/odoo/addons \
+    && chmod 640 /opt/odoo/config
+
+# Copy and install secure Python dependencies
+COPY requirements.secure.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir --user --upgrade pip==23.3.1 && \
+    pip3 install --no-cache-dir --user -r /tmp/requirements.txt && \
+    rm -f /tmp/requirements.txt
+
+# Copy configuration with secure permissions
+COPY --chown=odoo-secure:odoo-secure ./config/odoo.conf /opt/odoo/config/odoo.conf
+RUN chmod 640 /opt/odoo/config/odoo.conf
+
+# Copy BCM modules with secure permissions
+COPY --chown=odoo-secure:odoo-secure ./addons/ /opt/odoo/addons/
+RUN find /opt/odoo/addons -type f -exec chmod 644 {} \; && \
+    find /opt/odoo/addons -type d -exec chmod 755 {} \;
+
+# Copy and secure entry point scripts
+COPY --chown=odoo-secure:odoo-secure docker-entrypoint.secure.sh /opt/odoo/docker-entrypoint.sh
+COPY --chown=odoo-secure:odoo-secure check_dependencies.sh /opt/odoo/check_dependencies.sh
+RUN chmod 750 /opt/odoo/docker-entrypoint.sh /opt/odoo/check_dependencies.sh
+
+# Switch to non-root user
+USER odoo-secure
+
+# Set secure environment variables
+ENV ODOO_RC=/opt/odoo/config/odoo.conf
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Secure health check
+HEALTHCHECK --interval=30s --timeout=15s --start-period=120s --retries=3 \
+  CMD curl -f --max-time 10 http://localhost:8069/web/health || exit 1
+
+# Expose port with least privilege
+EXPOSE 8069
+
+# Use exec form for better signal handling
+ENTRYPOINT ["/opt/odoo/docker-entrypoint.sh"]
+CMD ["odoo", "--config=/opt/odoo/config/odoo.conf", "--logfile=/opt/odoo/logs/odoo.log"]
+
+# Security metadata
+LABEL org.opencontainers.image.title="Secure BCM Odoo Platform"
+LABEL org.opencontainers.image.description="Security-hardened Odoo 18.0 with BCM modules"
+LABEL org.opencontainers.image.vendor="SEH Foundation"
+LABEL org.opencontainers.image.version="v1.2-secure"
+LABEL security.scan="enabled"
+LABEL security.non-root="true"

@@ -1,0 +1,71 @@
+name: Update GitHub Pages Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - recovery-7-8-oct
+    paths:
+      - 'catalogs/**'
+      - 'infrastructure/**'
+      - 'README.md'
+      - 'scripts/docs-generator/**'
+
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git operations
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/docs-generator/requirements.txt
+
+      - name: Generate documentation
+        run: |
+          python scripts/docs-generator/generate_docs.py
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code docs/ || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/
+          git commit -m "docs: Auto-update GitHub Pages from catalogs
+
+          Generated at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          Triggered by: ${{ github.event_name }}
+          Commit: ${{ github.sha }}"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Documentation Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Documentation generated successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Updated Files:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`docs/assets/stats.json\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`docs/index.html\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Catalogs Processed:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Service Catalog (Platform Services)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Subsystems Catalog" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Systems Catalog" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ User Applications Catalog" >> $GITHUB_STEP_SUMMARY

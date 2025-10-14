@@ -1,0 +1,474 @@
+# Test Infrastructure Configuration
+# Managed by: Project Agent (Port 8060)
+# Version: 1.0.0
+# Last Updated: 2025-10-11
+
+metadata:
+  owner: "project-agent"
+  port: 8060
+  version: "1.0.0"
+  centralized: true
+  centralization_date: "2025-10-11"
+
+# Test Structure
+test_structure:
+  root: "/tests"
+
+  categories:
+    unit:
+      path: "/tests/unit"
+      description: "Unit tests for individual components"
+      coverage_target: 80
+      subcategories:
+        - name: "platform-services"
+          path: "/tests/unit/platform-services"
+          services: 9
+          coverage_target: 80
+
+        - name: "intelligent-core"
+          path: "/tests/unit/intelligent-core"
+          components: 12
+          coverage_target: 85
+
+        - name: "infrastructure"
+          path: "/tests/unit/infrastructure"
+          components: 4
+          coverage_target: 75
+
+    integration:
+      path: "/tests/integration"
+      description: "Cross-service integration tests"
+      coverage_target: 70
+      subcategories:
+        - name: "services"
+          path: "/tests/integration/services"
+        - name: "database"
+          path: "/tests/integration/database"
+        - name: "eventbus"
+          path: "/tests/integration/eventbus"
+
+    e2e:
+      path: "/tests/e2e"
+      description: "End-to-end user workflow tests"
+      coverage_target: 60
+      subcategories:
+        - name: "workflows"
+          path: "/tests/e2e/workflows"
+        - name: "api"
+          path: "/tests/e2e/api"
+
+    load:
+      path: "/tests/load"
+      description: "Performance and load tests"
+      subcategories:
+        - name: "performance"
+          path: "/tests/load/performance"
+        - name: "stress"
+          path: "/tests/load/stress"
+
+    performance:
+      path: "/tests/performance"
+      description: "Performance benchmarking tests"
+
+    security:
+      path: "/tests/security"
+      description: "Security and vulnerability tests"
+      coverage_target: 90
+      subcategories:
+        - name: "general"
+          path: "/tests/security"
+          description: "General security tests (JWT, RBAC, session management)"
+        - name: "owasp"
+          path: "/tests/security/owasp"
+          description: "OWASP Top 10 2021 coverage tests"
+        - name: "eventbus"
+          path: "/tests/integration/eventbus"
+          description: "EventBus security and choreography tests"
+
+# Test Components
+components:
+  platform_services:
+    total: 9
+    services:
+      - name: "bia-service"
+        port: 8012
+        test_path: "/tests/unit/platform-services/test_bia_service.py"
+
+      - name: "compliance-service"
+        port: 8014
+        test_path: "/tests/unit/platform-services/test_compliance_service.py"
+
+      - name: "governance-service"
+        port: 8025
+        test_path: "/tests/unit/platform-services/test_governance_service.py"
+
+      - name: "learning-service"
+        port: 8021
+        test_path: "/tests/unit/platform-services/test_learning_service.py"
+
+      - name: "planning_service"
+        port: 8011
+        test_path: "/tests/unit/platform-services/test_planning_service.py"
+
+      - name: "plans_service"
+        port: 8023
+        test_path: "/tests/unit/platform-services/test_plans_service.py"
+
+      - name: "response-service"
+        port: 8027
+        test_path: "/tests/unit/platform-services/test_response_service.py"
+
+      - name: "risk-service"
+        port: 8026
+        test_path: "/tests/unit/platform-services/test_risk_service.py"
+
+      - name: "digital-twin"
+        port: 8035
+        test_path: "/tests/unit/platform-services/test_digital_twin.py"
+
+  intelligent_core:
+    total: 12
+    components:
+      - name: "ai-foundation"
+        test_path: "/tests/unit/intelligent-core/test_ai_foundation.py"
+
+      - name: "ai-orchestration"
+        port: 8002
+        test_path: "/tests/unit/intelligent-core/test_ai_orchestration.py"
+
+      - name: "community_intelligence"
+        port: 8030
+        test_path: "/tests/unit/intelligent-core/test_community_intelligence.py"
+
+      - name: "coordination-center"
+        port: 8033
+        test_path: "/tests/unit/intelligent-core/test_coordination_center.py"
+
+      - name: "expertise-center"
+        port: 8029
+        test_path: "/tests/unit/intelligent-core/test_expertise_center.py"
+
+      - name: "workflow-engine"
+        port: 8030
+        test_path: "/tests/unit/intelligent-core/test_workflow_engine.py"
+
+      - name: "workflow_intelligence"
+        port: 8028
+        test_path: "/tests/unit/intelligent-core/test_workflow_intelligence.py"
+
+      - name: "system-bcm-service"
+        port: 8050
+        test_path: "/tests/unit/intelligent-core/test_system_bcm.py"
+
+      - name: "collective"
+        port: 8034
+        test_path: "/tests/unit/intelligent-core/test_collective.py"
+
+      - name: "ai_workflow_optimizer"
+        port: 8038
+        test_path: "/tests/unit/intelligent-core/test_ai_workflow_optimizer.py"
+
+      - name: "predictive"
+        port: 8031
+        test_path: "/tests/unit/intelligent-core/test_predictive.py"
+
+      - name: "event_intelligence"
+        port: 8032
+        test_path: "/tests/unit/intelligent-core/test_event_intelligence.py"
+
+  infrastructure:
+    total: 4
+    components:
+      - name: "api-gateway"
+        test_path: "/tests/unit/infrastructure/test_api_gateway.py"
+
+      - name: "eventbus"
+        port: 8001
+        test_path: "/tests/unit/infrastructure/test_eventbus.py"
+
+      - name: "mio-manager"
+        port: 8057
+        test_path: "/tests/unit/infrastructure/test_mio_manager.py"
+
+      - name: "balancer-service"
+        test_path: "/tests/unit/infrastructure/test_balancer.py"
+
+# Test Tools
+test_tools:
+  framework: "pytest"
+  version: "7.4.0"
+
+  plugins:
+    - name: "pytest-asyncio"
+      purpose: "Async test support"
+
+    - name: "pytest-cov"
+      purpose: "Code coverage"
+
+    - name: "pytest-xdist"
+      purpose: "Parallel execution"
+
+    - name: "pytest-mock"
+      purpose: "Mocking utilities"
+
+    - name: "httpx"
+      purpose: "Async HTTP testing"
+
+    - name: "locust"
+      purpose: "Load testing"
+
+  configuration:
+    config_file: "/tests/pytest.ini"
+    conftest: "/tests/conftest.py"
+    requirements: "/tests/requirements-test.txt"
+
+# Test Runners
+test_runners:
+  bash:
+    file: "/tests/run_tests.sh"
+    description: "Bash-based test runner with parallel support"
+    features:
+      - "Category selection (unit/integration/e2e/load)"
+      - "Parallel execution"
+      - "Coverage reporting"
+      - "HTML report generation"
+
+  python:
+    file: "/tests/run_tests.py"
+    description: "Python-based test orchestrator"
+    features:
+      - "Programmatic test control"
+      - "Advanced filtering"
+      - "Custom reporters"
+
+# Test Markers
+markers:
+  - name: "fast"
+    description: "Fast-running tests (<1s)"
+
+  - name: "slow"
+    description: "Slow-running tests (>5s)"
+
+  - name: "integration"
+    description: "Integration tests"
+
+  - name: "e2e"
+    description: "End-to-end tests"
+
+  - name: "critical"
+    description: "Critical path tests"
+
+  - name: "skip_ci"
+    description: "Skip in CI environment"
+
+  - name: "require_db"
+    description: "Requires database connection"
+
+  - name: "require_redis"
+    description: "Requires Redis connection"
+
+  - name: "require_eventbus"
+    description: "Requires EventBus connection"
+
+  - name: "security"
+    description: "Security-focused tests"
+
+  - name: "owasp"
+    description: "OWASP Top 10 coverage tests"
+
+# Coverage Requirements
+coverage:
+  total_target: 80
+
+  by_category:
+    platform_services: 80
+    intelligent_core: 85
+    infrastructure: 75
+    shared: 85
+    security: 90
+
+  critical_paths:
+    target: 95
+    paths:
+      - "BIA workflow"
+      - "Risk assessment"
+      - "Compliance validation"
+      - "AI orchestration"
+      - "EventBus choreography"
+      - "Authentication & Authorization"
+      - "OWASP Top 10 vulnerabilities"
+
+# CI/CD Integration
+ci_cd:
+  triggers:
+    - event: "pull_request"
+      run: ["unit", "integration"]
+
+    - event: "push_to_main"
+      run: ["unit", "integration", "e2e"]
+
+    - event: "nightly"
+      run: ["unit", "integration", "e2e", "load"]
+
+    - event: "release"
+      run: ["all"]
+
+  quality_gates:
+    - name: "minimum_coverage"
+      threshold: 80
+      action: "block_merge"
+
+    - name: "no_failing_tests"
+      action: "block_merge"
+
+    - name: "performance_regression"
+      threshold: "10%"
+      action: "warn"
+
+# Test Fixtures
+fixtures:
+  location: "/tests/fixtures"
+
+  data_files:
+    - name: "users.json"
+      description: "Test user data"
+
+    - name: "organizations.json"
+      description: "Test organization data"
+
+    - name: "workflows.json"
+      description: "Test workflow definitions"
+
+    - name: "documents.json"
+      description: "Test documents"
+
+  global_fixtures:
+    - name: "db_session"
+      scope: "function"
+      description: "Test database session"
+
+    - name: "event_bus"
+      scope: "session"
+      description: "Test event bus"
+
+    - name: "auth_user"
+      scope: "function"
+      description: "Authenticated test user"
+
+    - name: "test_client"
+      scope: "function"
+      description: "Async HTTP test client"
+
+# Archive Information
+archive:
+  location: "/Users/MD/AI-Platform-ISO/_archive/tests-original-2025-10-11"
+  date: "2025-10-11"
+  reason: "Centralization to /tests/unit/"
+
+  archived_directories: 25
+  breakdown:
+    platform_services: 9
+    intelligent_core: 12
+    infrastructure: 4
+
+  documentation: "/Users/MD/AI-Platform-ISO/_archive/tests-original-2025-10-11/ARCHIVE_README.md"
+
+# Project Agent Integration
+project_agent:
+  service_name: "project-agent"
+  port: 8060
+
+  capabilities:
+    - "testing_coverage"
+    - "test_generation"
+    - "code_quality_analysis"
+    - "compliance_checking"
+
+  api_endpoints:
+    - endpoint: "/api/tests/run"
+      method: "POST"
+      description: "Run specific test suite"
+
+    - endpoint: "/api/tests/coverage"
+      method: "GET"
+      description: "Get current test coverage"
+
+    - endpoint: "/api/tests/generate"
+      method: "POST"
+      description: "Generate missing tests"
+
+    - endpoint: "/api/tests/report"
+      method: "GET"
+      description: "Get test execution report"
+
+  responsibilities:
+    - "Monitor test coverage across all components"
+    - "Generate missing unit tests automatically"
+    - "Analyze test quality and effectiveness"
+    - "Ensure compliance with testing standards"
+    - "Report testing metrics to dashboard"
+
+# DevOps Agent Integration
+devops_agent:
+  service_name: "devops-agent"
+  port: 8058
+
+  capabilities:
+    - "ci_cd_management"
+    - "deployment_automation"
+
+  responsibilities:
+    - "Execute tests in CI/CD pipeline"
+    - "Deploy only if tests pass"
+    - "Trigger test runs on commits"
+    - "Manage test environments"
+
+# Monitoring & Metrics
+monitoring:
+  prometheus_metrics:
+    - name: "test_coverage_percentage"
+      type: "gauge"
+      labels: ["component", "category"]
+
+    - name: "test_execution_duration_seconds"
+      type: "histogram"
+      labels: ["suite", "test_type"]
+
+    - name: "test_failures_total"
+      type: "counter"
+      labels: ["component", "test_name"]
+
+    - name: "tests_generated_total"
+      type: "counter"
+      labels: ["component", "generator"]
+
+  dashboards:
+    grafana:
+      - "Test Coverage Dashboard"
+      - "Test Execution Performance"
+      - "Test Failure Trends"
+
+# Standards Compliance
+standards:
+  - name: "ISO/IEC/IEEE 29119"
+    description: "Software testing standards"
+
+  - name: "ISO/IEC 25010"
+    description: "Software quality model"
+
+  - name: "pytest best practices"
+    description: "Modern Python testing"
+
+# Related Documentation
+documentation:
+  - path: "/tests/README.md"
+    description: "Main test documentation"
+
+  - path: "/tests/README_STRUCTURE.md"
+    description: "Test structure documentation"
+
+  - path: "/tests/conftest.py"
+    description: "Global fixtures and configuration"
+
+  - path: "/tests/pytest.ini"
+    description: "pytest configuration"

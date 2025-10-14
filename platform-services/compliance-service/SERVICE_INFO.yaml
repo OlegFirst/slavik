@@ -1,0 +1,360 @@
+# ============================================
+# SERVICE INFORMATION - Compliance Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: compliance-service
+display_name: "Compliance Service"
+version: "1.0.0"
+description: "Comprehensive compliance management for ISO 22301. Manages assessments, gap analysis, evidence collection, nonconformity management (RCA), internal audits, and continual improvement initiatives."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "platform-services"
+business_process: "Compliance Management (ISO 22301 Clauses 9.2, 10.1, 10.2)"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8014
+
+endpoints:
+  base_url: "http://localhost:8014"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/compliance"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Compliance assessments against ISO 22301, HIPAA, SOC2, GDPR"
+  - "Gap analysis and remediation tracking"
+  - "Evidence collection and management"
+  - "Internal audit planning and execution (Clause 9.2)"
+  - "Nonconformity management with Root Cause Analysis (Clause 10.1)"
+  - "Corrective and preventive actions (CAPA)"
+  - "Continual improvement tracking (Clause 10.2)"
+  - "Management review support"
+  - "Compliance dashboard and reporting"
+  - "Templates library (audit plans, checklists, reports)"
+  - "Knowledge base for compliance best practices"
+
+features:
+  - name: "Compliance Assessments"
+    description: "Multi-standard compliance assessments with scoring"
+    endpoints: 8
+
+  - name: "Gap Analysis"
+    description: "Identify and track compliance gaps"
+    endpoints: 6
+
+  - name: "Evidence Management"
+    description: "Collect and link evidence to requirements"
+    endpoints: 6
+
+  - name: "Internal Audits"
+    description: "Plan, execute, and report internal audits"
+    endpoints: 8
+
+  - name: "Nonconformity Management"
+    description: "Track nonconformities with RCA and CAPA"
+    endpoints: 6
+
+  - name: "Continual Improvement"
+    description: "PDCA cycles and improvement initiatives"
+    endpoints: 6
+
+  - name: "Dashboard & Reporting"
+    description: "Compliance metrics and executive dashboards"
+    endpoints: 4
+
+  - name: "Templates & Knowledge Base"
+    description: "Reusable templates and best practices"
+    endpoints: 8
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 1000/day"
+    prometheus_metric: "compliance_service_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 700ms"
+    prometheus_metric: "compliance_service_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "compliance_service_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.5%"
+    prometheus_metric: "compliance_service_availability"
+
+  - name: "overall_compliance_score"
+    type: "gauge"
+    description: "Overall compliance score (0-100)"
+    target: "> 85"
+    prometheus_metric: "compliance_service_overall_score"
+
+  - name: "open_gaps_count"
+    type: "gauge"
+    description: "Number of open compliance gaps"
+    target: "< 10"
+    prometheus_metric: "compliance_service_open_gaps"
+
+  - name: "audit_completion_rate"
+    type: "gauge"
+    description: "Percentage of planned audits completed"
+    target: "> 90%"
+    prometheus_metric: "compliance_service_audit_completion"
+
+  - name: "nonconformity_resolution_time"
+    type: "histogram"
+    description: "Average time to resolve nonconformities (days)"
+    target: "< 30 days"
+    prometheus_metric: "compliance_service_nc_resolution_days"
+
+  - name: "capa_effectiveness"
+    type: "gauge"
+    description: "Percentage of effective corrective actions"
+    target: "> 80%"
+    prometheus_metric: "compliance_service_capa_effectiveness"
+
+  - name: "evidence_coverage"
+    type: "gauge"
+    description: "Percentage of requirements with evidence"
+    target: "> 95%"
+    prometheus_metric: "compliance_service_evidence_coverage"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "aio-pika>=9.3.0"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "redis>=5.0.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Primary database for compliance data"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      port: 6379
+      purpose: "Caching assessment results"
+      required: false
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for event-driven integration"
+      required: false
+
+  infrastructure:
+    - "PostgreSQL database (compliance schema)"
+    - "Redis (optional caching)"
+    - "RabbitMQ (EventBus)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "governance.policy.approved"
+        source: "governance_service"
+        action: "Update compliance requirements"
+
+      - event: "documents.published"
+        source: "documents_service"
+        action: "Link evidence to assessments"
+
+      - event: "risk.identified"
+        source: "risk_service"
+        action: "Create compliance gap if control missing"
+
+    publishes:
+      - event: "compliance.gap.identified"
+        target: "governance_service,risk_service"
+        data: "gap_id, severity, requirement, remediation_plan"
+
+      - event: "compliance.assessment.completed"
+        target: "governance_service,documents_service"
+        data: "assessment_id, score, gaps_count"
+
+      - event: "compliance.nonconformity.raised"
+        target: "governance_service"
+        data: "nc_id, severity, root_cause"
+
+      - event: "compliance.audit.completed"
+        target: "governance_service,documents_service"
+        data: "audit_id, findings_count, score"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/compliance/assessments"
+        methods: ["GET", "POST", "PUT"]
+        consumers: ["admin_panel", "governance_service"]
+
+      - endpoint: "/api/compliance/dashboard"
+        methods: ["GET"]
+        consumers: ["admin_panel"]
+
+      - endpoint: "/api/compliance/iso-coverage"
+        methods: ["GET"]
+        consumers: ["governance_service", "documents_service"]
+
+    consumes:
+      - service: "documents_service"
+        endpoint: "/api/documents/documents"
+        purpose: "Link evidence documents to requirements"
+
+      - service: "governance_service"
+        endpoint: "/api/governance/policies"
+        purpose: "Get policy requirements for compliance"
+
+      - service: "orchestrator"
+        endpoint: "/api/v1/decision"
+        purpose: "AI assistance for gap analysis"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Manual evidence upload required (no auto-discovery)"
+    severity: "medium"
+    workaround: "Periodic manual evidence collection"
+    tracking: "COMP-001"
+
+  - issue: "RCA templates limited to 5W2H and Fishbone"
+    severity: "low"
+    workaround: "Custom RCA can be added manually"
+    tracking: "COMP-002"
+
+limitations:
+  - "Supports ISO 22301, HIPAA, SOC2, GDPR (others require custom config)"
+  - "Maximum 1000 requirements per assessment"
+  - "Evidence files limited to 50MB each"
+  - "Audit scheduling manual (no auto-scheduling)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "compliance-service:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8014:8014"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+
+    optional:
+      - name: "REDIS_URL"
+        description: "Redis connection string"
+        default: "redis://localhost:6379/0"
+
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        default: "amqp://guest:guest@localhost:5672/"
+
+      - name: "ORCHESTRATOR_URL"
+        description: "AI Orchestrator URL"
+        default: "http://localhost:8002"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m compliance.main"
+
+  requirements:
+    cpu: "0.5 cores"
+    memory: "512MB"
+    disk: "2GB"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8014/docs"
+  external_links:
+    - name: "ISO 22301 Clause 9.2 - Internal Audit"
+      url: "https://www.iso.org/standard/75106.html"
+    - name: "ISO 22301 Clause 10 - Improvement"
+      url: "https://www.iso.org/standard/75106.html"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Platform Services Team"
+  tech_lead: "Platform Architect"
+  product_owner: "BCM Product Owner"
+  on_call: "platform-team@company.com"
+  slack_channel: "#platform-services"
+
+support:
+  incidents: "Create ticket in JIRA Platform project"
+  questions: "#platform-services Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  iso_22301:
+    - clause: "9.2"
+      description: "Internal audit"
+      status: "compliant"
+
+    - clause: "10.1"
+      description: "Nonconformity and corrective action"
+      status: "compliant"
+
+    - clause: "10.2"
+      description: "Continual improvement"
+      status: "compliant"

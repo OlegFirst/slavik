@@ -1,0 +1,162 @@
+version: '3.8'
+
+services:
+  # ========================================
+  # БАЗОВАЯ ИНФРАСТРУКТУРА
+  # ========================================
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: bcm_platform
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: bcm
+      RABBITMQ_DEFAULT_PASS: bcm123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ========================================
+  # ODOO С BCM МОДУЛЯМИ
+  # ========================================
+  odoo:
+    image: odoo:18.0
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=postgres
+      - USER=odoo
+      - PASSWORD=postgres123
+      - DB_NAME=bcm_platform
+      - REDIS_URL=redis://redis:6379/0
+      # Включаем BCM модули
+      - INIT_MODULES=bcm_core,bcm_base,bcm_risk_management,bcm_incident,bcm_bia,bcm_training,bcm_exercise,bcm_plans,bcm_audit,bcm_digital_twin_core
+    volumes:
+      - ./core/odoo-18.0/addons:/mnt/extra-addons:rw
+      - odoo_data:/var/lib/odoo
+      - odoo_config:/etc/odoo
+    command: odoo -i bcm_core,bcm_base,bcm_risk_management -d bcm_platform
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ========================================
+  # FRONTEND ПРИЛОЖЕНИЯ
+  # ========================================
+
+  # Основная BCM платформа
+  frontend-unified:
+    build:
+      context: ./frontend/unified-bcm-platform
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8069
+      - NEXT_PUBLIC_ODOO_URL=http://localhost:8069
+    volumes:
+      - ./frontend/unified-bcm-platform:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - odoo
+    command: npm run dev
+
+  # Admin Panel
+  frontend-admin:
+    build:
+      context: ./frontend/admin_panel
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8069/api/v1
+      - REACT_APP_ODOO_URL=http://localhost:8069
+    volumes:
+      - ./frontend/admin_panel:/app
+      - /app/node_modules
+    depends_on:
+      - odoo
+    command: npm start
+
+  # BCM Marketplace
+  frontend-marketplace:
+    build:
+      context: ./frontend/bcm-marketplace
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - VITE_API_URL=http://localhost:8069/api
+    volumes:
+      - ./frontend/bcm-marketplace:/app
+      - /app/node_modules
+    depends_on:
+      - odoo
+    command: npm run dev
+
+  # Enhanced Web Portal
+  frontend-portal:
+    build:
+      context: ./frontend/web_portal_enhanced
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - VUE_APP_API_URL=http://localhost:8069/api
+    volumes:
+      - ./frontend/web_portal_enhanced:/app
+      - /app/node_modules
+    depends_on:
+      - odoo
+    command: npm run serve
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  odoo_data:
+  odoo_config:
+
+networks:
+  default:
+    driver: bridge

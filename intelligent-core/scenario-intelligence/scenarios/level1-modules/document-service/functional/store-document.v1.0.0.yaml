@@ -1,0 +1,224 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "document-service-store-document"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "operational_excellence"
+    domain: "document_management"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "document-service"
+    subsystem: "platform-services"
+    team: "document-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Store Document with Metadata"
+    summary: "Store document (BCM plan, SOP, policy) with version control and metadata"
+    business_value: "Enable centralized document management with audit trail and compliance"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Document Management"
+
+    scenario: "Store document with metadata"
+
+    given:
+      - "Document Service is running"
+      - "User has permission 'documents:write'"
+      - "Organization exists"
+      - "Document data is valid"
+      - "Document type is supported (PDF, DOCX, etc.)"
+
+    when:
+      - "User uploads BCM Plan document"
+      - "Document includes metadata (title, type, version)"
+      - "Document is scanned for viruses"
+
+    then:
+      - "Document is stored in object storage"
+      - "Document metadata is saved to database"
+      - "Document version is 1.0.0"
+      - "Virus scan result is clean"
+      - "Audit log entry is created"
+      - "Response status is 201"
+      - "Event 'document.stored' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 60  # Longer timeout for file upload
+    retry_policy:
+      max_retries: 2
+      backoff: linear
+
+    steps:
+      - id: "validate_permissions"
+        action: "document.check_permission"
+        params:
+          user_id: "{{user_id}}"
+          permission: "documents:write"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "abort"
+
+      - id: "validate_organization"
+        action: "document.validate_organization"
+        params:
+          organization_id: "{{organization_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "validate_file"
+        action: "document.validate_file"
+        params:
+          file_name: "{{file_name}}"
+          file_size: "{{file_size}}"
+          mime_type: "{{mime_type}}"
+        expect:
+          valid: true
+          size_within_limit: true
+          type_supported: true
+        on_failure: "abort"
+
+      - id: "scan_virus"
+        action: "document.scan_virus"
+        params:
+          file_data: "{{file_data}}"
+        expect:
+          status: 200
+          is_clean: true
+        on_failure: "abort"
+
+      - id: "store_to_object_storage"
+        action: "document.store_file"
+        params:
+          organization_id: "{{organization_id}}"
+          file_name: "{{file_name}}"
+          file_data: "{{file_data}}"
+          storage_path: "bcm-documents/{{organization_id}}"
+        expect:
+          status: 200
+          storage_url: "{{exists}}"
+
+      - id: "save_metadata"
+        action: "document.save_metadata"
+        params:
+          organization_id: "{{organization_id}}"
+          title: "{{title}}"
+          document_type: "{{document_type}}"
+          version: "1.0.0"
+          storage_url: "{{steps.store_to_object_storage.result.storage_url}}"
+          created_by: "{{user_id}}"
+        expect:
+          status: 201
+          document_id: "{{exists}}"
+
+      - id: "create_audit_log"
+        action: "document.log_audit"
+        params:
+          event: "document_stored"
+          document_id: "{{steps.save_metadata.result.document_id}}"
+          user_id: "{{user_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "document.stored"
+          aggregate: "Document"
+          aggregate_id: "{{steps.save_metadata.result.document_id}}"
+          payload:
+            document_id: "{{steps.save_metadata.result.document_id}}"
+            organization_id: "{{organization_id}}"
+            title: "{{title}}"
+            document_type: "{{document_type}}"
+            version: "1.0.0"
+            created_by: "{{user_id}}"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "7.5.3"
+          name: "Control of documented information"
+          requirement: "Control creation, updating, and protection of documents"
+
+        - id: "8.4.1"
+          name: "Business continuity plans"
+          requirement: "Establish and maintain documented BCM procedures"
+
+      evidence_generated:
+        - type: "document_metadata"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "document_id"
+            - "organization_id"
+            - "title"
+            - "document_type"
+            - "version"
+            - "storage_url"
+            - "created_by"
+            - "timestamp"
+
+        - type: "virus_scan_result"
+          format: "JSON"
+          storage: "security_logs"
+          retention: "1 year"
+
+        - type: "audit_log"
+          format: "JSON"
+          storage: "audit_logs"
+          retention: "7 years"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "document_upload_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+          - "document_type"
+
+      - name: "documents_stored_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "document_type"
+
+      - name: "document_size_bytes"
+        type: "histogram"
+        buckets: [1024, 10240, 102400, 1048576, 10485760]
+
+      - name: "virus_scan_failures_total"
+        type: "counter"
+
+    logs:
+      level: "INFO"
+      include:
+        - "document_id"
+        - "organization_id"
+        - "document_type"
+        - "file_size"
+        - "user_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "Document storage with virus scanning"

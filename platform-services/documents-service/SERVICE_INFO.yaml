@@ -1,0 +1,556 @@
+# ============================================
+# SERVICE INFORMATION - Documents Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: documents-service
+display_name: "Documents Service"
+version: "1.0.0"
+description: "Enterprise document lifecycle management with AI/NLP capabilities, approval workflows, version control, and retention policies. Implements ISO 22301 Clause 7.5 - Documented Information Management."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "platform-services"
+business_process: "Document Management & Control (ISO 22301 Clause 7.5)"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8024
+
+endpoints:
+  base_url: "http://localhost:8024"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/documents"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Document lifecycle management (Draft → Review → Approved → Published → Archived)"
+  - "AI/NLP document processing (extraction, classification, analysis, summarization)"
+  - "Version control with diff comparison"
+  - "Multi-stage approval workflows (5 stages with SLAs)"
+  - "Retention policies (ISO 22301 + HIPAA compliance)"
+  - "Security classification levels (5 levels)"
+  - "Access control and audit logging"
+  - "Document sharing and collaboration"
+  - "File storage with integrity verification (SHA-256)"
+  - "Event-driven integration with BCM platform"
+
+features:
+  - name: "Document CRUD"
+    description: "Create, upload, read, update, delete documents with file management"
+    endpoints: 7
+
+  - name: "Lifecycle Workflow"
+    description: "State machine workflow with validation rules"
+    endpoints: 2
+    states: "DRAFT, UNDER_REVIEW, APPROVED, PUBLISHED, ARCHIVED, SUPERSEDED, OBSOLETE"
+
+  - name: "Version Control"
+    description: "Full version history with comparison and rollback"
+    endpoints: 3
+
+  - name: "Sharing & Collaboration"
+    description: "Secure document sharing with time-limited access"
+    endpoints: 2
+
+  - name: "Approval Workflow"
+    description: "Multi-stage approval chains with priority calculation"
+    endpoints: 3
+    stages: 5
+
+  - name: "Retention Policies"
+    description: "Automated archival and destruction per compliance requirements"
+    endpoints: 3
+    retention_periods:
+      - "Policy: 7 years"
+      - "Procedure: 5 years"
+      - "Plans: 5 years"
+      - "Risk assessments: 7 years"
+      - "BIA: 7 years"
+      - "Exercise reports: 5 years"
+      - "Audit reports: 7 years"
+
+  - name: "AI/NLP Processing"
+    description: "Text extraction, auto-classification, entity recognition, summarization"
+    processors:
+      - "DocumentExtractor (PDF, DOCX, Excel, OCR)"
+      - "DocumentClassifier (ML-based type detection)"
+      - "DocumentAnalyzer (NER, key phrases, summarization)"
+      - "DocumentComparator (version diff)"
+
+  - name: "Audit & Access Control"
+    description: "Complete audit trail and classification-based access control"
+    endpoints: 1
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 2000/day"
+    prometheus_metric: "documents_service_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 800ms"
+    prometheus_metric: "documents_service_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "documents_service_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.5%"
+    prometheus_metric: "documents_service_availability"
+
+  - name: "total_documents"
+    type: "gauge"
+    description: "Total documents in system"
+    target: "> 100"
+    prometheus_metric: "documents_service_total_documents"
+
+  - name: "documents_by_status"
+    type: "gauge"
+    description: "Document count by lifecycle status"
+    target: "Track distribution"
+    prometheus_metric: "documents_service_documents_by_status"
+    labels: ["status"]
+
+  - name: "approval_sla_compliance"
+    type: "gauge"
+    description: "Percentage of approvals completed within SLA"
+    target: "> 90%"
+    prometheus_metric: "documents_service_approval_sla_compliance"
+
+  - name: "retention_compliance"
+    type: "gauge"
+    description: "Percentage of documents with valid retention policy"
+    target: "100%"
+    prometheus_metric: "documents_service_retention_compliance"
+
+  - name: "ai_processing_duration"
+    type: "histogram"
+    description: "AI/NLP processing duration"
+    target: "< 5s"
+    prometheus_metric: "documents_service_ai_processing_seconds"
+
+  - name: "file_storage_usage"
+    type: "gauge"
+    description: "Total file storage used (bytes)"
+    target: "< 100GB"
+    prometheus_metric: "documents_service_storage_bytes"
+
+  - name: "classification_accuracy"
+    type: "gauge"
+    description: "AI classification accuracy (verified)"
+    target: "> 85%"
+    prometheus_metric: "documents_service_classification_accuracy"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "aio-pika>=9.3.0"  # RabbitMQ async client
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "PyMuPDF>=1.23.0"  # PDF extraction
+    - "pdfplumber>=0.10.0"  # PDF tables
+    - "python-docx>=1.0.0"  # DOCX processing
+    - "openpyxl>=3.1.0"  # Excel processing
+    - "pytesseract>=0.3.10"  # OCR
+    - "spacy>=3.7.0"  # NLP
+    - "scikit-learn>=1.3.0"  # ML classification
+    - "openai>=1.0.0"  # AI summarization
+    - "python-multipart>=0.0.6"
+
+  services:
+    - name: "postgresql"
+      version: "15+"
+      purpose: "Primary database for documents metadata"
+      required: true
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for event-driven integration"
+      required: false
+
+    - name: "openai-api"
+      purpose: "AI summarization and analysis"
+      required: false
+
+  infrastructure:
+    - "PostgreSQL database (documents schema)"
+    - "File storage (local or S3-compatible)"
+    - "RabbitMQ (EventBus)"
+    - "spaCy NLP models (en_core_web_sm)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "governance.policy.created"
+        source: "governance_service"
+        action: "Create policy document record"
+
+      - event: "governance.policy.updated"
+        source: "governance_service"
+        action: "Update policy document references"
+
+      - event: "plans.plan.created"
+        source: "plans_service"
+        action: "Link plan documents"
+
+      - event: "plans.plan.updated"
+        source: "plans_service"
+        action: "Update plan document references"
+
+      - event: "validation.exercise.completed"
+        source: "validation_service"
+        action: "Create exercise report document"
+
+    publishes:
+      - event: "document.uploaded"
+        target: "all_services"
+        data: "document_id, file_name, file_size, classification"
+
+      - event: "document.approved"
+        target: "governance_service,compliance_service"
+        data: "document_id, approved_by, approval_date"
+
+      - event: "document.published"
+        target: "all_services"
+        data: "document_id, version, publication_date"
+
+      - event: "document.archived"
+        target: "governance_service,compliance_service"
+        data: "document_id, archive_date, retention_policy"
+
+      - event: "document.shared"
+        target: "governance_service"
+        data: "document_id, shared_with, permissions"
+
+      - event: "document.version.created"
+        target: "governance_service"
+        data: "document_id, version, changes"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/documents/documents"
+        methods: ["GET", "POST", "PATCH", "DELETE"]
+        consumers: ["admin_panel", "governance_service", "plans_service"]
+
+      - endpoint: "/api/documents/documents/{id}/upload"
+        methods: ["POST"]
+        consumers: ["admin_panel"]
+        max_file_size: "100MB"
+
+      - endpoint: "/api/documents/documents/{id}/workflow/{action}"
+        methods: ["POST"]
+        consumers: ["governance_service", "orchestrator"]
+
+      - endpoint: "/api/documents/plans/{id}/documents"
+        methods: ["GET"]
+        consumers: ["plans_service"]
+
+      - endpoint: "/api/documents/iso-coverage"
+        methods: ["GET"]
+        consumers: ["compliance_service", "governance_service"]
+
+    consumes:
+      - service: "plans_service"
+        endpoint: "/api/plans/plans/{id}"
+        purpose: "Get plan details for document linking"
+
+      - service: "governance_service"
+        endpoint: "/api/governance/policies/{id}"
+        purpose: "Get policy details for compliance"
+
+      - service: "ai_intelligence"
+        endpoint: "/api/ai/analyze"
+        purpose: "AI document analysis and summarization"
+
+      - service: "orchestrator"
+        endpoint: "/api/v1/decision"
+        purpose: "AI decision support for document classification"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Large PDF processing slow (>50MB)"
+    severity: "medium"
+    workaround: "Use background processing for large files"
+    tracking: "DOC-001"
+
+  - issue: "OCR quality depends on image resolution"
+    severity: "low"
+    workaround: "Recommend minimum 300 DPI for OCR"
+    tracking: "DOC-002"
+
+  - issue: "AI summarization requires OpenAI API key"
+    severity: "medium"
+    workaround: "Falls back to extractive summarization without API key"
+    tracking: "DOC-003"
+
+  - issue: "Version comparison memory intensive for large docs"
+    severity: "low"
+    workaround: "Limit comparison to documents < 10MB"
+    tracking: "DOC-004"
+
+limitations:
+  - "Maximum file size: 100MB (configurable)"
+  - "Maximum 100 versions per document"
+  - "OCR limited to English language"
+  - "AI classification accuracy ~85% (requires manual verification)"
+  - "Retention policies executed daily (not real-time)"
+  - "File storage on local disk (S3 integration planned)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "documents-service:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8024:8024"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm_platform"
+
+      - name: "STORAGE_PATH"
+        description: "File storage directory path"
+        example: "./storage/documents"
+
+    optional:
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        default: "amqp://guest:guest@localhost:5672/"
+
+      - name: "ORCHESTRATOR_URL"
+        description: "AI Orchestrator URL"
+        default: "http://localhost:8002"
+
+      - name: "AI_INTELLIGENCE_URL"
+        description: "AI Intelligence service URL"
+        default: "http://localhost:8000"
+
+      - name: "OPENAI_API_KEY"
+        description: "OpenAI API key for summarization"
+        example: "sk-..."
+
+      - name: "MAX_FILE_SIZE"
+        description: "Maximum file upload size (bytes)"
+        default: "104857600"  # 100MB
+
+      - name: "DEFAULT_RETENTION_YEARS"
+        description: "Default retention period (years)"
+        default: "7"
+
+      - name: "ARCHIVE_AFTER_DAYS"
+        description: "Auto-archive documents after N days"
+        default: "365"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  pre_deployment:
+    - "Install spaCy model: python -m spacy download en_core_web_sm"
+    - "Create storage directory: mkdir -p ./storage/documents"
+    - "Ensure PostgreSQL documents schema exists"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python main.py"
+
+  requirements:
+    cpu: "1.0 cores (AI processing intensive)"
+    memory: "1GB (2GB recommended for AI)"
+    disk: "100GB (for file storage)"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8024/docs"
+  architecture: "See README.md - 4-Tier Architecture"
+  ai_processing: "See core/ directory - AI/NLP processors"
+  workflows: "See workflows/ directory - State machines"
+  external_links:
+    - name: "ISO 22301 Clause 7.5"
+      url: "https://www.iso.org/standard/75106.html"
+    - name: "spaCy NLP Documentation"
+      url: "https://spacy.io/usage"
+    - name: "OpenAI API Documentation"
+      url: "https://platform.openai.com/docs"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Platform Services Team"
+  tech_lead: "Platform Architect"
+  product_owner: "BCM Product Owner"
+  on_call: "platform-team@company.com"
+  slack_channel: "#platform-services"
+
+support:
+  incidents: "Create ticket in JIRA Platform project"
+  questions: "#platform-services Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. DATABASE MODELS
+# ============================================
+database:
+  schema: "documents"
+  models:
+    - name: "Document"
+      table: "documents"
+      description: "Main document entity with lifecycle state"
+
+    - name: "DocumentAccess"
+      table: "document_access"
+      description: "Complete audit trail of document access"
+
+    - name: "DocumentShare"
+      table: "document_shares"
+      description: "Document sharing and collaboration"
+
+    - name: "DocumentApproval"
+      table: "document_approvals"
+      description: "Approval workflow tracking with SLAs"
+
+    - name: "DocumentTag"
+      table: "document_tags"
+      description: "Taxonomy and categorization tags"
+
+    - name: "DocumentTagAssociation"
+      table: "document_tag_associations"
+      description: "Many-to-many document-tag relationships"
+
+    - name: "DocumentComparison"
+      table: "document_comparisons"
+      description: "Version diff tracking and comparison"
+
+    - name: "DocumentRetentionPolicy"
+      table: "document_retention_policies"
+      description: "Compliance retention policies (ISO 22301, HIPAA)"
+
+# ============================================
+# 13. COMPLIANCE
+# ============================================
+compliance:
+  iso_22301:
+    - clause: "7.5.1"
+      description: "General requirements for documented information"
+      status: "compliant"
+
+    - clause: "7.5.2"
+      description: "Creating and updating documents"
+      status: "compliant"
+
+    - clause: "7.5.3"
+      description: "Control of documented information"
+      status: "compliant"
+
+    - clause: "7.5.3a"
+      description: "Availability and suitability for use"
+      status: "compliant"
+
+    - clause: "7.5.3b"
+      description: "Adequate protection"
+      status: "compliant"
+
+    - clause: "7.5.3c"
+      description: "Distribution, access, retrieval"
+      status: "compliant"
+
+    - clause: "7.5.3d"
+      description: "Storage and preservation"
+      status: "compliant"
+
+    - clause: "7.5.3e"
+      description: "Control of changes (version control)"
+      status: "compliant"
+
+    - clause: "7.5.3f"
+      description: "Retention and disposition"
+      status: "compliant"
+
+  hipaa:
+    - requirement: "Minimum 6-year retention for health records"
+      status: "compliant"
+
+# ============================================
+# 14. AI/NLP FEATURES
+# ============================================
+ai_features:
+  document_extraction:
+    - "PDF text extraction (PyMuPDF, pdfplumber)"
+    - "DOCX processing (python-docx)"
+    - "Excel processing (openpyxl)"
+    - "Image OCR (pytesseract)"
+    - "Page count, word count, metadata extraction"
+
+  document_classification:
+    - "Auto-classify document type (policy, procedure, plan, etc.)"
+    - "Suggest classification level (public, internal, confidential)"
+    - "Map to ISO 22301 clauses"
+    - "Map to BCI GPG practices"
+    - "Determine if controlled document"
+    - "Determine if requires approval"
+
+  document_analysis:
+    - "Named entity recognition (spaCy)"
+    - "Key phrase extraction (TF-IDF)"
+    - "AI summarization (OpenAI GPT)"
+    - "Readability analysis (Flesch-Kincaid)"
+    - "ISO compliance keyword detection"
+
+  version_comparison:
+    - "Text diff generation"
+    - "Similarity scoring"
+    - "Track additions, deletions, modifications"
+    - "Structural change detection"

@@ -1,0 +1,228 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for Moodle
+  moodle-postgres:
+    image: postgres:15-alpine
+    container_name: moodle-postgres
+    environment:
+      POSTGRES_DB: moodle
+      POSTGRES_USER: moodleuser
+      POSTGRES_PASSWORD: ${MOODLE_DB_PASSWORD:-moodle_secure_pass}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - moodle_postgres_data:/var/lib/postgresql/data
+      - ./config/postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - moodle-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moodleuser -d moodle"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis for Moodle caching
+  moodle-redis:
+    image: redis:7-alpine
+    container_name: moodle-redis
+    command: redis-server --requirepass ${MOODLE_REDIS_PASSWORD:-redis_secure_pass}
+    volumes:
+      - moodle_redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - moodle-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Moodle LMS
+  moodle:
+    image: moodlehq/moodle-php-apache:4.3
+    container_name: moodle-lms
+    environment:
+      MOODLE_DATABASE_TYPE: pgsql
+      MOODLE_DATABASE_HOST: moodle-postgres
+      MOODLE_DATABASE_PORT: 5432
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodleuser
+      MOODLE_DATABASE_PASSWORD: ${MOODLE_DB_PASSWORD:-moodle_secure_pass}
+      MOODLE_ADMIN: admin
+      MOODLE_ADMIN_PASSWORD: ${MOODLE_ADMIN_PASSWORD:-Admin123!}
+      MOODLE_ADMIN_EMAIL: ${MOODLE_ADMIN_EMAIL:-admin@bcm-platform.local}
+      MOODLE_URL: ${MOODLE_URL:-http://localhost:8080}
+      MOODLE_DATAROOT: /var/www/moodledata
+      # BCM Platform specific settings
+      MOODLE_SITENAME: "BCM Training Platform"
+      MOODLE_SHORTNAME: "BCM-LMS"
+      MOODLE_SUMMARY: "Business Continuity Management Training and Competency Platform"
+      # Performance settings
+      PHP_MAX_INPUT_VARS: 5000
+      PHP_UPLOAD_MAX_FILESIZE: 50M
+      PHP_POST_MAX_SIZE: 50M
+      PHP_MAX_EXECUTION_TIME: 300
+      PHP_MEMORY_LIMIT: 512M
+    volumes:
+      - moodle_data:/var/www/html
+      - moodle_data_root:/var/www/moodledata
+      - ./config/moodle/config.php:/var/www/html/config.php:ro
+      - ./config/moodle/bcm-theme:/var/www/html/theme/bcm:ro
+      - ./plugins:/var/www/html/local/bcm:ro
+    ports:
+      - "8080:80"
+    networks:
+      - moodle-network
+      - bcm-network
+    depends_on:
+      moodle-postgres:
+        condition: service_healthy
+      moodle-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/login/index.php"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+
+  # Moodle-BCM Bridge Service
+  moodle-bcm-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    container_name: moodle-bcm-bridge
+    environment:
+      MOODLE_URL: http://moodle:80
+      MOODLE_TOKEN: ${MOODLE_API_TOKEN}
+      BCM_WEBHOOK_URL: ${BCM_WEBHOOK_URL:-http://host.docker.internal:8069}
+      BRIDGE_API_KEY: ${BRIDGE_API_KEY}
+      VERIFY_SSL: "false"
+      LOG_LEVEL: info
+      PORT: 8092
+    ports:
+      - "8092:8092"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - moodle-network
+      - bcm-network
+    depends_on:
+      - moodle
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8092/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Moodle Webhook Receiver
+  moodle-webhook-receiver:
+    build:
+      context: .
+      dockerfile: Dockerfile.webhook
+    container_name: moodle-webhook-receiver
+    environment:
+      BCM_API_URL: ${BCM_API_URL:-http://host.docker.internal:8069}
+      BCM_API_KEY: ${BCM_API_KEY}
+      MOODLE_WEBHOOK_SECRET: ${MOODLE_WEBHOOK_SECRET}
+      LOG_LEVEL: info
+      PORT: 8093
+    ports:
+      - "8093:8093"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - moodle-network
+      - bcm-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8093/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Moodle Mobile API (optional)
+  moodle-mobile:
+    image: moodlehq/moodle-php-apache:4.3
+    container_name: moodle-mobile-api
+    environment:
+      MOODLE_DATABASE_TYPE: pgsql
+      MOODLE_DATABASE_HOST: moodle-postgres
+      MOODLE_DATABASE_PORT: 5432
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodleuser
+      MOODLE_DATABASE_PASSWORD: ${MOODLE_DB_PASSWORD:-moodle_secure_pass}
+      MOODLE_URL: ${MOODLE_MOBILE_URL:-http://localhost:8081}
+      MOODLE_MOBILE_SERVICE: 1
+    volumes:
+      - moodle_data:/var/www/html:ro
+      - moodle_data_root:/var/www/moodledata
+      - ./config/moodle/mobile-config.php:/var/www/html/config.php:ro
+    ports:
+      - "8081:80"
+    networks:
+      - moodle-network
+    depends_on:
+      - moodle-postgres
+      - moodle-redis
+    restart: unless-stopped
+    profiles:
+      - mobile
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/webservice/rest/server.php"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+
+  # Moodle Elasticsearch (for global search)
+  moodle-elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: moodle-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - cluster.name=moodle-search
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - moodle_elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9201:9200"
+    networks:
+      - moodle-network
+    restart: unless-stopped
+    profiles:
+      - search
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  moodle_postgres_data:
+    driver: local
+  moodle_redis_data:
+    driver: local
+  moodle_data:
+    driver: local
+  moodle_data_root:
+    driver: local
+  moodle_elasticsearch_data:
+    driver: local
+
+networks:
+  moodle-network:
+    driver: bridge
+    name: moodle-network
+  bcm-network:
+    external: true
+    name: bcm-network

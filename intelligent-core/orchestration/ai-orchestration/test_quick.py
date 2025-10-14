@@ -20,7 +20,7 @@ def test_imports():
 
     # Test main module
     try:
-        from intelligent_core.ai_orchestration import AIOrchestrator
+        from . import AIOrchestrator
         print("✅ Main module: AIOrchestrator")
     except Exception as e:
         errors.append(f"❌ Main module: {e}")
@@ -28,7 +28,7 @@ def test_imports():
 
     # Test models
     try:
-        from intelligent_core.ai_orchestration.models import (
+        from .models import (
             Decision, Strategy, Priority, FullContext, SafetyResult,
             ActionType, PriorityLevel, MemoryType
         )
@@ -39,7 +39,7 @@ def test_imports():
 
     # Test decision center
     try:
-        from intelligent_core.ai_orchestration.decision_center import (
+        from .decision_center import (
             ContextAggregator, PriorityEngine, StrategySelector, DelegationManager
         )
         print("✅ Decision Center: All components")
@@ -49,7 +49,7 @@ def test_imports():
 
     # Test memory
     try:
-        from intelligent_core.ai_orchestration.memory import (
+        from .memory import (
             DistributedMemory, WorkingMemory, ShortTermMemory,
             LongTermMemory, ProceduralMemory
         )
@@ -60,7 +60,7 @@ def test_imports():
 
     # Test safety
     try:
-        from intelligent_core.ai_orchestration.safety import (
+        from .safety import (
             SafetyMonitor, ConstitutionEnforcer, LoopDetector,
             HallucinationDetector, ControlMonitor
         )
@@ -71,7 +71,7 @@ def test_imports():
 
     # Test evolution
     try:
-        from intelligent_core.ai_orchestration.evolution import (
+        from .evolution import (
             EvolutionEngine, DataEvolution, ModelEvolution, CodeEvolution
         )
         print("✅ Evolution: All evolution components")

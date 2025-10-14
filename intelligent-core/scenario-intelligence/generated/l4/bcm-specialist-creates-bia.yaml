@@ -1,0 +1,686 @@
+meta:
+  id: l4-workflow-bcm-specialist-creates-bia
+  level: 4
+  type: user_workflow
+  workflow: bcm-specialist-creates-bia
+  status: active
+  version: 1.0.0
+  created_at: '2025-10-14T19:34:54.779252'
+  created_by: scenario_manager
+  generation_method: ai_powered
+  tags:
+  - daily_operations
+  - end_user
+  - business_outcome
+  category: daily_operations
+  source_item: bcm-specialist-creates-bia
+  generated_at: '2025-10-14T19:34:54.814242'
+description:
+  summary: BCM specialist creates comprehensive Business Impact Analysis document
+  purpose: Validate complete user journey from start to finish
+  business_value: Complete BIA document with identified critical functions and recovery
+    priorities
+  user_story: As a bcm_manager, I want to Create a comprehensive BIA document identifying
+    critical business functions, so that Complete BIA document with identified critical
+    functions and recovery priorities
+workflow_info:
+  name: bcm-specialist-creates-bia
+  category: daily_operations
+  primary_user: bcm_manager
+  additional_users:
+  - manager, auditor
+  frequency: weekly
+  criticality: critical
+user_context:
+  persona:
+    name: BCM Manager
+    role: bcm_manager
+    experience_level: '{beginner|intermediate|expert}'
+    goals:
+    - Identify critical business functions
+    - Assess business impact of disruptions
+    pain_points:
+    - Complex data collection process
+    - Multiple stakeholder inputs required
+    success_criteria:
+    - All critical functions identified
+    - RTO/RPO defined for each function
+  environment:
+    device: '{desktop|tablet|mobile}'
+    location: '{office|remote|field}'
+    time_of_day: '{business_hours|after_hours|emergency}'
+    network_conditions: '{stable|unstable|offline}'
+involved_systems:
+  functional_systems:
+  - system-bcm-service
+  - bia-service
+  subsystems:
+  - authentication
+  - authorization
+  key_services:
+  - system-bcm-service
+  - bia-service
+  applications:
+  - bcm-workspace
+  - admin-control-center
+test_scenarios:
+- name: Complete User Journey - Happy Path
+  scenario_id: workflow-happy-path
+  priority: critical
+  execution_time: 45-60 minutes
+  description: User successfully completes entire workflow without issues
+  user_journey:
+    entry_point:
+      application: BCM Workspace
+      url: /workflows/start
+      authentication: required
+    journey_steps:
+    - step: 1
+      title: User performs action
+      user_action: User interacts with the system
+      system_response: System responds appropriately
+      ui_elements:
+      - element: button
+        action: '{click|type|select}'
+        value: sample_input
+      expected_outcome: Step completed successfully
+      duration: 5 minutes
+    - step: 2
+      title: User continues workflow
+      user_action: User proceeds to next step
+      system_response: System updates state
+      depends_on:
+      - 1
+      expected_outcome: Progress saved
+      duration: 5 minutes
+    - step: 3
+      title: User completes workflow
+      user_action: User submits final step
+      system_response: System finalizes workflow
+      depends_on:
+      - 2
+      expected_outcome: Workflow completed
+      final_step: true
+    exit_criteria:
+      business_outcome: Complete BIA document with identified critical functions and
+        recovery priorities
+      user_satisfaction: positive
+      data_created: workflow_data.json
+      notifications_sent:
+      - user, manager
+  steps:
+  - id: '1.1'
+    action: user_authenticates
+    credentials: '{{test_user}}'
+    expected:
+      login_successful: true
+      redirect_to: /dashboard
+      user_dashboard_loaded: true
+  - id: '1.2'
+    action: user_navigates_to_workflow_start
+    navigation_path:
+    - Dashboard
+    - Workflows
+    expected:
+      page_loaded: true
+      form_rendered: true
+      help_text_visible: true
+  - id: '1.3'
+    action: user_completes_workflow_steps
+    simulate_user_actions: true
+    expected:
+      all_steps_completed: true
+      data_saved: true
+      validation_passed: true
+  - id: '1.4'
+    action: user_submits_workflow
+    expected:
+      submission_successful: true
+      confirmation_message: true
+      email_notification_sent: true
+      workflow_status: completed
+  - id: '1.5'
+    action: verify_business_outcome
+    expected:
+      business_object_created: true
+      downstream_processes_triggered: true
+      metrics_updated: true
+  business_validation:
+  - metric: workflow_completion_rate
+    expected_value: 95%
+  - metric: user_satisfaction
+    expected_value: 4.5/5.0
+- name: Alternative User Paths
+  scenario_id: workflow-alternative-paths
+  priority: high
+  execution_time: 45-60 minutes
+  description: User completes workflow using alternative valid paths
+  alternative_paths:
+  - path: path_a
+    description: Alternative navigation path
+    steps:
+    - nav -> form -> submit
+    valid: true
+    expected_outcome: same_as_happy_path
+  - path: path_b
+    description: Quick path for experienced users
+    steps:
+    - shortcut -> submit
+    valid: true
+    expected_outcome: similar_with_variations
+  steps:
+  - id: '2.1'
+    action: test_alternative_navigation
+    path: path_a
+    expected:
+      workflow_completed: true
+      outcome_equivalent: true
+  - id: '2.2'
+    action: test_workflow_variations
+    variations:
+    - mobile_workflow
+    - desktop_workflow
+    expected:
+      all_variations_supported: true
+      outcomes_correct: true
+  - id: '2.3'
+    action: test_optional_steps
+    skip:
+    - help_section
+    expected:
+      workflow_still_valid: true
+      no_errors: true
+- name: Error Handling & User Recovery
+  scenario_id: workflow-error-handling
+  priority: critical
+  execution_time: 45-60 minutes
+  description: User encounters errors and successfully recovers
+  error_scenarios:
+  - error_type: validation_error
+    trigger: invalid_input
+    expected_behavior:
+      error_message_shown: true
+      field_highlighted: true
+      user_can_correct: true
+  - error_type: network_error
+    trigger: connection_timeout
+    expected_behavior:
+      draft_saved: true
+      user_notified: true
+      retry_option: true
+  - error_type: authorization_error
+    trigger: insufficient_permissions
+    expected_behavior:
+      clear_message: true
+      request_access_link: true
+      admin_notified: true
+  - error_type: business_rule_violation
+    trigger: conflicting_data
+    expected_behavior:
+      conflict_explained: true
+      resolution_options: true
+      help_available: true
+  steps:
+  - id: '3.1'
+    action: test_input_validation
+    invalid_inputs:
+    - test@invalid
+    expected:
+      errors_caught: true
+      messages_helpful: true
+      user_can_fix: true
+  - id: '3.2'
+    action: test_network_interruption
+    disconnect_at: step_3
+    expected:
+      progress_saved: true
+      resume_possible: true
+      no_data_loss: true
+  - id: '3.3'
+    action: test_session_timeout
+    idle_time: 31 minutes
+    expected:
+      session_expired: true
+      redirect_to_login: true
+      state_preserved: true
+      resume_after_login: true
+  - id: '3.4'
+    action: test_error_recovery
+    fix_error: true
+    retry_workflow: true
+    expected:
+      workflow_completed: true
+      no_duplicate_data: true
+- name: Collaborative Workflow
+  scenario_id: workflow-collaboration
+  priority: high
+  execution_time: 45-60 minutes
+  description: Multiple users collaborate on same workflow
+  collaboration_pattern:
+    participants:
+    - role: '{role_1}'
+      actions:
+      - '{action_1}'
+      - '{action_2}'
+      permissions:
+      - '{permission_list}'
+    - role: '{role_2}'
+      actions:
+      - '{action_3}'
+      - '{action_4}'
+      permissions:
+      - '{permission_list_2}'
+    workflow:
+    - phase: initiation
+      by: '{role_1}'
+      actions:
+      - '{action}'
+    - phase: review
+      by: '{role_2}'
+      actions:
+      - '{review_action}'
+    - phase: approval
+      by: '{role_3}'
+      actions:
+      - '{approve_action}'
+  steps:
+  - id: '4.1'
+    action: user_1_initiates_workflow
+    user: '{{user_1}}'
+    expected:
+      workflow_created: true
+      user_2_notified: true
+  - id: '4.2'
+    action: user_2_contributes
+    user: '{{user_2}}'
+    expected:
+      changes_visible_to_user_1: true
+      real_time_updates: true
+      no_conflicts: true
+  - id: '4.3'
+    action: test_concurrent_editing
+    users:
+    - '{{user_1}}'
+    - '{{user_2}}'
+    expected:
+      conflict_detection: true
+      resolution_mechanism: true
+      no_data_loss: true
+  - id: '4.4'
+    action: workflow_approval_chain
+    approvers:
+    - '{{approver_1}}'
+    - '{{approver_2}}'
+    expected:
+      approval_sequence_enforced: true
+      notifications_sent: true
+      workflow_progresses: true
+- name: User Experience & Performance
+  scenario_id: workflow-ux-performance
+  priority: high
+  execution_time: 45-60 minutes
+  description: Workflow provides excellent user experience and performance
+  ux_metrics:
+  - metric: workflow_completion_time
+    target: < 60 minutes
+    measurement: wall_clock_time
+  - metric: user_satisfaction_score
+    target: '> 4.0/5.0'
+    measurement: post_workflow_survey
+  - metric: error_rate
+    target: < 5%
+    measurement: user_errors_per_workflow
+  - metric: help_needed_rate
+    target: < 10%
+    measurement: help_views_per_workflow
+  steps:
+  - id: '5.1'
+    action: measure_workflow_duration
+    user_speed: normal
+    expected:
+      total_time: < 45 minutes
+      no_unnecessary_delays: true
+  - id: '5.2'
+    action: test_ui_responsiveness
+    expected:
+      page_transitions: < 200ms
+      form_interactions: < 100ms
+      loading_indicators: true
+  - id: '5.3'
+    action: test_workflow_intuitive
+    first_time_user: true
+    expected:
+      completion_without_help: true
+      clear_instructions: true
+      logical_flow: true
+  - id: '5.4'
+    action: test_mobile_experience
+    device: mobile
+    expected:
+      responsive_design: true
+      touch_friendly: true
+      workflow_completable: true
+- name: Business Process Integration
+  scenario_id: workflow-business-integration
+  priority: critical
+  execution_time: 45-60 minutes
+  description: Workflow integrates correctly with business processes
+  business_process:
+    upstream_process: upstream_process
+    workflow: '{this_workflow}'
+    downstream_process: downstream_process
+  integration_points:
+  - point: data_input
+    source: erp_system
+    data: business_function_data
+    expected: pre_populated
+  - point: approval_required
+    approver: bcm_manager
+    notification: email
+    expected: approval_triggered
+  - point: data_output
+    target: '{downstream_system}'
+    data: recovery_strategy_data
+    expected: automatically_sent
+  steps:
+  - id: '6.1'
+    action: verify_upstream_integration
+    expected:
+      data_received_from_upstream: true
+      data_format_correct: true
+      pre_population_works: true
+  - id: '6.2'
+    action: verify_business_rules
+    expected:
+      rules_applied: true
+      invalid_operations_blocked: true
+      audit_trail_created: true
+  - id: '6.3'
+    action: verify_downstream_integration
+    expected:
+      data_sent_to_downstream: true
+      downstream_process_triggered: true
+      integration_successful: true
+  - id: '6.4'
+    action: verify_workflow_orchestration
+    expected:
+      parallel_tasks_executed: true
+      dependencies_respected: true
+      timeouts_handled: true
+- name: Compliance & Audit Trail
+  scenario_id: workflow-compliance
+  priority: high
+  execution_time: 45-60 minutes
+  description: Workflow meets compliance requirements and creates audit trail
+  compliance_requirements:
+  - requirement: data_retention
+    policy: 7 years
+    validation: audit_log_retention
+  - requirement: approval_evidence
+    policy: dual_approval
+    validation: approval_trail_complete
+  - requirement: access_control
+    policy: rbac
+    validation: unauthorized_access_prevented
+  steps:
+  - id: '7.1'
+    action: verify_audit_logging
+    perform_workflow: true
+    expected:
+      all_actions_logged: true
+      user_identifiable: true
+      timestamps_accurate: true
+      logs_immutable: true
+  - id: '7.2'
+    action: verify_approval_trail
+    expected:
+      approvers_recorded: true
+      approval_timestamps: true
+      approval_reasons_captured: true
+  - id: '7.3'
+    action: verify_data_protection
+    expected:
+      pii_encrypted: true
+      access_restricted: true
+      data_classified: true
+  - id: '7.4'
+    action: verify_regulatory_compliance
+    regulations:
+    - ISO 22301
+    - GDPR
+    expected:
+      requirements_met: true
+      evidence_generated: true
+      reports_available: true
+- name: Edge Cases & Stress Conditions
+  scenario_id: workflow-edge-cases
+  priority: medium
+  execution_time: 45-60 minutes
+  description: Workflow handles edge cases and stress conditions
+  edge_cases:
+  - case: minimum_data
+    description: Workflow with minimal required data
+    expected: completes_successfully
+  - case: maximum_data
+    description: Workflow with maximum allowed data
+    expected: handles_without_errors
+  - case: special_characters
+    description: Data contains special characters
+    expected: properly_escaped
+  - case: concurrent_workflows
+    description: User runs multiple workflows simultaneously
+    expected: no_conflicts
+  steps:
+  - id: '8.1'
+    action: test_boundary_conditions
+    test_cases:
+    - minimum_required_fields
+    - all_optional_fields
+    expected:
+      both_cases_handled: true
+      no_errors: true
+  - id: '8.2'
+    action: test_special_characters
+    input: <script>alert('test')</script>
+    expected:
+      no_injection: true
+      data_preserved: true
+  - id: '8.3'
+    action: test_large_dataset
+    records: 10000
+    expected:
+      pagination_works: true
+      performance_acceptable: true
+      no_timeout: true
+  - id: '8.4'
+    action: test_workflow_interruption
+    interrupt_at: random_step
+    expected:
+      state_saved: true
+      resumable: true
+      data_consistent: true
+monitoring:
+  workflow_metrics:
+  - name: bcm-specialist-creates-bia_completions_total
+    type: counter
+    description: Total workflow completions
+    labels:
+    - user_role
+    - outcome
+  - name: bcm-specialist-creates-bia_duration_seconds
+    type: histogram
+    description: Workflow completion time
+    thresholds:
+      p50: < 30 seconds
+      p95: < 60 seconds
+  - name: bcm-specialist-creates-bia_step_duration_seconds
+    type: histogram
+    description: Individual step duration
+    labels:
+    - step_name
+  - name: bcm-specialist-creates-bia_errors_total
+    type: counter
+    description: Workflow errors
+    labels:
+    - error_type
+    - step_name
+  - name: bcm-specialist-creates-bia_user_satisfaction
+    type: gauge
+    description: User satisfaction score (1-5)
+  - name: bcm-specialist-creates-bia_abandonment_rate
+    type: gauge
+    description: Rate of abandoned workflows
+  business_metrics:
+  - metric: plans_created
+    unit: count
+    target: 95%
+  - metric: compliance_rate
+    unit: percentage
+    target: 4.5/5.0
+  alerts:
+  - name: workflow_high_failure_rate
+    condition: failure_rate > 10%
+    severity: critical
+    action: investigate_immediately
+  - name: workflow_slow_completion
+    condition: p95_duration > 90 seconds
+    severity: warning
+    action: review_performance
+  - name: workflow_high_abandonment
+    condition: abandonment_rate > 20%
+    severity: warning
+    action: review_ux
+ai_generation:
+  generation_prompt: 'Generate a detailed L4 user workflow scenario for: bcm-specialist-creates-bia
+
+
+    Context:
+
+    - User Role: bcm_manager
+
+    - Business Objective: Create a comprehensive BIA document identifying critical
+    business functions
+
+    - Systems Involved: system-bcm-service, bia-service, workflow-intelligence, document-service
+
+    - Compliance Requirements: ISO 22301
+
+
+    Generate:
+
+    1. Complete user journey with step-by-step actions
+
+    2. Expected system responses at each step
+
+    3. Error scenarios and recovery paths
+
+    4. Business validation criteria
+
+    5. Performance expectations
+
+    6. Compliance checks
+
+
+    Use the golden_standard_l4.yaml template structure.
+
+    '
+  generation_parameters:
+    model: gpt-4
+    temperature: 0.7
+    max_tokens: 4000
+    include_examples: true
+  review_criteria:
+  - Workflow is realistic and achievable
+  - All steps are clearly defined
+  - Error handling is comprehensive
+  - Business outcomes are measurable
+  - Compliance requirements are met
+execution_history: null
+learning_data: null
+user_feedback:
+  collection_methods:
+  - method: post_workflow_survey
+    timing: after_completion
+    questions:
+    - How would you rate this workflow? (1-5)
+    - What was most confusing?
+    - What would you improve?
+  - method: in_app_feedback
+    timing: during_workflow
+    trigger: user_request
+  - method: session_replay
+    recording: user_interactions
+    analysis: identify_friction_points
+  feedback_analysis:
+  - Aggregate satisfaction scores
+  - Identify common pain points
+  - Correlate feedback with execution data
+  - Generate improvement recommendations
+scenario_dependencies:
+  l1_prerequisites:
+  - All involved services must pass L1 health checks
+  l2_prerequisites:
+  - All involved subsystems must pass L2 integration tests
+  l3_prerequisites:
+  - All involved functional systems must pass L3 end-to-end tests
+  l4_unique_value:
+  - Real user journey validation
+  - Business outcome measurement
+  - User experience testing
+  - Compliance verification
+  - End-to-end business process integration
+metadata:
+  template_version: 1.0.0
+  created_by: scenario_manager
+  created_at: '2025-10-12'
+  applicable_to:
+    workflow_categories:
+    - user_onboarding
+    - daily_operations
+    - incident_response
+    - compliance_management
+    - training_delivery
+    - business_continuity_planning
+    - risk_assessment
+    - simulation_exercises
+  generation_method: ai_powered
+  estimated_generation_time: 10-15 minutes per workflow (AI generation + review)
+  notes: 'This template is designed for L4 user workflow testing.
+
+    L4 scenarios are AI-generated using OpenAI/Claude based on:
+
+    - User role and context
+
+    - Business objectives
+
+    - Involved systems from L1/L2/L3
+
+    - Compliance requirements
+
+
+    L4 focuses on:
+
+    - Real user journeys
+
+    - Business outcome validation
+
+    - User experience quality
+
+    - Collaboration workflows
+
+    - Compliance and audit
+
+    - Edge cases and stress conditions
+
+
+    L4 scenarios are continuously improved based on:
+
+    - User feedback
+
+    - Execution results
+
+    - Business metrics
+
+    - AI learning recommendations
+
+    '

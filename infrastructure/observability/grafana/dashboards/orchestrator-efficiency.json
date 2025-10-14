@@ -1,0 +1,228 @@
+{
+  "title": "AI Orchestrator - Efficiency Metrics",
+  "uid": "orchestrator-efficiency",
+  "tags": ["orchestrator", "efficiency", "business"],
+  "timezone": "",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Human Intervention Rate (Target < 30%)",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(rate(orchestrator_escalations_total[1h])) / sum(rate(orchestrator_decisions_total[1h])) * 100",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "yellow", "value": 20},
+              {"color": "red", "value": 30}
+            ]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Auto-Resolution Success Rate",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 8, "x": 8, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(rate(orchestrator_executions_total{action_type=\"AUTO_RESOLVE\",status=\"success\"}[1h])) / sum(rate(orchestrator_executions_total{action_type=\"AUTO_RESOLVE\"}[1h])) * 100",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 80},
+              {"color": "green", "value": 95}
+            ]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Safety Approval Rate (Target > 95%)",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 8, "x": 16, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(rate(orchestrator_safety_checks_total{approved=\"True\"}[1h])) / sum(rate(orchestrator_safety_checks_total[1h])) * 100",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 90},
+              {"color": "green", "value": 95}
+            ]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "MTTR - Mean Time To Resolution",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(orchestrator_resolution_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50 MTTR"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(orchestrator_resolution_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95 MTTR"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Incidents Prevented (Proactive Actions)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+      "targets": [
+        {
+          "expr": "sum(increase(orchestrator_incidents_prevented_total[1h]))",
+          "legendFormat": "Incidents Prevented (Last Hour)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Escalation Reasons Breakdown",
+      "type": "piechart",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(orchestrator_escalations_total[1h])) by (reason)",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Strategy Confidence Distribution",
+      "type": "heatmap",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(orchestrator_strategy_confidence_bucket[5m])) by (le)",
+          "format": "heatmap"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Learning Effectiveness - Strategies from Memory",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 22},
+      "targets": [
+        {
+          "expr": "sum(increase(orchestrator_strategies_from_memory_total[24h]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 10},
+              {"color": "green", "value": 50}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Cost Savings Estimate (Auto-Resolution)",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 22},
+      "targets": [
+        {
+          "expr": "sum(increase(orchestrator_auto_resolutions_total[24h])) * 0.5",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0,
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null}
+            ]
+          }
+        }
+      },
+      "description": "Estimated cost savings (assuming $0.50 per auto-resolved incident vs manual)"
+    },
+    {
+      "id": 10,
+      "title": "ROI - Return on Investment",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 12, "x": 12, "y": 22},
+      "targets": [
+        {
+          "expr": "(sum(increase(orchestrator_auto_resolutions_total[24h])) * 0.5 + sum(increase(orchestrator_incidents_prevented_total[24h])) * 2.0) / 100 * 100",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 0,
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 100},
+              {"color": "green", "value": 300}
+            ]
+          }
+        }
+      },
+      "description": "ROI calculation: (Cost Savings / Platform Cost) * 100"
+    }
+  ]
+}

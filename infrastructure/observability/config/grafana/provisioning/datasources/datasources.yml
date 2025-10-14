@@ -35,3 +35,19 @@ datasources:
     jsonData:
       implementation: prometheus
     version: 1
+
+  # PostgreSQL - Database for Security & Archive Metrics
+  - name: PostgreSQL
+    type: postgres
+    access: proxy
+    url: aws-1-eu-north-1.pooler.supabase.com:5432
+    database: postgres
+    user: postgres.tpdkhddtbhpoqzzgxfni
+    secureJsonData:
+      password: K@x3ta9V8GK5rnW
+    editable: false
+    jsonData:
+      sslmode: require
+      postgresVersion: 1500
+      timescaledb: false
+    version: 1

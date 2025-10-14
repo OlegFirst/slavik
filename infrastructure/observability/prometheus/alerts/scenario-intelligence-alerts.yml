@@ -1,0 +1,204 @@
+groups:
+  - name: scenario_intelligence_alerts
+    interval: 30s
+    rules:
+      # ===================================================
+      # GENERATION ALERTS
+      # ===================================================
+
+      - alert: ScenarioGenerationHighErrorRate
+        expr: |
+          (
+            sum(rate(scenario_intelligence_generation_errors_total[5m]))
+            /
+            sum(rate(scenario_intelligence_scenarios_generated_total[5m]))
+          ) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "High scenario generation error rate"
+          description: "Scenario generation error rate is {{ $value | humanizePercentage }} (threshold: 10%)"
+
+      - alert: ScenarioGenerationStalled
+        expr: |
+          sum(scenario_intelligence_generation_in_progress) > 0
+          and
+          rate(scenario_intelligence_scenarios_generated_total[10m]) == 0
+        for: 10m
+        labels:
+          severity: critical
+          service: scenario-intelligence
+        annotations:
+          summary: "Scenario generation appears stalled"
+          description: "Generation in progress but no scenarios completed in 10 minutes"
+
+      - alert: ScenarioGenerationSlowL4
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(scenario_intelligence_generation_duration_seconds_bucket{level="l4"}[5m])) by (le)
+          ) > 60
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+          level: l4
+        annotations:
+          summary: "L4 scenario generation is slow"
+          description: "L4 generation p95 latency is {{ $value }}s (threshold: 60s)"
+
+      # ===================================================
+      # EXECUTION ALERTS
+      # ===================================================
+
+      - alert: ScenarioExecutionLowSuccessRate
+        expr: |
+          (
+            sum(rate(scenario_intelligence_scenarios_executed_total{status="success"}[5m]))
+            /
+            sum(rate(scenario_intelligence_scenarios_executed_total[5m]))
+          ) < 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "Low scenario execution success rate"
+          description: "Execution success rate is {{ $value | humanizePercentage }} (threshold: 90%)"
+
+      - alert: ScenarioExecutionHighFailureRate
+        expr: |
+          sum(rate(scenario_intelligence_scenarios_executed_total{status="failed"}[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: critical
+          service: scenario-intelligence
+        annotations:
+          summary: "High scenario execution failure rate"
+          description: "Execution failure rate is {{ $value }} failures/sec"
+
+      - alert: ScenarioExecutionStalled
+        expr: |
+          sum(scenario_intelligence_execution_in_progress) > 0
+          and
+          rate(scenario_intelligence_scenarios_executed_total[10m]) == 0
+        for: 10m
+        labels:
+          severity: critical
+          service: scenario-intelligence
+        annotations:
+          summary: "Scenario execution appears stalled"
+          description: "Execution in progress but no completions in 10 minutes"
+
+      # ===================================================
+      # STORAGE ALERTS
+      # ===================================================
+
+      - alert: StorageOperationHighErrorRate
+        expr: |
+          (
+            sum(rate(scenario_intelligence_storage_operations_total{status="failed"}[5m]))
+            /
+            sum(rate(scenario_intelligence_storage_operations_total[5m]))
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "High storage operation error rate"
+          description: "Storage error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+
+      - alert: StorageOperationSlow
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(scenario_intelligence_storage_operation_duration_seconds_bucket[5m])) by (le, backend)
+          ) > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "Storage operations are slow"
+          description: "Storage p95 latency for {{ $labels.backend }} is {{ $value }}s (threshold: 5s)"
+
+      # ===================================================
+      # EVENTBUS ALERTS
+      # ===================================================
+
+      - alert: EventBusHighErrorRate
+        expr: |
+          sum(rate(scenario_intelligence_eventbus_errors_total[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "High EventBus error rate"
+          description: "EventBus error rate is {{ $value }} errors/sec"
+
+      - alert: EventBusPublishFailure
+        expr: |
+          rate(scenario_intelligence_eventbus_errors_total{error_type="publish_failed"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          service: scenario-intelligence
+        annotations:
+          summary: "EventBus publish failures detected"
+          description: "EventBus publish failure rate is {{ $value }} failures/sec"
+
+      # ===================================================
+      # SERVICE HEALTH ALERTS
+      # ===================================================
+
+      - alert: ScenarioIntelligenceDown
+        expr: up{job="scenario_intelligence"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: scenario-intelligence
+        annotations:
+          summary: "Scenario Intelligence service is down"
+          description: "Scenario Intelligence service has been down for 2 minutes"
+
+      - alert: ScenarioOrchestratorDown
+        expr: up{job="scenario_orchestrator"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: scenario-orchestrator
+        annotations:
+          summary: "Scenario Orchestrator API is down"
+          description: "Scenario Orchestrator API has been down for 2 minutes"
+
+      # ===================================================
+      # CAPACITY ALERTS
+      # ===================================================
+
+      - alert: TooManyScenariosInStorage
+        expr: |
+          sum(scenario_intelligence_scenarios_in_storage) > 100000
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "Large number of scenarios in storage"
+          description: "Total scenarios in storage: {{ $value }} (consider archiving old scenarios)"
+
+      - alert: HighConcurrentOperations
+        expr: |
+          (
+            sum(scenario_intelligence_generation_in_progress)
+            +
+            sum(scenario_intelligence_execution_in_progress)
+          ) > 50
+        for: 5m
+        labels:
+          severity: warning
+          service: scenario-intelligence
+        annotations:
+          summary: "High number of concurrent operations"
+          description: "{{ $value }} concurrent operations (consider scaling)"

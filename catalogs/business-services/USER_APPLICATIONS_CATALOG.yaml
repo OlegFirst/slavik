@@ -1,0 +1,420 @@
+# ========================================================================
+# User Applications Catalog (Программные сервисы для пользователей)
+# ========================================================================
+# Version: 2.0.0
+# Created: 2025-10-12
+# Purpose: Catalog of user-facing applications and products
+#
+# Это программные продукты, которыми пользуются пользователи платформы
+# ========================================================================
+
+version: "2.0.0"
+created_date: "2025-10-12"
+total_applications: 4
+total_bcm_modules: 12
+
+# ========================================================================
+# MAIN USER APPLICATIONS (Главные программные продукты)
+# ========================================================================
+
+user_applications:
+  # ======================================================================
+  # 1. BCM PORTAL (Портал БНП)
+  # ======================================================================
+  - id: "bcm-portal"
+    name: "BCM Portal"
+    name_ru: "Портал БНП"
+    type: "web_application"
+    status: "production"
+    port: 3000
+
+    description:
+      summary: "Main web portal for BCM management"
+      summary_ru: "Основной веб-портал для управления БНП"
+      purpose: "Unified interface for all BCM activities"
+      target_users: ["BCM Managers", "Risk Analysts", "Compliance Officers", "Executives"]
+
+    features:
+      - "Dashboard with KPIs and metrics"
+      - "BIA management"
+      - "Risk assessment"
+      - "BCM plan creation and management"
+      - "Incident response coordination"
+      - "Compliance tracking"
+      - "Reporting and analytics"
+      - "Document management"
+      - "User and role management"
+
+    technology_stack:
+      frontend: "React + TypeScript"
+      ui_framework: "Tailwind CSS / Shadcn UI"
+      state_management: "Redux / Zustand"
+      api_client: "Axios / React Query"
+
+    integrations:
+      - "All 12 BCM modules (via API Gateway)"
+      - "AI Orchestration (recommendations)"
+      - "Predictive Service (forecasts)"
+      - "Community Intelligence (peer knowledge)"
+
+  # ======================================================================
+  # 2. SIMULATION PLATFORM (Платформа симуляций)
+  # ======================================================================
+  - id: "simulation-platform"
+    name: "BCM Simulation Platform"
+    name_ru: "Платформа Симуляций БНП"
+    type: "simulation_environment"
+    status: "production"
+    port: 3001
+
+    description:
+      summary: "Platform for BCM exercises, drills, and scenario simulations"
+      summary_ru: "Платформа для учений, тренировок и симуляций сценариев БНП"
+      purpose: "Test BCM plans through realistic simulations"
+      target_users: ["BCM Coordinators", "Exercise Planners", "Training Managers"]
+
+    features:
+      - "Tabletop exercises"
+      - "Full-scale simulations"
+      - "Crisis scenario generation (AI-powered)"
+      - "Real-time simulation control"
+      - "Team coordination tools"
+      - "Performance tracking"
+      - "After-action reports"
+      - "Virtual incident command center"
+
+    simulation_types:
+      - type: "Tabletop Exercise"
+        description: "Discussion-based scenario walkthroughs"
+        duration: "2-4 hours"
+
+      - type: "Functional Exercise"
+        description: "Test specific functions or procedures"
+        duration: "4-8 hours"
+
+      - type: "Full-Scale Exercise"
+        description: "Comprehensive simulation with all teams"
+        duration: "1-3 days"
+
+    technology_stack:
+      frontend: "React + WebSocket"
+      simulation_engine: "Custom event simulator"
+      ai_generation: "Scenario Orchestrator integration"
+
+    integrations:
+      - "Validation Service (exercise management)"
+      - "Learning Service (training records)"
+      - "Scenario Intelligence (AI scenarios)"
+      - "BCM Plans (plan activation)"
+
+  # ======================================================================
+  # 3. MARKETPLACE (Маркетплейс экспертов)
+  # ======================================================================
+  - id: "expert-marketplace"
+    name: "BCM Expert Marketplace"
+    name_ru: "Маркетплейс Экспертов БНП"
+    type: "marketplace_platform"
+    status: "production"
+    port: 3002
+
+    description:
+      summary: "Marketplace connecting organizations with BCM experts"
+      summary_ru: "Маркетплейс для связи организаций с экспертами БНП"
+      purpose: "Enable expert consultation, training, and knowledge sharing"
+      target_users: ["Organizations seeking experts", "BCM Consultants", "Trainers", "Auditors"]
+
+    features:
+      - "Expert profiles and ratings"
+      - "Service catalog (consulting, training, audits)"
+      - "Booking and scheduling"
+      - "Video consultations"
+      - "Project management"
+      - "Payment processing"
+      - "Review and rating system"
+      - "AI-powered expert matching"
+
+    expert_services:
+      - service: "BCM Consulting"
+        description: "Strategic BCM planning and implementation"
+        pricing: "hourly or project-based"
+
+      - service: "BIA Facilitation"
+        description: "Conduct BIA workshops and assessments"
+        pricing: "per workshop"
+
+      - service: "Training & Certification"
+        description: "BCM training programs and certification prep"
+        pricing: "per course or participant"
+
+      - service: "ISO 22301 Audit"
+        description: "Gap analysis and certification audit support"
+        pricing: "per audit day"
+
+      - service: "Exercise Facilitation"
+        description: "Design and facilitate BCM exercises"
+        pricing: "per exercise"
+
+    technology_stack:
+      frontend: "Next.js + React"
+      payment: "Stripe integration"
+      video: "WebRTC / Zoom API"
+      matching_ai: "Predictive Service"
+
+    integrations:
+      - "Predictive Service (expert demand forecasting)"
+      - "Community Intelligence (expert recommendations)"
+      - "Learning Service (training catalog)"
+
+  # ======================================================================
+  # 4. DIGITAL TWIN (Цифровой двойник организации)
+  # ======================================================================
+  - id: "digital-twin"
+    name: "Organization Digital Twin"
+    name_ru: "Цифровой Двойник Организации"
+    type: "digital_twin_platform"
+    status: "production"
+    port: 3003
+
+    description:
+      summary: "Digital twin of organization for BCM simulation and analysis"
+      summary_ru: "Цифровой двойник организации для симуляции и анализа БНП"
+      purpose: "Virtual model of organization for testing BCM strategies"
+      target_users: ["BCM Strategists", "Risk Analysts", "Executives"]
+
+    features:
+      - "3D organization model"
+      - "Real-time data synchronization"
+      - "What-if scenario analysis"
+      - "Impact simulation"
+      - "Resource visualization"
+      - "Dependency mapping"
+      - "Predictive modeling"
+      - "Time-travel (historical states)"
+
+    digital_twin_components:
+      - component: "Organization Structure"
+        description: "Departments, teams, reporting lines"
+        data_source: "HR systems, org charts"
+
+      - component: "Business Processes"
+        description: "Critical workflows and dependencies"
+        data_source: "Workflow Intelligence"
+
+      - component: "IT Infrastructure"
+        description: "Servers, networks, applications"
+        data_source: "CMDB, monitoring systems"
+
+      - component: "Physical Assets"
+        description: "Buildings, equipment, inventory"
+        data_source: "Asset management systems"
+
+      - component: "People & Skills"
+        description: "Staff, competencies, availability"
+        data_source: "Learning Service, HR"
+
+      - component: "External Dependencies"
+        description: "Suppliers, partners, customers"
+        data_source: "Supply chain data"
+
+    simulation_capabilities:
+      - "Disruption impact simulation"
+      - "Recovery strategy testing"
+      - "Resource allocation optimization"
+      - "Cascade effect analysis"
+      - "Cost-benefit analysis"
+
+    technology_stack:
+      frontend: "Three.js / React Three Fiber"
+      simulation: "Custom physics engine"
+      data_sync: "Real-time EventBus integration"
+      ai_modeling: "AI Orchestration + Predictive"
+
+    integrations:
+      - "BIA Service (critical functions data)"
+      - "Risk Service (risk scenarios)"
+      - "Workflow Intelligence (process models)"
+      - "Event Intelligence (real-time events)"
+      - "Predictive Service (forecasting)"
+
+# ========================================================================
+# 12 BCM MODULES (Модули БНП)
+# ========================================================================
+# These are the backend services that power the applications above
+
+bcm_modules:
+  # Core BCM
+  - id: "bia-module"
+    name: "BIA Module"
+    name_ru: "Модуль BIA"
+    category: "bcm_core"
+    description: "Business Impact Analysis functionality"
+    used_by: ["bcm-portal", "digital-twin"]
+
+  - id: "risk-module"
+    name: "Risk Assessment Module"
+    name_ru: "Модуль Оценки Рисков"
+    category: "bcm_core"
+    description: "Risk identification and assessment"
+    used_by: ["bcm-portal", "digital-twin"]
+
+  - id: "plans-module"
+    name: "BCM Plans Module"
+    name_ru: "Модуль Планов БНП"
+    category: "bcm_core"
+    description: "BCM plan creation and management"
+    used_by: ["bcm-portal", "simulation-platform"]
+
+  # Operations
+  - id: "response-module"
+    name: "Incident Response Module"
+    name_ru: "Модуль Реагирования"
+    category: "bcm_operations"
+    description: "Incident detection and response"
+    used_by: ["bcm-portal", "simulation-platform"]
+
+  - id: "validation-module"
+    name: "Validation & Testing Module"
+    name_ru: "Модуль Валидации"
+    category: "bcm_operations"
+    description: "Plan testing and exercises"
+    used_by: ["bcm-portal", "simulation-platform"]
+
+  # Governance
+  - id: "compliance-module"
+    name: "Compliance Module"
+    name_ru: "Модуль Соответствия"
+    category: "governance"
+    description: "ISO 22301 compliance monitoring"
+    used_by: ["bcm-portal"]
+
+  - id: "governance-module"
+    name: "Governance Module"
+    name_ru: "Модуль Управления"
+    category: "governance"
+    description: "BCM governance and policies"
+    used_by: ["bcm-portal"]
+
+  # Support
+  - id: "learning-module"
+    name: "Learning & Training Module"
+    name_ru: "Модуль Обучения"
+    category: "support"
+    description: "Training and competency management"
+    used_by: ["bcm-portal", "expert-marketplace"]
+
+  - id: "documents-module"
+    name: "Document Management Module"
+    name_ru: "Модуль Документов"
+    category: "support"
+    description: "BCM document management"
+    used_by: ["bcm-portal"]
+
+  # Strategy
+  - id: "planning-module"
+    name: "Planning & Journey Module"
+    name_ru: "Модуль Планирования Пути"
+    category: "strategy"
+    description: "BCM journey planning"
+    used_by: ["bcm-portal", "digital-twin"]
+
+  # Analytics
+  - id: "analytics-module"
+    name: "Analytics & Reporting Module"
+    name_ru: "Модуль Аналитики"
+    category: "analytics"
+    description: "Business intelligence and reporting"
+    used_by: ["bcm-portal", "digital-twin"]
+
+  - id: "monitoring-module"
+    name: "Monitoring & Metrics Module"
+    name_ru: "Модуль Мониторинга"
+    category: "analytics"
+    description: "Real-time monitoring and KPIs"
+    used_by: ["bcm-portal", "digital-twin"]
+
+# ========================================================================
+# APPLICATION INTEGRATION MAP
+# ========================================================================
+application_integration:
+  bcm_portal:
+    primary_modules: ["bia", "risk", "plans", "compliance", "governance"]
+    supporting_modules: ["response", "validation", "learning", "documents", "planning", "analytics", "monitoring"]
+    ai_services: ["ai-orchestration", "predictive", "community-intelligence"]
+
+  simulation_platform:
+    primary_modules: ["validation", "response", "plans"]
+    supporting_modules: ["learning"]
+    ai_services: ["scenario-intelligence", "ai-orchestration"]
+
+  expert_marketplace:
+    primary_modules: ["learning"]
+    supporting_modules: []
+    ai_services: ["predictive", "community-intelligence"]
+
+  digital_twin:
+    primary_modules: ["bia", "risk", "planning", "analytics", "monitoring"]
+    supporting_modules: []
+    ai_services: ["workflow-intelligence", "predictive", "event-intelligence", "ai-orchestration"]
+
+# ========================================================================
+# USER JOURNEY EXAMPLES
+# ========================================================================
+user_journeys:
+  - journey: "New Organization Onboarding"
+    applications: ["bcm-portal", "digital-twin"]
+    steps:
+      - "Create organization profile (Portal)"
+      - "Initial assessment (Portal)"
+      - "Create digital twin (Digital Twin)"
+      - "Conduct BIA (Portal + Digital Twin)"
+      - "Assess risks (Portal + Digital Twin)"
+      - "Create BCM plans (Portal)"
+
+  - journey: "BCM Exercise"
+    applications: ["simulation-platform", "bcm-portal"]
+    steps:
+      - "Design exercise scenario (Simulation)"
+      - "Configure simulation (Simulation)"
+      - "Notify participants (Portal)"
+      - "Run simulation (Simulation)"
+      - "Track performance (Simulation)"
+      - "Generate report (Portal)"
+
+  - journey: "Hire BCM Expert"
+    applications: ["expert-marketplace", "bcm-portal"]
+    steps:
+      - "Post requirement (Marketplace)"
+      - "AI matches experts (Marketplace)"
+      - "Review profiles (Marketplace)"
+      - "Book consultation (Marketplace)"
+      - "Video call (Marketplace)"
+      - "Track progress (Portal)"
+
+# ========================================================================
+# STATISTICS
+# ========================================================================
+statistics:
+  total_applications: 4
+  total_bcm_modules: 12
+  total_services: 16  # 4 apps + 12 modules
+
+  by_type:
+    web_applications: 1      # BCM Portal
+    simulation: 1            # Simulation Platform
+    marketplace: 1           # Expert Marketplace
+    digital_twin: 1          # Digital Twin
+    backend_modules: 12      # BCM modules
+
+  by_status:
+    production: 16
+
+# ========================================================================
+# METADATA
+# ========================================================================
+metadata:
+  generated_by: "User Requirements Analysis"
+  generation_date: "2025-10-12"
+  version: "2.0.0"
+  note: "Разделены программные продукты (4) и модули БНП (12)"
+  total_user_facing_services: 4
+  total_backend_modules: 12

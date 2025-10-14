@@ -1,0 +1,252 @@
+groups:
+  - name: service_catalog_critical
+    interval: 30s
+    rules:
+      # CRITICAL - Low coverage (many services not running)
+      - alert: ServiceCatalogLowCoverage
+        expr: service_catalog_coverage_percent < 60
+        for: 5m
+        labels:
+          severity: critical
+          component: service-catalog
+        annotations:
+          summary: "Service catalog coverage critically low"
+          description: "Only {{ $value }}% of catalog services are running. Target is > 80%."
+          runbook: "Check which services are missing, review service health, start missing critical services"
+
+      # CRITICAL - Too many missing services
+      - alert: ServiceCatalogTooManyMissing
+        expr: service_catalog_missing_services > 10
+        for: 3m
+        labels:
+          severity: critical
+          component: service-catalog
+        annotations:
+          summary: "Too many services missing"
+          description: "{{ $value }} services from catalog are not running"
+          runbook: "Review missing services list, check deployment status, verify infrastructure health"
+
+      # CRITICAL - Low healthy services count
+      - alert: ServiceCatalogLowHealthyCount
+        expr: service_catalog_healthy_services < 15
+        for: 5m
+        labels:
+          severity: critical
+          component: service-catalog
+        annotations:
+          summary: "Too few healthy services"
+          description: "Only {{ $value }} services are healthy. Expected > 15."
+          runbook: "Check service health status, review logs, investigate unhealthy services"
+
+      # CRITICAL - Catalog export failing
+      - alert: ServiceCatalogExportFailing
+        expr: rate(service_catalog_export_errors[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+          component: service-catalog
+        annotations:
+          summary: "Service catalog export failing"
+          description: "Catalog metrics export error rate: {{ $value | humanizePercentage }}"
+          runbook: "Check Service Discovery logs, verify catalog integration, check Prometheus connectivity"
+
+      # CRITICAL - Service Discovery down
+      - alert: ServiceDiscoveryDown
+        expr: up{job="service-discovery"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: service-discovery
+        annotations:
+          summary: "Service Discovery is down"
+          description: "Service Discovery API is unreachable. Service catalog unavailable."
+          runbook: "Restart Service Discovery service (port 8500), check logs, verify dependencies"
+
+  - name: service_catalog_warning
+    interval: 1m
+    rules:
+      # WARNING - Coverage below target
+      - alert: ServiceCatalogCoverageLow
+        expr: service_catalog_coverage_percent < 80
+        for: 10m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Service catalog coverage below target"
+          description: "Coverage is {{ $value }}%. Target is > 80%."
+          runbook: "Review missing services, plan deployment of missing components"
+
+      # WARNING - Unknown services detected
+      - alert: ServiceCatalogUnknownServicesDetected
+        expr: service_catalog_unknown_services > 3
+        for: 10m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Unknown services detected"
+          description: "{{ $value }} services are running but not in catalog"
+          runbook: "Add SERVICE_INFO.yaml for unknown services, update service catalog"
+
+      # WARNING - Some services missing
+      - alert: ServiceCatalogServicesMissing
+        expr: service_catalog_missing_services > 5
+        for: 10m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Some catalog services are not running"
+          description: "{{ $value }} services from catalog are not running"
+          runbook: "Review deployment status, check if missing services are required"
+
+      # WARNING - Unhealthy services detected
+      - alert: ServiceCatalogUnhealthyServices
+        expr: (service_catalog_registered_services - service_catalog_healthy_services) > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Multiple unhealthy services detected"
+          description: "{{ $value }} registered services are unhealthy or degraded"
+          runbook: "Check service health endpoints, review service logs, investigate degraded services"
+
+      # WARNING - Catalog export slow
+      - alert: ServiceCatalogExportSlow
+        expr: histogram_quantile(0.95, service_catalog_export_duration_seconds_bucket) > 2.0
+        for: 5m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Service catalog export is slow"
+          description: "P95 export duration is {{ $value | humanizeDuration }}. Target is < 2s."
+          runbook: "Check catalog integration performance, review database queries, optimize export logic"
+
+      # WARNING - Service type imbalance
+      - alert: ServiceCatalogTypeImbalance
+        expr: max(service_catalog_services_by_type) / min(service_catalog_services_by_type > 0) > 5
+        for: 15m
+        labels:
+          severity: warning
+          component: service-catalog
+        annotations:
+          summary: "Service type distribution imbalanced"
+          description: "Some service types have significantly more services than others"
+          runbook: "Review platform architecture, ensure balanced service distribution"
+
+      # WARNING - Service health degraded
+      - alert: ServiceHealthDegraded
+        expr: service_health_status{health_status="degraded"} == 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: service-catalog
+          service: "{{ $labels.service_name }}"
+        annotations:
+          summary: "Service {{ $labels.service_name }} is degraded"
+          description: "Service {{ $labels.service_name }} ({{ $labels.type }}) is in degraded state"
+          runbook: "Check service {{ $labels.service_name }} logs, verify dependencies, investigate performance issues"
+
+      # WARNING - Service unhealthy
+      - alert: ServiceUnhealthy
+        expr: service_health_status{health_status="unhealthy"} == 0
+        for: 3m
+        labels:
+          severity: warning
+          component: service-catalog
+          service: "{{ $labels.service_name }}"
+        annotations:
+          summary: "Service {{ $labels.service_name }} is unhealthy"
+          description: "Service {{ $labels.service_name }} ({{ $labels.type }}) failed health check"
+          runbook: "Check service {{ $labels.service_name }} health endpoint, review logs, restart if needed"
+
+  - name: service_catalog_info
+    interval: 5m
+    rules:
+      # INFO - High coverage achieved
+      - alert: ServiceCatalogHighCoverage
+        expr: service_catalog_coverage_percent > 95
+        for: 1h
+        labels:
+          severity: info
+          component: service-catalog
+        annotations:
+          summary: "Excellent service catalog coverage"
+          description: "Coverage is {{ $value }}%. Platform is well-deployed."
+
+      # INFO - All services healthy
+      - alert: ServiceCatalogAllHealthy
+        expr: service_catalog_healthy_services == service_catalog_registered_services
+        for: 1h
+        labels:
+          severity: info
+          component: service-catalog
+        annotations:
+          summary: "All registered services are healthy"
+          description: "{{ $value }} services are running and healthy"
+
+      # INFO - New service registered
+      - alert: ServiceCatalogNewServiceRegistered
+        expr: increase(service_catalog_registered_services[5m]) > 0
+        for: 0m
+        labels:
+          severity: info
+          component: service-catalog
+        annotations:
+          summary: "New service registered"
+          description: "Service catalog registered {{ $value }} new services"
+
+      # INFO - Service registered
+      - alert: ServiceRegistered
+        expr: changes(service_registration_status[5m]) > 0 and service_registration_status == 1
+        for: 0m
+        labels:
+          severity: info
+          component: service-catalog
+          service: "{{ $labels.service_name }}"
+        annotations:
+          summary: "Service {{ $labels.service_name }} registered"
+          description: "Service {{ $labels.service_name }} ({{ $labels.type }}) successfully registered"
+
+      # INFO - Service deregistered
+      - alert: ServiceDeregistered
+        expr: changes(service_registration_status[5m]) > 0 and service_registration_status == 0
+        for: 0m
+        labels:
+          severity: info
+          component: service-catalog
+          service: "{{ $labels.service_name }}"
+        annotations:
+          summary: "Service {{ $labels.service_name }} deregistered"
+          description: "Service {{ $labels.service_name }} ({{ $labels.type }}) was deregistered"
+
+# Alert routing configuration (for Alertmanager)
+# Add these routes to alertmanager.yml
+#
+# route:
+#   routes:
+#     - match:
+#         component: service-catalog
+#         severity: critical
+#       receiver: 'infrastructure-team-critical'
+#       continue: true
+#
+#     - match:
+#         component: service-catalog
+#         severity: warning
+#       receiver: 'infrastructure-team-warnings'
+#
+# receivers:
+#   - name: 'infrastructure-team-critical'
+#     pagerduty_configs:
+#       - service_key: '<pagerduty-service-key>'
+#
+#   - name: 'infrastructure-team-warnings'
+#     slack_configs:
+#       - api_url: '<slack-webhook-url>'
+#         channel: '#infrastructure-alerts'
+#         title: 'Service Catalog Alert'
+#         text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'

@@ -1,0 +1,450 @@
+# ============================================
+# SERVICE INFORMATION - AI Orchestrator
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: ai-orchestration
+display_name: "AI Orchestrator - The Brain"
+version: "3.0.0"
+description: "Autonomous AI decision-making system with 4-layer memory, safety-first architecture, and self-evolution capabilities. Aggregates context, assesses priority, selects strategies, validates safety, and executes or delegates decisions."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/orchestration"
+business_process: "AI Decision-Making & Autonomous Operations"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8002
+
+endpoints:
+  base_url: "http://localhost:8002"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/v1"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Autonomous decision-making with multi-factor priority scoring"
+  - "4-layer memory system (Working, Short-term, Long-term, Procedural)"
+  - "Context aggregation from workflows, events, databases, external sources"
+  - "Strategy selection from historical cases and learned patterns"
+  - "Safety-first architecture (Constitution, Loop Detection, Hallucination Check)"
+  - "Self-evolution on 3 levels (Data, Model, Code)"
+  - "Crisis coordination and emergency response"
+  - "Delegation to specialist agents"
+  - "Performance optimization and auto-tuning"
+  - "Constitutional AI governance"
+
+features:
+  - name: "Decision Center"
+    description: "Context aggregation, priority assessment, strategy selection, delegation"
+    components: ["ContextAggregator", "PriorityEngine", "StrategySelector", "DelegationManager"]
+
+  - name: "4-Layer Memory"
+    description: "Working (Redis 1h), Short-term (PostgreSQL 30d), Long-term (Case Library), Procedural (ML Models)"
+    components: ["WorkingMemory", "ShortTermMemory", "LongTermMemory", "ProceduralMemory"]
+
+  - name: "Safety Monitor"
+    description: "Constitutional rules, loop detection, hallucination detection, control monitoring"
+    components: ["ConstitutionEnforcer", "LoopDetector", "HallucinationDetector", "ControlMonitor"]
+
+  - name: "Evolution Engine"
+    description: "Daily data evolution, weekly model evolution, monthly code evolution"
+    components: ["DataEvolution", "ModelEvolution", "CodeEvolution"]
+
+  - name: "Crisis Coordinator"
+    description: "Emergency response coordination and escalation"
+    components: ["CrisisDetector", "ResourceAllocator", "CommunicationHub"]
+
+  - name: "Performance Optimizer"
+    description: "Auto-tuning and performance evaluation"
+    components: ["PolicyEvaluator", "PerformanceMonitor"]
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of decision requests"
+    target: "> 2000/day"
+    prometheus_metric: "orchestrator_requests_total"
+
+  - name: "decision_latency_p95"
+    type: "histogram"
+    description: "95th percentile decision latency"
+    target: "< 100ms"
+    prometheus_metric: "orchestrator_decision_latency_seconds"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed decisions"
+    target: "< 1%"
+    prometheus_metric: "orchestrator_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.9%"
+    prometheus_metric: "orchestrator_availability"
+
+  - name: "auto_resolve_success_rate"
+    type: "gauge"
+    description: "Percentage of successfully auto-resolved issues"
+    target: "> 85%"
+    prometheus_metric: "orchestrator_auto_resolve_success_rate"
+
+  - name: "escalation_rate"
+    type: "gauge"
+    description: "Percentage of decisions escalated to humans"
+    target: "< 30%"
+    prometheus_metric: "orchestrator_escalation_rate"
+
+  - name: "safety_approval_rate"
+    type: "gauge"
+    description: "Percentage of decisions passing safety checks"
+    target: "> 95%"
+    prometheus_metric: "orchestrator_safety_approval_rate"
+
+  - name: "average_confidence"
+    type: "gauge"
+    description: "Average decision confidence score"
+    target: "> 0.75"
+    prometheus_metric: "orchestrator_avg_confidence"
+
+  - name: "memory_hit_rate"
+    type: "gauge"
+    description: "Percentage of decisions using memory strategies"
+    target: "> 60%"
+    prometheus_metric: "orchestrator_memory_hit_rate"
+
+  - name: "circuit_breaker_trips"
+    type: "counter"
+    description: "Number of circuit breaker activations"
+    target: "< 5/hour"
+    prometheus_metric: "orchestrator_circuit_breaker_trips_total"
+
+  - name: "crisis_detection_count"
+    type: "counter"
+    description: "Number of crises detected"
+    target: "Track trends"
+    prometheus_metric: "orchestrator_crises_detected_total"
+
+  - name: "pdca_cycles_completed"
+    type: "counter"
+    description: "PDCA continuous improvement cycles"
+    target: "> 10/week"
+    prometheus_metric: "orchestrator_pdca_cycles_total"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "redis[hiredis]>=5.0.0"
+    - "aio-pika>=9.3.0"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "scikit-learn>=1.3.0"  # ML models
+    - "openai>=1.0.0"  # AI capabilities
+    - "anthropic>=0.8.0"  # Claude API
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Short-term memory and decision history"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      port: 6379
+      purpose: "Working memory (1-hour TTL)"
+      required: true
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for real-time events"
+      required: true
+
+    - name: "vector-db"
+      purpose: "Long-term memory (case library)"
+      required: false
+
+  infrastructure:
+    - "PostgreSQL database (orchestrator schema)"
+    - "Redis (working memory)"
+    - "RabbitMQ (EventBus)"
+    - "Vector DB (optional, for semantic search)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "workflow.stuck"
+        source: "workflow_engine"
+        action: "Analyze and resolve workflow blockage"
+
+      - event: "service.degraded"
+        source: "monitoring"
+        action: "Assess impact and take corrective action"
+
+      - event: "incident.declared"
+        source: "response_service"
+        action: "Activate crisis coordination"
+
+      - event: "compliance.gap.identified"
+        source: "compliance_service"
+        action: "Generate remediation strategy"
+
+    publishes:
+      - event: "decision.made"
+        target: "all_services"
+        data: "decision_id, action, rationale, confidence"
+
+      - event: "decision.escalated"
+        target: "governance_service,admin_panel"
+        data: "decision_id, escalation_reason, priority"
+
+      - event: "crisis.detected"
+        target: "response_service,governance_service"
+        data: "crisis_id, severity, affected_services"
+
+      - event: "strategy.learned"
+        target: "workflow_intelligence"
+        data: "strategy_id, success_rate, context"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/v1/decision"
+        methods: ["POST"]
+        consumers: ["all_services"]
+        description: "Request AI decision for situation"
+
+      - endpoint: "/api/v1/crisis/{id}/status"
+        methods: ["GET"]
+        consumers: ["response_service", "admin_panel"]
+
+      - endpoint: "/api/v1/stats"
+        methods: ["GET"]
+        consumers: ["admin_panel", "monitoring"]
+
+    consumes:
+      - service: "workflow_engine"
+        endpoint: "/api/workflow/instances/{id}/status"
+        purpose: "Get workflow context for decisions"
+
+      - service: "case_library"
+        endpoint: "/api/cases/search"
+        purpose: "Search historical cases for strategy selection"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Code evolution requires manual review (by design)"
+    severity: "n/a"
+    workaround: "This is a safety feature, not a bug"
+    tracking: "N/A"
+
+  - issue: "High memory usage with large case libraries (>10k cases)"
+    severity: "medium"
+    workaround: "Use pagination and caching for case retrieval"
+    tracking: "ORCH-001"
+
+  - issue: "Hallucination detector has 5% false positive rate"
+    severity: "low"
+    workaround: "Tune detection thresholds per use case"
+    tracking: "ORCH-002"
+
+limitations:
+  - "Maximum 100 concurrent decision requests"
+  - "Working memory TTL fixed at 1 hour (configurable in future)"
+  - "Constitution rules immutable (by design)"
+  - "Code evolution requires human approval (safety requirement)"
+  - "ML model retraining limited to weekly cycles"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "ai-orchestration:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8002:8002"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/orchestrator"
+
+      - name: "REDIS_URL"
+        description: "Redis connection string"
+        example: "redis://localhost:6379/0"
+
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        example: "amqp://guest:guest@localhost:5672/"
+
+      - name: "OPENAI_API_KEY"
+        description: "OpenAI API key for AI capabilities"
+        example: "sk-..."
+
+    optional:
+      - name: "ANTHROPIC_API_KEY"
+        description: "Anthropic Claude API key"
+        example: "sk-ant-..."
+
+      - name: "ENABLE_SAFETY"
+        description: "Enable safety monitoring"
+        default: "true"
+
+      - name: "ENABLE_EVOLUTION"
+        description: "Enable self-evolution"
+        default: "true"
+
+      - name: "CONFIDENCE_THRESHOLD"
+        description: "Minimum confidence for auto-execution"
+        default: "0.7"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m orchestrator.main"
+
+  requirements:
+    cpu: "2.0 cores (AI processing intensive)"
+    memory: "4GB (memory system + ML models)"
+    disk: "10GB (case library + models)"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8002/docs"
+  examples: "./examples/"
+  external_links:
+    - name: "Constitutional AI Paper"
+      url: "https://arxiv.org/abs/2212.08073"
+    - name: "OpenAI Function Calling"
+      url: "https://platform.openai.com/docs/guides/function-calling"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "AI Platform Architect"
+  product_owner: "AI Product Owner"
+  on_call: "ai-orchestration-oncall@company.com"
+  slack_channel: "#intelligent-core"
+  pagerduty: "ai-orchestration-oncall"
+
+support:
+  incidents: "Create P1 ticket in JIRA Orchestration project (critical service)"
+  questions: "#intelligent-core Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. SAFETY CONSTITUTION
+# ============================================
+safety_constitution:
+  immutable_rules:
+    - "Never modify user data without explicit permission"
+    - "Never delete audit trail"
+    - "Never modify production code without human review"
+    - "Always escalate when confidence < 70%"
+    - "Never bypass governance rules"
+    - "Never expose sensitive data"
+    - "Always maintain data integrity"
+
+  safety_layers:
+    - name: "Constitution Enforcer"
+      description: "Validates decisions against immutable rules"
+
+    - name: "Loop Detector"
+      description: "Prevents infinite loops and oscillations"
+
+    - name: "Hallucination Detector"
+      description: "Identifies AI-generated fabrications"
+
+    - name: "Control Monitor"
+      description: "Prevents runaway AI and scope creep"
+
+# ============================================
+# 13. EVOLUTION SYSTEM
+# ============================================
+evolution_system:
+  data_evolution:
+    frequency: "Daily"
+    automatic: true
+    actions:
+      - "Consolidate new cases"
+      - "Update case library"
+      - "Extract patterns"
+      - "Clean old data"
+
+  model_evolution:
+    frequency: "Weekly"
+    automatic: true
+    actions:
+      - "Retrain ML models"
+      - "A/B test new versions"
+      - "Auto-rollback if performance degrades"
+      - "Track performance metrics"
+
+  code_evolution:
+    frequency: "Monthly"
+    automatic: false
+    human_review_required: true
+    actions:
+      - "Analyze code performance"
+      - "Generate improvement suggestions"
+      - "Create pull requests"
+      - "Require human approval before deployment"
+
+# ============================================
+# 14. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "Constitutional AI Principles"
+      description: "Alignment with human values and safety"
+      status: "compliant"
+
+    - name: "ISO/IEC/IEEE 26514:2022"
+      description: "Software documentation standards"
+      status: "compliant"

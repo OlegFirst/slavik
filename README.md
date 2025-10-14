@@ -144,9 +144,10 @@ AI-Platform-ISO/
 │   ├── workflow_intelligence/ # Temporal workflows
 │   ├── expertise-center/    # 14 AI specialists
 │   ├── ai-foundation/       # LLM, RAG, ML
+│   │   └── utils/           # ✨ NEW: ResourceTracker (shared utility)
 │   ├── predictive/          # ML predictions
 │   ├── collective/          # 347+ case library
-│   └── system-bcm-service/  # Platform BCM (port 8050)
+│   └── system-bcm-service/  # Platform BCM (port 8050) + ResourceTracker integration
 │
 ├── platform-services/        # BCM Services
 │   ├── bia-service/         # Business Impact Analysis
@@ -229,6 +230,12 @@ AI-Platform-ISO/
 - 347+ anonymized case library
 - Pattern recognition
 - Peer learning
+
+**✨ ResourceTracker (NEW - 2025-10-11):**
+- Platform resource monitoring (CPU, Memory, Disk I/O, Network)
+- Trend analysis and deficit prediction
+- Integrated into System BCM Service
+- Available as shared utility for all services
 
 ### 📋 BCM Platform Services
 

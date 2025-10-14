@@ -1,0 +1,207 @@
+groups:
+  - name: orchestrator_critical
+    interval: 30s
+    rules:
+      # CRITICAL - Decision latency too high
+      - alert: OrchestratorHighLatency
+        expr: histogram_quantile(0.95, sum(rate(orchestrator_decision_latency_seconds_bucket[5m])) by (le)) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "AI Orchestrator decision latency too high"
+          description: "P95 decision latency is {{ $value | humanizeDuration }}. Target is < 100ms."
+          runbook: "Check orchestrator logs, database performance, and context aggregation times"
+
+      # CRITICAL - Auto-resolve failure rate high
+      - alert: OrchestratorAutoResolveFailures
+        expr: sum(rate(orchestrator_executions_total{action_type="AUTO_RESOLVE",status="failure"}[5m])) / sum(rate(orchestrator_executions_total{action_type="AUTO_RESOLVE"}[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "High auto-resolve failure rate"
+          description: "Auto-resolve failure rate is {{ $value | humanizePercentage }}. Target is < 5%."
+          runbook: "Check service health, review failed executions in logs"
+
+      # CRITICAL - Escalation rate too high
+      - alert: OrchestratorHighEscalationRate
+        expr: sum(rate(orchestrator_escalations_total[10m])) / sum(rate(orchestrator_decisions_total[10m])) > 0.30
+        for: 10m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "Too many decisions escalated to humans"
+          description: "Escalation rate is {{ $value | humanizePercentage }}. Target is < 30%."
+          runbook: "Review escalation reasons, check strategy confidence, verify safety checks"
+
+      # CRITICAL - Safety approval rate too low
+      - alert: OrchestratorLowSafetyApproval
+        expr: sum(rate(orchestrator_safety_checks_total{approved="True"}[10m])) / sum(rate(orchestrator_safety_checks_total[10m])) < 0.95
+        for: 5m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "Safety approval rate below threshold"
+          description: "Safety approval rate is {{ $value | humanizePercentage }}. Target is > 95%."
+          runbook: "Review safety monitor logs, check constitution rules, verify decision context"
+
+      # CRITICAL - Multiple circuit breakers open
+      - alert: OrchestratorCircuitBreakersOpen
+        expr: sum(increase(orchestrator_circuit_breaker_trips_total[5m])) > 5
+        for: 2m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "Multiple circuit breakers tripped"
+          description: "{{ $value }} circuit breakers have tripped in the last 5 minutes"
+          runbook: "Check service health for affected services, review service call failures"
+
+      # CRITICAL - Crisis coordinator down
+      - alert: OrchestratorCrisisCoordinatorDown
+        expr: up{job="orchestrator-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: orchestrator
+        annotations:
+          summary: "AI Orchestrator API is down"
+          description: "Orchestrator API is unreachable. Crisis coordination unavailable."
+          runbook: "Restart orchestrator service, check logs, verify dependencies (Redis, PostgreSQL)"
+
+  - name: orchestrator_warning
+    interval: 1m
+    rules:
+      # WARNING - Service call latency high
+      - alert: OrchestratorServiceCallSlow
+        expr: histogram_quantile(0.95, sum(rate(orchestrator_service_call_latency_seconds_bucket[5m])) by (service_name, le)) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          component: orchestrator
+        annotations:
+          summary: "Slow service calls detected"
+          description: "Service {{ $labels.service_name }} P95 latency is {{ $value | humanizeDuration }}"
+          runbook: "Check service {{ $labels.service_name }} health and performance"
+
+      # WARNING - Cache hit rate low
+      - alert: OrchestratorLowCacheHitRate
+        expr: sum(rate(orchestrator_cache_hits_total[5m])) / (sum(rate(orchestrator_cache_hits_total[5m])) + sum(rate(orchestrator_cache_misses_total[5m]))) < 0.70
+        for: 10m
+        labels:
+          severity: warning
+          component: orchestrator
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }}. Target is > 70%."
+          runbook: "Review cache configuration, check memory usage, consider increasing cache size"
+
+      # WARNING - High retry rate
+      - alert: OrchestratorHighRetryRate
+        expr: sum(rate(orchestrator_retries_total[5m])) / sum(rate(orchestrator_service_call_latency_seconds_count[5m])) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+          component: orchestrator
+        annotations:
+          summary: "High service call retry rate"
+          description: "Retry rate is {{ $value | humanizePercentage }}. Indicates service instability."
+          runbook: "Check service health, review network connectivity, check for intermittent failures"
+
+      # WARNING - PDCA cycles not completing
+      - alert: OrchestratorPDCAStalled
+        expr: rate(orchestrator_pdca_cycles_total{phase="act"}[15m]) == 0
+        for: 15m
+        labels:
+          severity: warning
+          component: orchestrator
+        annotations:
+          summary: "PDCA cycles not completing"
+          description: "No PDCA ACT phases completed in 15 minutes. Continuous improvement stalled."
+          runbook: "Check PDCA engine logs, verify EventBus connectivity, review workflow completions"
+
+      # WARNING - Memory usage high
+      - alert: OrchestratorHighMemoryUsage
+        expr: sum(orchestrator_memory_usage_bytes) > 1073741824
+        for: 10m
+        labels:
+          severity: warning
+          component: orchestrator
+        annotations:
+          summary: "High memory usage"
+          description: "Orchestrator memory usage is {{ $value | humanize1024 }}. Consider optimization."
+          runbook: "Review memory layers, check for leaks, consider memory optimization"
+
+  - name: orchestrator_info
+    interval: 5m
+    rules:
+      # INFO - Strategy learning effective
+      - alert: OrchestratorLearningEffective
+        expr: increase(orchestrator_strategies_from_memory_total[1h]) > 10
+        for: 1h
+        labels:
+          severity: info
+          component: orchestrator
+        annotations:
+          summary: "Learning system is effective"
+          description: "{{ $value }} strategies retrieved from memory in the last hour"
+
+      # INFO - Crisis detected
+      - alert: OrchestratorCrisisDetected
+        expr: orchestrator_active_crises > 0
+        for: 0m
+        labels:
+          severity: info
+          component: orchestrator
+        annotations:
+          summary: "Crisis situation detected"
+          description: "{{ $value }} active crises. Crisis coordinator activated."
+          runbook: "Monitor crisis status via /api/v1/crisis/{id}/status endpoint"
+
+      # INFO - Incident prevention working
+      - alert: OrchestratorPreventingIncidents
+        expr: increase(orchestrator_incidents_prevented_total[1h]) > 5
+        for: 1h
+        labels:
+          severity: info
+          component: orchestrator
+        annotations:
+          summary: "Proactive incident prevention working"
+          description: "{{ $value }} incidents prevented in the last hour"
+
+# Alert routing configuration (for Alertmanager)
+# Place this in alertmanager.yml
+#
+# route:
+#   group_by: ['alertname', 'component']
+#   group_wait: 10s
+#   group_interval: 10s
+#   repeat_interval: 12h
+#   receiver: 'orchestrator-team'
+#   routes:
+#     - match:
+#         severity: critical
+#       receiver: 'pagerduty-critical'
+#       continue: true
+#     - match:
+#         severity: warning
+#       receiver: 'slack-warnings'
+#
+# receivers:
+#   - name: 'orchestrator-team'
+#     email_configs:
+#       - to: 'orchestrator-team@company.com'
+#
+#   - name: 'pagerduty-critical'
+#     pagerduty_configs:
+#       - service_key: '<your-pagerduty-key>'
+#
+#   - name: 'slack-warnings'
+#     slack_configs:
+#       - api_url: '<your-slack-webhook>'
+#         channel: '#orchestrator-alerts'

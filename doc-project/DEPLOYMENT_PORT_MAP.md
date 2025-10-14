@@ -1,8 +1,9 @@
 # 🗺️ DEPLOYMENT PORT MAP & STARTUP GUIDE
 
-**Project:** NASH 4.0 Universal AI Partnership Platform  
-**Date:** 2025-10-08  
+**Project:** NASH 4.0 Universal AI Partnership Platform
+**Date:** 2025-10-11 (Updated after Phase 2.1 & Monitoring Cleanup)
 **Purpose:** Поэтапный запуск без конфликтов портов
+**Architecture:** Event-Driven Choreography with MIO EYES Observatory
 
 ---
 
@@ -34,8 +35,9 @@
 | **RabbitMQ UI** | 15672 | 🟡 Optional | 2 | (включается автоматически) |
 | **API Gateway** | 8080 | 🔴 Required | 1 | `cd infrastructure/gateway && uvicorn main:app --port 8080` |
 | **Qdrant Vector DB** | 6333 | 🟡 Optional | 3 | `docker run -d -p 6333:6333 qdrant/qdrant` |
-| **Prometheus** | 9090 | 🟡 Optional | 3 | `docker run -d -p 9090:9090 prom/prometheus` |
+| **Prometheus** | 9090 | 🔴 Required (Phase 2.1) | 2 | `docker run -d -p 9090:9090 prom/prometheus` |
 | **Grafana** | 3001 | 🟡 Optional | 3 | `docker run -d -p 3001:3000 grafana/grafana` |
+| **Service Catalog** | N/A | 🔴 Required (Phase 2.1) | 1 | Loaded by Service Discovery v2.0 |
 
 **Startup Script:**
 ```bash
@@ -101,22 +103,45 @@ python orchestration/main.py --port 8022 &
 
 ---
 
-### 🤖 Layer 4: AI-Office Infrastructure (ОПЦИОНАЛЬНО)
+### 🤖 Layer 4: AI-Office Infrastructure (РЕКОМЕНДУЕТСЯ для Phase 2.1)
 
 | Component | Port | Status | Dependencies | Command |
 |-----------|------|--------|--------------|---------|
+| **Service Discovery v2.0** | 8500 | 🔴 Required | Service Catalog, EventBus | `uvicorn main:app --port 8500` |
+| **MIO Manager (EYES)** | 8046 | 🔴 Required | Service Discovery, Prometheus, EventBus | `uvicorn main:app --port 8046` |
 | **DB Intelligence** | 8050 | 🟢 Optional | PostgreSQL | `python main.py --port 8050` |
-| **AI Event Manager** | 8055 | 🟢 Optional | RabbitMQ | `python main.py --port 8055` |
-| **DevOps Agent** | 8060 | 🟢 Optional | All Infrastructure | `uvicorn main:app --port 8060` |
-| **MIO Manager** | 8061 | 🟢 Optional | All Services | `uvicorn main:app --port 8061` |
-| **Unified Orchestrator** | 8090 | 🟢 Optional | All Components | `uvicorn main:app --port 8090` |
+| **AI Event Manager** | 8055 | 🟢 Optional | EventBus | `python main:app --port 8055` |
+| **DevOps Agent** | 8060 | 🟢 Optional | MIO Manager, EventBus | `uvicorn main:app --port 8060` |
+| **Analytics Specialist** | 8051 | 🟢 Optional | MIO Manager | `uvicorn main:app --port 8051` |
 
-**Startup Script:**
+**Startup Script (Phase 2.1):**
 ```bash
 # infrastructure/AI-office-infrastructure/start-ai-office.sh
-cd infrastructure/AI-office-infrastructure
-python db-intelligence/main.py --port 8050 &
-python ai-event-manager/main.py --port 8055 &
+
+# ВАЖНО: Запускать ПОСЛЕ Infrastructure Layer 1 (Redis, Prometheus)
+
+# 1. Service Discovery v2.0 (required for MIO)
+cd infrastructure/runtime/service-discovery
+uvicorn main:app --port 8500 &
+sleep 3
+
+# 2. MIO Manager EYES (observes Service Discovery events)
+cd ../../AI-office-infrastructure/mio-manager
+uvicorn main:app --port 8046 &
+sleep 3
+
+# 3. Optional AI Office components
+cd ../db-intelligence
+python main.py --port 8050 &
+
+cd ../ai-event-manager
+python main:app --port 8055 &
+
+cd ../devops-agent
+uvicorn main:app --port 8060 &
+
+cd ../analytics-specialist
+uvicorn main:app --port 8051 &
 ```
 
 ---
@@ -135,6 +160,76 @@ python ai-event-manager/main.py --port 8055 &
 # interface/start-interface.sh
 cd interface/web-app
 npm start &
+```
+
+---
+
+## 🆕 PHASE 2.1: EVENT-DRIVEN ARCHITECTURE (Oct 11, 2025)
+
+### Новая архитектура: MIO EYES Observatory
+
+**Ключевые изменения:**
+1. **Service Discovery v2.0** - Unified Catalog + Registry + Event Broadcasting
+2. **MIO Manager EYES** - Observatory pattern (observes, doesn't command)
+3. **Event-Driven Choreography** - Services react autonomously to observations
+4. **Service Catalog v2.0** - 27 services with 13-section schema
+
+### Порядок запуска Phase 2.1:
+
+```bash
+# 1. Infrastructure (Base)
+docker-compose -f infrastructure/observability/docker-compose.monitoring.yml up -d
+# → Redis (6379), Prometheus (9090), Grafana (3001)
+
+# 2. Service Discovery v2.0 (loads Service Catalog)
+cd infrastructure/runtime/service-discovery
+uvicorn main:app --port 8500
+
+# 3. MIO Manager EYES (subscribes to Service Discovery events)
+cd ../../AI-office-infrastructure/mio-manager
+uvicorn main:app --port 8046
+
+# 4. AI Event Manager (receives observations)
+cd ../ai-event-manager
+python main:app --port 8055
+
+# 5. DevOps Agent (executes auto-fixes based on observations)
+cd ../devops-agent
+uvicorn main:app --port 8060
+```
+
+### Event Flow (Phase 2.1):
+
+```
+1. Service registers → Service Discovery publishes event
+                    ↓
+2. MIO EYES observes → Checks if monitored by Prometheus
+                    ↓
+3. If NOT monitored → Publishes observation event
+                    ↓
+4. DevOps Agent receives → Adds service to Prometheus config
+                    ↓
+5. Verification → MIO confirms service now monitored
+```
+
+### Observation Cycles:
+
+- **Metrics Coverage** (every 5 min): Service Discovery vs Prometheus comparison
+- **Metrics Health** (every 1 min): Endpoint accessibility, scrape freshness
+- **Service Events** (real-time): Service registration/deregistration
+
+### Integration Points:
+
+```
+Service Discovery v2.0 (8500)
+    ↓ (publishes events)
+EventBus (Redis Streams)
+    ↓ (subscribes)
+MIO Manager EYES (8046)
+    ↓ (publishes observations)
+EventBus
+    ↓ (subscribers)
+AI Event Manager (8055) + DevOps Agent (8060)
 ```
 
 ---
@@ -554,6 +649,55 @@ cd interface/web-app && npm start
 
 ---
 
-**Version:** 1.0.0  
-**Date:** 2025-10-08  
-**Status:** Ready for deployment
+## 📝 PHASE 2.1 CHECKLIST (NEW - Oct 11, 2025)
+
+```
+☐ Infrastructure базовая запущена (PostgreSQL, Redis, Prometheus)
+☐ Service Catalog v2.0 проверен (27 services, /runtime/service-catalog/service-catalog.yaml)
+☐ Service Discovery v2.0 запущен на порту 8500
+☐ MIO Manager EYES запущен на порту 8046
+☐ EventBus (Redis Streams) работает
+☐ Prometheus доступен на порту 9090
+☐ MIO EYES подписан на события Service Discovery
+☐ Observability stack merged (/infrastructure/observability/)
+☐ Alert rules загружены (orchestrator-alerts.yml)
+☐ Grafana dashboards доступны
+☐ Observation cycles работают (Coverage: 5 min, Health: 1 min)
+```
+
+### Проверка Phase 2.1:
+
+```bash
+# 1. Service Discovery v2.0
+curl http://localhost:8500/v2/catalog/services | jq
+
+# 2. MIO Manager EYES
+curl http://localhost:8046/health
+
+# 3. Prometheus targets
+curl http://localhost:9090/api/v1/targets
+
+# 4. Service Catalog
+cat /Users/MD/AI-Platform-ISO/infrastructure/runtime/service-catalog/service-catalog.yaml | grep "version:"
+# Expected: version: 2.0.0
+```
+
+---
+
+## 📚 ДОКУМЕНТАЦИЯ
+
+### Phase 2.1 Документация:
+
+- **MIO Manager:** `/infrastructure/AI-office-infrastructure/mio-manager/START_HERE.md`
+- **Quick Reference:** `/infrastructure/AI-office-infrastructure/mio-manager/QUICK_MONITORING_OVERVIEW.md`
+- **Service Catalog Schema:** `/infrastructure/runtime/service-catalog/CATALOG_SCHEMA.md`
+- **Service Catalog Quick Ref:** `/infrastructure/runtime/service-catalog/QUICK_REFERENCE.md`
+- **Component Catalog:** `/infrastructure/FULL_COMPONENT_CATALOG.md` (updated Oct 11)
+- **Cleanup Report:** `/infrastructure/AI-office-infrastructure/mio-manager/CLEANUP_COMPLETE.md`
+
+---
+
+**Version:** 2.1.0 (Phase 2.1 Complete)
+**Date:** 2025-10-11 (Updated after Phase 2.1 & Monitoring Cleanup)
+**Status:** Production Ready - Event-Driven Architecture
+**Architecture:** MIO EYES Observatory + Event-Driven Choreography

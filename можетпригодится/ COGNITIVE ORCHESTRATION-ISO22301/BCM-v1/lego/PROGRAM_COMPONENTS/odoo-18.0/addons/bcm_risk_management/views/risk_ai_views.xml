@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- AI Enhanced Risk Views -->
+        <record id="view_bcm_risk_form_ai" model="ir.ui.view">
+            <field name="name">bcm.risk.management.form.ai</field>
+            <field name="model">bcm.risk.management</field>
+            <field name="arch" type="xml">
+                <form string="AI Risk Management">
+                    <header>
+                        <button name="action_ai_risk_analysis" type="object"
+                                string="AI Risk Analysis" class="btn-primary"/>
+                        <field name="risk_score" widget="badge" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="risk_category"/>
+                                <field name="likelihood"/>
+                                <field name="impact"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="risk_score" readonly="1"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <group string="Risk Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                        <group string="AI Analysis">
+                            <field name="ai_analysis" nolabel="1"/>
+                            <field name="ai_recommendations"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_bcm_risk_ai" model="ir.actions.act_window">
+            <field name="name">🤖 AI Risk Management</field>
+            <field name="res_model">bcm.risk.management</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_bcm_risk_ai"
+                  name="⚠️ AI Risk Management"
+                  parent="bcm_core.menu_bcm_root"
+                  action="action_bcm_risk_ai"
+                  sequence="35"/>
+    </data>
+</odoo>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- AI Control Center Main Menu -->
+        <menuitem id="menu_bcm_ai_control_root"
+                  name="AI Control Center"
+                  parent="bcm_core.menu_bcm_root"
+                  sequence="1"
+                  web_icon="bcm_ai_control,static/description/icon.png"
+                  groups="bcm_core.group_bcm_manager"/>
+
+        <!-- Organism Management -->
+        <menuitem id="menu_ai_organism_management"
+                  name="🧬 Organism Management"
+                  parent="menu_bcm_ai_control_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_ai_control_dashboard"
+                  name="📊 Organism Dashboard"
+                  parent="menu_ai_organism_management"
+                  action="action_ai_control_dashboard"
+                  sequence="10"/>
+
+        <menuitem id="menu_ai_organ_status"
+                  name="🎯 AI Organs Status"
+                  parent="menu_ai_organism_management"
+                  action="action_ai_organ_status"
+                  sequence="20"/>
+
+        <!-- Memory System -->
+        <menuitem id="menu_ai_memory_system"
+                  name="🧠 Memory System"
+                  parent="menu_bcm_ai_control_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_memory_analytics"
+                  name="📈 Memory Analytics"
+                  parent="menu_ai_memory_system"
+                  sequence="10"/>
+
+        <!-- AI Tools -->
+        <menuitem id="menu_ai_tools"
+                  name="🛠️ AI Tools"
+                  parent="menu_bcm_ai_control_root"
+                  sequence="30"/>
+
+        <menuitem id="menu_prompt_library"
+                  name="📝 Prompt Library"
+                  parent="menu_ai_tools"
+                  sequence="10"/>
+
+        <menuitem id="menu_token_usage"
+                  name="💰 Token Usage"
+                  parent="menu_ai_tools"
+                  sequence="20"/>
+
+        <menuitem id="menu_api_management"
+                  name="🔌 API Management"
+                  parent="menu_ai_tools"
+                  sequence="30"/>
+
+        <!-- External Tools -->
+        <menuitem id="menu_external_ai_tools"
+                  name="🚀 External AI Tools"
+                  parent="menu_bcm_ai_control_root"
+                  sequence="40"/>
+
+        <menuitem id="menu_open_ai_control_center"
+                  name="🎛️ Professional AI Control Center"
+                  parent="menu_external_ai_tools"
+                  action="action_open_ai_control_center"
+                  sequence="10"/>
+
+        <menuitem id="menu_open_mcp_inspector"
+                  name="🔍 MCP Inspector"
+                  parent="menu_external_ai_tools"
+                  action="action_open_mcp_inspector"
+                  sequence="20"/>
+
+        <menuitem id="menu_open_prompt_studio"
+                  name="📝 Prompt Engineering Studio"
+                  parent="menu_external_ai_tools"
+                  action="action_open_prompt_studio"
+                  sequence="30"/>
+
+        <!-- Actions -->
+        <record id="action_ai_control_dashboard" model="ir.actions.act_window">
+            <field name="name">AI Control Dashboard</field>
+            <field name="res_model">bcm.ai.control.dashboard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="context">{'create': False}</field>
+        </record>
+
+        <record id="action_ai_organ_status" model="ir.actions.act_window">
+            <field name="name">AI Organs Status</field>
+            <field name="res_model">bcm.ai.organ.status</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <record id="action_open_ai_control_center" model="ir.actions.server">
+            <field name="name">Open AI Control Center</field>
+            <field name="model_id" ref="model_bcm_ai_control_dashboard"/>
+            <field name="code">action = records.action_open_ai_control_center()</field>
+        </record>
+
+        <record id="action_open_mcp_inspector" model="ir.actions.server">
+            <field name="name">Open MCP Inspector</field>
+            <field name="model_id" ref="model_bcm_ai_control_dashboard"/>
+            <field name="code">action = records.action_open_mcp_inspector()</field>
+        </record>
+
+        <record id="action_open_prompt_studio" model="ir.actions.server">
+            <field name="name">Open Prompt Studio</field>
+            <field name="model_id" ref="model_bcm_ai_control_dashboard"/>
+            <field name="code">action = records.action_open_prompt_studio()</field>
+        </record>
+    </data>
+</odoo>

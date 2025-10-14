@@ -15,11 +15,11 @@ import logging
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 
-from intelligent_core.ai_orchestration.memory.working_memory import WorkingMemory
-from intelligent_core.ai_orchestration.memory.short_term_memory import ShortTermMemory
-from intelligent_core.ai_orchestration.memory.long_term_memory import LongTermMemory
-from intelligent_core.ai_orchestration.memory.procedural_memory import ProceduralMemory
-from intelligent_core.ai_orchestration.models import Memory, MemoryType
+from .memory.working_memory import WorkingMemory
+from .memory.short_term_memory import ShortTermMemory
+from .memory.long_term_memory import LongTermMemory
+from .memory.procedural_memory import ProceduralMemory
+from .models import Memory, MemoryType
 
 logger = logging.getLogger(__name__)
 

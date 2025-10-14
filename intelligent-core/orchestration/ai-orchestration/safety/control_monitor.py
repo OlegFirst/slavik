@@ -13,7 +13,7 @@ import logging
 from typing import List
 from datetime import datetime, timedelta
 
-from intelligent_core.ai_orchestration.models import (
+from .models import (
     Decision, FullContext, SafetyResult, SafetyConcern, ActionType
 )
 

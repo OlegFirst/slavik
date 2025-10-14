@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Consultation Session Tree View -->
+    <record id="view_consultation_session_tree" model="ir.ui.view">
+        <field name="name">bcm.ai.consultation.session.tree</field>
+        <field name="model">bcm.ai.consultation.session</field>
+        <field name="arch" type="xml">
+            <list string="Consultation Sessions" sample="1">
+                <field name="name"/>
+                <field name="consultant_id"/>
+                <field name="bcm_client_id"/>
+                <field name="start_date"/>
+                <field name="duration_minutes"/>
+                <field name="message_count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Consultation Session Form View -->
+    <record id="view_consultation_session_form" model="ir.ui.view">
+        <field name="name">bcm.ai.consultation.session.form</field>
+        <field name="model">bcm.ai.consultation.session</field>
+        <field name="arch" type="xml">
+            <form string="Consultation Session">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="consultant_id"/>
+                            <field name="bcm_client_id"/>
+                            <field name="context_type"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration_minutes"/>
+                            <field name="message_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Messages">
+                            <field name="message_ids" widget="one2many_list" readonly="1">
+                                <list>
+                                    <field name="sequence"/>
+                                    <field name="message_type"/>
+                                    <field name="content"/>
+                                    <field name="create_date"/>
+                                    <field name="confidence"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Context">
+                            <group>
+                                <field name="topic" widget="text"/>
+                                <field name="context_type"/>
+                            </group>
+                        </page>
+                        <page string="Summary">
+                            <group>
+                                <field name="feedback" widget="text"/>
+                                <field name="export_format"/>
+                                <field name="rating"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Consultation Session Search View -->
+    <record id="view_consultation_session_search" model="ir.ui.view">
+        <field name="name">bcm.ai.consultation.session.search</field>
+        <field name="model">bcm.ai.consultation.session</field>
+        <field name="arch" type="xml">
+            <search string="Consultation Sessions">
+                <field name="name"/>
+                <field name="consultant_id"/>
+                <field name="bcm_client_id"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Today" name="today" domain="[('start_date', '&gt;=', context_today), ('start_date', '&lt;', context_today + datetime.timedelta(days=1))]"/>
+                <filter string="This Week" name="this_week" domain="[('start_date', '&gt;=', (context_today - datetime.timedelta(days=context_today.weekday())).strftime('%%Y-%%m-%%d')), ('start_date', '&lt;', (context_today + datetime.timedelta(days=7-context_today.weekday())).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Consultant" name="group_consultant" domain="[]" context="{'group_by': 'consultant_id'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" domain="[]" context="{'group_by': 'start_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_consultation_session" model="ir.actions.act_window">
+        <field name="name">Consultation Sessions</field>
+        <field name="res_model">bcm.ai.consultation.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_consultation_session_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start your first AI Consultation Session!
+            </p>
+            <p>
+                AI Consultation Sessions provide interactive guidance
+                and expert recommendations for your BCM processes.
+            </p>
+        </field>
+    </record>
+
+</odoo>

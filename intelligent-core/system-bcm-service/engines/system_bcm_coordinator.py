@@ -46,7 +46,7 @@ class SystemBCMCoordinator:
     РЕЗУЛЬТАТ: Интегрирован с ЯДРОМ платформы!
     """
 
-    def __init__(self):
+    def __init__(self, resource_tracker=None):
         """Инициализация координатора"""
         # EventBus
         self.eventbus = None
@@ -56,6 +56,9 @@ class SystemBCMCoordinator:
         self.expertise = ExpertiseIntegration()
         self.collective = CollectiveIntegration()
         self.ai = AIIntegration()
+
+        # ResourceTracker (NEW!)
+        self.resource_tracker = resource_tracker
 
         # State
         self.running = False
@@ -123,9 +126,9 @@ class SystemBCMCoordinator:
                 "started_at": start_time.isoformat()
             })
 
-            # PHASE 1: BIA - Собрать метрики (делаем сами)
+            # PHASE 1: BIA - Собрать метрики (делаем сами) + ResourceTracker
             logger.info("📊 Phase 1: BIA - Collecting platform metrics...")
-            bia_results = await self._execute_bia_phase()
+            bia_results = await self._execute_bia_phase(self.resource_tracker)
 
             # PHASE 2: Risk Assessment - Консультация с Expertise Center
             logger.info("⚠️  Phase 2: Risk Assessment - Consulting AI experts...")
@@ -269,11 +272,11 @@ class SystemBCMCoordinator:
             })
             raise
 
-    async def _execute_bia_phase(self) -> Dict[str, Any]:
+    async def _execute_bia_phase(self, resource_tracker=None) -> Dict[str, Any]:
         """
         Выполнить BIA фазу - ЕДИНСТВЕННОЕ что делаем сами
 
-        Собираем метрики платформы для анализа
+        Собираем метрики платформы для анализа + ResourceTracker данные
         """
         # Собрать health статус всех сервисов
         services_health = []
@@ -303,7 +306,35 @@ class SystemBCMCoordinator:
             "optional": 1800  # 30 минут
         }
 
-        return {
+        # ResourceTracker данные (NEW!)
+        resource_monitoring = None
+        if resource_tracker:
+            available = resource_tracker.get_available_resources()
+            resource_state = resource_tracker.detect_resource_state()
+            cpu_deficit = resource_tracker.predict_deficit('cpu_percent', 90.0)
+            mem_deficit = resource_tracker.predict_deficit('memory_percent', 90.0)
+
+            resource_monitoring = {
+                "state": resource_state,
+                "available": available,
+                "predictions": {
+                    "cpu_deficit_seconds": cpu_deficit,
+                    "memory_deficit_seconds": mem_deficit
+                },
+                "stats": resource_tracker.get_stats()
+            }
+
+            # Publish event if deficit detected
+            if resource_state == "deficit":
+                logger.warning(f"⚠️  Resource deficit detected!")
+                await self._publish_event("resources.contention", {
+                    "type": "predicted_shortage",
+                    "available": available,
+                    "cpu_deficit_seconds": cpu_deficit,
+                    "memory_deficit_seconds": mem_deficit
+                })
+
+        result = {
             "services": services_health,
             "health_score": round(health_score, 2),
             "healthy_count": healthy_count,
@@ -317,6 +348,12 @@ class SystemBCMCoordinator:
             "rto_recommendations": rto_recommendations,
             "timestamp": datetime.utcnow().isoformat()
         }
+
+        # Add resource monitoring if available
+        if resource_monitoring:
+            result["resource_monitoring"] = resource_monitoring
+
+        return result
 
     async def _check_service_health(self, service: Dict[str, Any]) -> Dict[str, Any]:
         """Проверить здоровье сервиса"""

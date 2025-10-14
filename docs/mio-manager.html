@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIO Manager - Platform Eyes | AI-Platform-ISO</title>
+  <meta name="description" content="Deep dive into MIO Manager: The Observatory pattern for intelligent monitoring, automation, and self-healing in the AI-Platform-ISO">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html" class="active">MIO Manager</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="documentation.html">Documentation</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);">
+    <div class="container">
+      <h1>MIO Manager</h1>
+      <p class="hero-subtitle">Intelligent Monitoring & Observability Manager</p>
+      <p style="opacity: 0.9; margin-top: 1rem;">
+        <strong>Port 8046</strong> | Platform Eyes | Observatory Pattern | Self-Healing
+      </p>
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">The Platform Eyes</h2>
+      <p class="section-subtitle text-center" style="max-width: 800px; margin: 0 auto 2rem;">
+        MIO Manager is the <strong>Observatory</strong> of the platform - constantly watching, learning, and maintaining health.
+        It doesn't command, it observes and reports. It doesn't decide, it informs decision-makers.
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 class="text-primary">👀 Observatory Pattern</h3>
+          <p>Continuous observation without intervention. Publishes findings to EventBus for choreography-based responses.</p>
+        </div>
+        <div class="card">
+          <h3 class="text-primary">🗓️ Smart Scheduling</h3>
+          <p>Multi-cycle monitoring: continuous (30s), hourly, daily (3am), weekly (Monday), monthly. Focused, deep analysis.</p>
+        </div>
+        <div class="card">
+          <h3 class="text-primary">🤖 Self-Healing Integration</h3>
+          <p>Integrates with DevOps Agent, AI Event Manager, Predictive Service for proactive problem detection and resolution.</p>
+        </div>
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3 class="text-center">Core Responsibilities</h3>
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <ul>
+            <li><strong>Metrics Coverage:</strong> Ensure all services export Prometheus metrics</li>
+            <li><strong>Health Monitoring:</strong> Check service health every 60 seconds</li>
+            <li><strong>Deep Analysis:</strong> Daily (3am) deep performance analysis</li>
+            <li><strong>Focus Analysis:</strong> Weekly (Monday) component-by-component review</li>
+          </ul>
+          <ul>
+            <li><strong>Automation Setup:</strong> Configure Prometheus scrape jobs and Grafana dashboards</li>
+            <li><strong>Critical Escalation:</strong> Detect failures and publish to EventBus</li>
+            <li><strong>Report Generation:</strong> Daily (6am), weekly (8am), monthly reports to Workflow Intelligence</li>
+            <li><strong>ML Model Retraining:</strong> Weekly (Sunday) predictive model updates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Observatory Pattern Architecture -->
+  <section id="architecture">
+    <div class="container">
+      <h2 class="text-center">MIO EYES Observatory Pattern</h2>
+      <p class="section-subtitle text-center">
+        MIO observes, analyzes, and publishes findings - but never commands
+      </p>
+
+      <div class="diagram-container">
+        <pre class="mermaid">
+graph TB
+    subgraph MIO["👀 MIO Manager (Port 8046)"]
+        SS[Smart Scheduler]
+        MCO[Metrics Coverage Observer]
+        MHC[Metrics Health Checker]
+        AT[Automation Toolkit]
+    end
+
+    subgraph Monitoring["📊 Monitoring Sources"]
+        PROM[Prometheus :9090]
+        SD[Service Discovery :8500]
+        GRAF[Grafana :3000]
+    end
+
+    subgraph Intelligence["🧠 Intelligence Layer"]
+        WI[Workflow Intelligence<br/>Brain]
+        PRED[Predictive Service]
+        OPT[Optimizer]
+        COORD[Coordination Center]
+    end
+
+    subgraph Actions["⚡ Action Systems"]
+        DEVOPS[DevOps Agent]
+        AIEM[AI Event Manager]
+        POL[Policy Engine]
+    end
+
+    EB[EventBus<br/>Choreography Hub]
+
+    %% Observation Flow
+    SS -->|Every 5 min| MCO
+    SS -->|Every 1 min| MHC
+    SS -->|Hourly| AT
+    MCO -->|Check coverage| PROM
+    MCO -->|Check services| SD
+    MHC -->|Check targets| PROM
+
+    %% Publish Observations
+    MCO -->|Publish observation| EB
+    MHC -->|Publish health status| EB
+    AT -->|Publish findings| EB
+
+    %% Deep Analysis
+    SS -->|Daily 3am| AT
+    AT -->|Get metrics| PROM
+    AT -->|Analyze| OPT
+    AT -->|Predict| PRED
+    AT -->|Report| WI
+
+    %% EventBus Choreography
+    EB -->|Critical failure| DEVOPS
+    EB -->|Pattern detected| AIEM
+    EB -->|Policy violation| POL
+    EB -->|Needs coordination| COORD
+
+    %% Automation
+    AT -.->|Setup scrape jobs| PROM
+    AT -.->|Create dashboards| GRAF
+    AT -.->|Register services| SD
+
+    style MIO fill:#1e3a8a,color:#fff
+    style EB fill:#dc2626,color:#fff
+    style Monitoring fill:#059669,color:#fff
+    style Intelligence fill:#7c3aed,color:#fff
+    style Actions fill:#ea580c,color:#fff
+        </pre>
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3>Key Architectural Principles</h3>
+        <div class="grid grid-2">
+          <div>
+            <h4>Observatory (Not Commander)</h4>
+            <ul style="margin-top: 0.5rem;">
+              <li><strong>Observe:</strong> Continuously watch all services</li>
+              <li><strong>Analyze:</strong> Use AI to understand patterns</li>
+              <li><strong>Publish:</strong> Send findings to EventBus</li>
+              <li><strong>Never Command:</strong> Other services react autonomously</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Choreography (Not Orchestration)</h4>
+            <ul style="margin-top: 0.5rem;">
+              <li><strong>Event-Driven:</strong> Publish observations as events</li>
+              <li><strong>Decoupled:</strong> Services subscribe to relevant events</li>
+              <li><strong>Autonomous:</strong> Each service decides its own actions</li>
+              <li><strong>Scalable:</strong> No single point of failure</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Smart Scheduler -->
+  <section id="smart-scheduler">
+    <div class="container">
+      <h2 class="text-center">Smart Scheduler: Multi-Cycle Monitoring</h2>
+      <p class="section-subtitle text-center">
+        "Not frequent, but FOCUSED and DEEP monitoring" - User's philosophy
+      </p>
+
+      <div class="diagram-container">
+        <pre class="mermaid">
+gantt
+    title MIO Manager Monitoring Cycles
+    dateFormat HH:mm
+    axisFormat %H:%M
+
+    section Continuous (24/7)
+    Health Check (60s) :active, 00:00, 24h
+    Metrics Coverage (5min) :active, 00:00, 24h
+    Metrics Health (1min) :active, 00:00, 24h
+
+    section Hourly
+    DevOps Monitoring :crit, 00:00, 1h
+
+    section Daily
+    Deep Analysis (3am) :crit, 03:00, 1h
+    Daily Report (6am) :milestone, 06:00, 0h
+    Predictive Recommendations (8am) :milestone, 08:00, 0h
+    Coordination Health (9am) :milestone, 09:00, 0h
+
+    section Weekly (Monday)
+    Focus Analysis (2am) :crit, 02:00, 1h
+    DevOps Deep Scan (3am) :crit, 03:00, 1h
+    Event Intelligence (4am) :crit, 04:00, 1h
+    Collective Stuck Detection (5am) :crit, 05:00, 1h
+    Community Insights (6am) :milestone, 06:00, 0h
+    Expertise Analysis (7am) :milestone, 07:00, 0h
+    Weekly Report (8am) :milestone, 08:00, 0h
+
+    section Weekly (Sunday)
+    ML Model Retraining (2am) :crit, 02:00, 1h
+
+    section Monthly (1st day)
+    Monthly Report (9am) :milestone, 09:00, 0h
+        </pre>
+      </div>
+
+      <div class="grid grid-4 mt-2">
+        <div class="card">
+          <h3 style="color: var(--primary-color);">Continuous (24/7)</h3>
+          <ul style="font-size: 0.9rem; margin-top: 0.5rem;">
+            <li><strong>60s:</strong> Health check all integrations</li>
+            <li><strong>5min:</strong> Metrics coverage observation</li>
+            <li><strong>1min:</strong> Metrics health check</li>
+          </ul>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--medium-text);">
+            Fast detection of critical failures
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary-color);">Daily</h3>
+          <ul style="font-size: 0.9rem; margin-top: 0.5rem;">
+            <li><strong>3:00 AM:</strong> Deep performance analysis</li>
+            <li><strong>6:00 AM:</strong> Report to Workflow Intelligence</li>
+            <li><strong>8:00 AM:</strong> Predictive recommendations</li>
+            <li><strong>9:00 AM:</strong> Coordination Center health</li>
+          </ul>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--medium-text);">
+            Daily insights and proactive recommendations
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary-color);">Weekly (Monday)</h3>
+          <ul style="font-size: 0.9rem; margin-top: 0.5rem;">
+            <li><strong>2:00 AM:</strong> Focus analysis (each component)</li>
+            <li><strong>3:00 AM:</strong> DevOps deep scan</li>
+            <li><strong>4:00 AM:</strong> Event intelligence analysis</li>
+            <li><strong>5:00 AM:</strong> Collective stuck detection</li>
+            <li><strong>8:00 AM:</strong> Weekly report</li>
+          </ul>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--medium-text);">
+            Deep dive into each system component
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--primary-color);">Monthly</h3>
+          <ul style="font-size: 0.9rem; margin-top: 0.5rem;">
+            <li><strong>9:00 AM:</strong> Monthly aggregated report</li>
+            <li>Trends over 30 days</li>
+            <li>Achievements & challenges</li>
+            <li>Scheduler statistics</li>
+          </ul>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--medium-text);">
+            Strategic insights and long-term patterns
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Real-World Example -->
+  <section id="example">
+    <div class="container">
+      <h2 class="text-center">Real-World Example</h2>
+      <p class="section-subtitle text-center">
+        How MIO observes a problem and triggers choreographed responses
+      </p>
+
+      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); padding: 2rem; border-radius: 8px; color: white; margin: 2rem 0;">
+        <h3 style="color: white; margin-bottom: 1rem;">Scenario: Critical Service Failure</h3>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem;">
+          <h4 style="color: white; margin-bottom: 0.5rem;">1. Detection (Health Check Cycle - 60s)</h4>
+          <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>{
+  "service": "workflow_intelligence",
+  "status": "unhealthy",
+  "error": "Connection timeout",
+  "detected_at": "2025-10-14T03:42:15Z"
+}</code></pre>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem;">
+          <h4 style="color: white; margin-bottom: 0.5rem;">2. MIO Observation (Observatory Pattern)</h4>
+          <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>// MIO publishes observation to EventBus
+await eventbus.publish(
+  'platform.mio.critical_service_failure_observed',
+  {
+    observation: 'Workflow Intelligence unavailable',
+    severity: 'critical',
+    services: [{service: 'workflow_intelligence', status: 'down'}],
+    detected_at: '2025-10-14T03:42:15Z',
+    recommendations: [
+      {
+        recommendation: 'Investigate service failures immediately',
+        priority: 'critical'
+      }
+    ]
+  },
+  priority: 'critical'
+)</code></pre>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem;">
+          <h4 style="color: white; margin-bottom: 0.5rem;">3. Choreographed Responses (Autonomous)</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(234, 88, 12, 0.3); padding: 1rem; border-radius: 4px;">
+              <strong style="display: block; margin-bottom: 0.5rem;">DevOps Agent</strong>
+              <span style="font-size: 0.9rem;">Restarts container, checks logs, exports metrics</span>
+            </div>
+            <div style="background: rgba(124, 58, 237, 0.3); padding: 1rem; border-radius: 4px;">
+              <strong style="display: block; margin-bottom: 0.5rem;">AI Event Manager</strong>
+              <span style="font-size: 0.9rem;">Learns failure pattern, suggests prevention</span>
+            </div>
+            <div style="background: rgba(5, 150, 105, 0.3); padding: 1rem; border-radius: 4px;">
+              <strong style="display: block; margin-bottom: 0.5rem;">Policy Engine</strong>
+              <span style="font-size: 0.9rem;">Checks if escalation policy triggered</span>
+            </div>
+            <div style="background: rgba(220, 38, 38, 0.3); padding: 1rem; border-radius: 4px;">
+              <strong style="display: block; margin-bottom: 0.5rem;">Notification Service</strong>
+              <span style="font-size: 0.9rem;">Alerts on-call engineer via Slack/PagerDuty</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 6px;">
+          <h4 style="color: white; margin-bottom: 0.5rem;">4. MIO Continues Observing</h4>
+          <p style="margin: 0; font-size: 0.95rem;">
+            MIO keeps monitoring health checks. Once service recovers, publishes
+            <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px;">platform.mio.service_recovered</code>
+            event. Collects data for daily report (6am).
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-alt">
+        <h3>Key Learnings from Example</h3>
+        <div class="grid grid-2">
+          <div>
+            <h4 class="text-primary">What MIO Does</h4>
+            <ul style="margin-top: 0.5rem;">
+              <li>✅ Detects failure in 60 seconds</li>
+              <li>✅ Publishes observation to EventBus</li>
+              <li>✅ Continues monitoring for recovery</li>
+              <li>✅ Includes findings in daily report</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-primary">What MIO Does NOT Do</h4>
+            <ul style="margin-top: 0.5rem;">
+              <li>❌ Does not restart services (DevOps Agent does)</li>
+              <li>❌ Does not decide who to notify (Policy Engine does)</li>
+              <li>❌ Does not learn patterns (AI Event Manager does)</li>
+              <li>❌ Does not coordinate actions (Coordination Center does)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Points -->
+  <section id="integrations">
+    <div class="container">
+      <h2 class="text-center">Integration Points</h2>
+      <p class="section-subtitle text-center">
+        MIO Manager integrates with 15+ platform services
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>🧠 Intelligence Layer</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>Workflow Intelligence:</strong> Reports daily/weekly/monthly findings</li>
+            <li><strong>Predictive Service:</strong> Gets proactive recommendations, triggers ML retraining</li>
+            <li><strong>AI Orchestrator:</strong> Receives directives for actions</li>
+            <li><strong>Optimizer:</strong> Deep performance analysis</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>⚡ Action Systems</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>DevOps Agent:</strong> Infrastructure scanning, container health</li>
+            <li><strong>AI Event Manager:</strong> Event pattern learning</li>
+            <li><strong>Policy Engine:</strong> Escalation rules</li>
+            <li><strong>Coordination Center:</strong> Multi-service coordination</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>📊 Monitoring Stack</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>Prometheus:</strong> Metrics collection, scrape job setup</li>
+            <li><strong>Grafana:</strong> Dashboard creation</li>
+            <li><strong>Service Discovery:</strong> Service registration</li>
+            <li><strong>EventBus:</strong> Choreography hub</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>🔬 Expertise Services</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>Expertise Center:</strong> Tactical assistants quality</li>
+            <li><strong>Collective Intelligence:</strong> Stuck organization detection</li>
+            <li><strong>Community Intelligence:</strong> Community insights</li>
+            <li><strong>Compliance Monitoring:</strong> Compliance status (critical for BCM specialist!)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>🔧 Automation Toolkit</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>Service Discovery:</strong> Find all services</li>
+            <li><strong>Metrics Scraper:</strong> Collect Prometheus metrics</li>
+            <li><strong>Config Generator:</strong> Auto-generate prometheus.yml</li>
+            <li><strong>Dashboard Generator:</strong> Auto-create Grafana dashboards</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>👀 MIO EYES (Phase 2.1)</h3>
+          <ul style="margin-top: 1rem; font-size: 0.9rem;">
+            <li><strong>Metrics Coverage Observer:</strong> Ensure all services have metrics</li>
+            <li><strong>Metrics Health Checker:</strong> Check Prometheus targets health</li>
+            <li><strong>Event Handlers:</strong> React to service registration/disconnection</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Deep Dive -->
+  <section id="technical">
+    <div class="container">
+      <h2 class="text-center">Technical Implementation</h2>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>SmartScheduler (scheduler/smart_scheduler.py)</h3>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            APScheduler-based intelligent scheduler managing all monitoring cycles
+          </p>
+          <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; margin-top: 1rem; overflow-x: auto; font-size: 0.85rem;"><code class="language-python">class SmartScheduler:
+    def __init__(
+        self,
+        workflow_intelligence_client,
+        predictive_client,
+        optimizer_client,
+        coordination_center_client,
+        compliance_monitoring_client,
+        automation_toolkit_manager,
+        ai_event_manager_client,
+        devops_agent_client,
+        eventbus,  # NEW: EventBus
+        metrics_coverage_observer,
+        metrics_health_checker
+    ):
+        self.brain = workflow_intelligence_client
+        self.predictive = predictive_client
+        self.optimizer = optimizer_client
+        self.eventbus = eventbus
+        # ... more clients
+
+    async def start(self):
+        # Register all cycles
+        self._register_health_checks()
+        self._register_metrics_observation_cycles()
+        self._register_hourly_cycles()
+        self._register_daily_cycles()
+        self._register_weekly_cycles()
+        self._register_monthly_cycles()
+
+        self.scheduler.start()</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>EventBus Integration (integrations/eventbus_client.py)</h3>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            Publishes observations to EventBus for choreography-based responses
+          </p>
+          <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; margin-top: 1rem; overflow-x: auto; font-size: 0.85rem;"><code class="language-python">class EventBusClient:
+    async def publish_problem_detected(
+        self,
+        problem: Dict[str, Any],
+        severity: str,
+        source: str = 'mio-manager'
+    ) -> bool:
+        return await self._publish_event(
+            event_type='mio.problem_detected',
+            data={
+                'problem': problem,
+                'severity': severity,
+                'detected_at': datetime.utcnow().isoformat()
+            },
+            source=source,
+            priority=self._severity_to_priority(severity)
+        )
+
+    # Subscribe to events from other services
+    async def subscribe_to_problems(self, callback)
+    async def subscribe_to_tasks(self, callback)
+    async def subscribe_to_directives(self, callback)</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>Metrics Coverage Observer (monitoring/)</h3>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            Phase 2.1 "MIO EYES" - observes metrics coverage without commanding
+          </p>
+          <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; margin-top: 1rem; overflow-x: auto; font-size: 0.85rem;"><code class="language-python">class MetricsCoverageObserver:
+    async def observe_coverage(self):
+        # Get all registered services
+        services = await self.get_services()
+
+        # Check which have Prometheus metrics
+        with_metrics = await self.check_prometheus_targets()
+
+        # Calculate coverage
+        coverage_percentage =
+            (len(with_metrics) / len(services)) * 100
+
+        # Create observation
+        observation = Observation(
+            coverage_percentage=coverage_percentage,
+            missing_services=[...],
+            detected_at=datetime.utcnow()
+        )
+
+        # Publish to EventBus (NOT command!)
+        await self.publish_observation(observation)
+
+        return observation</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>Automation Toolkit Manager (integrations/)</h3>
+          <p style="margin-top: 0.5rem; color: var(--medium-text);">
+            Automates monitoring setup: Prometheus configs, Grafana dashboards
+          </p>
+          <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; margin-top: 1rem; overflow-x: auto; font-size: 0.85rem;"><code class="language-python">class AutomationToolkitManager:
+    async def setup_monitoring(self):
+        # 1. Discover all services
+        services = await self.discover_services()
+
+        # 2. Generate Prometheus scrape jobs
+        prometheus_config =
+            self.generate_prometheus_config(services)
+        await self.apply_prometheus_config(prometheus_config)
+
+        # 3. Create Grafana dashboards
+        for service in services:
+            dashboard = self.generate_grafana_dashboard(service)
+            await self.create_grafana_dashboard(dashboard)
+
+        # 4. Calculate coverage
+        coverage = len([s for s in services if s.has_metrics])
+        coverage_percentage = (coverage / len(services)) * 100
+
+        return {
+            'prometheus_config': prometheus_config,
+            'grafana_dashboard': len(services),
+            'coverage_percentage': coverage_percentage
+        }</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics & Monitoring -->
+  <section id="stats">
+    <div class="container">
+      <h2 class="text-center">Key Statistics Tracked</h2>
+
+      <div class="grid grid-4">
+        <div class="card text-center">
+          <h3 class="text-primary" style="font-size: 2.5rem; margin: 0;">60s</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--medium-text);">Health Check Interval</p>
+        </div>
+        <div class="card text-center">
+          <h3 class="text-primary" style="font-size: 2.5rem; margin: 0;">5min</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--medium-text);">Metrics Coverage Check</p>
+        </div>
+        <div class="card text-center">
+          <h3 class="text-primary" style="font-size: 2.5rem; margin: 0;">3am</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--medium-text);">Daily Deep Analysis</p>
+        </div>
+        <div class="card text-center">
+          <h3 class="text-primary" style="font-size: 2.5rem; margin: 0;">15+</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--medium-text);">Integrated Services</p>
+        </div>
+      </div>
+
+      <div class="bg-alt mt-2">
+        <h3>What Gets Tracked</h3>
+        <div class="grid grid-3">
+          <ul>
+            <li>Health check count</li>
+            <li>Daily analysis count</li>
+            <li>Weekly analysis count</li>
+            <li>Monthly report count</li>
+          </ul>
+          <ul>
+            <li>Last health check timestamp</li>
+            <li>Last daily analysis timestamp</li>
+            <li>Last weekly analysis timestamp</li>
+            <li>Critical failure events</li>
+          </ul>
+          <ul>
+            <li>Metrics coverage percentage</li>
+            <li>Services discovered</li>
+            <li>Services with metrics</li>
+            <li>Prometheus scrape jobs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section>
+    <div class="container">
+      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); padding: 3rem 2rem; border-radius: 8px; text-align: center; color: white;">
+        <h2 style="color: white; margin-bottom: 1rem;">Explore More Platform Services</h2>
+        <p style="margin-bottom: 2rem; font-size: 1.1rem; opacity: 0.9;">
+          MIO Manager works with 15+ services to maintain platform health
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="service-catalog-visual.html" class="btn btn-outline" style="border-color: white; color: white;">View Service Catalog</a>
+          <a href="decision-center.html" class="btn btn-outline" style="border-color: white; color: white;">Decision Center</a>
+          <a href="architecture.html" class="btn btn-outline" style="border-color: white; color: white;">Full Architecture</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          Business Continuity Management with AI-powered intelligence
+        </p>
+      </div>
+
+      <div>
+        <h4>Deep Dives</h4>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="architecture.html">Architecture</a>
+        <a href="modules.html">Modules</a>
+        <a href="technology.html">Technology</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      gantt: {
+        useMaxWidth: true,
+        axisFormat: '%H:%M'
+      }
+    });
+  </script>
+  <script src="assets/scripts.js"></script>
+</body>
+</html>

@@ -294,7 +294,7 @@ def integrate_with_workflow_engine(workflow_engine) -> WorkflowIntelligenceAdapt
     Helper function to integrate adapter with existing workflow engine
 
     Usage:
-        from knowledge_system.integrations import integrate_with_workflow_engine
+        from learning_knowledge.integrations.workflow_intelligence_adapter import integrate_with_workflow_engine
 
         adapter = integrate_with_workflow_engine(workflow_engine)
 

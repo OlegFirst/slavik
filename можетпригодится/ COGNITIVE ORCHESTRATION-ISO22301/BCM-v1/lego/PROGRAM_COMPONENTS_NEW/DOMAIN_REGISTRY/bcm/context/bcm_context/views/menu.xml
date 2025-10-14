@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <menuitem id="menu_bcm_context_root" name="Контекст" parent="bcm_core.menu_bcm_root"/>
+</odoo>

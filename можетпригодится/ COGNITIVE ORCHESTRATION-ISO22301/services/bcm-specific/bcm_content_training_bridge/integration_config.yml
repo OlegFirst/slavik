@@ -1,0 +1,133 @@
+integration_endpoints:
+  # Bridge API Gateway
+  bridge_gateway:
+    base_url: http://localhost:8096
+    endpoints:
+      gamification:
+        - POST /api/bridge/gamification/award-points
+        - GET /api/bridge/gamification/leaderboard
+      learning:
+        - POST /api/bridge/learning/convert-template
+        - GET /api/bridge/learning/paths
+      calendar:
+        - POST /api/bridge/calendar/schedule
+      scenario:
+        - POST /api/bridge/scenario/ai-create
+      analytics:
+        - GET /api/bridge/analytics/dashboard
+
+  # Service integrations
+  external_services:
+    scenario_orchestrator:
+      url: http://scenario_orchestrator:8085
+      integration_points:
+        - /scenarios/generate
+        - /scenarios/available
+        - /learning/exercise-result
+        - /learning/scenario/{scenario_id}/insights
+
+    exercise_simulators:
+      url: http://exercise_simulators:8094
+      integration_points:
+        - /api/simulations/initialize
+
+    digital_twin_platform:
+      url: http://localhost:3000
+      integration_points:
+        - /webhooks/odoo/scenario-published
+        - /topics/{topic_id}
+
+    ai_orchestrator:
+      url: http://ai_orchestrator:8000
+      integration_points:
+        - /nlp/query
+        - /learning/update
+
+  # Frontend integrations
+  frontend_webhooks:
+    react_inspector_ui:
+      port: 3000
+      webhook: /webhooks/odoo/scenario-published
+
+    bcm_admin_panel:
+      port: 3001
+      api_prefix: /api/admin
+
+    bcm_platform_main:
+      port: 3003
+      api_prefix: /api/platform
+
+    bcm_marketplace:
+      port: 3004
+      api_prefix: /api/marketplace
+
+    web_portal_enhanced:
+      port: 3005
+      api_prefix: /api/portal
+
+# Data flow mappings
+data_flows:
+  gamification_flow:
+    source: user_action
+    process:
+      - bridge_api_gateway
+      - redis_cache
+      - odoo_gamification_module
+    destination: leaderboard_display
+
+  learning_conversion_flow:
+    source: bcm_template
+    process:
+      - template_analysis
+      - content_generation
+      - format_conversion
+    destination: e_learning_platform
+
+  scenario_generation_flow:
+    source: ai_request
+    process:
+      - scenario_orchestrator
+      - ai_processing
+      - jaamsim_config
+    destination: scenario_hub
+
+  calendar_scheduling_flow:
+    source: scheduling_request
+    process:
+      - availability_check
+      - reminder_setup
+      - odoo_calendar_sync
+    destination: calendar_event
+
+# Authentication & Security
+security:
+  api_keys:
+    bridge_gateway: ${BRIDGE_API_KEY}
+    scenario_orchestrator: ${SCENARIO_API_KEY}
+
+  cors:
+    allowed_origins:
+      - http://localhost:3000
+      - http://localhost:3001
+      - http://localhost:3003
+      - http://localhost:3004
+      - http://localhost:3005
+
+  rate_limiting:
+    requests_per_minute: 100
+    burst_size: 20
+
+# Monitoring & Logging
+monitoring:
+  health_checks:
+    - /health
+    - /api/bridge/health
+
+  metrics_endpoints:
+    - /metrics
+    - /api/bridge/analytics/dashboard
+
+  log_levels:
+    default: INFO
+    bridge_gateway: DEBUG
+    integrations: INFO

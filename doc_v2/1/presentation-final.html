@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Platform-ISO - Презентация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; overflow-x: hidden; }
+        .slide { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container-slide { max-width: 1400px; width: 100%; background: white; border-radius: 24px; padding: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .service-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; transition: all 0.3s ease; }
+        .service-card:hover { border-color: #667eea; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2); }
+    </style>
+</head>
+<body>
+
+<!-- 1. BCM Философия -->
+<div class="slide">
+    <div class="container-slide">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4"><span class="gradient-text">Что такое BCM?</span></h1>
+            <p class="text-xl text-gray-600">Business Continuity Management по ISO 22301</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="border-2 border-red-300 rounded-xl p-6 bg-red-50">
+                <h3 class="text-2xl font-bold mb-4 text-red-700">БЕЗ ПОДГОТОВКИ</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-white p-3 rounded-lg"><div class="font-semibold">Обычные операции</div></div>
+                    <div class="text-center py-2"><div class="font-bold text-red-700">КРИЗИС</div></div>
+                    <div class="bg-red-100 p-3 rounded-lg"><div class="font-semibold">Нет плана</div><ul class="text-xs space-y-1"><li>Хаос и импровизация</li><li>Никто не знает, что делать</li></ul></div>
+                    <div class="bg-red-200 p-3 rounded-lg"><div class="font-bold text-red-800">УСЛУГИ ПРЕРВАНЫ</div></div>
+                    <div class="bg-red-300 p-3 rounded-lg text-center"><div class="font-bold text-red-900">ТЯЖЕЛЫЕ ПОСЛЕДСТВИЯ</div></div>
+                </div>
+            </div>
+
+            <div class="border-2 border-green-300 rounded-xl p-6 bg-green-50">
+                <h3 class="text-2xl font-bold mb-4 text-green-700">С BCM / ISO 22301</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-white p-3 rounded-lg"><div class="font-semibold">Планы готовы</div></div>
+                    <div class="text-center py-2"><div class="font-bold text-green-700">ТОТ ЖЕ КРИЗИС</div></div>
+                    <div class="bg-green-100 p-3 rounded-lg"><div class="font-semibold">План активирован</div><ul class="text-xs space-y-1"><li>Немедленная реакция</li><li>Четкие процедуры</li></ul></div>
+                    <div class="bg-green-200 p-3 rounded-lg"><div class="font-bold text-green-800">УСЛУГИ РАБОТАЮТ</div></div>
+                    <div class="bg-green-300 p-3 rounded-lg text-center"><div class="font-bold text-green-900">БЫСТРОЕ ВОССТАНОВЛЕНИЕ</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+            <h3 class="text-xl font-bold mb-3 text-center">ISO 22301 = Международный стандарт непрерывности бизнеса</h3>
+            <p class="text-center text-gray-700">Гарантирует, что ваша организация сможет продолжать работу даже в самых критических ситуациях</p>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Наше решение - Экосистема -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-3"><span class="gradient-text">Наше решение</span></h2>
+        <p class="text-xl text-center text-gray-600 mb-8">Единая AI-платформа для управления непрерывностью бизнеса</p>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="service-card bg-blue-50">
+                <h4 class="font-bold text-sm mb-2">BIA Analysis</h4>
+                <p class="text-xs text-gray-600">Анализ влияния на бизнес с AI</p>
+            </div>
+            <div class="service-card bg-green-50">
+                <h4 class="font-bold text-sm mb-2">Risk Management</h4>
+                <p class="text-xs text-gray-600">Управление рисками и оценка</p>
+            </div>
+            <div class="service-card bg-purple-50">
+                <h4 class="font-bold text-sm mb-2">Plan Generator</h4>
+                <p class="text-xs text-gray-600">Автогенерация BCP планов</p>
+            </div>
+            <div class="service-card bg-yellow-50">
+                <h4 class="font-bold text-sm mb-2">Compliance Monitor</h4>
+                <p class="text-xs text-gray-600">Контроль соответствия ISO 22301</p>
+            </div>
+            <div class="service-card bg-red-50">
+                <h4 class="font-bold text-sm mb-2">Incident Response</h4>
+                <p class="text-xs text-gray-600">Управление инцидентами 24/7</p>
+            </div>
+            <div class="service-card bg-indigo-50">
+                <h4 class="font-bold text-sm mb-2">Training Platform</h4>
+                <p class="text-xs text-gray-600">Обучение персонала и учения</p>
+            </div>
+            <div class="service-card bg-pink-50">
+                <h4 class="font-bold text-sm mb-2">Document Manager</h4>
+                <p class="text-xs text-gray-600">Управление документацией</p>
+            </div>
+            <div class="service-card bg-teal-50">
+                <h4 class="font-bold text-sm mb-2">Simulation Hub</h4>
+                <p class="text-xs text-gray-600">Симуляции кризисных сценариев</p>
+            </div>
+            <div class="service-card bg-orange-50">
+                <h4 class="font-bold text-sm mb-2">Analytics Dashboard</h4>
+                <p class="text-xs text-gray-600">Аналитика и метрики</p>
+            </div>
+            <div class="service-card bg-cyan-50">
+                <h4 class="font-bold text-sm mb-2">AI Assistant</h4>
+                <p class="text-xs text-gray-600">24/7 интеллектуальный помощник</p>
+            </div>
+            <div class="service-card bg-lime-50">
+                <h4 class="font-bold text-sm mb-2">Audit System</h4>
+                <p class="text-xs text-gray-600">Подготовка к аудиту</p>
+            </div>
+            <div class="service-card bg-violet-50">
+                <h4 class="font-bold text-sm mb-2">Integration Hub</h4>
+                <p class="text-xs text-gray-600">Интеграции с вашими системами</p>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center p-6 bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl border-2 border-purple-300">
+            <h3 class="text-2xl font-bold mb-2">Все сервисы в одной экосистеме</h3>
+            <p class="text-gray-700">Единый интерфейс, единая база знаний, единый AI-движок для всех процессов BCM</p>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Кто наши клиенты -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-8"><span class="gradient-text">Для кого мы работаем?</span></h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- BCM Менеджеры -->
+            <div class="border-2 border-blue-300 rounded-xl p-6 bg-blue-50">
+                <h3 class="text-2xl font-bold mb-4 text-center text-blue-800">BCM Менеджеры</h3>
+                
+                <div class="mb-4">
+                    <div class="font-bold mb-2">Ваши задачи:</div>
+                    <ul class="text-sm space-y-1 text-gray-700">
+                        <li>Провести BIA анализ</li>
+                        <li>Разработать планы непрерывности</li>
+                        <li>Управлять рисками</li>
+                        <li>Обучить персонал</li>
+                        <li>Провести учения</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg">
+                    <div class="font-bold mb-2 text-blue-700">Мы даем:</div>
+                    <ul class="text-sm space-y-1">
+                        <li>AI-помощник 24/7 для консультаций</li>
+                        <li>Автогенерация планов за часы, не недели</li>
+                        <li>Готовые шаблоны по ISO 22301</li>
+                        <li>Автоматический мониторинг рисков</li>
+                        <li><strong>В 4-8 раз быстрее</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Аудиторы -->
+            <div class="border-2 border-green-300 rounded-xl p-6 bg-green-50">
+                <h3 class="text-2xl font-bold mb-4 text-center text-green-800">Аудиторы</h3>
+                
+                <div class="mb-4">
+                    <div class="font-bold mb-2">Ваши задачи:</div>
+                    <ul class="text-sm space-y-1 text-gray-700">
+                        <li>Проверка соответствия ISO 22301</li>
+                        <li>Gap-анализ текущего состояния</li>
+                        <li>Подготовка отчетов</li>
+                        <li>Рекомендации по улучшениям</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg">
+                    <div class="font-bold mb-2 text-green-700">Мы даем:</div>
+                    <ul class="text-sm space-y-1">
+                        <li>Gap-анализ за 45 минут вместо 4-6 недель</li>
+                        <li>Автоматическая проверка всех пунктов ISO</li>
+                        <li>Детальные отчеты с рекомендациями</li>
+                        <li>Трекинг исправлений в реальном времени</li>
+                        <li><strong>87% точность AI-проверки</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Руководство / Инвесторы -->
+            <div class="border-2 border-purple-300 rounded-xl p-6 bg-purple-50">
+                <h3 class="text-2xl font-bold mb-4 text-center text-purple-800">Руководство / Инвесторы</h3>
+                
+                <div class="mb-4">
+                    <div class="font-bold mb-2">Ваши вопросы:</div>
+                    <ul class="text-sm space-y-1 text-gray-700">
+                        <li>Сколько это стоит?</li>
+                        <li>Какая будет отдача (ROI)?</li>
+                        <li>Насколько мы защищены?</li>
+                        <li>Соответствуем ли стандартам?</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg">
+                    <div class="font-bold mb-2 text-purple-700">Мы даем:</div>
+                    <ul class="text-sm space-y-1">
+                        <li><strong>70% снижение затрат</strong> на BCM</li>
+                        <li>Сертификация ISO 22301 за 3-6 месяцев</li>
+                        <li>Dashboard с метриками защищенности</li>
+                        <li>Снижение простоев на 65%+</li>
+                        <li>Прозрачная отчетность для стейкхолдеров</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. AI - что он дает -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-8"><span class="gradient-text">Что дает Искусственный Интеллект?</span></h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border-2 border-blue-200">
+                <h3 class="text-2xl font-bold mb-4">Скорость</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span>Gap-анализ:</span>
+                        <span class="font-bold text-blue-600">4-6 недель → 45 минут</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>BIA анализ:</span>
+                        <span class="font-bold text-blue-600">8-12 недель → 2-3 недели</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Генерация планов:</span>
+                        <span class="font-bold text-blue-600">16-24 недели → 4-6 недель</span>
+                    </div>
+                    <div class="text-center mt-4 p-4 bg-blue-100 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-700">В 4-8 раз быстрее</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-blue-50 p-6 rounded-xl border-2 border-green-200">
+                <h3 class="text-2xl font-bold mb-4">Экономия</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span>Консультанты:</span>
+                        <span class="font-bold text-green-600">-80% затрат</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Время персонала:</span>
+                        <span class="font-bold text-green-600">-70% часов</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Ручная работа:</span>
+                        <span class="font-bold text-green-600">-85% рутины</span>
+                    </div>
+                    <div class="text-center mt-4 p-4 bg-green-100 rounded-lg">
+                        <div class="text-3xl font-bold text-green-700">70% экономия</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center p-6 bg-white rounded-xl border-2 border-gray-200">
+                <div class="text-2xl font-bold mb-2">87%</div>
+                <div class="text-sm text-gray-600">Точность AI-анализа</div>
+            </div>
+            <div class="text-center p-6 bg-white rounded-xl border-2 border-gray-200">
+                <div class="text-2xl font-bold mb-2">24/7</div>
+                <div class="text-sm text-gray-600">AI-помощник доступен</div>
+            </div>
+            <div class="text-center p-6 bg-white rounded-xl border-2 border-gray-200">
+                <div class="text-2xl font-bold mb-2">347+</div>
+                <div class="text-sm text-gray-600">Кейсов в базе знаний</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. MCP возможности -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-4"><span class="gradient-text">MCP: USB для AI систем</span></h2>
+        <p class="text-xl text-center text-gray-600 mb-8">Model Context Protocol — универсальный коннектор для AI интеграций</p>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <!-- БЕЗ MCP -->
+            <div class="border-2 border-red-300 rounded-xl p-6 bg-red-50">
+                <h3 class="text-2xl font-bold mb-4 text-red-700">БЕЗ MCP</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="font-bold text-red-700">Кастомная интеграция</div>
+                        <div class="text-gray-600 text-xs">6-12 месяцев разработки</div>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-lg">
+                        <div class="font-bold">Vendor lock-in</div>
+                        <div class="text-gray-600 text-xs">Привязка к одному провайдеру</div>
+                    </div>
+                    <div class="bg-red-200 p-3 rounded-lg">
+                        <div class="font-bold">Изолированные системы</div>
+                        <div class="text-gray-600 text-xs">Нет обмена знаниями</div>
+                    </div>
+                    <div class="text-center p-3 bg-red-300 rounded-lg">
+                        <div class="font-bold text-red-900">Дорого, долго, негибко</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- С MCP -->
+            <div class="border-2 border-green-300 rounded-xl p-6 bg-green-50">
+                <h3 class="text-2xl font-bold mb-4 text-green-700">С MCP</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="font-bold text-green-700">Plug-and-play</div>
+                        <div class="text-gray-600 text-xs">Часы вместо месяцев</div>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg">
+                        <div class="font-bold">Любой AI провайдер</div>
+                        <div class="text-gray-600 text-xs">Claude, OpenAI, Gemini, свои модели</div>
+                    </div>
+                    <div class="bg-green-200 p-3 rounded-lg">
+                        <div class="font-bold">Сетевой эффект</div>
+                        <div class="text-gray-600 text-xs">Сообщество расширяет платформу</div>
+                    </div>
+                    <div class="text-center p-3 bg-green-300 rounded-lg">
+                        <div class="font-bold text-green-900">Быстро, гибко, растет экспоненциально</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 фундаментальных сдвигов -->
+        <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-xl border-2 border-purple-200 mb-6">
+            <h3 class="text-2xl font-bold mb-4 text-center">5 фундаментальных сдвигов, которые дает AI + MCP</h3>
+            <div class="grid md:grid-cols-5 gap-4 text-xs">
+                <div class="bg-white p-3 rounded-lg text-center">
+                    <div class="font-bold mb-2">От зависимости от экспертов</div>
+                    <div class="text-gray-600">К AI-помощникам для всех</div>
+                </div>
+                <div class="bg-white p-3 rounded-lg text-center">
+                    <div class="font-bold mb-2">От статичных планов</div>
+                    <div class="text-gray-600">К динамическому обучению</div>
+                </div>
+                <div class="bg-white p-3 rounded-lg text-center">
+                    <div class="font-bold mb-2">От изолированных систем</div>
+                    <div class="text-gray-600">К коллективному интеллекту</div>
+                </div>
+                <div class="bg-white p-3 rounded-lg text-center">
+                    <div class="font-bold mb-2">От реакции на кризис</div>
+                    <div class="text-gray-600">К прогнозированию</div>
+                </div>
+                <div class="bg-white p-3 rounded-lg text-center">
+                    <div class="font-bold mb-2">От дефицита знаний</div>
+                    <div class="text-gray-600">К изобилию доступных знаний</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MCP серверы -->
+        <div class="bg-white p-6 rounded-xl border-2 border-gray-200">
+            <h3 class="text-xl font-bold mb-4 text-center">MCP Серверы: Сообщество расширяет платформу</h3>
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-3 text-xs text-center">
+                <div class="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                    <div class="font-semibold">Data Integration</div>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="font-semibold">Healthcare Domain</div>
+                </div>
+                <div class="p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div class="font-semibold">Geographic Context</div>
+                </div>
+                <div class="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div class="font-semibold">Collaboration</div>
+                </div>
+                <div class="p-3 bg-red-50 rounded-lg border border-red-200">
+                    <div class="font-semibold">Knowledge Base</div>
+                </div>
+                <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                    <div class="font-semibold">Ваш сервер!</div>
+                </div>
+            </div>
+            <div class="mt-4 text-center text-sm text-gray-600">
+                Любой может создать MCP сервер и расширить возможности платформы для всех
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 6. Интеграции -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-8"><span class="gradient-text">Интеграции</span></h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- CRM/ERP Systems -->
+            <div class="p-6 bg-blue-50 rounded-xl border-2 border-blue-200">
+                <h3 class="text-xl font-bold mb-4">CRM / ERP Systems</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>Salesforce</li>
+                    <li>SAP</li>
+                    <li>Microsoft Dynamics</li>
+                    <li>1C (ERP)</li>
+                    <li>Oracle</li>
+                </ul>
+            </div>
+
+            <!-- Desktop Applications -->
+            <div class="p-6 bg-green-50 rounded-xl border-2 border-green-200">
+                <h3 class="text-xl font-bold mb-4">Desktop Applications</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>Microsoft Excel</li>
+                    <li>Microsoft Word</li>
+                    <li>PDF генерация</li>
+                    <li>CSV импорт/экспорт</li>
+                    <li>Привычные интерфейсы</li>
+                </ul>
+            </div>
+
+            <!-- Communication Platforms -->
+            <div class="p-6 bg-purple-50 rounded-xl border-2 border-purple-200">
+                <h3 class="text-xl font-bold mb-4">Коммуникации</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>Slack</li>
+                    <li>Microsoft Teams</li>
+                    <li>Telegram</li>
+                    <li>Email (SMTP)</li>
+                    <li>SMS (Twilio)</li>
+                </ul>
+            </div>
+
+            <!-- Cloud Platforms -->
+            <div class="p-6 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+                <h3 class="text-xl font-bold mb-4">Cloud & Deployment</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>Microsoft Azure</li>
+                    <li>AWS</li>
+                    <li>Google Cloud</li>
+                    <li>On-Premise</li>
+                    <li>Hybrid Cloud</li>
+                </ul>
+            </div>
+
+            <!-- AI Providers -->
+            <div class="p-6 bg-red-50 rounded-xl border-2 border-red-200">
+                <h3 class="text-xl font-bold mb-4">AI Providers</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>Anthropic (Claude)</li>
+                    <li>OpenAI (GPT-4)</li>
+                    <li>Google (Gemini)</li>
+                    <li>Azure OpenAI</li>
+                    <li>Свои модели (On-Premise)</li>
+                </ul>
+            </div>
+
+            <!-- Database & Storage -->
+            <div class="p-6 bg-teal-50 rounded-xl border-2 border-teal-200">
+                <h3 class="text-xl font-bold mb-4">Database & Storage</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>PostgreSQL (Supabase)</li>
+                    <li>Redis</li>
+                    <li>Qdrant (Vector DB)</li>
+                    <li>S3 Compatible Storage</li>
+                    <li>File Systems</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center p-6 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl border-2 border-blue-300">
+            <h3 class="text-2xl font-bold mb-2">Интеграция с вашими системами</h3>
+            <p class="text-gray-700">Работаем с инструментами, которые вы уже используете. MCP протокол обеспечивает быструю интеграцию.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 7. Контакты -->
+<div class="slide">
+    <div class="container-slide text-center">
+        <h2 class="text-5xl font-bold mb-8"><span class="gradient-text">Готовы начать?</span></h2>
+
+        <div class="max-w-2xl mx-auto mb-12">
+            <p class="text-2xl text-gray-700 mb-6">Запросите демо и увидите платформу в действии</p>
+            <p class="text-xl text-gray-600">Покажем реальные сценарии работы с AI для вашей отрасли</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+            <div class="p-6 bg-blue-50 rounded-xl border-2 border-blue-200">
+                <h3 class="text-xl font-bold mb-3">MVP Platform</h3>
+                <a href="http://localhost:3333" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">
+                    localhost:3333
+                </a>
+                <p class="text-sm text-gray-600 mt-2">Live demo интерфейса</p>
+            </div>
+
+            <div class="p-6 bg-green-50 rounded-xl border-2 border-green-200">
+                <h3 class="text-xl font-bold mb-3">Documentation</h3>
+                <a href="http://localhost:4000" target="_blank" class="text-green-600 hover:text-green-800 font-semibold">
+                    localhost:4000
+                </a>
+                <p class="text-sm text-gray-600 mt-2">1745+ документов</p>
+            </div>
+
+            <div class="p-6 bg-purple-50 rounded-xl border-2 border-purple-200">
+                <h3 class="text-xl font-bold mb-3">API Backend</h3>
+                <a href="http://localhost:8888/docs" target="_blank" class="text-purple-600 hover:text-purple-800 font-semibold">
+                    localhost:8888/docs
+                </a>
+                <p class="text-sm text-gray-600 mt-2">API документация</p>
+            </div>
+        </div>
+
+        <div class="p-8 bg-gradient-to-r from-purple-100 to-blue-100 rounded-2xl border-2 border-purple-300">
+            <h3 class="text-3xl font-bold mb-4">Свяжитесь с нами</h3>
+            <p class="text-xl text-gray-700 mb-6">Обсудим, как AI-Platform-ISO поможет вашей организации</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="mailto:info@ai-platform-iso.com" class="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition">
+                    Написать нам
+                </a>
+                <a href="tel:+1234567890" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                    Позвонить
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

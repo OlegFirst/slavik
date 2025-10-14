@@ -1,0 +1,77 @@
+version: "3.9"
+
+services:
+  # Main Digital Twin Application
+  digital-twin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - SIMPY_ADAPTER_URL=http://simpy-adapter:7001/run
+      - MESA_ADAPTER_URL=http://mesa-adapter:7002/run
+      - EPINOW2_ADAPTER_URL=http://epinow2-adapter:7003/run
+      - DATABASE_URL=${DATABASE_URL}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    depends_on:
+      - simpy-adapter
+      - mesa-adapter
+      - epinow2-adapter
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - digital-twin-network
+
+  # SEH Simulation Adapters
+  simpy-adapter:
+    build: ./external-adapters/simpy-adapter
+    image: seh-simpy:latest
+    ports:
+      - "7001:7001"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mesa-adapter:
+    build: ./external-adapters/mesa-adapter
+    image: seh-mesa:latest
+    ports:
+      - "7002:7002"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7002/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  epinow2-adapter:
+    build: ./external-adapters/epinow2-adapter
+    image: seh-epinow2:latest
+    ports:
+      - "7003:7003"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - digital-twin-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7003/__ping__"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  digital-twin-network:
+    driver: bridge

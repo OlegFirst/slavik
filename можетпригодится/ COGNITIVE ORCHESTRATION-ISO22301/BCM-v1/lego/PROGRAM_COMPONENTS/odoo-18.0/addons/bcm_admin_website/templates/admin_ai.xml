@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="admin_ai_template" name="BCM Admin AI Organs">
+        <t t-call="website.layout">
+            <t t-set="title">AI Organs Management</t>
+            <div id="wrap">
+                <div class="container my-4">
+                    <h1><i class="fa fa-robot me-3"></i>AI Organs Management</h1>
+                    <p class="text-muted">Monitor and manage AI Digital Organism</p>
+
+                    <div class="row">
+                        <t t-foreach="ai_organs" t-as="organ">
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6><t t-esc="organ.get('name', '')"/></h6>
+                                        <p class="text-muted"><t t-esc="organ.get('type', '')"/></p>
+                                        <span t-attf-class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

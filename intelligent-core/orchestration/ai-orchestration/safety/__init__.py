@@ -9,11 +9,11 @@ Multi-layered safety monitoring:
 - Control monitoring (prevent runaway AI)
 """
 
-from intelligent_core.ai_orchestration.safety.safety_monitor import SafetyMonitor
-from intelligent_core.ai_orchestration.safety.constitution_enforcer import ConstitutionEnforcer
-from intelligent_core.ai_orchestration.safety.loop_detector import LoopDetector
-from intelligent_core.ai_orchestration.safety.hallucination_detector import HallucinationDetector
-from intelligent_core.ai_orchestration.safety.control_monitor import ControlMonitor
+from .safety.safety_monitor import SafetyMonitor
+from .safety.constitution_enforcer import ConstitutionEnforcer
+from .safety.loop_detector import LoopDetector
+from .safety.hallucination_detector import HallucinationDetector
+from .safety.control_monitor import ControlMonitor
 
 __all__ = [
     'SafetyMonitor',

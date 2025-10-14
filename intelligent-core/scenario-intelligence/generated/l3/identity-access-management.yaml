@@ -1,0 +1,870 @@
+meta:
+  id: l3-security-system-identity-access-management
+  name: L3 Security System Test Scenarios
+  level: 3
+  category: security
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - Security & Access Control (system)
+  - Secrets Management (system)
+  - Authentication Services (system)
+  - Authorization Framework (system)
+  source_item: identity-access-management
+  generated_at: '2025-10-14T08:09:28.465816'
+description: 'Specialized L3 template for Security systems testing.
+
+
+  Security systems are critical for platform protection and require:
+
+  - Multi-layer security testing (authentication, authorization, encryption)
+
+  - Threat simulation and penetration testing
+
+  - Compliance validation (GDPR, ISO 27001, HIPAA)
+
+  - Incident response workflows
+
+  - Security monitoring and alerting
+
+  - Zero-trust architecture validation
+
+
+  This template generates comprehensive security test scenarios that validate
+
+  security controls, detect vulnerabilities, and ensure compliance.
+
+  '
+systems_involved:
+- identity-access-management
+- API Gateway
+- Secrets Manager
+- Audit Logger
+- Policy Engine
+- EventBus
+test_scenarios:
+- name: Authentication Chain Validation
+  scenario_id: l3-sec-auth-chain
+  description: Test complete authentication chain from request to user verification
+  authentication_methods:
+  - method: jwt_token
+    tests:
+    - name: valid_token
+      input:
+        token: valid_jwt
+        exp: future
+      expected:
+        authenticated: true
+        user_id: extracted
+    - name: expired_token
+      input:
+        token: expired_jwt
+        exp: past
+      expected:
+        authenticated: false
+        error: token_expired
+    - name: invalid_signature
+      input:
+        token: tampered_jwt
+      expected:
+        authenticated: false
+        error: invalid_signature
+    - name: missing_token
+      input:
+        token: null
+      expected:
+        authenticated: false
+        error: token_required
+  - method: api_key
+    tests:
+    - name: valid_key
+      input:
+        api_key: valid_key
+        scope: read
+      expected:
+        authenticated: true
+        scope:
+        - read
+    - name: revoked_key
+      input:
+        api_key: revoked_key
+      expected:
+        authenticated: false
+        error: key_revoked
+  - method: oauth2
+    tests:
+    - name: valid_bearer
+      input:
+        bearer_token: valid_oauth
+      expected:
+        authenticated: true
+        provider: oauth_provider
+    - name: insufficient_scope
+      input:
+        bearer_token: valid_oauth
+        required_scope: admin
+      expected:
+        authenticated: false
+        error: insufficient_scope
+  monitoring:
+  - metric: authentication_attempts_total
+    labels:
+    - method
+    - result
+  - metric: authentication_latency_seconds
+    labels:
+    - method
+  - metric: failed_authentication_rate
+    alert_threshold: 0.05
+- name: Authorization Policy Enforcement
+  scenario_id: l3-sec-authz-policy
+  description: Validate authorization policies across different access levels
+  rbac_scenarios:
+  - role: platform_admin
+    resources:
+    - resource: /api/admin/users
+      action: read
+      expected:
+        allowed: true
+    - resource: /api/admin/users
+      action: write
+      expected:
+        allowed: true
+    - resource: /api/admin/system
+      action: delete
+      expected:
+        allowed: true
+        audit_logged: true
+  - role: organization_admin
+    resources:
+    - resource: /api/orgs/{org_id}/users
+      action: write
+      expected:
+        allowed: true
+        scope_validated: true
+    - resource: /api/orgs/{other_org_id}/users
+      action: read
+      expected:
+        allowed: false
+        error: cross_org_access_denied
+    - resource: /api/admin/system
+      action: read
+      expected:
+        allowed: false
+        error: insufficient_privileges
+  - role: user
+    resources:
+    - resource: /api/users/{own_id}
+      action: read
+      expected:
+        allowed: true
+    - resource: /api/users/{own_id}
+      action: write
+      expected:
+        allowed: true
+        fields_restricted:
+        - role
+        - permissions
+    - resource: /api/users/{other_id}
+      action: read
+      expected:
+        allowed: false
+        error: unauthorized
+  - role: anonymous
+    resources:
+    - resource: /api/public/health
+      action: read
+      expected:
+        allowed: true
+    - resource: /api/users
+      action: read
+      expected:
+        allowed: false
+        error: authentication_required
+  abac_scenarios:
+  - name: time_based_access
+    conditions:
+      user_role: contractor
+      resource: /api/sensitive_data
+      time: '2024-01-01T22:00:00Z'
+      policy: 'contractor_hours: 9-17 weekdays'
+    expected:
+      allowed: false
+      reason: outside_allowed_hours
+  - name: location_based_access
+    conditions:
+      user_role: admin
+      resource: /api/admin/production
+      ip_address: 203.0.113.0
+      policy: admin_vpn_required
+    expected:
+      allowed: false
+      reason: vpn_required
+  - name: resource_state_based
+    conditions:
+      user_role: reviewer
+      resource: /api/documents/{doc_id}
+      resource_state: published
+      action: edit
+    expected:
+      allowed: false
+      reason: published_documents_immutable
+  monitoring:
+  - metric: authorization_checks_total
+    labels:
+    - role
+    - resource
+    - result
+  - metric: authorization_denied_total
+    labels:
+    - role
+    - reason
+  - metric: policy_evaluation_latency_seconds
+- name: Secrets Management Security
+  scenario_id: l3-sec-secrets
+  description: Test secrets storage, rotation, and access control
+  secret_lifecycle:
+  - phase: creation
+    tests:
+    - name: create_secret
+      input:
+        key: db_password
+        value: secret123
+        encryption: AES-256
+      expected:
+        stored: true
+        encrypted_at_rest: true
+        version: 1
+    - name: duplicate_key
+      input:
+        key: existing_key
+        value: value
+      expected:
+        error: key_exists
+        suggestion: use_rotation
+  - phase: retrieval
+    tests:
+    - name: authorized_access
+      input:
+        key: db_password
+        requester: analytics-service
+      expected:
+        value_returned: true
+        decrypted: true
+        access_logged: true
+    - name: unauthorized_access
+      input:
+        key: db_password
+        requester: unknown-service
+      expected:
+        error: access_denied
+        audit_alert_triggered: true
+    - name: non_existent_secret
+      input:
+        key: missing_key
+      expected:
+        error: secret_not_found
+  - phase: rotation
+    tests:
+    - name: manual_rotation
+      input:
+        key: api_key
+        new_value: new_secret
+        strategy: immediate
+      expected:
+        version: 2
+        old_version_marked_deprecated: true
+    - name: automatic_rotation
+      trigger: rotation_policy_30_days
+      expected:
+        new_version_created: true
+        services_notified: true
+        grace_period: 24h
+    - name: rotation_rollback
+      input:
+        key: db_password
+        target_version: 1
+      expected:
+        active_version: 1
+        rollback_logged: true
+  - phase: deletion
+    tests:
+    - name: soft_delete
+      input:
+        key: deprecated_key
+        delete_type: soft
+      expected:
+        marked_deleted: true
+        recoverable: true
+        ttl: 30d
+    - name: hard_delete
+      input:
+        key: sensitive_key
+        delete_type: hard
+      expected:
+        permanently_deleted: true
+        audit_logged: true
+  encryption_tests:
+  - name: at_rest_encryption
+    validation:
+    - storage: PostgreSQL
+      expected:
+        encrypted: true
+        algorithm: AES-256-GCM
+    - storage: Redis
+      expected:
+        encrypted: true
+        key_rotation_enabled: true
+  - name: in_transit_encryption
+    validation:
+    - protocol: internal_grpc
+      expected:
+        tls_enabled: true
+        min_version: TLS 1.3
+    - protocol: external_api
+      expected:
+        tls_enabled: true
+        certificate_valid: true
+  monitoring:
+  - metric: secrets_access_total
+    labels:
+    - key
+    - requester
+    - result
+  - metric: secrets_rotation_total
+    labels:
+    - key
+    - strategy
+  - metric: unauthorized_secrets_access_total
+    alert_threshold: 1
+- name: Threat Detection and Response
+  scenario_id: l3-sec-threat-detection
+  description: Simulate security threats and validate detection/response
+  threat_scenarios:
+  - threat_type: brute_force_attack
+    simulation:
+      target: /api/auth/login
+      requests_per_second: 50
+      duration: 60s
+      source_ip: 198.51.100.1
+    expected_detection:
+    - detector: rate_limiter
+      action: block_ip
+      triggered_after_requests: 10
+    - detector: anomaly_detector
+      action: alert_security_team
+      confidence: 0.95
+    expected_response:
+    - action: temporary_ip_ban
+      duration: 1h
+    - action: captcha_challenge
+      for_ip_range: 198.51.100.0/24
+  - threat_type: sql_injection_attempt
+    simulation:
+      target: /api/users/search
+      payload: '''; DROP TABLE users; --'
+      method: GET
+    expected_detection:
+    - detector: waf
+      action: block_request
+      rule_matched: sql_injection
+    - detector: input_validator
+      action: sanitize_input
+    expected_response:
+    - action: log_incident
+      severity: high
+    - action: alert_security_team
+      channel: pagerduty
+  - threat_type: privilege_escalation_attempt
+    simulation:
+      user_role: user
+      target: /api/admin/users/{user_id}
+      method: PATCH
+      payload:
+        role: admin
+    expected_detection:
+    - detector: authorization_monitor
+      action: deny_request
+      reason: role_escalation_blocked
+    - detector: behavioral_analysis
+      action: flag_suspicious_activity
+    expected_response:
+    - action: revoke_session
+      user_id: suspicious_user
+    - action: force_reauthentication
+    - action: security_audit_log
+  - threat_type: data_exfiltration_attempt
+    simulation:
+      user: compromised_account
+      action: bulk_download
+      resource: /api/users/export
+      data_volume: 10GB
+      time_window: 5m
+    expected_detection:
+    - detector: dlp_monitor
+      action: throttle_response
+      reason: abnormal_data_volume
+    - detector: behavioral_baseline
+      action: alert_anomaly
+      deviation: 10x_normal
+    expected_response:
+    - action: suspend_account
+    - action: notify_user_security_team
+    - action: forensic_log_capture
+  - threat_type: insider_threat
+    simulation:
+      user_role: developer
+      actions:
+      - access_production_db_after_hours
+      - download_sensitive_customer_data
+      - disable_audit_logging
+    expected_detection:
+    - detector: user_behavior_analytics
+      action: flag_high_risk_behavior
+      risk_score: 85
+    - detector: audit_integrity_monitor
+      action: alert_critical
+      reason: audit_tampering_detected
+    expected_response:
+    - action: immediate_account_suspension
+    - action: security_incident_created
+    - action: legal_compliance_notification
+  monitoring:
+  - metric: threats_detected_total
+    labels:
+    - threat_type
+    - severity
+  - metric: threat_response_latency_seconds
+    labels:
+    - threat_type
+    - action
+  - metric: false_positive_rate
+    alert_threshold: 0.1
+- name: Compliance Validation
+  scenario_id: l3-sec-compliance
+  description: Validate compliance with security standards and regulations
+  gdpr_compliance:
+  - requirement: right_to_access
+    test:
+      user_request: export_my_data
+      expected:
+        data_export_generated: true
+        format: JSON
+        within_30_days: true
+  - requirement: right_to_be_forgotten
+    test:
+      user_request: delete_my_account
+      expected:
+      - personal_data_deleted: true
+      - anonymized_audit_logs_retained: true
+      - third_party_processors_notified: true
+      - completed_within: 30_days
+  - requirement: data_breach_notification
+    test:
+      incident: unauthorized_data_access
+      affected_users: 1000
+      expected:
+      - supervisory_authority_notified_within: 72h
+      - users_notified_within: 72h
+      - breach_documentation_complete: true
+  - requirement: consent_management
+    test:
+      user_action: withdraw_consent
+      data_processing: marketing_emails
+      expected:
+        processing_stopped: true
+        consent_logged: true
+  iso27001_controls:
+  - control: A.9.2.1_user_registration
+    validation:
+    - unique_user_ids: true
+    - registration_approval_process: true
+    - access_rights_documented: true
+  - control: A.9.4.1_information_access_restriction
+    validation:
+    - access_control_policy_enforced: true
+    - least_privilege_principle: true
+    - access_reviews_quarterly: true
+  - control: A.12.4.1_event_logging
+    validation:
+    - user_activities_logged: true
+    - exceptions_logged: true
+    - logs_protected_from_tampering: true
+    - log_retention: 1_year
+  - control: A.18.1.5_privacy_in_system_design
+    validation:
+    - privacy_by_design: true
+    - data_minimization: true
+    - purpose_limitation: true
+  hipaa_compliance:
+  - requirement: access_control_164.312(a)(1)
+    validation:
+    - unique_user_identification: true
+    - emergency_access_procedure: true
+    - automatic_logoff: true
+    - encryption_and_decryption: true
+  - requirement: audit_controls_164.312(b)
+    validation:
+    - hardware_software_activity_recorded: true
+    - audit_logs_reviewed_regularly: true
+  - requirement: integrity_164.312(c)(1)
+    validation:
+    - data_integrity_mechanisms: true
+    - data_alteration_detection: true
+  - requirement: transmission_security_164.312(e)(1)
+    validation:
+    - integrity_controls: true
+    - encryption: true
+  monitoring:
+  - metric: compliance_checks_total
+    labels:
+    - standard
+    - requirement
+    - result
+  - metric: compliance_violations_total
+    labels:
+    - standard
+    - severity
+    alert_threshold: 1
+- name: Security Incident Response
+  scenario_id: l3-sec-incident-response
+  description: Test incident response workflows and recovery procedures
+  incident_types:
+  - incident: credential_compromise
+    detection:
+      source: anomaly_detector
+      indicators:
+      - login_from_unusual_location
+      - multiple_failed_attempts_followed_by_success
+      - access_to_sensitive_resources
+    response_workflow:
+    - phase: detection
+      actions:
+      - alert_security_team
+      - capture_forensic_data
+      sla: 5m
+    - phase: containment
+      actions:
+      - revoke_compromised_credentials
+      - terminate_active_sessions
+      - block_suspicious_ip
+      sla: 15m
+    - phase: eradication
+      actions:
+      - force_password_reset
+      - review_access_logs
+      - identify_affected_resources
+      sla: 2h
+    - phase: recovery
+      actions:
+      - restore_user_access_with_new_credentials
+      - enable_additional_monitoring
+      - verify_no_unauthorized_changes
+      sla: 4h
+    - phase: post_incident
+      actions:
+      - incident_report_created
+      - root_cause_analysis
+      - update_security_controls
+      sla: 7d
+  - incident: ransomware_attack
+    detection:
+      source: endpoint_detection
+      indicators:
+      - file_encryption_activity
+      - ransom_note_detected
+      - command_and_control_communication
+    response_workflow:
+    - phase: detection
+      actions:
+      - alert_critical
+      - isolate_affected_systems
+      sla: immediate
+    - phase: containment
+      actions:
+      - disconnect_network_segments
+      - stop_affected_services
+      - preserve_forensic_evidence
+      sla: 5m
+    - phase: eradication
+      actions:
+      - identify_malware_variant
+      - remove_malicious_code
+      - verify_backup_integrity
+      sla: 4h
+    - phase: recovery
+      actions:
+      - restore_from_clean_backups
+      - rebuild_compromised_systems
+      - verify_data_integrity
+      sla: 24h
+    - phase: post_incident
+      actions:
+      - law_enforcement_notification
+      - insurance_claim
+      - security_hardening
+      sla: 7d
+  - incident: ddos_attack
+    detection:
+      source: traffic_monitor
+      indicators:
+      - abnormal_traffic_volume
+      - request_rate_10x_baseline
+      - multiple_source_ips
+    response_workflow:
+    - phase: detection
+      actions:
+      - activate_ddos_mitigation
+      - notify_infrastructure_team
+      sla: 1m
+    - phase: containment
+      actions:
+      - enable_rate_limiting
+      - activate_cdn_protection
+      - block_attack_sources
+      sla: 5m
+    - phase: recovery
+      actions:
+      - gradually_restore_normal_traffic
+      - monitor_for_continuation
+      sla: 1h
+    - phase: post_incident
+      actions:
+      - update_ddos_protection_rules
+      - capacity_planning_review
+      sla: 3d
+  monitoring:
+  - metric: security_incidents_total
+    labels:
+    - type
+    - severity
+  - metric: incident_response_time_seconds
+    labels:
+    - incident_type
+    - phase
+  - metric: mean_time_to_detect_seconds
+  - metric: mean_time_to_respond_seconds
+- name: Security Monitoring and Alerting
+  scenario_id: l3-sec-monitoring
+  description: Validate security monitoring systems and alert workflows
+  monitoring_capabilities:
+  - capability: real_time_threat_detection
+    data_sources:
+    - api_gateway_logs
+    - application_logs
+    - database_audit_logs
+    - network_traffic
+    detection_rules:
+    - rule: suspicious_authentication_pattern
+      condition: failed_attempts > 5 in 1m from same IP
+      severity: high
+      action: alert_and_block
+    - rule: privilege_escalation_attempt
+      condition: role_change_without_approval_workflow
+      severity: critical
+      action: alert_and_revert
+    - rule: data_exfiltration_indicator
+      condition: data_transfer > 1GB in 5m
+      severity: high
+      action: alert_and_throttle
+  - capability: anomaly_detection
+    ml_models:
+    - model: user_behavior_baseline
+      features:
+      - login_times
+      - access_patterns
+      - resource_usage
+      threshold: 3_sigma
+    - model: api_usage_baseline
+      features:
+      - request_rate
+      - endpoints
+      - response_times
+      threshold: 2_sigma
+    expected_alerts:
+    - scenario: unusual_login_time
+      user: typically_9_to_5_user
+      login_time: 03:00
+      expected_alert: true
+    - scenario: unusual_resource_access
+      user: developer
+      accessed: financial_database
+      expected_alert: true
+  - capability: compliance_monitoring
+    checks:
+    - check: encryption_in_transit
+      frequency: continuous
+      expected:
+        all_connections_encrypted: true
+    - check: password_policy_compliance
+      frequency: daily
+      expected:
+        non_compliant_accounts: 0
+    - check: access_review_completion
+      frequency: quarterly
+      expected:
+        reviews_completed: true
+  alert_workflows:
+  - severity: critical
+    channels:
+    - pagerduty
+    - security_team_slack
+    - email
+    escalation:
+    - level: security_engineer
+      timeout: 5m
+    - level: security_manager
+      timeout: 15m
+    - level: ciso
+      timeout: 30m
+    response_required: true
+  - severity: high
+    channels:
+    - security_team_slack
+    - email
+    escalation:
+    - level: security_engineer
+      timeout: 15m
+    - level: security_manager
+      timeout: 1h
+    response_required: true
+  - severity: medium
+    channels:
+    - security_team_slack
+    escalation:
+    - level: security_engineer
+      timeout: 4h
+    response_required: false
+  - severity: low
+    channels:
+    - ticketing_system
+    escalation: []
+    response_required: false
+  monitoring:
+  - metric: security_alerts_total
+    labels:
+    - severity
+    - type
+  - metric: alert_response_time_seconds
+    labels:
+    - severity
+  - metric: false_positive_alerts_total
+  - metric: mean_time_to_acknowledge_seconds
+monitoring:
+  required_metrics:
+  - name: security_system_health
+    type: gauge
+    description: Overall security system health (0-1)
+    labels:
+    - component
+  - name: authentication_attempts_total
+    type: counter
+    description: Total authentication attempts
+    labels:
+    - method
+    - result
+  - name: authorization_checks_total
+    type: counter
+    description: Total authorization checks
+    labels:
+    - role
+    - resource
+    - result
+  - name: secrets_access_total
+    type: counter
+    description: Total secrets access attempts
+    labels:
+    - key
+    - requester
+    - result
+  - name: threats_detected_total
+    type: counter
+    description: Total threats detected
+    labels:
+    - threat_type
+    - severity
+  - name: security_incidents_total
+    type: counter
+    description: Total security incidents
+    labels:
+    - type
+    - severity
+  - name: compliance_checks_total
+    type: counter
+    description: Total compliance checks
+    labels:
+    - standard
+    - requirement
+    - result
+  - name: security_alerts_total
+    type: counter
+    description: Total security alerts
+    labels:
+    - severity
+    - type
+  - name: authentication_latency_seconds
+    type: histogram
+    description: Authentication latency
+    labels:
+    - method
+  - name: threat_response_latency_seconds
+    type: histogram
+    description: Time to respond to threats
+    labels:
+    - threat_type
+    - action
+  - name: incident_response_time_seconds
+    type: histogram
+    description: Incident response time by phase
+    labels:
+    - incident_type
+    - phase
+integration:
+  eventbus_events:
+    publishes:
+    - security.authentication.succeeded
+    - security.authentication.failed
+    - security.authorization.denied
+    - security.threat.detected
+    - security.incident.created
+    - security.incident.resolved
+    - security.compliance.violation
+    - security.alert.triggered
+    subscribes:
+    - system.service.started
+    - system.user.created
+    - system.user.deleted
+    - governance.policy.updated
+  dependencies:
+  - service: api-gateway
+    purpose: Authentication/authorization integration
+  - service: secrets-manager
+    purpose: Secrets storage and retrieval
+  - service: audit-logger
+    purpose: Security event logging
+  - service: policy-engine
+    purpose: Policy evaluation
+  - service: eventbus
+    purpose: Security event propagation
+context_variables:
+  system_name: Name of security system (e.g., 'authentication-service')
+  security_controls: List of security controls implemented
+  compliance_standards: List of compliance standards (GDPR, ISO27001, HIPAA)
+  threat_models: List of threat models addressed
+  authentication_methods: Supported authentication methods
+  encryption_algorithms: Encryption algorithms used
+learning_integration:
+  collect_patterns:
+  - successful_attack_vectors
+  - false_positive_patterns
+  - effective_countermeasures
+  - compliance_violations
+  feedback_to_learning_system:
+  - Update threat detection models
+  - Refine anomaly detection baselines
+  - Improve incident response playbooks
+  recommendations:
+  - Suggest security control improvements
+  - Recommend policy updates
+  - Identify security training needs

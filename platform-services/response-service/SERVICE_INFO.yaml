@@ -1,0 +1,429 @@
+# ============================================
+# SERVICE INFORMATION - Response Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: response-service
+display_name: "Response Service"
+version: "1.0.0"
+description: "Comprehensive incident response management. Manages incidents, response actions, response teams, communications, timeline tracking, recovery metrics (RTO/RPO), escalation, and reporting."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "platform-services"
+business_process: "Incident Response & Recovery (ISO 22301 Clause 8.4)"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8027
+
+endpoints:
+  base_url: "http://localhost:8027"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/response"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Incident lifecycle management (New → Active → Contained → Resolved → Closed)"
+  - "Response action tracking and assignment"
+  - "Response team management and coordination"
+  - "Incident communications log"
+  - "Chronological incident timeline"
+  - "RTO/RPO tracking and validation"
+  - "Automatic and manual incident escalation"
+  - "Real-time incident dashboard"
+  - "Comprehensive incident reports"
+  - "Post-incident review process"
+  - "Plan activation integration"
+
+features:
+  - name: "Incident Management"
+    description: "Create, track, and manage incidents with full lifecycle"
+    endpoints: 10
+
+  - name: "Response Actions"
+    description: "Define, assign, and track response actions"
+    endpoints: 5
+
+  - name: "Response Teams"
+    description: "Manage incident response teams and roles"
+    endpoints: 4
+
+  - name: "Communications"
+    description: "Log and track all incident communications"
+    endpoints: 3
+
+  - name: "Timeline Tracking"
+    description: "Chronological incident event timeline"
+    endpoints: 3
+
+  - name: "Recovery Metrics"
+    description: "RTO/RPO tracking and validation"
+    endpoints: 3
+
+  - name: "Escalation"
+    description: "Automatic and manual incident escalation"
+    endpoints: 2
+
+  - name: "Dashboard & Reporting"
+    description: "Real-time analytics and incident reports"
+    endpoints: 5
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 500/day"
+    prometheus_metric: "response_service_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 400ms"
+    prometheus_metric: "response_service_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "response_service_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.9%"  # Critical service
+    prometheus_metric: "response_service_availability"
+
+  - name: "active_incidents_count"
+    type: "gauge"
+    description: "Number of currently active incidents"
+    target: "< 5"
+    prometheus_metric: "response_service_active_incidents"
+
+  - name: "mean_time_to_resolve"
+    type: "histogram"
+    description: "MTTR - Mean time to resolve incidents (hours)"
+    target: "< 4 hours"
+    prometheus_metric: "response_service_mttr_hours"
+
+  - name: "mean_time_to_acknowledge"
+    type: "histogram"
+    description: "MTTA - Mean time to acknowledge incidents (minutes)"
+    target: "< 15 minutes"
+    prometheus_metric: "response_service_mtta_minutes"
+
+  - name: "rto_achievement_rate"
+    type: "gauge"
+    description: "Percentage of incidents meeting RTO"
+    target: "> 95%"
+    prometheus_metric: "response_service_rto_achievement"
+
+  - name: "rpo_achievement_rate"
+    type: "gauge"
+    description: "Percentage of incidents meeting RPO"
+    target: "> 95%"
+    prometheus_metric: "response_service_rpo_achievement"
+
+  - name: "escalation_rate"
+    type: "gauge"
+    description: "Percentage of incidents escalated"
+    target: "< 20%"
+    prometheus_metric: "response_service_escalation_rate"
+
+  - name: "plan_activation_count"
+    type: "counter"
+    description: "Number of BC plan activations"
+    target: "Track trends"
+    prometheus_metric: "response_service_plan_activations_total"
+
+  - name: "incident_severity_distribution"
+    type: "gauge"
+    description: "Distribution of incidents by severity"
+    target: "Track trends"
+    prometheus_metric: "response_service_incidents_by_severity"
+    labels: ["severity"]
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "aio-pika>=9.3.0"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "redis>=5.0.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Primary database for incident data"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      port: 6379
+      purpose: "Real-time incident state caching"
+      required: true
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for incident notifications"
+      required: true
+
+  infrastructure:
+    - "PostgreSQL database (response schema)"
+    - "Redis (real-time state)"
+    - "RabbitMQ (EventBus)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "monitoring.alert.critical"
+        source: "monitoring_service"
+        action: "Auto-create incident"
+
+      - event: "risk.critical.identified"
+        source: "risk_service"
+        action: "Create preventive incident"
+
+      - event: "plan.activated"
+        source: "plans_service"
+        action: "Link plan to incident"
+
+    publishes:
+      - event: "incident.declared"
+        target: "all_services"
+        data: "incident_id, severity, affected_services"
+
+      - event: "incident.major.declared"
+        target: "governance_service,orchestrator"
+        data: "incident_id, severity, estimated_impact"
+
+      - event: "incident.resolved"
+        target: "all_services"
+        data: "incident_id, resolution_time, rto_met"
+
+      - event: "incident.escalated"
+        target: "governance_service"
+        data: "incident_id, escalation_level, reason"
+
+      - event: "plan.activation.requested"
+        target: "plans_service"
+        data: "incident_id, plan_id"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/response/incidents"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        consumers: ["admin_panel", "orchestrator", "monitoring_service"]
+
+      - endpoint: "/api/response/incidents/{id}/actions"
+        methods: ["GET", "POST", "PUT"]
+        consumers: ["admin_panel", "orchestrator"]
+
+      - endpoint: "/api/response/dashboard"
+        methods: ["GET"]
+        consumers: ["admin_panel"]
+        description: "Real-time incident analytics"
+
+    consumes:
+      - service: "plans_service"
+        endpoint: "/api/plans/plans/{id}/activate-real"
+        purpose: "Activate BC plans during incidents"
+
+      - service: "bia_service"
+        endpoint: "/api/bia/processes/{id}"
+        purpose: "Get RTO/RPO for validation"
+
+      - service: "orchestrator"
+        endpoint: "/api/v1/decision"
+        purpose: "AI-assisted incident response"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "No automated incident detection (manual or webhook only)"
+    severity: "medium"
+    workaround: "Integrate with monitoring alerts"
+    tracking: "RESP-001"
+
+  - issue: "Communication log not integrated with email/SMS"
+    severity: "medium"
+    workaround: "Manual logging of external communications"
+    tracking: "RESP-002"
+
+  - issue: "Post-incident review workflow manual"
+    severity: "low"
+    workaround: "Manual review scheduling"
+    tracking: "RESP-003"
+
+limitations:
+  - "Maximum 100 concurrent active incidents"
+  - "Timeline entries limited to 1000 per incident"
+  - "Response teams limited to 50 members"
+  - "No mobile push notifications (planned)"
+  - "RTO/RPO validation assumes accurate timestamps"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "response-service:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8027:8027"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+
+      - name: "REDIS_URL"
+        description: "Redis connection string"
+        example: "redis://localhost:6379/0"
+
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        example: "amqp://guest:guest@localhost:5672/"
+
+    optional:
+      - name: "ORCHESTRATOR_URL"
+        description: "AI Orchestrator URL"
+        default: "http://localhost:8002"
+
+      - name: "PLANS_SERVICE_URL"
+        description: "Plans service URL"
+        default: "http://localhost:8023"
+
+      - name: "BIA_SERVICE_URL"
+        description: "BIA service URL"
+        default: "http://localhost:8020"
+
+      - name: "AUTO_ESCALATE_CRITICAL"
+        description: "Auto-escalate critical incidents"
+        default: "true"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m response.main"
+
+  requirements:
+    cpu: "1.0 cores (critical service)"
+    memory: "512MB"
+    disk: "2GB"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8027/docs"
+  external_links:
+    - name: "ISO 22301 Clause 8.4 - Incident Response"
+      url: "https://www.iso.org/standard/75106.html"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Platform Services Team"
+  tech_lead: "Platform Architect"
+  product_owner: "BCM Product Owner"
+  on_call: "platform-team@company.com"
+  slack_channel: "#platform-services"
+  pagerduty: "response-service-oncall"
+
+support:
+  incidents: "Create P1 ticket in JIRA (critical service)"
+  questions: "#platform-services Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. DATABASE MODELS
+# ============================================
+database:
+  schema: "response"
+  models:
+    - name: "Incident"
+      table: "incidents"
+      description: "Main incident entity with lifecycle state"
+
+    - name: "ResponseAction"
+      table: "response_actions"
+      description: "Response actions and assignments"
+
+    - name: "ResponseTeam"
+      table: "response_teams"
+      description: "Incident response team members"
+
+    - name: "Communication"
+      table: "communications"
+      description: "Incident communications log"
+
+    - name: "Timeline"
+      table: "timeline"
+      description: "Chronological incident events"
+
+    - name: "RecoveryMetrics"
+      table: "recovery_metrics"
+      description: "RTO/RPO tracking and validation"
+
+# ============================================
+# 13. COMPLIANCE
+# ============================================
+compliance:
+  iso_22301:
+    - clause: "8.4"
+      description: "BC plans and procedures - Incident response"
+      status: "compliant"
+
+    - clause: "8.4.2"
+      description: "Incident response structure"
+      status: "compliant"
+
+    - clause: "8.4.3"
+      description: "Warning and communication"
+      status: "compliant"
+
+    - clause: "8.5"
+      description: "Exercising and testing"
+      status: "partial"  # Integration with validation service

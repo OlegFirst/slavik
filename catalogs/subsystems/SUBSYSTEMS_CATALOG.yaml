@@ -1,0 +1,475 @@
+# Subsystems Catalog - AI Platform ISO 22301
+# Last Updated: 2025-10-12
+# Source: Functional Systems Analysis by Agent
+# Total Subsystems: 11 (technical categories)
+# Total Services: 46
+
+version: 1.0.0
+created_date: '2025-10-12'
+total_subsystems: 11
+active_subsystems: 11
+
+subsystems:
+  # ===================================================================
+  # 1. DATABASE INFRASTRUCTURE (💾)
+  # ===================================================================
+  - id: database_infrastructure
+    name: "Database Infrastructure"
+    category: infrastructure
+    description: "Relational, cache, vector, and time-series data storage"
+    services:
+      - postgresql  # Primary database (Supabase)
+      - redis       # Cache and session storage
+      - qdrant      # Vector database for RAG
+      - db_managers # Database connection pools
+    status: production
+    critical: true
+    port_range: "5432, 6379, 6333"
+    dependencies: []
+    capabilities:
+      - "Persistent data storage (PostgreSQL)"
+      - "Fast caching (Redis)"
+      - "Semantic search (Qdrant)"
+      - "29 database schemas"
+      - "Row-Level Security (RLS)"
+      - "Real-time subscriptions"
+
+  # ===================================================================
+  # 2. RUNTIME SERVICES (⚡)
+  # ===================================================================
+  - id: runtime_services
+    name: "Runtime Services"
+    category: infrastructure
+    description: "Service discovery, WebSocket, message queues"
+    services:
+      - service_discovery    # Consul-based service registry
+      - realtime_websocket   # Real-time communications
+      - message_queue        # RabbitMQ (planned)
+    status: production
+    critical: true
+    port_range: "8500, 8071, 5672"
+    dependencies:
+      - database_infrastructure  # Redis for registry
+    capabilities:
+      - "Service registration and discovery"
+      - "Real-time WebSocket updates"
+      - "Async task queuing (planned)"
+      - "Health monitoring"
+
+  # ===================================================================
+  # 3. GATEWAY LAYER (🚪)
+  # ===================================================================
+  - id: gateway_layer
+    name: "Gateway Layer"
+    category: infrastructure
+    description: "Unified API gateway with routing and load balancing"
+    services:
+      - api_gateway  # FastAPI gateway with auth, rate limiting
+    status: production
+    critical: true
+    port_range: "8000"
+    dependencies:
+      - runtime_services  # Service discovery
+      - security          # Auth service
+    capabilities:
+      - "Unified API entry point (single endpoint)"
+      - "JWT authentication & authorization"
+      - "Rate limiting (token bucket, sliding window)"
+      - "Load balancing (round-robin, least-connections)"
+      - "Circuit breaker pattern"
+
+  # ===================================================================
+  # 4. OBSERVABILITY (📊)
+  # ===================================================================
+  - id: observability
+    name: "Observability"
+    category: infrastructure
+    description: "Metrics, monitoring, visualization, alerting"
+    services:
+      - prometheus  # Time-series metrics database
+      - grafana     # Visualization dashboards
+    status: production
+    critical: true
+    port_range: "9090, 3000"
+    dependencies:
+      - database_infrastructure  # For dashboard storage
+    capabilities:
+      - "Metrics collection via /metrics endpoints"
+      - "Time-series data storage"
+      - "18 pre-configured dashboards"
+      - "Alerting rules engine"
+      - "Service discovery integration"
+
+  # ===================================================================
+  # 5. EVENTBUS CORE (📡)
+  # ===================================================================
+  - id: eventbus_core
+    name: "EventBus Core"
+    category: infrastructure
+    description: "Clean architecture event system for choreography"
+    services:
+      - eventbus  # Event publishing and subscription
+    status: production
+    critical: true
+    port_range: "8003"
+    dependencies:
+      - database_infrastructure  # Redis Streams backend
+    capabilities:
+      - "Event publishing and subscription"
+      - "Multiple backends (Memory, Redis Streams)"
+      - "Event filtering by pattern"
+      - "Async/await support"
+      - "Type-safe event definitions"
+
+  # ===================================================================
+  # 6. SECURITY (🔒)
+  # ===================================================================
+  - id: security
+    name: "Security"
+    category: infrastructure
+    description: "Authentication, authorization, secrets management"
+    services:
+      - auth_service     # JWT authentication & RBAC
+      - vault            # HashiCorp Vault secrets
+      - secrets_manager  # Additional secrets management
+    status: production
+    critical: true
+    port_range: "8001, 8200"
+    dependencies:
+      - database_infrastructure  # User storage
+    capabilities:
+      - "JWT authentication"
+      - "Role-Based Access Control (RBAC)"
+      - "Secrets storage (KV v2)"
+      - "Dynamic secrets generation"
+      - "Audit logging"
+      - "Secret rotation"
+
+  # ===================================================================
+  # 7. AI OFFICE (🤖)
+  # ===================================================================
+  - id: ai_office
+    name: "AI Office Infrastructure"
+    category: ai
+    description: "AI specialists, coordinators, and automation agents"
+    services:
+      - mio_manager           # Platform observatory & coordinator
+      - db_intelligence       # Database performance specialist
+      - analytics_specialist  # Platform analytics expert
+      - devops_agent         # DevOps automation agent
+      - project_agent        # Project management agent
+      - agent_router         # Agent request routing
+      - ai_event_manager     # AI-powered event coordination
+    status: production
+    critical: false
+    port_range: "8046, 8051, 8045, 8062, 8063, 8052, 8055"
+    dependencies:
+      - database_infrastructure
+      - eventbus_core
+      - runtime_services
+    capabilities:
+      - "Platform-wide health monitoring"
+      - "Prometheus metrics coverage analysis"
+      - "Database performance optimization"
+      - "Infrastructure automation"
+      - "Project task management"
+      - "AI request routing"
+
+  # ===================================================================
+  # 8. SHARED LIBRARIES (📚)
+  # ===================================================================
+  - id: shared_libraries
+    name: "Shared Libraries"
+    category: infrastructure
+    description: "Common utilities, helpers, and test infrastructure"
+    services:
+      - shared  # Common Python utilities
+      - tests   # Shared test infrastructure
+    status: production
+    critical: false
+    port_range: "N/A"
+    dependencies: []
+    capabilities:
+      - "Common Python utilities"
+      - "Database managers"
+      - "Redis managers"
+      - "Shared test infrastructure"
+      - "Configuration helpers"
+
+  # ===================================================================
+  # 9. PLATFORM SERVICES (📋)
+  # ===================================================================
+  - id: platform_services
+    name: "Platform Services"
+    category: business
+    description: "BCM business logic services (BIA, Risk, Plans, etc.)"
+    services:
+      - planning_service      # BCM journey planning
+      - bia_service          # Business Impact Analysis
+      - learning_service     # Personnel training
+      - validation_service   # Testing and validation
+      - plans_service        # Continuity plans
+      - documents_service    # Document management
+      - governance_service   # Governance and policies
+      - compliance_service   # Compliance monitoring
+      - risk_service         # Risk assessment
+      - response_service     # Incident response
+      - process_analytics    # Process analytics
+    status: production
+    critical: true
+    port_range: "8004-8029"
+    dependencies:
+      - database_infrastructure
+      - eventbus_core
+      - security
+    capabilities:
+      - "Business Impact Analysis (BIA)"
+      - "Risk Assessment"
+      - "BCM Plan Management"
+      - "Document Management"
+      - "Audit Trail"
+      - "ISO 22301 Compliance"
+      - "Governance Framework"
+      - "Incident Response"
+
+  # ===================================================================
+  # 10. INTELLIGENT CORE (🧠)
+  # ===================================================================
+  - id: intelligent_core
+    name: "Intelligent Core"
+    category: ai
+    description: "AI orchestration, learning, workflow intelligence"
+    services:
+      - workflow_intelligence  # Temporal-based workflow orchestration
+      - ai_foundation         # RAG, embeddings, LLM integration
+      - expertise_center      # Domain-specific AI assistants
+      - community_intelligence # Peer knowledge sharing
+      - workflow_engine       # BPMN 2.0 workflow execution
+      - ai_orchestration      # Autonomous AI decision-making (handles multi-agent coordination)
+      - event_intelligence    # Self-healing and pattern detection
+      - predictive            # Forecasting and predictions
+      - collective            # Collective intelligence networks
+      - ai_workflow_optimizer # ML-powered workflow optimization
+      - system_bcm_service    # Platform self-application of BCM
+      - scenario_intelligence # Scenario-based orchestration (4-level hierarchy)
+      # coordination_center removed - functionality in ai_orchestration (Delegation Manager)
+    status: production
+    critical: true
+    port_range: "8010, 8030-8044, 8050"
+    dependencies:
+      - database_infrastructure
+      - eventbus_core
+      - ai_office
+    capabilities:
+      - "Temporal workflow orchestration"
+      - "RAG with Qdrant embeddings"
+      - "Domain-Specific AI Assistants"
+      - "Peer knowledge sharing"
+      - "BPMN 2.0 workflow execution"
+      - "Autonomous AI decision-making"
+      - "Self-healing and pattern detection"
+      - "AI-powered forecasting"
+      - "ML workflow optimization"
+      - "Platform self-BCM"
+
+  # ===================================================================
+  # 11. USER APPLICATIONS (📱)
+  # ===================================================================
+  - id: user_applications
+    name: "User Applications"
+    category: business_applications
+    description: "User-facing applications and products (программные продукты для пользователей)"
+    services:
+      # Main Applications (4)
+      - bcm_portal              # Main BCM management portal
+      - simulation_platform     # BCM exercises and simulations
+      - expert_marketplace      # Expert consultation marketplace
+      - digital_twin           # Organization digital twin
+
+      # BCM Modules (12)
+      - bia_module             # BIA functionality
+      - risk_module            # Risk assessment
+      - plans_module           # BCM plans
+      - response_module        # Incident response
+      - validation_module      # Testing & exercises
+      - compliance_module      # Compliance monitoring
+      - governance_module      # Governance
+      - learning_module        # Training
+      - documents_module       # Document management
+      - planning_module        # Journey planning
+      - analytics_module       # Analytics & reporting
+      - monitoring_module      # Monitoring & KPIs
+
+    status: production
+    critical: false
+    port_range: "3000-3003 (apps), 9000-9012 (modules)"
+    dependencies:
+      - platform_services  # Backend BCM services
+      - intelligent_core   # AI services
+      - interface_layer    # UI components
+      - security          # Authentication
+    capabilities:
+      # Applications
+      - "BCM Portal (unified interface for all BCM)"
+      - "Simulation Platform (exercises, drills, scenarios)"
+      - "Expert Marketplace (consulting, training, audits)"
+      - "Digital Twin (virtual organization model)"
+
+      # Modules
+      - "12 BCM modules powering applications"
+      - "BIA, Risk, Plans, Response, Validation"
+      - "Compliance, Governance, Learning, Documents"
+      - "Planning, Analytics, Monitoring"
+
+  # ===================================================================
+  # 12. INTERFACE LAYER (🖥️)
+  # ===================================================================
+  - id: interface_layer
+    name: "Interface Layer"
+    category: ui
+    description: "User interfaces and external integrations"
+    services:
+      - mcp_interface  # Model Context Protocol (reserved)
+      - admin_panel    # System administration (reserved)
+      - platform_ui    # End-user interface (reserved)
+    status: reserved
+    critical: false
+    port_range: "TBD"
+    dependencies:
+      - gateway_layer
+      - security
+    capabilities:
+      - "Model Context Protocol interface (planned)"
+      - "System administration dashboard (planned)"
+      - "End-user BCM interface (planned)"
+
+# ===================================================================
+# SUBSYSTEM STATISTICS
+# ===================================================================
+statistics:
+  total_subsystems: 12
+  total_services: 62  # 46 platform + 16 user applications (4 apps + 12 modules)
+  by_category:
+    infrastructure: 6           # Database, Runtime, Gateway, Observability, EventBus, Security
+    ai: 2                      # AI Office, Intelligent Core
+    business: 1                # Platform Services (backend)
+    business_applications: 1   # User Applications (4 apps + 12 modules)
+    ui: 1                      # Interface Layer
+    shared: 1                  # Shared Libraries
+
+  user_applications_breakdown:
+    main_applications: 4       # Portal, Simulation, Marketplace, Digital Twin
+    bcm_modules: 12           # BIA, Risk, Plans, Response, etc.
+
+  by_status:
+    production: 10
+    planned: 0
+    reserved: 1
+    configured: 0
+
+  critical_subsystems: 8
+  non_critical_subsystems: 4
+
+# ===================================================================
+# DEPLOYMENT ORDER (for docker-compose)
+# ===================================================================
+deployment_order:
+  phase_1_foundation:
+    order: 1
+    subsystems:
+      - database_infrastructure  # PostgreSQL, Redis, Qdrant
+      - shared_libraries         # Common utilities
+
+  phase_2_infrastructure:
+    order: 2
+    subsystems:
+      - security                 # Auth, Vault
+      - eventbus_core           # EventBus
+      - runtime_services        # Service Discovery, WebSocket
+      - observability           # Prometheus, Grafana
+
+  phase_3_gateway:
+    order: 3
+    subsystems:
+      - gateway_layer           # API Gateway
+
+  phase_4_platform:
+    order: 4
+    subsystems:
+      - platform_services       # BCM business logic (backend)
+
+  phase_5_intelligence:
+    order: 5
+    subsystems:
+      - intelligent_core        # AI services
+      - ai_office              # AI specialists
+
+  phase_6_applications:
+    order: 6
+    subsystems:
+      - business_services      # User applications (программные сервисы)
+
+  phase_7_interface:
+    order: 7
+    subsystems:
+      - interface_layer        # UI (reserved)
+
+# ===================================================================
+# INTEGRATION PATTERNS
+# ===================================================================
+integration_patterns:
+  - pattern: "All → Database Managers → PostgreSQL/Redis/Qdrant"
+    description: "Universal data access pattern"
+    subsystems: [all]
+    target: database_infrastructure
+
+  - pattern: "Services ↔ EventBus → Async communication"
+    description: "Event-driven choreography"
+    subsystems: [platform_services, intelligent_core, ai_office]
+    target: eventbus_core
+
+  - pattern: "External → API Gateway → Service Discovery → Services"
+    description: "Request routing with service discovery"
+    subsystems: [gateway_layer, runtime_services]
+    targets: [platform_services, intelligent_core]
+
+  - pattern: "Services /metrics → Prometheus → Grafana"
+    description: "Metrics collection and visualization"
+    subsystems: [all]
+    target: observability
+
+  - pattern: "AI tasks → Agent Router → AI Orchestration → Specialists"
+    description: "AI agent coordination"
+    subsystems: [ai_office, intelligent_core]
+    target: ai_office
+
+  - pattern: "BCM → Workflow Intelligence → Temporal → Execution"
+    description: "Workflow orchestration"
+    subsystems: [platform_services, intelligent_core]
+    target: intelligent_core
+
+  - pattern: "UI ↔ WebSocket ↔ EventBus → Live updates"
+    description: "Real-time user interface updates"
+    subsystems: [interface_layer, runtime_services, eventbus_core]
+    target: runtime_services
+
+  - pattern: "AI → RAG → Qdrant → Context retrieval"
+    description: "Retrieval-Augmented Generation"
+    subsystems: [intelligent_core, ai_office]
+    target: database_infrastructure
+
+# ===================================================================
+# METADATA
+# ===================================================================
+catalog_metadata:
+  generated_by: "Agent Analysis + Manual Refinement + User Requirements"
+  generation_date: "2025-10-12"
+  version: "2.0.0"
+  source: "FUNCTIONAL_SYSTEMS_ANALYSIS.md + USER_APPLICATIONS_CATALOG.yaml"
+  total_services: 62
+  total_subsystems: 12
+  correction: "Fixed from 8 to 11 to 12 subsystems (added Observability, EventBus Core, Shared Libraries, User Applications)"
+  notes: |
+    Separated Platform Services (46 infrastructure) and User Applications (16 total):
+    - 4 main applications: Portal, Simulation, Marketplace, Digital Twin
+    - 12 BCM modules: BIA, Risk, Plans, Response, Validation, Compliance, Governance, Learning, Documents, Planning, Analytics, Monitoring

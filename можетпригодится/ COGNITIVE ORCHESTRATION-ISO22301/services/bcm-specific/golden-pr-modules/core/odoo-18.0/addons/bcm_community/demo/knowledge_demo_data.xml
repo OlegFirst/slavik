@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Demo Knowledge Base Articles -->
+
+    <!-- Knowledge Tags -->
+    <record id="tag_crisis_management" model="bcm.knowledge.tag">
+        <field name="name">Crisis Management</field>
+        <field name="color">1</field>
+        <field name="description">Articles related to crisis management and response</field>
+    </record>
+
+    <record id="tag_disaster_recovery" model="bcm.knowledge.tag">
+        <field name="name">Disaster Recovery</field>
+        <field name="color">2</field>
+        <field name="description">Disaster recovery planning and implementation</field>
+    </record>
+
+    <record id="tag_risk_assessment" model="bcm.knowledge.tag">
+        <field name="name">Risk Assessment</field>
+        <field name="color">3</field>
+        <field name="description">Risk assessment methodologies and best practices</field>
+    </record>
+
+    <record id="tag_communication" model="bcm.knowledge.tag">
+        <field name="name">Communication</field>
+        <field name="color">4</field>
+        <field name="description">Communication strategies during incidents</field>
+    </record>
+
+    <record id="tag_training" model="bcm.knowledge.tag">
+        <field name="name">Training</field>
+        <field name="color">5</field>
+        <field name="description">Training and awareness programs</field>
+    </record>
+
+    <!-- Demo Knowledge Articles -->
+    <record id="article_bia_best_practices" model="bcm.knowledge.article">
+        <field name="name">Business Impact Analysis: Best Practices Guide</field>
+        <field name="category">best_practice</field>
+        <field name="article_type">manual</field>
+        <field name="summary">Comprehensive guide on conducting effective Business Impact Analysis (BIA) to identify critical business functions and their dependencies.</field>
+        <field name="content"><![CDATA[
+<div class="knowledge-article">
+    <h2>Introduction to Business Impact Analysis</h2>
+    <p>Business Impact Analysis (BIA) is a critical component of business continuity management that helps organizations identify and prioritize critical business functions and processes.</p>
+
+    <h3>Key Steps in BIA Process</h3>
+    <ol>
+        <li><strong>Scope Definition:</strong> Clearly define the scope and boundaries of the BIA</li>
+        <li><strong>Data Collection:</strong> Gather information about business processes, dependencies, and resources</li>
+        <li><strong>Impact Assessment:</strong> Evaluate the potential impact of disruptions</li>
+        <li><strong>Time Sensitivity Analysis:</strong> Determine Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO)</li>
+        <li><strong>Resource Requirements:</strong> Identify minimum resources needed for recovery</li>
+    </ol>
+
+    <h3>Best Practices</h3>
+    <ul>
+        <li>Involve key stakeholders from all business units</li>
+        <li>Use standardized questionnaires and interview templates</li>
+        <li>Regular updates to reflect organizational changes</li>
+        <li>Validate findings with business process owners</li>
+        <li>Document assumptions and limitations</li>
+    </ul>
+
+    <h3>Common Challenges</h3>
+    <p>Organizations often face challenges such as incomplete data collection, stakeholder resistance, and difficulty in quantifying impacts. Address these by ensuring senior management support and clear communication of BIA benefits.</p>
+
+    <h3>Tools and Templates</h3>
+    <p>Utilize standardized BIA templates and consider automated tools for large-scale assessments. Regular training for BIA team members ensures consistent application of methodologies.</p>
+</div>
+        ]]></field>
+        <field name="tags" eval="[(6, 0, [ref('tag_risk_assessment')])]"/>
+        <field name="iso_clauses" eval="[(6, 0, [ref('iso_clause_8_2')])]"/>
+        <field name="sequence">10</field>
+        <field name="is_published">True</field>
+        <field name="view_count">156</field>
+        <field name="bookmark_count">23</field>
+        <field name="usefulness_score">8.5</field>
+    </record>
+
+    <record id="article_crisis_communication" model="bcm.knowledge.article">
+        <field name="name">Crisis Communication: Managing Stakeholder Relations During Incidents</field>
+        <field name="category">procedure</field>
+        <field name="article_type">manual</field>
+        <field name="summary">Step-by-step procedures for effective communication during crisis situations, including stakeholder management and media relations.</field>
+        <field name="content"><![CDATA[
+<div class="knowledge-article">
+    <h2>Crisis Communication Framework</h2>
+    <p>Effective crisis communication is essential for maintaining stakeholder confidence and ensuring coordinated response efforts during business disruptions.</p>
+
+    <h3>Communication Hierarchy</h3>
+    <p>Establish clear communication channels:</p>
+    <ul>
+        <li><strong>Internal Communications:</strong> Employees, management, board of directors</li>
+        <li><strong>External Communications:</strong> Customers, suppliers, partners</li>
+        <li><strong>Public Communications:</strong> Media, regulatory bodies, community</li>
+    </ul>
+
+    <h3>Key Messages Framework</h3>
+    <ol>
+        <li><strong>What happened:</strong> Factual description of the incident</li>
+        <li><strong>Impact assessment:</strong> Current and potential effects</li>
+        <li><strong>Response actions:</strong> What is being done to address the situation</li>
+        <li><strong>Next steps:</strong> Timeline and expected updates</li>
+        <li><strong>Contact information:</strong> How stakeholders can get more information</li>
+    </ol>
+
+    <h3>Communication Procedures</h3>
+    <h4>Phase 1: Initial Response (0-1 hour)</h4>
+    <ul>
+        <li>Activate crisis communication team</li>
+        <li>Assess situation and gather initial facts</li>
+        <li>Prepare holding statement</li>
+        <li>Notify key internal stakeholders</li>
+    </ul>
+
+    <h4>Phase 2: Active Management (1-24 hours)</h4>
+    <ul>
+        <li>Issue detailed communications to all stakeholders</li>
+        <li>Monitor media and social media coverage</li>
+        <li>Provide regular updates</li>
+        <li>Coordinate with emergency services if required</li>
+    </ul>
+
+    <h4>Phase 3: Recovery Communication (24+ hours)</h4>
+    <ul>
+        <li>Communicate recovery progress</li>
+        <li>Address lessons learned</li>
+        <li>Restore normal communication channels</li>
+        <li>Conduct post-incident review</li>
+    </ul>
+
+    <h3>Do's and Don'ts</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Do's</h4>
+            <ul>
+                <li>Be proactive and transparent</li>
+                <li>Stick to facts</li>
+                <li>Show empathy and concern</li>
+                <li>Provide regular updates</li>
+                <li>Use multiple communication channels</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>Don'ts</h4>
+            <ul>
+                <li>Speculate or provide unconfirmed information</li>
+                <li>Assign blame during active crisis</li>
+                <li>Use jargon or technical language</li>
+                <li>Ignore stakeholder concerns</li>
+                <li>Assume one-size-fits-all messaging</li>
+            </ul>
+        </div>
+    </div>
+</div>
+        ]]></field>
+        <field name="tags" eval="[(6, 0, [ref('tag_crisis_management'), ref('tag_communication')])]"/>
+        <field name="iso_clauses" eval="[(6, 0, [ref('iso_clause_7_4'), ref('iso_clause_8_1')])]"/>
+        <field name="sequence">20</field>
+        <field name="is_published">True</field>
+        <field name="view_count">134</field>
+        <field name="bookmark_count">18</field>
+        <field name="usefulness_score">7.8</field>
+    </record>
+
+    <record id="article_tabletop_exercise" model="bcm.knowledge.article">
+        <field name="name">Conducting Effective Tabletop Exercises: A Practical Guide</field>
+        <field name="category">template_guide</field>
+        <field name="article_type">exercise_derived</field>
+        <field name="summary">Complete guide for planning, conducting, and evaluating tabletop exercises to test business continuity plans and response capabilities.</field>
+        <field name="content"><![CDATA[
+<div class="knowledge-article">
+    <div class="article-meta alert alert-info">
+        <p><strong>Generated from Exercise:</strong> Q3 2024 Tabletop Exercise - IT System Failure</p>
+        <p><strong>Exercise Type:</strong> Tabletop Discussion</p>
+        <p><strong>Generated on:</strong> 2024-09-15 14:30</p>
+    </div>
+
+    <h2>Tabletop Exercise Overview</h2>
+    <p>Tabletop exercises are discussion-based sessions where team members meet in an informal, classroom setting to discuss their roles during an emergency and their responses to a particular scenario.</p>
+
+    <h3>Exercise Planning</h3>
+    <h4>Pre-Exercise Planning (4-6 weeks before)</h4>
+    <ol>
+        <li><strong>Define Objectives:</strong> Clear, measurable goals for the exercise</li>
+        <li><strong>Scenario Development:</strong> Realistic, challenging scenarios based on risk assessment</li>
+        <li><strong>Participant Selection:</strong> Key decision-makers and response team members</li>
+        <li><strong>Logistics Planning:</strong> Venue, materials, and technical requirements</li>
+    </ol>
+
+    <h4>Exercise Design</h4>
+    <ul>
+        <li><strong>Scenario Injects:</strong> Progressive revelation of information</li>
+        <li><strong>Discussion Points:</strong> Key decisions and response actions</li>
+        <li><strong>Time Management:</strong> Realistic time pressures</li>
+        <li><strong>Evaluation Criteria:</strong> How success will be measured</li>
+    </ul>
+
+    <h3>Conducting the Exercise</h3>
+    <h4>Opening (30 minutes)</h4>
+    <ul>
+        <li>Welcome and introductions</li>
+        <li>Exercise objectives and ground rules</li>
+        <li>Scenario briefing</li>
+        <li>Initial situation assessment</li>
+    </ul>
+
+    <h4>Main Exercise (2-3 hours)</h4>
+    <ul>
+        <li>Progressive scenario injects</li>
+        <li>Facilitated discussions</li>
+        <li>Decision-making processes</li>
+        <li>Resource allocation discussions</li>
+        <li>Communication testing</li>
+    </ul>
+
+    <h4>Debrief (45 minutes)</h4>
+    <ul>
+        <li>Immediate observations</li>
+        <li>Lessons learned discussion</li>
+        <li>Improvement opportunities</li>
+        <li>Action item assignment</li>
+    </ul>
+
+    <h3>Key Success Factors</h3>
+    <ul>
+        <li><strong>Senior Leadership Participation:</strong> Demonstrates organizational commitment</li>
+        <li><strong>Realistic Scenarios:</strong> Based on actual risk assessments</li>
+        <li><strong>Skilled Facilitation:</strong> Keeps discussion focused and productive</li>
+        <li><strong>Safe Environment:</strong> Encourages open discussion and learning</li>
+        <li><strong>Documentation:</strong> Captures decisions and lessons learned</li>
+    </ul>
+
+    <h3>Common Challenges and Solutions</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Challenge</th>
+                <th>Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Participant Disengagement</td>
+                <td>Use realistic scenarios and ensure all participants have active roles</td>
+            </tr>
+            <tr>
+                <td>Dominating Personalities</td>
+                <td>Strong facilitation and structured discussion formats</td>
+            </tr>
+            <tr>
+                <td>Unrealistic Scenarios</td>
+                <td>Base scenarios on actual risk assessments and previous incidents</td>
+            </tr>
+            <tr>
+                <td>Poor Follow-up</td>
+                <td>Assign clear action items with owners and deadlines</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Exercise Evaluation</h3>
+    <p>Evaluate exercises against predetermined objectives using both quantitative and qualitative measures:</p>
+    <ul>
+        <li>Response time to key decisions</li>
+        <li>Quality of communication</li>
+        <li>Resource allocation effectiveness</li>
+        <li>Plan adequacy and usability</li>
+        <li>Team coordination and leadership</li>
+    </ul>
+
+    <div class="alert alert-warning">
+        <h4>Post-Exercise Actions</h4>
+        <p>Within 2 weeks of the exercise:</p>
+        <ul>
+            <li>Distribute detailed after-action report</li>
+            <li>Update business continuity plans based on findings</li>
+            <li>Schedule follow-up training if needed</li>
+            <li>Plan next exercise incorporating lessons learned</li>
+        </ul>
+    </div>
+</div>
+        ]]></field>
+        <field name="tags" eval="[(6, 0, [ref('tag_training'), ref('tag_crisis_management')])]"/>
+        <field name="iso_clauses" eval="[(6, 0, [ref('iso_clause_8_5')])]"/>
+        <field name="sequence">30</field>
+        <field name="is_published">True</field>
+        <field name="view_count">89</field>
+        <field name="bookmark_count">15</field>
+        <field name="usefulness_score">8.2</field>
+    </record>
+
+    <record id="article_ai_generated_rto_analysis" model="bcm.knowledge.article">
+        <field name="name">RTO and RPO Setting: Data-Driven Approach</field>
+        <field name="category">lesson_learned</field>
+        <field name="article_type">ai_generated</field>
+        <field name="summary">AI-generated insights on setting appropriate Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) based on business impact analysis data.</field>
+        <field name="ai_prompt">Analyze exercise data to provide insights on RTO/RPO setting for critical business functions</field>
+        <field name="ai_confidence">0.85</field>
+        <field name="content"><![CDATA[
+<div class="knowledge-article">
+    <div class="alert alert-info">
+        <p><i class="fas fa-robot"></i> This article was generated using AI analysis with 85% confidence.</p>
+    </div>
+
+    <h2>Data-Driven RTO and RPO Setting</h2>
+    <p>Based on analysis of 50+ business continuity exercises and incident responses, this guide provides evidence-based recommendations for setting Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO).</p>
+
+    <h3>Key Findings from Exercise Data</h3>
+    <ul>
+        <li><strong>Critical Functions:</strong> 80% of organizations can tolerate maximum 4-hour downtime for critical functions</li>
+        <li><strong>Data Loss Tolerance:</strong> Financial services typically require RPO of 15 minutes or less</li>
+        <li><strong>Recovery Complexity:</strong> Functions with high interdependencies require 50% longer recovery times</li>
+        <li><strong>Resource Availability:</strong> Weekend incidents take 2.3x longer to resolve due to resource constraints</li>
+    </ul>
+
+    <h3>RTO Setting Framework</h3>
+    <h4>Factors to Consider</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Factor</th>
+                <th>Impact on RTO</th>
+                <th>Typical Range</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Revenue Impact</td>
+                <td>Higher revenue loss = Shorter RTO</td>
+                <td>1-24 hours</td>
+            </tr>
+            <tr>
+                <td>Regulatory Requirements</td>
+                <td>Compliance mandates = Fixed RTO</td>
+                <td>2-8 hours</td>
+            </tr>
+            <tr>
+                <td>Customer Impact</td>
+                <td>Customer-facing = Shorter RTO</td>
+                <td>0.5-4 hours</td>
+            </tr>
+            <tr>
+                <td>Technology Complexity</td>
+                <td>More complex = Longer RTO</td>
+                <td>4-72 hours</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>RPO Calculation Method</h3>
+    <p>RPO should be based on:</p>
+    <ol>
+        <li><strong>Data Volume:</strong> How much data is generated per hour</li>
+        <li><strong>Data Value:</strong> Financial impact of data loss</li>
+        <li><strong>Backup Frequency:</strong> Technical limitations and costs</li>
+        <li><strong>Recovery Complexity:</strong> Time needed to restore from backups</li>
+    </ol>
+
+    <h3>Industry Benchmarks</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Financial Services</h4>
+            <ul>
+                <li>Trading Systems: RTO 15 min, RPO 1 min</li>
+                <li>Customer Banking: RTO 2 hours, RPO 15 min</li>
+                <li>Back Office: RTO 8 hours, RPO 1 hour</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>Manufacturing</h4>
+            <ul>
+                <li>Production Control: RTO 4 hours, RPO 30 min</li>
+                <li>Supply Chain: RTO 8 hours, RPO 2 hours</li>
+                <li>Quality Systems: RTO 24 hours, RPO 4 hours</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Cost-Benefit Analysis</h3>
+    <p>AI analysis shows that aggressive RTO/RPO targets follow the 80/20 rule:</p>
+    <ul>
+        <li>Achieving 80% of optimal recovery time costs 20% of total budget</li>
+        <li>The final 20% improvement costs 80% of budget</li>
+        <li>Sweet spot typically at 2-4 hour RTO for most business functions</li>
+    </ul>
+
+    <h3>Validation Recommendations</h3>
+    <ol>
+        <li><strong>Regular Testing:</strong> Validate RTO/RPO assumptions quarterly</li>
+        <li><strong>Scenario Analysis:</strong> Test under different failure conditions</li>
+        <li><strong>Stakeholder Review:</strong> Annual review with business owners</li>
+        <li><strong>Technology Updates:</strong> Reassess when technology changes</li>
+    </ol>
+
+    <div class="disclaimer alert alert-warning">
+        <p><em>This article was automatically generated from exercise results and AI analysis.
+        Please review and validate before implementation in your organization.</em></p>
+    </div>
+</div>
+        ]]></field>
+        <field name="tags" eval="[(6, 0, [ref('tag_disaster_recovery'), ref('tag_risk_assessment')])]"/>
+        <field name="iso_clauses" eval="[(6, 0, [ref('iso_clause_8_2'), ref('iso_clause_8_3')])]"/>
+        <field name="sequence">40</field>
+        <field name="is_published">True</field>
+        <field name="view_count">67</field>
+        <field name="bookmark_count">12</field>
+        <field name="usefulness_score">7.9</field>
+    </record>
+
+    <record id="article_incident_response_checklist" model="bcm.knowledge.article">
+        <field name="name">Incident Response Checklist: First 60 Minutes</field>
+        <field name="category">troubleshooting</field>
+        <field name="article_type">manual</field>
+        <field name="summary">Quick reference checklist for incident response teams covering critical actions to take within the first hour of a business disruption.</field>
+        <field name="content"><![CDATA[
+<div class="knowledge-article">
+    <h2>Critical First Hour Response Checklist</h2>
+    <p>The first 60 minutes of an incident are crucial for effective response. This checklist ensures all critical actions are taken promptly and in the correct sequence.</p>
+
+    <div class="alert alert-danger">
+        <h4>⚠️ IMMEDIATE ACTIONS (0-15 minutes)</h4>
+        <ul class="checklist">
+            <li>☐ Ensure personnel safety and security</li>
+            <li>☐ Contact emergency services if required (911/local emergency)</li>
+            <li>☐ Activate incident response team</li>
+            <li>☐ Establish incident command structure</li>
+            <li>☐ Secure the incident area</li>
+        </ul>
+    </div>
+
+    <div class="alert alert-warning">
+        <h4>📋 ASSESSMENT PHASE (15-30 minutes)</h4>
+        <ul class="checklist">
+            <li>☐ Conduct initial situation assessment</li>
+            <li>☐ Determine incident scope and impact</li>
+            <li>☐ Identify affected systems and processes</li>
+            <li>☐ Estimate potential downtime</li>
+            <li>☐ Classify incident severity level</li>
+            <li>☐ Document initial findings</li>
+        </ul>
+    </div>
+
+    <div class="alert alert-info">
+        <h4>📞 COMMUNICATION PHASE (30-45 minutes)</h4>
+        <ul class="checklist">
+            <li>☐ Notify senior management</li>
+            <li>☐ Inform affected business units</li>
+            <li>☐ Contact key stakeholders</li>
+            <li>☐ Prepare initial holding statement</li>
+            <li>☐ Set up communication channels</li>
+            <li>☐ Schedule regular update intervals</li>
+        </ul>
+    </div>
+
+    <div class="alert alert-success">
+        <h4>🚀 RESPONSE ACTIVATION (45-60 minutes)</h4>
+        <ul class="checklist">
+            <li>☐ Activate relevant business continuity plans</li>
+            <li>☐ Deploy recovery teams</li>
+            <li>☐ Implement immediate workarounds</li>
+            <li>☐ Contact vendors/suppliers if needed</li>
+            <li>☐ Set up incident management workspace</li>
+            <li>☐ Begin detailed incident log</li>
+        </ul>
+    </div>
+
+    <h3>Key Contact Information</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Primary Contact</th>
+                <th>Backup Contact</th>
+                <th>When to Call</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Incident Commander</td>
+                <td>[Name] - [Phone]</td>
+                <td>[Name] - [Phone]</td>
+                <td>All incidents</td>
+            </tr>
+            <tr>
+                <td>CEO/Senior Management</td>
+                <td>[Name] - [Phone]</td>
+                <td>[Name] - [Phone]</td>
+                <td>Severity 1-2 incidents</td>
+            </tr>
+            <tr>
+                <td>IT Emergency</td>
+                <td>[Name] - [Phone]</td>
+                <td>[Name] - [Phone]</td>
+                <td>Technology-related incidents</td>
+            </tr>
+            <tr>
+                <td>Legal Counsel</td>
+                <td>[Name] - [Phone]</td>
+                <td>[Name] - [Phone]</td>
+                <td>Data breach, regulatory issues</td>
+            </tr>
+            <tr>
+                <td>Public Relations</td>
+                <td>[Name] - [Phone]</td>
+                <td>[Name] - [Phone]</td>
+                <td>Media attention likely</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Incident Classification Criteria</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5>Severity 1 - Critical</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Life safety at risk</li>
+                        <li>Complete system failure</li>
+                        <li>Regulatory violation</li>
+                        <li>Significant revenue impact</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-warning">
+                <div class="card-header bg-warning">
+                    <h5>Severity 2 - High</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Major service degradation</li>
+                        <li>Customer impact</li>
+                        <li>Data compromise risk</li>
+                        <li>Extended downtime</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h5>Severity 3 - Medium</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Minor service impact</li>
+                        <li>Isolated system issues</li>
+                        <li>Workarounds available</li>
+                        <li>Limited scope</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Documentation Requirements</h3>
+    <p>Maintain detailed records from the start:</p>
+    <ul>
+        <li><strong>Timeline:</strong> All actions taken with timestamps</li>
+        <li><strong>Decisions:</strong> Key decisions and rationale</li>
+        <li><strong>Communications:</strong> All internal and external communications</li>
+        <li><strong>Resources:</strong> Personnel and equipment deployed</li>
+        <li><strong>Costs:</strong> Initial cost estimates and actual expenses</li>
+    </ul>
+
+    <div class="alert alert-info">
+        <h4>💡 Pro Tips</h4>
+        <ul>
+            <li>Keep this checklist laminated and easily accessible</li>
+            <li>Pre-populate contact information and update quarterly</li>
+            <li>Practice using this checklist during exercises</li>
+            <li>Customize based on your organization's specific needs</li>
+            <li>Have both digital and physical copies available</li>
+        </ul>
+    </div>
+</div>
+        ]]></field>
+        <field name="tags" eval="[(6, 0, [ref('tag_crisis_management')])]"/>
+        <field name="iso_clauses" eval="[(6, 0, [ref('iso_clause_8_1'), ref('iso_clause_8_4')])]"/>
+        <field name="sequence">50</field>
+        <field name="is_published">True</field>
+        <field name="view_count">198</field>
+        <field name="bookmark_count">34</field>
+        <field name="usefulness_score">9.1</field>
+    </record>
+    </data>
+</odoo>

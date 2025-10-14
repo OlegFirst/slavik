@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Architecture | ISO 22301 BCM Platform</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Architecture" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Enterprise Business Continuity Management Platform powered by AI. Next-generation BCM solution with intelligent automation and predictive analytics." />
+<meta property="og:description" content="Enterprise Business Continuity Management Platform powered by AI. Next-generation BCM solution with intelligent automation and predictive analytics." />
+<link rel="canonical" href="https://seh-foundation.github.io/ISO-22301/architecture/" />
+<meta property="og:url" content="https://seh-foundation.github.io/ISO-22301/architecture/" />
+<meta property="og:site_name" content="ISO 22301 BCM Platform" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Architecture" />
+<meta name="twitter:site" content="@bcmplatform" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Enterprise Business Continuity Management Platform powered by AI. Next-generation BCM solution with intelligent automation and predictive analytics.","headline":"Architecture","url":"https://seh-foundation.github.io/ISO-22301/architecture/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/ISO-22301/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://seh-foundation.github.io/ISO-22301/feed.xml" title="ISO 22301 BCM Platform" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ISO-22301/">ISO 22301 BCM Platform</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ISO-22301/architecture/">Architecture</a><a class="page-link" href="/ISO-22301/modules/">Modules</a><a class="page-link" href="/ISO-22301/technology/">Technology Stack</a><a class="page-link" href="/ISO-22301/roadmap/">Roadmap</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Architecture</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="system-architecture">System Architecture</h1>
+
+<h2 id="platform-architecture-overview">Platform Architecture Overview</h2>
+
+<p>The BCM Platform employs a modern microservices architecture designed for scalability, resilience, and performance. Our architecture ensures that each component can scale independently while maintaining system coherence through event-driven communication.</p>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Presentation Layer"
+        UI[Unified Web Portal]
+        ADMIN[Admin Dashboard]
+        MOBILE[Mobile Applications]
+        API_GW[API Gateway]
+    end
+
+    subgraph "Application Services Layer"
+        subgraph "Core BCM Services"
+            BIA[BIA Engine]
+            RISK[Risk Management]
+            INC[Incident Manager]
+            GOV[Governance Engine]
+            PLAN[Recovery Planner]
+        end
+
+        subgraph "AI Intelligence Layer"
+            AI_ORCH[AI Orchestrator]
+            ML[ML Pipeline]
+            NLP[NLP Processor]
+            PRED[Predictive Analytics]
+        end
+    end
+
+    subgraph "Integration Layer"
+        ESB[Event Service Bus]
+        MSG[Message Queue]
+        ADAPT[Adapters]
+        WEBHOOK[Webhooks]
+    end
+
+    subgraph "Data Layer"
+        PG[(PostgreSQL)]
+        REDIS[(Redis Cache)]
+        ELASTIC[(Elasticsearch)]
+        S3[(Object Storage)]
+    end
+
+    subgraph "Infrastructure Layer"
+        K8S[Kubernetes]
+        MONITOR[Monitoring Stack]
+        LOG[Logging System]
+        SEC[Security Layer]
+    end
+
+    UI --&gt; API_GW
+    ADMIN --&gt; API_GW
+    MOBILE --&gt; API_GW
+    API_GW --&gt; ESB
+
+    ESB --&gt; BIA
+    ESB --&gt; RISK
+    ESB --&gt; INC
+    ESB --&gt; GOV
+    ESB --&gt; PLAN
+
+    BIA --&gt; AI_ORCH
+    RISK --&gt; AI_ORCH
+    INC --&gt; AI_ORCH
+
+    BIA --&gt; PG
+    RISK --&gt; PG
+    INC --&gt; PG
+    GOV --&gt; PG
+    PLAN --&gt; PG
+
+    AI_ORCH --&gt; ML
+    AI_ORCH --&gt; NLP
+    AI_ORCH --&gt; PRED
+
+    ESB --&gt; MSG
+    MSG --&gt; ADAPT
+    ADAPT --&gt; WEBHOOK
+</code></pre>
+
+<hr />
+
+<h2 id="microservices-architecture">Microservices Architecture</h2>
+
+<h3 id="service-mesh-design">Service Mesh Design</h3>
+
+<p>Our platform consists of 37 specialized microservices, each responsible for specific business capabilities:</p>
+
+<pre><code class="language-mermaid">graph LR
+    subgraph "Business Services"
+        BIA_SVC[BIA Service&lt;br/&gt;Port: 8082]
+        RISK_SVC[Risk Service&lt;br/&gt;Port: 8081]
+        INC_SVC[Incident Service&lt;br/&gt;Port: 8003]
+        COMP_SVC[Compliance Service&lt;br/&gt;Port: 8084]
+        DOC_SVC[Document Service&lt;br/&gt;Port: 8083]
+    end
+
+    subgraph "AI Services"
+        AI_CTRL[AI Control Center&lt;br/&gt;Port: 8200]
+        AI_ORCH[AI Orchestrator&lt;br/&gt;Port: 8000]
+        SCEN_ORCH[Scenario Orchestrator&lt;br/&gt;Port: 8085]
+    end
+
+    subgraph "Infrastructure Services"
+        AUTH[Auth Service&lt;br/&gt;Port: 8005]
+        NOTIF[Notification Service&lt;br/&gt;Port: 8004]
+        EVENT[Event Bus&lt;br/&gt;Port: 8001]
+    end
+
+    subgraph "Integration Adapters"
+        HIVE[TheHive Adapter&lt;br/&gt;Port: 8007]
+        LMS[LMS Adapter&lt;br/&gt;Port: 8008]
+        GRAF[Grafana Adapter&lt;br/&gt;Port: 8006]
+    end
+
+    EVENT --&gt; BIA_SVC
+    EVENT --&gt; RISK_SVC
+    EVENT --&gt; INC_SVC
+    EVENT --&gt; COMP_SVC
+
+    BIA_SVC --&gt; AI_ORCH
+    RISK_SVC --&gt; AI_ORCH
+    INC_SVC --&gt; AI_ORCH
+
+    AI_ORCH --&gt; AI_CTRL
+    AI_CTRL --&gt; SCEN_ORCH
+</code></pre>
+
+<h3 id="service-communication-patterns">Service Communication Patterns</h3>
+
+<p><strong>Synchronous Communication</strong></p>
+<ul>
+  <li>REST APIs for client-server interactions</li>
+  <li>GraphQL for flexible data queries</li>
+  <li>gRPC for high-performance inter-service calls</li>
+</ul>
+
+<p><strong>Asynchronous Communication</strong></p>
+<ul>
+  <li>Event-driven architecture using RabbitMQ</li>
+  <li>Pub/Sub patterns for system-wide notifications</li>
+  <li>CQRS for command and query separation</li>
+</ul>
+
+<hr />
+
+<h2 id="data-architecture">Data Architecture</h2>
+
+<h3 id="multi-tenant-data-model">Multi-Tenant Data Model</h3>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Tenant Isolation"
+        T1[Tenant A]
+        T2[Tenant B]
+        T3[Tenant C]
+    end
+
+    subgraph "Shared Schema"
+        SHARED[Shared Tables&lt;br/&gt;- Users&lt;br/&gt;- Permissions&lt;br/&gt;- Templates]
+    end
+
+    subgraph "Tenant Schemas"
+        SCH1[Schema A&lt;br/&gt;- BIA Data&lt;br/&gt;- Risk Data&lt;br/&gt;- Incidents]
+        SCH2[Schema B&lt;br/&gt;- BIA Data&lt;br/&gt;- Risk Data&lt;br/&gt;- Incidents]
+        SCH3[Schema C&lt;br/&gt;- BIA Data&lt;br/&gt;- Risk Data&lt;br/&gt;- Incidents]
+    end
+
+    T1 --&gt; SCH1
+    T2 --&gt; SCH2
+    T3 --&gt; SCH3
+
+    T1 --&gt; SHARED
+    T2 --&gt; SHARED
+    T3 --&gt; SHARED
+</code></pre>
+
+<h3 id="data-flow-architecture">Data Flow Architecture</h3>
+
+<pre><code class="language-mermaid">sequenceDiagram
+    participant User
+    participant API Gateway
+    participant Service
+    participant Cache
+    participant Database
+    participant Event Bus
+
+    User-&gt;&gt;API Gateway: Request
+    API Gateway-&gt;&gt;Service: Authorized Request
+    Service-&gt;&gt;Cache: Check Cache
+
+    alt Cache Hit
+        Cache--&gt;&gt;Service: Cached Data
+    else Cache Miss
+        Service-&gt;&gt;Database: Query Data
+        Database--&gt;&gt;Service: Result Set
+        Service-&gt;&gt;Cache: Update Cache
+    end
+
+    Service--&gt;&gt;API Gateway: Response
+    API Gateway--&gt;&gt;User: JSON Response
+
+    Service-&gt;&gt;Event Bus: Publish Event
+    Event Bus-&gt;&gt;Other Services: Notify Subscribers
+</code></pre>
+
+<hr />
+
+<h2 id="ai-architecture">AI Architecture</h2>
+
+<h3 id="digital-bcm-organism">Digital BCM Organism</h3>
+
+<p>Our unique AI architecture treats the BCM system as a living organism with specialized AI “organs”:</p>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "AI Control Center - The Brain"
+        BRAIN[Central AI Brain&lt;br/&gt;Orchestration &amp; Coordination]
+    end
+
+    subgraph "Sensory Organs"
+        EYES[Risk Scanner&lt;br/&gt;Environmental Monitoring]
+        EARS[Event Listener&lt;br/&gt;Signal Processing]
+        TOUCH[Impact Sensor&lt;br/&gt;Business Pulse]
+    end
+
+    subgraph "Action Organs"
+        VOICE[Communication Hub&lt;br/&gt;Stakeholder Engagement]
+        HANDS[Recovery Executor&lt;br/&gt;Action Implementation]
+    end
+
+    subgraph "Internal Organs"
+        HEART[Performance Monitor&lt;br/&gt;System Health]
+        LUNGS[Resource Manager&lt;br/&gt;Capacity Management]
+        LIVER[Compliance Filter&lt;br/&gt;Regulatory Processing]
+        KIDNEY[Audit Processor&lt;br/&gt;Quality Assurance]
+        STOMACH[Knowledge Digester&lt;br/&gt;Learning System]
+    end
+
+    EYES --&gt; BRAIN
+    EARS --&gt; BRAIN
+    TOUCH --&gt; BRAIN
+
+    BRAIN --&gt; VOICE
+    BRAIN --&gt; HANDS
+
+    BRAIN -.-&gt; HEART
+    BRAIN -.-&gt; LUNGS
+    BRAIN -.-&gt; LIVER
+    BRAIN -.-&gt; KIDNEY
+    BRAIN -.-&gt; STOMACH
+</code></pre>
+
+<h3 id="ml-pipeline-architecture">ML Pipeline Architecture</h3>
+
+<pre><code class="language-mermaid">graph LR
+    subgraph "Data Ingestion"
+        RAW[Raw Data]
+        STREAM[Stream Processing]
+        BATCH[Batch Processing]
+    end
+
+    subgraph "Feature Engineering"
+        EXTRACT[Feature Extraction]
+        TRANSFORM[Transformation]
+        SELECT[Feature Selection]
+    end
+
+    subgraph "Model Training"
+        TRAIN[Training Pipeline]
+        VAL[Validation]
+        TUNE[Hyperparameter Tuning]
+    end
+
+    subgraph "Model Serving"
+        DEPLOY[Model Deployment]
+        PREDICT[Prediction Service]
+        MONITOR[Model Monitoring]
+    end
+
+    RAW --&gt; STREAM
+    RAW --&gt; BATCH
+    STREAM --&gt; EXTRACT
+    BATCH --&gt; EXTRACT
+    EXTRACT --&gt; TRANSFORM
+    TRANSFORM --&gt; SELECT
+    SELECT --&gt; TRAIN
+    TRAIN --&gt; VAL
+    VAL --&gt; TUNE
+    TUNE --&gt; DEPLOY
+    DEPLOY --&gt; PREDICT
+    PREDICT --&gt; MONITOR
+    MONITOR -.-&gt; TRAIN
+</code></pre>
+
+<hr />
+
+<h2 id="security-architecture">Security Architecture</h2>
+
+<h3 id="defense-in-depth">Defense in Depth</h3>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Perimeter Security"
+        WAF[Web Application Firewall]
+        DDoS[DDoS Protection]
+        CDN[Content Delivery Network]
+    end
+
+    subgraph "Network Security"
+        FW[Firewall Rules]
+        IDS[Intrusion Detection]
+        VNET[Virtual Networks]
+    end
+
+    subgraph "Application Security"
+        AUTH[Authentication]
+        AUTHZ[Authorization]
+        AUDIT[Audit Logging]
+    end
+
+    subgraph "Data Security"
+        ENCRYPT[Encryption at Rest]
+        TLS[Encryption in Transit]
+        DLP[Data Loss Prevention]
+    end
+
+    Internet --&gt; WAF
+    WAF --&gt; DDoS
+    DDoS --&gt; CDN
+    CDN --&gt; FW
+    FW --&gt; IDS
+    IDS --&gt; VNET
+    VNET --&gt; AUTH
+    AUTH --&gt; AUTHZ
+    AUTHZ --&gt; AUDIT
+    AUDIT --&gt; ENCRYPT
+    ENCRYPT --&gt; TLS
+    TLS --&gt; DLP
+</code></pre>
+
+<h3 id="zero-trust-architecture">Zero Trust Architecture</h3>
+
+<ul>
+  <li><strong>Identity Verification</strong>: Multi-factor authentication for all users</li>
+  <li><strong>Device Trust</strong>: Device compliance checking and management</li>
+  <li><strong>Network Segmentation</strong>: Microsegmentation and lateral movement prevention</li>
+  <li><strong>Least Privilege</strong>: Role-based access with minimal required permissions</li>
+  <li><strong>Continuous Verification</strong>: Real-time security posture assessment</li>
+</ul>
+
+<hr />
+
+<h2 id="deployment-architecture">Deployment Architecture</h2>
+
+<h3 id="container-orchestration">Container Orchestration</h3>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Production Cluster"
+        subgraph "Master Nodes"
+            M1[Master 1]
+            M2[Master 2]
+            M3[Master 3]
+        end
+
+        subgraph "Worker Nodes"
+            subgraph "Node 1"
+                POD1[BIA Pods]
+                POD2[Risk Pods]
+            end
+            subgraph "Node 2"
+                POD3[AI Pods]
+                POD4[Doc Pods]
+            end
+            subgraph "Node 3"
+                POD5[Event Bus]
+                POD6[Cache Pods]
+            end
+        end
+    end
+
+    subgraph "Storage"
+        PV[Persistent Volumes]
+        S3[Object Storage]
+    end
+
+    subgraph "Load Balancing"
+        LB[Load Balancer]
+        ING[Ingress Controller]
+    end
+
+    LB --&gt; ING
+    ING --&gt; POD1
+    ING --&gt; POD2
+    ING --&gt; POD3
+    ING --&gt; POD4
+
+    POD1 --&gt; PV
+    POD2 --&gt; PV
+    POD3 --&gt; S3
+    POD4 --&gt; S3
+</code></pre>
+
+<h3 id="high-availability-design">High Availability Design</h3>
+
+<ul>
+  <li><strong>Multi-Region Deployment</strong>: Active-active configuration across regions</li>
+  <li><strong>Auto-Scaling</strong>: Horizontal pod autoscaling based on metrics</li>
+  <li><strong>Self-Healing</strong>: Automatic container restart and node replacement</li>
+  <li><strong>Load Distribution</strong>: Intelligent traffic routing and load balancing</li>
+  <li><strong>Disaster Recovery</strong>: Automated backup and recovery procedures</li>
+</ul>
+
+<hr />
+
+<h2 id="integration-architecture">Integration Architecture</h2>
+
+<h3 id="api-gateway-pattern">API Gateway Pattern</h3>
+
+<pre><code class="language-mermaid">graph LR
+    subgraph "External Clients"
+        WEB[Web App]
+        MOB[Mobile App]
+        THIRD[3rd Party]
+    end
+
+    subgraph "API Gateway"
+        ROUTE[Routing]
+        AUTH[Authentication]
+        LIMIT[Rate Limiting]
+        CACHE[Response Cache]
+        TRANS[Protocol Translation]
+    end
+
+    subgraph "Backend Services"
+        SVC1[Service A]
+        SVC2[Service B]
+        SVC3[Service C]
+    end
+
+    WEB --&gt; ROUTE
+    MOB --&gt; ROUTE
+    THIRD --&gt; ROUTE
+
+    ROUTE --&gt; AUTH
+    AUTH --&gt; LIMIT
+    LIMIT --&gt; CACHE
+    CACHE --&gt; TRANS
+
+    TRANS --&gt; SVC1
+    TRANS --&gt; SVC2
+    TRANS --&gt; SVC3
+</code></pre>
+
+<h3 id="event-driven-integration">Event-Driven Integration</h3>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Event Producers"
+        P1[BIA Service]
+        P2[Risk Service]
+        P3[Incident Service]
+    end
+
+    subgraph "Event Bus"
+        TOPIC1[Risk Events]
+        TOPIC2[Incident Events]
+        TOPIC3[Compliance Events]
+    end
+
+    subgraph "Event Consumers"
+        C1[Notification Service]
+        C2[Audit Service]
+        C3[Analytics Service]
+        C4[AI Orchestrator]
+    end
+
+    P1 --&gt; TOPIC1
+    P2 --&gt; TOPIC1
+    P2 --&gt; TOPIC2
+    P3 --&gt; TOPIC2
+    P3 --&gt; TOPIC3
+
+    TOPIC1 --&gt; C1
+    TOPIC1 --&gt; C3
+    TOPIC1 --&gt; C4
+
+    TOPIC2 --&gt; C1
+    TOPIC2 --&gt; C2
+    TOPIC2 --&gt; C4
+
+    TOPIC3 --&gt; C2
+    TOPIC3 --&gt; C3
+</code></pre>
+
+<hr />
+
+<h2 id="performance-architecture">Performance Architecture</h2>
+
+<h3 id="caching-strategy">Caching Strategy</h3>
+
+<ul>
+  <li><strong>Multi-Level Caching</strong>: Browser, CDN, API Gateway, Application, Database</li>
+  <li><strong>Cache Invalidation</strong>: Event-driven cache invalidation for consistency</li>
+  <li><strong>Distributed Caching</strong>: Redis cluster for session and data caching</li>
+  <li><strong>Query Optimization</strong>: Materialized views and query result caching</li>
+</ul>
+
+<h3 id="scalability-patterns">Scalability Patterns</h3>
+
+<ul>
+  <li><strong>Horizontal Scaling</strong>: Stateless services with shared-nothing architecture</li>
+  <li><strong>Database Sharding</strong>: Partition data by tenant and time</li>
+  <li><strong>Read Replicas</strong>: Separate read and write workloads</li>
+  <li><strong>Async Processing</strong>: Queue-based processing for heavy operations</li>
+</ul>
+
+<hr />
+
+<h2 id="monitoring-architecture">Monitoring Architecture</h2>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph "Metrics Collection"
+        PROM[Prometheus]
+        METRICS[Service Metrics]
+        CUSTOM[Custom Metrics]
+    end
+
+    subgraph "Log Aggregation"
+        FLUENT[Fluentd]
+        ELASTIC[Elasticsearch]
+        LOGS[Application Logs]
+    end
+
+    subgraph "Tracing"
+        JAEGER[Jaeger]
+        TRACE[Distributed Traces]
+    end
+
+    subgraph "Visualization"
+        GRAF[Grafana Dashboards]
+        KIBANA[Kibana Logs]
+        ALERT[Alert Manager]
+    end
+
+    METRICS --&gt; PROM
+    CUSTOM --&gt; PROM
+    PROM --&gt; GRAF
+
+    LOGS --&gt; FLUENT
+    FLUENT --&gt; ELASTIC
+    ELASTIC --&gt; KIBANA
+
+    TRACE --&gt; JAEGER
+    JAEGER --&gt; GRAF
+
+    GRAF --&gt; ALERT
+    KIBANA --&gt; ALERT
+</code></pre>
+
+<hr />
+
+<h2 id="technology-standards">Technology Standards</h2>
+
+<h3 id="development-standards">Development Standards</h3>
+<ul>
+  <li><strong>Languages</strong>: Python 3.11+, TypeScript 5+, Go 1.21+</li>
+  <li><strong>Frameworks</strong>: FastAPI, Next.js 15, React 19</li>
+  <li><strong>Testing</strong>: 80% code coverage requirement</li>
+  <li><strong>Documentation</strong>: OpenAPI 3.0 specifications</li>
+</ul>
+
+<h3 id="operational-standards">Operational Standards</h3>
+<ul>
+  <li><strong>Containers</strong>: Docker with multi-stage builds</li>
+  <li><strong>Orchestration</strong>: Kubernetes 1.28+</li>
+  <li><strong>CI/CD</strong>: GitOps with ArgoCD</li>
+  <li><strong>Monitoring</strong>: OpenTelemetry standards</li>
+</ul>
+
+<h3 id="security-standards">Security Standards</h3>
+<ul>
+  <li><strong>Encryption</strong>: TLS 1.3 minimum</li>
+  <li><strong>Authentication</strong>: OAuth 2.0 / OpenID Connect</li>
+  <li><strong>Secrets</strong>: HashiCorp Vault integration</li>
+  <li><strong>Compliance</strong>: SOC 2, ISO 27001 aligned</li>
+</ul>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ISO-22301/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ISO 22301 BCM Platform</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ISO 22301 BCM Platform</li><li><a class="u-email" href="mailto:contact@bcm-platform.com">contact@bcm-platform.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Enterprise Business Continuity Management Platform powered by AI. Next-generation BCM solution with intelligent automation and predictive analytics.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    themeVariables: {
+      primaryColor: '#2563eb',
+      primaryTextColor: '#fff',
+      primaryBorderColor: '#1e40af',
+      lineColor: '#6b7280',
+      secondaryColor: '#f3f4f6',
+      tertiaryColor: '#e5e7eb',
+      background: '#ffffff',
+      mainBkg: '#2563eb',
+      secondBkg: '#f3f4f6',
+      tertiaryBkg: '#e5e7eb',
+      primaryFontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+    },
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+      padding: 20
+    },
+    sequence: {
+      diagramMarginX: 50,
+      diagramMarginY: 50,
+      actorMargin: 50,
+      width: 150,
+      height: 65,
+      boxMargin: 10,
+      boxTextMargin: 5,
+      noteMargin: 10,
+      messageMargin: 35,
+      mirrorActors: true
+    }
+  });
+</script></body>
+
+</html>

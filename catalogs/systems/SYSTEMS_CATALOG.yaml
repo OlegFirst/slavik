@@ -1,0 +1,696 @@
+# Functional Systems Catalog - AI Platform ISO 22301
+# Last Updated: 2025-10-12
+# Source: FUNCTIONAL_SYSTEMS_ANALYSIS.md by Agent
+# Architecture Approach: FUNCTIONAL (not technical grouping)
+# Total Functional Systems: 19
+
+version: 1.0.0
+created_date: '2025-10-12'
+total_systems: 19
+active_systems: 19
+architecture_approach: "functional"
+
+# ===================================================================
+# ARCHITECTURE PHILOSOPHY
+# ===================================================================
+# Systems organized by PURPOSE (what they do) not TECHNOLOGY (what they use)
+# Each system represents a functional capability of the platform
+# Examples: Startup System, Resilience System, Security System, etc.
+
+functional_systems:
+  # =================================================================
+  # 1. 🚀 СИСТЕМА ЗАПУСКА И ОРКЕСТРАЦИИ (STARTUP & ORCHESTRATION)
+  # =================================================================
+  - id: startup_orchestration_system
+    name: "Система запуска и оркестрации"
+    name_en: "Startup & Orchestration System"
+    icon: "🚀"
+    category: "infrastructure_management"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Manages service lifecycle, coordinates startup, monitors system state"
+      business_value: "Ensures platform starts reliably and all services coordinate properly"
+
+    key_services:
+      - service_discovery    # Service registry and coordination
+      - mio_manager         # Platform observatory & coordinator
+      - ai_orchestration    # AI decision-making and coordination
+
+    capabilities:
+      - "Service registration and discovery"
+      - "Startup sequence coordination"
+      - "Health monitoring of all services"
+      - "Platform state tracking"
+      - "Service dependency management"
+      - "Graceful shutdown coordination"
+
+  # =================================================================
+  # 2. 🛡️ СИСТЕМА ОТКАЗОУСТОЙЧИВОСТИ (RESILIENCE & FAILOVER)
+  # =================================================================
+  - id: resilience_system
+    name: "Система отказоустойчивости"
+    name_en: "Resilience & Failover System"
+    icon: "🛡️"
+    category: "reliability"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Ensures continuous operation, recovery after failures, self-healing"
+      business_value: "Platform remains operational even when components fail"
+
+    key_services:
+      - event_intelligence      # Self-healing and error analysis
+      - system_bcm_service     # Platform self-application of BCM
+      - api_gateway            # Circuit breaker pattern
+
+    capabilities:
+      - "Automatic failure detection"
+      - "Self-healing code repairs"
+      - "Circuit breaker pattern"
+      - "Automatic recovery procedures (7 procedures)"
+      - "Platform health monitoring (29 services)"
+      - "RTO monitoring and enforcement"
+
+  # =================================================================
+  # 3. 🔒 СИСТЕМА БЕЗОПАСНОСТИ (SECURITY & ACCESS CONTROL)
+  # =================================================================
+  - id: security_system
+    name: "Система безопасности"
+    name_en: "Security & Access Control System"
+    icon: "🔒"
+    category: "security"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Authentication, authorization, secrets management, security audit"
+      business_value: "Protects platform and data from unauthorized access"
+
+    key_services:
+      - auth_service       # JWT authentication & RBAC
+      - vault             # HashiCorp Vault secrets
+      - api_gateway       # Auth validation
+
+    capabilities:
+      - "JWT authentication"
+      - "Role-Based Access Control (RBAC)"
+      - "Secrets management and rotation"
+      - "Audit logging (100% request logging)"
+      - "Multi-factor authentication (MFA)"
+      - "Token validation (<100ms)"
+
+  # =================================================================
+  # 4. 📊 СИСТЕМА МОНИТОРИНГА И НАБЛЮДАЕМОСТИ (MONITORING)
+  # =================================================================
+  - id: monitoring_system
+    name: "Система мониторинга и наблюдаемости"
+    name_en: "Monitoring & Observability System"
+    icon: "📊"
+    category: "operations"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Metrics, logs, tracing, visualization, alerting"
+      business_value: "Full visibility into platform operations and health"
+
+    key_services:
+      - prometheus         # Metrics collection
+      - grafana           # Visualization dashboards
+      - mio_manager       # Platform observatory
+      - db_intelligence   # Database performance monitoring
+
+    capabilities:
+      - "Metrics collection from all services"
+      - "18 pre-configured dashboards"
+      - "Real-time alerting"
+      - "Service health tracking"
+      - "Performance monitoring"
+      - "Database query optimization"
+
+  # =================================================================
+  # 5. 🔍 СИСТЕМА АНАЛИТИКИ (ANALYTICS & INTELLIGENCE)
+  # =================================================================
+  - id: analytics_system
+    name: "Система аналитики"
+    name_en: "Analytics & Intelligence System"
+    icon: "🔍"
+    category: "intelligence"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "Data analysis, business intelligence, pattern detection, insights"
+      business_value: "Data-driven decision making and continuous improvement"
+
+    key_services:
+      - analytics_specialist      # Platform analytics expert
+      - community_intelligence    # Peer knowledge analysis
+      - process_analytics        # Process performance analytics
+
+    capabilities:
+      - "System health analysis"
+      - "Code dependency mapping"
+      - "API usage analysis"
+      - "Performance bottleneck detection"
+      - "Metrics discovery"
+      - "Security scanning"
+
+  # =================================================================
+  # 6. 💾 СИСТЕМА ХРАНЕНИЯ ДАННЫХ (DATA STORAGE)
+  # =================================================================
+  - id: data_storage_system
+    name: "Система хранения данных"
+    name_en: "Data Storage System"
+    icon: "💾"
+    category: "infrastructure"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Storage of relational, cache, vector, and time-series data"
+      business_value: "Reliable and fast data storage for entire platform"
+
+    key_services:
+      - postgresql    # Primary relational database
+      - redis        # Cache and sessions
+      - qdrant       # Vector database for RAG
+
+    capabilities:
+      - "Persistent relational storage (PostgreSQL)"
+      - "Fast caching (<5ms, Redis)"
+      - "Semantic search (Qdrant)"
+      - "29 database schemas"
+      - "Row-Level Security (RLS)"
+      - "Real-time subscriptions"
+
+  # =================================================================
+  # 7. 🌐 API И КОММУНИКАЦИИ (API & COMMUNICATION)
+  # =================================================================
+  - id: api_communication_system
+    name: "API и коммуникации"
+    name_en: "API & Communication System"
+    icon: "🌐"
+    category: "infrastructure"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "HTTP API, WebSocket, message queues, sync/async communication"
+      business_value: "Unified communication layer for all platform interactions"
+
+    key_services:
+      - api_gateway           # Unified API entry point
+      - realtime_websocket    # Real-time updates
+      - message_queue        # Async task queuing (planned)
+      - eventbus             # Event-driven messaging
+
+    capabilities:
+      - "Unified API gateway (<50ms routing)"
+      - "Real-time WebSocket connections"
+      - "Async message queuing"
+      - "Rate limiting (10,000 req/min)"
+      - "Load balancing"
+      - "Request/response logging"
+
+  # =================================================================
+  # 8. 📚 СИСТЕМА ОБУЧЕНИЯ И ЗНАНИЙ (LEARNING & KNOWLEDGE)
+  # =================================================================
+  - id: learning_system
+    name: "Система обучения и знаний"
+    name_en: "Learning & Knowledge System"
+    icon: "📚"
+    category: "ai"
+    status: production
+    criticality: medium
+
+    description:
+      purpose: "Knowledge management, personnel training, competencies, self-learning AI"
+      business_value: "Continuous learning and knowledge sharing across platform"
+
+    key_services:
+      - learning_service      # Personnel training and competencies
+      - ai_foundation        # RAG and knowledge base
+      - expertise_center     # Domain-specific knowledge
+
+    capabilities:
+      - "RAG with Qdrant embeddings"
+      - "Domain-specific AI assistants"
+      - "Personnel training programs"
+      - "Competency tracking"
+      - "Knowledge base management"
+      - "Pattern learning from history"
+
+  # =================================================================
+  # 9. 🔮 СИСТЕМА ПРЕДСКАЗАНИЙ (PREDICTIVE INTELLIGENCE)
+  # =================================================================
+  - id: predictive_system
+    name: "Система предсказаний"
+    name_en: "Predictive Intelligence System"
+    icon: "🔮"
+    category: "ai"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "Risk forecasting, machine learning, predictive analytics"
+      business_value: "Proactive problem prevention through prediction"
+
+    key_services:
+      - predictive            # Journey and certification forecasting
+      - analytics_specialist  # ML-based analytics
+      - ai_foundation        # ML models and training
+
+    capabilities:
+      - "90-day journey prediction"
+      - "ISO 22301 certification forecasting"
+      - "Expert demand prediction"
+      - "Challenge prediction with mitigation"
+      - "Daily proactive digest (8:00 AM)"
+      - "85% prediction accuracy target"
+
+  # =================================================================
+  # 10. 🤖 AI ОРКЕСТРАЦИЯ (AI ORCHESTRATION)
+  # =================================================================
+  - id: ai_orchestration_system
+    name: "AI Оркестрация"
+    name_en: "AI Orchestration System"
+    icon: "🤖"
+    category: "ai"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "AI agent coordination, task distribution, collective intelligence"
+      business_value: "Coordinated AI decision-making across platform"
+
+    key_services:
+      - ai_orchestration      # The Brain - autonomous decision-making
+      - agent_router         # AI request routing
+      - coordination_center  # Multi-agent coordination (planned)
+
+    capabilities:
+      - "Autonomous decision-making"
+      - "4-layer memory system"
+      - "Context aggregation from multiple sources"
+      - "Strategy selection from historical cases"
+      - "Safety-first architecture"
+      - "Task delegation (<5s)"
+
+  # =================================================================
+  # 11. 👥 КОЛЛЕКТИВНЫЙ AI (COMMUNITY INTELLIGENCE)
+  # =================================================================
+  - id: community_intelligence_system
+    name: "Коллективный AI"
+    name_en: "Community Intelligence System"
+    icon: "👥"
+    category: "ai"
+    status: production
+    criticality: medium
+
+    description:
+      purpose: "Peer knowledge sharing, community insights, collaborative learning"
+      business_value: "Collective wisdom from all organizations using platform"
+
+    key_services:
+      - community_intelligence    # Peer review and knowledge sharing
+      - collective               # Privacy-preserving collective agents
+      - expertise_center         # Community expertise
+
+    capabilities:
+      - "Auto-contribution from workflows"
+      - "Peer review system"
+      - "Reputation engine (gamification)"
+      - "Privacy-preserving collective agents (k-anonymity k≥5)"
+      - "Case library with anonymization"
+      - "Automatic stuck organization detection"
+
+  # =================================================================
+  # 12. 🧬 СИСТЕМА ЭВОЛЮЦИИ (EVOLUTION & SELF-IMPROVEMENT)
+  # =================================================================
+  - id: evolution_system
+    name: "Система эволюции"
+    name_en: "Evolution & Self-Improvement System"
+    icon: "🧬"
+    category: "ai"
+    status: production
+    criticality: medium
+
+    description:
+      purpose: "Self-learning, adaptation, automatic system improvement"
+      business_value: "Platform improves itself over time automatically"
+
+    key_services:
+      - event_intelligence    # Pattern detection and learning
+      - ai_orchestration     # Self-evolution engine
+      - learning_service     # Learning from experience
+
+    capabilities:
+      - "Pattern detection from platform events"
+      - "Automated code healing"
+      - "Self-learning from operations"
+      - "Evolution engine (automatic improvement)"
+      - "Adaptation based on usage patterns"
+      - "Continuous optimization"
+
+  # =================================================================
+  # 13. 📋 BCM BUSINESS LOGIC
+  # =================================================================
+  - id: bcm_business_system
+    name: "BCM Business Logic"
+    name_en: "BCM Business Logic System"
+    icon: "📋"
+    category: "business"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "BCM business logic: BIA, Risk, Plans, Governance, Compliance"
+      business_value: "Complete ISO 22301 compliant BCM capabilities"
+
+    key_services:
+      - bia_service          # Business Impact Analysis
+      - risk_service         # Risk assessment
+      - plans_service        # BCM plans
+      - governance_service   # Governance
+      - compliance_service   # Compliance monitoring
+      - response_service     # Incident response
+
+    capabilities:
+      - "Business Impact Analysis (ISO 8.2.2)"
+      - "Risk Assessment (ISO 8.2.3)"
+      - "BCM Plan Management (ISO 8.3)"
+      - "Incident Response (ISO 8.4)"
+      - "Compliance checking (ISO 9.1)"
+      - "Governance framework"
+
+  # =================================================================
+  # 14. ⚙️ WORKFLOW MANAGEMENT
+  # =================================================================
+  - id: workflow_system
+    name: "Workflow Management"
+    name_en: "Workflow Management System"
+    icon: "⚙️"
+    category: "orchestration"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "Business process management, workflow engine, orchestration"
+      business_value: "Automated business process execution and optimization"
+
+    key_services:
+      - workflow_intelligence     # Temporal-based orchestration
+      - workflow_engine          # BPMN 2.0 execution
+      - ai_workflow_optimizer    # ML-powered optimization
+
+    capabilities:
+      - "BPMN 2.0 workflow execution"
+      - "Temporal workflow orchestration"
+      - "Process instance lifecycle management"
+      - "AI-powered workflow optimization"
+      - "Bottleneck detection"
+      - "Execution time prediction"
+
+  # =================================================================
+  # 15. 📡 EVENT-DRIVEN ARCHITECTURE
+  # =================================================================
+  - id: event_driven_system
+    name: "Event-Driven Architecture"
+    name_en: "Event-Driven Architecture System"
+    icon: "📡"
+    category: "infrastructure"
+    status: production
+    criticality: critical
+
+    description:
+      purpose: "Asynchronous event processing, pub/sub, event sourcing"
+      business_value: "Loosely-coupled microservices communication"
+
+    key_services:
+      - eventbus               # Event publishing and subscription
+      - event_intelligence     # Intelligent event analysis
+      - realtime_websocket    # Real-time event streaming
+
+    capabilities:
+      - "Event publishing and subscription"
+      - "Redis Streams backend"
+      - "Event pattern detection"
+      - "Domain detection"
+      - "Real-time event streaming to UI"
+      - "Event filtering by pattern"
+
+  # =================================================================
+  # 16. 🧠 AI FOUNDATION INFRASTRUCTURE
+  # =================================================================
+  - id: ai_foundation_system
+    name: "AI Foundation Infrastructure"
+    name_en: "AI Foundation Infrastructure System"
+    icon: "🧠"
+    category: "ai"
+    status: production
+    criticality: high
+
+    description:
+      purpose: "Core AI capabilities: RAG, embeddings, LLM integration"
+      business_value: "Foundation for all AI features on platform"
+
+    key_services:
+      - ai_foundation      # RAG, embeddings, LLM
+      - qdrant            # Vector database
+      - expertise_center  # Domain-specific AI
+
+    capabilities:
+      - "RAG (Retrieval-Augmented Generation)"
+      - "OpenAI embeddings (ada-002)"
+      - "Qdrant vector search"
+      - "LLM integration (OpenAI, Claude)"
+      - "Domain-specific AI assistants"
+      - "Context retrieval for AI queries"
+
+  # =================================================================
+  # 17. 🔧 DEVOPS & INFRASTRUCTURE
+  # =================================================================
+  - id: devops_system
+    name: "DevOps & Infrastructure"
+    name_en: "DevOps & Infrastructure System"
+    icon: "🔧"
+    category: "operations"
+    status: production
+    criticality: medium
+
+    description:
+      purpose: "Deployment automation, CI/CD, infrastructure management"
+      business_value: "Automated infrastructure operations and deployment"
+
+    key_services:
+      - devops_agent         # Infrastructure automation
+      - project_agent        # Project management
+      - service_discovery    # Service coordination
+
+    capabilities:
+      - "Automated infrastructure management"
+      - "Project task tracking"
+      - "Service registration automation"
+      - "Health check automation"
+      - "Deployment orchestration"
+      - "Infrastructure as code"
+
+  # =================================================================
+  # 18. ✅ TESTING & VALIDATION
+  # =================================================================
+  - id: testing_system
+    name: "Testing & Validation"
+    name_en: "Testing & Validation System"
+    icon: "✅"
+    category: "quality"
+    status: production
+    criticality: medium
+
+    description:
+      purpose: "Testing, validation, exercises, audit, CAPA"
+      business_value: "Ensures platform quality and compliance"
+
+    key_services:
+      - validation_service    # Testing and validation
+      - tests                # Shared test infrastructure
+      - devops_agent         # Automated testing
+
+    capabilities:
+      - "BCM exercise execution"
+      - "Validation workflows"
+      - "Test infrastructure"
+      - "Audit trail generation"
+      - "CAPA (Corrective Action Preventive Action)"
+      - "Compliance validation"
+
+  # =================================================================
+  # 19. 🖥️ USER INTERFACE LAYER
+  # =================================================================
+  - id: ui_system
+    name: "User Interface Layer"
+    name_en: "User Interface Layer System"
+    icon: "🖥️"
+    category: "frontend"
+    status: reserved
+    criticality: medium
+
+    description:
+      purpose: "User interfaces for end-users and administrators"
+      business_value: "User-friendly access to platform capabilities"
+
+    key_services:
+      - admin_panel          # System administration (reserved)
+      - platform_ui          # End-user interface (reserved)
+      - mcp_interface        # Model Context Protocol (reserved)
+
+    capabilities:
+      - "Admin dashboard (planned)"
+      - "End-user BCM interface (planned)"
+      - "Real-time updates via WebSocket"
+      - "Model Context Protocol interface (planned)"
+      - "System configuration UI"
+      - "Monitoring dashboards"
+
+# ===================================================================
+# FUNCTIONAL SYSTEM STATISTICS
+# ===================================================================
+statistics:
+  total_systems: 19
+  by_category:
+    infrastructure_management: 1    # Startup & Orchestration
+    reliability: 1                  # Resilience
+    security: 1                     # Security
+    operations: 2                   # Monitoring, DevOps
+    intelligence: 1                 # Analytics
+    infrastructure: 2               # Data Storage, Event-Driven
+    ai: 6                          # Learning, Predictive, Orchestration, Community, Evolution, Foundation
+    business: 1                     # BCM Business Logic
+    orchestration: 1                # Workflow Management
+    quality: 1                      # Testing & Validation
+    frontend: 1                     # User Interface
+
+  by_status:
+    production: 17
+    reserved: 1
+    planned: 1
+
+  by_criticality:
+    critical: 7
+    high: 7
+    medium: 5
+
+# ===================================================================
+# SYSTEM RELATIONSHIPS (FUNCTIONAL DEPENDENCIES)
+# ===================================================================
+system_relationships:
+  # Foundation systems (all depend on these)
+  - system: data_storage_system
+    depends_on: []
+    used_by: [all_systems]
+    relationship_type: "foundation"
+
+  - system: event_driven_system
+    depends_on: [data_storage_system]
+    used_by: [most_systems]
+    relationship_type: "foundation"
+
+  # Startup depends on nothing (it starts everything)
+  - system: startup_orchestration_system
+    depends_on: [data_storage_system]
+    used_by: []
+    relationship_type: "initialization"
+
+  # Security protects everything
+  - system: security_system
+    depends_on: [data_storage_system]
+    protects: [all_systems]
+    relationship_type: "cross_cutting"
+
+  # Monitoring observes everything
+  - system: monitoring_system
+    depends_on: [data_storage_system]
+    monitors: [all_systems]
+    relationship_type: "cross_cutting"
+
+  # AI systems enhance business systems
+  - system: ai_orchestration_system
+    depends_on: [data_storage_system, event_driven_system, ai_foundation_system]
+    enhances: [bcm_business_system, workflow_system]
+    relationship_type: "enhancement"
+
+  # Business logic uses workflows
+  - system: bcm_business_system
+    depends_on: [data_storage_system, workflow_system, security_system]
+    enhanced_by: [ai_orchestration_system, predictive_system]
+    relationship_type: "business_operation"
+
+# ===================================================================
+# DEPLOYMENT GROUPS (by functional capability)
+# ===================================================================
+deployment_groups:
+  group_1_foundation:
+    name: "Foundation Systems"
+    order: 1
+    systems:
+      - data_storage_system
+      - event_driven_system
+      - api_communication_system
+
+  group_2_security_operations:
+    name: "Security & Operations"
+    order: 2
+    systems:
+      - security_system
+      - monitoring_system
+      - startup_orchestration_system
+      - resilience_system
+
+  group_3_ai_intelligence:
+    name: "AI Intelligence"
+    order: 3
+    systems:
+      - ai_foundation_system
+      - ai_orchestration_system
+      - predictive_system
+      - learning_system
+
+  group_4_business_workflows:
+    name: "Business & Workflows"
+    order: 4
+    systems:
+      - bcm_business_system
+      - workflow_system
+      - analytics_system
+
+  group_5_collaboration:
+    name: "Collaboration & Evolution"
+    order: 5
+    systems:
+      - community_intelligence_system
+      - evolution_system
+      - testing_system
+
+  group_6_management_ui:
+    name: "Management & UI"
+    order: 6
+    systems:
+      - devops_system
+      - ui_system
+
+# ===================================================================
+# METADATA
+# ===================================================================
+catalog_metadata:
+  generated_by: "Agent Analysis (FUNCTIONAL_SYSTEMS_ANALYSIS.md) + Manual Refinement"
+  generation_date: "2025-10-12"
+  version: "1.0.0"
+  source: "FUNCTIONAL_SYSTEMS_ANALYSIS.md"
+  architecture_approach: "FUNCTIONAL (purpose-based, not technology-based)"
+  total_systems: 19
+  total_services: 46
+  correction: "Rebuilt from 3 technical systems to 19 functional systems"
+  user_feedback: "системаили подсистема запуска, отказоустойчивости, тестирвооания, безопастнотси, обучения, система предсаказний, симстема коллекктивного ии, комьюнити, система эвоюции, система, балансировки, система, апи , мониоринга6 аналитики, всм истема, и тд"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM BIA Multi-tenant Rules -->
+        
+        <!-- Business Process Rules -->
+        <record id="bcm_business_process_company_rule" model="ir.rule">
+            <field name="name">BCM Business Process: Company Rule</field>
+            <field name="model_id" ref="model_bcm_business_process"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Process Dependency Rules -->
+        <record id="bcm_process_dependency_company_rule" model="ir.rule">
+            <field name="name">BCM Process Dependency: Company Rule</field>
+            <field name="model_id" ref="model_bcm_process_dependency"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Resource Requirement Rules -->
+        <record id="bcm_resource_requirement_company_rule" model="ir.rule">
+            <field name="name">BCM Resource Requirement: Company Rule</field>
+            <field name="model_id" ref="model_bcm_resource_requirement"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Impact Analysis Rules -->
+        <record id="bcm_impact_analysis_company_rule" model="ir.rule">
+            <field name="name">BCM Impact Analysis: Company Rule</field>
+            <field name="model_id" ref="model_bcm_impact_analysis"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

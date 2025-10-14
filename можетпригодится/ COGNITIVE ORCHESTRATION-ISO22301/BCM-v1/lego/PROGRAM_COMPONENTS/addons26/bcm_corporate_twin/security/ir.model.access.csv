@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_corporate_twin_user,bcm.corporate.twin user,model_bcm_corporate_twin,base.group_user,1,0,0,0
+access_bcm_corporate_twin_manager,bcm.corporate.twin manager,model_bcm_corporate_twin,base.group_system,1,1,1,1
+access_bcm_corporate_financial_user,bcm.corporate.financial user,model_bcm_corporate_financial,base.group_user,1,0,0,0
+access_bcm_corporate_financial_manager,bcm.corporate.financial manager,model_bcm_corporate_financial,base.group_system,1,1,1,1
+access_bcm_corporate_supply_chain_user,bcm.corporate.supply_chain user,model_bcm_corporate_supply_chain,base.group_user,1,0,0,0
+access_bcm_corporate_supply_chain_manager,bcm.corporate.supply_chain manager,model_bcm_corporate_supply_chain,base.group_system,1,1,1,1
+access_bcm_corporate_compliance_user,bcm.corporate.compliance user,model_bcm_corporate_compliance,base.group_user,1,0,0,0
+access_bcm_corporate_compliance_manager,bcm.corporate.compliance manager,model_bcm_corporate_compliance,base.group_system,1,1,1,1

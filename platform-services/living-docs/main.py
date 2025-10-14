@@ -27,6 +27,9 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from api import documentation
 from config import settings
+from prometheus_client import Counter, Histogram, Gauge, make_asgi_app
+from starlette.middleware.base import BaseHTTPMiddleware
+import time
 
 # Configure logging
 logging.basicConfig(
@@ -34,6 +37,139 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# ================================================
+# PROMETHEUS METRICS
+# ================================================
+
+# Request metrics
+living_docs_requests_total = Counter(
+    'living_docs_requests_total',
+    'Total number of requests to Living Docs service',
+    ['method', 'endpoint', 'status']
+)
+
+living_docs_request_duration_seconds = Histogram(
+    'living_docs_request_duration_seconds',
+    'Request duration in seconds',
+    ['method', 'endpoint']
+)
+
+# AI Generation metrics
+living_docs_ai_generations = Counter(
+    'living_docs_ai_generations',
+    'Total number of AI content generations',
+    ['generation_type', 'status']
+)
+
+living_docs_ai_generation_duration_seconds = Histogram(
+    'living_docs_ai_generation_duration_seconds',
+    'AI generation duration in seconds',
+    ['generation_type']
+)
+
+# Quality metrics
+living_docs_quality_score = Gauge(
+    'living_docs_quality_score',
+    'Average quality score of documentation pages',
+    ['page_type']
+)
+
+living_docs_helpful_votes_total = Counter(
+    'living_docs_helpful_votes_total',
+    'Total helpful votes',
+    ['helpful']
+)
+
+# Personalization metrics
+living_docs_personalization_cache_hits = Counter(
+    'living_docs_personalization_cache_hits',
+    'Cache hits for personalized content',
+    ['cache_type']
+)
+
+living_docs_personalization_cache_misses = Counter(
+    'living_docs_personalization_cache_misses',
+    'Cache misses for personalized content',
+    ['cache_type']
+)
+
+living_docs_personalized_requests = Counter(
+    'living_docs_personalized_requests',
+    'Total personalized content requests',
+    ['industry', 'user_level']
+)
+
+# Search metrics
+living_docs_searches_total = Counter(
+    'living_docs_searches_total',
+    'Total search requests',
+    ['search_type']
+)
+
+living_docs_search_results = Histogram(
+    'living_docs_search_results',
+    'Number of search results returned',
+    ['search_type']
+)
+
+# Improvement metrics
+living_docs_improvements_queued = Gauge(
+    'living_docs_improvements_queued',
+    'Number of documentation improvements queued'
+)
+
+living_docs_gaps_detected = Gauge(
+    'living_docs_gaps_detected',
+    'Number of knowledge gaps detected'
+)
+
+# User engagement
+living_docs_page_views = Counter(
+    'living_docs_page_views',
+    'Total page views',
+    ['page_id']
+)
+
+living_docs_time_on_page_seconds = Histogram(
+    'living_docs_time_on_page_seconds',
+    'Time spent on page',
+    ['page_id']
+)
+
+
+# ================================================
+# PROMETHEUS MIDDLEWARE
+# ================================================
+
+class PrometheusMiddleware(BaseHTTPMiddleware):
+    """Middleware to track request metrics"""
+
+    async def dispatch(self, request, call_next):
+        # Skip metrics endpoint
+        if request.url.path == "/metrics":
+            return await call_next(request)
+
+        start_time = time.time()
+
+        # Process request
+        response = await call_next(request)
+
+        # Record metrics
+        duration = time.time() - start_time
+
+        living_docs_requests_total.labels(
+            method=request.method,
+            endpoint=request.url.path,
+            status=response.status_code
+        ).inc()
+
+        living_docs_request_duration_seconds.labels(
+            method=request.method,
+            endpoint=request.url.path
+        ).observe(duration)
+
+        return response
 
 # ================================================
 # LIFECYCLE
@@ -225,6 +361,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Prometheus middleware
+app.add_middleware(PrometheusMiddleware)
+
 # ================================================
 # ROUTES
 # ================================================
@@ -268,6 +407,27 @@ async def root():
         ]
     }
 
+@app.get("/metrics")
+async def metrics():
+    """
+    Prometheus metrics endpoint
+
+    Exposes metrics for:
+    - Request counts and durations
+    - AI generation metrics
+    - Quality scores
+    - Personalization cache performance
+    - Search metrics
+    - User engagement
+    """
+    from starlette.responses import Response
+    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
+    return Response(
+        content=generate_latest(),
+        media_type=CONTENT_TYPE_LATEST
+    )
+
 @app.get("/health")
 async def health_check():
     """Health check"""
@@ -280,6 +440,23 @@ async def health_check():
             "personalization": True,
             "ai_generation": True,
             "smart_search": True
+        },
+        "metrics_enabled": True,
+        "metrics_endpoint": "/metrics",
+        "security": {
+            "jwt_enabled": settings.JWT_REQUIRED_ENDPOINTS,
+            "jwt_algorithm": settings.JWT_ALGORITHM,
+            "protected_endpoints": [
+                "GET /api/v1/docs/{page_id}",
+                "POST /api/v1/docs/feedback",
+                "POST /api/v1/docs/examples/generate",
+                "GET /api/v1/docs/journey/{goal}"
+            ],
+            "public_endpoints": [
+                "GET /api/v1/docs/search",
+                "GET /api/v1/docs/gaps",
+                "GET /api/v1/docs/improvements"
+            ]
         }
     }
 

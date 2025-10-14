@@ -1,0 +1,205 @@
+# ============================================================================
+# Docker Ignore File
+# ============================================================================
+# Exclude unnecessary files from Docker build context
+# ============================================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.next
+out
+.cache
+.parcel-cache
+.nuxt
+dist
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vscode-test
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/tmp/
+
+# Archives
+_archive/
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Documentation (build into image only what's needed)
+doc-project/
+docs/
+*.md
+!README.md
+!DOCKER_STRATEGY.md
+
+# Tests
+tests/
+__tests__/
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
+test_*.py
+*_test.py
+
+# Deprecated
+*deprecated*/
+*_deprecated*/
+_deprecated*/
+*-deprecated*/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# OS files
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+Desktop.ini
+$RECYCLE.BIN/
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Railway
+railway.json
+railway.toml
+
+# Kubernetes
+*.yaml
+*.yml
+!requirements.yml
+
+# Secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+service-account.json
+
+# Large files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.pdf
+*.iso
+*.dmg
+
+# Backups
+*.backup
+*.bak
+*.old
+
+# Monitoring data
+prometheus_data/
+grafana_data/
+
+# Uploads (use volume)
+uploads/
+media/
+
+# ML Models (use volume)
+models/*.h5
+models/*.pb
+models/*.onnx
+*.model
+
+# Coverage reports
+coverage/
+.nyc_output/

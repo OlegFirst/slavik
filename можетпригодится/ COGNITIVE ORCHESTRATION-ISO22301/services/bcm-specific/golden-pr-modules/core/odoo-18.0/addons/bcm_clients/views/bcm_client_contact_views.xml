@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- BCM Client Contact Tree View -->
+        <record id="bcm_client_contact_view_tree" model="ir.ui.view">
+            <field name="name">bcm.client.contact.tree</field>
+            <field name="model">bcm.client.contact</field>
+            <field name="arch" type="xml">
+                <list string="Client Contacts" decoration-bf="is_primary">
+                    <field name="client_id"/>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="role"/>
+                    <field name="is_primary"/>
+                    <field name="last_login"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- BCM Client Contact Form View -->
+        <record id="bcm_client_contact_view_form" model="ir.ui.view">
+            <field name="name">bcm.client.contact.form</field>
+            <field name="model">bcm.client.contact</field>
+            <field name="arch" type="xml">
+                <form string="Client Contact">
+                    <header>
+                        <button name="action_create_user_account" type="object" 
+                                string="Create User Account" class="btn-primary"
+                                invisible="user_id != False"/>
+                        <button name="action_reset_password" type="object" 
+                                string="Reset Password" class="btn-secondary"
+                                invisible="user_id == False"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Contact Information">
+                                <field name="client_id"/>
+                                <field name="user_id"/>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group string="BCM Role &amp; Status">
+                                <field name="role"/>
+                                <field name="is_primary"/>
+                                <field name="active"/>
+                                <field name="last_login"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Notification Preferences" name="notifications">
+                                <group string="Email Notifications">
+                                    <p>Configure when this contact should receive notifications:</p>
+                                    <!-- TODO: Add notification preference fields -->
+                                </group>
+                                <group>
+                                    <field name="notify_prefs" widget="ace" options="{'mode': 'json'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- BCM Client Contact Search View -->
+        <record id="bcm_client_contact_view_search" model="ir.ui.view">
+            <field name="name">bcm.client.contact.search</field>
+            <field name="model">bcm.client.contact</field>
+            <field name="arch" type="xml">
+                <search string="Search Client Contacts">
+                    <field name="name" string="Contact" 
+                           filter_domain="['|', ('name', 'ilike', self), ('email', 'ilike', self)]"/>
+                    <field name="client_id"/>
+                    <field name="role"/>
+                    
+                    <separator/>
+                    <filter string="Active" name="active" 
+                            domain="[('active', '=', True)]"/>
+                    <filter string="Primary Contacts" name="primary" 
+                            domain="[('is_primary', '=', True)]"/>
+                    <filter string="With User Account" name="has_user" 
+                            domain="[('user_id', '!=', False)]"/>
+                    
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Client" name="group_client" 
+                                domain="[]" context="{'group_by': 'client_id'}"/>
+                        <filter string="Role" name="group_role" 
+                                domain="[]" context="{'group_by': 'role'}"/>
+                        <filter string="Company" name="group_company" 
+                                domain="[]" context="{'group_by': 'company_id'}" 
+                                groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- BCM Client Contact Action -->
+        <record id="bcm_client_contact_action" model="ir.actions.act_window">
+            <field name="name">Client Contacts</field>
+            <field name="res_model">bcm.client.contact</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add Client Contacts!
+                </p>
+                <p>
+                    Manage contacts for your BCM clients. You can assign roles,
+                    create user accounts, and configure notification preferences.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

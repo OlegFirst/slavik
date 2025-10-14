@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Root Menu -->
+        <menuitem id="menu_bcm_digital_twin_root"
+                  name="Digital Twin"
+                  sequence="10"
+                  web_icon="bcm_digital_twin_core,static/description/icon.png"/>
+
+        <!-- Digital Twin Organizations -->
+        <menuitem id="menu_bcm_digital_twin_organization"
+                  name="Organizations"
+                  parent="menu_bcm_digital_twin_root"
+                  action="action_digital_twin_organization"
+                  sequence="10"/>
+
+        <!-- Digital Twin Dashboard -->
+        <menuitem id="menu_bcm_digital_twin_dashboard"
+                  name="Dashboard"
+                  parent="menu_bcm_digital_twin_root"
+                  sequence="5"/>
+
+        <!-- My Personal Twin -->
+        <menuitem id="menu_my_personal_twin"
+                  name="My Digital Twin"
+                  parent="menu_bcm_digital_twin_root"
+                  action="my_personal_twin_action"
+                  sequence="7"/>
+
+        <!-- Personal Twins (Admin) -->
+        <menuitem id="menu_personal_digital_twins"
+                  name="Personal Twins"
+                  parent="menu_bcm_digital_twin_root"
+                  action="personal_twin_dashboard_action"
+                  groups="bcm_digital_twin_core.group_digital_twin_manager"
+                  sequence="8"/>
+
+        <!-- Data Packages -->
+        <menuitem id="menu_bcm_twin_data_package"
+                  name="Data Packages"
+                  parent="menu_bcm_digital_twin_root"
+                  action="action_twin_data_package"
+                  sequence="15"/>
+
+        <!-- Package Analytics -->
+        <menuitem id="menu_bcm_twin_data_package_analytics"
+                  name="Package Analytics"
+                  parent="menu_bcm_digital_twin_root"
+                  action="action_twin_data_package_analytics"
+                  sequence="20"/>
+
+    </data>
+</odoo>

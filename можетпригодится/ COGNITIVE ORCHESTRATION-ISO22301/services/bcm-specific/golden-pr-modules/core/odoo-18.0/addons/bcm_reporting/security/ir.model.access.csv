@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_reporting_user,BCM Reporting User,model_bcm_reporting,base.group_user,1,1,1,1
+access_bcm_reporting_portal,BCM Reporting Portal,model_bcm_reporting,base.group_portal,1,0,0,0
+access_bcm_analytics_dashboard_user,BCM Analytics Dashboard User,model_bcm_analytics_dashboard,base.group_user,1,1,1,1
+access_bcm_analytics_dashboard_manager,BCM Analytics Dashboard Manager,model_bcm_analytics_dashboard,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_analytics_dashboard_portal,BCM Analytics Dashboard Portal,model_bcm_analytics_dashboard,base.group_portal,1,0,0,0

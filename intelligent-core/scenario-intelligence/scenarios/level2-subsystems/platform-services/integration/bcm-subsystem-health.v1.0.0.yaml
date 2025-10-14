@@ -1,0 +1,208 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "platform-services-bcm-subsystem-health"
+    version: "1.0.0"
+    level: 2  # Subsystem level
+    type: "integration"
+    pillar: "reliability"
+    domain: "subsystem_health"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    subsystem: "platform-services"
+    modules:
+      - "bia-service"
+      - "risk-service"
+      - "plans-service"
+      - "document-service"
+    team: "platform-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "BCM Subsystem Health Check"
+    summary: "Verify all BCM platform services are healthy and integrated correctly"
+    business_value: "Ensure BCM subsystem availability and correct inter-service communication"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Platform Services Subsystem Health"
+
+    scenario: "Check health of all BCM services"
+
+    given:
+      - "All BCM services are deployed"
+      - "Service discovery is running"
+      - "Database connections are available"
+
+    when:
+      - "Health check is triggered for BCM subsystem"
+
+    then:
+      - "BIA Service responds healthy"
+      - "Risk Service responds healthy"
+      - "Plans Service responds healthy"
+      - "Document Service responds healthy"
+      - "All services can connect to database"
+      - "All services can publish events"
+      - "Overall subsystem status is healthy"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 60
+    retry_policy:
+      max_retries: 2
+      backoff: linear
+
+    steps:
+      - id: "check_bia_service"
+        action: "http.get"
+        params:
+          url: "http://bia-service:8001/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+
+      - id: "check_risk_service"
+        action: "http.get"
+        params:
+          url: "http://risk-service:8002/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+
+      - id: "check_plans_service"
+        action: "http.get"
+        params:
+          url: "http://plans-service:8003/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+
+      - id: "check_document_service"
+        action: "http.get"
+        params:
+          url: "http://document-service:8004/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+
+      - id: "check_bia_db_connection"
+        action: "http.get"
+        params:
+          url: "http://bia-service:8001/health/db"
+        expect:
+          status: 200
+          response.database_connected: true
+
+      - id: "check_risk_db_connection"
+        action: "http.get"
+        params:
+          url: "http://risk-service:8002/health/db"
+        expect:
+          status: 200
+          response.database_connected: true
+
+      - id: "check_bia_eventbus"
+        action: "http.get"
+        params:
+          url: "http://bia-service:8001/health/eventbus"
+        expect:
+          status: 200
+          response.eventbus_connected: true
+
+      - id: "test_cross_service_integration"
+        action: "http.post"
+        params:
+          url: "http://bia-service:8001/api/test/integration"
+          body:
+            test_event: "bia.created"
+        expect:
+          status: 200
+          response.event_published: true
+
+      - id: "aggregate_health"
+        action: "subsystem.aggregate_health"
+        params:
+          service_healths:
+            - service: "bia-service"
+              status: "{{steps.check_bia_service.result.status}}"
+            - service: "risk-service"
+              status: "{{steps.check_risk_service.result.status}}"
+            - service: "plans-service"
+              status: "{{steps.check_plans_service.result.status}}"
+            - service: "document-service"
+              status: "{{steps.check_document_service.result.status}}"
+        expect:
+          overall_status: "healthy"
+          all_services_up: true
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      - scenario_id: "bia-service-create-bia"
+        level: 1
+        when: "integration_test"
+        parallel: false
+
+      - scenario_id: "risk-service-create-risk-assessment"
+        level: 1
+        when: "integration_test"
+        parallel: false
+
+    events:
+      emits:
+        - event_type: "subsystem.health.checked"
+          aggregate: "Subsystem"
+          aggregate_id: "platform-services-bcm"
+          payload:
+            subsystem: "platform-services-bcm"
+            overall_status: "{{steps.aggregate_health.result.overall_status}}"
+            services_checked: 4
+            all_healthy: "{{steps.aggregate_health.result.all_services_up}}"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "subsystem_health_check_duration_seconds"
+        type: "histogram"
+        labels:
+          - "subsystem"
+
+      - name: "subsystem_health_status"
+        type: "gauge"
+        labels:
+          - "subsystem"
+          - "service"
+
+      - name: "subsystem_service_down_total"
+        type: "counter"
+        labels:
+          - "subsystem"
+          - "service"
+
+    logs:
+      level: "INFO"
+      include:
+        - "subsystem"
+        - "overall_status"
+        - "services_checked"
+
+  # ========== SLA ==========
+  sla:
+    target_availability: 0.999  # 99.9%
+    target_response_time_ms: 500
+    error_budget: 0.001  # 0.1% downtime per month
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "BCM subsystem health check with service integration tests"

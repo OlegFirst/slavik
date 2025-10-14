@@ -16,7 +16,7 @@ import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
 
-from intelligent_core.ai_orchestration.models import Decision
+from .models import Decision
 from infrastructure.eventbus import IEventBus, Event, EventPriority
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,11 @@ class DelegationManager:
         'risk': 'risk-specialist',
         'compliance': 'compliance-specialist',
         'integration': 'integration-specialist',
-        'general': 'general-specialist'
+        'general': 'general-specialist',
+        # AI Experts (high-level consultants)
+        'bcm_advisor': 'ai-expert-bcm-advisor',
+        'compliance_auditor': 'ai-expert-compliance-auditor',
+        'strategic_planner': 'ai-expert-strategic-planner'
     }
 
     def __init__(self):
@@ -131,31 +135,69 @@ class DelegationManager:
         Select appropriate specialist for decision.
 
         Selection logic:
-        - Extract task domain from decision metadata
-        - Match to specialist type
-        - Return specialist identifier
-        """
-        # Get situation from metadata
-        situation = decision.metadata.get('situation', {})
+        1. Check for AI Expert requirements (high-level expertise)
+        2. Fall back to domain specialists
+        3. Default to general specialist
 
-        # Workflow-related
-        if 'workflow' in str(situation).lower():
+        AI Experts (Consultants):
+        - BCM Advisor: BCM planning, strategy, BIA design
+        - Compliance Auditor: ISO compliance, gap analysis, certification
+        - Strategic Planner: Long-term planning, roadmaps, strategic decisions
+
+        Domain Specialists (Execution):
+        - BIA Specialist: Execute BIA assessments
+        - Risk Specialist: Execute risk assessments
+        - Compliance Specialist: Execute compliance checks
+        """
+        # Get situation and strategy from metadata
+        situation = decision.metadata.get('situation', {})
+        strategy = decision.metadata.get('strategy', {})
+        situation_str = str(situation).lower()
+        strategy_action = strategy.get('action', '').lower() if isinstance(strategy, dict) else ''
+
+        # AI EXPERT SELECTION (high-level consulting)
+
+        # BCM Advisor - for complex BCM planning and strategy
+        bcm_advisor_keywords = ['bcm planning', 'recovery strategy', 'continuity strategy',
+                                'bia design', 'business continuity', 'strategic bcm']
+        if any(keyword in situation_str or keyword in strategy_action for keyword in bcm_advisor_keywords):
+            logger.info("🎯 Delegating to AI Expert: BCM Advisor")
+            return self.SPECIALISTS['bcm_advisor']
+
+        # Compliance Auditor - for compliance and certification
+        compliance_auditor_keywords = ['iso compliance', 'gap analysis', 'certification',
+                                       'audit preparation', 'compliance assessment', 'iso 22301']
+        if any(keyword in situation_str or keyword in strategy_action for keyword in compliance_auditor_keywords):
+            logger.info("🎯 Delegating to AI Expert: Compliance Auditor")
+            return self.SPECIALISTS['compliance_auditor']
+
+        # Strategic Planner - for strategic planning
+        strategic_keywords = ['strategic plan', 'roadmap', 'strategic decision',
+                             'long-term planning', 'strategic direction']
+        if any(keyword in situation_str or keyword in strategy_action for keyword in strategic_keywords):
+            logger.info("🎯 Delegating to AI Expert: Strategic Planner")
+            return self.SPECIALISTS['strategic_planner']
+
+        # DOMAIN SPECIALIST SELECTION (execution)
+
+        # Workflow specialist
+        if 'workflow' in situation_str:
             return self.SPECIALISTS['workflow']
 
-        # BIA-related
-        if 'bia' in str(situation).lower() or 'business_impact' in str(situation).lower():
+        # BIA specialist (execution)
+        if 'bia' in situation_str or 'business_impact' in situation_str or 'business impact analysis' in situation_str:
             return self.SPECIALISTS['bia']
 
-        # Risk-related
-        if 'risk' in str(situation).lower() or 'threat' in str(situation).lower():
+        # Risk specialist (execution)
+        if 'risk' in situation_str or 'threat' in situation_str or 'risk assessment' in situation_str:
             return self.SPECIALISTS['risk']
 
-        # Compliance-related
-        if 'compliance' in str(situation).lower() or 'audit' in str(situation).lower():
+        # Compliance specialist (execution)
+        if 'compliance' in situation_str or 'audit' in situation_str:
             return self.SPECIALISTS['compliance']
 
-        # Integration-related
-        if 'integration' in str(situation).lower() or 'api' in str(situation).lower():
+        # Integration specialist
+        if 'integration' in situation_str or 'api' in situation_str:
             return self.SPECIALISTS['integration']
 
         # Default to general specialist

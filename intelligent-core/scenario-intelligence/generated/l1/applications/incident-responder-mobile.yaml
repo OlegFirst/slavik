@@ -1,0 +1,624 @@
+meta:
+  id: l1-app-{app_name}
+  level: 1
+  type: application
+  application: '{app_name}'
+  category: '{category}'
+  status: active
+  version: 1.0.0
+  created_at: '{timestamp}'
+  created_by: scenario_manager
+  tags:
+  - '{app_type}'
+  - user_facing
+  - business_logic
+  source_item: incident-responder-mobile
+  generated_at: '2025-10-14T08:07:46.622461'
+description:
+  summary: '{app_description}'
+  purpose: Validate {app_name} application functionality and user workflows
+  business_value: '{business_value}'
+  target_users:
+  - '{user_roles}'
+application_info:
+  name: '{app_name}'
+  port:
+    port: null
+  type: '{app_type}'
+  url: http://localhost:{port}
+  technology_stack:
+    frontend: '{frontend_tech}'
+    ui_framework: '{ui_framework}'
+    state_management: '{state_management}'
+  features:
+  - '{key_features}'
+dependencies:
+  backend_services:
+  - '{backend_services}'
+  platform_services:
+  - '{platform_services}'
+  intelligent_services:
+  - '{intelligent_services}'
+  external_integrations:
+  - '{external_integrations}'
+test_scenarios:
+- name: Application Startup & Availability
+  scenario_id: app-startup
+  priority: critical
+  execution_time: 2-3 minutes
+  description: Verify application starts correctly and is accessible
+  preconditions:
+  - Backend services are running
+  - Database is accessible
+  - Authentication service is available
+  steps:
+  - id: '1.1'
+    action: start_application
+    command: npm run dev
+    expected:
+      status: running
+      startup_time_max: 30s
+      console_output_contains:
+      - Server started
+      - Port {port}
+  - id: '1.2'
+    action: check_availability
+    method: GET
+    endpoint: http://localhost:{port}
+    expected:
+      http_status: 200
+      response_time_max: 2s
+      content_type: text/html
+  - id: '1.3'
+    action: verify_static_assets
+    expected:
+      css_loaded: true
+      js_loaded: true
+      fonts_loaded: true
+      images_loaded: true
+  - id: '1.4'
+    action: check_health_endpoint
+    endpoint: http://localhost:{port}/health
+    expected:
+      http_status: 200
+      response:
+        status: healthy
+        dependencies_status: ok
+  postconditions:
+  - Application is accessible
+  - All assets loaded correctly
+  rollback:
+  - action: stop_application
+  - action: clear_cache
+- name: User Authentication & Authorization
+  scenario_id: app-auth
+  priority: critical
+  execution_time: 5-7 minutes
+  description: Verify user login, logout, and role-based access control
+  test_users:
+  - role: admin
+    username: test_admin@example.com
+    password: '{test_password}'
+    expected_permissions:
+    - read
+    - write
+    - delete
+    - admin
+  - role: user
+    username: test_user@example.com
+    password: '{test_password}'
+    expected_permissions:
+    - read
+    - write
+  - role: guest
+    username: guest@example.com
+    password: '{test_password}'
+    expected_permissions:
+    - read
+  steps:
+  - id: '2.1'
+    action: navigate_to_login
+    url: http://localhost:{port}/login
+    expected:
+      page_loaded: true
+      login_form_visible: true
+  - id: '2.2'
+    action: login_as_user
+    username: '{{test_user.username}}'
+    password: '{{test_user.password}}'
+    expected:
+      redirect_to: /dashboard
+      session_created: true
+      jwt_token_received: true
+  - id: '2.3'
+    action: verify_user_session
+    expected:
+      user_info_displayed: true
+      role_badge_visible: true
+      logout_button_visible: true
+  - id: '2.4'
+    action: test_unauthorized_access
+    url: http://localhost:{port}/admin
+    expected:
+      http_status: 403
+      error_message: Unauthorized access
+  - id: '2.5'
+    action: logout
+    expected:
+      redirect_to: /login
+      session_cleared: true
+      jwt_token_removed: true
+- name: Core Business Functionality
+  scenario_id: app-core-functionality
+  priority: critical
+  execution_time: 10-15 minutes
+  description: Verify primary business operations and workflows
+  bcm_portal_operations:
+  - operation: view_dashboard
+    steps:
+    - navigate_to: /dashboard
+    - verify_kpis_displayed: true
+    - verify_charts_rendered: true
+  - operation: manage_bia
+    steps:
+    - navigate_to: /bia
+    - create_new_bia: true
+    - edit_existing_bia: true
+    - delete_bia: true
+  - operation: manage_risk
+    steps:
+    - navigate_to: /risk
+    - create_risk_assessment: true
+    - update_risk_status: true
+  simulation_operations:
+  - operation: create_scenario
+    steps:
+    - navigate_to: /simulations/new
+    - select_scenario_type: tabletop
+    - configure_parameters: true
+    - save_scenario: true
+  - operation: run_simulation
+    steps:
+    - select_scenario: true
+    - start_simulation: true
+    - monitor_progress: true
+    - view_results: true
+  marketplace_operations:
+  - operation: browse_experts
+    steps:
+    - navigate_to: /experts
+    - apply_filters: true
+    - view_expert_profile: true
+  - operation: book_consultation
+    steps:
+    - select_expert: true
+    - choose_service: true
+    - schedule_appointment: true
+    - confirm_booking: true
+  digital_twin_operations:
+  - operation: view_organization_model
+    steps:
+    - navigate_to: /digital-twin
+    - load_organization_structure: true
+    - visualize_processes: true
+  - operation: simulate_disruption
+    steps:
+    - select_disruption_type: true
+    - configure_impact: true
+    - run_simulation: true
+    - analyze_results: true
+  bcm_module_operations:
+  - operation: crud_operations
+    steps:
+    - id: '3.1'
+      action: create_entity
+      expected:
+        entity_created: true
+        id_returned: true
+        success_message_displayed: true
+    - id: '3.2'
+      action: read_entity
+      expected:
+        entity_loaded: true
+        data_displayed: true
+    - id: '3.3'
+      action: update_entity
+      expected:
+        entity_updated: true
+        changes_saved: true
+    - id: '3.4'
+      action: delete_entity
+      expected:
+        entity_deleted: true
+        confirmation_shown: true
+- name: UI/UX Validation
+  scenario_id: app-ui-ux
+  priority: high
+  execution_time: 8-10 minutes
+  description: Verify user interface and user experience quality
+  steps:
+  - id: '4.1'
+    action: test_responsive_design
+    viewports:
+    - device: desktop
+      width: 1920
+      height: 1080
+      expected: full_layout
+    - device: tablet
+      width: 768
+      height: 1024
+      expected: tablet_layout
+    - device: mobile
+      width: 375
+      height: 667
+      expected: mobile_layout
+  - id: '4.2'
+    action: test_navigation
+    expected:
+      menu_accessible: true
+      breadcrumbs_visible: true
+      back_button_works: true
+      search_functional: true
+  - id: '4.3'
+    action: test_forms
+    expected:
+      input_validation: true
+      error_messages_clear: true
+      success_feedback: true
+      auto_save_works: true
+  - id: '4.4'
+    action: test_accessibility
+    wcag_level: AA
+    expected:
+      keyboard_navigation: true
+      screen_reader_support: true
+      aria_labels_present: true
+      color_contrast_ratio: '>= 4.5:1'
+  - id: '4.5'
+    action: test_performance
+    metrics:
+    - name: First Contentful Paint
+      max_value: 1.8s
+    - name: Largest Contentful Paint
+      max_value: 2.5s
+    - name: Time to Interactive
+      max_value: 3.8s
+    - name: Cumulative Layout Shift
+      max_value: '0.1'
+- name: Data Integration & API Communication
+  scenario_id: app-integration
+  priority: high
+  execution_time: 10-12 minutes
+  description: Verify backend integration and data flow
+  steps:
+  - id: '5.1'
+    action: test_api_endpoints
+    endpoints:
+    - method: GET
+      path: /api/{resource}
+      expected:
+        status: 200
+        response_time_max: 500ms
+        data_format: json
+    - method: POST
+      path: /api/{resource}
+      payload: '{sample_data}'
+      expected:
+        status: 201
+        resource_created: true
+    - method: PUT
+      path: /api/{resource}/{{id}}
+      payload: '{update_data}'
+      expected:
+        status: 200
+        resource_updated: true
+    - method: DELETE
+      path: /api/{resource}/{{id}}
+      expected:
+        status: 204
+        resource_deleted: true
+  - id: '5.2'
+    action: test_real_time_updates
+    technology: WebSocket
+    expected:
+      connection_established: true
+      events_received: true
+      ui_updated_automatically: true
+  - id: '5.3'
+    action: test_error_handling
+    scenarios:
+    - error_type: network_timeout
+      expected:
+        error_message_shown: true
+        retry_mechanism: true
+    - error_type: server_error_500
+      expected:
+        user_friendly_message: true
+        error_logged: true
+    - error_type: unauthorized_401
+      expected:
+        redirect_to_login: true
+  - id: '5.4'
+    action: test_data_synchronization
+    expected:
+      local_state_matches_server: true
+      conflicts_resolved: true
+      optimistic_updates_work: true
+- name: Security & Data Protection
+  scenario_id: app-security
+  priority: critical
+  execution_time: 12-15 minutes
+  description: Verify security measures and data protection
+  steps:
+  - id: '6.1'
+    action: test_xss_protection
+    attack_vectors:
+    - <script>alert('XSS')</script>
+    - <img src=x onerror=alert('XSS')>
+    expected:
+      input_sanitized: true
+      output_escaped: true
+      no_script_execution: true
+  - id: '6.2'
+    action: test_csrf_protection
+    expected:
+      csrf_token_required: true
+      token_validated: true
+      invalid_token_rejected: true
+  - id: '6.3'
+    action: test_authentication_security
+    expected:
+      password_hashed: true
+      session_timeout: 30 minutes
+      failed_login_lockout: 5 attempts
+      jwt_expiration: true
+  - id: '6.4'
+    action: test_data_encryption
+    expected:
+      https_enforced: true
+      sensitive_data_encrypted: true
+      secure_cookies: true
+  - id: '6.5'
+    action: test_authorization
+    expected:
+      rbac_enforced: true
+      resource_level_permissions: true
+      unauthorized_access_blocked: true
+- name: Error Handling & User Feedback
+  scenario_id: app-error-handling
+  priority: medium
+  execution_time: 6-8 minutes
+  description: Verify error handling and user notifications
+  steps:
+  - id: '7.1'
+    action: test_form_validation_errors
+    expected:
+      inline_error_messages: true
+      field_highlighting: true
+      clear_error_text: true
+  - id: '7.2'
+    action: test_network_errors
+    expected:
+      offline_mode_indicator: true
+      retry_button: true
+      queued_actions_preserved: true
+  - id: '7.3'
+    action: test_success_notifications
+    expected:
+      toast_notifications: true
+      auto_dismiss: true
+      success_icon_shown: true
+  - id: '7.4'
+    action: test_loading_states
+    expected:
+      loading_spinner: true
+      skeleton_screens: true
+      progress_indicator: true
+- name: Performance Under Load
+  scenario_id: app-performance
+  priority: high
+  execution_time: 15-20 minutes
+  description: Verify application performance under various load conditions
+  steps:
+  - id: '8.1'
+    action: test_concurrent_users
+    users:
+    - 10
+    - 50
+    - 100
+    duration: 5 minutes
+    expected:
+      response_time_p95: < 2s
+      error_rate: < 1%
+      no_crashes: true
+  - id: '8.2'
+    action: test_large_dataset_rendering
+    dataset_sizes:
+    - 100
+    - 1000
+    - 10000
+    expected:
+      virtual_scrolling: true
+      pagination_works: true
+      no_ui_freeze: true
+  - id: '8.3'
+    action: test_memory_usage
+    duration: 10 minutes
+    expected:
+      memory_leak_free: true
+      memory_usage_stable: true
+      max_heap_size: < 200MB
+monitoring:
+  metrics:
+  - name: '{app_name}_page_load_time'
+    type: histogram
+    description: Page load time in seconds
+    thresholds:
+      p50: < 1s
+      p95: < 2s
+      p99: < 3s
+  - name: '{app_name}_api_calls_total'
+    type: counter
+    description: Total API calls made
+    labels:
+    - endpoint
+    - method
+    - status
+  - name: '{app_name}_errors_total'
+    type: counter
+    description: Total frontend errors
+    labels:
+    - error_type
+    - severity
+  - name: '{app_name}_user_sessions_active'
+    type: gauge
+    description: Active user sessions
+  - name: '{app_name}_feature_usage'
+    type: counter
+    description: Feature usage tracking
+    labels:
+    - feature
+    - user_role
+  - name: '{app_name}_first_contentful_paint'
+    type: histogram
+    description: FCP metric
+    threshold: < 1.8s
+  - name: '{app_name}_largest_contentful_paint'
+    type: histogram
+    description: LCP metric
+    threshold: < 2.5s
+  - name: '{app_name}_cumulative_layout_shift'
+    type: histogram
+    description: CLS metric
+    threshold: < 0.1
+  alerts:
+  - name: high_error_rate
+    condition: error_rate > 5%
+    severity: critical
+    action: notify_devops
+    channels:
+    - slack
+    - pagerduty
+  - name: slow_page_load
+    condition: p95_load_time > 3s
+    severity: warning
+    action: investigate_performance
+  - name: api_failures
+    condition: api_error_rate > 10%
+    severity: critical
+    action: check_backend_services
+  - name: low_user_engagement
+    condition: active_sessions < 10
+    severity: info
+    action: review_user_experience
+  dashboards:
+  - name: '{app_name} User Metrics'
+    panels:
+    - Active Users
+    - User Sessions Duration
+    - Feature Usage Heatmap
+  - name: '{app_name} Performance'
+    panels:
+    - Page Load Times
+    - API Response Times
+    - Error Rates
+  - name: '{app_name} Business Metrics'
+    panels:
+    - Conversion Rates
+    - User Actions
+    - Workflow Completion
+execution_history: null
+learning_data: null
+integrations:
+  platform_services:
+  - service: planning_service
+    endpoint: http://planning-service:8004
+    used_for: BCM journey planning
+  - service: bia_service
+    endpoint: http://bia-service:8005
+    used_for: Business impact analysis
+  - service: risk_service
+    endpoint: http://risk-service:8013
+    used_for: Risk assessment
+  intelligent_services:
+  - service: ai_orchestration
+    endpoint: http://ai-orchestration:8040
+    used_for: AI decision making
+  - service: workflow_intelligence
+    endpoint: http://workflow-intelligence:8010
+    used_for: Workflow orchestration
+  infrastructure:
+  - service: api_gateway
+    endpoint: http://api-gateway:8000
+    used_for: Unified API access
+  - service: auth_service
+    endpoint: http://auth-service:8001
+    used_for: Authentication & authorization
+  - service: eventbus
+    endpoint: http://eventbus:8003
+    used_for: Event-driven updates
+deployment:
+  environment: production
+  build_command: npm run build
+  start_command: npm run start
+  health_check: /health
+  readiness_check: /ready
+  environment_variables:
+  - NEXT_PUBLIC_API_URL
+  - NEXT_PUBLIC_WS_URL
+  - NEXT_PUBLIC_AUTH_URL
+  resources:
+    cpu: 1 core
+    memory: 512MB
+    storage: 1GB
+metadata:
+  template_version: 1.0.0
+  created_by: scenario_manager
+  created_at: '2025-10-12'
+  applicable_to:
+    main_applications:
+    - bcm_portal
+    - simulation_platform
+    - expert_marketplace
+    - digital_twin
+    bcm_modules:
+    - bia
+    - risk
+    - plans
+    - response
+    - validation
+    - compliance
+    - governance
+    - learning
+    - documents
+    - planning
+    - analytics
+    - monitoring
+  estimated_generation_time: 2 minutes per scenario
+  total_scenarios_to_generate: 16
+  notes: 'This template is designed for user-facing applications and BCM modules.
+
+    It focuses on:
+
+    - User authentication and authorization
+
+    - UI/UX validation
+
+    - Business functionality testing
+
+    - Data integration
+
+    - Security and data protection
+
+    - Performance under load
+
+
+    Different from L1 Service template which focuses on:
+
+    - Infrastructure health
+
+    - Service dependencies
+
+    - Technical resilience
+
+    '

@@ -1,0 +1,243 @@
+# ============================================
+# SERVICE INFORMATION - Coordination Center
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: coordination-center
+display_name: "Multi-Agent Coordination Center"
+version: "1.0.0-planned"
+description: "Multi-agent coordination and collaboration hub. Manages agent teams, task allocation, inter-agent communication, and collaborative problem-solving. (PLANNED - Not yet implemented)"
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/coordination"
+business_process: "Multi-Agent Coordination & Collaboration"
+status: "planned"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8033
+
+endpoints:
+  base_url: "http://localhost:8033"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/coordination"
+
+# ============================================
+# 4. FUNCTIONALITY (PLANNED)
+# ============================================
+capabilities:
+  - "Multi-agent team formation and management"
+  - "Dynamic task allocation and scheduling"
+  - "Inter-agent communication protocols"
+  - "Collaborative problem-solving strategies"
+  - "Consensus building and conflict resolution"
+  - "Agent capability discovery and matching"
+  - "Workload balancing across agents"
+  - "Coordination pattern learning"
+  - "Agent performance tracking"
+
+features:
+  - name: "Team Formation"
+    description: "Dynamic agent team creation based on task requirements"
+    endpoints: 4
+
+  - name: "Task Allocation"
+    description: "Intelligent task distribution among agents"
+    endpoints: 5
+
+  - name: "Communication Hub"
+    description: "Inter-agent messaging and information sharing"
+    endpoints: 6
+
+  - name: "Consensus Engine"
+    description: "Multi-agent decision consensus building"
+    endpoints: 3
+
+  - name: "Performance Monitor"
+    description: "Track agent and team performance"
+    endpoints: 4
+
+# ============================================
+# 5. KPIS & METRICS (PLANNED)
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total coordination requests"
+    target: "TBD"
+    prometheus_metric: "coordination_requests_total"
+
+  - name: "agent_utilization"
+    type: "gauge"
+    description: "Average agent utilization percentage"
+    target: "> 70%"
+    prometheus_metric: "coordination_agent_utilization"
+
+  - name: "task_completion_rate"
+    type: "gauge"
+    description: "Percentage of tasks completed successfully"
+    target: "> 90%"
+    prometheus_metric: "coordination_task_completion_rate"
+
+  - name: "consensus_time"
+    type: "histogram"
+    description: "Time to reach multi-agent consensus"
+    target: "< 30s"
+    prometheus_metric: "coordination_consensus_seconds"
+
+  - name: "team_effectiveness"
+    type: "gauge"
+    description: "Overall team effectiveness score"
+    target: "> 0.8"
+    prometheus_metric: "coordination_team_effectiveness"
+
+# ============================================
+# 6. DEPENDENCIES (PLANNED)
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "redis>=5.0.0"
+    - "aio-pika>=9.3.0"
+    - "prometheus-client>=0.19.0"
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Agent and task state storage"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      purpose: "Real-time agent coordination"
+      required: true
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      purpose: "Inter-agent messaging"
+      required: true
+
+# ============================================
+# 7. INTEGRATIONS (PLANNED)
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "task.complex.detected"
+        source: "orchestrator"
+        action: "Form agent team for complex task"
+
+      - event: "agent.registered"
+        source: "agent_registry"
+        action: "Add agent to coordination pool"
+
+    publishes:
+      - event: "team.formed"
+        target: "orchestrator"
+        data: "team_id, agents, task_allocation"
+
+      - event: "consensus.reached"
+        target: "orchestrator,governance_service"
+        data: "decision, participating_agents, confidence"
+
+      - event: "task.delegated"
+        target: "agent_services"
+        data: "task_id, assigned_agent, context"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/coordination/teams"
+        methods: ["GET", "POST", "PUT"]
+        consumers: ["orchestrator", "admin_panel"]
+
+      - endpoint: "/api/coordination/tasks"
+        methods: ["GET", "POST"]
+        consumers: ["orchestrator"]
+
+    consumes:
+      - service: "orchestrator"
+        endpoint: "/api/v1/decision"
+        purpose: "Request AI assistance for coordination decisions"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS (PLANNED)
+# ============================================
+known_issues:
+  - issue: "Service not yet implemented"
+    severity: "n/a"
+    workaround: "Use orchestrator for simple task delegation"
+    tracking: "COORD-000"
+
+limitations:
+  - "Service in planning phase"
+  - "Implementation timeline: Q1 2026"
+  - "Architecture under design"
+
+# ============================================
+# 9. DEPLOYMENT (PLANNED)
+# ============================================
+deployment:
+  docker:
+    image: "coordination-center:latest"
+    ports:
+      - "8033:8033"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+      - name: "REDIS_URL"
+        example: "redis://localhost:6379/0"
+      - name: "EVENTBUS_URL"
+        example: "amqp://guest:guest@localhost:5672/"
+
+  startup_command: "python -m coordination.main"
+
+  requirements:
+    cpu: "2.0 cores (estimated)"
+    memory: "2GB (estimated)"
+    disk: "5GB (estimated)"
+
+# ============================================
+# 10. DOCUMENTATION (PLANNED)
+# ============================================
+documentation:
+  readme: "./README.md (to be created)"
+  api_docs: "http://localhost:8033/docs (future)"
+  design_docs: "./resources/"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "AI Platform Architect"
+  product_owner: "AI Product Owner"
+  slack_channel: "#intelligent-core"
+  status: "Planning phase - not yet staffed"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "ISO/IEC/IEEE 26514:2022"
+      status: "planned"

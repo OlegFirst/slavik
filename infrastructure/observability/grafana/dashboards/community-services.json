@@ -1,0 +1,210 @@
+{
+  "title": "Community Services - Portal & Marketplace",
+  "uid": "community-services-detailed",
+  "tags": ["platform-services", "community", "marketplace"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 100,
+      "panels": [],
+      "title": "Community Portal",
+      "type": "row"
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Active Users",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
+      "targets": [
+        {
+          "expr": "community_portal_active_users",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Specialists Registered",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+      "targets": [
+        {
+          "expr": "community_portal_specialists_registered",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Projects Active",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+      "targets": [
+        {
+          "expr": "community_portal_projects_active",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "gauge",
+      "title": "Portal Engagement Score",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+      "targets": [
+        {
+          "expr": "community_portal_engagement_score",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 50},
+              {"color": "green", "value": 75}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Portal Activity Over Time",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 5},
+      "targets": [
+        {
+          "expr": "sum(rate(community_portal_requests_total[5m]))",
+          "legendFormat": "Requests/sec",
+          "refId": "A"
+        },
+        {
+          "expr": "community_portal_active_users",
+          "legendFormat": "Active Users",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 13},
+      "id": 101,
+      "panels": [],
+      "title": "Marketplace",
+      "type": "row"
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Transactions (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(community_marketplace_transactions_total[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Active Listings",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 14},
+      "targets": [
+        {
+          "expr": "community_marketplace_active_listings",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Total Revenue (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(community_marketplace_revenue_total[24h]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "gauge",
+      "title": "Marketplace Health Score",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 14},
+      "targets": [
+        {
+          "expr": "community_marketplace_health_score",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 60},
+              {"color": "green", "value": 80}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Transaction Rate",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 18},
+      "targets": [
+        {
+          "expr": "sum(rate(community_marketplace_transactions_total[5m])) by (transaction_type)",
+          "legendFormat": "{{transaction_type}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "piechart",
+      "title": "Transaction Types (24h)",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 18},
+      "targets": [
+        {
+          "expr": "sum(increase(community_marketplace_transactions_total[24h])) by (transaction_type)",
+          "legendFormat": "{{transaction_type}}",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"}
+}

@@ -1,0 +1,264 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "compliance-engine-check-compliance"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "security"
+    domain: "compliance_management"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "compliance-engine"
+    subsystem: "governance"
+    team: "compliance-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Check ISO 22301 Compliance"
+    summary: "Verify organization compliance against ISO 22301 requirements"
+    business_value: "Ensure continuous compliance and identify gaps proactively"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Compliance Checking"
+
+    scenario: "Check ISO 22301 compliance for organization"
+
+    given:
+      - "Compliance Engine is running"
+      - "User has permission 'compliance:check'"
+      - "Organization exists"
+      - "ISO 22301 rules are loaded"
+
+    when:
+      - "User triggers compliance check for organization"
+      - "System validates against 10 ISO 22301 clauses"
+
+    then:
+      - "Compliance report is generated"
+      - "Compliance score is calculated (0-100)"
+      - "Non-compliant items are identified"
+      - "Recommendations are provided"
+      - "Response status is 200"
+      - "Event 'compliance.checked' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 60
+    retry_policy:
+      max_retries: 2
+      backoff: linear
+
+    steps:
+      - id: "validate_permissions"
+        action: "compliance.check_permission"
+        params:
+          user_id: "{{user_id}}"
+          permission: "compliance:check"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "abort"
+
+      - id: "validate_organization"
+        action: "compliance.validate_organization"
+        params:
+          organization_id: "{{organization_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "load_compliance_rules"
+        action: "compliance.load_rules"
+        params:
+          standard: "ISO_22301"
+          version: "2019"
+        expect:
+          status: 200
+          rules_loaded: true
+
+      - id: "check_clause_4"
+        action: "compliance.check_clause"
+        params:
+          organization_id: "{{organization_id}}"
+          clause: "4.1"
+          name: "Understanding the organization"
+        expect:
+          status: 200
+
+      - id: "check_clause_6"
+        action: "compliance.check_clause"
+        params:
+          organization_id: "{{organization_id}}"
+          clause: "6.1"
+          name: "Actions to address risks and opportunities"
+        expect:
+          status: 200
+
+      - id: "check_clause_8_2"
+        action: "compliance.check_clause"
+        params:
+          organization_id: "{{organization_id}}"
+          clause: "8.2"
+          name: "BIA and risk assessment"
+        expect:
+          status: 200
+
+      - id: "check_clause_8_4"
+        action: "compliance.check_clause"
+        params:
+          organization_id: "{{organization_id}}"
+          clause: "8.4"
+          name: "Business continuity plans"
+        expect:
+          status: 200
+
+      - id: "aggregate_results"
+        action: "compliance.aggregate"
+        params:
+          check_results:
+            - "{{steps.check_clause_4.result}}"
+            - "{{steps.check_clause_6.result}}"
+            - "{{steps.check_clause_8_2.result}}"
+            - "{{steps.check_clause_8_4.result}}"
+        expect:
+          status: 200
+          compliance_score: "{{exists}}"
+
+      - id: "generate_report"
+        action: "compliance.generate_report"
+        params:
+          organization_id: "{{organization_id}}"
+          standard: "ISO_22301"
+          aggregated_results: "{{steps.aggregate_results.result}}"
+        expect:
+          status: 200
+          report_id: "{{exists}}"
+
+      - id: "create_audit_log"
+        action: "compliance.log_audit"
+        params:
+          event: "compliance_checked"
+          organization_id: "{{organization_id}}"
+          report_id: "{{steps.generate_report.result.report_id}}"
+          user_id: "{{user_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "compliance.checked"
+          aggregate: "ComplianceReport"
+          aggregate_id: "{{steps.generate_report.result.report_id}}"
+          payload:
+            report_id: "{{steps.generate_report.result.report_id}}"
+            organization_id: "{{organization_id}}"
+            standard: "ISO_22301"
+            compliance_score: "{{steps.aggregate_results.result.compliance_score}}"
+            checked_by: "{{user_id}}"
+
+        - event_type: "compliance.gap.identified"
+          aggregate: "ComplianceGap"
+          aggregate_id: "{{steps.generate_report.result.report_id}}"
+          payload:
+            report_id: "{{steps.generate_report.result.report_id}}"
+            non_compliant_items: "{{steps.aggregate_results.result.non_compliant}}"
+          condition:
+            compliance_score: "<80"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "4.1"
+          name: "Understanding the organization and its context"
+          requirement: "Determine external and internal issues"
+
+        - id: "6.1"
+          name: "Actions to address risks and opportunities"
+          requirement: "Plan actions to address risks"
+
+        - id: "8.2"
+          name: "Business impact analysis and risk assessment"
+          requirement: "Conduct BIA and risk assessment"
+
+        - id: "8.4"
+          name: "Business continuity plans and procedures"
+          requirement: "Establish and maintain BCM procedures"
+
+        - id: "9.1"
+          name: "Monitoring, measurement, analysis and evaluation"
+          requirement: "Monitor BCM performance"
+
+      evidence_generated:
+        - type: "compliance_report"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "report_id"
+            - "organization_id"
+            - "standard"
+            - "compliance_score"
+            - "checked_clauses"
+            - "non_compliant_items"
+            - "recommendations"
+            - "checked_by"
+            - "timestamp"
+
+        - type: "audit_log"
+          format: "JSON"
+          storage: "audit_logs"
+          retention: "7 years"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "compliance_check_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+          - "standard"
+
+      - name: "compliance_checks_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "standard"
+
+      - name: "compliance_score"
+        type: "gauge"
+        labels:
+          - "organization_id"
+          - "standard"
+
+      - name: "compliance_gaps_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "clause"
+
+    logs:
+      level: "INFO"
+      include:
+        - "report_id"
+        - "organization_id"
+        - "compliance_score"
+        - "user_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "ISO 22301 compliance checking with gap identification"

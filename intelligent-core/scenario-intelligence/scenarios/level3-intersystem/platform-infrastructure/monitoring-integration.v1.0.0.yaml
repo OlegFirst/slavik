@@ -1,0 +1,254 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "platform-infrastructure-monitoring"
+    version: "1.0.0"
+    level: 3  # Inter-system level
+    type: "integration"
+    pillar: "reliability"
+    domain: "monitoring_integration"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "infrastructure-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    systems:
+      - "platform-services"
+      - "infrastructure"
+    subsystems:
+      - "bcm-services"
+      - "observability"
+      - "eventbus"
+    team: "infrastructure-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Platform-Infrastructure Monitoring Integration"
+    summary: "Verify Platform Services metrics are properly collected by Infrastructure observability"
+    business_value: "Ensure comprehensive monitoring and alerting across systems"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Cross-System Monitoring"
+
+    scenario: "Platform metrics flow to Infrastructure monitoring"
+
+    given:
+      - "Platform Services are running"
+      - "Prometheus is running"
+      - "Service Discovery is running"
+      - "EventBus is available"
+
+    when:
+      - "Platform Services emit metrics"
+      - "Prometheus scrapes service endpoints"
+      - "EventBus publishes health events"
+      - "Service Discovery updates service status"
+
+    then:
+      - "All platform metrics are visible in Prometheus"
+      - "Service health status is accurate"
+      - "Alerts trigger on threshold violations"
+      - "Dashboard shows real-time metrics"
+      - "Cross-system monitoring is functional"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 90
+    retry_policy:
+      max_retries: 2
+      backoff: linear
+
+    steps:
+      # Step 1: Verify Service Discovery
+      - id: "check_service_discovery"
+        action: "http.get"
+        params:
+          url: "http://service-discovery:8500/health"
+        expect:
+          status: 200
+          response.status: "healthy"
+        on_failure: "abort"
+
+      # Step 2: Verify Prometheus
+      - id: "check_prometheus"
+        action: "http.get"
+        params:
+          url: "http://prometheus:9090/-/healthy"
+        expect:
+          status: 200
+        on_failure: "abort"
+
+      # Step 3: Check Platform Services registered
+      - id: "check_services_registered"
+        action: "http.get"
+        params:
+          url: "http://service-discovery:8500/api/v1/services"
+          query:
+            subsystem: "platform-services"
+        expect:
+          status: 200
+          response.services_count: ">3"
+
+      # Step 4: Trigger metric emission from BIA Service
+      - id: "trigger_bia_metrics"
+        action: "http.post"
+        params:
+          url: "http://bia-service:8001/api/v1/bia"
+          body:
+            organization_id: "test-org"
+            process_name: "test-process"
+        expect:
+          status: 201
+
+      # Step 5: Wait for metric propagation
+      - id: "wait_for_metrics"
+        action: "sleep"
+        params:
+          seconds: 15  # Prometheus scrape interval
+
+      # Step 6: Verify metrics in Prometheus
+      - id: "query_bia_metrics"
+        action: "http.get"
+        params:
+          url: "http://prometheus:9090/api/v1/query"
+          query:
+            query: "bia_created_total"
+        expect:
+          status: 200
+          response.data.result: "{{exists}}"
+
+      # Step 7: Check service health metrics
+      - id: "query_service_health"
+        action: "http.get"
+        params:
+          url: "http://prometheus:9090/api/v1/query"
+          query:
+            query: "up{job='platform-services'}"
+        expect:
+          status: 200
+          response.data.result: "{{exists}}"
+
+      # Step 8: Verify EventBus health event published
+      - id: "check_eventbus_health_event"
+        action: "http.get"
+        params:
+          url: "http://ai-event-manager:9005/api/events"
+          query:
+            event_type: "service.health.changed"
+            service: "bia-service"
+        expect:
+          status: 200
+
+      # Step 9: Check cross-system latency metric
+      - id: "query_cross_system_latency"
+        action: "http.get"
+        params:
+          url: "http://prometheus:9090/api/v1/query"
+          query:
+            query: "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))"
+        expect:
+          status: 200
+          response.data.result: "{{exists}}"
+
+      # Step 10: Verify alert rules loaded
+      - id: "check_alert_rules"
+        action: "http.get"
+        params:
+          url: "http://prometheus:9090/api/v1/rules"
+        expect:
+          status: 200
+          response.data.groups: "{{exists}}"
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      - scenario_id: "platform-services-bcm-subsystem-health"
+        level: 2
+        when: "before_monitoring"
+        parallel: false
+
+    events:
+      emits:
+        - event_type: "intersystem.monitoring.verified"
+          aggregate: "MonitoringIntegration"
+          aggregate_id: "platform-infrastructure-monitoring"
+          payload:
+            systems_verified:
+              - "platform-services"
+              - "infrastructure-observability"
+            metrics_flowing: true
+            alerts_configured: true
+
+      subscribes:
+        - event_type: "service.health.changed"
+          trigger_scenario: "update-monitoring-dashboard"
+
+        - event_type: "alert.triggered"
+          trigger_scenario: "escalate-to-on-call"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "monitoring_integration_test_duration_seconds"
+        type: "histogram"
+
+      - name: "cross_system_metrics_flow_success"
+        type: "gauge"
+
+      - name: "prometheus_scrape_failures_total"
+        type: "counter"
+        labels:
+          - "service"
+
+      - name: "alert_evaluation_duration_seconds"
+        type: "histogram"
+
+    logs:
+      level: "INFO"
+      include:
+        - "systems_verified"
+        - "metrics_flowing"
+
+    dashboards:
+      - name: "Platform Services Overview"
+        panels:
+          - "BIA Service Metrics"
+          - "Risk Service Metrics"
+          - "Plans Service Metrics"
+          - "Cross-System Latency"
+
+  # ========== ALERTING ==========
+  alerting:
+    rules:
+      - alert: "PlatformServiceDown"
+        condition: "up{job='platform-services'} == 0"
+        duration: "5m"
+        severity: "critical"
+
+      - alert: "HighCrossSystemLatency"
+        condition: "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1"
+        duration: "10m"
+        severity: "warning"
+
+      - alert: "PrometheusScrapeFailing"
+        condition: "up{job='prometheus'} == 0"
+        duration: "5m"
+        severity: "critical"
+
+  # ========== SLA ==========
+  sla:
+    target_metric_availability: 0.999
+    max_metric_lag_seconds: 30
+    alert_evaluation_interval_seconds: 15
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "infrastructure-team"
+      changes:
+        - "Initial version"
+        - "Platform-Infrastructure monitoring integration"

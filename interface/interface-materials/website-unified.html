@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Platform-ISO - Intelligent Business Continuity Management Platform with ISO 22301:2019 compliance">
+    <meta name="keywords" content="BCM, ISO 22301, AI, Business Continuity, Risk Management, Compliance, Healthcare">
+    <title>AI-Platform-ISO | Intelligent BCM Platform</title>
+
+    <!-- Mermaid.js for Architecture Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Restrained color palette - Anthropic style */
+            --primary: #2d3748;
+            --primary-light: #4a5568;
+            --secondary: #718096;
+            --accent: #4299e1;
+            --background: #f7fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --border-light: #edf2f7;
+            --text-primary: #1a202c;
+            --text-secondary: #718096;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --highlight: #ebf8ff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-teal) 0%, var(--primary-light) 100%);
+            z-index: 101;
+            transition: width 0.1s ease;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 80px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto 12px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        header .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary-light);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 24px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section:nth-child(even) {
+            background: var(--surface);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 48px;
+            text-align: center;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-teal);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        /* Statistics Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+            margin: 48px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 32px 16px;
+            background: var(--surface);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: block;
+        }
+
+        /* Two Paths Comparison */
+        .paths-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .path {
+            padding: 40px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .path::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+
+        .path-fragile {
+            background: #fef2f2;
+            border: 2px solid var(--danger);
+        }
+
+        .path-fragile::before {
+            background: var(--danger);
+        }
+
+        .path-resilient {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .path-resilient::before {
+            background: var(--success);
+        }
+
+        .path:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .path h3 {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+        }
+
+        .path-fragile h3 {
+            color: var(--danger);
+        }
+
+        .path-resilient h3 {
+            color: var(--success);
+        }
+
+        .path-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .path-step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .path-fragile .path-step-icon {
+            background: var(--danger);
+            color: white;
+        }
+
+        .path-resilient .path-step-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .path-step-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .path-step-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Core Message Box */
+        .core-message {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 60px 0;
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.3);
+        }
+
+        .core-message h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .core-message p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+        }
+
+        .card-highlight h3 {
+            color: white;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-teal) 0%, var(--primary-light) 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Service Items */
+        .service-item {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .service-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .service-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .service-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Architecture Diagram */
+        .diagram-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 32px 0;
+        }
+
+        /* Technical Specs Table */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .specs-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .specs-table th {
+            font-weight: 600;
+        }
+
+        .specs-table tbody tr:hover {
+            background: var(--background);
+        }
+
+        .specs-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--primary);
+            padding: 24px;
+            border-radius: 8px;
+            margin: 32px 0;
+        }
+
+        /* Integration Tags */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .integration-tag {
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Comparison Section */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .comparison-box {
+            padding: 40px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .comparison-traditional {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--warning);
+        }
+
+        .comparison-nash {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid var(--primary-light);
+        }
+
+        .comparison-box h3 {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+        }
+
+        .comparison-traditional h3 {
+            color: var(--warning);
+        }
+
+        .comparison-nash h3 {
+            color: var(--primary-light);
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .comparison-label {
+            font-weight: 700;
+            min-width: 140px;
+            color: var(--text-primary);
+        }
+
+        .comparison-value {
+            color: var(--text-secondary);
+        }
+
+        /* Principles Grid */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .principle-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent-teal);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .principle-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .principle-card h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .principle-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta {
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--primary);
+            color: white;
+        }
+
+        .cta h2 {
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .cta h2::after {
+            background: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .paths-container,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 16px;
+                padding: 12px 0;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Header -->
+<header>
+    <div class="container">
+        <h1>AI-Platform-ISO</h1>
+        <p>Intelligent Business Continuity Management with Artificial Intelligence</p>
+        <p class="subtitle">Modern solution for risk management and ISO 22301:2019 compliance</p>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav>
+    <ul>
+        <li><a href="#stats">Overview</a></li>
+        <li><a href="#philosophy">BCM Philosophy</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#solution">Services</a></li>
+        <li><a href="#audiences">Audiences</a></li>
+        <li><a href="#ai">AI Value</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#specs">Technology</a></li>
+        <li><a href="#mcp">MCP</a></li>
+        <li><a href="#integrations">Integrations</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- Statistics Section -->
+<section id="stats">
+    <div class="container">
+        <h2>Platform at a Glance</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">1745</span>
+                <span class="stat-label">Documents in System</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">23</span>
+                <span class="stat-label">Microservices</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">14</span>
+                <span class="stat-label">AI Specialists</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">347</span>
+                <span class="stat-label">Cases in Library</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">87%</span>
+                <span class="stat-label">Prediction Accuracy</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">10</span>
+                <span class="stat-label">ISO 22301 Clauses</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BCM Philosophy - Two Paths -->
+<section id="philosophy">
+    <div class="container">
+        <h2>Two Paths When Crisis Hits</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 900px; margin-left: auto; margin-right: auto; font-size: 1.1rem;">
+            Every organization faces this reality. Crises are inevitable—epidemics, disasters, system failures. The question is not IF, but WHEN.
+        </p>
+
+        <div class="paths-container">
+            <div class="path path-fragile">
+                <h3>Without Preparedness: Fragile</h3>
+
+                <div class="path-step">
+                    <div class="path-step-icon">1</div>
+                    <div class="path-step-content">
+                        <h4>Normal Operations</h4>
+                        <p>Services delivered. Patients treated. Community trust established.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">2</div>
+                    <div class="path-step-content">
+                        <h4>Crisis Hits</h4>
+                        <p>Epidemic | Disaster | Cyber Attack | Supply Disruption</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">3</div>
+                    <div class="path-step-content">
+                        <h4>No Clear Plan</h4>
+                        <p>Confusion, delays, improvisation. Staff overwhelmed without procedures.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">4</div>
+                    <div class="path-step-content">
+                        <h4>Services Disrupted</h4>
+                        <p>Patients unable to access care. Treatment interrupted. Community loses trust.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">5</div>
+                    <div class="path-step-content">
+                        <h4>Severe Consequences</h4>
+                        <p>Lives at risk. Long recovery. High costs. Reputation damage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="path path-resilient">
+                <h3>With BCM / ISO 22301: Resilient</h3>
+
+                <div class="path-step">
+                    <div class="path-step-icon">1</div>
+                    <div class="path-step-content">
+                        <h4>Normal Operations</h4>
+                        <p>Services delivered. Patients treated. Plans ready, tested.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">2</div>
+                    <div class="path-step-content">
+                        <h4>Same Crisis Hits</h4>
+                        <p>Same epidemic, disaster—but organization is prepared.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">3</div>
+                    <div class="path-step-content">
+                        <h4>Plan Activated Immediately</h4>
+                        <p>Trained response. Clear procedures. Coordinated action.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">4</div>
+                    <div class="path-step-content">
+                        <h4>Services Maintained</h4>
+                        <p>Critical care continues. Patients receive treatment. Staff protected, supported.</p>
+                    </div>
+                </div>
+
+                <div class="path-step">
+                    <div class="path-step-icon">5</div>
+                    <div class="path-step-content">
+                        <h4>Rapid Recovery + Learning</h4>
+                        <p>Quick return to normal. Lessons captured. Organization stronger.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="core-message">
+            <h3>Organizations have two choices:</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 16px;">
+                <strong>1.</strong> React when crisis happens → Chaos, improvisation, severe harm<br>
+                <strong>2.</strong> Prepare systematically before crisis → Controlled response, continuity, recovery
+            </p>
+            <p style="font-size: 1.15rem; font-weight: 600; margin-top: 24px;">
+                BCM = Systematic Preparation | ISO 22301 = Proven International Framework
+            </p>
+        </div>
+
+        <div style="margin-top: 48px; padding: 32px; background: #f8fafc; border-left: 4px solid var(--accent); border-radius: 8px;">
+            <h3 style="font-size: 1.4rem; margin-bottom: 16px; color: var(--text-primary);">Why This Matters</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8; font-size: 1.05rem;">
+                Patient care cannot stop. Treatment interruption = lives at risk. Staff safety = essential for sustained response. Community trust = foundation of public health.
+            </p>
+            <p style="color: var(--text-secondary); line-height: 1.8; font-size: 1.05rem; margin-top: 16px;">
+                <strong>Preparedness is not optional.</strong> It's our professional responsibility to the communities we serve.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features">
+    <div class="container">
+        <h2>Key Capabilities</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Comprehensive AI-powered business continuity management solution
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>AI-Powered BIA Analysis</h3>
+                <p>Automated business impact analysis using machine learning. 87% prediction accuracy. Expert recommendations from 14 AI specialists. Identifies critical processes and dependencies automatically.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Automated Compliance Reporting</h3>
+                <p>One-click ISO 22301 compliance reporting. Full coverage of all 10 standard clauses. Audit logs for all operations. Gap analysis in 45 minutes instead of 4-6 weeks.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Intelligent Risk Assessment</h3>
+                <p>Smart risk evaluation and prioritization. Predictive analytics for proactive management. Integration with collective intelligence from 347+ anonymized cases worldwide.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Simulation and Scenario Planning</h3>
+                <p>Digital twin of your organization for scenario testing. Monte Carlo simulations. Integration with TheHive for incident management. Test response plans safely.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Real-Time Monitoring</h3>
+                <p>Prometheus + Grafana for system observability. Automatic recovery with exponential backoff. EventBus architecture for real-time event processing across all services.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Collective Intelligence</h3>
+                <p>Learning from 347+ anonymized crisis cases. Pattern recognition and best practices. Knowledge sharing between organizations. AI improves continuously from global experience.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Solution / Services -->
+<section id="solution">
+    <div class="container">
+        <h2>Platform Services</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Unified AI platform for managing all aspects of business continuity
+        </p>
+
+        <div class="grid-4">
+            <div class="service-item">
+                <h4>BIA Analysis</h4>
+                <p>Business Impact Analysis with AI-powered insights and automation</p>
+            </div>
+            <div class="service-item">
+                <h4>Risk Management</h4>
+                <p>Comprehensive risk assessment and mitigation strategies</p>
+            </div>
+            <div class="service-item">
+                <h4>Plan Generator</h4>
+                <p>Automatic generation of business continuity plans</p>
+            </div>
+            <div class="service-item">
+                <h4>Compliance Monitor</h4>
+                <p>ISO 22301 compliance tracking and reporting</p>
+            </div>
+            <div class="service-item">
+                <h4>Incident Response</h4>
+                <p>24/7 incident management and crisis coordination</p>
+            </div>
+            <div class="service-item">
+                <h4>Training Platform</h4>
+                <p>Staff training programs and exercise simulations</p>
+            </div>
+            <div class="service-item">
+                <h4>Document Manager</h4>
+                <p>Centralized document management with version control</p>
+            </div>
+            <div class="service-item">
+                <h4>Simulation Hub</h4>
+                <p>Crisis scenario simulations and digital twin modeling</p>
+            </div>
+            <div class="service-item">
+                <h4>Analytics Dashboard</h4>
+                <p>Real-time analytics, metrics and insights</p>
+            </div>
+            <div class="service-item">
+                <h4>AI Assistant</h4>
+                <p>Intelligent 24/7 assistant for guidance and support</p>
+            </div>
+            <div class="service-item">
+                <h4>Audit System</h4>
+                <p>Audit preparation and management tools</p>
+            </div>
+            <div class="service-item">
+                <h4>Integration Hub</h4>
+                <p>Seamless integration with your existing systems</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Target Audiences -->
+<section id="audiences">
+    <div class="container">
+        <h2>Who We Serve</h2>
+
+        <div class="grid-3">
+            <div class="card">
+                <h3>BCM Managers</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Business continuity professionals</p>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Challenges:</h4>
+                <ul style="color: var(--text-secondary); margin-bottom: 24px; list-style: none; padding-left: 0;">
+                    <li>• Conducting comprehensive BIA analysis</li>
+                    <li>• Developing continuity plans</li>
+                    <li>• Managing organizational risks</li>
+                    <li>• Training staff effectively</li>
+                </ul>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Solutions:</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>• 24/7 AI consultant support</li>
+                    <li>• Auto-generate plans in hours</li>
+                    <li>• Ready-made ISO 22301 templates</li>
+                    <li>• Automated risk monitoring</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Auditors</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Compliance assessment specialists</p>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Challenges:</h4>
+                <ul style="color: var(--text-secondary); margin-bottom: 24px; list-style: none; padding-left: 0;">
+                    <li>• Verifying ISO 22301 compliance</li>
+                    <li>• Gap analysis of current state</li>
+                    <li>• Preparing detailed reports</li>
+                    <li>• Providing improvement recommendations</li>
+                </ul>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Solutions:</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>• Gap analysis in 45 minutes</li>
+                    <li>• Automatic verification of all clauses</li>
+                    <li>• Detailed reports with recommendations</li>
+                    <li>• Real-time tracking of corrections</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Leadership / Investors</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Decision makers</p>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Questions:</h4>
+                <ul style="color: var(--text-secondary); margin-bottom: 24px; list-style: none; padding-left: 0;">
+                    <li>• Implementation costs</li>
+                    <li>• Return on investment (ROI)</li>
+                    <li>• Protection level</li>
+                    <li>• Standards compliance</li>
+                </ul>
+
+                <h4 style="font-size: 1rem; margin-bottom: 12px;">Results:</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>• 70% reduction in BCM costs</li>
+                    <li>• Certification in 3-6 months</li>
+                    <li>• Dashboard with security metrics</li>
+                    <li>• 65%+ reduction in downtime</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI Value -->
+<section id="ai">
+    <div class="container">
+        <h2>The Value of Artificial Intelligence</h2>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3>Speed</h3>
+                <div style="margin: 24px 0;">
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                        <span>Gap Analysis</span>
+                        <span style="font-weight: 600; color: var(--success);">4-6 weeks → 45 minutes</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                        <span>BIA Analysis</span>
+                        <span style="font-weight: 600; color: var(--success);">8-12 weeks → 2-3 weeks</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+                        <span>Plan Generation</span>
+                        <span style="font-weight: 600; color: var(--success);">16-24 weeks → 4-6 weeks</span>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 24px; padding: 16px; background: #eff6ff; border-radius: 6px;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">4-8x Faster</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Cost Savings</h3>
+                <div style="margin: 24px 0;">
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                        <span>Consultants</span>
+                        <span style="font-weight: 600; color: var(--success);">-80% costs</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                        <span>Staff Time</span>
+                        <span style="font-weight: 600; color: var(--success);">-70% hours</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+                        <span>Manual Work</span>
+                        <span style="font-weight: 600; color: var(--success);">-85% routine</span>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 24px; padding: 16px; background: #f0fdf4; border-radius: 6px;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--success);">70% Savings</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-grid" style="margin-top: 64px;">
+            <div class="comparison-box comparison-traditional">
+                <h3>Traditional BCM Implementation</h3>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Timeline:</div>
+                    <div class="comparison-value">12-24 months</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Gap Analysis:</div>
+                    <div class="comparison-value">4-6 weeks manual work</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">BCP Development:</div>
+                    <div class="comparison-value">16-24 weeks</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Approach:</div>
+                    <div class="comparison-value">Expert consultants required</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Knowledge:</div>
+                    <div class="comparison-value">Leaves with consultants</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Updates:</div>
+                    <div class="comparison-value">Manual, expensive</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Crisis Support:</div>
+                    <div class="comparison-value">Static documents</div>
+                </div>
+            </div>
+
+            <div class="comparison-box comparison-nash">
+                <h3>AI Platform Approach</h3>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Timeline:</div>
+                    <div class="comparison-value">3-6 months (4-8x faster)</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Gap Analysis:</div>
+                    <div class="comparison-value">45 minutes AI-powered</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">BCP Development:</div>
+                    <div class="comparison-value">4-6 weeks AI-generated</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Approach:</div>
+                    <div class="comparison-value">AI guides, your team learns</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Knowledge:</div>
+                    <div class="comparison-value">Stays in your organization</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Updates:</div>
+                    <div class="comparison-value">Automatic, continuous</div>
+                </div>
+
+                <div class="comparison-item">
+                    <div class="comparison-label">Crisis Support:</div>
+                    <div class="comparison-value">24/7 AI assistant</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+    <div class="container">
+        <h2>Platform Architecture</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Modern microservices architecture with event-driven design
+        </p>
+
+        <div class="diagram-container">
+            <div class="mermaid">
+graph TB
+    subgraph "Human Interface Layer"
+        WEB[Web App<br/>Next.js + React]
+        API_GW[API Gateway<br/>FastAPI]
+    end
+
+    subgraph "Platform Services Layer - 12 BCM Services"
+        BIA[BIA Service<br/>Business Impact]
+        RISK[Risk Service<br/>Risk Management]
+        COMP[Compliance<br/>ISO 22301]
+        DOCS[Documents<br/>Management]
+        PLAN[Planning<br/>BC Plans]
+        RESP[Response<br/>Incidents]
+    end
+
+    subgraph "Intelligent Core Layer"
+        AI_ORCH[AI Orchestrator<br/>Cognitive Loop]
+        WF_INT[Workflow Intelligence<br/>Temporal]
+        EXPERT[Expertise Center<br/>14 Specialists]
+        PRED[Predictive<br/>ML Analytics]
+        COLL[Collective<br/>347+ Cases]
+    end
+
+    subgraph "Infrastructure Layer"
+        DB[(PostgreSQL<br/>Supabase)]
+        EVENT[EventBus<br/>Redis + RabbitMQ]
+        VECTOR[(Qdrant<br/>Vector DB)]
+        MON[Monitoring<br/>Prometheus]
+    end
+
+    WEB --> API_GW
+    API_GW --> BIA
+    API_GW --> RISK
+    API_GW --> COMP
+    API_GW --> DOCS
+    API_GW --> PLAN
+    API_GW --> RESP
+
+    BIA --> AI_ORCH
+    RISK --> AI_ORCH
+    COMP --> AI_ORCH
+    PLAN --> WF_INT
+
+    AI_ORCH --> EXPERT
+    AI_ORCH --> PRED
+    WF_INT --> COLL
+
+    AI_ORCH --> EVENT
+    BIA --> DB
+    RISK --> DB
+    COMP --> DB
+    EXPERT --> VECTOR
+    PRED --> DB
+    EVENT --> MON
+
+    style WEB fill:#60a5fa
+    style API_GW fill:#60a5fa
+    style AI_ORCH fill:#a78bfa
+    style WF_INT fill:#a78bfa
+    style DB fill:#34d399
+    style EVENT fill:#34d399
+            </div>
+        </div>
+
+        <div class="principles-grid">
+            <div class="principle-card">
+                <h3>Microservices</h3>
+                <p>23 independent services for modularity and scalability</p>
+            </div>
+            <div class="principle-card">
+                <h3>Event-Driven</h3>
+                <p>133 event types for real-time coordination</p>
+            </div>
+            <div class="principle-card">
+                <h3>AI-First</h3>
+                <p>Claude + OpenAI GPT-4 for intelligent capabilities</p>
+            </div>
+            <div class="principle-card">
+                <h3>Multi-Tenant</h3>
+                <p>Complete data isolation for security</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technical Specifications -->
+<section id="specs">
+    <div class="container">
+        <h2>Technical Specifications</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Modern technology stack for reliable and scalable operation
+        </p>
+
+        <table class="specs-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>Python 3.9+ / FastAPI</td>
+                    <td>Asynchronous microservices</td>
+                </tr>
+                <tr>
+                    <td><strong>Frontend</strong></td>
+                    <td>Next.js 14 / React 18 / TypeScript</td>
+                    <td>Modern web interface</td>
+                </tr>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>PostgreSQL (Supabase)</td>
+                    <td>Primary data storage</td>
+                </tr>
+                <tr>
+                    <td><strong>Vector DB</strong></td>
+                    <td>Qdrant</td>
+                    <td>RAG and semantic search</td>
+                </tr>
+                <tr>
+                    <td><strong>Event Bus</strong></td>
+                    <td>Redis Streams + RabbitMQ</td>
+                    <td>Asynchronous communication</td>
+                </tr>
+                <tr>
+                    <td><strong>Caching</strong></td>
+                    <td>Redis</td>
+                    <td>High-speed cache</td>
+                </tr>
+                <tr>
+                    <td><strong>AI Platform</strong></td>
+                    <td>Anthropic Claude / OpenAI GPT-4</td>
+                    <td>Intelligent capabilities</td>
+                </tr>
+                <tr>
+                    <td><strong>ML Libraries</strong></td>
+                    <td>Scikit-learn / TensorFlow</td>
+                    <td>Predictive analytics</td>
+                </tr>
+                <tr>
+                    <td><strong>Workflows</strong></td>
+                    <td>Temporal</td>
+                    <td>Distributed transactions</td>
+                </tr>
+                <tr>
+                    <td><strong>Monitoring</strong></td>
+                    <td>Prometheus + Grafana</td>
+                    <td>System observability</td>
+                </tr>
+                <tr>
+                    <td><strong>Orchestration</strong></td>
+                    <td>Docker / Docker Compose</td>
+                    <td>Service containerization</td>
+                </tr>
+                <tr>
+                    <td><strong>Security</strong></td>
+                    <td>Vault / JWT / RBAC</td>
+                    <td>Secrets and access management</td>
+                </tr>
+                <tr>
+                    <td><strong>Compliance</strong></td>
+                    <td>ISO 22301:2019</td>
+                    <td>Business continuity standard</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- MCP Technology -->
+<section id="mcp">
+    <div class="container">
+        <h2>MCP: Open Integration Architecture</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Model Context Protocol - universal protocol for AI system integration
+        </p>
+
+        <div class="comparison-grid">
+            <div class="comparison-box comparison-traditional">
+                <h3>Traditional Approach</h3>
+                <div style="margin-top: 20px; line-height: 2;">
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Custom integration: 6-12 months</div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Vendor lock-in: tied to provider</div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Isolated systems</div>
+                    <div style="padding: 12px 0;">High development costs</div>
+                </div>
+            </div>
+
+            <div class="comparison-box comparison-nash">
+                <h3>With MCP Protocol</h3>
+                <div style="margin-top: 20px; line-height: 2;">
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Plug-and-play: hours instead of months</div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Any AI provider by choice</div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">Network effect and collective intelligence</div>
+                    <div style="padding: 12px 0;">Exponential capability growth</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 48px;">
+            <div class="card">
+                <h3>From Expert Dependency</h3>
+                <p>To AI assistants available to every specialist in the organization</p>
+            </div>
+            <div class="card">
+                <h3>From Static Plans</h3>
+                <p>To dynamic learning and continuous improvement</p>
+            </div>
+            <div class="card">
+                <h3>From Isolation</h3>
+                <p>To collective intelligence and knowledge sharing</p>
+            </div>
+            <div class="card">
+                <h3>From Crisis Reaction</h3>
+                <p>To prediction and proactive action</p>
+            </div>
+            <div class="card">
+                <h3>From Knowledge Scarcity</h3>
+                <p>To abundance of accessible expertise</p>
+            </div>
+            <div class="card card-highlight">
+                <h3>Extensibility</h3>
+                <p>Community can create MCP servers and extend platform capabilities</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Integrations -->
+<section id="integrations">
+    <div class="container">
+        <h2>Integrations</h2>
+
+        <div class="grid-3" style="margin-bottom: 48px;">
+            <div>
+                <h3 style="margin-bottom: 16px;">CRM / ERP Systems</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">Salesforce</div>
+                    <div class="integration-tag">SAP</div>
+                    <div class="integration-tag">Microsoft Dynamics</div>
+                    <div class="integration-tag">1C (ERP)</div>
+                    <div class="integration-tag">Oracle</div>
+                    <div class="integration-tag">Odoo</div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="margin-bottom: 16px;">Desktop Applications</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">Microsoft Excel</div>
+                    <div class="integration-tag">Microsoft Word</div>
+                    <div class="integration-tag">PDF Generation</div>
+                    <div class="integration-tag">CSV Import/Export</div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="margin-bottom: 16px;">Communications</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">Slack</div>
+                    <div class="integration-tag">Microsoft Teams</div>
+                    <div class="integration-tag">Telegram</div>
+                    <div class="integration-tag">Email (SMTP)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3">
+            <div>
+                <h3 style="margin-bottom: 16px;">Cloud Platforms</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">Microsoft Azure</div>
+                    <div class="integration-tag">AWS</div>
+                    <div class="integration-tag">Google Cloud</div>
+                    <div class="integration-tag">On-Premise</div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="margin-bottom: 16px;">AI Providers</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">Anthropic Claude</div>
+                    <div class="integration-tag">OpenAI GPT-4</div>
+                    <div class="integration-tag">Google Gemini</div>
+                    <div class="integration-tag">Azure OpenAI</div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="margin-bottom: 16px;">Database & Storage</h3>
+                <div class="integration-grid">
+                    <div class="integration-tag">PostgreSQL</div>
+                    <div class="integration-tag">Redis</div>
+                    <div class="integration-tag">Qdrant Vector DB</div>
+                    <div class="integration-tag">S3 Storage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 48px;">
+            <h3>Works with Your Systems</h3>
+            <p>MCP protocol enables rapid integration with tools you already use. No need to replace existing infrastructure. Plug-and-play architecture reduces integration time from months to hours.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact / CTA -->
+<section id="contact" class="cta">
+    <div class="container">
+        <h2>Ready to Get Started?</h2>
+        <p style="font-size: 1.25rem; margin-bottom: 32px; opacity: 0.95;">Request a platform demonstration and see the capabilities in action</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin: 48px 0; color: white; max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Platform</div>
+                <div style="opacity: 0.9;">localhost:3333</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Documentation</div>
+                <div style="opacity: 0.9;">localhost:4000</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">API</div>
+                <div style="opacity: 0.9;">localhost:8888/docs</div>
+            </div>
+        </div>
+
+        <div class="cta-buttons">
+            <a href="mailto:info@ai-platform-iso.com" class="btn btn-primary">Contact Us</a>
+            <a href="http://localhost:3333" target="_blank" class="btn btn-secondary">Open Demo</a>
+            <a href="docs/index.html" class="btn btn-secondary">Documentation</a>
+        </div>
+
+        <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.2); opacity: 0.9;">
+            <p style="font-size: 1.1rem; margin-bottom: 16px;">Built with AI Partnership | For Healthcare BCM | Social Impact Project</p>
+            <p>Non-commercial project dedicated to making business continuity accessible to all organizations</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+    });
+
+    // Progress bar
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+    });
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Animate statistics on scroll
+    const animateNumbers = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const numbers = entry.target.querySelectorAll('.stat-number');
+                numbers.forEach(num => {
+                    const target = parseInt(num.textContent);
+                    const duration = 1500;
+                    const step = target / (duration / 16);
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            num.textContent = target + (num.textContent.includes('%') ? '%' : '');
+                            clearInterval(timer);
+                        } else {
+                            num.textContent = Math.floor(current) + (num.textContent.includes('%') ? '%' : '');
+                        }
+                    }, 16);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    };
+
+    const statsObserver = new IntersectionObserver(animateNumbers, { threshold: 0.5 });
+    document.querySelectorAll('.stats-grid').forEach(grid => {
+        statsObserver.observe(grid);
+    });
+</script>
+
+</body>
+</html>

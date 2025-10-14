@@ -1,0 +1,705 @@
+meta:
+  id: "l3-business-system-{system_name}"
+  name: "L3 Business System Test Scenarios"
+  level: 3
+  category: "business"
+  version: "1.0.0"
+  created: "2025-10-13"
+  template_type: "specialized"
+  applicable_to:
+    - "BCM Core Business Logic (system)"
+    - "Multi-tenancy & Organizations (system)"
+    - "Business Domain Intelligence (system)"
+    - "Document Management (system)"
+
+description: |
+  Specialized L3 template for Business Logic and Domain systems testing.
+
+  Business systems implement core domain logic and rules through:
+  - Multi-tenant organization management
+  - BCM domain workflows (BIA, Risk Assessment, Response Planning)
+  - Business rule validation and enforcement
+  - Document lifecycle management
+  - Compliance and audit trail generation
+  - Cross-organizational data isolation
+
+  This template generates comprehensive business test scenarios that validate
+  domain logic correctness, business rule compliance, and data integrity.
+
+systems_involved:
+  - "{system_name}"
+  - "PostgreSQL"
+  - "Policy Engine"
+  - "Workflow Intelligence"
+  - "EventBus"
+
+test_scenarios:
+  - name: "Multi-Tenant Organization Management"
+    scenario_id: "l3-biz-multi-tenancy"
+    description: "Test multi-tenant isolation and organization lifecycle"
+
+    organization_lifecycle:
+      - phase: "creation"
+        tests:
+          - name: "create_organization"
+            input:
+              name: "Acme Hospital"
+              type: "healthcare"
+              tier: "enterprise"
+            expected:
+              org_created: true
+              schema_namespace_created: true
+              rls_policies_applied: true
+              default_roles_created: ["org_admin", "org_member"]
+              audit_log_entry: "organization.created"
+
+          - name: "duplicate_organization_name"
+            input:
+              name: "Existing Org"
+            expected:
+              error: "organization_name_exists"
+              creation_blocked: true
+
+      - phase: "configuration"
+        tests:
+          - name: "configure_organization_settings"
+            settings:
+              rto_default: "4h"
+              rpo_default: "1h"
+              compliance_standards: ["ISO22301", "HIPAA"]
+            expected:
+              settings_applied: true
+              inheritable_by_sub_units: true
+
+      - phase: "scaling"
+        tests:
+          - name: "add_organizational_units"
+            units:
+              - {name: "Emergency Department", parent: "root"}
+              - {name: "ICU", parent: "Emergency Department"}
+            expected:
+              hierarchy_created: true
+              inheritance_path_valid: true
+
+      - phase: "suspension"
+        tests:
+          - name: "suspend_organization"
+            reason: "payment_overdue"
+            expected:
+              org_status: "suspended"
+              user_access_blocked: true
+              data_retained: true
+              admin_access_allowed: true
+
+      - phase: "deletion"
+        tests:
+          - name: "soft_delete_organization"
+            expected:
+              org_status: "deleted"
+              data_anonymized: false
+              recoverable: true
+              recovery_period: "30_days"
+
+          - name: "hard_delete_organization"
+            confirmation: "PERMANENT_DELETE"
+            expected:
+              data_permanently_deleted: true
+              audit_logs_retained: true
+              unrecoverable: true
+
+    data_isolation:
+      - scenario: "cross_tenant_access_prevention"
+        tests:
+          - name: "user_from_org_a_cannot_access_org_b"
+            user: "user_from_org_a"
+            target: "org_b_bia_document"
+            expected:
+              access_denied: true
+              rls_policy_enforced: true
+              audit_log_entry: "unauthorized_access_attempt"
+
+          - name: "shared_service_isolation"
+            service: "bia_generator"
+            org_a_request: "generate_bia"
+            org_b_data_present: true
+            expected:
+              org_a_sees_only_org_a_data: true
+              org_b_data_invisible: true
+
+    organization_hierarchy:
+      - scenario: "permission_inheritance"
+        tests:
+          - parent_org: "Acme Corp"
+            child_org: "Acme EU"
+            parent_policy: "require_2fa"
+            expected:
+              child_inherits_policy: true
+              child_can_override: false  # If policy is enforced
+
+      - scenario: "resource_aggregation"
+        tests:
+          - parent_org: "Acme Corp"
+            child_orgs: ["Acme US", "Acme EU", "Acme Asia"]
+            query: "aggregate_risk_score"
+            expected:
+              parent_sees_consolidated_view: true
+              children_see_only_own: true
+
+    monitoring:
+      - metric: "organizations_total"
+        labels: ["type", "tier", "status"]
+      - metric: "organization_operations_total"
+        labels: ["operation", "status"]
+      - metric: "cross_tenant_access_violations_total"
+
+  - name: "BCM Domain Workflows"
+    scenario_id: "l3-biz-bcm-workflows"
+    description: "Test core BCM business workflows and logic"
+
+    bia_workflow:
+      - phase: "initiation"
+        tests:
+          - name: "create_bia"
+            input:
+              organization: "Acme Hospital"
+              scope: "Emergency Department"
+              methodology: "ISO22301"
+            expected:
+              bia_created: true
+              status: "draft"
+              template_loaded: "healthcare_bia_template"
+              workflow_started: true
+
+      - phase: "data_collection"
+        tests:
+          - name: "collect_process_information"
+            processes:
+              - {name: "Patient Admission", criticality: "high"}
+              - {name: "Lab Testing", criticality: "medium"}
+            expected:
+              processes_registered: true
+              dependency_mapping_initiated: true
+
+          - name: "identify_dependencies"
+            process: "Patient Admission"
+            dependencies:
+              - {type: "system", name: "EMR System"}
+              - {type: "resource", name: "Admissions Staff"}
+              - {type: "supplier", name: "Internet Provider"}
+            expected:
+              dependencies_mapped: true
+              dependency_graph_updated: true
+
+      - phase: "analysis"
+        tests:
+          - name: "calculate_mtpd"
+            process: "Patient Admission"
+            input_data:
+              criticality: "high"
+              regulatory_requirements: "HIPAA"
+              business_impact_high: "4h"
+            expected:
+              mtpd_calculated: "4h"
+              rto_recommended: "2h"
+              rpo_recommended: "30m"
+
+          - name: "ai_assisted_analysis"
+            process: "Emergency Care"
+            ai_recommendations: true
+            expected:
+              ai_analysis_complete: true
+              recommendations_provided: true
+              human_review_required: true
+
+      - phase: "validation"
+        tests:
+          - name: "validate_completeness"
+            bia_sections:
+              processes: "complete"
+              dependencies: "complete"
+              mtpd_analysis: "complete"
+              recovery_strategies: "incomplete"
+            expected:
+              validation_status: "incomplete"
+              missing_sections: ["recovery_strategies"]
+              completion_percentage: 75
+
+      - phase: "approval"
+        tests:
+          - name: "submit_for_approval"
+            bia_status: "ready_for_review"
+            approvers: ["bcm_manager", "department_head"]
+            expected:
+              approval_workflow_started: true
+              notifications_sent: true
+              status: "pending_approval"
+
+          - name: "approved"
+            all_approvers_approved: true
+            expected:
+              bia_status: "approved"
+              version_locked: true
+              effective_date_set: true
+
+          - name: "rejected"
+            approver: "bcm_manager"
+            feedback: "Incomplete risk analysis"
+            expected:
+              bia_status: "revision_required"
+              feedback_captured: true
+              reassigned_to_creator: true
+
+      - phase: "maintenance"
+        tests:
+          - name: "periodic_review_due"
+            last_review: "13_months_ago"
+            review_frequency: "annual"
+            expected:
+              review_alert_triggered: true
+              status: "review_required"
+
+    risk_assessment_workflow:
+      - phase: "threat_identification"
+        tests:
+          - name: "identify_threats"
+            organization_context: "hospital"
+            expected:
+              threats_suggested: true
+              threat_library_filtered_by_domain: true
+              custom_threats_allowed: true
+
+      - phase: "risk_calculation"
+        tests:
+          - name: "calculate_inherent_risk"
+            threat: "Ransomware Attack"
+            likelihood: 0.3  # 30%
+            impact: 0.9  # 90%
+            expected:
+              inherent_risk_score: 0.27  # 0.3 * 0.9
+              risk_level: "high"
+
+          - name: "calculate_residual_risk"
+            inherent_risk: 0.27
+            controls:
+              - {control: "Backup System", effectiveness: 0.8}
+              - {control: "EDR", effectiveness: 0.7}
+            expected:
+              residual_risk_score: "< 0.1"
+              risk_level: "low"
+              risk_reduction: "63%"
+
+    response_planning_workflow:
+      - phase: "strategy_definition"
+        tests:
+          - name: "define_recovery_strategy"
+            process: "Critical Database"
+            rto: "2h"
+            rpo: "15m"
+            expected:
+              strategy_suggested: "hot_standby_with_replication"
+              estimated_cost: "calculated"
+              feasibility_assessed: true
+
+      - phase: "playbook_creation"
+        tests:
+          - name: "generate_incident_playbook"
+            incident_type: "ransomware"
+            expected:
+              playbook_created: true
+              steps_defined: true
+              roles_assigned: true
+              escalation_paths_defined: true
+
+    monitoring:
+      - metric: "bia_workflows_total"
+        labels: ["status"]
+      - metric: "bia_completion_time_hours"
+      - metric: "risk_assessments_total"
+        labels: ["risk_level"]
+      - metric: "response_plans_total"
+        labels: ["strategy_type"]
+
+  - name: "Business Rule Validation"
+    scenario_id: "l3-biz-rule-validation"
+    description: "Test business rule enforcement and validation"
+
+    validation_rules:
+      - rule: "rto_must_be_less_than_mtpd"
+        tests:
+          - input: {mtpd: "4h", rto: "2h"}
+            expected: {valid: true}
+          - input: {mtpd: "4h", rto: "6h"}
+            expected: {valid: false, error: "rto_exceeds_mtpd"}
+
+      - rule: "critical_processes_require_daily_backups"
+        tests:
+          - input: {criticality: "critical", backup_frequency: "daily"}
+            expected: {valid: true}
+          - input: {criticality: "critical", backup_frequency: "weekly"}
+            expected: {valid: false, error: "insufficient_backup_frequency"}
+
+      - rule: "high_risks_require_mitigation_plan"
+        tests:
+          - input: {risk_level: "high", mitigation_plan: "present"}
+            expected: {valid: true}
+          - input: {risk_level: "high", mitigation_plan: "absent"}
+            expected: {valid: false, error: "mitigation_plan_required"}
+
+      - rule: "approval_requires_minimum_two_approvers"
+        tests:
+          - input: {approvers_count: 2}
+            expected: {valid: true}
+          - input: {approvers_count: 1}
+            expected: {valid: false, error: "insufficient_approvers"}
+
+    compliance_validation:
+      - standard: "ISO22301"
+        requirements:
+          - requirement: "8.2.2_bia_shall_be_conducted"
+            validation:
+              bia_exists: true
+              bia_approved: true
+              bia_not_older_than: "12_months"
+            expected: {compliant: true}
+
+          - requirement: "8.3_risk_assessment_documented"
+            validation:
+              risk_assessment_exists: true
+              threats_identified: true
+              residual_risk_acceptable: true
+            expected: {compliant: true}
+
+      - standard: "HIPAA"
+        requirements:
+          - requirement: "contingency_plan_required"
+            validation:
+              contingency_plan_exists: true
+              tested_annually: true
+            expected: {compliant: true}
+
+    data_quality_rules:
+      - rule: "no_orphaned_dependencies"
+        validation:
+          query: "dependencies without valid parent process"
+          expected: {orphaned_count: 0}
+
+      - rule: "consistent_criticality_assessment"
+        validation:
+          scenario: "child_process_more_critical_than_parent"
+          expected: {warning_triggered: true}
+
+    monitoring:
+      - metric: "rule_validations_total"
+        labels: ["rule", "result"]
+      - metric: "compliance_checks_total"
+        labels: ["standard", "requirement", "result"]
+      - metric: "data_quality_violations_total"
+        labels: ["rule"]
+
+  - name: "Document Lifecycle Management"
+    scenario_id: "l3-biz-document-lifecycle"
+    description: "Test document creation, versioning, and archival"
+
+    document_lifecycle:
+      - phase: "creation"
+        tests:
+          - name: "create_document"
+            document_type: "bia_report"
+            content: "BIA Report v1.0"
+            expected:
+              document_created: true
+              version: "1.0"
+              status: "draft"
+              author_recorded: true
+
+      - phase: "versioning"
+        tests:
+          - name: "create_new_version"
+            current_version: "1.0"
+            changes: "Updated MTPD calculations"
+            expected:
+              new_version: "1.1"
+              previous_version_retained: true
+              change_log_updated: true
+
+          - name: "major_version"
+            current_version: "1.5"
+            breaking_changes: true
+            expected:
+              new_version: "2.0"
+              migration_note_required: true
+
+      - phase: "review"
+        tests:
+          - name: "submit_for_review"
+            reviewers: ["bcm_manager", "compliance_officer"]
+            expected:
+              status: "in_review"
+              reviewers_notified: true
+              comments_enabled: true
+
+          - name: "reviewer_comments"
+            reviewer: "bcm_manager"
+            comments: "Update risk scores in section 3"
+            expected:
+              comments_saved: true
+              author_notified: true
+
+      - phase: "approval"
+        tests:
+          - name: "approve_document"
+            all_reviewers_approved: true
+            expected:
+              status: "approved"
+              document_locked: true
+              approval_timestamp_recorded: true
+
+      - phase: "publication"
+        tests:
+          - name: "publish_document"
+            target_audience: "organization_wide"
+            expected:
+              status: "published"
+              access_granted_to_target_audience: true
+              notification_sent: true
+
+      - phase: "archival"
+        tests:
+          - name: "archive_old_version"
+            document_age: "3_years"
+            retention_policy: "7_years"
+            expected:
+              status: "archived"
+              moved_to_archive_storage: true
+              searchable: false
+              retrievable_by_admin: true
+
+          - name: "permanent_deletion"
+            document_age: "8_years"
+            retention_policy: "7_years"
+            expected:
+              permanently_deleted: true
+              audit_log_retained: true
+
+    document_access_control:
+      - scenario: "role_based_access"
+        tests:
+          - user_role: "bcm_specialist"
+            document: "bia_report_draft"
+            expected: {can_read: true, can_edit: true}
+
+          - user_role: "auditor"
+            document: "bia_report_approved"
+            expected: {can_read: true, can_edit: false}
+
+          - user_role: "external_consultant"
+            document: "internal_only_document"
+            expected: {can_read: false, can_edit: false}
+
+    document_search:
+      - scenario: "full_text_search"
+        query: "emergency response procedures"
+        expected:
+          results_found: true
+          ranked_by_relevance: true
+          access_controlled: true
+
+      - scenario: "metadata_search"
+        filters:
+          document_type: "risk_assessment"
+          created_after: "2025-01-01"
+          status: "approved"
+        expected:
+          filtered_results: true
+
+    monitoring:
+      - metric: "documents_total"
+        labels: ["type", "status"]
+      - metric: "document_versions_total"
+        labels: ["document_id"]
+      - metric: "document_access_total"
+        labels: ["document_type", "access_result"]
+
+  - name: "Compliance and Audit Trail"
+    scenario_id: "l3-biz-compliance-audit"
+    description: "Test compliance validation and audit trail generation"
+
+    audit_trail:
+      - event: "bia_created"
+        tests:
+          - name: "audit_log_entry"
+            expected:
+              logged: true
+              timestamp: "recorded"
+              user: "identified"
+              action: "bia.created"
+              entity_id: "bia_12345"
+              changes: "documented"
+
+      - event: "sensitive_data_accessed"
+        tests:
+          - name: "audit_sensitive_access"
+            user: "auditor"
+            document: "confidential_bia"
+            expected:
+              logged: true
+              security_level: "high"
+              justification_required: true
+
+      - event: "approval_granted"
+        tests:
+          - name: "audit_approval"
+            approver: "bcm_manager"
+            document: "response_plan"
+            expected:
+              logged: true
+              approval_timestamp: "recorded"
+              digital_signature: "captured"
+
+    compliance_reporting:
+      - report: "iso22301_compliance"
+        tests:
+          - name: "generate_compliance_report"
+            standard: "ISO22301"
+            expected:
+              report_generated: true
+              all_clauses_covered: true
+              non_compliances_highlighted: true
+              evidence_linked: true
+
+      - report: "audit_trail_export"
+        tests:
+          - name: "export_audit_logs"
+            date_range: "2025-01-01 to 2025-12-31"
+            format: "csv"
+            expected:
+              export_successful: true
+              all_events_included: true
+              tamper_proof_checksum: true
+
+    data_retention:
+      - policy: "audit_logs_7_years"
+        tests:
+          - name: "retain_audit_logs"
+            log_age: "5_years"
+            expected:
+              logs_retained: true
+              searchable: true
+
+          - name: "archive_old_logs"
+            log_age: "8_years"
+            expected:
+              logs_deleted_or_archived: true
+              summary_retained: true
+
+    monitoring:
+      - metric: "audit_events_total"
+        labels: ["event_type", "severity"]
+      - metric: "compliance_checks_total"
+        labels: ["standard", "result"]
+      - metric: "audit_report_generation_total"
+        labels: ["report_type"]
+
+monitoring:
+  required_metrics:
+    - name: "business_system_health"
+      type: "gauge"
+      description: "Overall business system health (0-1)"
+      labels: ["component"]
+
+    - name: "organizations_total"
+      type: "gauge"
+      description: "Total organizations"
+      labels: ["type", "tier", "status"]
+
+    - name: "bia_workflows_total"
+      type: "counter"
+      description: "BIA workflows executed"
+      labels: ["status"]
+
+    - name: "risk_assessments_total"
+      type: "counter"
+      description: "Risk assessments performed"
+      labels: ["risk_level"]
+
+    - name: "documents_total"
+      type: "gauge"
+      description: "Total documents"
+      labels: ["type", "status"]
+
+    - name: "rule_validations_total"
+      type: "counter"
+      description: "Business rule validations"
+      labels: ["rule", "result"]
+
+    - name: "compliance_checks_total"
+      type: "counter"
+      description: "Compliance checks performed"
+      labels: ["standard", "requirement", "result"]
+
+    - name: "audit_events_total"
+      type: "counter"
+      description: "Audit events logged"
+      labels: ["event_type", "severity"]
+
+    - name: "bia_completion_time_hours"
+      type: "histogram"
+      description: "Time to complete BIA workflow"
+
+    - name: "cross_tenant_access_violations_total"
+      type: "counter"
+      description: "Cross-tenant access violations"
+
+integration:
+  eventbus_events:
+    publishes:
+      - "business.organization.created"
+      - "business.organization.deleted"
+      - "business.bia.created"
+      - "business.bia.approved"
+      - "business.risk_assessment.completed"
+      - "business.document.published"
+      - "business.compliance.violated"
+      - "business.rule.violated"
+
+    subscribes:
+      - "workflow.execution.completed"
+      - "user.action.performed"
+      - "governance.policy.updated"
+      - "system.periodic.review_due"
+
+  dependencies:
+    - service: "postgresql"
+      purpose: "Business data persistence with RLS"
+    - service: "policy-engine"
+      purpose: "Business rule evaluation"
+    - service: "workflow-intelligence"
+      purpose: "Workflow execution and optimization"
+    - service: "eventbus"
+      purpose: "Business event propagation"
+
+context_variables:
+  system_name: "Name of business system (e.g., 'bcm-core')"
+  organization_types: "Supported organization types"
+  compliance_standards: "Supported compliance standards"
+  document_types: "Supported document types"
+  workflow_types: "Business workflow types"
+
+learning_integration:
+  collect_patterns:
+    - "successful_bia_completion_patterns"
+    - "common_validation_failures"
+    - "effective_risk_mitigation_strategies"
+    - "optimal_document_workflows"
+
+  feedback_to_learning_system:
+    - "Refine business rule thresholds"
+    - "Improve workflow recommendations"
+    - "Enhance compliance validation"
+    - "Optimize document lifecycle"
+
+  recommendations:
+    - "Suggest process improvements"
+    - "Recommend compliance actions"
+    - "Identify missing documentation"
+    - "Propose workflow optimizations"

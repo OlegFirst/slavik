@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Analytics Dashboard Form View -->
+    <record id="view_bcm_analytics_dashboard_form" model="ir.ui.view">
+        <field name="name">bcm.analytics.dashboard.form</field>
+        <field name="model">bcm.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="BCM Analytics Dashboard">
+                <header>
+                    <button name="action_refresh_analytics" type="object"
+                            string="🔄 Refresh Data" class="btn-primary"/>
+
+                    <field name="last_updated" widget="badge" readonly="1"
+                           decoration-success="True"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Dashboard Name"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Dashboard Configuration">
+                            <field name="dashboard_type" widget="radio"/>
+                            <field name="description"/>
+                        </group>
+                        <group string="Auto-Refresh Settings">
+                            <field name="auto_refresh"/>
+                            <field name="refresh_interval_minutes"
+                                   attrs="{'invisible': [('auto_refresh', '=', False)]}"/>
+                        </group>
+                    </group>
+
+                    <!-- Analytics Data Visualization -->
+                    <div class="analytics-visualization">
+                        <h3>📊 Analytics Data</h3>
+
+                        <!-- Executive Dashboard -->
+                        <div class="dashboard-content executive-dashboard"
+                             attrs="{'invisible': [('dashboard_type', '!=', 'executive')]}">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <div class="metric-number">
+                                            <field name="total_scenarios" readonly="1"/>
+                                        </div>
+                                        <div class="metric-label">Total Scenarios</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <div class="metric-number">
+                                            <field name="total_exercises" readonly="1"/>
+                                        </div>
+                                        <div class="metric-label">Total Exercises</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <div class="metric-number">
+                                            <field name="ai_generated_scenarios" readonly="1"/>
+                                        </div>
+                                        <div class="metric-label">AI Scenarios</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <div class="metric-number">
+                                            <field name="platform_effectiveness" readonly="1"/>%
+                                        </div>
+                                        <div class="metric-label">Platform Effectiveness</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Executive Charts -->
+                            <div class="executive-charts mt-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="chart-container">
+                                            <h6>Exercise Performance Trend</h6>
+                                            <field name="exercise_performance_chart" widget="dashboard_chart"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="chart-container">
+                                            <h6>Scenario Effectiveness Distribution</h6>
+                                            <field name="scenario_effectiveness_chart" widget="dashboard_chart"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Insights Dashboard -->
+                        <div class="dashboard-content ai-insights-dashboard"
+                             attrs="{'invisible': [('dashboard_type', '!=', 'ai_insights')]}">
+
+                            <div class="ai-learning-summary">
+                                <h4>🤖 AI Learning Summary</h4>
+
+                                <div class="learning-metrics">
+                                    <div class="metric-grid">
+                                        <div class="metric-item">
+                                            <span class="metric-value">
+                                                <field name="scenarios_with_learning_data" readonly="1"/>
+                                            </span>
+                                            <span class="metric-label">Scenarios with Learning Data</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="metric-value">
+                                                <field name="avg_platform_effectiveness" readonly="1"/>
+                                            </span>
+                                            <span class="metric-label">Avg Platform Effectiveness</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="metric-value">
+                                                <field name="total_exercises_completed" readonly="1"/>
+                                            </span>
+                                            <span class="metric-label">Completed Exercises</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AI Recommendations -->
+                                <div class="ai-recommendations mt-4">
+                                    <h5>💡 AI Improvement Recommendations</h5>
+                                    <field name="ai_recommendations_list" widget="ai_recommendations"/>
+                                </div>
+
+                                <!-- Top Performing Scenarios -->
+                                <div class="top-scenarios mt-4">
+                                    <h5>⭐ Top Performing Scenarios</h5>
+                                    <field name="top_scenarios_list" widget="scenario_ranking"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Raw Analytics Data (for developers) -->
+                        <div class="raw-analytics-data mt-4">
+                            <field name="analytics_data" widget="ace" options="{'mode': 'json'}"
+                                   attrs="{'invisible': [('analytics_data', '=', False)]}"/>
+                        </div>
+                    </div>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Analytics Dashboard Kanban View -->
+    <record id="view_bcm_analytics_dashboard_kanban" model="ir.ui.view">
+        <field name="name">bcm.analytics.dashboard.kanban</field>
+        <field name="model">bcm.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="dashboard_type"/>
+                <field name="last_updated"/>
+                <field name="analytics_data"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card analytics-dashboard-card">
+                            <div class="oe_kanban_content">
+                                <!-- Dashboard Header -->
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <i t-attf-class="#{getDashboardIcon(record.dashboard_type.raw_value)} mr-2"></i>
+                                            <t t-esc="record.name.value"/>
+                                        </strong>
+                                        <div class="text-muted">
+                                            <t t-esc="record.dashboard_type.value"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Metrics Preview -->
+                                <div class="o_kanban_record_body">
+                                    <div class="dashboard-preview" t-if="record.analytics_data.raw_value">
+                                        <div class="preview-metrics">
+                                            <!-- Metrics preview will be populated by JavaScript -->
+                                            <div class="metrics-placeholder">
+                                                <i class="fas fa-chart-line text-primary"></i>
+                                                Click to view analytics
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="no-data-message" t-if="!record.analytics_data.raw_value">
+                                        <p class="text-muted">No analytics data yet</p>
+                                        <button class="btn btn-sm btn-primary refresh-btn">
+                                            <i class="fas fa-sync"></i> Generate Data
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Dashboard Actions -->
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <small class="text-muted">
+                                            Updated: <t t-esc="record.last_updated.value"/>
+                                        </small>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <a type="object" name="action_refresh_analytics" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-sync"></i> Refresh
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Analytics Dashboard Tree View -->
+    <record id="view_bcm_analytics_dashboard_tree" model="ir.ui.view">
+        <field name="name">bcm.analytics.dashboard.tree</field>
+        <field name="model">bcm.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <list string="Analytics Dashboards">
+                <field name="name"/>
+                <field name="dashboard_type"/>
+                <field name="last_updated"/>
+                <field name="auto_refresh"/>
+                <field name="total_scenarios"/>
+                <field name="platform_effectiveness"/>
+                <button name="action_refresh_analytics" type="object"
+                        string="Refresh" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Analytics Dashboard Action -->
+    <record id="action_bcm_analytics_dashboard" model="ir.actions.act_window">
+        <field name="name">Analytics Dashboards</field>
+        <field name="res_model">bcm.analytics.dashboard</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Analytics Dashboard!
+            </p>
+            <p>
+                Monitor your BCM platform performance with AI-powered analytics.
+                Track scenario effectiveness, exercise performance, and get intelligent recommendations.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_bcm_analytics_main"
+              name="Analytics"
+              parent="bcm_core.menu_bcm_root"
+              sequence="60"/>
+
+    <menuitem id="menu_bcm_analytics_dashboard"
+              name="Dashboards"
+              parent="menu_bcm_analytics_main"
+              action="action_bcm_analytics_dashboard"
+              sequence="10"/>
+
+</odoo>

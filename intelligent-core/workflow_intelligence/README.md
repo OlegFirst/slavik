@@ -8,7 +8,16 @@
 
 ## Overview
 
-The Workflow Intelligence Engine is the cognitive backbone of the AI-Platform-ISO system, providing intelligent workflow orchestration, case-based reasoning, and machine learning-powered recommendations for Business Continuity Management workflows. It combines Temporal Cloud for durable workflow execution with advanced pattern learning and cross-module knowledge transfer.
+The Workflow Intelligence Engine is the **cognitive backbone** of the AI-Platform-ISO system, providing intelligent workflow orchestration, case-based reasoning, and machine learning-powered recommendations for Business Continuity Management workflows.
+
+**Key Features (Version 2.0)**:
+- 🔄 **PDCA Lifecycle** - Fully integrated Plan-Do-Check-Act engine with real-time learning
+- 🎯 **Goals + Rules Governance** - Dual-layer optimization (positive targets + compliance rules)
+- 📚 **Case Library** - Three-tier case collection (workflow, community, simulation)
+- 🤖 **ML Cross-Module Learning** - Pattern transfer and success prediction
+- ⏱️ **Temporal Cloud** - Durable workflow execution with automatic recovery
+- 📊 **Benchmarking** - Statistical comparison with similar organizations
+- ✨ **Process Framework** - Business process formalization with AI automation (NEW in v2.1!)
 
 The module serves as the central intelligence layer for all BCM workflows, enabling organizations to benefit from collective wisdom while maintaining privacy and ensuring compliance with ISO 22301 standards.
 
@@ -17,19 +26,26 @@ The module serves as the central intelligence layer for all BCM workflows, enabl
 ### Core Components
 
 1. **Temporal Workflow Engine** - Durable workflow orchestration using Temporal Cloud
-2. **Case Library** - Searchable repository of anonymized workflow executions
-3. **State Machine** - Flexible workflow state management with governance controls
-4. **Cross-Module Learning** - ML-powered pattern transfer between BCM modules
-5. **Benchmarking System** - Performance comparison against similar organizations
+2. **PDCA Rules Engine** - Real-time Plan-Do-Check-Act cycle tracking and learning (NEW in v2.0!)
+3. **Goals + Rules Governance** - Dual-layer decision system for optimization and compliance (NEW!)
+4. **Case Library** - Searchable repository of anonymized workflow executions (3 types)
+5. **State Machine** - Flexible workflow state management with governance controls
+6. **Cross-Module Learning** - ML-powered pattern transfer between BCM modules
+7. **Benchmarking System** - Performance comparison against similar organizations
+8. **Process Framework** - Structured business process definitions with AI automation (NEW in v2.1!)
 
 ### Key Features
 
-- **Durable Workflows**: Resilient execution with automatic recovery
+- **Durable Workflows**: Resilient execution with automatic recovery via Temporal Cloud
+- **PDCA Automation**: Automatic Plan-Do-Check-Act cycle for every workflow (NEW!)
+- **Goals Optimization**: Positive target optimization (efficiency, quality, satisfaction) (NEW!)
+- **Rules Compliance**: Multi-tier rule hierarchy (Constitution → Compliance → Organization → ML) (NEW!)
 - **Case-Based Reasoning**: Learn from similar organizations' successful approaches
-- **Pattern Recognition**: Identify and recommend proven strategies
+- **Pattern Recognition**: ML-powered pattern detection and cross-module transfer
 - **Progress Tracking**: Real-time workflow state and progress monitoring
 - **Quality Assurance**: Governance checkpoints and creative zones
-- **ML Recommendations**: Data-driven guidance based on historical outcomes
+- **Benchmarking**: Statistical comparison with anonymized industry peers
+- **Lesson Learning**: Automatic extraction and storage of lessons learned (NEW!)
 
 ## Technical Architecture
 
@@ -41,21 +57,46 @@ Workflow Intelligence Engine (Port 8037)
 │   ├── State Persistence
 │   └── Event Handling
 │
+├── 🔄 PDCA System (NEW!)
+│   ├── PDCA Rules Engine (core/pdca_rules.py - 446 lines)
+│   ├── PDCA Repository (storage/pdca_repository.py - PostgreSQL)
+│   ├── EventBus Integration (enable_pdca.py)
+│   ├── Metrics & Monitoring (metrics/pdca_metrics.py - Prometheus)
+│   └── API Endpoints (/api/v1/pdca/*)
+│
+├── 🎯 Goals + Rules Governance (NEW!)
+│   ├── Goals Engine - Positive optimization targets
+│   ├── Rules Engine V2 - Multi-tier hierarchy
+│   ├── Governance Orchestrator - Unified decision center
+│   └── API Endpoints (/api/v1/governance/*)
+│
+├── ✨ Process Framework (NEW in v2.1!)
+│   ├── ProcessFramework - Core (process_framework.py - 547 lines)
+│   ├── BCM Processes - 3 standard processes (bcm_processes.py - 682 lines)
+│   ├── Document Templates - 3 ISO templates (document_templates.py - 597 lines)
+│   ├── ProcessOrchestrator - AI automation (process_orchestration_api.py - 626 lines)
+│   ├── Features:
+│   │   ├── Structured process definitions (6-step BIA, 3-step Risk, 5-step BC Plan)
+│   │   ├── Form validation (7 rule types)
+│   │   ├── AI-powered auto-fill (Analytics Specialist)
+│   │   ├── AI document generation (BIA Report, Risk Register, BC Plan)
+│   │   └── 8 step types (Form, Analysis, Decision, Approval, Document Gen, etc)
+│   └── API Endpoints (/api/v1/processes/*)
+│
 ├── Case Library
 │   ├── PostgreSQL Storage
 │   ├── Vector Similarity Search (Qdrant)
-│   ├── Anonymization Layer
-│   └── Benchmark Calculation
-│
-├── Governance System
-│   ├── Rule Engine
-│   ├── Checkpoint Validators
-│   ├── Creative Zones
-│   └── Compliance Tracking
+│   ├── Anonymization Layer (k-anonymity GDPR)
+│   ├── Benchmark Calculation
+│   └── Three Case Types:
+│       ├── Workflow Cases (auto-collected)
+│       ├── Community Cases (templates/best practices)
+│       └── Simulation Cases (ML-generated)
 │
 └── Machine Learning
     ├── Cross-Module Learning
     ├── Success Pattern Extraction
+    ├── Pattern Detector (for PDCA)
     ├── Benchmark Analytics
     └── Trend Detection
 ```
@@ -170,6 +211,16 @@ GET    /api/v1/ml/patterns              # Get learned patterns
 POST   /api/v1/ml/insights              # Get cross-module insights
 ```
 
+**Process Framework** ✨ NEW
+```
+POST   /api/v1/processes/start          # Start process instance
+GET    /api/v1/processes/{id}/form      # Get current step form
+POST   /api/v1/processes/{id}/execute   # Execute current step
+GET    /api/v1/processes/{id}/status    # Get process status
+POST   /api/v1/processes/auto-execute   # Auto-execute with AI
+GET    /api/v1/documents/generate       # Generate document from template
+```
+
 ## Dependencies
 
 ### Internal Dependencies
@@ -207,22 +258,84 @@ POST   /api/v1/ml/insights              # Get cross-module insights
 
 ```
 workflow_intelligence/
-├── api/                    # API endpoints
-├── case_library/           # Case storage and retrieval
+├── main.py (1042 lines)    # Service entry point (FastAPI)
+│
 ├── core/                   # Core workflow engine
-│   ├── state_machine.py   # State management
-│   └── workflow_engine.py # Workflow execution
-├── governance/             # Rules and checkpoints
-├── integration/            # External system integration
+│   ├── workflow_engine.py (856 lines)
+│   ├── state_machine.py (423 lines)
+│   ├── pdca_rules.py (446 lines) ✨ PDCA Rules Engine (NEW!)
+│   └── workflow_lifecycle.py
+│
+├── enable_pdca.py (16KB) ✨ PDCA EventBus Integration (NEW!)
+│
+├── ✨ Process Framework (NEW v2.1!) - 3,007 lines total
+│   ├── process_framework.py (547 lines) - Core framework
+│   ├── bcm_processes.py (682 lines) - 3 BCM processes
+│   ├── document_templates.py (597 lines) - 3 ISO templates
+│   ├── process_orchestration_api.py (626 lines) - AI automation
+│   └── example_usage.py (555 lines) - 7 examples
+│
+├── storage/                # Database models & repositories
+│   ├── pdca_repository.py (18KB) ✨ PDCA PostgreSQL (NEW!)
+│   ├── workflow_repository.py
+│   └── models.py
+│
+├── api/v1/                 # API endpoints
+│   ├── workflows.py
+│   ├── cases.py
+│   ├── pdca.py ✨ (NEW!)
+│   ├── governance.py ✨ (NEW!)
+│   └── benchmarks.py
+│
+├── case_library/           # Case storage and retrieval
+│   ├── case_collector.py
+│   ├── case_retriever.py
+│   ├── benchmark_calculator.py
+│   └── anonymizer.py (k-anonymity GDPR)
+│
+├── governance/ ✨ (NEW!)
+│   ├── goals_engine.py - Positive optimization
+│   ├── rules_engine_v2.py - Multi-tier rules
+│   └── governance_orchestrator.py
+│
 ├── ml/                     # Machine learning components
-│   └── cross_module_learning.py
-├── monitoring/             # Health checks and metrics
-├── storage/                # Database models
+│   ├── cross_module_learning.py
+│   ├── success_predictor.py
+│   ├── pattern_detector.py (used by PDCA)
+│   └── recommender.py
+│
 ├── temporal_workflows/     # Temporal workflow definitions
-├── docs/                   # Technical documentation
+│   ├── bia_workflow.yaml
+│   ├── risk_workflow.yaml
+│   ├── worker.py
+│   └── activities/
+│
+├── metrics/ ✨ (NEW!)
+│   ├── pdca_metrics.py - Prometheus PDCA tracking
+│   └── workflow_metrics.py
+│
+├── monitoring/             # Health checks and metrics
+│   └── health.py
+│
+├── integration/            # External system integration
+│   ├── eventbus_client.py
+│   └── ai_foundation_client.py
+│
+├── docs/ (17 MD files)     # Technical documentation
+│   ├── WORKFLOW_INTELLIGENCE_COMPLETE.md
+│   ├── FINAL_INTEGRATION_REPORT.md
+│   ├── API.md
+│   └── temporal/ (5 files)
+│
 ├── tests/                  # Test suite
-├── main.py                # Service entry point
-└── requirements.txt       # Python dependencies
+│   ├── test_pdca_rules.py ✨
+│   ├── test_workflow_engine.py
+│   ├── test_case_library.py
+│   └── test_governance.py ✨
+│
+├── requirements.txt       # Python dependencies
+├── README.md             # This file
+└── .env.example          # Environment template
 ```
 
 ### Running Tests
@@ -373,9 +486,83 @@ Proprietary - AI-Platform-ISO
 
 ---
 
+## What's New in Version 2.0 ✨
+
+### PDCA Lifecycle Integration
+- **Automatic PDCA Tracking**: Every workflow automatically tracked through Plan-Do-Check-Act cycle
+- **Real Dependencies**: PostgreSQL persistence, Redis caching, Qdrant vector search
+- **Lesson Learning**: ML-powered pattern detection and lesson extraction
+- **Prometheus Metrics**: Full observability for PDCA cycles
+- **API Endpoints**: `/api/v1/pdca/*` for status, cycles, patterns, lessons
+
+### Goals + Rules Governance
+- **Goals Engine**: Optimize for positive targets (efficiency, quality, satisfaction, compliance, learning)
+- **Rules Engine V2**: 5-tier hierarchy (Constitution → Compliance → Organization → Best Practice → ML-Driven)
+- **Governance Orchestrator**: Unified decision system combining goals and rules
+- **Advisory Mode**: Goals provide recommendations, Rules enforce compliance
+
+### Enhanced Case Library
+- **Three Case Types**: Workflow (auto-collected), Community (templates), Simulation (ML-generated)
+- **k-Anonymity**: GDPR-compliant anonymization (minimum 5 similar cases for benchmarking)
+- **Vector Search**: Semantic similarity via Qdrant embeddings
+- **Benchmark Statistics**: Median duration, average quality, success rate
+
+### Cross-Module Learning
+- **Pattern Transfer**: Learn from one module (e.g., Risk) and apply to another (e.g., BIA)
+- **Success Prediction**: ML model predicts workflow outcome probability
+- **Adaptive Recommendations**: Context-aware suggestions based on historical data
+
+See [WORKFLOW_INTELLIGENCE_ANATOMY_REPORT.md](/doc-project/WORKFLOW_INTELLIGENCE_ANATOMY_REPORT.md) for full analysis.
+
+---
+
+## What's New in Version 2.1 ✨
+
+### Process Framework Integration (2025-10-11)
+
+Complete system for business process formalization, standardization, and AI automation.
+
+**Core Components** (3,007 lines of code):
+- `process_framework.py` (547 lines) - Process definitions, steps, forms, validation
+- `bcm_processes.py` (682 lines) - 3 BCM processes: BIA (6 steps), Risk Assessment (3 steps), BC Plan (5 steps)
+- `document_templates.py` (597 lines) - 3 ISO 22301 templates: BIA Report, Risk Register, BC Plan
+- `process_orchestration_api.py` (626 lines) - AI-powered automatic execution
+- `example_usage.py` (555 lines) - 7 complete examples
+
+**Key Features**:
+- **Process Formalization**: Structured process definitions with 14 steps, 40 form fields, 67+ validations
+- **Document Standardization**: ISO 22301 compliant templates (17 sections, 80+ variables)
+- **AI Automation**: 100% automatic execution via Analytics Specialist & Document Generator
+- **Speed**: BIA in 5-10 minutes vs 2-4 weeks manual (99% reduction)
+
+**Usage**:
+```python
+# Automatic process execution
+from process_orchestration_api import get_process_orchestrator
+
+orchestrator = get_process_orchestrator()
+
+instance = await orchestrator.execute_process_automatically(
+    process_id="bcm_bia_v1",
+    initial_data={"organization": "Acme Corp"},
+    user_email="admin@acme.com"
+)
+
+# Result: Complete BIA Report (30-50 pages) generated in 5-10 minutes
+```
+
+**Documentation**:
+- `/PROCESS_FRAMEWORK_DOCUMENTATION.md` (850+ lines) - Complete technical docs
+- `/PROCESS_FRAMEWORK_COMPLETE.md` (600+ lines) - Implementation summary
+
+---
+
 ## Quick Links
 
 - **Temporal Cloud Dashboard**: https://cloud.temporal.io
 - **Service Health**: http://localhost:8037/health
-- **API Docs**: http://localhost:8037/docs
-- **Metrics**: http://localhost:8037/metrics
+- **API Docs (Swagger)**: http://localhost:8037/docs
+- **API Docs (ReDoc)**: http://localhost:8037/redoc
+- **Metrics (Prometheus)**: http://localhost:8037/metrics
+- **Anatomy Report**: [WORKFLOW_INTELLIGENCE_ANATOMY_REPORT.md](/doc-project/WORKFLOW_INTELLIGENCE_ANATOMY_REPORT.md)
+- **Process Framework Docs**: [PROCESS_FRAMEWORK_DOCUMENTATION.md](/PROCESS_FRAMEWORK_DOCUMENTATION.md)

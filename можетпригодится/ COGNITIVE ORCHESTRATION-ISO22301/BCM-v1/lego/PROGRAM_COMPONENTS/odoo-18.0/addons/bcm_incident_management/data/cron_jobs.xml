@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Scheduled tasks for BCM Incident Management -->
+        <record id="cron_bcm_incident_check" model="ir.cron">
+            <field name="name">BCM: Check Incident Status</field>
+            <field name="model_id" ref="model_bcm_incident_management"/>
+            <field name="state">code</field>
+            <field name="code">model.check_incident_status()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

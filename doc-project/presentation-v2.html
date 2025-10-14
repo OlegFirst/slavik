@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Platform-ISO - Презентация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .slide { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container-slide { max-width: 1400px; width: 100%; background: white; border-radius: 24px; padding: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: BCM Философия -->
+<div class="slide">
+    <div class="container-slide">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4"><span class="gradient-text">Что такое BCM?</span></h1>
+            <p class="text-xl text-gray-600">Business Continuity Management по ISO 22301</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="border-2 border-red-300 rounded-xl p-6 bg-red-50">
+                <h3 class="text-2xl font-bold mb-4 text-red-700">❌ БЕЗ ПОДГОТОВКИ</h3>
+                <div class="space-y-4 text-sm">
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="font-semibold mb-2">Обычные операции ✓</div>
+                        <div class="text-gray-600">Услуги работают, клиенты довольны</div>
+                    </div>
+                    <div class="text-center py-2">
+                        <div class="text-3xl">⚡</div>
+                        <div class="font-bold text-red-700">КРИЗИС</div>
+                        <div class="text-xs text-gray-600">Эпидемия • Катастрофа • Кибератака</div>
+                    </div>
+                    <div class="bg-red-100 p-4 rounded-lg">
+                        <div class="font-semibold mb-2">Нет плана</div>
+                        <ul class="text-xs space-y-1"><li>• Хаос и путаница</li><li>• Импровизация</li><li>• Задержки в реакции</li></ul>
+                    </div>
+                    <div class="bg-red-200 p-4 rounded-lg">
+                        <div class="font-bold mb-2 text-red-800">УСЛУГИ ПРЕРВАНЫ</div>
+                        <ul class="text-xs space-y-1"><li>• Клиенты не получают помощь</li><li>• Потеря доверия</li></ul>
+                    </div>
+                    <div class="bg-red-300 p-4 rounded-lg text-center"><div class="font-bold text-red-900">ТЯЖЕЛЫЕ ПОСЛЕДСТВИЯ</div></div>
+                </div>
+            </div>
+
+            <div class="border-2 border-green-300 rounded-xl p-6 bg-green-50">
+                <h3 class="text-2xl font-bold mb-4 text-green-700">✅ С BCM / ISO 22301</h3>
+                <div class="space-y-4 text-sm">
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="font-semibold mb-2">Обычные операции ✓</div>
+                        <div class="text-gray-600">+ Планы готовы и протестированы</div>
+                    </div>
+                    <div class="text-center py-2">
+                        <div class="text-3xl">⚡</div>
+                        <div class="font-bold text-green-700">ТОТ ЖЕ КРИЗИС</div>
+                        <div class="text-xs text-gray-600">Эпидемия • Катастрофа • Кибератака</div>
+                    </div>
+                    <div class="bg-green-100 p-4 rounded-lg">
+                        <div class="font-semibold mb-2">План активирован</div>
+                        <ul class="text-xs space-y-1"><li>• Немедленная реакция</li><li>• Четкие процедуры</li><li>• Обученный персонал</li></ul>
+                    </div>
+                    <div class="bg-green-200 p-4 rounded-lg">
+                        <div class="font-bold mb-2 text-green-800">УСЛУГИ ПОДДЕРЖИВАЮТСЯ</div>
+                        <ul class="text-xs space-y-1"><li>• Критические функции работают</li><li>• Клиенты защищены</li></ul>
+                    </div>
+                    <div class="bg-green-300 p-4 rounded-lg text-center"><div class="font-bold text-green-900">БЫСТРОЕ ВОССТАНОВЛЕНИЕ</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-xl">
+            <p class="text-xl font-semibold">Кризисы неизбежны. Вопрос не "ЕСЛИ", а "КОГДА"</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Наше решение -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-8"><span class="gradient-text">AI-Platform-ISO</span></h2>
+        <p class="text-2xl text-center text-gray-600 mb-12">Интеллектуальная платформа для автоматизации BCM</p>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl">
+                <div class="text-4xl mb-4">🤖</div>
+                <h3 class="text-xl font-bold mb-2">AI-Автоматизация</h3>
+                <p class="text-gray-600">Искусственный интеллект анализирует риски, генерирует планы, дает рекомендации</p>
+            </div>
+            <div class="text-center p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl">
+                <div class="text-4xl mb-4">✅</div>
+                <h3 class="text-xl font-bold mb-2">ISO Compliance</h3>
+                <p class="text-gray-600">Полное соответствие ISO 22301, готовность к аудиту "из коробки"</p>
+            </div>
+            <div class="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
+                <div class="text-4xl mb-4">🔗</div>
+                <h3 class="text-xl font-bold mb-2">Интеграции</h3>
+                <p class="text-gray-600">Работает с вашими системами: CRM, ERP, Slack, Teams</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-8 rounded-xl">
+            <h3 class="text-2xl font-bold mb-4 text-center">Ключевые возможности</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>Автоматический BIA анализ с AI</span></div>
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>Генерация планов реагирования</span></div>
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>Симуляции и сценарии</span></div>
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>Мониторинг рисков 24/7</span></div>
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>Автоотчеты для аудиторов</span></div>
+                <div class="flex items-center gap-3"><i class="fas fa-check-circle text-green-500 text-xl"></i><span>База знаний с 347+ кейсами</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Интеграции -->
+<div class="slide">
+    <div class="container-slide">
+        <h2 class="text-4xl font-bold text-center mb-4"><span class="gradient-text">Интеграции</span></h2>
+        <p class="text-xl text-center text-gray-600 mb-8">Работаем с вашими привычными инструментами</p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">📊</div>
+                <h3 class="text-lg font-bold mb-2">CRM & ERP</h3>
+                <p class="text-sm text-gray-600 mb-3">Прямая интеграция через API</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ Salesforce, HubSpot, Zoho</li>
+                    <li>✓ SAP, Oracle, 1C</li>
+                    <li>✓ Автоимпорт процессов</li>
+                </ul>
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">🔌</div>
+                <h3 class="text-lg font-bold mb-2">MCP Protocol</h3>
+                <p class="text-sm text-gray-600 mb-3">Model Context Protocol</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ Любые AI модели</li>
+                    <li>✓ Claude, GPT-4, Gemini</li>
+                    <li>✓ Кастомные агенты</li>
+                </ul>
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">💻</div>
+                <h3 class="text-lg font-bold mb-2">Desktop Apps</h3>
+                <p class="text-sm text-gray-600 mb-3">Привычные интерфейсы</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ Excel/Word экспорт</li>
+                    <li>✓ Windows/Mac клиенты</li>
+                    <li>✓ Offline режим</li>
+                </ul>
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">💬</div>
+                <h3 class="text-lg font-bold mb-2">Коммуникации</h3>
+                <p class="text-sm text-gray-600 mb-3">Уведомления в реальном времени</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ Slack, MS Teams</li>
+                    <li>✓ Telegram, WhatsApp</li>
+                    <li>✓ Email, SMS, Push</li>
+                </ul>
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">☁️</div>
+                <h3 class="text-lg font-bold mb-2">Развертывание</h3>
+                <p class="text-sm text-gray-600 mb-3">Гибкость размещения</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ AWS, Azure, GCP</li>
+                    <li>✓ On-Premise</li>
+                    <li>✓ Hybrid облако</li>
+                </ul>
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-xl p-5 hover:border-blue-400 transition-all">
+                <div class="text-3xl mb-3">🧠</div>
+                <h3 class="text-lg font-bold mb-2">AI Провайдеры</h3>
+                <p class="text-sm text-gray-600 mb-3">Выбирайте свою AI</p>
+                <ul class="text-xs text-gray-700 space-y-1">
+                    <li>✓ Anthropic Claude</li>
+                    <li>✓ OpenAI GPT-4</li>
+                    <li>✓ Google Gemini</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-plug text-blue-600 text-3xl"></i>
+                <div>
+                    <h4 class="font-bold text-lg mb-1">REST API + SDK</h4>
+                    <p class="text-sm text-gray-700">OpenAPI 3.0, примеры кода Python/JS/C#, готовые библиотеки</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Контакты -->
+<div class="slide">
+    <div class="container-slide">
+        <div class="text-center">
+            <h2 class="text-5xl font-bold mb-8"><span class="gradient-text">Начнем?</span></h2>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-laptop-code text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">Живая демо</h3>
+                    <p class="text-sm text-gray-600">MVP работает</p>
+                    <p class="text-xs text-blue-600 mt-2">localhost:3333</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-book text-4xl text-purple-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">Документация</h3>
+                    <p class="text-sm text-gray-600">1745+ документов</p>
+                    <p class="text-xs text-purple-600 mt-2">localhost:4000</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-code text-4xl text-green-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">API</h3>
+                    <p class="text-sm text-gray-600">OpenAPI спека</p>
+                    <p class="text-xs text-green-600 mt-2">localhost:8888/docs</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-xl mb-8">
+                <h3 class="text-3xl font-bold mb-4">Готовы к внедрению</h3>
+                <p class="text-xl">Срок запуска: 25-30 дней</p>
+            </div>
+
+            <div class="text-6xl mb-4"><span class="gradient-text font-bold">AI-Platform-ISO</span></div>
+            <p class="text-gray-500">Интеллектуальная платформа управления непрерывностью бизнеса</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('keydown', function(e) {
+        let slides = document.querySelectorAll('.slide');
+        let currentSlide = Array.from(slides).findIndex(slide => {
+            let rect = slide.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight / 2;
+        });
+
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+            e.preventDefault();
+            if (currentSlide < slides.length - 1) {
+                slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            if (currentSlide > 0) {
+                slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

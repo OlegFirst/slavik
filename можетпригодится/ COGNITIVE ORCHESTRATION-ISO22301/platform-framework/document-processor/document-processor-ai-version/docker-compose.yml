@@ -1,0 +1,249 @@
+version: '3.8'
+
+services:
+  # Document Processor Service
+  document-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bcm-document-processor
+    environment:
+      # Service configuration
+      PORT: 8002
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
+      
+      # API Security
+      DOCUMENT_PROCESSOR_API_KEY: ${DOCUMENT_PROCESSOR_API_KEY}
+      
+      # Database connection
+      DATABASE_URL: postgresql+asyncpg://docprocessor:${DOC_PROCESSOR_DB_PASSWORD:-docproc_secure_pass}@doc-postgres:5432/bcm_documents
+      
+      # Redis connection
+      REDIS_URL: redis://:${DOC_PROCESSOR_REDIS_PASSWORD:-redis_secure_pass}@doc-redis:6379/0
+      
+      # AI/ML Configuration
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      HUGGINGFACE_API_KEY: ${HUGGINGFACE_API_KEY:-}
+      
+      # Processing configuration
+      MAX_FILE_SIZE: 50MB
+      SUPPORTED_FORMATS: "pdf,docx,doc,xlsx,xls,txt,csv,png,jpg,jpeg,tiff"
+      OCR_LANGUAGE: eng
+      
+      # BCM Platform integration
+      BCM_API_URL: ${BCM_API_URL:-http://host.docker.internal:8069}
+      BCM_API_KEY: ${BCM_API_KEY}
+      
+      # Storage paths
+      UPLOAD_DIR: /app/uploads
+      PROCESSED_DIR: /app/processed
+      MODEL_DIR: /app/models
+      
+    ports:
+      - "8002:8002"
+    volumes:
+      - document_uploads:/app/uploads
+      - document_processed:/app/processed
+      - document_models:/app/models
+      - document_logs:/app/logs
+      - document_temp:/tmp
+    networks:
+      - ai-network
+      - bcm-network
+    depends_on:
+      - doc-postgres
+      - doc-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+
+  # PostgreSQL for document metadata
+  doc-postgres:
+    image: postgres:15-alpine
+    container_name: bcm-doc-postgres
+    environment:
+      POSTGRES_DB: bcm_documents
+      POSTGRES_USER: docprocessor
+      POSTGRES_PASSWORD: ${DOC_PROCESSOR_DB_PASSWORD:-docproc_secure_pass}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - doc_postgres_data:/var/lib/postgresql/data
+      - ./sql/init-documents-db.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - ai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docprocessor -d bcm_documents"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis for caching and task queue
+  doc-redis:
+    image: redis:7-alpine
+    container_name: bcm-doc-redis
+    command: redis-server --requirepass ${DOC_PROCESSOR_REDIS_PASSWORD:-redis_secure_pass}
+    volumes:
+      - doc_redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - ai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MinIO for document storage (alternative to local files)
+  doc-minio:
+    image: minio/minio:RELEASE.2023-11-20T22-40-07Z
+    container_name: bcm-doc-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - doc_minio_data:/data
+    networks:
+      - ai-network
+    restart: unless-stopped
+    profiles:
+      - storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Elasticsearch for document search (optional)
+  doc-elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: bcm-doc-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - cluster.name=bcm-documents
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - doc_elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9203:9200"
+    networks:
+      - ai-network
+    restart: unless-stopped
+    profiles:
+      - search
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Document Processing Worker (for heavy processing)
+  doc-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: bcm-doc-worker
+    environment:
+      REDIS_URL: redis://:${DOC_PROCESSOR_REDIS_PASSWORD:-redis_secure_pass}@doc-redis:6379/0
+      DATABASE_URL: postgresql+asyncpg://docprocessor:${DOC_PROCESSOR_DB_PASSWORD:-docproc_secure_pass}@doc-postgres:5432/bcm_documents
+      WORKER_CONCURRENCY: 2
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - document_uploads:/app/uploads
+      - document_processed:/app/processed
+      - document_models:/app/models
+    networks:
+      - ai-network
+    depends_on:
+      - doc-postgres
+      - doc-redis
+    restart: unless-stopped
+    profiles:
+      - worker
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+          cpus: '3.0'
+
+  # Document Processing Monitor (web UI)
+  doc-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitor
+    container_name: bcm-doc-monitor
+    environment:
+      DOCUMENT_PROCESSOR_URL: http://document-processor:8002
+      DOCUMENT_PROCESSOR_API_KEY: ${DOCUMENT_PROCESSOR_API_KEY}
+      REDIS_URL: redis://:${DOC_PROCESSOR_REDIS_PASSWORD:-redis_secure_pass}@doc-redis:6379/0
+    ports:
+      - "3002:3000"
+    networks:
+      - ai-network
+    depends_on:
+      - document-processor
+    restart: unless-stopped
+    profiles:
+      - monitor
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  # Document storage
+  document_uploads:
+    driver: local
+  document_processed:
+    driver: local
+  document_models:
+    driver: local
+  document_logs:
+    driver: local
+  document_temp:
+    driver: local
+    
+  # Database storage
+  doc_postgres_data:
+    driver: local
+  doc_redis_data:
+    driver: local
+    
+  # Optional services storage
+  doc_minio_data:
+    driver: local
+  doc_elasticsearch_data:
+    driver: local
+
+networks:
+  ai-network:
+    driver: bridge
+    name: ai-network
+  bcm-network:
+    external: true
+    name: bcm-network

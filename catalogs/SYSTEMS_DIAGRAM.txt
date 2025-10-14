@@ -1,0 +1,101 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                    AI PLATFORM ISO 22301 - FUNCTIONAL SYSTEMS                  ║
+║                                 46 Services / 19 Systems                        ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                           🖥️  USER INTERFACE LAYER                             │
+│  admin-panel • platform-ui • mcp-interface                                     │
+└───────────────────────────────┬────────────────────────────────────────────────┘
+                                │
+┌───────────────────────────────▼────────────────────────────────────────────────┐
+│                        🚪 GATEWAY & API LAYER                                   │
+│  api-gateway:8000 (auth, rate-limit, routing, circuit-breaker)                │
+│  realtime-websocket:8050 (live updates)                                        │
+└───────────────────────────────┬────────────────────────────────────────────────┘
+                                │
+                  ┌─────────────┴─────────────┐
+                  │                           │
+┌─────────────────▼───────────┐  ┌───────────▼────────────────────────────────┐
+│   🚀 ORCHESTRATION          │  │   🔒 SECURITY LAYER                        │
+│  service-discovery:8500     │  │  auth-service:8001 (JWT, RBAC)            │
+│  mio-manager:8002           │  │  vault (secrets management)                │
+│  coordination-center        │  │  RLS (row-level security)                  │
+└─────────────────┬───────────┘  └────────────────────────────────────────────┘
+                  │
+┌─────────────────▼──────────────────────────────────────────────────────────────┐
+│                        📡 EVENT-DRIVEN BACKBONE                                 │
+│  eventbus:8003 (pub/sub: low, normal, high, critical)                         │
+│  event-intelligence (pattern detection, self-healing)                          │
+└───────────────────┬────────────────────────────────────────────────────────────┘
+                    │
+        ┌───────────┼───────────┬────────────┬─────────────┐
+        │           │           │            │             │
+┌───────▼─────┐ ┌──▼──────┐ ┌──▼──────┐ ┌──▼──────┐ ┌────▼──────────────┐
+│ 🤖 AI OFFICE │ │📋 BCM    │ │⚙️  WF    │ │🧠 AI     │ │📊 OBSERVABILITY   │
+│             │ │SERVICES  │ │ENGINE   │ │CORE     │ │                   │
+├─────────────┤ ├──────────┤ ├─────────┤ ├─────────┤ ├───────────────────┤
+│ mio-manager │ │ bia:8011 │ │ workflow│ │ ai-orch │ │ prometheus:9090   │
+│ db-intel    │ │ risk     │ │ -intelli│ │ :8040   │ │ grafana:3000      │
+│ analytics   │ │ plans    │ │ gence   │ │ ai-found│ │ mio-eyes          │
+│ devops-agent│ │ govern   │ │ :8010   │ │ ation   │ │ analytics-spec    │
+│ project-agt │ │ comply   │ │ workflow│ │ expertis│ │ db-intelligence   │
+│ agent-router│ │ response │ │ -engine │ │ e-center│ │                   │
+│             │ │ planning │ │ optimize│ │ collecti│ │ 18 Dashboards     │
+│             │ │ docs     │ │ r       │ │ ve      │ │ 45 Alert Rules    │
+│             │ │ learning │ │         │ │ communit│ │                   │
+│             │ │ validatio│ │         │ │ y-intel │ │                   │
+└─────┬───────┘ └────┬─────┘ └────┬────┘ └────┬────┘ └─────────┬─────────┘
+      │              │            │           │                │
+      └──────────────┴────────────┴───────────┴────────────────┘
+                                  │
+┌─────────────────────────────────▼──────────────────────────────────────────────┐
+│                        💾 DATA STORAGE LAYER                                    │
+│                                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌──────────────────┐              │
+│  │ PostgreSQL:5432 │  │  Redis:6379     │  │ Qdrant Cloud     │              │
+│  │                 │  │                 │  │                  │              │
+│  │ 29 schemas      │  │ Cache           │  │ Vector search    │              │
+│  │ 46 migrations   │  │ Sessions        │  │ RAG              │              │
+│  │ RLS multi-tenant│  │ Rate limiting   │  │ Embeddings       │              │
+│  │ 25 BCM tables   │  │ Service registry│  │ 1536-dim vectors │              │
+│  └─────────────────┘  └─────────────────┘  └──────────────────┘              │
+│                                                                                 │
+│  database-managers: Unified access layer (pooling, caching, RLS)              │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                           KEY FUNCTIONAL SYSTEMS                                ║
+╠════════════════════════════════════════════════════════════════════════════════╣
+║ 🚀 Startup & Orchestration  │ 🛡️  Resilience & Failover │ 🔒 Security          ║
+║ 📊 Monitoring               │ 🔍 Analytics              │ 💾 Data Storage      ║
+║ 🌐 API & Communication      │ 📚 Learning & Knowledge   │ 🔮 Predictive        ║
+║ 🤖 AI Orchestration         │ 👥 Community Intelligence │ 🧬 Evolution         ║
+║ 📋 BCM Business Logic       │ ⚙️  Workflow Management   │ 📡 Event-Driven      ║
+║ 🧠 AI Foundation            │ 🔧 DevOps                 │ ✅ Testing           ║
+║ 🖥️  User Interface          │                           │                      ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                            INTEGRATION PATTERNS                                 ║
+╠════════════════════════════════════════════════════════════════════════════════╣
+║ 1. All Services → database-managers → PostgreSQL/Redis/Qdrant                 ║
+║ 2. Services ↔ EventBus → Async pub/sub communication                          ║
+║ 3. External → API Gateway → Service Discovery → Services                      ║
+║ 4. Services /metrics → Prometheus → Grafana visualization                     ║
+║ 5. AI requests → Agent Router → AI Orchestration → Specialists                ║
+║ 6. BCM workflows → Workflow Intelligence → Temporal execution                 ║
+║ 7. UI clients ↔ WebSocket ↔ EventBus → Real-time updates                     ║
+║ 8. AI context → RAG → Qdrant vector search → Relevant docs                   ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+DEPLOYMENT STATUS:
+  ✅ Production: 23 services    ✅ Running: 3 services      🟢 Active: 14 services
+  🟡 Configured: 1 service      📋 Planned: 2 services      ⚪ Reserved: 3 services
+
+CRITICAL SERVICES (must be running):
+  postgresql:5432 • redis:6379 • eventbus:8003 • service-discovery:8500
+  api-gateway:8000 • auth-service:8001 • mio-manager:8002
+  workflow-intelligence:8010 • ai-orchestration:8040
+
+See detailed analysis: /Users/MD/AI-Platform-ISO/catalogs/FUNCTIONAL_SYSTEMS_ANALYSIS.md

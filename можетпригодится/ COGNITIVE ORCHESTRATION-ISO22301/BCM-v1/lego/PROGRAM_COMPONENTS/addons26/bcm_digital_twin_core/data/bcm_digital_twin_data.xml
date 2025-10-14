@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!-- Default Configuration -->
+        <record id="bcm_digital_twin_default_config" model="bcm.digital.twin.config">
+            <field name="name">Default BCM Digital Twin Configuration</field>
+            <field name="active">True</field>
+            <field name="service_url">http://localhost:3001</field>
+            <field name="timeout">30</field>
+            <field name="retry_count">3</field>
+            <field name="default_simulation_mode">standard</field>
+            <field name="enable_caching">True</field>
+            <field name="cache_duration">24</field>
+            <field name="enable_ai_analysis">True</field>
+            <field name="ai_confidence_threshold">70.0</field>
+            <field name="max_concurrent_simulations">5</field>
+            <field name="batch_processing_enabled">True</field>
+            <field name="batch_size">10</field>
+        </record>
+
+        <!-- System Parameters -->
+        <record id="config_parameter_dt_service_url" model="ir.config_parameter">
+            <field name="key">bcm.digital_twin.service_url</field>
+            <field name="value">http://localhost:3001</field>
+        </record>
+
+        <record id="config_parameter_dt_timeout" model="ir.config_parameter">
+            <field name="key">bcm.digital_twin.timeout</field>
+            <field name="value">30</field>
+        </record>
+
+        <record id="config_parameter_dt_retry_count" model="ir.config_parameter">
+            <field name="key">bcm.digital_twin.retry_count</field>
+            <field name="value">3</field>
+        </record>
+
+        <record id="config_parameter_dt_enable_ai" model="ir.config_parameter">
+            <field name="key">bcm.digital_twin.enable_ai</field>
+            <field name="value">True</field>
+        </record>
+
+        <record id="config_parameter_dt_enable_caching" model="ir.config_parameter">
+            <field name="key">bcm.digital_twin.enable_caching</field>
+            <field name="value">True</field>
+        </record>
+</odoo>

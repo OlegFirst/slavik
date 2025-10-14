@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Center Architecture - AI-Platform-ISO</title>
+  <meta name="description" content="Deep dive into the AI Orchestrator Decision Center architecture and decision-making flow">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Services</a>
+        <a href="decision-center.html" class="active">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="documentation.html">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="container">
+      <h1>AI Orchestrator: Decision Center</h1>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">
+        The "brain" of the platform - autonomous decision-making system
+      </p>
+      <p style="font-size: 1rem; opacity: 0.9; margin-top: 0.5rem;">
+        Port: 8002 | Location: intelligent-core/orchestration/ai-orchestration/
+      </p>
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section>
+    <div class="container">
+      <h2>What is the Decision Center?</h2>
+      <p class="section-subtitle">
+        The AI Orchestrator is the central decision-making engine that coordinates all autonomous actions across the platform.
+        It aggregates context, assesses priority, selects strategies, validates safety, and executes or delegates decisions.
+      </p>
+
+      <div class="bg-alt" style="padding: 2rem; border-radius: 0.75rem; margin-top: 2rem;">
+        <h3>Core Responsibilities</h3>
+        <div class="grid grid-3" style="margin-top: 1rem;">
+          <div class="card" style="background: white;">
+            <h4>1. Aggregate Context</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Collect and synthesize information from all platform sources:
+              platform state, workflows, events, similar situations, governance rules
+            </p>
+          </div>
+          <div class="card" style="background: white;">
+            <h4>2. Assess Priority</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Determine urgency level (Low, Normal, High, Critical) based on
+              impact, time sensitivity, and risk factors
+            </p>
+          </div>
+          <div class="card" style="background: white;">
+            <h4>3. Select Strategy</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Choose best action from memory of past decisions or generate new strategy
+              using AI and evidence-based reasoning
+            </p>
+          </div>
+          <div class="card" style="background: white;">
+            <h4>4. Validate Safety</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Check against constitution rules, detect loops, prevent hallucinations,
+              ensure compliance with governance constraints
+            </p>
+          </div>
+          <div class="card" style="background: white;">
+            <h4>5. Execute/Delegate</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Either auto-resolve, delegate to specialists, escalate to humans,
+              wait-and-monitor, or emergency stop
+            </p>
+          </div>
+          <div class="card" style="background: white;">
+            <h4>6. Learn & Evolve</h4>
+            <p style="font-size: 0.9rem; color: var(--medium-text);">
+              Store outcomes in 4-layer memory, run evolution cycles,
+              improve strategies based on real-world effectiveness
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Diagram -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Decision Center Architecture</h2>
+      <p class="section-subtitle text-center">
+        Five core components working together to make autonomous decisions
+      </p>
+
+      <div class="mermaid">
+graph TB
+    subgraph Input["📥 Input"]
+        SIT[Situation<br/>workflow_stuck,<br/>error, etc.]
+    end
+
+    subgraph DecisionCenter["🧠 AI Orchestrator Decision Center"]
+        CA[Context Aggregator<br/>Gather all relevant data]
+        PE[Priority Engine<br/>Assess urgency level]
+        SS[Strategy Selector<br/>Choose best action]
+        SM[Safety Monitor<br/>Validate decision]
+        DM[Delegation Manager<br/>Route to specialists]
+    end
+
+    subgraph Memory["💾 4-Layer Memory"]
+        WM[Working Memory<br/>Events, recent data]
+        STM[Short-term Memory<br/>Decisions, outcomes]
+        LTM[Long-term Memory<br/>Patterns, strategies]
+        OM[Organizational Memory<br/>Domain knowledge]
+    end
+
+    subgraph Execution["⚡ Execution"]
+        AUTO[Auto-Resolve<br/>Call services]
+        DEL[Delegate<br/>To AI specialists]
+        ESC[Escalate<br/>To human]
+        WAIT[Wait & Monitor<br/>Track situation]
+        STOP[Emergency Stop<br/>Halt operations]
+    end
+
+    SIT --> CA
+    CA --> PE
+    PE --> SS
+    SS --> SM
+    SM --> DM
+
+    CA -.read.-> WM
+    CA -.read.-> STM
+    SS -.read.-> LTM
+    SS -.read.-> OM
+
+    DM --> AUTO
+    DM --> DEL
+    DM --> ESC
+    DM --> WAIT
+    DM --> STOP
+
+    AUTO -.store result.-> STM
+    DEL -.store result.-> STM
+    ESC -.store result.-> STM
+
+    style DecisionCenter fill:#e0f2fe,stroke:#0369a1,stroke-width:3px
+    style Memory fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style Execution fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+      </div>
+    </div>
+  </section>
+
+  <!-- Decision Flow -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Decision-Making Flow</h2>
+      <p class="section-subtitle text-center">
+        Step-by-step process from situation to execution
+      </p>
+
+      <div class="mermaid">
+sequenceDiagram
+    participant User as 🧑 Situation
+    participant Orch as 🧠 AI Orchestrator
+    participant CA as Context Aggregator
+    participant PE as Priority Engine
+    participant SS as Strategy Selector
+    participant SM as Safety Monitor
+    participant Exec as ⚡ Execution
+
+    User->>Orch: decide(situation)
+
+    Orch->>CA: aggregate(situation, tenant_id)
+    CA->>CA: Get platform state
+    CA->>CA: Get active workflows
+    CA->>CA: Get recent events
+    CA->>CA: Find similar situations
+    CA->>CA: Get governance rules
+    CA-->>Orch: FullContext
+
+    Orch->>PE: assess_priority(context)
+    PE->>PE: Calculate priority score
+    PE->>PE: Map to level (LOW/NORMAL/HIGH/CRITICAL)
+    PE-->>Orch: Priority
+
+    Orch->>SS: select_strategies(context, priority)
+    SS->>SS: Query memory for similar cases
+    SS->>SS: Generate candidate strategies
+    SS->>SS: Rank by confidence
+    SS-->>Orch: List[Strategy]
+
+    Orch->>SM: validate(decision, context)
+    SM->>SM: Check constitution rules
+    SM->>SM: Detect loops
+    SM->>SM: Check hallucinations
+    SM-->>Orch: SafetyResult
+
+    alt Safety Approved
+        Orch->>Exec: execute(decision)
+        Exec->>Exec: Route to action type
+        Exec-->>Orch: Result
+        Orch-->>User: Decision + Result
+    else Safety Failed
+        Orch->>Exec: escalate_to_human(decision)
+        Exec-->>Orch: Escalation ticket
+        Orch-->>User: Escalated
+    end
+      </div>
+    </div>
+  </section>
+
+  <!-- Component Deep Dives -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2>Component Deep Dives</h2>
+
+      <!-- Context Aggregator -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-color);">1. Context Aggregator</h3>
+        <p><strong>Purpose:</strong> Collect comprehensive context from all platform sources</p>
+
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Data Sources:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Database:</strong> workflows, processes, risks, plans</li>
+              <li><strong>Cache (Redis):</strong> recent events, platform state</li>
+              <li><strong>Memory:</strong> similar historical situations</li>
+              <li><strong>Governance:</strong> applicable rules and constraints</li>
+              <li><strong>Predictive:</strong> AI forecasts for situation</li>
+              <li><strong>External:</strong> industry trends (stub), regulatory changes (stub)</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Output: FullContext</h4>
+            <pre style="font-size: 0.85rem; padding: 1rem; background: var(--background-alt); border-radius: 0.5rem; overflow-x: auto;"><code>{
+  "platform_state": {...},
+  "workflows": [...],
+  "recent_events": [...],
+  "similar_situations": [...],
+  "industry_trends": [...],
+  "regulatory_changes": [...],
+  "predictions": {...},
+  "governance_rules": [...],
+  "timestamp": "2025-10-14T..."
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Engine -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-color);">2. Priority Engine</h3>
+        <p><strong>Purpose:</strong> Assess urgency and impact to determine priority level</p>
+
+        <div class="grid grid-2" style="margin-top: 1rem;">
+          <div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Priority Levels:</h4>
+            <ul style="font-size: 0.9rem; list-style: none; padding: 0;">
+              <li style="padding: 0.5rem; background: #f3f4f6; margin: 0.25rem 0; border-radius: 0.25rem;">
+                <strong>CRITICAL</strong> (score ≥ 80): Immediate action required
+              </li>
+              <li style="padding: 0.5rem; background: #fef3c7; margin: 0.25rem 0; border-radius: 0.25rem;">
+                <strong>HIGH</strong> (score 60-79): High priority, respond quickly
+              </li>
+              <li style="padding: 0.5rem; background: #dbeafe; margin: 0.25rem 0; border-radius: 0.25rem;">
+                <strong>NORMAL</strong> (score 30-59): Standard priority
+              </li>
+              <li style="padding: 0.5rem; background: #dcfce7; margin: 0.25rem 0; border-radius: 0.25rem;">
+                <strong>LOW</strong> (score < 30): Can wait
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Factors Considered:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Impact on critical services</li>
+              <li>Number of affected users/processes</li>
+              <li>Time sensitivity (deadlines, SLAs)</li>
+              <li>Risk of cascade failures</li>
+              <li>Compliance/regulatory requirements</li>
+              <li>Current system load</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Selector -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-color);">3. Strategy Selector</h3>
+        <p><strong>Purpose:</strong> Select best action strategy from memory or generate new one</p>
+
+        <h4 style="font-size: 1rem; margin-top: 1rem; margin-bottom: 0.5rem;">Selection Process:</h4>
+        <div class="mermaid" style="margin-top: 1rem;">
+graph LR
+    A[Receive Context + Priority] --> B{Query Memory}
+    B -->|Found| C[Retrieve Similar Cases]
+    B -->|Not Found| D[Generate New Strategy]
+
+    C --> E[Score Strategies]
+    D --> E
+
+    E --> F[Rank by Confidence]
+    F --> G[Return Top 3 Strategies]
+
+    style A fill:#e0f2fe
+    style G fill:#dcfce7
+        </div>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 0.95rem;">Strategy Confidence Mapping:</h4>
+            <ul style="font-size: 0.85rem; color: var(--medium-text);">
+              <li><strong>≥ 0.9:</strong> Auto-resolve or delegate</li>
+              <li><strong>0.7-0.89:</strong> Delegate to specialist</li>
+              <li><strong>< 0.7:</strong> Escalate to human</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size: 0.95rem;">Strategy Metadata:</h4>
+            <pre style="font-size: 0.75rem; padding: 0.75rem; background: var(--background-alt); border-radius: 0.5rem;"><code>{
+  "action": "Restart workflow X",
+  "rationale": "Similar case succeeded",
+  "confidence": 0.92,
+  "learned_from": ["case_123", "case_456"],
+  "requires_expert": false,
+  "domain": "workflow_management"
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safety Monitor -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-color);">4. Safety Monitor</h3>
+        <p><strong>Purpose:</strong> Validate decisions against safety rules before execution</p>
+
+        <div class="grid grid-4" style="margin-top: 1rem;">
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.9rem;">Constitution Enforcer</h4>
+            <p style="font-size: 0.85rem;">Check against core rules: never modify user data without permission, never delete audit trails</p>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.9rem;">Loop Detector</h4>
+            <p style="font-size: 0.85rem;">Prevent circular decision patterns and infinite loops</p>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.9rem;">Hallucination Detector</h4>
+            <p style="font-size: 0.85rem;">Detect unrealistic or impossible actions</p>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.9rem;">Control Monitor</h4>
+            <p style="font-size: 0.85rem;">Ensure human oversight for critical decisions</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #fef2f2; border-left: 4px solid #dc2626; border-radius: 0.5rem;">
+          <h4 style="margin: 0; color: #991b1b; font-size: 1rem;">Safety Check Result</h4>
+          <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #7f1d1d;">
+            If safety check fails → decision is automatically converted to <strong>ESCALATE_HUMAN</strong> with safety concerns listed
+          </p>
+        </div>
+      </div>
+
+      <!-- Delegation Manager -->
+      <div class="card">
+        <h3 style="color: var(--primary-color);">5. Delegation Manager</h3>
+        <p><strong>Purpose:</strong> Route decisions to appropriate execution path or AI specialists</p>
+
+        <h4 style="font-size: 1rem; margin-top: 1rem; margin-bottom: 0.5rem;">Action Types:</h4>
+        <div class="grid grid-2" style="margin-top: 0.5rem;">
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.95rem;">AUTO_RESOLVE</h4>
+            <ul style="font-size: 0.85rem; margin: 0.5rem 0 0;">
+              <li>Call platform services directly</li>
+              <li>Automatic retry with exponential backoff</li>
+              <li>Parse action from strategy metadata</li>
+              <li>Route to: BIA, Risk, Planning, Compliance services</li>
+            </ul>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.95rem;">DELEGATE</h4>
+            <ul style="font-size: 0.85rem; margin: 0.5rem 0 0;">
+              <li>Send to AI specialists (Expertise Center)</li>
+              <li>Publish delegation event via EventBus</li>
+              <li>Track delegation status</li>
+              <li>Handle async responses</li>
+            </ul>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.95rem;">ESCALATE_HUMAN</h4>
+            <ul style="font-size: 0.85rem; margin: 0.5rem 0 0;">
+              <li>Create incident ticket</li>
+              <li>Send notifications (email, Slack, PagerDuty)</li>
+              <li>Log escalation for tracking</li>
+              <li>Require manual intervention</li>
+            </ul>
+          </div>
+          <div class="card" style="background: var(--background-alt);">
+            <h4 style="font-size: 0.95rem;">EMERGENCY_STOP</h4>
+            <ul style="font-size: 0.85rem; margin: 0.5rem 0 0;">
+              <li>Halt all workflows</li>
+              <li>Publish critical event</li>
+              <li>Trigger incident response</li>
+              <li>Send emergency notifications</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Real Example -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Real-World Example</h2>
+      <p class="section-subtitle text-center">
+        How Decision Center handles a stuck workflow
+      </p>
+
+      <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem;">
+        <h3 style="color: white; margin-bottom: 1.5rem;">Scenario: BIA Workflow Stuck for 30 Minutes</h3>
+
+        <div class="grid grid-2" style="gap: 1.5rem;">
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px);">
+            <h4 style="color: white; margin-bottom: 1rem;">📥 Input</h4>
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem; color: #e0e0e0;"><code>{
+  "workflow_stuck": true,
+  "workflow_id": "bia_001",
+  "stuck_duration_minutes": 30,
+  "error": "Timeout waiting for input"
+}</code></pre>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px);">
+            <h4 style="color: white; margin-bottom: 1rem;">⚡ Decision Made</h4>
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem; color: #e0e0e0;"><code>{
+  "action": "AUTO_RESOLVE",
+  "rationale": "Restart workflow - similar case succeeded (92% confidence)",
+  "priority": "HIGH",
+  "confidence": 0.92,
+  "learned_from": ["case_123"]
+}</code></pre>
+          </div>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px); margin-top: 1.5rem;">
+          <h4 style="color: white; margin-bottom: 1rem;">🔄 Execution Steps</h4>
+          <ol style="margin: 0; padding-left: 1.5rem; font-size: 0.95rem;">
+            <li style="margin-bottom: 0.75rem;"><strong>Context Aggregated:</strong> Found similar case (case_123) where restart succeeded</li>
+            <li style="margin-bottom: 0.75rem;"><strong>Priority Assessed:</strong> HIGH (score: 72) - affects ongoing BIA assessment</li>
+            <li style="margin-bottom: 0.75rem;"><strong>Strategy Selected:</strong> "Restart workflow" (confidence: 0.92)</li>
+            <li style="margin-bottom: 0.75rem;"><strong>Safety Validated:</strong> ✅ Passed all checks</li>
+            <li style="margin-bottom: 0.75rem;"><strong>Auto-Resolved:</strong> Called Planning Service → POST /api/v1/workflows/bia_001/resume</li>
+            <li><strong>Result:</strong> ✅ Workflow resumed successfully in 2.3 seconds</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Points -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Integration Points</h2>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Memory System</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li><strong>4 Layers:</strong> Working, Short-term, Long-term, Organizational</li>
+            <li>Store decisions and outcomes</li>
+            <li>Query similar situations</li>
+            <li>Learn from effectiveness</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Evolution Engine</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Run periodic evolution cycles (24h)</li>
+            <li>Discover new patterns</li>
+            <li>Refine strategies</li>
+            <li>Self-improvement</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>PDCA Integration</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Plan-Do-Check-Act cycle</li>
+            <li>Continuous improvement</li>
+            <li>Learn from outcomes</li>
+            <li>Update playbooks</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Crisis Coordinator</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Detect crisis situations (priority ≥ HIGH)</li>
+            <li>Multi-service coordination</li>
+            <li>BC plan activation</li>
+            <li>Incident response</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Service Registry</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Register platform services</li>
+            <li>Health monitoring</li>
+            <li>Automatic retry logic</li>
+            <li>Service discovery</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>EventBus</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li>Publish decision events</li>
+            <li>Subscribe to platform events</li>
+            <li>Async communication</li>
+            <li>Event-driven architecture</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Orchestrator Statistics</h2>
+
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h4 style="color: var(--primary-color);">decisions_made</h4>
+            <p>Total decisions executed</p>
+          </div>
+          <div class="stat-item">
+            <h4 style="color: var(--secondary-color);">auto_resolved</h4>
+            <p>Automatically resolved</p>
+          </div>
+          <div class="stat-item">
+            <h4 style="color: var(--primary-color);">delegated</h4>
+            <p>Delegated to specialists</p>
+          </div>
+          <div class="stat-item">
+            <h4 style="color: #f59e0b);">escalated_to_human</h4>
+            <p>Escalated to operators</p>
+          </div>
+          <div class="stat-item">
+            <h4 style="color: var(--accent-color);">safety_blocks</h4>
+            <p>Blocked by safety</p>
+          </div>
+          <div class="stat-item">
+            <h4 style="color: var(--secondary-color);">evolution_cycles</h4>
+            <p>Evolution cycles run</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section style="background: var(--background-alt);">
+    <div class="container text-center">
+      <h2>Explore More Architecture</h2>
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <a href="mio-manager.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>MIO Manager</h3>
+          <p>Platform observatory and smart task scheduling</p>
+        </a>
+        <a href="service-catalog-visual.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Service Catalog</h3>
+          <p>All 62 platform services explained</p>
+        </a>
+        <a href="architecture.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Full Architecture</h3>
+          <p>Complete system architecture</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          AI-powered autonomous decision-making for Business Continuity Management.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform-overview.html">Platform Overview</a>
+        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+
+      <div>
+        <h4>Key Services</h4>
+        <a href="decision-center.html">Decision Center</a>
+        <a href="mio-manager.html">MIO Manager</a>
+        <a href="modules.html">All Services</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      sequence: {
+        useMaxWidth: true,
+        wrap: true
+      }
+    });
+  </script>
+</body>
+</html>

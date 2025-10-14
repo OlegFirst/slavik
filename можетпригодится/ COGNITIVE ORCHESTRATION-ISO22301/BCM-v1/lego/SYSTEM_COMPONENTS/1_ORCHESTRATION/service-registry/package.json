@@ -1,0 +1,17 @@
+{
+  "name": "@cognitive-system/service-registry",
+  "version": "1.0.0",
+  "description": "Universal service discovery and registration for cognitive orchestration system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "redis": "^4.0.0",
+    "etcd3": "^1.1.0",
+    "uuid": "^9.0.0",
+    "ws": "^8.0.0"
+  }
+}

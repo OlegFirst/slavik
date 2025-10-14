@@ -1,0 +1,379 @@
+{
+  "title": "ML Pipeline - Predictions & Training",
+  "uid": "ml-pipeline-detailed",
+  "tags": ["platform-services", "ml", "ai", "predictions"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 100,
+      "panels": [],
+      "title": "Prediction Performance",
+      "type": "row"
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Predictions Generated (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
+      "targets": [
+        {
+          "expr": "sum(increase(ml_pipeline_predictions_generated[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "gauge",
+      "title": "Model Accuracy",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_model_accuracy)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "orange", "value": 70},
+              {"color": "green", "value": 85}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Prediction Rate",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+      "targets": [
+        {
+          "expr": "sum(rate(ml_pipeline_predictions_generated[5m]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Inference Time (p95)",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(ml_pipeline_inference_duration_seconds_bucket[5m])) by (le)) * 1000",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 100},
+              {"color": "red", "value": 500}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Predictions by Model Type",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+      "targets": [
+        {
+          "expr": "sum(rate(ml_pipeline_predictions_generated[5m])) by (model_type)",
+          "legendFormat": "{{model_type}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Inference Duration Distribution",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(ml_pipeline_inference_duration_seconds_bucket[5m])) by (le)) * 1000",
+          "legendFormat": "p50",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(ml_pipeline_inference_duration_seconds_bucket[5m])) by (le)) * 1000",
+          "legendFormat": "p95",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(ml_pipeline_inference_duration_seconds_bucket[5m])) by (le)) * 1000",
+          "legendFormat": "p99",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 13},
+      "id": 101,
+      "panels": [],
+      "title": "Model Training",
+      "type": "row"
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Training Jobs (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(ml_pipeline_training_jobs_total[24h]))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Active Training Jobs",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 14},
+      "targets": [
+        {
+          "expr": "ml_pipeline_active_training_jobs",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Failed Training Jobs (24h)",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 14},
+      "targets": [
+        {
+          "expr": "sum(increase(ml_pipeline_training_jobs_total{status=\"failed\"}[24h]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "red", "value": 5}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Average Training Duration",
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 14},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_training_duration_seconds) / 60",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Training Jobs Status",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 18},
+      "targets": [
+        {
+          "expr": "sum(rate(ml_pipeline_training_jobs_total[5m])) by (status)",
+          "legendFormat": "{{status}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "Training Duration by Model",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 18},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_training_duration_seconds) by (model_type) / 60",
+          "legendFormat": "{{model_type}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 26},
+      "id": 102,
+      "panels": [],
+      "title": "Model Quality & Monitoring",
+      "type": "row"
+    },
+    {
+      "id": 20,
+      "type": "gauge",
+      "title": "Model Precision",
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 27},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_model_precision)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 75},
+              {"color": "green", "value": 85}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "gauge",
+      "title": "Model Recall",
+      "gridPos": {"h": 6, "w": 6, "x": 6, "y": 27},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_model_recall)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 75},
+              {"color": "green", "value": 85}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "type": "gauge",
+      "title": "F1 Score",
+      "gridPos": {"h": 6, "w": 6, "x": 12, "y": 27},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_model_f1_score)",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 75},
+              {"color": "green", "value": 85}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "Model Drift Detected",
+      "gridPos": {"h": 6, "w": 6, "x": 18, "y": 27},
+      "targets": [
+        {
+          "expr": "sum(increase(ml_pipeline_model_drift_detected[24h]))",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "red", "value": 5}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "type": "timeseries",
+      "title": "Model Accuracy Trend",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 33},
+      "targets": [
+        {
+          "expr": "avg(ml_pipeline_model_accuracy) by (model_type)",
+          "legendFormat": "{{model_type}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        }
+      }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"}
+}

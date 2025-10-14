@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Daily Automated Test Execution -->
+        <record id="cron_automated_test_execution" model="ir.cron">
+            <field name="name">BCM: Daily Automated Tests</field>
+            <field name="model_id" ref="model_bcm_test_execution"/>
+            <field name="state">code</field>
+            <field name="code">model.run_automated_tests()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+            <field name="priority">5</field>
+        </record>
+        
+        <!-- Weekly Compliance Assessment -->
+        <record id="cron_compliance_assessment" model="ir.cron">
+            <field name="name">BCM: Weekly Compliance Assessment</field>
+            <field name="model_id" ref="model_bcm_compliance_assessment"/>
+            <field name="state">code</field>
+            <field name="code">model.run_weekly_assessment()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="active" eval="True"/>
+            <field name="priority">10</field>
+        </record>
+        
+        <!-- Real-time Scenario Monitoring (Every 5 minutes) -->
+        <record id="cron_scenario_monitoring" model="ir.cron">
+            <field name="name">BCM: Real-time Scenario Monitoring</field>
+            <field name="model_id" ref="model_bcm_scenario_instance"/>
+            <field name="state">code</field>
+            <field name="code">model.monitor_active_scenarios()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="priority">1</field>
+        </record>
+        
+        <!-- Alert Notifications Processing (Every 10 minutes) -->
+        <record id="cron_alert_notifications" model="ir.cron">
+            <field name="name">BCM: Process Alert Notifications</field>
+            <field name="model_id" ref="model_bcm_notification"/>
+            <field name="state">code</field>
+            <field name="code">model.process_pending_notifications()</field>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="priority">2</field>
+        </record>
+        
+        <!-- Expired Test Cleanup (Daily at midnight) -->
+        <record id="cron_expired_test_cleanup" model="ir.cron">
+            <field name="name">BCM: Cleanup Expired Tests</field>
+            <field name="model_id" ref="model_bcm_test_execution"/>
+            <field name="state">code</field>
+            <field name="code">model.cleanup_expired_tests()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+            <field name="priority">20</field>
+            <field name="nextcall" eval="(datetime.now().replace(hour=0, minute=0, second=0) + timedelta(days=1))"/>
+        </record>
+    </data>
+</odoo>

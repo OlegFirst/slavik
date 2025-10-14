@@ -1,0 +1,717 @@
+# Golden Standard Template - Level 2 (Subsystem)
+# For Testing Coordinated Subsystem Operations
+# Version: 1.0.0
+# Created: 2025-10-12
+# Purpose: Generate L2 scenarios for 12 subsystems (groups of related services)
+
+meta:
+  id: "l2-subsystem-{subsystem_name}"
+  level: 2
+  type: "subsystem"
+  subsystem: "{subsystem_name}"
+  category: "{category}"  # infrastructure, ai, business, business_applications, ui, shared
+  status: "active"
+  version: "1.0.0"
+  created_at: "{timestamp}"
+  created_by: "scenario_manager"
+  tags: ["{subsystem_type}", "integration", "coordination"]
+
+description:
+  summary: "{subsystem_description}"
+  purpose: "Validate coordinated operation of all services within {subsystem_name} subsystem"
+  scope: "Integration testing across {service_count} related services"
+  business_impact: "{business_impact}"
+
+subsystem_info:
+  name: "{subsystem_name}"
+  category: "{category}"
+  criticality: "{criticality}"  # critical, high, medium, low
+  services: ["{service_list}"]
+  service_count: {count}
+  port_range: "{port_range}"
+
+dependencies:
+  required_subsystems: ["{required_subsystems}"]
+  optional_subsystems: ["{optional_subsystems}"]
+  external_dependencies: ["{external_dependencies}"]
+
+capabilities:
+  - "{capability_1}"
+  - "{capability_2}"
+  - "{capability_3}"
+
+test_scenarios:
+  # ===================================================================
+  # SCENARIO 1: Coordinated Startup
+  # ===================================================================
+  - name: "Subsystem Coordinated Startup"
+    scenario_id: "subsystem-startup"
+    priority: "critical"
+    execution_time: "5-10 minutes"
+    description: "Verify all services in subsystem start in correct order and establish connections"
+
+    startup_sequence:
+      # Example for Database Infrastructure subsystem
+      - phase: "foundation"
+        order: 1
+        services: ["postgresql", "redis"]
+        parallel: true
+        timeout: "30s"
+
+      - phase: "specialized_storage"
+        order: 2
+        services: ["qdrant"]
+        depends_on: ["postgresql"]
+        timeout: "20s"
+
+      - phase: "managers"
+        order: 3
+        services: ["db_managers"]
+        depends_on: ["postgresql", "redis", "qdrant"]
+        timeout: "10s"
+
+    steps:
+      - id: "1.1"
+        action: "start_subsystem_services"
+        method: "sequential"
+        expected:
+          all_services_started: true
+          startup_time_total: "< 2 minutes"
+          dependency_order_respected: true
+
+      - id: "1.2"
+        action: "verify_service_health"
+        for_each: "service in subsystem"
+        expected:
+          health_status: "healthy"
+          response_time: "< 1s"
+
+      - id: "1.3"
+        action: "verify_inter_service_connections"
+        expected:
+          connections_established: true
+          no_connection_errors: true
+
+      - id: "1.4"
+        action: "verify_service_registration"
+        service_discovery: true
+        expected:
+          all_services_registered: true
+          health_checks_configured: true
+
+    postconditions:
+      - "All services running"
+      - "Connections established"
+      - "Services registered in service discovery"
+
+  # ===================================================================
+  # SCENARIO 2: Inter-Service Communication
+  # ===================================================================
+  - name: "Inter-Service Communication & Data Flow"
+    scenario_id: "subsystem-communication"
+    priority: "critical"
+    execution_time: "10-15 minutes"
+    description: "Verify services communicate correctly and data flows as expected"
+
+    communication_patterns:
+      - pattern: "request-response"
+        from: "{service_a}"
+        to: "{service_b}"
+        protocol: "HTTP"
+        expected_latency: "< 100ms"
+
+      - pattern: "event-driven"
+        from: "{service_c}"
+        to: "{service_d}"
+        protocol: "EventBus"
+        expected_latency: "< 50ms"
+
+      - pattern: "streaming"
+        from: "{service_e}"
+        to: "{service_f}"
+        protocol: "WebSocket"
+        expected_latency: "< 10ms"
+
+    steps:
+      - id: "2.1"
+        action: "test_synchronous_calls"
+        scenarios:
+          - from: "{service_a}"
+            to: "{service_b}"
+            method: "POST"
+            payload: "{test_data}"
+            expected:
+              status: 200
+              response_time: "< 500ms"
+              data_integrity: true
+
+      - id: "2.2"
+        action: "test_asynchronous_events"
+        scenarios:
+          - publisher: "{service_c}"
+            event_type: "{event_type}"
+            subscribers: ["{service_d}", "{service_e}"]
+            expected:
+              event_delivered: true
+              delivery_time: "< 100ms"
+              all_subscribers_received: true
+
+      - id: "2.3"
+        action: "test_data_consistency"
+        expected:
+          data_synchronized: true
+          no_data_loss: true
+          transaction_integrity: true
+
+      - id: "2.4"
+        action: "test_error_propagation"
+        inject_error: true
+        expected:
+          error_caught: true
+          error_message_propagated: true
+          graceful_degradation: true
+
+  # ===================================================================
+  # SCENARIO 3: Subsystem-Level Resilience
+  # ===================================================================
+  - name: "Subsystem Resilience & Fault Tolerance"
+    scenario_id: "subsystem-resilience"
+    priority: "critical"
+    execution_time: "15-20 minutes"
+    description: "Verify subsystem continues operating when individual services fail"
+
+    fault_scenarios:
+      - fault_type: "service_crash"
+        target: "{non_critical_service}"
+        expected_behavior: "subsystem_continues"
+
+      - fault_type: "service_slow_response"
+        target: "{any_service}"
+        delay: "5s"
+        expected_behavior: "timeout_and_retry"
+
+      - fault_type: "network_partition"
+        between: ["{service_a}", "{service_b}"]
+        expected_behavior: "circuit_breaker_opens"
+
+      - fault_type: "resource_exhaustion"
+        target: "{service_c}"
+        resource: "memory"
+        expected_behavior: "backpressure_applied"
+
+    steps:
+      - id: "3.1"
+        action: "test_service_failure_isolation"
+        kill_service: "{non_critical_service}"
+        expected:
+          critical_services_continue: true
+          dependent_services_handle_gracefully: true
+          error_logged: true
+
+      - id: "3.2"
+        action: "test_automatic_recovery"
+        expected:
+          service_restarts: true
+          reconnection_automatic: true
+          state_recovered: true
+          recovery_time: "< 30s"
+
+      - id: "3.3"
+        action: "test_circuit_breaker"
+        failure_threshold: 5
+        expected:
+          circuit_opens_after_threshold: true
+          fallback_mechanism_activated: true
+          circuit_closes_after_recovery: true
+
+      - id: "3.4"
+        action: "test_cascading_failure_prevention"
+        inject_failure: "{service_a}"
+        expected:
+          failure_contained: true
+          no_cascade: true
+          other_services_healthy: true
+
+  # ===================================================================
+  # SCENARIO 4: Performance Under Load
+  # ===================================================================
+  - name: "Subsystem Performance Under Load"
+    scenario_id: "subsystem-performance"
+    priority: "high"
+    execution_time: "20-30 minutes"
+    description: "Verify subsystem performance under various load conditions"
+
+    load_profiles:
+      - profile: "normal"
+        requests_per_second: 100
+        duration: "5 minutes"
+        expected:
+          p50_latency: "< 100ms"
+          p95_latency: "< 500ms"
+          p99_latency: "< 1s"
+          error_rate: "< 0.1%"
+
+      - profile: "peak"
+        requests_per_second: 500
+        duration: "5 minutes"
+        expected:
+          p50_latency: "< 200ms"
+          p95_latency: "< 1s"
+          p99_latency: "< 2s"
+          error_rate: "< 1%"
+
+      - profile: "stress"
+        requests_per_second: 1000
+        duration: "5 minutes"
+        expected:
+          p50_latency: "< 500ms"
+          p95_latency: "< 2s"
+          error_rate: "< 5%"
+          no_crashes: true
+
+    steps:
+      - id: "4.1"
+        action: "baseline_performance_test"
+        load: "normal"
+        expected:
+          all_metrics_within_threshold: true
+          resource_usage_normal: true
+
+      - id: "4.2"
+        action: "peak_load_test"
+        load: "peak"
+        expected:
+          services_scale_automatically: true
+          performance_degradation_acceptable: true
+
+      - id: "4.3"
+        action: "stress_test"
+        load: "stress"
+        expected:
+          no_crashes: true
+          graceful_degradation: true
+          recovery_after_load: true
+
+      - id: "4.4"
+        action: "endurance_test"
+        load: "normal"
+        duration: "1 hour"
+        expected:
+          no_memory_leaks: true
+          performance_stable: true
+          no_resource_exhaustion: true
+
+  # ===================================================================
+  # SCENARIO 5: Data Integration & Consistency
+  # ===================================================================
+  - name: "Data Integration & Consistency"
+    scenario_id: "subsystem-data"
+    priority: "critical"
+    execution_time: "10-15 minutes"
+    description: "Verify data integrity across all services in subsystem"
+
+    data_flows:
+      - flow: "write_path"
+        from: "{source_service}"
+        through: ["{middleware_service}"]
+        to: "{storage_service}"
+        expected:
+          data_persisted: true
+          no_data_loss: true
+          transaction_committed: true
+
+      - flow: "read_path"
+        from: "{storage_service}"
+        through: ["{cache_service}"]
+        to: "{consumer_service}"
+        expected:
+          data_consistent: true
+          cache_hit_rate: "> 80%"
+
+    steps:
+      - id: "5.1"
+        action: "test_write_consistency"
+        operations: ["write", "write", "write"]
+        concurrent: true
+        expected:
+          all_writes_successful: true
+          no_conflicts: true
+          data_consistent_across_services: true
+
+      - id: "5.2"
+        action: "test_read_consistency"
+        after_write: true
+        from_all_replicas: true
+        expected:
+          eventual_consistency_time: "< 1s"
+          all_reads_return_latest: true
+
+      - id: "5.3"
+        action: "test_transaction_atomicity"
+        multi_service_transaction: true
+        expected:
+          all_or_nothing: true
+          no_partial_commits: true
+          rollback_works: true
+
+      - id: "5.4"
+        action: "test_data_validation"
+        invalid_data: "{malformed_payload}"
+        expected:
+          validation_error: true
+          error_message_clear: true
+          no_data_corruption: true
+
+  # ===================================================================
+  # SCENARIO 6: Security & Access Control
+  # ===================================================================
+  - name: "Security & Access Control"
+    scenario_id: "subsystem-security"
+    priority: "critical"
+    execution_time: "12-15 minutes"
+    description: "Verify security measures across subsystem services"
+
+    security_tests:
+      - test: "authentication"
+        expected:
+          jwt_required: true
+          invalid_token_rejected: true
+          expired_token_rejected: true
+
+      - test: "authorization"
+        expected:
+          rbac_enforced: true
+          unauthorized_access_blocked: true
+          permission_checked: true
+
+      - test: "encryption"
+        expected:
+          data_in_transit_encrypted: true
+          data_at_rest_encrypted: true
+          tls_enforced: true
+
+    steps:
+      - id: "6.1"
+        action: "test_inter_service_auth"
+        expected:
+          service_to_service_auth_required: true
+          mutual_tls_works: true
+
+      - id: "6.2"
+        action: "test_secret_management"
+        expected:
+          secrets_from_vault: true
+          no_hardcoded_secrets: true
+          secrets_rotated: true
+
+      - id: "6.3"
+        action: "test_audit_logging"
+        expected:
+          security_events_logged: true
+          log_integrity: true
+          log_retention_policy: true
+
+      - id: "6.4"
+        action: "test_vulnerability_scanning"
+        expected:
+          no_critical_vulnerabilities: true
+          dependencies_up_to_date: true
+
+  # ===================================================================
+  # SCENARIO 7: Monitoring & Observability
+  # ===================================================================
+  - name: "Subsystem Monitoring & Observability"
+    scenario_id: "subsystem-monitoring"
+    priority: "high"
+    execution_time: "8-10 minutes"
+    description: "Verify monitoring and observability across subsystem"
+
+    monitoring_requirements:
+      - metrics: "all_services_expose_metrics"
+      - logs: "centralized_logging"
+      - traces: "distributed_tracing"
+      - alerts: "alert_rules_configured"
+
+    steps:
+      - id: "7.1"
+        action: "verify_metrics_endpoints"
+        for_each: "service in subsystem"
+        endpoint: "/metrics"
+        expected:
+          endpoint_accessible: true
+          prometheus_format: true
+          key_metrics_present: true
+
+      - id: "7.2"
+        action: "verify_logging"
+        expected:
+          structured_logs: true
+          log_levels_appropriate: true
+          correlation_ids_present: true
+
+      - id: "7.3"
+        action: "verify_distributed_tracing"
+        trace_request: true
+        through_subsystem: true
+        expected:
+          trace_id_propagated: true
+          all_spans_captured: true
+          trace_complete: true
+
+      - id: "7.4"
+        action: "verify_alerting"
+        trigger_condition: true
+        expected:
+          alert_fired: true
+          notification_sent: true
+          alert_resolution_tracked: true
+
+  # ===================================================================
+  # SCENARIO 8: Dependency Management
+  # ===================================================================
+  - name: "External Dependency Management"
+    scenario_id: "subsystem-dependencies"
+    priority: "high"
+    execution_time: "10-12 minutes"
+    description: "Verify subsystem handles external dependencies correctly"
+
+    external_dependencies:
+      - dependency: "{required_subsystem_1}"
+        failure_mode: "unavailable"
+        expected_behavior: "subsystem_degraded"
+
+      - dependency: "{optional_subsystem_1}"
+        failure_mode: "unavailable"
+        expected_behavior: "subsystem_continues"
+
+    steps:
+      - id: "8.1"
+        action: "test_dependency_health_checks"
+        expected:
+          health_checks_configured: true
+          unhealthy_dependencies_detected: true
+
+      - id: "8.2"
+        action: "test_dependency_failure_handling"
+        simulate_failure: "{required_subsystem}"
+        expected:
+          fallback_activated: true
+          graceful_degradation: true
+          user_notified: true
+
+      - id: "8.3"
+        action: "test_dependency_recovery"
+        restore_dependency: true
+        expected:
+          automatic_reconnection: true
+          service_resumed: true
+          no_manual_intervention: true
+
+      - id: "8.4"
+        action: "test_dependency_versioning"
+        expected:
+          version_compatibility_checked: true
+          incompatible_versions_rejected: true
+
+# ===================================================================
+# MONITORING & METRICS
+# ===================================================================
+monitoring:
+  subsystem_metrics:
+    - name: "{subsystem_name}_services_healthy"
+      type: "gauge"
+      description: "Number of healthy services in subsystem"
+      threshold: "> 90%"
+
+    - name: "{subsystem_name}_requests_total"
+      type: "counter"
+      description: "Total requests to subsystem"
+      labels: ["service", "endpoint", "status"]
+
+    - name: "{subsystem_name}_request_duration_seconds"
+      type: "histogram"
+      description: "Request duration across subsystem"
+      thresholds:
+        p50: "< 100ms"
+        p95: "< 500ms"
+        p99: "< 1s"
+
+    - name: "{subsystem_name}_errors_total"
+      type: "counter"
+      description: "Total errors in subsystem"
+      labels: ["service", "error_type"]
+
+    - name: "{subsystem_name}_inter_service_calls_total"
+      type: "counter"
+      description: "Inter-service communication within subsystem"
+      labels: ["from_service", "to_service", "status"]
+
+    - name: "{subsystem_name}_resource_usage"
+      type: "gauge"
+      description: "Resource usage across subsystem"
+      labels: ["service", "resource_type"]
+
+  alerts:
+    - name: "subsystem_degraded"
+      condition: "healthy_services < 80%"
+      severity: "critical"
+      action: "notify_oncall"
+
+    - name: "subsystem_high_error_rate"
+      condition: "error_rate > 5%"
+      severity: "warning"
+      action: "investigate"
+
+    - name: "subsystem_performance_degradation"
+      condition: "p95_latency > 1s"
+      severity: "warning"
+      action: "check_resources"
+
+    - name: "inter_service_communication_failure"
+      condition: "communication_failure_rate > 1%"
+      severity: "critical"
+      action: "check_network"
+
+  dashboards:
+    - name: "{subsystem_name} Health Overview"
+      panels:
+        - "Service Health Status"
+        - "Request Rate"
+        - "Error Rate"
+        - "Resource Usage"
+
+    - name: "{subsystem_name} Performance"
+      panels:
+        - "Request Latency"
+        - "Inter-Service Latency"
+        - "Throughput"
+
+    - name: "{subsystem_name} Dependencies"
+      panels:
+        - "Dependency Health"
+        - "External Calls"
+        - "Circuit Breaker Status"
+
+# ===================================================================
+# SUBSYSTEM-SPECIFIC CONFIGURATIONS
+# ===================================================================
+subsystem_configurations:
+  database_infrastructure:
+    additional_tests:
+      - "test_connection_pooling"
+      - "test_query_performance"
+      - "test_replication"
+      - "test_backup_restore"
+
+  runtime_services:
+    additional_tests:
+      - "test_service_discovery"
+      - "test_load_balancing"
+      - "test_websocket_connections"
+
+  ai_office:
+    additional_tests:
+      - "test_ai_agent_coordination"
+      - "test_task_distribution"
+      - "test_observatory_visibility"
+
+  intelligent_core:
+    additional_tests:
+      - "test_ai_orchestration"
+      - "test_workflow_execution"
+      - "test_learning_integration"
+
+  platform_services:
+    additional_tests:
+      - "test_bcm_workflows"
+      - "test_business_logic"
+      - "test_compliance_validation"
+
+# ===================================================================
+# EXECUTION HISTORY
+# ===================================================================
+execution_history:
+  # Will be populated after each scenario execution
+  # Example structure:
+  # - execution_id: "exec-l2-001"
+  #   timestamp: "2025-10-12T14:00:00Z"
+  #   subsystem: "database_infrastructure"
+  #   triggered_by: "scheduled"
+  #   scenarios_executed: 8
+  #   scenarios_passed: 8
+  #   duration: "1h15m"
+  #   service_health: "100%"
+  #   performance_metrics:
+  #     p95_latency: "450ms"
+  #     error_rate: "0.01%"
+
+# ===================================================================
+# LEARNING DATA
+# ===================================================================
+learning_data:
+  # Will be populated by AI learning system
+  # Example structure:
+  # subsystem_insights:
+  #   reliability_score: 0.98
+  #   common_failure_modes:
+  #     - "redis_connection_timeout_during_peak"
+  #     - "service_startup_order_violation"
+  #   optimization_suggestions:
+  #     - "Increase connection pool size"
+  #     - "Add startup dependency checks"
+  #   integration_patterns:
+  #     - pattern: "request-response"
+  #       usage: "85%"
+  #       reliability: 0.99
+
+# ===================================================================
+# INTEGRATION WITH L1 SCENARIOS
+# ===================================================================
+l1_dependencies:
+  description: "L2 scenarios depend on successful L1 scenarios"
+  prerequisite_l1_scenarios:
+    - "All services in subsystem must pass L1 health checks"
+    - "Individual service scenarios must pass"
+
+  l1_to_l2_data_flow:
+    - "L1 execution results feed into L2 precondition checks"
+    - "L1 performance baselines used for L2 integration testing"
+    - "L1 failure patterns inform L2 resilience tests"
+
+# ===================================================================
+# METADATA
+# ===================================================================
+metadata:
+  template_version: "1.0.0"
+  created_by: "scenario_manager"
+  created_at: "2025-10-12"
+  applicable_to:
+    subsystems: 12
+    subsystem_list:
+      - "database_infrastructure"
+      - "runtime_services"
+      - "gateway_layer"
+      - "observability"
+      - "eventbus_core"
+      - "security"
+      - "ai_office"
+      - "shared_libraries"
+      - "platform_services"
+      - "intelligent_core"
+      - "user_applications"
+      - "interface_layer"
+  estimated_generation_time: "3 minutes per scenario"
+  total_scenarios_to_generate: 12
+  notes: |
+    This template is designed for subsystem-level integration testing.
+    It focuses on:
+    - Coordinated startup and shutdown
+    - Inter-service communication
+    - Subsystem-level resilience
+    - Data consistency across services
+    - Performance under load
+    - Security across services
+    - Monitoring and observability
+    - External dependency management
+
+    L2 scenarios assume L1 scenarios have passed.

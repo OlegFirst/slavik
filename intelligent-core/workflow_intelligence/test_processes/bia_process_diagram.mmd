@@ -1,0 +1,21 @@
+flowchart TD
+    Start([Start: Business Impact Analysis])
+    style Start fill:#90EE90,stroke:#333,stroke-width:2px
+    identify_functions[Identify Critical Functions\n[form_input]]
+    style identify_functions fill:#87CEEB,stroke:#333,stroke-width:2px
+    assess_impact[[Assess Business Impact\n[analysis]]]
+    style assess_impact fill:#DDA0DD,stroke:#333,stroke-width:2px
+    identify_dependencies[Identify Dependencies\n[form_input]]
+    style identify_dependencies fill:#87CEEB,stroke:#333,stroke-width:2px
+    approval[Manager Approval\n[approval]]
+    style approval fill:#FFD700,stroke:#333,stroke-width:2px
+    generate_report[/Generate BIA Report\n[document_generation]/]
+    style generate_report fill:#98FB98,stroke:#333,stroke-width:2px
+    complete_end([End: complete])
+    style complete_end fill:#FFB6C1,stroke:#333,stroke-width:2px
+    Start --> identify_functions
+    identify_functions --> assess_impact
+    assess_impact --> identify_dependencies
+    identify_dependencies --> approval
+    approval --> generate_report
+    generate_report --> complete_end

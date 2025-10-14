@@ -1,0 +1,334 @@
+version: '3.8'
+
+services:
+  # ===========================================
+  # PLATFORM ORCHESTRATOR - Main Control
+  # ===========================================
+  platform_orchestrator:
+    build:
+      context: ./services/platform-orchestrator
+      dockerfile: Dockerfile
+    container_name: bcm-platform-orchestrator
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=bcm_platform
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker-compose.yml:/app/docker-compose.yml:ro
+      - ./.env:/app/.env:ro
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - bcm_platform
+    restart: unless-stopped
+
+  # ===========================================
+  # LEVEL 1: FOUNDATION SERVICES
+  # ===========================================
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: bcm-postgres
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=bcm_platform
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d bcm_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: bcm-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: bcm-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB for logs and events
+  mongodb:
+    image: mongo:7-jammy
+    container_name: bcm-mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+      - MONGO_INITDB_DATABASE=bcm_platform
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # LEVEL 2: INFRASTRUCTURE SERVICES
+  # ===========================================
+
+  # EventBus - Communication Hub
+  eventbus:
+    build:
+      context: ./backend/eventbus
+      dockerfile: Dockerfile
+    container_name: bcm-eventbus
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - POSTGRES_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Database Gateway
+  unified_database_gateway:
+    build:
+      context: ./gateways/unified_database_gateway
+      dockerfile: Dockerfile
+    container_name: bcm-database-gateway
+    environment:
+      - DATABASE_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8888:8888"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8888/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Gateway
+  unified_api_gateway:
+    build:
+      context: ./gateways/unified_api_gateway
+      dockerfile: Dockerfile
+    container_name: bcm-api-gateway
+    environment:
+      - DATABASE_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8777:8777"
+    depends_on:
+      eventbus:
+        condition: service_healthy
+      unified_database_gateway:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8777/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # LEVEL 3: BUSINESS SERVICES
+  # ===========================================
+
+  # Odoo ERP with BCM modules
+  odoo:
+    build:
+      context: ./core/odoo-18.0
+      dockerfile: Dockerfile.bcm
+    container_name: bcm-odoo
+    environment:
+      - HOST=postgres
+      - USER=odoo
+      - PASSWORD=postgres123
+      - DATABASE=bcm_platform
+      - BCM_MODULES_AUTO_INSTALL=true
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=odoo
+      - DB_PASSWORD=postgres123
+      - DB_NAME=bcm_platform
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./core/odoo-18.0/addons:/mnt/extra-addons
+      - odoo_data:/var/lib/odoo
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # BIA Engine
+  bia_engine:
+    build:
+      context: ./services/bia_engine
+      dockerfile: Dockerfile
+    container_name: bcm-bia-engine
+    environment:
+      - DATABASE_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # LEVEL 3: INTELLIGENCE SERVICES
+  # ===========================================
+
+  # AI Orchestrator
+  ai_orchestrator:
+    build:
+      context: ./services/ai_orchestrator
+      dockerfile: Dockerfile
+    container_name: bcm-ai-orchestrator
+    environment:
+      - DATABASE_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eventbus:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # MONITORING & OBSERVABILITY
+  # ===========================================
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: bcm-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - bcm_platform
+    restart: unless-stopped
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bcm-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=postgres:5432
+      - GF_DATABASE_NAME=grafana
+      - GF_DATABASE_USER=odoo
+      - GF_DATABASE_PASSWORD=postgres123
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - bcm_platform
+    restart: unless-stopped
+
+networks:
+  bcm_platform:
+    driver: bridge
+    name: bcm-platform-network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  odoo_data:
+  prometheus_data:
+  grafana_data:

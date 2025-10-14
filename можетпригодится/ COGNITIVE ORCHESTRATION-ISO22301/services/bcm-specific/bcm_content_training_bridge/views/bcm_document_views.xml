@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Document Views -->
+
+        <!-- Document Menu -->
+        <record id="bcm_document_menu" model="ir.ui.menu">
+            <field name="name">Document Management</field>
+            <field name="parent_id" ref="bcm_core.menu_bcm_root"/>
+            <field name="sequence">35</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,411 @@
+# ============================================
+# SERVICE INFORMATION - Plans Service
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: plans_service
+display_name: "Plans Service"
+version: "1.0.0"
+description: "Business Continuity Plans & Procedures management service. Manages BC plans, procedures, resources, plan lifecycle, reviews, and activations. Implements ISO 22301 Clause 8.4 requirements."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "platform-services"
+business_process: "Business Continuity Planning (ISO 22301 Clause 8.4)"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8023
+
+endpoints:
+  base_url: "http://localhost:8023"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/plans"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "Business continuity plan management"
+  - "Plan lifecycle workflow (Draft → Review → Approved → Active → Archived)"
+  - "Procedure management with sequencing"
+  - "Resource allocation and tracking (7 resource types)"
+  - "Contact lists with call tree structure"
+  - "Plan activation tracking and metrics"
+  - "Plan review scheduling and workflow"
+  - "Communication templates library"
+  - "Plan templates (reusable structures)"
+  - "ISO 22301 Clause 8.4 compliance"
+
+features:
+  - name: "Plan Management"
+    description: "Create, update, approve, activate BC plans"
+    endpoints: 10
+
+  - name: "Procedure Management"
+    description: "Step-by-step procedures with dependencies"
+    endpoints: 4
+
+  - name: "Resource Management"
+    description: "Resource requirements and alternatives"
+    endpoints: 2
+
+  - name: "Contact Lists"
+    description: "Emergency contact management with call trees"
+    endpoints: 2
+
+  - name: "Plan Activation"
+    description: "Real incident activation and tracking"
+    endpoints: 2
+
+  - name: "Plan Reviews"
+    description: "Scheduled and post-incident reviews"
+    endpoints: 2
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 1000/day"
+    prometheus_metric: "plans_service_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 500ms"
+    prometheus_metric: "plans_service_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "plans_service_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.5%"
+    prometheus_metric: "plans_service_availability"
+
+  - name: "active_plans_count"
+    type: "gauge"
+    description: "Number of active BC plans"
+    target: "> 10"
+    prometheus_metric: "plans_service_active_plans"
+
+  - name: "plan_approval_time"
+    type: "histogram"
+    description: "Time from draft to approval"
+    target: "< 7 days"
+    prometheus_metric: "plans_service_approval_duration_seconds"
+
+  - name: "plan_review_compliance"
+    type: "gauge"
+    description: "Percentage of plans reviewed on schedule"
+    target: "> 95%"
+    prometheus_metric: "plans_service_review_compliance_percent"
+
+  - name: "plan_activation_count"
+    type: "counter"
+    description: "Number of plan activations (real incidents)"
+    target: "Track trends"
+    prometheus_metric: "plans_service_activations_total"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "python-jose[cryptography]>=3.3.0"
+    - "passlib[bcrypt]>=1.7.4"
+    - "python-multipart>=0.0.6"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+
+  services:
+    - name: "postgresql"
+      version: "15+"
+      purpose: "Primary database for plans, procedures, resources"
+      required: true
+
+    - name: "eventbus"
+      port: 8001
+      purpose: "Event-driven integration with other services"
+      required: false
+
+    - name: "orchestrator"
+      port: 8002
+      purpose: "AI orchestration for plan optimization"
+      required: false
+
+  infrastructure:
+    - "PostgreSQL database"
+    - "Redis (optional, for caching)"
+    - "EventBus (for event-driven workflows)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "strategy.approved"
+        source: "planning_service"
+        action: "Create plan from approved strategy"
+
+      - event: "bia.completed"
+        source: "bia_service"
+        action: "Update plan RTOs/RPOs from BIA"
+
+      - event: "risk.identified"
+        source: "risk_service"
+        action: "Create mitigation plan"
+
+      - event: "incident.declared"
+        source: "response_service"
+        action: "Activate relevant BC plans"
+
+      - event: "exercise.completed"
+        source: "exercise_service"
+        action: "Trigger post-exercise plan review"
+
+    publishes:
+      - event: "plan.created"
+        target: "all_services"
+        data: "plan_id, plan_type, owner"
+
+      - event: "plan.approved"
+        target: "governance_service,compliance_service"
+        data: "plan_id, approved_by, approval_date"
+
+      - event: "plan.activated"
+        target: "response_service,orchestrator"
+        data: "plan_id, incident_id, activation_time"
+
+      - event: "plan.review_due"
+        target: "governance_service"
+        data: "plan_id, due_date, last_review"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/plans/plans"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        consumers: ["admin_panel", "response_service"]
+
+      - endpoint: "/api/plans/plans/{id}/activate-real"
+        methods: ["POST"]
+        consumers: ["response_service", "orchestrator"]
+
+      - endpoint: "/api/plans/contact-lists"
+        methods: ["GET", "POST"]
+        consumers: ["response_service", "communication_service"]
+
+    consumes:
+      - service: "planning_service"
+        endpoint: "/api/planning/strategies/{id}"
+        purpose: "Link plans to approved strategies"
+
+      - service: "bia_service"
+        endpoint: "/api/bia/analyses/{id}"
+        purpose: "Get RTO/RPO for plan creation"
+
+      - service: "risk_service"
+        endpoint: "/api/risks/assessments/{id}"
+        purpose: "Link plans to risk mitigation"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "Plan versioning not implemented"
+    severity: "medium"
+    workaround: "Create new plan with version suffix"
+    tracking: "PLAN-001"
+
+  - issue: "No automated plan testing"
+    severity: "low"
+    workaround: "Manual testing via exercises"
+    tracking: "PLAN-002"
+
+  - issue: "Contact list synchronization manual"
+    severity: "medium"
+    workaround: "Periodic manual updates from HR system"
+    tracking: "PLAN-003"
+
+limitations:
+  - "Maximum 1000 procedures per plan (database constraint)"
+  - "Contact lists limited to 500 contacts"
+  - "Plan activation history retained for 2 years"
+  - "No multi-language support for templates"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "plans_service:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8023:8023"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://bcm:bcm@localhost:5432/bcm"
+
+      - name: "SECRET_KEY"
+        description: "JWT secret key"
+        example: "your-secret-key-min-32-characters"
+
+    optional:
+      - name: "EVENTBUS_URL"
+        description: "EventBus service URL"
+        default: "http://localhost:8001"
+
+      - name: "ORCHESTRATOR_URL"
+        description: "AI Orchestrator URL"
+        default: "http://localhost:8002"
+
+      - name: "PLANNING_SERVICE_URL"
+        description: "Planning service URL"
+        default: "http://localhost:8022"
+
+      - name: "BIA_SERVICE_URL"
+        description: "BIA service URL"
+        default: "http://localhost:8020"
+
+      - name: "RISK_SERVICE_URL"
+        description: "Risk service URL"
+        default: "http://localhost:8024"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m plans_service.main"
+
+  requirements:
+    cpu: "0.5 cores"
+    memory: "512MB"
+    disk: "1GB"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8023/docs"
+  architecture: "./ARCHITECTURE.md"
+  eventbus: "./EVENTBUS_INTEGRATION.md"
+  auth: "./ENDPOINT_AUTH_SUMMARY.md"
+  external_links:
+    - name: "ISO 22301 Clause 8.4"
+      url: "https://www.iso.org/standard/75106.html"
+    - name: "BCI Good Practice Guidelines"
+      url: "https://www.thebci.org/resource/good-practice-guidelines.html"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Platform Services Team"
+  tech_lead: "Platform Architect"
+  product_owner: "BCM Product Owner"
+  on_call: "platform-team@company.com"
+  slack_channel: "#platform-services"
+
+support:
+  incidents: "Create ticket in JIRA Platform project"
+  questions: "#platform-services Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. DATABASE MODELS
+# ============================================
+database:
+  schema: "bcm"
+  models:
+    - name: "Plan"
+      table: "plans"
+      description: "Main plan entity with lifecycle workflow"
+
+    - name: "Procedure"
+      table: "procedures"
+      description: "Step-by-step procedures for plans"
+
+    - name: "PlanResource"
+      table: "plan_resources"
+      description: "Resource requirements for plans"
+
+    - name: "ContactList"
+      table: "contact_lists"
+      description: "Emergency contact lists with call trees"
+
+    - name: "PlanActivation"
+      table: "plan_activations"
+      description: "Plan activation tracking and metrics"
+
+    - name: "PlanReview"
+      table: "plan_reviews"
+      description: "Plan review tracking and findings"
+
+    - name: "CommunicationTemplate"
+      table: "communication_templates"
+      description: "Communication templates library"
+
+    - name: "PlanTemplate"
+      table: "plan_templates"
+      description: "Reusable plan templates"
+
+# ============================================
+# 13. COMPLIANCE
+# ============================================
+compliance:
+  iso_22301:
+    - clause: "8.4.1"
+      description: "BC plans established and documented"
+      status: "compliant"
+
+    - clause: "8.4.2"
+      description: "Incident response structure"
+      status: "compliant"
+
+    - clause: "8.4.3"
+      description: "Warning and communication"
+      status: "compliant"
+
+    - clause: "8.4.4"
+      description: "BC plans and procedures"
+      status: "compliant"
+
+  bci_practices:
+    - "PP5: Enabling Solutions"

@@ -1,0 +1,130 @@
+scenario:
+  # Metadata
+  id: "security-sql-injection-defense"
+  type: "system_test"
+  category: "security_testing"
+  level: 2
+
+  # Description
+  description: "Validate SQL injection protection across all platform services"
+  business_value: "OWASP A03 compliance - prevent data breaches"
+
+  # Attack vectors to test
+  attack_vectors:
+    - type: "sql_injection"
+      payloads:
+        - "' OR '1'='1"
+        - "'; DROP TABLE users--"
+        - "1' UNION SELECT * FROM secrets--"
+        - "admin'--"
+        - "1' AND '1'='1"
+
+  # Test steps
+  steps:
+    # Step 1: Baseline - normal operation
+    - id: "baseline"
+      service: "bia-service"
+      action: "search_assessments"
+      params:
+        query: "normal search term"
+      expected:
+        status: 200
+        response_contains: ["results"]
+
+    # Step 2: SQL injection attempt 1 - Authentication bypass
+    - id: "injection_attempt_1"
+      service: "bia-service"
+      action: "search_assessments"
+      params:
+        query: "{{attack_vectors.sql_injection.payloads[0]}}"
+      expected:
+        status: 400  # Must reject with bad request
+        error_contains: "invalid input"
+        db_queries_executed: 0  # No DB access with malicious input
+
+    # Step 3: SQL injection attempt 2 - Table drop
+    - id: "injection_attempt_2"
+      service: "bia-service"
+      action: "search_assessments"
+      params:
+        query: "{{attack_vectors.sql_injection.payloads[1]}}"
+      expected:
+        status: 400
+        tables_affected: 0  # No tables should be dropped
+
+    # Step 4: SQL injection attempt 3 - Data exfiltration
+    - id: "injection_attempt_3"
+      service: "vault-service"
+      action: "get_secret"
+      params:
+        name: "{{attack_vectors.sql_injection.payloads[2]}}"
+      expected:
+        status: 404  # Must not return secrets via injection
+        secrets_leaked: 0
+
+    # Step 5: Verify no data corruption
+    - id: "verify_data_integrity"
+      service: "bia-service"
+      action: "search_assessments"
+      params:
+        query: "normal search term"
+      expected:
+        status: 200
+        same_results_as_baseline: true
+
+  # Security assertions
+  assertions:
+    - type: "security"
+      check: "owasp_a03_injection"
+      result: "protected"
+      details: "All SQL injection attempts blocked"
+
+    - type: "audit"
+      check: "attack_logged"
+      log_contains:
+        - "sql_injection_attempt"
+        - "blocked"
+        - "source_ip"
+      log_level: "WARNING"
+
+    - type: "data_integrity"
+      check: "no_data_corruption"
+      verify:
+        - "tables_intact"
+        - "data_unchanged"
+        - "no_unauthorized_access"
+
+    - type: "response"
+      check: "secure_error_messages"
+      must_not_reveal:
+        - "database_schema"
+        - "table_names"
+        - "column_names"
+        - "error_stack_traces"
+
+  # Monitoring
+  metrics:
+    - name: "injection_attempts_blocked"
+      prometheus_query: "sql_injection_attempts_blocked_total"
+      alert_if: "== 0"  # Should have blocked attempts
+
+    - name: "security_alerts_fired"
+      prometheus_query: "security_alerts_total{type='sql_injection'}"
+      alert_if: "< 3"  # Should have fired for each attempt
+
+  # Post-execution
+  post_execution:
+    - action: "generate_security_report"
+      include:
+        - "attack_vectors_tested"
+        - "vulnerabilities_found"
+        - "services_tested"
+        - "remediation_required"
+
+    - action: "update_waf_rules"
+      if: "vulnerabilities_found > 0"
+      apply_patterns: true
+
+    - action: "notify_security_team"
+      severity: "high"
+      if: "vulnerabilities_found > 0"

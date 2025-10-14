@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_service_config_user,bcm.service.config.user,model_bcm_service_config,base.group_user,1,0,0,0
+access_bcm_service_config_manager,bcm.service.config.manager,model_bcm_service_config,base.group_system,1,1,1,1

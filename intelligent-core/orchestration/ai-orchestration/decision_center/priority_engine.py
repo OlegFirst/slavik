@@ -14,7 +14,7 @@ import logging
 from typing import Dict, List
 from datetime import datetime
 
-from intelligent_core.ai_orchestration.models import Priority, PriorityLevel, FullContext
+from .models import Priority, PriorityLevel, FullContext
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_industry_type_user,bcm.industry.type.user,model_bcm_industry_type,bcm_core.group_bcm_user,1,0,0,0
+access_bcm_industry_type_manager,bcm.industry.type.manager,model_bcm_industry_type,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_business_process_user,bcm.business.process.user,model_bcm_business_process,bcm_core.group_bcm_user,1,0,0,0
+access_bcm_business_process_manager,bcm.business.process.manager,model_bcm_business_process,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_bia_analysis_user,bcm.bia.analysis.user,model_bcm_bia_analysis,bcm_core.group_bcm_user,1,0,0,0
+access_bcm_bia_analysis_manager,bcm.bia.analysis.manager,model_bcm_bia_analysis,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_compliance_requirement_user,bcm.compliance.requirement.user,model_bcm_compliance_requirement,bcm_core.group_bcm_user,1,0,0,0
+access_bcm_compliance_requirement_manager,bcm.compliance.requirement.manager,model_bcm_compliance_requirement,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_technology_stack_user,bcm.technology.stack.user,model_bcm_technology_stack,bcm_core.group_bcm_user,1,0,0,0
+access_bcm_technology_stack_manager,bcm.technology.stack.manager,model_bcm_technology_stack,bcm_core.group_bcm_manager,1,1,1,1

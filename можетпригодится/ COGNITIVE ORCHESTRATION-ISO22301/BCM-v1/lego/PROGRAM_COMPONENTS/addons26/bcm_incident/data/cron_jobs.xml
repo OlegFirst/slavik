@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- AI Commander Automated Tasks -->
+        
+        <!-- Process AI Recommendations (every 5 minutes) -->
+        <record id="cron_ai_recommendations" model="ir.cron">
+            <field name="name">Process AI Incident Recommendations</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.process_ai_recommendations()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=5))"/>
+        </record>
+        
+        <!-- Check Escalation Rules (every 2 minutes) -->
+        <record id="cron_escalation_check" model="ir.cron">
+            <field name="name">Check Incident Escalation Rules</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.check_escalation_rules()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=2))"/>
+        </record>
+        
+        <!-- AI Risk Score Calculation (every 10 minutes) -->
+        <record id="cron_ai_risk_calculation" model="ir.cron">
+            <field name="name">Calculate AI Risk Scores</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.update_ai_risk_scores()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=10))"/>
+        </record>
+        
+        <!-- Find Similar Incidents AI (every 15 minutes) -->
+        <record id="cron_similar_incidents" model="ir.cron">
+            <field name="name">AI Find Similar Incidents</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.find_similar_incidents_batch()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=15))"/>
+        </record>
+        
+        <!-- Daily Reporting and Analytics -->
+        
+        <!-- Generate Daily Reports (at 06:00) -->
+        <record id="cron_daily_reports" model="ir.cron">
+            <field name="name">Generate Daily Incident Reports</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.generate_daily_reports()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=6, minute=0, second=0) + timedelta(days=1))"/>
+        </record>
+        
+        <!-- AI Learning Pattern Updates (at 02:00) -->
+        <record id="cron_ai_learning_update" model="ir.cron">
+            <field name="name">Update AI Learning Patterns</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.update_ai_learning_patterns()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=2, minute=0, second=0) + timedelta(days=1))"/>
+        </record>
+        
+        <!-- Response Team Performance Analysis (weekly, Sunday at 23:00) -->
+        <record id="cron_team_performance_analysis" model="ir.cron">
+            <field name="name">Response Team Performance Analysis</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.analyze_team_performance_weekly()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=23, minute=0, second=0) + timedelta(days=(6-DateTime.now().weekday())))"/>
+        </record>
+        
+        <!-- Maintenance and Cleanup Tasks -->
+        
+        <!-- Archive Resolved Incidents (monthly, 1st at 01:00) -->
+        <record id="cron_archive_resolved" model="ir.cron">
+            <field name="name">Archive Old Resolved Incidents</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.archive_old_incidents()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(day=1, hour=1, minute=0, second=0) + timedelta(days=32)).replace(day=1)"/>
+        </record>
+        
+        <!-- Cleanup AI Temporary Data (daily at 03:00) -->
+        <record id="cron_ai_cleanup" model="ir.cron">
+            <field name="name">Cleanup AI Temporary Data</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.cleanup_ai_temp_data()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=3, minute=0, second=0) + timedelta(days=1))"/>
+        </record>
+        
+        <!-- External System Integration Tasks -->
+        
+        <!-- Sync with External ITSM (every 30 minutes) -->
+        <record id="cron_external_itsm_sync" model="ir.cron">
+            <field name="name">Sync with External ITSM Systems</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.sync_external_itsm()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=30))"/>
+        </record>
+        
+        <!-- TheHive Security Integration (every 10 minutes) -->
+        <record id="cron_thehive_sync" model="ir.cron">
+            <field name="name">Sync with TheHive Security Platform</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.sync_thehive_cases()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=10))"/>
+        </record>
+        
+        <!-- Mobile App Data Sync (every 5 minutes) -->
+        <record id="cron_mobile_sync" model="ir.cron">
+            <field name="name">Mobile App Data Synchronization</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.sync_mobile_data()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=5))"/>
+        </record>
+        
+        <!-- GPS Tracking Updates (every 1 minute for active incidents) -->
+        <record id="cron_gps_tracking" model="ir.cron">
+            <field name="name">GPS Tracking Updates</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.update_gps_tracking()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=1))"/>
+        </record>
+        
+        <!-- Compliance and Audit Tasks -->
+        
+        <!-- ISO 22301 Compliance Check (weekly, Monday at 08:00) -->
+        <record id="cron_iso_compliance_check" model="ir.cron">
+            <field name="name">ISO 22301 Compliance Check</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.check_iso22301_compliance()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=8, minute=0, second=0) + timedelta(days=(7-DateTime.now().weekday())))"/>
+        </record>
+        
+        <!-- Generate Audit Trail Reports (monthly, 15th at 09:00) -->
+        <record id="cron_audit_trail" model="ir.cron">
+            <field name="name">Generate Audit Trail Reports</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="state">active</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="code">model.generate_audit_trail_reports()</field>
+            <field name="doall">False</field>
+            <field name="nextcall" eval="(DateTime.now().replace(day=15, hour=9, minute=0, second=0) + timedelta(days=32)).replace(day=15)"/>
+        </record>
+        
+    </data>
+</odoo>

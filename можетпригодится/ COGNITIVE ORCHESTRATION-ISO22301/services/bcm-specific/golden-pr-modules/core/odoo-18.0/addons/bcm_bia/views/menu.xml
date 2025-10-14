@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- BIA Section -->
+        <menuitem id="menu_bcm_bia_root" 
+                  name="Business Impact Analysis" 
+                  parent="bcm_core.menu_bcm_root" 
+                  sequence="10"/>
+        
+        <!-- Business Processes Action -->
+        <record id="action_bcm_business_process" model="ir.actions.act_window">
+            <field name="name">Business Processes</field>
+            <field name="res_model">bcm.business.process</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first business process for BIA analysis
+                </p>
+            </field>
+        </record>
+        
+        <menuitem id="menu_bcm_business_process" 
+                  name="Business Processes"
+                  parent="menu_bcm_bia_root"
+                  action="action_bcm_business_process"
+                  sequence="10"/>
+        
+        <!-- Industry Types Action -->
+        <record id="action_bcm_industry_type" model="ir.actions.act_window">
+            <field name="name">Industry Types</field>
+            <field name="res_model">bcm.industry.type</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        
+        <menuitem id="menu_bcm_industry_type" 
+                  name="Industry Types"
+                  parent="menu_bcm_bia_root"
+                  action="action_bcm_industry_type"
+                  sequence="20"/>
+                  
+        <!-- Configuration submenu -->
+        <menuitem id="menu_bcm_bia_config" 
+                  name="Configuration" 
+                  parent="menu_bcm_bia_root" 
+                  sequence="90"/>
+    </data>
+</odoo>

@@ -35,8 +35,12 @@ ai-foundation/
 ├── context/          # Context Building
 │   └── context_builder.py
 │
-└── llm/              # LLM Routing
-    └── llm_router.py
+├── llm/              # LLM Routing
+│   └── llm_router.py
+│
+└── utils/            # ✨ NEW: Shared Utilities (2025-10-11)
+    ├── resource_tracker.py  # Platform resource monitoring
+    └── __init__.py
 ```
 
 ## Usage
@@ -90,6 +94,36 @@ detector = AnomalyDetector()
 anomalies = await detector.detect(data=risk_metrics)
 ```
 
+### ✨ NEW: ResourceTracker (2025-10-11)
+
+```python
+from utils.resource_tracker import create_resource_tracker
+
+# Create resource tracker
+tracker = await create_resource_tracker(
+    snapshot_interval_seconds=60.0,
+    history_size=100
+)
+
+# Get available resources
+available = tracker.get_available_resources()
+# {'cpu_percent': 65.3, 'memory_mb': 2048.5, ...}
+
+# Detect resource state
+state = tracker.detect_resource_state()  # 'deficit' | 'normal' | 'surplus'
+
+# Predict deficit
+cpu_deficit = tracker.predict_deficit('cpu_percent', 90.0)
+# Returns seconds until 90% CPU (or None)
+
+# Calculate trend
+trend = tracker.calculate_trend('cpu_percent')  # -1.0 to +1.0
+```
+
+**Used by:**
+- System BCM Service (platform resource monitoring)
+- Available for any service needing resource tracking
+
 ## Why Separate from workflow_intelligence?
 
 **Architecture Decision (V7 Improved):**
@@ -135,3 +169,7 @@ Benefits:
 - Learning: Complete
 - Context: Basic (needs enrichment)
 - LLM: Complete
+- ✨ **ResourceTracker**: Complete (2025-10-11)
+  - Integrated into System BCM Service
+  - Available as shared utility
+  - Documentation: `/intelligent-core/system-bcm-service/docs/RESOURCE_TRACKER_INTEGRATION.md`

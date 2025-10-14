@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Intelligent Base Security Groups -->
+        <record id="group_bcm_ai_user" model="res.groups">
+            <field name="name">BCM AI User</field>
+            <field name="category_id" ref="bcm_core.module_category_business_continuity"/>
+            <field name="comment">Users with access to AI-powered BCM features</field>
+        </record>
+    </data>
+</odoo>

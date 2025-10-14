@@ -1,0 +1,148 @@
+version: '3.8'
+
+# КООРДИНАЦИОННЫЙ СЛОЙ - Ядро системы
+# Минимальный набор для управления
+
+services:
+  # ==================================
+  # БАЗОВАЯ ИНФРАСТРУКТУРА (нужна для координации)
+  # ==================================
+
+  redis:
+    container_name: core-redis
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - core-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    container_name: core-postgres
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=orchestration
+      - POSTGRES_USER=orchestrator
+      - POSTGRES_PASSWORD=orchestrator123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - core-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orchestrator"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================================
+  # КООРДИНАЦИОННОЕ ЯДРО
+  # ==================================
+
+  # 1. EventBus - нервная система
+  eventbus:
+    container_name: core-eventbus
+    build:
+      context: ./platform-framework/event-bus
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_URL=postgresql://orchestrator:orchestrator123@postgres:5432/orchestration
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - core-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Service Registry - реестр сервисов
+  service-registry:
+    container_name: core-registry
+    build:
+      context: ./platform-framework/service-registry
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - core-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 3. Workflow Engine (BPMN)
+  workflow-engine:
+    container_name: core-workflow
+    build:
+      context: ./platform-framework/services/bpmn_service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+      - REGISTRY_URL=http://service-registry:8002
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      eventbus:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - core-network
+
+  # 4. Orchestrator - мозг
+  # ПОКА ЗАКОММЕНТИРОВАН - нужно починить зависимости
+  # orchestrator:
+  #   container_name: core-orchestrator
+  #   build:
+  #     context: ./platform-framework/orchestrator
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - EVENTBUS_URL=http://eventbus:8001
+  #     - REGISTRY_URL=http://service-registry:8002
+  #     - WORKFLOW_URL=http://workflow-engine:8003
+  #     - REDIS_URL=redis://redis:6379
+  #   depends_on:
+  #     - eventbus
+  #     - service-registry
+  #     - workflow-engine
+  #   networks:
+  #     - core-network
+
+# ==================================
+# VOLUMES
+# ==================================
+volumes:
+  postgres-data:
+  redis-data:
+
+# ==================================
+# NETWORK
+# ==================================
+networks:
+  core-network:
+    driver: bridge
+    name: core-network

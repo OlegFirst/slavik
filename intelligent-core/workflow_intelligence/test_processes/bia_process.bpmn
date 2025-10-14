@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             id="definitions_bia_process_v1"
+             targetNamespace="http://ai-platform-iso.local/bpmn">
+
+  <process id="bia_process_v1" name="Business Impact Analysis" isExecutable="true">
+
+    <startEvent id="start" name="Start"/>
+
+    <userTask id="identify_functions" name="Identify Critical Functions"/>
+    <serviceTask id="assess_impact" name="Assess Business Impact"/>
+    <userTask id="identify_dependencies" name="Identify Dependencies"/>
+    <userTask id="approval" name="Manager Approval"/>
+    <serviceTask id="generate_report" name="Generate BIA Report"/>
+    <endEvent id="complete_end" name="End"/>
+
+    <sequenceFlow id="flow_start" sourceRef="start" targetRef="identify_functions"/>
+    <sequenceFlow id="flow_1" sourceRef="identify_functions" targetRef="assess_impact"/>
+    <sequenceFlow id="flow_2" sourceRef="assess_impact" targetRef="identify_dependencies"/>
+    <sequenceFlow id="flow_3" sourceRef="identify_dependencies" targetRef="approval"/>
+    <sequenceFlow id="flow_4" sourceRef="approval" targetRef="generate_report"/>
+    <sequenceFlow id="flow_5" sourceRef="generate_report" targetRef="complete_end"/>
+
+  </process>
+</definitions>

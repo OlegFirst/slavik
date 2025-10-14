@@ -8,3 +8,9 @@ redis==5.0.1
 sqlalchemy==2.0.23
 asyncpg==0.29.0
 python-multipart==0.0.6
+
+# Monitoring
+prometheus-client>=0.18.0
+
+# Security
+pyjwt>=2.8.0

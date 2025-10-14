@@ -1,0 +1,322 @@
+scenario:
+  # Metadata
+  id: "user-incident-response-cyber-attack"
+  type: "user_workflow"
+  category: "incident_management"
+  level: 4
+
+  # Description
+  description: "User responds to ransomware attack with AI guidance and automation"
+  business_value: "30min response time + regulatory compliance + automated documentation"
+
+  # Trigger configuration
+  trigger:
+    event: "security_alert"
+    severity: "critical"
+    type: "ransomware_detected"
+    source: "security_monitoring"
+
+  # User context
+  context:
+    user_role: "incident_commander"
+    organization: "city_hospital"
+    incident_type: "cyber_attack"
+    regulatory_obligations:
+      - "HIPAA_breach_notification"
+      - "GDPR_72h_report"
+      - "ISO_22301_incident_response"
+
+  # Workflow steps
+  steps:
+    # Step 1: AI detects incident and creates response plan
+    - id: "ai_incident_detection"
+      service: "ai-orchestrator"
+      action: "analyze_incident"
+      ai_assist:
+        use_expertise: "cybersecurity_incident_response"
+        use_rag: true
+        query: "ransomware response playbook healthcare HIPAA"
+        use_knowledge_base: true
+      params:
+        alert_data: "{{trigger.event_data}}"
+        organization_context: "{{context.organization}}"
+      expected:
+        status: 200
+        incident_type: "ransomware"
+        severity: "critical"
+        response_plan_generated: true
+        estimated_impact:
+          - "systems_affected"
+          - "data_at_risk"
+          - "regulatory_implications"
+
+    # Step 2: AI activates incident response team
+    - id: "auto_activate_team"
+      service: "response-service"
+      action: "activate_incident_team"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        team: "cyber_incident_response"
+        severity: "critical"
+        activation_method: "auto"
+      expected:
+        status: 200
+        notifications_sent: true
+        team_members_alerted: ">= 5"
+        roles_activated:
+          - "incident_commander"
+          - "security_analyst"
+          - "legal_counsel"
+          - "communications_lead"
+          - "technical_lead"
+
+    # Step 3: User reviews AI-generated action items
+    - id: "user_review_actions"
+      service: "response-service"
+      action: "get_action_items"
+      ui_element: "Incident Dashboard > Action Items"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+      expected:
+        status: 200
+        action_items:
+          min_count: 5
+          must_include:
+            - "Isolate affected systems"
+            - "Contact law enforcement"
+            - "Activate DR site"
+            - "Notify stakeholders"
+            - "Preserve evidence"
+        priority_assigned: true
+        estimated_time_per_action: true
+
+    # Step 4: User executes containment with AI monitoring
+    - id: "user_execute_containment"
+      service: "response-service"
+      action: "execute_action"
+      ui_element: "Action Items > Execute: Isolate Systems"
+      ai_assist:
+        monitor: true
+        provide_guidance: true
+        real_time_analysis: true
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        action_id: "isolate_systems"
+        affected_systems: "{{steps.ai_incident_detection.response.systems_affected}}"
+      expected:
+        status: 200
+        systems_isolated: true
+        spread_prevented: true
+        isolation_verified: true
+        ai_guidance_provided: true
+
+    # Step 5: AI analyzes ransomware variant
+    - id: "ai_analyze_malware"
+      service: "ai-orchestrator"
+      action: "analyze_malware_variant"
+      ai_assist:
+        use_knowledge_base: true
+        query: "ransomware variants decryption tools"
+        use_expertise: "malware_analysis"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        malware_samples: "{{steps.user_execute_containment.response.samples_collected}}"
+      expected:
+        status: 200
+        variant_identified: true
+        decryption_available: "true_or_false"
+        recommended_actions:
+          - "decryption_strategy"
+          - "recovery_approach"
+
+    # Step 6: DR site activation
+    - id: "activate_dr_site"
+      service: "response-service"
+      action: "activate_disaster_recovery"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        dr_plan: "cyber_attack_dr"
+        priority_systems:
+          - "EHR"
+          - "patient_triage"
+          - "emergency_services"
+      expected:
+        status: 200
+        dr_site_activated: true
+        systems_online: ">= 3"
+        rto_met: true
+
+    # Step 7: AI generates regulatory notifications
+    - id: "auto_compliance_notifications"
+      service: "documents-service"
+      action: "generate_breach_notifications"
+      ai_assist:
+        use_expertise: "regulatory_compliance"
+        ensure_accuracy: true
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        regulatory_requirements: "{{context.regulatory_obligations}}"
+        affected_data: "{{steps.ai_analyze_malware.response.data_impact}}"
+      expected:
+        status: 200
+        reports_generated:
+          - "HIPAA"
+          - "GDPR"
+          - "ISO_22301"
+        submission_ready: true
+        deadline_compliance:
+          HIPAA: "<= 60 days"
+          GDPR: "<= 72 hours"
+
+    # Step 8: Stakeholder communication
+    - id: "stakeholder_notifications"
+      service: "response-service"
+      action: "notify_stakeholders"
+      ai_assist:
+        generate_communications: true
+        tone: "professional_calm"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        stakeholder_groups:
+          - "executive_leadership"
+          - "affected_patients"
+          - "staff"
+          - "media"
+        communication_templates: "ai_generated"
+      expected:
+        status: 200
+        notifications_sent: true
+        communication_approved: true
+
+    # Step 9: AI generates post-incident report
+    - id: "auto_incident_report"
+      service: "documents-service"
+      action: "generate_incident_report"
+      ai_assist:
+        use_rag: true
+        query: "incident report best practices lessons learned"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        include_sections:
+          - "timeline"
+          - "impact_assessment"
+          - "response_actions"
+          - "lessons_learned"
+          - "recommendations"
+      expected:
+        status: 200
+        report_generated: true
+        compliance_requirements_met: true
+        lessons_learned_documented: true
+
+    # Step 10: AI schedules follow-up actions
+    - id: "ai_schedule_followups"
+      service: "ai-orchestrator"
+      action: "schedule_post_incident_actions"
+      params:
+        incident_id: "{{steps.ai_incident_detection.response.incident_id}}"
+        recommendations: "{{steps.auto_incident_report.response.recommendations}}"
+      expected:
+        status: 200
+        tasks_created: ">= 5"
+        tasks_assigned: true
+        deadlines_set: true
+
+  # Critical assertions
+  assertions:
+    - type: "response_time"
+      check: "time_to_containment"
+      target: "<= 30 minutes"
+      measurement: "from_detection_to_isolation"
+
+    - type: "compliance"
+      check: "regulatory_notifications"
+      requirements:
+        HIPAA:
+          notification_within: "60 days"
+          breach_assessment_completed: true
+        GDPR:
+          notification_within: "72 hours"
+          data_subjects_notified: true
+      result: "all_sent_on_time"
+
+    - type: "business_continuity"
+      check: "service_restoration"
+      critical_services:
+        - "EHR"
+        - "patient_triage"
+        - "emergency_services"
+      rto_met: true
+      mtpd_not_exceeded: true
+
+    - type: "ai_effectiveness"
+      check: "ai_guidance_accuracy"
+      measurements:
+        - "correct_variant_identification"
+        - "appropriate_containment_actions"
+        - "accurate_compliance_requirements"
+      accuracy: ">= 95%"
+
+    - type: "documentation"
+      check: "incident_documentation_complete"
+      required_documents:
+        - "incident_timeline"
+        - "impact_assessment"
+        - "regulatory_notifications"
+        - "post_incident_report"
+      completeness: "100%"
+
+  # Auto-generate follow-up scenarios
+  auto_generate:
+    - scenario_type: "post_incident_review"
+      based_on: "incident_response_actions"
+      schedule: "within_7_days"
+
+    - scenario_type: "security_improvements"
+      based_on: "lessons_learned"
+      priority: "high"
+
+    - scenario_type: "dr_drill"
+      based_on: "activated_dr_procedures"
+      schedule: "within_30_days"
+
+  # Monitoring metrics
+  metrics:
+    - name: "incident_detection_time"
+      prometheus_query: "incident_detection_duration_seconds{type='ransomware'}"
+      target: "<= 300"  # 5 minutes
+
+    - name: "containment_time"
+      prometheus_query: "incident_containment_duration_seconds{type='ransomware'}"
+      target: "<= 1800"  # 30 minutes
+
+    - name: "rto_compliance"
+      prometheus_query: "incident_rto_met{incident_type='cyber_attack'}"
+      target: "== 1"
+
+    - name: "regulatory_compliance_rate"
+      prometheus_query: "regulatory_notifications_on_time_total / regulatory_notifications_total"
+      target: "== 1.0"
+
+    - name: "ai_accuracy_rate"
+      prometheus_query: "avg(ai_incident_recommendations_accuracy{type='cyber_attack'})"
+      target: ">= 0.95"
+
+  # Triggers
+  triggers:
+    - event: "containment_successful"
+      action: "begin_recovery_phase"
+      params:
+        recovery_priority: "critical_systems_first"
+
+    - event: "regulatory_deadline_approaching"
+      action: "escalate_to_legal"
+      threshold: "24_hours_before"
+
+    - event: "similar_incident_detected"
+      action: "auto_apply_lessons_learned"
+      apply_improvements: true
+
+    - event: "incident_resolved"
+      action: "schedule_post_incident_review"
+      timeline: "within_7_days"

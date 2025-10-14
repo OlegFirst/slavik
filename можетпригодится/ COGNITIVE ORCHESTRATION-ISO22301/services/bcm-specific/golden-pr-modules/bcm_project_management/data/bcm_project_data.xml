@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Stages -->
+    <record id="bcm_stage_planning" model="project.project.stage">
+        <field name="name">Planning</field>
+        <field name="sequence">1</field>
+        <field name="fold">False</field>
+        <field name="mail_template_id" ref="project.mail_template_project_stage"/>
+    </record>
+
+    <record id="bcm_stage_execution" model="project.project.stage">
+        <field name="name">Execution</field>
+        <field name="sequence">2</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_stage_monitoring" model="project.project.stage">
+        <field name="name">Monitoring</field>
+        <field name="sequence">3</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_stage_completed" model="project.project.stage">
+        <field name="name">Completed</field>
+        <field name="sequence">4</field>
+        <field name="fold">True</field>
+    </record>
+
+    <!-- Task Stages for BCM Projects -->
+    <record id="bcm_task_stage_new" model="project.task.type">
+        <field name="name">New</field>
+        <field name="sequence">1</field>
+        <field name="fold">False</field>
+        <field name="mail_template_id" ref="project.mail_template_task_stage_change"/>
+    </record>
+
+    <record id="bcm_task_stage_analysis" model="project.task.type">
+        <field name="name">Analysis</field>
+        <field name="sequence">2</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_task_stage_implementation" model="project.task.type">
+        <field name="name">Implementation</field>
+        <field name="sequence">3</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_task_stage_testing" model="project.task.type">
+        <field name="name">Testing & Validation</field>
+        <field name="sequence">4</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_task_stage_review" model="project.task.type">
+        <field name="name">Review</field>
+        <field name="sequence">5</field>
+        <field name="fold">False</field>
+    </record>
+
+    <record id="bcm_task_stage_done" model="project.task.type">
+        <field name="name">Done</field>
+        <field name="sequence">6</field>
+        <field name="fold">True</field>
+    </record>
+
+    <!-- Default BCM Project Templates -->
+    <record id="bcm_project_template_recovery" model="project.project">
+        <field name="name">Recovery Plan Implementation Template</field>
+        <field name="bcm_type">recovery</field>
+        <field name="criticality_level">high</field>
+        <field name="recovery_time_objective">4.0</field>
+        <field name="recovery_point_objective">1.0</field>
+        <field name="maximum_tolerable_downtime">24.0</field>
+        <field name="auto_escalate">True</field>
+        <field name="auto_assign">True</field>
+        <field name="is_template">True</field>
+        <field name="active">False</field>
+        <field name="description">Template for recovery plan implementation projects with automated task generation and monitoring.</field>
+    </record>
+
+    <record id="bcm_project_template_exercise" model="project.project">
+        <field name="name">BCM Exercise Template</field>
+        <field name="bcm_type">exercise</field>
+        <field name="criticality_level">medium</field>
+        <field name="auto_notify">True</field>
+        <field name="is_template">True</field>
+        <field name="active">False</field>
+        <field name="description">Template for conducting BCM exercises and training sessions.</field>
+    </record>
+
+    <record id="bcm_project_template_audit" model="project.project">
+        <field name="name">BCM Audit Template</field>
+        <field name="bcm_type">audit</field>
+        <field name="criticality_level">high</field>
+        <field name="auto_escalate">True</field>
+        <field name="is_template">True</field>
+        <field name="active">False</field>
+        <field name="description">Template for BCM audit projects with compliance tracking.</field>
+    </record>
+
+    <!-- Default AI Configuration -->
+    <record id="bcm_ai_local_default" model="bcm.project.ai.local">
+        <field name="name">Default Project AI Assistant</field>
+        <field name="active">True</field>
+        <field name="project_patterns">{}</field>
+        <field name="task_assignment_rules">{}</field>
+        <field name="risk_indicators">{}</field>
+    </record>
+
+    <!-- Default AI Connector -->
+    <record id="bcm_ai_connector_default" model="bcm.ai.connector">
+        <field name="service_name">BCM AI Service</field>
+        <field name="endpoint_url">http://localhost:8000/api/ai</field>
+        <field name="is_active">False</field>
+        <field name="timeout">30</field>
+    </record>
+
+    <!-- Default Project Categories -->
+    <record id="project_category_bcm" model="project.category">
+        <field name="name">BCM</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="project_category_recovery" model="project.category">
+        <field name="name">Recovery</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="project_category_audit" model="project.category">
+        <field name="name">Audit & Compliance</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="project_category_exercise" model="project.category">
+        <field name="name">Exercise & Training</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <!-- Server Actions for Automation -->
+    <record id="action_bcm_health_check" model="ir.actions.server">
+        <field name="name">BCM Project Health Check</field>
+        <field name="model_id" ref="base.model_project_project"/>
+        <field name="binding_model_id" ref="base.model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">
+for record in records.filtered(lambda p: p.bcm_type):
+    record.action_run_health_check()
+        </field>
+    </record>
+
+    <record id="action_bcm_generate_insights" model="ir.actions.server">
+        <field name="name">Generate AI Insights</field>
+        <field name="model_id" ref="base.model_project_project"/>
+        <field name="binding_model_id" ref="base.model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">
+for record in records.filtered(lambda p: p.bcm_type):
+    record._update_ai_insights()
+        </field>
+    </record>
+
+    <!-- Automated Actions (Cron Jobs) -->
+    <record id="cron_bcm_health_monitoring" model="ir.cron">
+        <field name="name">BCM Project Health Monitoring</field>
+        <field name="model_id" ref="base.model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">
+# Run health checks for all active BCM projects
+projects = model.search([('bcm_type', '!=', False), ('active', '=', True)])
+for project in projects:
+    project._compute_health_status()
+    if project.auto_escalate and project.health_status == 'critical':
+        project.action_escalate()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="cron_bcm_ai_sync" model="ir.cron">
+        <field name="name">BCM AI Synchronization</field>
+        <field name="model_id" ref="model_bcm_project_ai_local"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_with_central_ai()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Mail Templates -->
+    <record id="mail_template_bcm_escalation" model="mail.template">
+        <field name="name">BCM Project Escalation</field>
+        <field name="model_id" ref="base.model_project_project"/>
+        <field name="subject">🚨 BCM Project Escalation: ${object.name}</field>
+        <field name="body_html"><![CDATA[
+<div style="margin: 0px; padding: 0px;">
+    <p>Dear Team,</p>
+
+    <p>BCM Project <strong>${object.name}</strong> requires immediate attention:</p>
+
+    <ul>
+        <li><strong>Project Type:</strong> ${object.bcm_type}</li>
+        <li><strong>Health Status:</strong> <span style="color: red;">${object.health_status}</span></li>
+        <li><strong>Health Score:</strong> ${object.health_score}%</li>
+        <li><strong>Criticality Level:</strong> ${object.criticality_level}</li>
+        <li><strong>Overdue Tasks:</strong> ${object.tasks_overdue_count}</li>
+    </ul>
+
+    % if object.ai_recommendations:
+    <h3>AI Recommendations:</h3>
+    <p>${object.ai_recommendations}</p>
+    % endif
+
+    <p>Please review this project immediately and take corrective action.</p>
+
+    <p>
+        <a href="/web#model=project.project&id=${object.id}" style="background-color: #875A7B; padding: 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+            View Project
+        </a>
+    </p>
+
+    <p>Best regards,<br/>
+    BCM AI System</p>
+</div>
+        ]]></field>
+        <field name="lang">${object.partner_id.lang}</field>
+        <field name="auto_delete">True</field>
+    </record>
+</odoo>

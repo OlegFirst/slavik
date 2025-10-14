@@ -1,0 +1,271 @@
+scenario:
+  # Metadata
+  id: "user-bia-complete-workflow"
+  type: "user_workflow"
+  category: "business_process"
+  level: 4
+
+  # Description
+  description: "Complete BIA workflow for healthcare organization with AI assistance"
+  business_value: "ISO 22301 compliance + 4+ hours time savings per assessment"
+
+  # User context
+  context:
+    user_role: "bcm_manager"
+    organization: "city_hospital"
+    organization_type: "healthcare"
+    regulatory_requirements:
+      - "ISO_22301"
+      - "HIPAA"
+      - "GDPR"
+
+  # Workflow steps
+  steps:
+    # Step 1: User initiates BIA
+    - id: "user_start_bia"
+      service: "bia-service"
+      action: "create_assessment"
+      ui_element: "BIA Dashboard > New Assessment"
+      params:
+        name: "Q1 2025 Hospital BIA"
+        organization_id: "{{org_id}}"
+        scope:
+          - "emergency_department"
+          - "surgery"
+          - "pharmacy"
+          - "radiology"
+      expected:
+        status: 201
+        response_contains:
+          - "assessment_id"
+          - "mtpd_template"
+        ui_redirect: "/bia/assessment/{{assessment_id}}"
+        toast_message: "Assessment created successfully"
+
+    # Step 2: AI analyzes domain and suggests critical processes
+    - id: "ai_suggest_processes"
+      service: "ai-orchestrator"
+      action: "recommend_critical_processes"
+      ai_assist:
+        use_rag: true
+        query: "healthcare emergency department critical processes ISO 22301"
+        use_expertise: "iso_22301_healthcare"
+        context: "healthcare + emergency services"
+      params:
+        industry: "healthcare"
+        department: "emergency"
+        regulatory_context:
+          - "HIPAA"
+          - "ISO_22301"
+      expected:
+        status: 200
+        recommendations:
+          min_count: 5
+          must_include:
+            - "Patient Triage System"
+            - "Electronic Health Records Access"
+            - "Emergency Medication Dispensing"
+        confidence_score: ">= 0.85"
+        rag_sources_used: ">= 3"
+
+    # Step 3: User reviews and accepts AI suggestions
+    - id: "user_review_suggestions"
+      service: "bia-service"
+      action: "add_processes"
+      ui_interaction: "review_panel"
+      ui_element: "AI Recommendations Panel > Review & Accept"
+      params:
+        assessment_id: "{{steps.user_start_bia.response.assessment_id}}"
+        processes: "{{steps.ai_suggest_processes.recommendations}}"
+        user_action: "accept_all"
+      expected:
+        status: 200
+        processes_added: ">= 5"
+        ui_update: "process_list_refreshed"
+
+    # Step 4: AI calculates MTPD/RTO based on similar organizations
+    - id: "ai_calculate_mtpd"
+      service: "ai-orchestrator"
+      action: "calculate_recovery_objectives"
+      ai_assist:
+        use_knowledge_base: true
+        query: "healthcare emergency department MTPD RTO benchmarks"
+        use_rag: true
+      params:
+        processes: "{{steps.ai_suggest_processes.recommendations}}"
+        organization_type: "healthcare"
+        department: "emergency"
+      expected:
+        status: 200
+        mtpd_values:
+          "Patient Triage System": "<= 1 hour"
+          "EHR Access": "<= 4 hours"
+          "Emergency Medication Dispensing": "<= 2 hours"
+        rto_values:
+          "Patient Triage System": "<= 30 minutes"
+          "EHR Access": "<= 2 hours"
+        confidence_score: ">= 0.8"
+
+    # Step 5: User confirms or adjusts MTPD/RTO values
+    - id: "user_confirm_objectives"
+      service: "bia-service"
+      action: "set_recovery_objectives"
+      ui_element: "Recovery Objectives Panel"
+      params:
+        assessment_id: "{{steps.user_start_bia.response.assessment_id}}"
+        objectives: "{{steps.ai_calculate_mtpd.mtpd_values}}"
+        rto_values: "{{steps.ai_calculate_mtpd.rto_values}}"
+      expected:
+        status: 200
+        objectives_saved: true
+
+    # Step 6: AI identifies dependencies
+    - id: "ai_map_dependencies"
+      service: "ai-orchestrator"
+      action: "identify_dependencies"
+      ai_assist:
+        use_rag: true
+        query: "healthcare process dependencies critical infrastructure"
+      params:
+        processes: "{{steps.ai_suggest_processes.recommendations}}"
+      expected:
+        status: 200
+        dependencies_identified:
+          min_count: 10
+          categories:
+            - "IT_systems"
+            - "personnel"
+            - "facilities"
+            - "suppliers"
+
+    # Step 7: Risk assessment integration
+    - id: "risk_analysis"
+      service: "risk-service"
+      action: "analyze_dependencies"
+      params:
+        bia_id: "{{steps.user_start_bia.response.assessment_id}}"
+        dependencies: "{{steps.ai_map_dependencies.dependencies_identified}}"
+      expected:
+        status: 200
+        critical_risks_identified: true
+        risk_count: ">= 3"
+        mitigation_strategies_count: ">= 3"
+
+    # Step 8: Generate compliance report
+    - id: "generate_report"
+      service: "documents-service"
+      action: "generate_bia_report"
+      params:
+        assessment_id: "{{steps.user_start_bia.response.assessment_id}}"
+        format: "ISO_22301_compliant"
+        include_sections:
+          - "executive_summary"
+          - "critical_processes"
+          - "recovery_objectives"
+          - "dependencies"
+          - "risk_assessment"
+      expected:
+        status: 200
+        document_generated: true
+        compliance_checklist_coverage: "100%"
+        document_format: "PDF"
+
+    # Step 9: AI generates follow-up action items
+    - id: "ai_generate_actions"
+      service: "ai-orchestrator"
+      action: "generate_action_items"
+      ai_assist:
+        use_expertise: "bcm_best_practices"
+      params:
+        assessment_id: "{{steps.user_start_bia.response.assessment_id}}"
+        risk_data: "{{steps.risk_analysis.response}}"
+      expected:
+        status: 200
+        action_items_generated: ">= 5"
+        priority_assignments: true
+        assigned_to_roles: true
+
+  # Business value validation
+  assertions:
+    - type: "business_value"
+      check: "time_saved"
+      baseline: "8 hours manual BIA"
+      expected: ">= 4 hours saved"
+      measurement: "workflow_completion_time"
+
+    - type: "compliance"
+      check: "iso_22301_clause_coverage"
+      expected:
+        - "8.2.2"  # BIA process
+        - "8.2.3"  # Impact analysis
+        - "8.3"    # Risk assessment
+      coverage_percentage: ">= 95%"
+
+    - type: "ai_effectiveness"
+      check: "recommendations_adopted"
+      expected: ">= 80%"
+      measurement: "user_acceptance_rate"
+
+    - type: "data_quality"
+      check: "completeness"
+      required_fields:
+        - "mtpd_defined"
+        - "rto_calculated"
+        - "dependencies_mapped"
+        - "risks_identified"
+      completeness: "100%"
+
+    - type: "user_experience"
+      check: "interaction_quality"
+      max_steps_to_completion: 10
+      max_user_inputs_required: 5
+      ai_assistance_provided: true
+
+  # Auto-generate follow-up scenarios
+  auto_generate:
+    - scenario_type: "incident_response_drill"
+      based_on: "identified_critical_processes"
+      trigger: "assessment_completed"
+
+    - scenario_type: "dr_test"
+      based_on: "calculated_rto_values"
+      schedule: "quarterly"
+
+    - scenario_type: "compliance_audit"
+      based_on: "iso_22301_requirements"
+      schedule: "annual"
+
+  # Monitoring metrics
+  metrics:
+    - name: "workflow_completion_time"
+      prometheus_query: "bia_workflow_duration_seconds{workflow='complete'}"
+      target: "<= 14400"  # 4 hours
+
+    - name: "ai_recommendation_adoption_rate"
+      prometheus_query: "avg(ai_recommendations_adopted{workflow='bia'})"
+      target: ">= 0.8"
+
+    - name: "compliance_score"
+      prometheus_query: "bia_compliance_score{standard='ISO_22301'}"
+      target: ">= 0.95"
+
+    - name: "user_satisfaction"
+      prometheus_query: "avg(workflow_satisfaction_rating{workflow='bia'})"
+      target: ">= 4.0"
+
+  # Triggers
+  triggers:
+    - event: "assessment_completed"
+      action: "auto_generate_scenarios"
+      params:
+        scenario_types:
+          - "incident_response_drill"
+          - "dr_test"
+
+    - event: "compliance_gap_found"
+      action: "create_remediation_task"
+      priority: "high"
+
+    - event: "ai_confidence_low"
+      action: "escalate_to_expert"
+      expert_type: "bcm_specialist"

@@ -17,7 +17,7 @@ import json
 
 from sqlalchemy import text
 from infrastructure.database.managers.supabase_client import supabase_manager
-from intelligent_core.ai_orchestration.models import Decision, FullContext
+from .models import Decision, FullContext
 
 logger = logging.getLogger(__name__)
 

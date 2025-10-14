@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Policy Workflow Views -->
+
+        <!-- Policy Workflow Form View -->
+        <record id="view_bcm_policy_workflow_form" model="ir.ui.view">
+            <field name="name">bcm.policy.workflow.form</field>
+            <field name="model">bcm.policy.workflow</field>
+            <field name="arch" type="xml">
+                <form string="Policy Workflow">
+                    <header>
+                        <button name="action_ai_policy_generation" type="object"
+                                string="🤖 AI Policy Generation" class="btn-primary"/>
+
+                        <button name="action_start_approval_workflow" type="object"
+                                string="📋 Start Approval Workflow" class="btn-success"/>
+
+                        <button name="action_ai_compliance_check" type="object"
+                                string="✅ AI Compliance Check" class="btn-info"/>
+
+                        <field name="approval_status" widget="badge"
+                               decoration-info="approval_status == 'draft'"
+                               decoration-warning="approval_status in ['ai_review', 'stakeholder_review']"
+                               decoration-success="approval_status == 'approved'"
+                               decoration-primary="approval_status == 'published'"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Policy Name"/></h1>
+                        </div>
+
+                        <group>
+                            <group string="Policy Information">
+                                <field name="policy_type"/>
+                                <field name="policy_owner"/>
+                                <field name="approval_deadline"/>
+                            </group>
+                            <group string="AI Enhancement">
+                                <field name="ai_generated" readonly="1"/>
+                                <field name="ai_templates_used" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group string="Approval Workflow">
+                            <field name="reviewers" widget="many2many_tags"/>
+                            <field name="approvers" widget="many2many_tags"/>
+                            <field name="current_approver" readonly="1"/>
+                        </group>
+
+                        <group string="Policy Content">
+                            <field name="policy_summary"/>
+                            <field name="policy_content" widget="html"/>
+                        </group>
+
+                        <group string="AI Compliance Analysis">
+                            <field name="ai_compliance_check" readonly="1"/>
+                        </group>
+
+                        <group string="DMS Integration">
+                            <field name="sharepoint_url"/>
+                            <field name="dms_document_id"/>
+                        </group>
+
+                        <group string="Compliance Mapping">
+                            <field name="iso_clauses" widget="many2many_tags"/>
+                            <field name="regulatory_requirements"/>
+                        </group>
+
+                        <!-- Approval History -->
+                        <field name="approval_history">
+                            <list>
+                                <field name="approval_step"/>
+                                <field name="approver_id"/>
+                                <field name="status"/>
+                                <field name="approval_date"/>
+                                <field name="deadline"/>
+                            </list>
+                        </field>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Policy Workflow Action -->
+        <record id="action_bcm_policy_workflow" model="ir.actions.act_window">
+            <field name="name">📝 Policy Workflow</field>
+            <field name="res_model">bcm.policy.workflow</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_bcm_policy_workflow"
+                  name="📝 Policy Management"
+                  parent="bcm_core.menu_bcm_governance"
+                  action="action_bcm_policy_workflow"
+                  sequence="15"/>
+    </data>
+</odoo>

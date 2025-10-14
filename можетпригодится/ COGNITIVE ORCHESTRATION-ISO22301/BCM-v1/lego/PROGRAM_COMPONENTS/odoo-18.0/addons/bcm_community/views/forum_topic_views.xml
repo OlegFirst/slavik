@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Forum Topic Views -->
+
+        <!-- Forum Topic List View -->
+        <record id="view_forum_topic_list" model="ir.ui.view">
+            <field name="name">bcm.forum.topic.list</field>
+            <field name="model">bcm.forum.topic</field>
+            <field name="arch" type="xml">
+                <list string="Forum Topics">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="author_id"/>
+                    <field name="reply_count"/>
+                    <field name="view_count"/>
+                    <field name="last_post_date"/>
+                    <field name="is_pinned"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Forum Topic Form View -->
+        <record id="view_forum_topic_form" model="ir.ui.view">
+            <field name="name">bcm.forum.topic.form</field>
+            <field name="model">bcm.forum.topic</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="category_id"/>
+                                <field name="author_id"/>
+                            </group>
+                            <group>
+                                <field name="is_pinned"/>
+                                <field name="is_locked"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <field name="description"/>
+                        <field name="content"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Forum Topic Action -->
+        <record id="action_forum_topic" model="ir.actions.act_window">
+            <field name="name">Forum Topics</field>
+            <field name="res_model">bcm.forum.topic</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

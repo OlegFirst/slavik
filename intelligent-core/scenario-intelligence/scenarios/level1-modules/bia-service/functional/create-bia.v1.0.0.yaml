@@ -1,0 +1,187 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "bia-service-create-bia"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "operational_excellence"
+    domain: "business_continuity"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "bia-service"
+    subsystem: "platform-services"
+    team: "bcm-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Create Business Impact Analysis"
+    summary: "Create a new BIA with business process definition and impact assessment"
+    business_value: "Enable systematic identification and prioritization of business processes"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Business Impact Analysis Management"
+
+    scenario: "Create new BIA"
+
+    given:
+      - "BIA Service is running"
+      - "User has permission 'bia:create'"
+      - "Organization exists"
+      - "Business process data is valid"
+
+    when:
+      - "User creates BIA for business process 'Customer Orders'"
+      - "BIA includes impact assessment (RTO, RPO, financial impact)"
+
+    then:
+      - "BIA is created in database"
+      - "BIA status is 'draft'"
+      - "Audit log entry is created"
+      - "Response status is 201"
+      - "Event 'bia.created' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 30
+    retry_policy:
+      max_retries: 3
+      backoff: exponential
+
+    steps:
+      - id: "validate_permissions"
+        action: "bia.check_permission"
+        params:
+          user_id: "{{user_id}}"
+          permission: "bia:create"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "abort"
+
+      - id: "validate_organization"
+        action: "bia.validate_organization"
+        params:
+          organization_id: "{{organization_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "validate_input"
+        action: "bia.validate_input"
+        params:
+          business_process_name: "{{process_name}}"
+          rto_hours: "{{rto}}"
+          rpo_hours: "{{rpo}}"
+          financial_impact: "{{financial_impact}}"
+        expect:
+          valid: true
+        on_failure: "abort"
+
+      - id: "create_bia"
+        action: "bia.create"
+        params:
+          organization_id: "{{organization_id}}"
+          process_name: "{{process_name}}"
+          rto_hours: "{{rto}}"
+          rpo_hours: "{{rpo}}"
+          financial_impact: "{{financial_impact}}"
+          created_by: "{{user_id}}"
+        expect:
+          status: 201
+          bia_id: "{{exists}}"
+
+      - id: "create_audit_log"
+        action: "bia.log_audit"
+        params:
+          event: "bia_created"
+          bia_id: "{{steps.create_bia.result.bia_id}}"
+          user_id: "{{user_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    events:
+      emits:
+        - event_type: "bia.created"
+          aggregate: "BIA"
+          aggregate_id: "{{steps.create_bia.result.bia_id}}"
+          payload:
+            bia_id: "{{steps.create_bia.result.bia_id}}"
+            organization_id: "{{organization_id}}"
+            process_name: "{{process_name}}"
+            status: "draft"
+            created_by: "{{user_id}}"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.2.2"
+          name: "Business impact analysis and risk assessment"
+          requirement: "Identify critical business processes and establish priorities"
+
+        - id: "7.5.3"
+          name: "Control of documented information"
+          requirement: "Retain BIA documentation for audit trail"
+
+      evidence_generated:
+        - type: "bia_document"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "organization_id"
+            - "process_name"
+            - "rto_hours"
+            - "rpo_hours"
+            - "financial_impact"
+            - "created_by"
+            - "timestamp"
+
+        - type: "audit_log"
+          format: "JSON"
+          storage: "audit_logs"
+          retention: "7 years"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "bia_creation_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+
+      - name: "bia_created_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "status"
+
+      - name: "bia_validation_failures_total"
+        type: "counter"
+        labels:
+          - "reason"
+
+    logs:
+      level: "INFO"
+      include:
+        - "bia_id"
+        - "organization_id"
+        - "user_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "Basic BIA creation with validation"

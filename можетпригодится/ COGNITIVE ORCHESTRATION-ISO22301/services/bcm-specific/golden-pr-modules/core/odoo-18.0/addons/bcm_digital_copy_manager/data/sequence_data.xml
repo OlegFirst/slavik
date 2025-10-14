@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for Digital Copy -->
+        <record id="seq_digital_copy" model="ir.sequence">
+            <field name="name">Digital Copy Sequence</field>
+            <field name="code">bcm.digital.copy</field>
+            <field name="prefix">COPY-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for Comparison -->
+        <record id="seq_digital_copy_comparison" model="ir.sequence">
+            <field name="name">Digital Copy Comparison Sequence</field>
+            <field name="code">bcm.digital.copy.comparison</field>
+            <field name="prefix">COMP-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

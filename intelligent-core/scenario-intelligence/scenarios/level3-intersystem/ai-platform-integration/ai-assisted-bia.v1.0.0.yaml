@@ -1,0 +1,269 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "ai-assisted-bia-workflow"
+    version: "1.0.0"
+    level: 3  # Inter-system level
+    type: "workflow"
+    pillar: "operational_excellence"
+    domain: "ai_platform_integration"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "integration-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    systems:
+      - "ai-office-infrastructure"
+      - "platform-services"
+    subsystems:
+      - "ai-office"
+      - "bcm-services"
+    team: "integration-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "AI-Assisted BIA Creation"
+    summary: "Use AI Office to analyze and suggest BIA improvements with Platform Services"
+    business_value: "Enhance BIA quality through AI-powered analysis and recommendations"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "AI-Platform Integration"
+
+    scenario: "AI assists in BIA creation"
+
+    given:
+      - "User has started BIA in Platform Services"
+      - "AI Office Analytics Specialist is available"
+      - "Historical BIA data exists"
+
+    when:
+      - "User creates BIA for new business process"
+      - "System triggers AI analysis via AI Orchestrator"
+      - "AI analyzes similar BIAs and industry benchmarks"
+      - "AI provides RTO/RPO recommendations"
+      - "Platform Services incorporates AI suggestions"
+
+    then:
+      - "BIA is created with AI-enhanced data"
+      - "AI recommendations are stored"
+      - "User receives AI insights"
+      - "Both systems are synchronized"
+      - "Audit trail spans both systems"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 120
+    retry_policy:
+      max_retries: 3
+      backoff: exponential
+
+    steps:
+      # Step 1: User creates BIA in Platform Services
+      - id: "create_bia_draft"
+        action: "http.post"
+        params:
+          url: "http://bia-service:8001/api/v1/bia"
+          body:
+            organization_id: "{{organization_id}}"
+            process_name: "{{process_name}}"
+            status: "draft"
+            ai_assistance_requested: true
+        expect:
+          status: 201
+          response.bia_id: "{{exists}}"
+
+      # Step 2: Platform triggers AI analysis
+      - id: "request_ai_analysis"
+        action: "http.post"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks"
+          body:
+            task_type: "bia_analysis"
+            bia_id: "{{steps.create_bia_draft.result.bia_id}}"
+            organization_id: "{{organization_id}}"
+            process_name: "{{process_name}}"
+            analysis_scope:
+              - "similar_bias"
+              - "industry_benchmarks"
+              - "rto_rpo_recommendations"
+        expect:
+          status: 201
+          response.task_id: "{{exists}}"
+
+      # Step 3: Wait for AI analysis
+      - id: "wait_for_ai_analysis"
+        action: "sleep"
+        params:
+          seconds: 10
+
+      # Step 4: Poll AI task status
+      - id: "check_ai_task_status"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks/{{steps.request_ai_analysis.result.task_id}}"
+        expect:
+          status: 200
+          response.status: "completed"
+
+      # Step 5: Retrieve AI recommendations
+      - id: "get_ai_recommendations"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks/{{steps.request_ai_analysis.result.task_id}}/result"
+        expect:
+          status: 200
+          response.recommendations: "{{exists}}"
+
+      # Step 6: Update BIA with AI recommendations
+      - id: "update_bia_with_ai"
+        action: "http.patch"
+        params:
+          url: "http://bia-service:8001/api/v1/bia/{{steps.create_bia_draft.result.bia_id}}"
+          body:
+            rto_hours: "{{steps.get_ai_recommendations.result.recommendations.rto_hours}}"
+            rpo_hours: "{{steps.get_ai_recommendations.result.recommendations.rpo_hours}}"
+            financial_impact: "{{steps.get_ai_recommendations.result.recommendations.financial_impact}}"
+            ai_recommendations: "{{steps.get_ai_recommendations.result.recommendations}}"
+            ai_task_id: "{{steps.request_ai_analysis.result.task_id}}"
+            status: "ai_reviewed"
+        expect:
+          status: 200
+
+      # Step 7: Store AI analysis in Platform
+      - id: "store_ai_analysis"
+        action: "http.post"
+        params:
+          url: "http://bia-service:8001/api/v1/bia/{{steps.create_bia_draft.result.bia_id}}/ai-analysis"
+          body:
+            task_id: "{{steps.request_ai_analysis.result.task_id}}"
+            recommendations: "{{steps.get_ai_recommendations.result.recommendations}}"
+            confidence_score: "{{steps.get_ai_recommendations.result.confidence}}"
+        expect:
+          status: 201
+
+      # Step 8: Verify cross-system audit trail
+      - id: "verify_audit_trail"
+        action: "http.get"
+        params:
+          url: "http://audit-service:8012/api/v1/logs"
+          query:
+            resource_id: "{{steps.create_bia_draft.result.bia_id}}"
+        expect:
+          status: 200
+          response.logs_count: ">2"  # At least create + AI update
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      # Call Level 2 scenarios
+      - scenario_id: "ai-office-coordination"
+        level: 2
+        when: "ai_analysis"
+        parallel: false
+
+      - scenario_id: "platform-services-bcm-subsystem-health"
+        level: 2
+        when: "before_start"
+        parallel: false
+
+      # Call Level 1 scenarios
+      - scenario_id: "bia-service-create-bia"
+        level: 1
+        when: "create_draft"
+        parallel: false
+
+      - scenario_id: "audit-service-create-audit-log"
+        level: 1
+        when: "after_completion"
+        parallel: false
+
+    events:
+      emits:
+        - event_type: "intersystem.ai_assisted_bia.created"
+          aggregate: "AIAssistedBIA"
+          aggregate_id: "{{steps.create_bia_draft.result.bia_id}}"
+          payload:
+            bia_id: "{{steps.create_bia_draft.result.bia_id}}"
+            organization_id: "{{organization_id}}"
+            ai_task_id: "{{steps.request_ai_analysis.result.task_id}}"
+            ai_confidence: "{{steps.get_ai_recommendations.result.confidence}}"
+            systems_involved:
+              - "ai-office"
+              - "platform-services"
+
+      subscribes:
+        - event_type: "bia.created"
+          trigger_scenario: "ai-auto-analyze-bia"
+          condition:
+            ai_assistance_requested: true
+
+        - event_type: "ai.task.completed"
+          trigger_scenario: "update-bia-from-ai"
+          condition:
+            task_type: "bia_analysis"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.2.2"
+          name: "Business impact analysis"
+          requirement: "Use systematic approach for BIA"
+
+      evidence_generated:
+        - type: "ai_assisted_bia"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "bia_id"
+            - "ai_task_id"
+            - "ai_recommendations"
+            - "confidence_score"
+            - "systems_involved"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "ai_assisted_bia_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+
+      - name: "ai_assisted_bia_success_total"
+        type: "counter"
+
+      - name: "ai_recommendations_confidence"
+        type: "histogram"
+        buckets: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
+      - name: "cross_system_latency_seconds"
+        type: "histogram"
+        labels:
+          - "from_system"
+          - "to_system"
+
+    logs:
+      level: "INFO"
+      include:
+        - "bia_id"
+        - "ai_task_id"
+        - "systems_involved"
+
+  # ========== SLA ==========
+  sla:
+    target_response_time_ms: 15000  # 15s including AI analysis
+    target_success_rate: 0.95
+    ai_confidence_threshold: 0.7
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "integration-team"
+      changes:
+        - "Initial version"
+        - "AI-Platform integration for BIA creation"

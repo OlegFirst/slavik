@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="admin_reports_template" name="BCM Admin Reports">
+        <t t-call="website.layout">
+            <t t-set="title">Reports Management</t>
+            <div id="wrap">
+                <div class="container my-4">
+                    <h1><i class="fa fa-chart-bar me-3"></i>Reports Management</h1>
+                    <p class="text-muted">Generate and manage BCM reports</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Report Statistics</h6>
+                            <p>Total Reports: <t t-esc="reports_data.get('total_reports', 0)"/></p>
+                            <a href="/web#model=bcm.reporting" class="btn btn-primary" target="_blank">
+                                Manage Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,276 @@
+meta:
+  id: l1-service-agent-router
+  level: 1
+  type: service
+  service: agent-router
+  status: active
+  version: 1.0.0
+  created: '{timestamp}'
+  created_by: l1-generator
+  catalog_source: SERVICE_CATALOG_DETAILED.yaml
+  category: ai
+  source_item: agent-router
+  generated_at: '2025-10-14T10:43:50.820844'
+description:
+  summary: '{service_description}'
+  purpose: Validate agent-router service operations
+  business_value: '{business_value}'
+  scope: Individual service testing
+service_info:
+  name: agent-router
+  role: '{service_role}'
+  port:
+    port: null
+  status: '{service_status}'
+  criticality: high
+  subsystem: ai_office
+  functional_systems:
+  - '{functional_systems}'
+dependencies:
+  internal:
+  - ai-orchestrator
+  external:
+  - ''
+  database: '{database_dependencies}'
+  cache: '{cache_dependencies}'
+test_scenarios:
+- name: Service Startup & Health Check
+  priority: critical
+  description: Verify service starts correctly and responds to health checks
+  estimated_duration: 30s
+  steps:
+  - id: '1.1'
+    action: start_service
+    service: agent-router
+    parameters:
+      port:
+        port: null
+      environment: test
+    expected:
+      status: running
+      startup_time_max: 10s
+  - id: '1.2'
+    action: check_health
+    endpoint: http://localhost:8045/health
+    method: GET
+    expected:
+      http_status: 200
+      response_time_max: 1s
+      response_body:
+        status: healthy
+        service: agent-router
+  - id: '1.3'
+    action: verify_metrics_endpoint
+    endpoint: http://localhost:8045/metrics
+    method: GET
+    expected:
+      http_status: 200
+      content_type: text/plain
+      metrics_present: true
+  success_criteria:
+  - Service starts within 10s
+  - Health check returns 200
+  - Metrics endpoint available
+- name: Primary Operations Test
+  priority: high
+  description: Test primary service functionality
+  estimated_duration: 1m
+  steps:
+  - id: '2.1'
+    action: execute_primary_function
+    description: '{primary_function_description}'
+    parameters:
+      primary_function_parameters: null
+    expected:
+      status: success
+      execution_time_max: 5s
+      result:
+        expected_result: null
+  - id: '2.2'
+    action: verify_side_effects
+    description: Verify state changes, database writes, events published
+    checks:
+    - database_write:
+        expected_database_state: null
+    - events_published:
+      - '{expected_events}'
+    - cache_updated:
+        expected_cache_state: null
+  success_criteria:
+  - Primary function executes successfully
+  - Response time < 5s
+  - Side effects verified
+- name: Dependency Verification
+  priority: high
+  description: Verify all dependencies are available and accessible
+  estimated_duration: 30s
+  steps:
+  - id: '3.1'
+    action: verify_database_connection
+    database: '{database_name}'
+    expected:
+      connection: established
+      response_time_max: 1s
+  - id: '3.2'
+    action: verify_cache_connection
+    cache: redis
+    expected:
+      connection: established
+      response_time_max: 500ms
+  - id: '3.3'
+    action: verify_internal_dependencies
+    services:
+    - ai-orchestrator
+    expected:
+      all_available: true
+      health_checks_pass: true
+  - id: '3.4'
+    action: verify_eventbus_connection
+    expected:
+      connected: true
+      can_publish: true
+      can_subscribe: true
+  success_criteria:
+  - Database connection established
+  - Cache connection established
+  - All internal dependencies available
+  - EventBus connection established
+- name: Error Handling & Resilience
+  priority: medium
+  description: Test service behavior under error conditions
+  estimated_duration: 2m
+  steps:
+  - id: '4.1'
+    action: simulate_database_failure
+    failure_type: connection_timeout
+    duration: 10s
+    expected:
+      service_status: degraded
+      error_response: graceful
+      retry_attempts: '>= 3'
+  - id: '4.2'
+    action: verify_circuit_breaker
+    expected:
+      circuit_breaker_active: true
+      fallback_behavior: executed
+  - id: '4.3'
+    action: restore_database
+    expected:
+      service_status: recovered
+      recovery_time: < 5s
+  - id: '4.4'
+    action: simulate_invalid_input
+    invalid_data:
+      invalid_input_examples: null
+    expected:
+      http_status: 400
+      error_message: descriptive
+      service_remains_healthy: true
+  success_criteria:
+  - Service handles failures gracefully
+  - Circuit breaker activates correctly
+  - Service recovers automatically
+  - Invalid input rejected properly
+- name: Performance & Load Test
+  priority: medium
+  description: Verify service performance under load
+  estimated_duration: 3m
+  steps:
+  - id: '5.1'
+    action: baseline_performance
+    requests: 100
+    concurrent_users: 10
+    expected:
+      response_time_p95: < {response_time_sla}
+      error_rate: < 1%
+      throughput: '> {min_throughput}'
+  - id: '5.2'
+    action: load_test
+    requests: 1000
+    concurrent_users: 50
+    ramp_up_time: 30s
+    expected:
+      response_time_p95: < {response_time_sla_load}
+      error_rate: < 5%
+  - id: '5.3'
+    action: memory_leak_check
+    duration: 2m
+    expected:
+      memory_growth: < 10%
+      memory_stable: true
+  success_criteria:
+  - Performance meets SLA
+  - Service handles load
+  - No memory leaks detected
+- name: Monitoring & Observability
+  priority: low
+  description: Verify monitoring and metrics collection
+  estimated_duration: 1m
+  steps:
+  - id: '6.1'
+    action: verify_prometheus_metrics
+    expected_metrics:
+    - agent-router_requests_total
+    - agent-router_errors_total
+    - agent-router_latency_seconds
+    - agent-router_active_connections
+    expected:
+      all_metrics_present: true
+  - id: '6.2'
+    action: verify_logging
+    expected:
+      log_level: INFO
+      structured_logging: true
+      correlation_id_present: true
+  - id: '6.3'
+    action: verify_tracing
+    expected:
+      tracing_enabled: true
+      spans_created: true
+  success_criteria:
+  - All metrics exposed
+  - Logging configured
+  - Tracing enabled
+monitoring:
+  metrics:
+  - name: agent-router_requests_total
+    type: counter
+    description: Total number of requests
+  - name: agent-router_errors_total
+    type: counter
+    description: Total number of errors
+  - name: agent-router_latency_seconds
+    type: histogram
+    description: Request latency distribution
+  - name: agent-router_active_connections
+    type: gauge
+    description: Number of active connections
+  alerts:
+  - name: HighErrorRate
+    condition: error_rate > 5%
+    severity: critical
+    action: notify_devops
+  - name: HighLatency
+    condition: latency_p95 > {latency_threshold}
+    severity: warning
+    action: investigate_performance
+  - name: ServiceDown
+    condition: health_check_failed
+    severity: critical
+    action: auto_restart
+success_criteria:
+- All 6 test scenarios pass
+- Service meets SLA requirements
+- No critical failures
+- Monitoring configured correctly
+execution_history: null
+learning_data: null
+metadata:
+  tags:
+  - '{service_tags}'
+  owner: '{service_owner}'
+  documentation: '{documentation_url}'
+  source_code: '{repository_url}'
+  compliance:
+    iso_22301: '{iso_clause}'
+    iso_27001: '{iso_27001_clause}'

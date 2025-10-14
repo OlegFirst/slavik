@@ -1,0 +1,397 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "complete-risk-assessment-workflow"
+    version: "1.0.0"
+    level: 4  # User level - E2E workflow
+    type: "workflow"
+    pillar: "operational_excellence"
+    domain: "user_workflow"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "product-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    product: "BCM Platform"
+    user_personas:
+      - "Risk Manager"
+      - "BCM Coordinator"
+    team: "product-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Complete Risk Assessment Workflow"
+    summary: "End-to-end workflow: Risk identification → Analysis → Mitigation planning → Documentation"
+    business_value: "Enable users to perform comprehensive risk assessment following ISO 22301 standards"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "Risk Assessment Workflow"
+
+    scenario: "User performs complete risk assessment"
+
+    given:
+      - "User is authenticated as Risk Manager"
+      - "Organization is registered"
+      - "BIA exists for business process"
+
+    when:
+      - "User identifies new risk (Data Breach)"
+      - "AI analyzes risk based on historical data"
+      - "User reviews AI recommendations"
+      - "User creates risk assessment with mitigation plan"
+      - "User links risk to existing BIA"
+      - "System generates compliance documentation"
+
+    then:
+      - "Risk is registered in system"
+      - "Risk score is calculated automatically"
+      - "Mitigation plan is documented"
+      - "Risk is linked to BIA"
+      - "Compliance evidence is generated"
+      - "Stakeholders are notified"
+      - "User receives workflow completion confirmation"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 300  # 5 minutes for full workflow
+    retry_policy:
+      max_retries: 2
+      backoff: exponential
+
+    steps:
+      # ========== PHASE 1: Authentication & Context ==========
+      - id: "authenticate_user"
+        action: "http.post"
+        params:
+          url: "http://auth-service:8010/api/v1/auth/login"
+          body:
+            username: "{{username}}"
+            password: "{{password}}"
+        expect:
+          status: 200
+          response.token: "{{exists}}"
+          response.role: "risk_manager"
+        on_failure: "abort"
+
+      - id: "get_organization_context"
+        action: "http.get"
+        params:
+          url: "http://platform-api:8000/api/v1/organizations/{{organization_id}}"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+        expect:
+          status: 200
+          response.organization_id: "{{organization_id}}"
+
+      # ========== PHASE 2: Risk Identification with AI ==========
+      - id: "request_ai_risk_analysis"
+        action: "http.post"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            task_type: "risk_analysis"
+            organization_id: "{{organization_id}}"
+            risk_name: "{{risk_name}}"
+            risk_description: "{{risk_description}}"
+            analysis_scope:
+              - "historical_risks"
+              - "industry_benchmarks"
+              - "likelihood_prediction"
+              - "impact_assessment"
+        expect:
+          status: 201
+          response.task_id: "{{exists}}"
+
+      - id: "wait_for_ai_analysis"
+        action: "sleep"
+        params:
+          seconds: 15
+
+      - id: "get_ai_risk_recommendations"
+        action: "http.get"
+        params:
+          url: "http://ai-orchestrator:8000/api/v1/tasks/{{steps.request_ai_risk_analysis.result.task_id}}/result"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+        expect:
+          status: 200
+          response.recommendations: "{{exists}}"
+
+      # ========== PHASE 3: Risk Assessment Creation ==========
+      - id: "create_risk_assessment"
+        action: "http.post"
+        params:
+          url: "http://risk-service:8002/api/v1/risk-assessments"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            risk_name: "{{risk_name}}"
+            description: "{{risk_description}}"
+            likelihood: "{{steps.get_ai_risk_recommendations.result.recommendations.likelihood}}"
+            impact: "{{steps.get_ai_risk_recommendations.result.recommendations.impact}}"
+            risk_score: "{{steps.get_ai_risk_recommendations.result.recommendations.risk_score}}"
+            mitigation_strategy: "{{mitigation_strategy}}"
+            ai_task_id: "{{steps.request_ai_risk_analysis.result.task_id}}"
+            ai_confidence: "{{steps.get_ai_risk_recommendations.result.confidence}}"
+            created_by: "{{steps.authenticate_user.result.user_id}}"
+        expect:
+          status: 201
+          response.risk_id: "{{exists}}"
+
+      # ========== PHASE 4: Link to BIA ==========
+      - id: "find_related_bia"
+        action: "http.get"
+        params:
+          url: "http://bia-service:8001/api/v1/bia"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          query:
+            organization_id: "{{organization_id}}"
+            process_name: "{{business_process}}"
+        expect:
+          status: 200
+          response.bia_id: "{{exists}}"
+
+      - id: "link_risk_to_bia"
+        action: "http.post"
+        params:
+          url: "http://risk-service:8002/api/v1/risk-assessments/{{steps.create_risk_assessment.result.risk_id}}/link-bia"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            bia_id: "{{steps.find_related_bia.result.bia_id}}"
+        expect:
+          status: 200
+
+      # ========== PHASE 5: Mitigation Plan Documentation ==========
+      - id: "create_mitigation_document"
+        action: "http.post"
+        params:
+          url: "http://document-service:8004/api/v1/documents"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            title: "Risk Mitigation Plan - {{risk_name}}"
+            document_type: "risk_mitigation_plan"
+            risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            content: "{{mitigation_plan_content}}"
+        expect:
+          status: 201
+          response.document_id: "{{exists}}"
+
+      # ========== PHASE 6: Compliance Evidence Generation ==========
+      - id: "generate_compliance_evidence"
+        action: "http.post"
+        params:
+          url: "http://compliance-engine:8013/api/v1/evidence/generate"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            standard: "ISO_22301"
+            clause: "8.2.3"  # Risk assessment
+            risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            document_id: "{{steps.create_mitigation_document.result.document_id}}"
+        expect:
+          status: 201
+          response.evidence_id: "{{exists}}"
+
+      # ========== PHASE 7: Stakeholder Notification ==========
+      - id: "notify_stakeholders"
+        action: "http.post"
+        params:
+          url: "http://notification-service:8015/api/v1/notifications"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            organization_id: "{{organization_id}}"
+            notification_type: "risk_identified"
+            risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            risk_name: "{{risk_name}}"
+            risk_score: "{{steps.create_risk_assessment.result.risk_score}}"
+            recipients:
+              - role: "risk_committee"
+              - role: "bcm_coordinator"
+        expect:
+          status: 201
+
+      # ========== PHASE 8: Workflow Completion ==========
+      - id: "mark_workflow_complete"
+        action: "http.post"
+        params:
+          url: "http://workflow-intelligence:8020/api/v1/workflows/complete"
+          headers:
+            Authorization: "Bearer {{steps.authenticate_user.result.token}}"
+          body:
+            workflow_type: "risk_assessment"
+            workflow_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            status: "completed"
+            artifacts:
+              - risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+              - document_id: "{{steps.create_mitigation_document.result.document_id}}"
+              - evidence_id: "{{steps.generate_compliance_evidence.result.evidence_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      # Level 3 scenarios
+      - scenario_id: "ai-assisted-bia-workflow"
+        level: 3
+        when: "ai_analysis"
+        parallel: false
+
+      # Level 2 scenarios
+      - scenario_id: "platform-services-bcm-subsystem-health"
+        level: 2
+        when: "before_start"
+        parallel: false
+
+      # Level 1 scenarios
+      - scenario_id: "risk-service-create-risk-assessment"
+        level: 1
+        when: "create_risk"
+        parallel: false
+
+      - scenario_id: "document-service-store-document"
+        level: 1
+        when: "create_document"
+        parallel: false
+
+      - scenario_id: "audit-service-create-audit-log"
+        level: 1
+        when: "after_completion"
+        parallel: false
+
+    events:
+      emits:
+        - event_type: "workflow.risk_assessment.completed"
+          aggregate: "RiskAssessmentWorkflow"
+          aggregate_id: "{{steps.create_risk_assessment.result.risk_id}}"
+          payload:
+            risk_id: "{{steps.create_risk_assessment.result.risk_id}}"
+            organization_id: "{{organization_id}}"
+            user_id: "{{steps.authenticate_user.result.user_id}}"
+            risk_score: "{{steps.create_risk_assessment.result.risk_score}}"
+            artifacts_created:
+              - type: "risk_assessment"
+                id: "{{steps.create_risk_assessment.result.risk_id}}"
+              - type: "mitigation_document"
+                id: "{{steps.create_mitigation_document.result.document_id}}"
+              - type: "compliance_evidence"
+                id: "{{steps.generate_compliance_evidence.result.evidence_id}}"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.2.2"
+          name: "Business impact analysis and risk assessment"
+          requirement: "Conduct systematic risk assessment"
+
+        - id: "8.2.3"
+          name: "Risk assessment"
+          requirement: "Identify, analyze and evaluate risks"
+
+        - id: "6.1"
+          name: "Actions to address risks and opportunities"
+          requirement: "Plan actions to address risks"
+
+      evidence_generated:
+        - type: "risk_assessment_workflow"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "risk_id"
+            - "organization_id"
+            - "user_id"
+            - "risk_score"
+            - "mitigation_strategy"
+            - "ai_recommendations"
+            - "bia_linkage"
+            - "stakeholder_notifications"
+            - "compliance_evidence_id"
+            - "workflow_completion_timestamp"
+
+  # ========== USER EXPERIENCE ==========
+  user_experience:
+    estimated_duration_minutes: 10
+    complexity: "medium"
+
+    steps_summary:
+      - step: 1
+        description: "Login and select organization"
+        estimated_time: "30s"
+
+      - step: 2
+        description: "Request AI risk analysis"
+        estimated_time: "2min"
+
+      - step: 3
+        description: "Review AI recommendations and create assessment"
+        estimated_time: "3min"
+
+      - step: 4
+        description: "Link to BIA and create mitigation plan"
+        estimated_time: "2min"
+
+      - step: 5
+        description: "Generate compliance evidence"
+        estimated_time: "1min"
+
+      - step: 6
+        description: "Notify stakeholders and complete"
+        estimated_time: "30s"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "risk_assessment_workflow_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+
+      - name: "risk_assessment_workflows_completed_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+
+      - name: "risk_assessment_ai_confidence"
+        type: "histogram"
+
+      - name: "workflow_step_failures_total"
+        type: "counter"
+        labels:
+          - "step_id"
+
+    logs:
+      level: "INFO"
+      include:
+        - "workflow_id"
+        - "risk_id"
+        - "organization_id"
+        - "user_id"
+
+  # ========== SLA ==========
+  sla:
+    target_completion_time_seconds: 600  # 10 minutes
+    target_success_rate: 0.98
+    max_retry_attempts: 2
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "product-team"
+      changes:
+        - "Initial version"
+        - "Complete risk assessment workflow with AI assistance"

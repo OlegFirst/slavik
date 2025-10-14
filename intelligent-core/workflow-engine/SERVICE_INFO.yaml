@@ -1,0 +1,335 @@
+# ============================================
+# SERVICE INFORMATION - Workflow Engine
+# ============================================
+# Auto-generated: false
+# Last updated: 2025-10-11
+# Schema version: 1.0.0
+
+# ============================================
+# 1. BASIC INFORMATION
+# ============================================
+name: workflow-engine
+display_name: "Unified Workflow Engine"
+version: "2.0.0"
+description: "Domain-agnostic BPMN 2.0 workflow orchestration engine with AI-powered recommendations, PostgreSQL persistence, event-driven architecture, and multi-tenancy support."
+
+# ============================================
+# 2. CLASSIFICATION
+# ============================================
+type: "intelligent-core/workflow-engine"
+business_process: "Workflow Orchestration & Process Automation"
+status: "active"
+
+# ============================================
+# 3. TECHNICAL PARAMETERS
+# ============================================
+runtime:
+  language: "python"
+  framework: "FastAPI"
+  version: "3.11+"
+  port: 8030
+
+endpoints:
+  base_url: "http://localhost:8030"
+  health: "/health"
+  metrics: "/metrics"
+  api_docs: "/docs"
+  api_base: "/api/workflow"
+
+# ============================================
+# 4. FUNCTIONALITY
+# ============================================
+capabilities:
+  - "BPMN 2.0 visual workflow modeling"
+  - "Workflow definition and deployment"
+  - "Workflow instance execution and tracking"
+  - "Task management (human tasks, service tasks)"
+  - "AI-powered workflow recommendations"
+  - "Event-driven workflow triggers"
+  - "Workflow versioning and rollback"
+  - "Multi-tenancy and isolation"
+  - "PostgreSQL persistence with full audit trail"
+  - "Real-time workflow monitoring"
+  - "Workflow analytics and reporting"
+
+features:
+  - name: "BPMN 2.0 Engine"
+    description: "Full BPMN 2.0 specification support with visual modeling"
+    endpoints: 8
+
+  - name: "Workflow Lifecycle"
+    description: "Deploy, start, pause, resume, cancel workflows"
+    endpoints: 6
+
+  - name: "Task Management"
+    description: "Human tasks, service tasks, and automated tasks"
+    endpoints: 5
+
+  - name: "AI Recommendations"
+    description: "Intelligent workflow optimization suggestions"
+    endpoints: 3
+
+  - name: "Event Integration"
+    description: "Event-driven workflow triggers and actions"
+    endpoints: 4
+
+  - name: "Analytics & Monitoring"
+    description: "Real-time dashboards and historical analytics"
+    endpoints: 6
+
+# ============================================
+# 5. KPIS & METRICS
+# ============================================
+kpis:
+  - name: "request_count"
+    type: "counter"
+    description: "Total number of API requests processed"
+    target: "> 1500/day"
+    prometheus_metric: "workflow_engine_requests_total"
+
+  - name: "response_time_p95"
+    type: "histogram"
+    description: "95th percentile response time"
+    target: "< 500ms"
+    prometheus_metric: "workflow_engine_response_time_ms"
+
+  - name: "error_rate"
+    type: "gauge"
+    description: "Percentage of failed requests"
+    target: "< 1%"
+    prometheus_metric: "workflow_engine_error_rate"
+
+  - name: "availability"
+    type: "gauge"
+    description: "Service uptime percentage"
+    target: "> 99.9%"
+    prometheus_metric: "workflow_engine_availability"
+
+  - name: "active_workflows"
+    type: "gauge"
+    description: "Number of active workflow instances"
+    target: "Track trends"
+    prometheus_metric: "workflow_engine_active_workflows"
+
+  - name: "workflow_completion_rate"
+    type: "gauge"
+    description: "Percentage of workflows completing successfully"
+    target: "> 95%"
+    prometheus_metric: "workflow_engine_completion_rate"
+
+  - name: "workflow_execution_time"
+    type: "histogram"
+    description: "Average workflow execution time"
+    target: "< 5 minutes"
+    prometheus_metric: "workflow_engine_execution_seconds"
+
+  - name: "task_queue_length"
+    type: "gauge"
+    description: "Number of pending tasks"
+    target: "< 100"
+    prometheus_metric: "workflow_engine_task_queue_length"
+
+  - name: "ai_recommendation_accuracy"
+    type: "gauge"
+    description: "Accuracy of AI workflow recommendations"
+    target: "> 80%"
+    prometheus_metric: "workflow_engine_ai_accuracy"
+
+# ============================================
+# 6. DEPENDENCIES
+# ============================================
+dependencies:
+  packages:
+    - "fastapi>=0.104.0"
+    - "uvicorn[standard]>=0.24.0"
+    - "sqlalchemy[asyncio]>=2.0.0"
+    - "asyncpg>=0.29.0"
+    - "pydantic>=2.4.0"
+    - "pydantic-settings>=2.0.0"
+    - "aio-pika>=9.3.0"
+    - "httpx>=0.25.0"
+    - "prometheus-client>=0.19.0"
+    - "redis>=5.0.0"
+    - "bpmn-python>=0.0.17"  # BPMN processing
+
+  services:
+    - name: "postgresql"
+      version: "14+"
+      purpose: "Workflow definitions and instance storage"
+      required: true
+
+    - name: "redis"
+      version: "7+"
+      port: 6379
+      purpose: "Task queue and caching"
+      required: true
+
+    - name: "rabbitmq"
+      version: "3.12+"
+      port: 5672
+      purpose: "EventBus for workflow events"
+      required: true
+
+  infrastructure:
+    - "PostgreSQL database (workflow schema)"
+    - "Redis (task queue)"
+    - "RabbitMQ (EventBus)"
+
+# ============================================
+# 7. INTEGRATIONS
+# ============================================
+integrations:
+  eventbus:
+    subscribes:
+      - event: "*.workflow.start.requested"
+        source: "any_service"
+        action: "Start workflow instance"
+
+      - event: "task.completed"
+        source: "any_service"
+        action: "Progress workflow to next step"
+
+    publishes:
+      - event: "workflow.started"
+        target: "all_services"
+        data: "workflow_id, instance_id, definition"
+
+      - event: "workflow.completed"
+        target: "all_services"
+        data: "workflow_id, instance_id, outcome"
+
+      - event: "workflow.failed"
+        target: "orchestrator,monitoring"
+        data: "workflow_id, instance_id, error"
+
+      - event: "task.assigned"
+        target: "user_service,notification_service"
+        data: "task_id, assignee, workflow_context"
+
+  rest_api:
+    provides:
+      - endpoint: "/api/workflow/definitions"
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        consumers: ["admin_panel", "orchestrator"]
+
+      - endpoint: "/api/workflow/instances"
+        methods: ["GET", "POST"]
+        consumers: ["all_services"]
+
+      - endpoint: "/api/workflow/tasks"
+        methods: ["GET", "POST", "PUT"]
+        consumers: ["admin_panel", "orchestrator"]
+
+    consumes:
+      - service: "orchestrator"
+        endpoint: "/api/v1/decision"
+        purpose: "AI recommendations for workflow optimization"
+
+# ============================================
+# 8. KNOWN ISSUES & LIMITATIONS
+# ============================================
+known_issues:
+  - issue: "BPMN complex gateways not fully supported"
+    severity: "medium"
+    workaround: "Use simple gateways and manual steps"
+    tracking: "WF-001"
+
+  - issue: "Workflow versioning requires manual migration"
+    severity: "low"
+    workaround: "Create new version, migrate instances manually"
+    tracking: "WF-002"
+
+limitations:
+  - "Maximum 50 concurrent workflow instances per tenant"
+  - "BPMN 2.0 subset supported (core elements only)"
+  - "Task queue limited to 1000 pending tasks"
+  - "No visual BPMN designer (import XML only)"
+  - "Workflow definitions stored as JSON (not native BPMN XML)"
+
+# ============================================
+# 9. DEPLOYMENT
+# ============================================
+deployment:
+  docker:
+    image: "workflow-engine:latest"
+    dockerfile: "./Dockerfile"
+    ports:
+      - "8030:8030"
+
+  environment_variables:
+    required:
+      - name: "DATABASE_URL"
+        description: "PostgreSQL connection string"
+        example: "postgresql+asyncpg://user:pass@localhost:5432/bcm"
+
+      - name: "REDIS_URL"
+        description: "Redis connection string"
+        example: "redis://localhost:6379/0"
+
+      - name: "EVENTBUS_URL"
+        description: "RabbitMQ connection URL"
+        example: "amqp://guest:guest@localhost:5672/"
+
+    optional:
+      - name: "ORCHESTRATOR_URL"
+        description: "AI Orchestrator URL"
+        default: "http://localhost:8002"
+
+      - name: "MAX_CONCURRENT_WORKFLOWS"
+        description: "Maximum concurrent workflows per tenant"
+        default: "50"
+
+      - name: "LOG_LEVEL"
+        description: "Logging level"
+        default: "INFO"
+
+  health_checks:
+    liveness: "/health"
+    readiness: "/health"
+    startup: "/health"
+
+  startup_command: "python -m workflow.main"
+
+  requirements:
+    cpu: "1.0 cores"
+    memory: "1GB"
+    disk: "5GB"
+
+# ============================================
+# 10. DOCUMENTATION
+# ============================================
+documentation:
+  readme: "./README.md"
+  api_docs: "http://localhost:8030/docs"
+  phase2_docs: "./PHASE_2_COMPLETE.md"
+  external_links:
+    - name: "BPMN 2.0 Specification"
+      url: "https://www.omg.org/spec/BPMN/2.0/"
+
+# ============================================
+# 11. OWNERSHIP
+# ============================================
+ownership:
+  team: "Intelligent Core Team"
+  tech_lead: "AI Platform Architect"
+  product_owner: "Platform Product Owner"
+  on_call: "intelligent-core@company.com"
+  slack_channel: "#intelligent-core"
+
+support:
+  incidents: "Create ticket in JIRA Intelligent-Core project"
+  questions: "#intelligent-core Slack channel"
+  documentation: "See README.md and /docs endpoint"
+
+# ============================================
+# 12. COMPLIANCE
+# ============================================
+compliance:
+  standards:
+    - name: "ISO/IEC/IEEE 26514:2022"
+      description: "Software documentation standards"
+      status: "compliant"
+
+    - name: "BPMN 2.0"
+      description: "Business Process Model and Notation"
+      status: "partial"  # Subset supported

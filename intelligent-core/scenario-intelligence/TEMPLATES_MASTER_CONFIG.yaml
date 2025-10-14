@@ -1,0 +1,619 @@
+# Scenario Intelligence - Master Templates Configuration
+# Version: 2.0.0
+# Created: 2025-10-12
+# Purpose: Complete template system with specialized templates for all categories
+
+version: "2.0.0"
+last_updated: "2025-10-12"
+
+# ===================================================================
+# TEMPLATE HIERARCHY
+# ===================================================================
+template_hierarchy:
+  description: "4-level hierarchy with specialized templates"
+
+  levels:
+    l1:
+      name: "Service Level"
+      count: 62
+      templates:
+        - id: "l1-platform-service"
+          file: "templates/golden_standard_l1.yaml"
+          applicable_to: 46  # Platform services
+          specializations: 3  # Database, API, Worker
+
+        - id: "l1-user-application"
+          file: "templates/golden_standard_l1_application.yaml"
+          applicable_to: 16  # User applications
+          specializations: 2  # Web App, BCM Module
+
+    l2:
+      name: "Subsystem Level"
+      count: 12
+      templates:
+        - id: "l2-subsystem"
+          file: "templates/golden_standard_l2.yaml"
+          applicable_to: 12
+          specializations: 4  # Database, Runtime, AI, Business
+
+    l3:
+      name: "Functional System Level"
+      count: 19
+      templates:
+        - id: "l3-general"
+          file: "templates/golden_standard_l3.yaml"
+          applicable_to: 19
+          specializations: 11  # By category
+
+        # Specialized L3 templates by category
+        - id: "l3-infrastructure"
+          file: "templates/l3-specialized/l3_infrastructure_system.yaml"
+          category: "infrastructure"
+          systems: ["startup_orchestration_system"]
+
+        - id: "l3-reliability"
+          file: "templates/l3-specialized/l3_reliability_system.yaml"
+          category: "reliability"
+          systems: ["resilience_system"]
+
+        - id: "l3-security"
+          file: "templates/l3-specialized/l3_security_system.yaml"
+          category: "security"
+          systems: ["security_system"]
+
+        - id: "l3-operations"
+          file: "templates/l3-specialized/l3_operations_system.yaml"
+          category: "operations"
+          systems: ["monitoring_system", "analytics_system"]
+
+        - id: "l3-intelligence"
+          file: "templates/l3-specialized/l3_intelligence_system.yaml"
+          category: "intelligence"
+          systems: ["learning_system", "predictive_system"]
+
+        - id: "l3-ai"
+          file: "templates/l3-specialized/l3_ai_system.yaml"
+          category: "ai"
+          systems: ["ai_orchestration_system", "collective_ai_system"]
+
+        - id: "l3-business"
+          file: "templates/l3-specialized/l3_business_system.yaml"
+          category: "business"
+          systems: ["bcm_business_system"]
+
+        - id: "l3-orchestration"
+          file: "templates/l3-specialized/l3_orchestration_system.yaml"
+          category: "orchestration"
+          systems: ["workflow_management_system", "event_driven_system"]
+
+        - id: "l3-quality"
+          file: "templates/l3-specialized/l3_quality_system.yaml"
+          category: "quality"
+          systems: ["testing_validation_system"]
+
+        - id: "l3-frontend"
+          file: "templates/l3-specialized/l3_frontend_system.yaml"
+          category: "frontend"
+          systems: ["user_interface_system"]
+
+    l4:
+      name: "User Workflow Level"
+      count: "variable"
+      templates:
+        - id: "l4-user-workflow"
+          file: "templates/golden_standard_l4.yaml"
+          generation: "ai_powered"
+          specializations: 6  # By workflow category
+
+# ===================================================================
+# STORAGE STRUCTURE
+# ===================================================================
+storage:
+  description: "Where scenarios are stored after generation"
+
+  database:
+    schema: "scenario_intelligence"
+    tables:
+      scenarios:
+        description: "All generated scenarios"
+        partitioning: "by level and category"
+        retention: "unlimited (versions in archive)"
+
+      executions:
+        description: "Execution history"
+        partitioning: "by month"
+        retention: "2 years"
+
+      learning:
+        description: "AI learning data"
+        partitioning: "by scenario_id"
+        retention: "unlimited"
+
+      archive:
+        description: "Old scenario versions"
+        partitioning: "by year"
+        retention: "7 years (compliance)"
+
+  filesystem:
+    base_path: "/intelligent-core/scenario-intelligence"
+
+    structure:
+      templates:
+        path: "templates/"
+        description: "Golden standard templates"
+        files:
+          - "golden_standard_l1.yaml"
+          - "golden_standard_l1_application.yaml"
+          - "golden_standard_l2.yaml"
+          - "golden_standard_l3.yaml"
+          - "golden_standard_l4.yaml"
+          - "l3-specialized/*.yaml"
+
+      generated:
+        path: "generated/"
+        description: "Generated scenarios (YAML files)"
+        structure:
+          - "l1/services/{service_name}.yaml"
+          - "l1/applications/{app_name}.yaml"
+          - "l2/subsystems/{subsystem_name}.yaml"
+          - "l3/systems/{system_name}.yaml"
+          - "l4/workflows/{workflow_name}.yaml"
+        sync: "to database on generation"
+
+      knowledge_base:
+        path: "knowledge-base/"
+        description: "RAG knowledge base for scenarios"
+        structure:
+          - "embeddings/"          # Vector embeddings for RAG
+          - "metadata/"            # Scenario metadata
+          - "relationships/"       # Scenario dependencies
+          - "patterns/"            # Detected patterns
+          - "best_practices/"      # Best practices extracted
+        integration: "Qdrant vector database"
+
+  qdrant_collections:
+    - name: "scenario_intelligence_scenarios"
+      description: "All scenarios for semantic search"
+      vector_size: 1536  # OpenAI embeddings
+      distance: "Cosine"
+
+    - name: "scenario_intelligence_executions"
+      description: "Execution results for learning"
+      vector_size: 1536
+      distance: "Cosine"
+
+    - name: "scenario_intelligence_patterns"
+      description: "Detected patterns for recommendations"
+      vector_size: 1536
+      distance: "Cosine"
+
+# ===================================================================
+# RAG INTEGRATION
+# ===================================================================
+rag_integration:
+  description: "How scenarios integrate with RAG and knowledge systems"
+
+  embedding_strategy:
+    when: "on_scenario_generation"
+    what_to_embed:
+      - "Scenario name and description"
+      - "Test steps and expected outcomes"
+      - "Business objectives"
+      - "Technical requirements"
+      - "Execution history summary"
+      - "Learning insights"
+    model: "text-embedding-ada-002"  # OpenAI
+
+  search_use_cases:
+    - use_case: "Find similar scenarios"
+      query: "User searches for 'database failure recovery'"
+      result: "Returns all L1/L2/L3 scenarios related to database resilience"
+
+    - use_case: "Recommend scenarios for new service"
+      query: "New service 'payment-processor' added"
+      result: "AI recommends relevant L1 scenarios based on similar services"
+
+    - use_case: "Learn from failures"
+      query: "L3 scenario failed - analyze why"
+      result: "RAG finds similar failures and suggests improvements"
+
+    - use_case: "Generate L4 workflows"
+      query: "Create workflow for 'BCM Manager onboarding'"
+      result: "AI uses RAG to find relevant L1/L2/L3 scenarios and generates workflow"
+
+    - use_case: "Compliance validation"
+      query: "Which scenarios cover ISO 22301 clause 8.4?"
+      result: "Returns all scenarios tagged with that requirement"
+
+  knowledge_extraction:
+    - type: "patterns"
+      description: "Common failure patterns across scenarios"
+      example: "Redis connection timeout appears in 15 scenarios"
+      action: "Create specialized test for connection pool management"
+
+    - type: "best_practices"
+      description: "Successful patterns from executions"
+      example: "Services with health check + readiness probe have 99.9% success rate"
+      action: "Add to L1 template as required test"
+
+    - type: "dependencies"
+      description: "Service dependency graph from scenarios"
+      example: "23 services depend on PostgreSQL"
+      action: "Prioritize PostgreSQL resilience testing"
+
+    - type: "business_impact"
+      description: "Technical failures → business impact mapping"
+      example: "API Gateway failure = $10K/min revenue loss"
+      action: "Increase priority of API Gateway scenarios"
+
+  integration_points:
+    learning_system:
+      path: "/intelligent-core/ai-foundation/learning-knowledge"
+      integration: "Bidirectional"
+      flow:
+        - "Scenarios → Learning system (execution results)"
+        - "Learning system → Scenarios (improvement recommendations)"
+
+    knowledge_system:
+      path: "/intelligent-core/knowledge-system"
+      integration: "Read"
+      usage: "ISO 22301 standards, BCM best practices"
+
+    rag_service:
+      path: "/intelligent-core/ai-foundation/rag"
+      integration: "Core"
+      collections:
+        - "scenario_intelligence_scenarios"
+        - "scenario_intelligence_executions"
+        - "scenario_intelligence_patterns"
+
+# ===================================================================
+# WORKFLOW INTEGRATION
+# ===================================================================
+workflow_integration:
+  description: "How scenarios integrate with workflow systems"
+
+  workflow_intelligence:
+    path: "/intelligent-core/workflow_intelligence"
+    integration_type: "bidirectional"
+
+    use_cases:
+      - name: "Scenario execution as workflow"
+        description: "Each scenario execution is a workflow"
+        workflow_type: "testing"
+        example:
+          workflow_name: "execute_l1_service_mio_manager"
+          steps:
+            - "Validate preconditions"
+            - "Execute test scenarios"
+            - "Collect metrics"
+            - "Publish results"
+            - "Trigger learning"
+
+      - name: "Scenario generation as workflow"
+        description: "Generation process orchestrated by workflow"
+        workflow_type: "generation"
+        example:
+          workflow_name: "generate_all_l1_scenarios"
+          steps:
+            - "Load templates"
+            - "Read catalogs"
+            - "Generate scenarios (parallel)"
+            - "Validate quality"
+            - "Store in database"
+            - "Create embeddings"
+            - "Publish events"
+
+      - name: "Continuous improvement workflow"
+        description: "AI-powered improvement cycle"
+        workflow_type: "improvement"
+        example:
+          workflow_name: "improve_failed_scenario"
+          steps:
+            - "Detect failure"
+            - "Analyze root cause (Analytics Specialist)"
+            - "Predict recurrence (Predictive Service)"
+            - "Decide action (AI Orchestration)"
+            - "Improve scenario (Scenario Manager)"
+            - "Archive old version"
+            - "Re-execute for validation"
+
+  temporal_workflows:
+    enabled: true
+    workflows:
+      - "scenario_generation_workflow"
+      - "scenario_execution_workflow"
+      - "scenario_improvement_workflow"
+      - "batch_execution_workflow"
+      - "scheduled_testing_workflow"
+
+# ===================================================================
+# GENERATOR SERVICE ARCHITECTURE
+# ===================================================================
+generator_service:
+  name: "Scenario Manager"
+  port: 8050
+  location: "/intelligent-core/scenario-intelligence/scenario-manager"
+
+  components:
+    api:
+      framework: "FastAPI"
+      endpoints:
+        - "POST /api/generate/l1"
+        - "POST /api/generate/l2"
+        - "POST /api/generate/l3"
+        - "POST /api/generate/l4"
+        - "POST /api/generate/all"
+        - "GET /api/scenarios"
+        - "GET /api/scenarios/{id}"
+        - "PUT /api/scenarios/{id}"
+        - "DELETE /api/scenarios/{id}"
+        - "POST /api/scenarios/{id}/execute"
+        - "GET /api/scenarios/{id}/history"
+        - "POST /api/scenarios/{id}/improve"
+
+    generators:
+      l1_platform:
+        class: "L1PlatformGenerator"
+        input: "SERVICE_CATALOG_DETAILED.yaml"
+        template: "golden_standard_l1.yaml"
+        output: "generated/l1/services/*.yaml"
+
+      l1_application:
+        class: "L1ApplicationGenerator"
+        input: "USER_APPLICATIONS_CATALOG.yaml"
+        template: "golden_standard_l1_application.yaml"
+        output: "generated/l1/applications/*.yaml"
+
+      l2_subsystem:
+        class: "L2SubsystemGenerator"
+        input: "SUBSYSTEMS_CATALOG.yaml"
+        template: "golden_standard_l2.yaml"
+        output: "generated/l2/subsystems/*.yaml"
+
+      l3_system:
+        class: "L3SystemGenerator"
+        input: "SYSTEMS_CATALOG.yaml"
+        templates:
+          - "golden_standard_l3.yaml"  # General
+          - "l3-specialized/*.yaml"    # Specialized by category
+        output: "generated/l3/systems/*.yaml"
+        specialization_logic: "category_based"
+
+      l4_workflow:
+        class: "L4WorkflowGenerator"
+        ai_model: "gpt-4"
+        template: "golden_standard_l4.yaml"
+        context_sources:
+          - "L1/L2/L3 scenarios"
+          - "User roles"
+          - "Business processes"
+          - "Compliance requirements"
+        output: "generated/l4/workflows/*.yaml"
+
+    executor:
+      class: "ScenarioExecutor"
+      execution_modes:
+        - "synchronous"   # Execute and wait
+        - "asynchronous"  # Execute in background
+        - "scheduled"     # Cron-based
+        - "triggered"     # Event-based
+
+    rag_integrator:
+      class: "RAGIntegrator"
+      responsibilities:
+        - "Create embeddings on generation"
+        - "Update embeddings on improvement"
+        - "Search scenarios semantically"
+        - "Extract patterns"
+        - "Generate recommendations"
+
+    eventbus_client:
+      class: "EventBusClient"
+      events_published:
+        - "scenario.generation.started"
+        - "scenario.{level}.generated"
+        - "scenario.generation.completed"
+        - "scenario.execution.started"
+        - "scenario.execution.completed"
+        - "scenario.improved"
+        - "scenario.archived"
+      events_subscribed:
+        - "analysis.completed"
+        - "prediction.created"
+        - "decision.made"
+
+    database_client:
+      class: "ScenarioDatabaseClient"
+      operations:
+        - "CRUD scenarios"
+        - "Store execution history"
+        - "Query learning data"
+        - "Archive old versions"
+
+# ===================================================================
+# FUNDAMENTAL SCENARIOS
+# ===================================================================
+fundamental_scenarios:
+  description: "Critical scenarios that integrate with workflow_intelligence"
+
+  categories:
+    startup:
+      scenarios:
+        - "l3-startup-orchestration-complete"
+        - "l2-runtime-services-startup"
+        - "l1-service-discovery-health"
+      workflow_integration: true
+      auto_execute: "on_platform_start"
+
+    resilience:
+      scenarios:
+        - "l3-resilience-self-healing"
+        - "l2-database-failover"
+        - "l1-redis-connection-recovery"
+      workflow_integration: true
+      auto_execute: "on_failure_detected"
+
+    security:
+      scenarios:
+        - "l3-security-breach-response"
+        - "l2-auth-service-validation"
+        - "l1-jwt-token-validation"
+      workflow_integration: true
+      auto_execute: "daily"
+
+    monitoring:
+      scenarios:
+        - "l3-monitoring-coverage-validation"
+        - "l2-observability-metrics"
+        - "l1-prometheus-scraping"
+      workflow_integration: true
+      auto_execute: "hourly"
+
+# ===================================================================
+# KNOWLEDGE BASE USAGE
+# ===================================================================
+knowledge_base_usage:
+  description: "Scenarios as knowledge base for platform intelligence"
+
+  use_as_knowledge:
+    - context: "AI Office decision making"
+      example: "MIO Manager uses scenario history to predict service health"
+
+    - context: "New service onboarding"
+      example: "RAG finds similar services and recommends scenarios"
+
+    - context: "Incident response"
+      example: "Failed scenario triggers incident workflow with context"
+
+    - context: "Training and documentation"
+      example: "L4 workflows become interactive training guides"
+
+    - context: "Compliance reporting"
+      example: "Generate ISO 22301 compliance report from scenario coverage"
+
+  knowledge_graph:
+    enabled: true
+    relationships:
+      - "scenario → depends_on → scenario"
+      - "scenario → tests → service"
+      - "scenario → validates → business_process"
+      - "scenario → covers → compliance_requirement"
+      - "service → participates_in → scenario"
+      - "failure_pattern → appears_in → scenario"
+
+# ===================================================================
+# METRICS & MONITORING
+# ===================================================================
+metrics:
+  generation_metrics:
+    - "scenarios_generated_total"
+    - "generation_duration_seconds"
+    - "generation_errors_total"
+    - "template_usage_count"
+
+  execution_metrics:
+    - "scenarios_executed_total"
+    - "execution_duration_seconds"
+    - "execution_success_rate"
+    - "execution_failures_total"
+
+  quality_metrics:
+    - "scenario_quality_score"
+    - "scenario_coverage_percentage"
+    - "false_positive_rate"
+    - "false_negative_rate"
+
+  learning_metrics:
+    - "improvements_applied_total"
+    - "patterns_detected_total"
+    - "recommendations_generated_total"
+    - "learning_cycle_duration_seconds"
+
+# ===================================================================
+# DEPLOYMENT
+# ===================================================================
+deployment:
+  docker:
+    image: "scenario-manager:latest"
+    ports:
+      - "8050:8050"
+    volumes:
+      - "./templates:/app/templates:ro"
+      - "./generated:/app/generated:rw"
+      - "./knowledge-base:/app/knowledge-base:rw"
+    environment:
+      - "DATABASE_URL=${DATABASE_URL}"
+      - "EVENTBUS_URL=${EVENTBUS_URL}"
+      - "QDRANT_URL=${QDRANT_URL}"
+      - "OPENAI_API_KEY=${OPENAI_API_KEY}"
+
+  kubernetes:
+    replicas: 2
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+    volumes:
+      - name: "templates"
+        configMap: "scenario-templates"
+      - name: "generated"
+        persistentVolumeClaim: "scenario-storage"
+
+# ===================================================================
+# ROADMAP
+# ===================================================================
+roadmap:
+  phase_1:
+    name: "Foundation"
+    weeks: "1-2"
+    tasks:
+      - "Create Scenario Manager service"
+      - "Setup database schema"
+      - "Implement basic generators"
+
+  phase_2:
+    name: "Generation"
+    weeks: "3-4"
+    tasks:
+      - "Implement all generators"
+      - "Create specialized L3 templates"
+      - "Generate initial 652 scenarios"
+
+  phase_3:
+    name: "RAG Integration"
+    weeks: "5-6"
+    tasks:
+      - "Setup Qdrant collections"
+      - "Implement embedding generation"
+      - "Build semantic search"
+      - "Extract knowledge patterns"
+
+  phase_4:
+    name: "Workflow Integration"
+    weeks: "7-8"
+    tasks:
+      - "Integrate with workflow_intelligence"
+      - "Create Temporal workflows"
+      - "Implement fundamental scenarios"
+
+  phase_5:
+    name: "AI Integration"
+    weeks: "9-10"
+    tasks:
+      - "Connect Analytics Specialist"
+      - "Connect Predictive Service"
+      - "Connect AI Orchestration"
+      - "Enable continuous improvement"
+
+  phase_6:
+    name: "Production"
+    weeks: "11-12"
+    tasks:
+      - "Production deployment"
+      - "Monitoring setup"
+      - "Documentation"
+      - "Training"

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "digital-twin": {
+      "command": "node",
+      "args": [
+        "/Users/maksymdemchenko/claude_workspace_files/Development/digital-twin-standalone/mcp-server/digital-twin-mcp-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "DATABASE_TYPE": "memory",
+        "AI_PROVIDER": "local"
+      }
+    }
+  }
+}

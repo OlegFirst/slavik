@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="admin_users_template" name="BCM Admin Users">
+        <t t-call="website.layout">
+            <t t-set="title">Users Management</t>
+            <div id="wrap">
+                <div class="container my-4">
+                    <h1><i class="fa fa-users me-3"></i>Users Management</h1>
+                    <p class="text-muted">Manage BCM platform users</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>User Statistics</h6>
+                            <p>Total Users: <t t-esc="len(users)"/></p>
+                            <a href="/web#model=res.users" class="btn btn-primary" target="_blank">
+                                Manage in Backend
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  document-processor:
+    build: .
+    ports:
+      - "8003:8003"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+      - STORAGE_TYPE=local
+      - STORAGE_PATH=/app/storage/documents
+      - MAX_FILE_SIZE=52428800  # 50MB
+      - ANALYSIS_ENGINE=local
+      - OCR_ENABLED=true
+      - OCR_LANGUAGES=eng+rus
+      - DATABASE_URL=sqlite:///./documents.db
+      - LOG_LEVEL=INFO
+      - MAX_CONCURRENT_ANALYSES=3
+      - ANALYSIS_TIMEOUT=300
+      - MAX_RETRIES=3
+      - RETRY_DELAY=5
+    volumes:
+      - document_storage:/app/storage
+      - document_data:/app/data
+    depends_on:
+      - redis
+      - eventbus
+    networks:
+      - bcm_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for EventBus integration
+  redis:
+    image: redis:7-alpine
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # Mock EventBus for development
+  eventbus:
+    image: bcm/eventbus:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_URL=postgresql://eventbus:eventbus@postgres:5432/bcm_events
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # PostgreSQL for EventBus
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=bcm_events
+      - POSTGRES_USER=eventbus
+      - POSTGRES_PASSWORD=eventbus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+volumes:
+  document_storage:
+    driver: local
+  document_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  bcm_network:
+    driver: bridge
+    external: true

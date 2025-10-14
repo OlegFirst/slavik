@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_incident_user,bcm.incident user,model_bcm_incident,base.group_user,1,1,1,0
+access_bcm_incident_manager,bcm.incident manager,model_bcm_incident,base.group_system,1,1,1,1
+access_bcm_incident_public,bcm.incident public,model_bcm_incident,base.group_public,1,0,0,0
+access_bcm_incident_category_user,bcm.incident.category user,model_bcm_incident_category,base.group_user,1,1,1,0
+access_bcm_incident_category_manager,bcm.incident.category manager,model_bcm_incident_category,base.group_system,1,1,1,1
+access_bcm_incident_field_update_user,bcm.incident.field.update user,model_bcm_incident_field_update,base.group_user,1,1,1,0
+access_bcm_incident_field_update_manager,bcm.incident.field.update manager,model_bcm_incident_field_update,base.group_system,1,1,1,1
+access_bcm_crisis_communication_plan_user,bcm.crisis.communication.plan user,model_bcm_crisis_communication_plan,base.group_user,1,1,1,0
+access_bcm_crisis_communication_plan_manager,bcm.crisis.communication.plan manager,model_bcm_crisis_communication_plan,base.group_system,1,1,1,1
+access_bcm_stakeholder_notification_user,bcm.stakeholder.notification user,model_bcm_stakeholder_notification,base.group_user,1,1,1,0
+access_bcm_stakeholder_notification_manager,bcm.stakeholder.notification manager,model_bcm_stakeholder_notification,base.group_system,1,1,1,1

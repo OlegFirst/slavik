@@ -387,6 +387,505 @@ def xss_patterns():
     ]
 
 
+@pytest.fixture
+def auth_user():
+    """
+    Authenticated test user with JWT token
+
+    Usage:
+        async def test_protected_endpoint(auth_user, test_client):
+            response = await test_client.get(
+                "/api/workflows",
+                headers={"Authorization": f"Bearer {auth_user['token']}"}
+            )
+    """
+    import jwt
+    from datetime import datetime, timedelta
+
+    user_data = {
+        "user_id": "test-user-001",
+        "username": "testuser",
+        "email": "test@example.com",
+        "role": "bcm_coordinator",
+        "organization_id": "org-001",
+        "permissions": [
+            "workflows.read",
+            "workflows.write",
+            "bia.execute",
+            "risk.assess"
+        ]
+    }
+
+    # Generate JWT token
+    secret = "test-secret-key-do-not-use-in-production"
+    payload = {
+        "user_id": user_data["user_id"],
+        "role": user_data["role"],
+        "exp": datetime.utcnow() + timedelta(hours=1),
+        "iat": datetime.utcnow()
+    }
+    token = jwt.encode(payload, secret, algorithm="HS256")
+
+    user_data["token"] = token
+    user_data["secret"] = secret
+
+    return user_data
+
+
+@pytest.fixture
+def mock_jwt_manager():
+    """
+    Mock JWT token manager for authentication testing
+
+    Usage:
+        def test_token_generation(mock_jwt_manager):
+            token = mock_jwt_manager.create_token("user-001")
+            assert mock_jwt_manager.verify_token(token)
+    """
+    import jwt
+    from datetime import datetime, timedelta
+
+    class JWTManager:
+        def __init__(self):
+            self.secret = "test-secret-key"
+            self.algorithm = "HS256"
+
+        def create_token(self, user_id: str, role: str = "user", expiry_hours: int = 24):
+            """Create JWT token"""
+            payload = {
+                "user_id": user_id,
+                "role": role,
+                "exp": datetime.utcnow() + timedelta(hours=expiry_hours),
+                "iat": datetime.utcnow()
+            }
+            return jwt.encode(payload, self.secret, algorithm=self.algorithm)
+
+        def verify_token(self, token: str) -> Dict[str, Any]:
+            """Verify and decode token"""
+            try:
+                return jwt.decode(token, self.secret, algorithms=[self.algorithm])
+            except jwt.ExpiredSignatureError:
+                raise ValueError("Token expired")
+            except jwt.InvalidTokenError:
+                raise ValueError("Invalid token")
+
+        def create_expired_token(self, user_id: str):
+            """Create already-expired token for testing"""
+            payload = {
+                "user_id": user_id,
+                "exp": datetime.utcnow() - timedelta(hours=1),
+                "iat": datetime.utcnow() - timedelta(hours=2)
+            }
+            return jwt.encode(payload, self.secret, algorithm=self.algorithm)
+
+    return JWTManager()
+
+
+@pytest.fixture
+def mock_rbac_manager():
+    """
+    Mock RBAC (Role-Based Access Control) manager
+
+    Usage:
+        def test_authorization(mock_rbac_manager):
+            assert mock_rbac_manager.can_user_perform("bcm_coordinator", "execute_bia")
+            assert not mock_rbac_manager.can_user_perform("auditor", "delete_plan")
+    """
+    class RBACManager:
+        def __init__(self):
+            self.roles_permissions = {
+                "auditor": [
+                    "workflows.read",
+                    "plans.read",
+                    "reports.read"
+                ],
+                "bcm_coordinator": [
+                    "workflows.read",
+                    "workflows.write",
+                    "bia.execute",
+                    "risk.assess",
+                    "plans.read",
+                    "plans.write"
+                ],
+                "risk_manager": [
+                    "workflows.read",
+                    "workflows.write",
+                    "risk.read",
+                    "risk.write",
+                    "risk.assess"
+                ],
+                "admin": [
+                    "workflows.*",
+                    "plans.*",
+                    "risk.*",
+                    "bia.*",
+                    "users.manage",
+                    "system.configure"
+                ]
+            }
+
+        def can_user_perform(self, role: str, permission: str) -> bool:
+            """Check if role has permission"""
+            role_perms = self.roles_permissions.get(role, [])
+
+            # Check exact match
+            if permission in role_perms:
+                return True
+
+            # Check wildcard permissions (e.g., "workflows.*")
+            for perm in role_perms:
+                if perm.endswith(".*"):
+                    prefix = perm[:-2]
+                    if permission.startswith(prefix):
+                        return True
+
+            return False
+
+        def get_user_permissions(self, role: str) -> list:
+            """Get all permissions for role"""
+            return self.roles_permissions.get(role, [])
+
+    return RBACManager()
+
+
+@pytest.fixture
+def mock_session_manager():
+    """
+    Mock session manager for session testing
+
+    Usage:
+        async def test_session_timeout(mock_session_manager):
+            session_id = await mock_session_manager.create_session("user-001")
+            assert await mock_session_manager.is_valid(session_id)
+    """
+    import secrets
+    from datetime import datetime, timedelta
+
+    class SessionManager:
+        def __init__(self, timeout_minutes: int = 30):
+            self.sessions = {}
+            self.timeout_minutes = timeout_minutes
+
+        async def create_session(self, user_id: str, metadata: Dict = None) -> str:
+            """Create new session"""
+            session_id = secrets.token_urlsafe(32)
+            self.sessions[session_id] = {
+                "user_id": user_id,
+                "created_at": datetime.now(),
+                "last_activity": datetime.now(),
+                "metadata": metadata or {}
+            }
+            return session_id
+
+        async def is_valid(self, session_id: str) -> bool:
+            """Check if session is valid and not expired"""
+            if session_id not in self.sessions:
+                return False
+
+            session = self.sessions[session_id]
+            elapsed = (datetime.now() - session["last_activity"]).total_seconds() / 60
+
+            if elapsed > self.timeout_minutes:
+                await self.destroy_session(session_id)
+                return False
+
+            # Update last activity
+            session["last_activity"] = datetime.now()
+            return True
+
+        async def destroy_session(self, session_id: str):
+            """Destroy session"""
+            self.sessions.pop(session_id, None)
+
+        async def get_session_data(self, session_id: str) -> Dict:
+            """Get session data"""
+            return self.sessions.get(session_id)
+
+    return SessionManager()
+
+
+@pytest.fixture
+def password_validator():
+    """
+    Password complexity validator fixture
+
+    Usage:
+        def test_password_strength(password_validator):
+            assert password_validator.is_valid("SecurePassword123!")
+            assert not password_validator.is_valid("weak")
+    """
+    import re
+
+    class PasswordValidator:
+        def __init__(self):
+            self.min_length = 12
+            self.require_uppercase = True
+            self.require_lowercase = True
+            self.require_digit = True
+            self.require_special = True
+            self.blocked_passwords = [
+                "password", "admin", "123456", "qwerty", "default"
+            ]
+
+        def is_valid(self, password: str) -> tuple[bool, list]:
+            """
+            Validate password complexity
+            Returns: (is_valid, errors)
+            """
+            errors = []
+
+            if len(password) < self.min_length:
+                errors.append(f"Password must be at least {self.min_length} characters")
+
+            if self.require_uppercase and not re.search(r'[A-Z]', password):
+                errors.append("Password must contain uppercase letter")
+
+            if self.require_lowercase and not re.search(r'[a-z]', password):
+                errors.append("Password must contain lowercase letter")
+
+            if self.require_digit and not re.search(r'\d', password):
+                errors.append("Password must contain digit")
+
+            if self.require_special and not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+                errors.append("Password must contain special character")
+
+            if password.lower() in self.blocked_passwords:
+                errors.append("Password is too common")
+
+            return (len(errors) == 0, errors)
+
+    return PasswordValidator()
+
+
+@pytest.fixture
+def ssrf_validator():
+    """
+    SSRF (Server-Side Request Forgery) validator
+
+    Usage:
+        def test_url_validation(ssrf_validator):
+            assert ssrf_validator.is_safe("https://api.example.com")
+            assert not ssrf_validator.is_safe("http://localhost/admin")
+    """
+    import ipaddress
+    from urllib.parse import urlparse
+
+    class SSRFValidator:
+        def __init__(self):
+            self.allowed_protocols = ["https"]
+            self.blocked_hosts = [
+                "localhost",
+                "127.0.0.1",
+                "0.0.0.0",
+                "169.254.169.254",  # AWS metadata
+                "metadata.google.internal",  # GCP metadata
+            ]
+
+        def is_safe(self, url: str) -> tuple[bool, str]:
+            """
+            Validate URL is safe from SSRF
+            Returns: (is_safe, reason)
+            """
+            try:
+                parsed = urlparse(url)
+
+                # Check protocol
+                if parsed.scheme not in self.allowed_protocols:
+                    return (False, f"Protocol {parsed.scheme} not allowed")
+
+                hostname = parsed.hostname or ""
+
+                # Check blocked hosts
+                if hostname.lower() in self.blocked_hosts:
+                    return (False, f"Host {hostname} is blocked")
+
+                # Check for private IP ranges
+                try:
+                    ip = ipaddress.ip_address(hostname)
+                    if ip.is_private or ip.is_loopback or ip.is_link_local:
+                        return (False, "Private/internal IP not allowed")
+                except ValueError:
+                    # Not an IP, that's OK
+                    pass
+
+                return (True, "URL is safe")
+
+            except Exception as e:
+                return (False, f"Invalid URL: {str(e)}")
+
+    return SSRFValidator()
+
+
+@pytest.fixture
+def rate_limiter():
+    """
+    Rate limiter for API security testing
+
+    Usage:
+        async def test_rate_limiting(rate_limiter):
+            for i in range(5):
+                assert await rate_limiter.check_limit("user-001")
+            # 6th request should fail
+            assert not await rate_limiter.check_limit("user-001")
+    """
+    from datetime import datetime
+
+    class RateLimiter:
+        def __init__(self, max_requests: int = 100, window_seconds: int = 60):
+            self.max_requests = max_requests
+            self.window_seconds = window_seconds
+            self.requests = {}
+
+        async def check_limit(self, identifier: str) -> bool:
+            """Check if identifier has exceeded rate limit"""
+            now = datetime.now()
+
+            if identifier not in self.requests:
+                self.requests[identifier] = []
+
+            # Clean old requests outside window
+            self.requests[identifier] = [
+                req_time for req_time in self.requests[identifier]
+                if (now - req_time).total_seconds() < self.window_seconds
+            ]
+
+            # Check limit
+            if len(self.requests[identifier]) >= self.max_requests:
+                return False
+
+            # Record request
+            self.requests[identifier].append(now)
+            return True
+
+        async def reset(self, identifier: str):
+            """Reset rate limit for identifier"""
+            self.requests.pop(identifier, None)
+
+    return RateLimiter()
+
+
+@pytest.fixture
+def input_sanitizer():
+    """
+    Input sanitizer for injection prevention testing
+
+    Usage:
+        def test_input_sanitization(input_sanitizer):
+            dirty = "'; DROP TABLE users; --"
+            clean = input_sanitizer.sanitize_sql(dirty)
+            assert "DROP" not in clean or clean != dirty
+    """
+    import re
+    import html
+
+    class InputSanitizer:
+        def sanitize_sql(self, user_input: str) -> str:
+            """Sanitize input for SQL (remove dangerous chars)"""
+            dangerous = ["'", '"', ";", "--", "/*", "*/", "xp_", "sp_"]
+            sanitized = user_input
+            for char in dangerous:
+                sanitized = sanitized.replace(char, "")
+            return sanitized
+
+        def sanitize_html(self, user_input: str) -> str:
+            """Sanitize HTML to prevent XSS"""
+            return html.escape(user_input)
+
+        def sanitize_shell(self, user_input: str) -> str:
+            """Sanitize for shell command injection"""
+            # Only allow alphanumeric, dash, underscore, dot
+            return re.sub(r'[^a-zA-Z0-9_\-\.]', '', user_input)
+
+        def sanitize_path(self, user_input: str) -> str:
+            """Sanitize file path to prevent directory traversal"""
+            # Remove ../ and ../
+            sanitized = user_input.replace("../", "").replace("..\\", "")
+            # Only allow safe characters
+            sanitized = re.sub(r'[^a-zA-Z0-9_\-\./]', '', sanitized)
+            return sanitized
+
+    return InputSanitizer()
+
+
+@pytest.fixture
+def security_logger():
+    """
+    Security event logger for testing logging mechanisms
+
+    Usage:
+        def test_failed_login_logging(security_logger):
+            security_logger.log_auth_failure("user-001", "192.168.1.1")
+            events = security_logger.get_events("authentication")
+            assert len(events) == 1
+    """
+    from datetime import datetime
+
+    class SecurityLogger:
+        def __init__(self):
+            self.events = []
+            self.sensitive_fields = [
+                "password", "token", "secret", "api_key",
+                "ssn", "credit_card", "private_key"
+            ]
+
+        def log_auth_success(self, user_id: str, ip_address: str, metadata: Dict = None):
+            """Log successful authentication"""
+            self.events.append({
+                "event_type": "authentication",
+                "status": "success",
+                "user_id": user_id,
+                "ip_address": ip_address,
+                "timestamp": datetime.now().isoformat(),
+                "metadata": metadata or {}
+            })
+
+        def log_auth_failure(self, user_id: str, ip_address: str, reason: str = None):
+            """Log failed authentication"""
+            self.events.append({
+                "event_type": "authentication",
+                "status": "failure",
+                "user_id": user_id,
+                "ip_address": ip_address,
+                "reason": reason,
+                "timestamp": datetime.now().isoformat()
+            })
+
+        def log_access_control(self, user_id: str, resource: str, action: str, allowed: bool):
+            """Log access control decision"""
+            self.events.append({
+                "event_type": "access_control",
+                "user_id": user_id,
+                "resource": resource,
+                "action": action,
+                "allowed": allowed,
+                "timestamp": datetime.now().isoformat()
+            })
+
+        def sanitize_log_data(self, data: Dict) -> Dict:
+            """Remove sensitive fields from log data"""
+            return {
+                k: "***REDACTED***" if k in self.sensitive_fields else v
+                for k, v in data.items()
+            }
+
+        def get_events(self, event_type: str = None) -> list:
+            """Get logged events, optionally filtered by type"""
+            if event_type:
+                return [e for e in self.events if e.get("event_type") == event_type]
+            return self.events
+
+        def get_failed_attempts(self, user_id: str) -> int:
+            """Count failed authentication attempts for user"""
+            return sum(
+                1 for e in self.events
+                if e.get("event_type") == "authentication"
+                and e.get("user_id") == user_id
+                and e.get("status") == "failure"
+            )
+
+    return SecurityLogger()
+
+
 # ==================== AI Foundation Integration Fixtures ====================
 @pytest.fixture
 def mock_ai_foundation():

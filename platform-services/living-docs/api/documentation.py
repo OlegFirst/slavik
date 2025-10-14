@@ -5,11 +5,123 @@ Interactive, personalized, self-evolving documentation API
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
+import logging
+import jwt
 
 router = APIRouter(prefix="/docs", tags=["living-documentation"])
+logger = logging.getLogger(__name__)
+security = HTTPBearer()
+
+# Import settings for JWT configuration
+try:
+    from config import settings
+    JWT_ENABLED = settings.JWT_REQUIRED_ENDPOINTS
+except ImportError:
+    JWT_ENABLED = False
+    logger.warning("Settings not available - JWT disabled")
+
+# Import metrics from main module
+try:
+    from main import (
+        living_docs_page_views,
+        living_docs_ai_generations,
+        living_docs_helpful_votes_total,
+        living_docs_personalized_requests,
+        living_docs_searches_total,
+        living_docs_search_results,
+        living_docs_personalization_cache_hits,
+        living_docs_personalization_cache_misses
+    )
+    METRICS_ENABLED = True
+except ImportError:
+    METRICS_ENABLED = False
+    logger.warning("Metrics not available in documentation API")
+
+# ================================================
+# JWT AUTHENTICATION
+# ================================================
+
+async def verify_token(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> dict:
+    """
+    Verify JWT token and return payload
+
+    Args:
+        credentials: HTTP Bearer token from request header
+
+    Returns:
+        dict: JWT payload containing user information
+
+    Raises:
+        HTTPException: If token is invalid, expired, or missing
+    """
+    if not JWT_ENABLED:
+        # JWT disabled - return mock user for development
+        return {
+            "user_id": "dev-user-123",
+            "email": "dev@example.com",
+            "roles": ["user"]
+        }
+
+    try:
+        # Decode and verify JWT token
+        payload = jwt.decode(
+            credentials.credentials,
+            settings.JWT_SECRET_KEY,
+            algorithms=[settings.JWT_ALGORITHM]
+        )
+
+        # Validate required fields
+        if "user_id" not in payload:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token: missing user_id"
+            )
+
+        logger.debug(f"Token verified for user: {payload.get('user_id')}")
+        return payload
+
+    except jwt.ExpiredSignatureError:
+        logger.warning("Token expired")
+        raise HTTPException(
+            status_code=401,
+            detail="Token has expired. Please login again."
+        )
+    except jwt.InvalidTokenError as e:
+        logger.warning(f"Invalid token: {str(e)}")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid authentication token"
+        )
+    except Exception as e:
+        logger.error(f"Token verification error: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Authentication error"
+        )
+
+
+async def optional_verify_token(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False))
+) -> Optional[dict]:
+    """
+    Optional JWT verification (for endpoints that work with or without auth)
+
+    Returns:
+        dict or None: User payload if token present and valid, None otherwise
+    """
+    if not credentials:
+        return None
+
+    try:
+        return await verify_token(credentials)
+    except HTTPException:
+        return None
 
 # Request/Response Models
 
@@ -45,7 +157,7 @@ async def get_documentation(
     page_id: str,
     user_id: str,
     personalize: bool = True,
-    current_user: dict = Depends(lambda: {"user_id": "user-123"})
+    current_user: dict = Depends(verify_token)
 ):
     """
     Get documentation page (personalized)
@@ -66,6 +178,28 @@ async def get_documentation(
     - Next steps
     - Interactive elements
     """
+
+    # Track page view
+    if METRICS_ENABLED:
+        living_docs_page_views.labels(page_id=page_id).inc()
+
+    # Track personalized request
+    if METRICS_ENABLED and personalize:
+        # In production: Extract from user profile
+        industry = "healthcare"  # Mock value
+        level = "beginner"  # Mock value
+        living_docs_personalized_requests.labels(
+            industry=industry,
+            user_level=level
+        ).inc()
+
+        # Simulate cache check
+        # In production: Check actual cache
+        cache_hit = False
+        if cache_hit:
+            living_docs_personalization_cache_hits.labels(cache_type="page_content").inc()
+        else:
+            living_docs_personalization_cache_misses.labels(cache_type="page_content").inc()
 
     # Get personalized documentation
     # In production: Use PersonalizationService
@@ -99,7 +233,7 @@ async def get_documentation(
 @router.post("/examples/generate")
 async def generate_example(
     request: GenerateExampleRequest,
-    current_user: dict = Depends(lambda: {"user_id": "user-123"})
+    current_user: dict = Depends(verify_token)
 ):
     """
     Generate AI-powered example on demand
@@ -130,6 +264,13 @@ async def generate_example(
     - RTOs calculated
     - Based on real hospital data!
     """
+
+    # Track AI generation
+    if METRICS_ENABLED:
+        living_docs_ai_generations.labels(
+            generation_type="example",
+            status="success"
+        ).inc()
 
     # Generate example using AI
     # In production: Use AIExampleGenerator
@@ -168,7 +309,7 @@ async def generate_example(
 @router.post("/feedback")
 async def submit_feedback(
     request: FeedbackRequest,
-    current_user: dict = Depends(lambda: {"user_id": "user-123"})
+    current_user: dict = Depends(verify_token)
 ):
     """
     Submit feedback on documentation
@@ -181,6 +322,12 @@ async def submit_feedback(
 
     Negative feedback triggers immediate review!
     """
+
+    # Track feedback metrics
+    if METRICS_ENABLED:
+        living_docs_helpful_votes_total.labels(
+            helpful=str(request.helpful).lower()
+        ).inc()
 
     # Track feedback
     # In production: Use DocumentationEvolutionEngine
@@ -200,7 +347,7 @@ async def smart_search(
     query: str,
     user_id: str,
     limit: int = 10,
-    current_user: dict = Depends(lambda: {"user_id": "user-123"})
+    current_user: dict = Depends(optional_verify_token)
 ):
     """
     Smart AI-powered search
@@ -221,35 +368,45 @@ async def smart_search(
     ```
     """
 
+    # Track search
+    if METRICS_ENABLED:
+        living_docs_searches_total.labels(search_type="smart_search").inc()
+
     # AI-powered search
     # In production: Use semantic search + personalization
 
+    results = [
+        {
+            "id": "rto-calculation",
+            "title": "Calculating RTO for Emergency Services",
+            "snippet": "Emergency departments typically...",
+            "relevance": 0.95,
+            "type": "guide",
+            "personalized": True
+        },
+        {
+            "id": "ex-hospital-er",
+            "title": "Case Study: Hospital ER Recovery",
+            "snippet": "How a 300-bed hospital...",
+            "relevance": 0.88,
+            "type": "example"
+        },
+        {
+            "id": "tool-rto-calc",
+            "title": "Interactive RTO Calculator",
+            "snippet": "Calculate RTO for your processes",
+            "relevance": 0.82,
+            "type": "tool"
+        }
+    ]
+
+    # Track result count
+    if METRICS_ENABLED:
+        living_docs_search_results.labels(search_type="smart_search").observe(len(results))
+
     return {
         "query": query,
-        "results": [
-            {
-                "id": "rto-calculation",
-                "title": "Calculating RTO for Emergency Services",
-                "snippet": "Emergency departments typically...",
-                "relevance": 0.95,
-                "type": "guide",
-                "personalized": True
-            },
-            {
-                "id": "ex-hospital-er",
-                "title": "Case Study: Hospital ER Recovery",
-                "snippet": "How a 300-bed hospital...",
-                "relevance": 0.88,
-                "type": "example"
-            },
-            {
-                "id": "tool-rto-calc",
-                "title": "Interactive RTO Calculator",
-                "snippet": "Calculate RTO for your processes",
-                "relevance": 0.82,
-                "type": "tool"
-            }
-        ],
+        "results": results,
         "suggestions": [
             "RPO for emergency services",
             "24/7 operations recovery",
@@ -261,7 +418,7 @@ async def smart_search(
 async def get_personalized_journey(
     goal: str,
     user_id: str,
-    current_user: dict = Depends(lambda: {"user_id": "user-123"})
+    current_user: dict = Depends(verify_token)
 ):
     """
     Get personalized learning journey

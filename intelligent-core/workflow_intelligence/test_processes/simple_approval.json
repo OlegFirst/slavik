@@ -1,0 +1,61 @@
+{
+  "id": "simple_approval",
+  "name": "Simple Approval Process",
+  "version": "1.0",
+  "description": "A simple approval process with metrics",
+  "start_step_id": "submit_request",
+  "end_step_ids": [
+    "complete"
+  ],
+  "category": "general",
+  "owner": null,
+  "tags": [],
+  "iso_clause": null,
+  "compliance_requirements": [],
+  "steps": {
+    "submit_request": {
+      "id": "submit_request",
+      "name": "Submit Request",
+      "step_type": "form_input",
+      "description": "Submit approval request",
+      "next_steps": [
+        "approval"
+      ],
+      "allowed_roles": [],
+      "document_template": null,
+      "ai_agent": null,
+      "estimated_duration_minutes": null,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": [
+        {
+          "name": "request_title",
+          "label": "Request Title",
+          "field_type": "text",
+          "description": null,
+          "required": true,
+          "default_value": null,
+          "placeholder": null,
+          "options": null,
+          "help_text": null
+        }
+      ]
+    },
+    "approval": {
+      "id": "approval",
+      "name": "Manager Approval",
+      "step_type": "approval",
+      "description": "Manager reviews and approves",
+      "next_steps": [
+        "complete"
+      ],
+      "allowed_roles": [],
+      "document_template": null,
+      "ai_agent": null,
+      "estimated_duration_minutes": null,
+      "sla_hours": null,
+      "auto_approve": false,
+      "form_fields": []
+    }
+  }
+}

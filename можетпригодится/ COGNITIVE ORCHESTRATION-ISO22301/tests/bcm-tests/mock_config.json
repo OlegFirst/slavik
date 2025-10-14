@@ -1,0 +1,147 @@
+{
+  "mock_targets": {
+    "bcm_compliance_api": {
+      "id": "bcm_compliance_api",
+      "type": "api_response",
+      "endpoint": "/api/bcm/compliance/overview",
+      "response_data": [
+        {
+          "id": 1,
+          "organization_name": "Test Organization",
+          "iso22301_status": "compliant",
+          "compliance_percentage": 85.5,
+          "last_assessment_date": "2024-01-15",
+          "next_review_date": "2024-07-15",
+          "critical_findings": 2,
+          "open_actions": 5,
+          "risk_level": "medium"
+        }
+      ],
+      "delay_ms": 200,
+      "failure_rate": 0.05,
+      "tags": ["bcm", "compliance", "api"]
+    },
+
+    "bcm_risk_api": {
+      "id": "bcm_risk_api",
+      "type": "api_response",
+      "endpoint": "/api/bcm/risk/assessments",
+      "response_data": [
+        {
+          "id": 1,
+          "risk_name": "Data Center Outage",
+          "category": "Infrastructure",
+          "likelihood": 3,
+          "impact": 4,
+          "risk_score": 12,
+          "mitigation_status": "in_progress",
+          "owner": "IT Security Team",
+          "due_date": "2024-03-01",
+          "last_review": "2024-01-10"
+        }
+      ],
+      "delay_ms": 150,
+      "failure_rate": 0.02,
+      "tags": ["bcm", "risk", "api"]
+    },
+
+    "database_users": {
+      "id": "database_users",
+      "type": "database_query",
+      "endpoint": "SELECT * FROM users",
+      "response_data": [
+        {"id": 1, "username": "admin", "role": "administrator"},
+        {"id": 2, "username": "user1", "role": "user"}
+      ],
+      "delay_ms": 50,
+      "failure_rate": 0.01,
+      "tags": ["database", "users"]
+    },
+
+    "external_weather_api": {
+      "id": "external_weather_api",
+      "type": "external_service",
+      "endpoint": "https://api.weather.com/current",
+      "response_data": {
+        "temperature": 22.5,
+        "humidity": 65,
+        "conditions": "partly_cloudy"
+      },
+      "delay_ms": 500,
+      "failure_rate": 0.15,
+      "tags": ["external", "weather"]
+    },
+
+    "file_system_config": {
+      "id": "file_system_config",
+      "type": "file_system",
+      "endpoint": "/etc/app/config.json",
+      "response_data": {
+        "app_name": "BCM Platform",
+        "version": "1.0.0",
+        "debug": false
+      },
+      "delay_ms": 10,
+      "failure_rate": 0.0,
+      "tags": ["filesystem", "config"]
+    }
+  },
+
+  "routing_rules": {
+    "frontend_*": ["bcm_compliance_api", "bcm_risk_api"],
+    "backend_service": ["database_users"],
+    "monitoring_*": ["external_weather_api"],
+    "*_config": ["file_system_config"]
+  },
+
+  "default_active_mocks": [
+    "bcm_compliance_api",
+    "bcm_risk_api"
+  ],
+
+  "test_scenarios": {
+    "scenario_basic_bcm": {
+      "description": "Basic BCM API testing",
+      "active_mocks": ["bcm_compliance_api", "bcm_risk_api"],
+      "test_calls": [
+        {
+          "caller": "frontend_dashboard",
+          "endpoint": "/api/bcm/compliance/overview",
+          "expected_response_keys": ["organization_name", "compliance_percentage"]
+        },
+        {
+          "caller": "frontend_risks",
+          "endpoint": "/api/bcm/risk/assessments",
+          "expected_response_keys": ["risk_name", "risk_score"]
+        }
+      ]
+    },
+
+    "scenario_with_failures": {
+      "description": "Testing with simulated failures",
+      "active_mocks": ["bcm_compliance_api"],
+      "mock_overrides": {
+        "bcm_compliance_api": {
+          "failure_rate": 0.5
+        }
+      },
+      "test_calls": [
+        {
+          "caller": "frontend_dashboard",
+          "endpoint": "/api/bcm/compliance/overview",
+          "expect_failures": true
+        }
+      ]
+    },
+
+    "scenario_cycle_detection": {
+      "description": "Test cycle detection",
+      "active_mocks": ["database_users"],
+      "artificial_cycles": [
+        ["service_a", "service_b"],
+        ["service_b", "service_c"],
+        ["service_c", "service_a"]
+      ]
+    }
+  }
+}

@@ -1,0 +1,656 @@
+meta:
+  id: "l3-infrastructure-management-system-{system_name}"
+  name: "L3 Infrastructure Management System Test Scenarios"
+  level: 3
+  category: "infrastructure_management"
+  version: "1.0.0"
+  created: "2025-10-13"
+  template_type: "specialized"
+  applicable_to:
+    - "Resource Management (system)"
+    - "Scaling & Autoscaling (system)"
+    - "Cost Optimization (system)"
+    - "Capacity Planning (system)"
+
+description: |
+  Specialized L3 template for Infrastructure Management systems testing.
+
+  Infrastructure Management systems oversee resource lifecycle through:
+  - Dynamic resource allocation and scaling
+  - Cost tracking and optimization
+  - Capacity planning and forecasting
+  - Resource utilization monitoring
+  - Multi-cloud resource management
+  - Infrastructure cost attribution
+
+  This template generates comprehensive infrastructure management test scenarios
+  that validate resource optimization, cost efficiency, and capacity planning.
+
+systems_involved:
+  - "{system_name}"
+  - "Infrastructure Coordinator"
+  - "Service Discovery"
+  - "Observability Stack"
+  - "EventBus"
+  - "Cloud Providers (AWS, GCP, Azure)"
+
+test_scenarios:
+  - name: "Resource Allocation and Lifecycle"
+    scenario_id: "l3-infra-mgmt-resource-allocation"
+    description: "Test resource provisioning, allocation, and deprovisioning"
+
+    resource_provisioning:
+      - resource_type: "compute_instance"
+        tests:
+          - name: "provision_instance"
+            request:
+              type: "t3.medium"
+              count: 1
+              tags: {service: "bia-service", environment: "production"}
+            expected:
+              provisioned: true
+              ready_time: "< 5m"
+              tagged_correctly: true
+              registered_in_inventory: true
+
+          - name: "provision_with_constraints"
+            request:
+              type: "c5.large"
+              availability_zone: "us-east-1a"
+              subnet: "private"
+            expected:
+              provisioned_in_correct_az: true
+              subnet_constraint_satisfied: true
+
+          - name: "provision_failure_quota_exceeded"
+            request:
+              type: "t3.medium"
+              count: 100
+            quota_limit: 50
+            expected:
+              provisioning_failed: true
+              error: "quota_exceeded"
+              partial_provision: false
+
+      - resource_type: "database"
+        tests:
+          - name: "provision_database"
+            request:
+              engine: "postgresql"
+              version: "15"
+              size: "db.t3.medium"
+            expected:
+              database_created: true
+              backups_enabled: true
+              encryption_at_rest: true
+              connection_string_generated: true
+
+    resource_tagging:
+      - tests:
+          - name: "mandatory_tags"
+            resource: "ec2_instance"
+            tags: {owner: "platform-team", cost_center: "engineering"}
+            expected:
+              tags_applied: true
+              cost_attribution_enabled: true
+
+          - name: "missing_mandatory_tag"
+            resource: "s3_bucket"
+            tags: {name: "backup-bucket"}
+            mandatory_tags: ["owner", "cost_center"]
+            expected:
+              validation_failed: true
+              provisioning_blocked: true
+
+    resource_deprovisioning:
+      - tests:
+          - name: "terminate_instance"
+            instance_id: "i-12345"
+            expected:
+              instance_stopped: true
+              data_backed_up: true
+              instance_terminated: true
+              inventory_updated: true
+
+          - name: "prevent_accidental_deletion"
+            instance_id: "i-production-db"
+            protection: "enabled"
+            expected:
+              termination_blocked: true
+              manual_override_required: true
+
+    monitoring:
+      - metric: "resources_provisioned_total"
+        labels: ["resource_type", "status"]
+      - metric: "resource_provisioning_duration_seconds"
+        labels: ["resource_type"]
+      - metric: "resource_terminations_total"
+        labels: ["resource_type", "reason"]
+
+  - name: "Autoscaling and Dynamic Scaling"
+    scenario_id: "l3-infra-mgmt-autoscaling"
+    description: "Test autoscaling policies and dynamic resource adjustment"
+
+    horizontal_scaling:
+      - service: "api-gateway"
+        policy:
+          min_instances: 2
+          max_instances: 10
+          target_cpu: 70
+        tests:
+          - name: "scale_up_on_load"
+            current_instances: 2
+            cpu_usage: 85
+            expected:
+              scale_up_triggered: true
+              new_instances: 3
+              scale_up_time: "< 3m"
+
+          - name: "scale_down_on_low_load"
+            current_instances: 5
+            cpu_usage: 30
+            expected:
+              scale_down_triggered: true
+              new_instances: 3
+              graceful_shutdown: true
+
+          - name: "respect_min_max_limits"
+            current_instances: 10
+            cpu_usage: 95
+            expected:
+              scale_up_blocked: true
+              at_max_capacity: true
+              alert_triggered: true
+
+      - service: "worker-pool"
+        policy:
+          metric: "queue_depth"
+          target_value: 100
+          scale_up_threshold: 150
+          scale_down_threshold: 50
+        tests:
+          - name: "scale_based_on_queue_depth"
+            queue_depth: 200
+            current_workers: 5
+            expected:
+              scale_up_triggered: true
+              new_workers: 8
+              queue_processing_improved: true
+
+    vertical_scaling:
+      - tests:
+          - name: "upgrade_instance_type"
+            current_type: "t3.medium"
+            target_type: "t3.large"
+            expected:
+              instance_stopped: true
+              type_changed: true
+              instance_restarted: true
+              downtime: "< 5m"
+
+    predictive_scaling:
+      - tests:
+          - name: "scale_based_on_forecast"
+            historical_pattern: "traffic_doubles_at_9am"
+            current_time: "08:45"
+            expected:
+              preemptive_scale_up: true
+              ready_before_traffic_spike: true
+
+    cooldown_periods:
+      - tests:
+          - name: "prevent_flapping"
+            scale_events: ["scale_up_at_10:00", "scale_down_at_10:05", "scale_up_attempt_at_10:08"]
+            cooldown: "10m"
+            expected:
+              third_event_blocked: true
+              cooldown_enforced: true
+
+    monitoring:
+      - metric: "autoscaling_events_total"
+        labels: ["service", "direction"]
+      - metric: "instance_count"
+        labels: ["service"]
+      - metric: "scaling_duration_seconds"
+        labels: ["service", "direction"]
+
+  - name: "Cost Tracking and Optimization"
+    scenario_id: "l3-infra-mgmt-cost-optimization"
+    description: "Test cost tracking, attribution, and optimization"
+
+    cost_tracking:
+      - tests:
+          - name: "track_resource_costs"
+            resources:
+              - {type: "ec2", count: 10, cost_per_hour: "$0.05"}
+              - {type: "rds", count: 2, cost_per_hour: "$0.20"}
+            duration: "24h"
+            expected:
+              total_cost: "$16.80"
+              cost_breakdown_by_type: true
+
+          - name: "cost_attribution_by_tag"
+            tag: "cost_center"
+            values: ["engineering", "sales"]
+            expected:
+              costs_attributed_correctly: true
+              per_cost_center_reports: true
+
+      - scenario: "budget_monitoring"
+        tests:
+          - name: "budget_threshold_warning"
+            monthly_budget: "$10000"
+            current_spend: "$8500"
+            threshold: "80%"
+            expected:
+              warning_triggered: true
+              stakeholders_notified: true
+
+          - name: "budget_exceeded"
+            monthly_budget: "$10000"
+            current_spend: "$10500"
+            expected:
+              alert_triggered: true
+              cost_optimization_recommended: true
+              optional_resources_flagged: true
+
+    cost_optimization:
+      - strategy: "rightsizing"
+        tests:
+          - name: "identify_underutilized_instances"
+            instance: "i-12345"
+            cpu_avg: 15
+            memory_avg: 25
+            current_type: "t3.large"
+            expected:
+              underutilized: true
+              recommended_type: "t3.medium"
+              potential_savings: "$15/month"
+
+          - name: "identify_overutilized_instances"
+            instance: "i-67890"
+            cpu_avg: 95
+            memory_avg: 90
+            current_type: "t3.medium"
+            expected:
+              overutilized: true
+              recommended_type: "t3.large"
+              performance_improvement: "expected"
+
+      - strategy: "reserved_instances"
+        tests:
+          - name: "recommend_reserved_instances"
+            usage_pattern: "stable_for_12_months"
+            on_demand_cost: "$1000/month"
+            reserved_cost: "$600/month"
+            expected:
+              recommendation: "purchase_reserved_instances"
+              potential_savings: "$4800/year"
+
+      - strategy: "spot_instances"
+        tests:
+          - name: "use_spot_for_non_critical"
+            workload: "batch_processing"
+            interruption_tolerant: true
+            expected:
+              spot_recommended: true
+              potential_savings: "70%"
+
+      - strategy: "unused_resources"
+        tests:
+          - name: "identify_idle_resources"
+            resources:
+              - {id: "vol-123", type: "ebs_volume", attached: false, age: "90_days"}
+              - {id: "eip-456", type: "elastic_ip", associated: false, age: "30_days"}
+            expected:
+              idle_resources_identified: true
+              deletion_recommended: true
+              potential_savings: "$50/month"
+
+    cost_anomaly_detection:
+      - tests:
+          - name: "detect_cost_spike"
+            baseline_daily_cost: "$100"
+            current_daily_cost: "$500"
+            threshold: "2x_baseline"
+            expected:
+              anomaly_detected: true
+              alert_sent: true
+              investigation_triggered: true
+
+    monitoring:
+      - metric: "infrastructure_cost_usd"
+        labels: ["resource_type", "cost_center"]
+      - metric: "cost_optimization_savings_usd"
+        labels: ["optimization_type"]
+      - metric: "budget_utilization_ratio"
+        labels: ["cost_center"]
+
+  - name: "Capacity Planning and Forecasting"
+    scenario_id: "l3-infra-mgmt-capacity-planning"
+    description: "Test capacity forecasting and planning"
+
+    resource_utilization_analysis:
+      - tests:
+          - name: "analyze_cpu_utilization"
+            service: "api-gateway"
+            metrics_30_days:
+              avg_cpu: 65
+              p95_cpu: 85
+              p99_cpu: 92
+            expected:
+              utilization_healthy: true
+              headroom: "15%"
+              no_immediate_scaling_needed: true
+
+          - name: "high_utilization_warning"
+            service: "database"
+            metrics_30_days:
+              avg_cpu: 88
+              p95_cpu: 95
+              p99_cpu: 98
+            expected:
+              utilization_warning: true
+              scaling_recommended: true
+              proactive_action_needed: true
+
+    capacity_forecasting:
+      - tests:
+          - name: "forecast_storage_needs"
+            current_storage: "500GB"
+            growth_rate: "10GB/week"
+            forecast_horizon: "6_months"
+            expected:
+              forecasted_storage: "760GB"
+              provisioning_recommended_at: "600GB"
+              lead_time_considered: "2_weeks"
+
+          - name: "forecast_compute_needs"
+            current_load: "1000_requests/s"
+            growth_trend: "15%_per_quarter"
+            forecast_horizon: "1_year"
+            expected:
+              forecasted_load: "1749_requests/s"
+              capacity_upgrade_needed: "Q3"
+              recommended_action: "plan_capacity_increase"
+
+    growth_planning:
+      - scenario: "prepare_for_customer_onboarding"
+        tests:
+          - name: "large_customer_onboarding"
+            new_customer_size: "10000_users"
+            current_capacity: "50000_users"
+            total_after_onboarding: "60000_users"
+            capacity_limit: "80000_users"
+            expected:
+              capacity_sufficient: true
+              headroom: "25%"
+              no_scaling_needed: true
+
+          - name: "capacity_insufficient"
+            new_customer_size: "50000_users"
+            current_capacity: "50000_users"
+            expected:
+              capacity_insufficient: true
+              scaling_required: true
+              scaling_timeline: "4_weeks"
+
+    seasonal_planning:
+      - tests:
+          - name: "prepare_for_peak_season"
+            seasonal_event: "year_end_compliance"
+            historical_increase: "3x_traffic"
+            current_capacity: "1000_rps"
+            expected:
+              forecasted_peak: "3000_rps"
+              scaling_plan_generated: true
+              scale_up_date: "2_weeks_before_peak"
+
+    monitoring:
+      - metric: "resource_utilization_ratio"
+        labels: ["resource_type", "service"]
+      - metric: "capacity_headroom_ratio"
+        labels: ["resource_type"]
+      - metric: "capacity_forecasts_accuracy"
+        labels: ["forecast_type"]
+
+  - name: "Multi-Cloud Resource Management"
+    scenario_id: "l3-infra-mgmt-multi-cloud"
+    description: "Test multi-cloud resource coordination"
+
+    cloud_provider_abstraction:
+      - tests:
+          - name: "provision_on_aws"
+            request: {provider: "aws", type: "compute", size: "medium"}
+            expected:
+              instance_type: "t3.medium"
+              provisioned_on_aws: true
+
+          - name: "provision_on_gcp"
+            request: {provider: "gcp", type: "compute", size: "medium"}
+            expected:
+              instance_type: "n1-standard-2"
+              provisioned_on_gcp: true
+
+          - name: "provision_on_azure"
+            request: {provider: "azure", type: "compute", size: "medium"}
+            expected:
+              instance_type: "Standard_D2s_v3"
+              provisioned_on_azure: true
+
+    cost_comparison:
+      - tests:
+          - name: "compare_cloud_costs"
+            workload: "web_application"
+            providers: ["aws", "gcp", "azure"]
+            expected:
+              costs_calculated_for_all: true
+              cheapest_provider: "identified"
+              recommendation: "based_on_cost_and_features"
+
+    workload_placement:
+      - tests:
+          - name: "place_latency_sensitive_workload"
+            workload: "api_gateway"
+            requirement: "low_latency_to_europe"
+            expected:
+              provider: "aws"
+              region: "eu-west-1"
+              latency_optimized: true
+
+          - name: "place_cost_sensitive_workload"
+            workload: "batch_processing"
+            requirement: "minimize_cost"
+            expected:
+              provider: "gcp"
+              spot_instances_used: true
+              cost_minimized: true
+
+    multi_region_coordination:
+      - tests:
+          - name: "deploy_across_regions"
+            regions: ["us-east-1", "eu-west-1", "ap-southeast-1"]
+            expected:
+              deployed_in_all_regions: true
+              cross_region_connectivity: true
+              data_replication_configured: true
+
+    monitoring:
+      - metric: "resources_by_cloud_provider"
+        labels: ["provider", "resource_type"]
+      - metric: "multi_cloud_cost_usd"
+        labels: ["provider"]
+      - metric: "cross_cloud_latency_ms"
+        labels: ["from_region", "to_region"]
+
+  - name: "Resource Health and Compliance"
+    scenario_id: "l3-infra-mgmt-health-compliance"
+    description: "Test resource health monitoring and compliance checks"
+
+    health_monitoring:
+      - tests:
+          - name: "detect_unhealthy_instance"
+            instance: "i-12345"
+            health_checks_failed: 3
+            expected:
+              instance_marked_unhealthy: true
+              traffic_removed: true
+              replacement_triggered: true
+
+          - name: "resource_expiry_tracking"
+            resource: "ssl_certificate"
+            expiry: "in_15_days"
+            threshold: "30_days"
+            expected:
+              expiry_warning: true
+              renewal_initiated: true
+
+    compliance_checks:
+      - tests:
+          - name: "encryption_at_rest"
+            resources: ["ebs_volumes", "rds_databases", "s3_buckets"]
+            expected:
+              all_encrypted: true
+              compliance: "passed"
+
+          - name: "encryption_missing"
+            resource: "ebs_vol_123"
+            encryption: false
+            expected:
+              compliance_failed: true
+              remediation_recommended: true
+              security_team_notified: true
+
+          - name: "public_access_check"
+            resource: "s3_bucket"
+            public_access: true
+            data_classification: "confidential"
+            expected:
+              compliance_violated: true
+              access_revoked: true
+              incident_logged: true
+
+    patch_management:
+      - tests:
+          - name: "detect_outdated_instances"
+            instance: "i-12345"
+            ami_age: "6_months"
+            threshold: "3_months"
+            expected:
+              outdated: true
+              patching_recommended: true
+              maintenance_scheduled: true
+
+    monitoring:
+      - metric: "resource_health_status"
+        labels: ["resource_type", "health"]
+      - metric: "compliance_violations_total"
+        labels: ["violation_type", "severity"]
+      - metric: "resources_requiring_patching"
+        labels: ["resource_type"]
+
+monitoring:
+  required_metrics:
+    - name: "infrastructure_management_health"
+      type: "gauge"
+      description: "Overall infrastructure management system health (0-1)"
+      labels: ["component"]
+
+    - name: "resources_provisioned_total"
+      type: "counter"
+      description: "Resources provisioned"
+      labels: ["resource_type", "status"]
+
+    - name: "autoscaling_events_total"
+      type: "counter"
+      description: "Autoscaling events"
+      labels: ["service", "direction"]
+
+    - name: "instance_count"
+      type: "gauge"
+      description: "Current instance count"
+      labels: ["service"]
+
+    - name: "infrastructure_cost_usd"
+      type: "gauge"
+      description: "Infrastructure costs in USD"
+      labels: ["resource_type", "cost_center"]
+
+    - name: "cost_optimization_savings_usd"
+      type: "counter"
+      description: "Cost savings from optimizations"
+      labels: ["optimization_type"]
+
+    - name: "resource_utilization_ratio"
+      type: "gauge"
+      description: "Resource utilization (0-1)"
+      labels: ["resource_type", "service"]
+
+    - name: "capacity_headroom_ratio"
+      type: "gauge"
+      description: "Available capacity headroom (0-1)"
+      labels: ["resource_type"]
+
+    - name: "budget_utilization_ratio"
+      type: "gauge"
+      description: "Budget utilization (0-1)"
+      labels: ["cost_center"]
+
+    - name: "compliance_violations_total"
+      type: "counter"
+      description: "Compliance violations"
+      labels: ["violation_type", "severity"]
+
+integration:
+  eventbus_events:
+    publishes:
+      - "infrastructure.resource.provisioned"
+      - "infrastructure.resource.terminated"
+      - "infrastructure.autoscaling.triggered"
+      - "infrastructure.cost.threshold_exceeded"
+      - "infrastructure.capacity.warning"
+      - "infrastructure.compliance.violated"
+
+    subscribes:
+      - "monitoring.metric.threshold_exceeded"
+      - "system.load.increased"
+      - "system.load.decreased"
+      - "governance.policy.updated"
+
+  dependencies:
+    - service: "infrastructure-coordinator"
+      purpose: "Resource provisioning orchestration"
+    - service: "service-discovery"
+      purpose: "Track provisioned resources"
+    - service: "observability-stack"
+      purpose: "Resource metrics and monitoring"
+    - service: "eventbus"
+      purpose: "Infrastructure event propagation"
+    - service: "cloud-providers"
+      purpose: "Actual resource provisioning"
+
+context_variables:
+  system_name: "Name of infrastructure management system"
+  cloud_providers: "Supported cloud providers (AWS, GCP, Azure)"
+  autoscaling_policies: "Autoscaling policy configurations"
+  cost_budgets: "Cost budget allocations"
+  capacity_thresholds: "Capacity warning thresholds"
+
+learning_integration:
+  collect_patterns:
+    - "optimal_instance_sizing"
+    - "effective_autoscaling_thresholds"
+    - "cost_optimization_opportunities"
+    - "capacity_planning_accuracy"
+
+  feedback_to_learning_system:
+    - "Refine autoscaling policies"
+    - "Improve cost optimization recommendations"
+    - "Enhance capacity forecasts"
+    - "Optimize resource allocation"
+
+  recommendations:
+    - "Suggest rightsizing opportunities"
+    - "Recommend reserved instance purchases"
+    - "Identify unused resources"
+    - "Propose capacity upgrades"

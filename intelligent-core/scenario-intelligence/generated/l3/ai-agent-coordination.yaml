@@ -1,0 +1,743 @@
+meta:
+  id: l3-orchestration-system-ai-agent-coordination
+  name: L3 Orchestration System Test Scenarios
+  level: 3
+  category: orchestration
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - AI Orchestration (system)
+  - Workflow Engine (system)
+  - Service Coordination (system)
+  - Task Scheduling (system)
+  source_item: ai-agent-coordination
+  generated_at: '2025-10-14T08:09:28.931413'
+description: 'Specialized L3 template for Orchestration and Coordination systems testing.
+
+
+  Orchestration systems coordinate complex multi-service workflows through:
+
+  - AI agent task delegation and coordination
+
+  - Workflow execution and state management
+
+  - Service choreography via event-driven patterns
+
+  - Task scheduling and priority management
+
+  - Resource allocation and load balancing
+
+  - Retry and compensation logic
+
+
+  This template generates comprehensive orchestration test scenarios that validate
+
+  coordination logic, state consistency, and workflow resilience.
+
+  '
+systems_involved:
+- ai-agent-coordination
+- EventBus
+- Service Discovery
+- PostgreSQL
+- AI Office
+- Temporal
+test_scenarios:
+- name: AI Agent Coordination
+  scenario_id: l3-orch-ai-coordination
+  description: Test AI agent task delegation and collaboration
+  task_delegation:
+  - scenario: simple_delegation
+    tests:
+    - name: delegate_single_task
+      coordinator: ai-orchestrator
+      task: analyze_risk
+      target_agent: risk-analyzer
+      expected:
+        task_delegated: true
+        agent_acknowledged: true
+        task_started: true
+        result_returned: true
+    - name: agent_unavailable
+      task: generate_report
+      target_agent: report-generator
+      agent_status: offline
+      expected:
+        delegation_failed: true
+        fallback_agent_selected: true
+        task_rerouted: true
+  - scenario: parallel_delegation
+    tests:
+    - name: fan_out_tasks
+      task: comprehensive_bia
+      subtasks:
+      - agent: data-collector
+        task: collect_data
+      - agent: dependency-mapper
+        task: map_dependencies
+      - agent: criticality-assessor
+        task: assess_criticality
+      expected:
+        all_tasks_delegated: true
+        tasks_execute_in_parallel: true
+        results_aggregated: true
+        total_time: max_subtask_time
+  - scenario: sequential_delegation
+    tests:
+    - name: pipeline_execution
+      workflow:
+      - agent: data-collector
+        task: collect
+        output: raw_data
+      - agent: data-validator
+        task: validate
+        input: raw_data
+        output: validated_data
+      - agent: analyzer
+        task: analyze
+        input: validated_data
+        output: analysis
+      expected:
+        sequential_execution: true
+        data_passed_between_agents: true
+        pipeline_completed: true
+  agent_collaboration:
+  - scenario: consensus_building
+    tests:
+    - name: multi_agent_consensus
+      task: risk_scoring
+      agents:
+      - agent: risk-analyzer-1
+        score: 0.75
+      - agent: risk-analyzer-2
+        score: 0.78
+      - agent: risk-analyzer-3
+        score: 0.72
+      consensus_method: weighted_average
+      expected:
+        consensus_score: 0.75
+        confidence: high
+        decision_made: true
+    - name: disagreement_resolution
+      task: mitigation_strategy
+      agents:
+      - agent: conservative
+        recommendation: full_backup
+      - agent: pragmatic
+        recommendation: partial_backup
+      conflict: true
+      expected:
+        escalation_triggered: true
+        human_review_requested: true
+        both_options_presented: true
+  dynamic_orchestration:
+  - scenario: adaptive_workflow
+    tests:
+    - name: workflow_branching
+      workflow_state: risk_assessed
+      risk_level: high
+      expected:
+        branch_taken: detailed_analysis
+        additional_agents_invoked:
+        - forensic-analyzer
+        - compliance-checker
+    - name: workflow_merging
+      parallel_branches:
+      - technical_analysis
+      - business_analysis
+      expected:
+        branches_completed: true
+        results_merged: true
+        next_stage_triggered: true
+  monitoring:
+  - metric: agent_tasks_delegated_total
+    labels:
+    - coordinator
+    - agent
+    - status
+  - metric: agent_collaboration_duration_seconds
+    labels:
+    - workflow_type
+  - metric: consensus_reached_total
+    labels:
+    - task_type
+- name: Workflow Execution and State Management
+  scenario_id: l3-orch-workflow-execution
+  description: Test workflow execution, state tracking, and persistence
+  workflow_lifecycle:
+  - phase: initiation
+    tests:
+    - name: start_workflow
+      workflow_type: bia_creation
+      input:
+        organization_id: org_123
+      expected:
+        workflow_started: true
+        workflow_id: generated
+        initial_state: data_collection
+        persistence: saved_to_db
+  - phase: execution
+    tests:
+    - name: state_transition
+      current_state: data_collection
+      event: data.collected
+      expected:
+        new_state: validation
+        transition_logged: true
+        event_published: workflow.state_changed
+    - name: invalid_state_transition
+      current_state: data_collection
+      event: workflow.complete
+      expected:
+        transition_rejected: true
+        error: invalid_state_transition
+        state_unchanged: true
+  - phase: persistence
+    tests:
+    - name: checkpoint_workflow_state
+      workflow_state: in_progress
+      checkpoint_data:
+        collected_data: '...'
+        progress: 60
+      expected:
+        checkpoint_saved: true
+        recoverable_on_failure: true
+    - name: resume_from_checkpoint
+      workflow_status: crashed
+      last_checkpoint: 60%_complete
+      expected:
+        workflow_resumed: true
+        no_duplicate_work: true
+        progress_continued_from: 60%
+  - phase: completion
+    tests:
+    - name: successful_completion
+      final_state: completed
+      output: bia_document
+      expected:
+        workflow_status: success
+        output_stored: true
+        cleanup_resources: true
+        event_published: workflow.completed
+    - name: workflow_failure
+      error: external_api_timeout
+      retry_count: 3
+      expected:
+        workflow_status: failed
+        error_logged: true
+        compensation_triggered: true
+        event_published: workflow.failed
+  long_running_workflows:
+  - scenario: temporal_workflow
+    tests:
+    - name: workflow_runs_for_days
+      workflow: annual_bcm_review
+      duration: 7_days
+      checkpoints: 15
+      expected:
+        workflow_persisted: true
+        survives_service_restarts: true
+        no_data_loss: true
+    - name: workflow_pause_resume
+      workflow: bia_creation
+      action: pause
+      pause_duration: 48_hours
+      expected:
+        workflow_paused: true
+        resources_released: true
+        resumable: true
+  parallel_workflow_execution:
+  - scenario: concurrent_workflows
+    tests:
+    - name: multiple_organizations
+      workflows: 50
+      expected:
+        all_workflows_isolated: true
+        no_resource_contention: true
+        consistent_performance: true
+  monitoring:
+  - metric: workflows_started_total
+    labels:
+    - workflow_type
+  - metric: workflows_completed_total
+    labels:
+    - workflow_type
+    - status
+  - metric: workflow_execution_duration_seconds
+    labels:
+    - workflow_type
+  - metric: workflow_state_transitions_total
+    labels:
+    - workflow_type
+    - from_state
+    - to_state
+- name: Service Choreography
+  scenario_id: l3-orch-choreography
+  description: Test event-driven service choreography
+  event_driven_flows:
+  - flow: document_approval_flow
+    events:
+    - event: document.submitted_for_approval
+      published_by: document-service
+      subscribers:
+      - notification-service
+      - approval-service
+      expected:
+        notifications_sent: true
+        approval_workflow_started: true
+    - event: document.approved
+      published_by: approval-service
+      subscribers:
+      - document-service
+      - audit-service
+      - notification-service
+      expected:
+        document_status_updated: true
+        audit_log_created: true
+        users_notified: true
+  - flow: incident_response_choreography
+    events:
+    - event: incident.detected
+      published_by: monitoring-service
+      expected:
+        incident_service_creates_ticket: true
+        notification_service_alerts_team: true
+        escalation_service_starts_timer: true
+    - event: incident.acknowledged
+      published_by: incident-service
+      expected:
+        escalation_timer_paused: true
+        responder_assigned: true
+    - event: incident.resolved
+      published_by: incident-service
+      expected:
+        monitoring_service_validates_resolution: true
+        learning_service_captures_patterns: true
+        stakeholders_notified: true
+  saga_pattern:
+  - scenario: distributed_transaction
+    saga: bia_creation_with_payment
+    steps:
+    - step: reserve_bia_slot
+      service: bia-service
+      compensation: release_bia_slot
+    - step: charge_customer
+      service: billing-service
+      compensation: refund_customer
+    - step: create_bia_document
+      service: document-service
+      compensation: delete_bia_document
+    tests:
+    - name: successful_saga
+      all_steps_succeed: true
+      expected:
+        saga_completed: true
+        no_compensations_needed: true
+    - name: failed_step_triggers_compensations
+      failing_step: charge_customer
+      expected:
+        compensation_chain_triggered: true
+        compensations:
+        - release_bia_slot
+        saga_rolled_back: true
+  event_ordering:
+  - scenario: ordered_events
+    tests:
+    - name: ensure_event_order
+      events:
+      - sequence: 1
+        event: workflow.started
+      - sequence: 2
+        event: step1.completed
+      - sequence: 3
+        event: step2.completed
+      expected:
+        events_processed_in_order: true
+        no_race_conditions: true
+  monitoring:
+  - metric: choreography_events_total
+    labels:
+    - event_type
+  - metric: saga_executions_total
+    labels:
+    - saga_type
+    - status
+  - metric: compensation_invocations_total
+    labels:
+    - saga_type
+    - step
+- name: Task Scheduling and Priority Management
+  scenario_id: l3-orch-scheduling
+  description: Test task scheduling, prioritization, and queue management
+  scheduling_strategies:
+  - strategy: priority_queue
+    tests:
+    - name: prioritize_critical_tasks
+      tasks:
+      - id: task1
+        priority: low
+      - id: task2
+        priority: critical
+      - id: task3
+        priority: high
+      expected:
+        execution_order:
+        - task2
+        - task3
+        - task1
+    - name: starvation_prevention
+      tasks:
+      - id: low_prio
+        priority: low
+        wait_time: 2h
+      expected:
+        priority_boosted: true
+        task_executed_eventually: true
+  - strategy: fair_scheduling
+    tests:
+    - name: round_robin_across_organizations
+      tasks:
+      - org: org_a
+        count: 10
+      - org: org_b
+        count: 5
+      expected:
+        fair_distribution: true
+        no_org_monopolizes_resources: true
+  - strategy: rate_limiting
+    tests:
+    - name: limit_tasks_per_organization
+      org: org_a
+      limit: 10_tasks_per_minute
+      submitted: 25
+      expected:
+        accepted: 10
+        rate_limited: 15
+        retry_after: 60s
+  scheduled_tasks:
+  - scenario: cron_jobs
+    tests:
+    - name: daily_backup
+      schedule: 0 2 * * *
+      expected:
+        executes_at_2am: true
+        executes_daily: true
+    - name: missed_schedule_handling
+      schedule: 0 2 * * *
+      system_down_at: 02:00
+      system_up_at: 03:00
+      expected:
+        missed_execution_detected: true
+        executes_immediately_or_skips: true
+  - scenario: delayed_tasks
+    tests:
+    - name: execute_after_delay
+      task: send_reminder
+      delay: 24h
+      expected:
+        task_scheduled: true
+        executes_after_24h: true
+  queue_management:
+  - scenario: queue_overflow
+    tests:
+    - name: handle_queue_full
+      queue_capacity: 1000
+      incoming_tasks: 1500
+      expected:
+        oldest_tasks_executed: true
+        new_tasks_rejected_or_queued_elsewhere: true
+        alert_triggered: true
+  - scenario: dead_letter_queue
+    tests:
+    - name: failed_task_to_dlq
+      task: failing_task
+      max_retries: 3
+      failures: 3
+      expected:
+        moved_to_dlq: true
+        manual_intervention_required: true
+        original_queue_unblocked: true
+  monitoring:
+  - metric: scheduled_tasks_total
+    labels:
+    - schedule_type
+    - status
+  - metric: task_queue_depth
+    labels:
+    - queue_name
+    - priority
+  - metric: task_wait_time_seconds
+    labels:
+    - priority
+  - metric: rate_limited_tasks_total
+    labels:
+    - organization
+- name: Resource Allocation and Load Balancing
+  scenario_id: l3-orch-resource-allocation
+  description: Test resource allocation and load distribution
+  resource_allocation:
+  - scenario: worker_pool_management
+    tests:
+    - name: allocate_workers
+      available_workers: 10
+      task_demand: 15
+      expected:
+        workers_allocated: 10
+        tasks_queued: 5
+        workers_utilized_efficiently: true
+    - name: autoscaling
+      current_workers: 5
+      task_demand: 20
+      autoscale_threshold: 80%_utilization
+      expected:
+        workers_scaled_up_to: 10
+        new_workers_available_within: 2m
+  - scenario: resource_limits
+    tests:
+    - name: per_organization_limits
+      org: org_a
+      limit: 5_concurrent_workflows
+      requested: 8
+      expected:
+        allocated: 5
+        queued: 3
+        fair_sharing_enforced: true
+  load_balancing:
+  - strategy: round_robin
+    tests:
+    - name: distribute_evenly
+      workers: 3
+      tasks: 9
+      expected:
+        worker1_tasks: 3
+        worker2_tasks: 3
+        worker3_tasks: 3
+  - strategy: least_connections
+    tests:
+    - name: route_to_least_busy
+      workers:
+      - id: worker1
+        active_tasks: 5
+      - id: worker2
+        active_tasks: 2
+      - id: worker3
+        active_tasks: 7
+      new_task: incoming
+      expected:
+        assigned_to: worker2
+  - strategy: weighted_distribution
+    tests:
+    - name: distribute_by_capacity
+      workers:
+      - id: worker1
+        capacity: 10
+        weight: 2
+      - id: worker2
+        capacity: 5
+        weight: 1
+      tasks: 30
+      expected:
+        worker1_receives: 20
+        worker2_receives: 10
+  monitoring:
+  - metric: workers_active
+    labels:
+    - worker_type
+  - metric: worker_utilization_ratio
+    labels:
+    - worker_id
+  - metric: resource_allocation_total
+    labels:
+    - resource_type
+    - organization
+- name: Retry and Compensation Logic
+  scenario_id: l3-orch-retry-compensation
+  description: Test retry strategies and compensation workflows
+  retry_strategies:
+  - strategy: exponential_backoff
+    tests:
+    - name: transient_failure_recovery
+      failures:
+      - 1
+      - 2
+      backoff:
+        initial: 1s
+        multiplier: 2
+        max: 30s
+      expected:
+        total_attempts: 3
+        delays:
+        - 1s
+        - 2s
+        final_result: success
+  - strategy: circuit_breaker_integration
+    tests:
+    - name: stop_retrying_on_circuit_open
+      service: external_api
+      circuit_state: open
+      expected:
+        retry_aborted: true
+        fast_fail: true
+        compensation_triggered: true
+  compensation_workflows:
+  - scenario: undo_partial_work
+    tests:
+    - name: rollback_on_failure
+      completed_steps:
+      - step: create_bia
+        compensation: delete_bia
+      - step: allocate_resources
+        compensation: release_resources
+      failed_step: send_notification
+      expected:
+        compensations_executed:
+        - release_resources
+        - delete_bia
+        system_restored_to_initial_state: true
+  - scenario: idempotent_compensation
+    tests:
+    - name: safe_to_retry_compensation
+      compensation: delete_document
+      retries: 3
+      expected:
+        idempotent: true
+        no_side_effects_from_retries: true
+  dead_letter_handling:
+  - scenario: unrecoverable_failure
+    tests:
+    - name: move_to_dlq_after_max_retries
+      max_retries: 5
+      failures: 6
+      expected:
+        task_in_dlq: true
+        alert_sent: true
+        manual_investigation_required: true
+  monitoring:
+  - metric: retries_total
+    labels:
+    - task_type
+    - attempt
+  - metric: compensations_executed_total
+    labels:
+    - compensation_type
+  - metric: dead_letter_queue_depth
+    labels:
+    - queue_name
+monitoring:
+  required_metrics:
+  - name: orchestration_system_health
+    type: gauge
+    description: Overall orchestration system health (0-1)
+    labels:
+    - component
+  - name: agent_tasks_delegated_total
+    type: counter
+    description: Tasks delegated to AI agents
+    labels:
+    - coordinator
+    - agent
+    - status
+  - name: workflows_started_total
+    type: counter
+    description: Workflows started
+    labels:
+    - workflow_type
+  - name: workflows_completed_total
+    type: counter
+    description: Workflows completed
+    labels:
+    - workflow_type
+    - status
+  - name: workflow_execution_duration_seconds
+    type: histogram
+    description: Workflow execution duration
+    labels:
+    - workflow_type
+  - name: choreography_events_total
+    type: counter
+    description: Choreography events processed
+    labels:
+    - event_type
+  - name: saga_executions_total
+    type: counter
+    description: Saga executions
+    labels:
+    - saga_type
+    - status
+  - name: scheduled_tasks_total
+    type: counter
+    description: Scheduled tasks executed
+    labels:
+    - schedule_type
+    - status
+  - name: task_queue_depth
+    type: gauge
+    description: Current task queue depth
+    labels:
+    - queue_name
+    - priority
+  - name: workers_active
+    type: gauge
+    description: Active workers
+    labels:
+    - worker_type
+  - name: retries_total
+    type: counter
+    description: Task retries
+    labels:
+    - task_type
+    - attempt
+  - name: compensations_executed_total
+    type: counter
+    description: Compensation workflows executed
+    labels:
+    - compensation_type
+integration:
+  eventbus_events:
+    publishes:
+    - orchestration.workflow.started
+    - orchestration.workflow.completed
+    - orchestration.workflow.failed
+    - orchestration.task.delegated
+    - orchestration.saga.started
+    - orchestration.saga.completed
+    - orchestration.compensation.triggered
+    subscribes:
+    - '*.task.completed'
+    - '*.service.failed'
+    - system.resource.available
+    - governance.workflow.approved
+  dependencies:
+  - service: eventbus
+    purpose: Event-driven choreography
+  - service: service-discovery
+    purpose: Service location for delegation
+  - service: postgresql
+    purpose: Workflow state persistence
+  - service: temporal
+    purpose: Long-running workflow orchestration
+  - service: ai-office
+    purpose: AI agent coordination
+context_variables:
+  system_name: Name of orchestration system (e.g., 'ai-orchestrator')
+  workflow_types: Supported workflow types
+  agent_types: AI agent types available
+  scheduling_strategies: Task scheduling strategies
+  resource_pools: Resource pool configurations
+learning_integration:
+  collect_patterns:
+  - successful_coordination_patterns
+  - optimal_resource_allocation
+  - effective_retry_strategies
+  - efficient_workflow_paths
+  feedback_to_learning_system:
+  - Optimize task delegation logic
+  - Improve workflow branching decisions
+  - Refine retry backoff parameters
+  - Enhance resource allocation algorithms
+  recommendations:
+  - Suggest workflow optimizations
+  - Recommend better task priorities
+  - Identify bottlenecks in coordination
+  - Propose alternative orchestration strategies

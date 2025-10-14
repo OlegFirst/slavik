@@ -1,0 +1,634 @@
+meta:
+  id: l3-frontend-system-ui-component-library
+  name: L3 Frontend System Test Scenarios
+  level: 3
+  category: frontend
+  version: 1.0.0
+  created: '2025-10-13'
+  template_type: specialized
+  applicable_to:
+  - User Interface (system)
+  - Admin Control Center (system)
+  - Client Applications (system)
+  source_item: ui-component-library
+  generated_at: '2025-10-14T08:09:29.062547'
+description: 'Specialized L3 template for Frontend and User Interface systems testing.
+
+
+  Frontend systems provide user-facing experiences through:
+
+  - Responsive web interfaces
+
+  - Interactive dashboards and visualizations
+
+  - Form validation and user input handling
+
+  - Real-time updates via WebSocket
+
+  - Accessibility compliance (WCAG)
+
+  - Cross-browser compatibility
+
+
+  This template generates comprehensive frontend test scenarios that validate
+
+  UI functionality, user experience, accessibility, and visual consistency.
+
+  '
+systems_involved:
+- ui-component-library
+- API Gateway
+- WebSocket Server
+- Authentication Service
+test_scenarios:
+- name: Component Rendering and Interaction
+  scenario_id: l3-fe-component-testing
+  description: Test React component rendering and user interactions
+  component_rendering:
+  - component: BIAForm
+    tests:
+    - name: render_form_correctly
+      props:
+        organization_id: org_123
+        mode: create
+      expected:
+        rendered: true
+        all_fields_visible: true
+        validation_rules_applied: true
+    - name: conditional_rendering
+      props:
+        criticality: high
+      expected:
+        additional_fields_shown: true
+        field: mtpd_justification
+  - component: DataTable
+    tests:
+    - name: render_table_with_data
+      data:
+        rows: 50
+        columns: 8
+      expected:
+        table_rendered: true
+        pagination_working: true
+        sorting_enabled: true
+        filtering_enabled: true
+    - name: empty_state
+      data:
+        rows: 0
+      expected:
+        empty_state_message: No data available
+        cta_button_visible: true
+  user_interactions:
+  - interaction: form_submission
+    tests:
+    - name: submit_valid_form
+      form_data:
+        name: Test BIA
+        scope: IT Department
+      expected:
+        validation_passed: true
+        api_called: true
+        success_message_shown: true
+        form_cleared: true
+    - name: submit_invalid_form
+      form_data:
+        name: ''
+        scope: IT Department
+      expected:
+        validation_failed: true
+        error_message: Name is required
+        form_not_submitted: true
+  - interaction: button_click
+    tests:
+    - name: loading_state
+      button: save
+      api_latency: 2s
+      expected:
+        button_disabled: true
+        loading_spinner_visible: true
+        button_enabled_after_response: true
+  - interaction: modal_dialog
+    tests:
+    - name: open_modal
+      trigger: delete_button
+      expected:
+        modal_visible: true
+        backdrop_visible: true
+        focus_trapped: true
+    - name: close_modal
+      action: cancel
+      expected:
+        modal_closed: true
+        no_side_effects: true
+  state_management:
+  - scenario: redux_state
+    tests:
+    - name: dispatch_action
+      action: CREATE_BIA
+      payload:
+        name: Test BIA
+      expected:
+        state_updated: true
+        ui_reflects_state: true
+    - name: async_action
+      action: FETCH_BIAS
+      expected:
+        loading_state_set: true
+        data_fetched: true
+        loading_state_cleared: true
+  monitoring:
+  - metric: component_render_duration_ms
+    labels:
+    - component_name
+  - metric: user_interactions_total
+    labels:
+    - interaction_type
+  - metric: form_validation_errors_total
+    labels:
+    - field_name
+    - error_type
+- name: Responsive Design and Cross-Browser
+  scenario_id: l3-fe-responsive-design
+  description: Test responsive layouts and browser compatibility
+  responsive_breakpoints:
+  - breakpoint: mobile
+    viewport: 375x667
+    tests:
+    - name: mobile_layout
+      expected:
+        sidebar_collapsed: true
+        navigation_hamburger: true
+        single_column_layout: true
+        touch_targets: '> 44px'
+  - breakpoint: tablet
+    viewport: 768x1024
+    tests:
+    - name: tablet_layout
+      expected:
+        sidebar_visible: true
+        two_column_layout: true
+        touch_optimized: true
+  - breakpoint: desktop
+    viewport: 1920x1080
+    tests:
+    - name: desktop_layout
+      expected:
+        full_sidebar: true
+        multi_column_layout: true
+        all_features_visible: true
+  cross_browser_testing:
+  - browsers:
+    - chromium
+    - firefox
+    - webkit
+    tests:
+    - name: consistent_rendering
+      page: dashboard
+      expected:
+        visual_consistency: true
+        functionality_identical: true
+        no_browser_specific_bugs: true
+    - name: css_compatibility
+      features:
+      - flexbox
+      - grid
+      - css_variables
+      expected:
+        all_features_supported: true
+        fallbacks_not_needed: true
+  viewport_testing:
+  - scenario: orientation_change
+    tests:
+    - name: portrait_to_landscape
+      device: tablet
+      expected:
+        layout_adjusted: true
+        content_remains_accessible: true
+        no_overflow: true
+  monitoring:
+  - metric: viewport_distribution
+    labels:
+    - breakpoint
+  - metric: browser_usage
+    labels:
+    - browser
+    - version
+- name: Accessibility Compliance
+  scenario_id: l3-fe-accessibility
+  description: Test WCAG 2.1 Level AA compliance
+  keyboard_navigation:
+  - tests:
+    - name: tab_navigation
+      expected:
+        all_interactive_elements_reachable: true
+        tab_order_logical: true
+        focus_visible: true
+    - name: skip_to_content
+      expected:
+        skip_link_present: true
+        skip_link_functional: true
+    - name: keyboard_shortcuts
+      shortcuts:
+      - Ctrl+S
+      - Esc
+      - Enter
+      expected:
+        all_shortcuts_working: true
+        no_trap_focus: true
+  screen_reader_support:
+  - tool: axe-core
+    tests:
+    - name: semantic_html
+      expected:
+        proper_heading_hierarchy: true
+        landmarks_present: true
+        aria_labels_correct: true
+    - name: form_labels
+      expected:
+        all_inputs_labeled: true
+        error_messages_associated: true
+        required_fields_indicated: true
+    - name: dynamic_content
+      action: show_alert
+      expected:
+        aria_live_region_updated: true
+        screen_reader_announces: true
+  color_contrast:
+  - wcag_level: AA
+    tests:
+    - name: text_contrast
+      expected:
+        normal_text_ratio: '> 4.5:1'
+        large_text_ratio: '> 3:1'
+        all_text_passes: true
+    - name: interactive_elements
+      expected:
+        button_contrast: '> 3:1'
+        link_contrast: '> 4.5:1'
+  focus_management:
+  - scenario: modal_dialog
+    tests:
+    - name: focus_trapped
+      expected:
+        focus_remains_in_modal: true
+        tab_wraps_around: true
+        escape_closes_modal: true
+    - name: focus_restored
+      action: close_modal
+      expected:
+        focus_returns_to_trigger: true
+  monitoring:
+  - metric: accessibility_violations_total
+    labels:
+    - violation_type
+    - severity
+  - metric: wcag_compliance_score
+    labels:
+    - page
+- name: Real-Time Updates and WebSocket
+  scenario_id: l3-fe-realtime-updates
+  description: Test real-time data synchronization
+  websocket_connection:
+  - tests:
+    - name: establish_connection
+      expected:
+        connection_established: true
+        authentication_successful: true
+        subscriptions_active: true
+    - name: connection_lost
+      scenario: network_interruption
+      expected:
+        reconnection_attempted: true
+        exponential_backoff: true
+        connection_restored: true
+        no_data_loss: true
+  real_time_updates:
+  - scenario: workflow_status_update
+    tests:
+    - name: receive_update
+      event: workflow.status_changed
+      payload:
+        workflow_id: wf_123
+        status: completed
+      expected:
+        ui_updated_immediately: true
+        notification_shown: true
+        no_page_refresh_needed: true
+  - scenario: collaborative_editing
+    tests:
+    - name: multiple_users_editing
+      users: 3
+      document: bia_document
+      expected:
+        changes_synced_in_realtime: true
+        no_conflicts: true
+        all_users_see_same_state: true
+  optimistic_updates:
+  - scenario: form_submission
+    tests:
+    - name: optimistic_ui_update
+      action: create_bia
+      expected:
+        ui_updated_immediately: true
+        api_call_in_background: true
+        rollback_on_failure: true
+  monitoring:
+  - metric: websocket_connections_active
+  - metric: websocket_messages_received_total
+    labels:
+    - event_type
+  - metric: realtime_update_latency_ms
+- name: Performance and User Experience
+  scenario_id: l3-fe-performance
+  description: Test frontend performance metrics
+  load_performance:
+  - metrics:
+    - name: first_contentful_paint
+      threshold: < 1.8s
+      expected:
+        pass: true
+    - name: largest_contentful_paint
+      threshold: < 2.5s
+      expected:
+        pass: true
+    - name: time_to_interactive
+      threshold: < 3.8s
+      expected:
+        pass: true
+    - name: cumulative_layout_shift
+      threshold: < 0.1
+      expected:
+        pass: true
+  runtime_performance:
+  - scenario: large_data_table
+    tests:
+    - name: render_1000_rows
+      rows: 1000
+      expected:
+        virtualization_enabled: true
+        smooth_scrolling: true
+        fps: '> 60'
+    - name: filter_large_dataset
+      rows: 10000
+      filter_latency: < 100ms
+      expected:
+        debounced_search: true
+        results_filtered_quickly: true
+        ui_remains_responsive: true
+  bundle_optimization:
+  - tests:
+    - name: bundle_size
+      main_bundle: < 250KB gzipped
+      expected:
+        pass: true
+    - name: code_splitting
+      expected:
+        lazy_loaded_routes: true
+        vendor_bundle_separate: true
+        initial_load_optimized: true
+  caching_strategy:
+  - tests:
+    - name: static_assets_cached
+      assets:
+      - js
+      - css
+      - images
+      expected:
+        cache_headers_set: true
+        cache_duration: 1_year
+    - name: api_response_caching
+      endpoint: /api/organizations
+      expected:
+        cached_in_browser: true
+        cache_invalidated_on_update: true
+  monitoring:
+  - metric: page_load_time_seconds
+    labels:
+    - page
+  - metric: bundle_size_bytes
+    labels:
+    - bundle_name
+  - metric: core_web_vitals
+    labels:
+    - metric_name
+- name: Error Handling and User Feedback
+  scenario_id: l3-fe-error-handling
+  description: Test error handling and user notifications
+  api_error_handling:
+  - tests:
+    - name: network_error
+      api_response: network_failure
+      expected:
+        error_message: Unable to connect. Please check your internet.
+        retry_button_visible: true
+        offline_mode_suggested: true
+    - name: validation_error
+      api_response:
+        status: 400
+        errors:
+        - field: email
+          message: Invalid email
+      expected:
+        field_error_displayed: true
+        field_highlighted: true
+        focus_moved_to_field: true
+    - name: unauthorized
+      api_response:
+        status: 401
+      expected:
+        redirected_to_login: true
+        return_url_preserved: true
+    - name: server_error
+      api_response:
+        status: 500
+      expected:
+        generic_error_message: true
+        error_id_shown: true
+        support_contact_shown: true
+  user_notifications:
+  - tests:
+    - name: success_toast
+      action: save_bia
+      expected:
+        toast_visible: true
+        toast_dismissible: true
+        auto_dismiss_after: 3s
+    - name: error_banner
+      error: critical_system_error
+      expected:
+        banner_persistent: true
+        banner_dismissible: false
+        action_button_present: true
+    - name: loading_indicators
+      api_call: fetch_large_dataset
+      expected:
+        skeleton_screen_shown: true
+        progress_indicator_visible: true
+        cancel_option_available: true
+  graceful_degradation:
+  - scenario: feature_unavailable
+    tests:
+    - name: service_down
+      service: recommendation_engine
+      expected:
+        feature_disabled: true
+        explanation_shown: true
+        core_functionality_unaffected: true
+  monitoring:
+  - metric: frontend_errors_total
+    labels:
+    - error_type
+    - severity
+  - metric: user_notifications_shown_total
+    labels:
+    - notification_type
+- name: Security and Data Protection
+  scenario_id: l3-fe-security
+  description: Test frontend security measures
+  authentication_flow:
+  - tests:
+    - name: login_flow
+      credentials:
+        username: user
+        password: pass
+      expected:
+        auth_token_stored_securely: true
+        token_in_httponly_cookie: true
+        redirect_to_dashboard: true
+    - name: token_refresh
+      token_expiry: in_5_minutes
+      expected:
+        token_refreshed_automatically: true
+        no_user_interruption: true
+    - name: logout
+      expected:
+        tokens_cleared: true
+        redirected_to_login: true
+        session_terminated: true
+  input_sanitization:
+  - tests:
+    - name: xss_prevention
+      input: <script>alert('xss')</script>
+      expected:
+        script_escaped: true
+        script_not_executed: true
+    - name: sql_injection_prevention
+      input: '''; DROP TABLE users; --'
+      expected:
+        input_sanitized: true
+        sent_to_backend_safely: true
+  csrf_protection:
+  - tests:
+    - name: csrf_token
+      form_submission: true
+      expected:
+        csrf_token_included: true
+        token_validated_by_backend: true
+  data_exposure:
+  - tests:
+    - name: no_sensitive_data_in_console
+      expected:
+        passwords_not_logged: true
+        tokens_not_logged: true
+        pii_not_logged: true
+    - name: no_sensitive_data_in_url
+      expected:
+        tokens_not_in_query_params: true
+        pii_not_in_url: true
+  monitoring:
+  - metric: authentication_attempts_total
+    labels:
+    - result
+  - metric: security_violations_detected_total
+    labels:
+    - violation_type
+monitoring:
+  required_metrics:
+  - name: frontend_system_health
+    type: gauge
+    description: Overall frontend system health (0-1)
+    labels:
+    - component
+  - name: page_load_time_seconds
+    type: histogram
+    description: Page load time
+    labels:
+    - page
+  - name: user_interactions_total
+    type: counter
+    description: User interactions
+    labels:
+    - interaction_type
+  - name: frontend_errors_total
+    type: counter
+    description: Frontend errors
+    labels:
+    - error_type
+    - severity
+  - name: accessibility_violations_total
+    type: counter
+    description: Accessibility violations
+    labels:
+    - violation_type
+    - severity
+  - name: websocket_connections_active
+    type: gauge
+    description: Active WebSocket connections
+  - name: core_web_vitals
+    type: gauge
+    description: Core Web Vitals metrics
+    labels:
+    - metric_name
+  - name: bundle_size_bytes
+    type: gauge
+    description: JavaScript bundle size
+    labels:
+    - bundle_name
+  - name: component_render_duration_ms
+    type: histogram
+    description: Component render duration
+    labels:
+    - component_name
+integration:
+  eventbus_events:
+    publishes:
+    - frontend.user.logged_in
+    - frontend.user.logged_out
+    - frontend.error.occurred
+    - frontend.interaction.tracked
+    subscribes:
+    - workflow.status_changed
+    - notification.created
+    - system.maintenance_mode
+    - user.session_expired
+  dependencies:
+  - service: api-gateway
+    purpose: Backend API calls
+  - service: websocket-server
+    purpose: Real-time updates
+  - service: authentication-service
+    purpose: User authentication
+  - service: cdn
+    purpose: Static asset delivery
+context_variables:
+  system_name: Name of frontend system (e.g., 'admin-control-center')
+  framework: Frontend framework (React, Vue, etc.)
+  ui_library: UI component library (MUI, Ant Design, etc.)
+  supported_browsers: Browser compatibility targets
+  responsive_breakpoints: Responsive design breakpoints
+learning_integration:
+  collect_patterns:
+  - common_user_interaction_patterns
+  - frequent_ui_errors
+  - performance_bottlenecks
+  - accessibility_issues
+  feedback_to_learning_system:
+  - Optimize component rendering
+  - Improve error messages
+  - Enhance user experience
+  - Fix accessibility issues
+  recommendations:
+  - Suggest UI improvements
+  - Recommend performance optimizations
+  - Identify usability issues
+  - Propose accessibility enhancements

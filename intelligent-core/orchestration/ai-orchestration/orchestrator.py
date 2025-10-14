@@ -17,18 +17,24 @@ import logging
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 
-from intelligent_core.ai_orchestration.models import (
+from .models import (
     Decision, Strategy, Priority, FullContext, ActionType,
     PriorityLevel, SafetyResult, SafetyConcern
 )
-from intelligent_core.ai_orchestration.decision_center.context_aggregator import ContextAggregator
-from intelligent_core.ai_orchestration.decision_center.priority_engine import PriorityEngine
-from intelligent_core.ai_orchestration.decision_center.strategy_selector import StrategySelector
-from intelligent_core.ai_orchestration.decision_center.delegation_manager import DelegationManager
-from intelligent_core.ai_orchestration.memory.distributed_memory import DistributedMemory
-from intelligent_core.ai_orchestration.safety.safety_monitor import SafetyMonitor
-from intelligent_core.ai_orchestration.evolution.evolution_engine import EvolutionEngine
-from intelligent_core.ai_orchestration.service_registry import ServiceRegistry
+from .decision_center.context_aggregator import ContextAggregator
+from .decision_center.priority_engine import PriorityEngine
+from .decision_center.strategy_selector import StrategySelector
+from .decision_center.delegation_manager import DelegationManager
+from .memory.distributed_memory import DistributedMemory
+from .safety.safety_monitor import SafetyMonitor
+from .evolution.evolution_engine import EvolutionEngine
+from .service_registry import ServiceRegistry
+from .crisis_coordinator import CrisisCoordinator
+
+# Infrastructure imports - need sys.path for infrastructure module
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 from infrastructure.eventbus import create_eventbus, Event, EventPriority
 
 logger = logging.getLogger(__name__)
@@ -99,16 +105,20 @@ class AIOrchestrator:
         # Infrastructure
         self.event_bus = create_eventbus(event_bus_backend)
         self.service_registry = ServiceRegistry()
+        self.crisis_coordinator = None  # Will be initialized in initialize()
 
         # State
         self.initialized = False
+        self.pdca_engine = None  # Will be initialized in initialize()
+        self.ace_engine = None  # ACE Engine for evolving context playbooks
         self.stats = {
             'decisions_made': 0,
             'auto_resolved': 0,
             'delegated': 0,
             'escalated_to_human': 0,
             'safety_blocks': 0,
-            'evolution_cycles': 0
+            'evolution_cycles': 0,
+            'ace_tasks': 0  # NEW: Track ACE-enhanced tasks
         }
 
         logger.info("AI Orchestrator created")
@@ -162,6 +172,15 @@ class AIOrchestrator:
 
             # Subscribe to platform events
             await self._subscribe_to_events()
+
+            # Initialize PDCA for continuous improvement
+            await self._initialize_pdca()
+
+            # Initialize Crisis Coordinator
+            await self._initialize_crisis_coordinator()
+
+            # Initialize ACE Engine
+            await self._initialize_ace_engine()
 
             self.initialized = True
             logger.info("🚀 AI Orchestrator initialized successfully")
@@ -218,6 +237,17 @@ class AIOrchestrator:
             # Step 2: Assess priority
             priority = await self.priority_engine.assess_priority(context)
             logger.info(f"Priority: {priority.level.name} (score: {priority.score:.1f})")
+
+            # Step 2.5: Check for crisis situation
+            if self.crisis_coordinator and priority.level.value >= 3:  # HIGH or CRITICAL
+                crisis_id = await self.crisis_coordinator.detect_crisis(
+                    situation=situation,
+                    source='orchestrator'
+                )
+                if crisis_id:
+                    logger.warning(f"🚨 Crisis detected: {crisis_id}")
+                    # Crisis will be handled by crisis coordinator
+                    # Continue with normal decision-making, but track crisis
 
             # Step 3: Select strategy
             strategies = await self.strategy_selector.select_strategies(context, priority)
@@ -375,20 +405,28 @@ class AIOrchestrator:
     async def _register_platform_services(self) -> None:
         """Register all platform services with the service registry."""
         services = [
+            # Core BCM Services (existing)
             ('bia', 'http://localhost:8012', '/health'),
             ('risk', 'http://localhost:8040', '/health'),
             ('planning', 'http://localhost:8011', '/health'),
             ('compliance', 'http://localhost:8014', '/health'),
             ('governance', 'http://localhost:8013', '/health'),
+            # Additional Services (NEW - critical for crisis coordination)
+            ('documents', 'http://localhost:8024', '/health'),
+            ('learning', 'http://localhost:8021', '/health'),
+            ('response', 'http://localhost:8041', '/health'),  # CRITICAL for crisis!
+            ('validation', 'http://localhost:8022', '/health'),
+            # Note: exercises-service not found - may be combined with validation
         ]
 
         for name, url, health_endpoint in services:
             try:
                 await self.service_registry.register_service(name, url, health_endpoint)
+                logger.info(f"✅ Registered service '{name}' at {url}")
             except Exception as e:
                 logger.warning(f"Failed to register service '{name}': {e}")
 
-        logger.info("Platform services registered")
+        logger.info(f"✅ Platform services registration complete: {len(services)} services")
 
     async def _subscribe_to_events(self) -> None:
         """Subscribe to relevant platform events."""
@@ -407,6 +445,56 @@ class AIOrchestrator:
         )
 
         logger.info("Subscribed to platform events")
+
+    async def _initialize_pdca(self) -> None:
+        """Initialize PDCA Rules Engine for continuous improvement."""
+        try:
+            from workflow_intelligence.enable_pdca import enable_pdca_for_platform_eventbus
+
+            logger.info("🔄 Initializing PDCA Rules Engine...")
+
+            # Enable PDCA with platform EventBus
+            pdca_engine = await enable_pdca_for_platform_eventbus(
+                event_bus=self.event_bus,
+                tenant_id='default-tenant'
+            )
+
+            # Store reference
+            self.pdca_engine = pdca_engine
+
+            logger.info("✅ PDCA Rules Engine initialized and connected to EventBus")
+            logger.info("   - Plan-Do-Check-Act cycle activated")
+            logger.info("   - Continuous improvement enabled")
+            logger.info("   - Learning from workflow outcomes")
+
+        except Exception as e:
+            logger.warning(f"⚠️ PDCA initialization failed (non-critical): {e}")
+            logger.warning("   Orchestrator will continue without PDCA")
+            self.pdca_engine = None
+
+    async def _initialize_crisis_coordinator(self) -> None:
+        """Initialize Crisis Coordinator for crisis response."""
+        try:
+            logger.info("🔄 Initializing Crisis Coordinator...")
+
+            # Create Crisis Coordinator
+            self.crisis_coordinator = CrisisCoordinator(
+                service_registry=self.service_registry,
+                event_bus=self.event_bus
+            )
+
+            # Initialize coordinator
+            await self.crisis_coordinator.initialize()
+
+            logger.info("✅ Crisis Coordinator initialized")
+            logger.info("   - Crisis detection enabled")
+            logger.info("   - Multi-service coordination ready")
+            logger.info("   - BC plan activation ready")
+
+        except Exception as e:
+            logger.warning(f"⚠️ Crisis Coordinator initialization failed (non-critical): {e}")
+            logger.warning("   Orchestrator will continue without crisis coordination")
+            self.crisis_coordinator = None
 
     async def _handle_workflow_event(self, event: Event) -> None:
         """Handle workflow-related events."""
@@ -439,6 +527,11 @@ class AIOrchestrator:
             # Check if strategy suggests delegation
             if 'delegate' in strategy.action.lower():
                 return ActionType.DELEGATE
+
+            # Delegate expert-level tasks to AI Experts
+            if self._should_delegate_to_experts(strategy):
+                return ActionType.DELEGATE
+
             return ActionType.AUTO_RESOLVE
 
         # Medium confidence = delegate to specialist
@@ -447,6 +540,45 @@ class AIOrchestrator:
 
         # Default: wait and monitor
         return ActionType.WAIT_AND_MONITOR
+
+    def _should_delegate_to_experts(self, strategy: Strategy) -> bool:
+        """
+        Determine if task should be delegated to AI Experts.
+
+        AI Experts handle:
+        - Complex BCM planning
+        - Compliance auditing
+        - Strategic decision-making
+        - Situations requiring specialized domain knowledge
+
+        Args:
+            strategy: Strategy to evaluate
+
+        Returns:
+            True if should delegate to AI Experts
+        """
+        expert_keywords = [
+            'compliance', 'audit', 'bcm', 'business continuity',
+            'strategic', 'planning', 'assessment', 'analysis',
+            'risk assessment', 'impact analysis', 'recovery strategy',
+            'gap analysis', 'certification', 'iso', 'standard'
+        ]
+
+        action_lower = strategy.action.lower()
+
+        # Check if action contains expert keywords
+        for keyword in expert_keywords:
+            if keyword in action_lower:
+                return True
+
+        # Check strategy metadata for delegation hints
+        if strategy.metadata.get('requires_expert', False):
+            return True
+
+        if strategy.metadata.get('domain') in ['bcm', 'compliance', 'strategic']:
+            return True
+
+        return False
 
     def _create_fallback_decision(
         self,
@@ -1062,6 +1194,191 @@ class AIOrchestrator:
             "6. Monitor the system closely after restart",
             "7. Update escalation procedures if needed"
         ]
+
+    async def _initialize_ace_engine(self) -> None:
+        """Initialize ACE Engine for evolving context playbooks."""
+        try:
+            logger.info("🔄 Initializing ACE Engine...")
+
+            # Import ACE Engine
+            import sys
+            from pathlib import Path
+            ace_path = Path(__file__).parent.parent.parent / "ace-engine"
+            if str(ace_path) not in sys.path:
+                sys.path.insert(0, str(ace_path))
+
+            from ace_engine import get_ace_engine
+
+            # Get ACE Engine instance
+            self.ace_engine = get_ace_engine()
+
+            logger.info("✅ ACE Engine initialized")
+            logger.info("   - Evolving context playbooks enabled")
+            logger.info("   - Knowledge accumulation active")
+            logger.info("   - +8-15% expected improvement")
+
+        except Exception as e:
+            logger.warning(f"⚠️ ACE Engine initialization failed (non-critical): {e}")
+            logger.warning("   Orchestrator will continue without ACE")
+            self.ace_engine = None
+
+    async def delegate_to_ai(
+        self,
+        task_type: str,
+        context: Dict[str, Any],
+        require_ace: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Delegate task to AI with ACE-enhanced context.
+
+        This method wraps AI task delegation with ACE framework:
+        1. Generator: Create enhanced context with evolving playbook
+        2. Execute: Delegate to AI specialist
+        3. Reflector: Analyze trajectory and identify insights
+        4. Curator: Update playbook incrementally
+
+        Args:
+            task_type: Type of task (e.g., "scenario_generation", "compliance_analysis")
+            context: Base context for the task
+            require_ace: Whether to use ACE (default: True)
+
+        Returns:
+            dict: Task result with ACE metadata
+
+        Example:
+            ```python
+            result = await orchestrator.delegate_to_ai(
+                task_type="scenario_generation",
+                context={
+                    "module_name": "bia",
+                    "operation": "create_assessment",
+                    "framework": "ISO_22301"
+                }
+            )
+            ```
+        """
+        if not self.initialized:
+            raise RuntimeError("Orchestrator not initialized")
+
+        logger.info(f"Delegating AI task: {task_type}")
+        start_time = datetime.utcnow()
+
+        try:
+            # Step 1: Generator - Create enhanced context with ACE
+            if self.ace_engine and require_ace:
+                logger.info(f"🧠 Generating ACE-enhanced context for {task_type}")
+
+                enhanced_context = await self.ace_engine.generate_context(
+                    task=task_type,
+                    base_context=context,
+                    playbook=self.ace_engine.get_playbook(task_type)
+                )
+
+                logger.info(
+                    f"✅ Enhanced context with {len(enhanced_context.get('playbook_strategies', []))} strategies, "
+                    f"{len(enhanced_context.get('known_patterns', []))} patterns"
+                )
+            else:
+                enhanced_context = context
+                logger.info("Using base context (ACE not available)")
+
+            # Step 2: Execute - Delegate to AI specialist via delegation manager
+            # Create a decision for delegation
+            from .models import Decision, ActionType, PriorityLevel
+
+            decision = Decision(
+                action=ActionType.DELEGATE,
+                rationale=f"AI task delegation: {task_type}",
+                priority=PriorityLevel.NORMAL,
+                confidence=0.9,
+                metadata={
+                    'task_type': task_type,
+                    'situation': enhanced_context,
+                    'ace_enhanced': self.ace_engine is not None and require_ace
+                }
+            )
+
+            # Delegate via delegation manager
+            delegation_result = await self.delegation_manager.delegate(decision)
+
+            # Simulate AI execution (in production, would wait for specialist response via event bus)
+            # For POC, we'll create a mock result
+            execution_time_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
+
+            ai_result = {
+                'success': delegation_result['success'],
+                'task_type': task_type,
+                'result': {
+                    'status': 'delegated',
+                    'specialist': delegation_result.get('specialist'),
+                    'event_id': delegation_result.get('event_id'),
+                    # Mock output - in production would come from specialist
+                    'output': {
+                        'message': f"Task {task_type} delegated to {delegation_result.get('specialist')}",
+                        'enhanced_with_ace': self.ace_engine is not None and require_ace
+                    }
+                },
+                'execution_time_ms': execution_time_ms
+            }
+
+            # Step 3 & 4: Reflector + Curator - Learn from execution (if ACE enabled)
+            if self.ace_engine and require_ace and ai_result['success']:
+                logger.info(f"🧠 Reflecting on trajectory for {task_type}")
+
+                # Create trajectory
+                trajectory = {
+                    'input': enhanced_context,
+                    'output': ai_result['result'],
+                    'execution_time_ms': execution_time_ms,
+                    'success': ai_result['success'],
+                    'effectiveness': 0.85,  # Mock - in production would come from validation
+                    'validation': {
+                        'approved': True,  # Mock
+                        'confidence': 0.9
+                    }
+                }
+
+                # Reflect on trajectory
+                insights = await self.ace_engine.reflect_on_trajectory(
+                    task=task_type,
+                    trajectory=trajectory
+                )
+
+                # Curate playbook
+                current_playbook = self.ace_engine.get_playbook(task_type)
+                updated_playbook = await self.ace_engine.curate_playbook(
+                    task=task_type,
+                    current_playbook=current_playbook,
+                    insights=insights,
+                    preserve_knowledge=True
+                )
+
+                # Add ACE metadata to result
+                ai_result['ace_metadata'] = {
+                    'playbook_updated': True,
+                    'insights': insights,
+                    'playbook_stats': self.ace_engine.get_playbook_stats(task_type)
+                }
+
+                logger.info(
+                    f"✅ Playbook updated for {task_type}: "
+                    f"{len(updated_playbook.get('strategies', []))} strategies, "
+                    f"{len(updated_playbook.get('patterns', []))} patterns"
+                )
+
+                # Update stats
+                self.stats['ace_tasks'] += 1
+
+            return ai_result
+
+        except Exception as e:
+            logger.error(f"Error in AI delegation: {e}", exc_info=True)
+            return {
+                'success': False,
+                'task_type': task_type,
+                'error': str(e),
+                'execution_time_ms': (datetime.utcnow() - start_time).total_seconds() * 1000
+            }
 
     async def _run_evolution_cycles(self) -> None:
         """Run periodic evolution cycles in background."""

@@ -169,6 +169,49 @@ class QdrantCollectionSetup:
             logger.error(f"Failed to create collection {collection_name}: {e}")
             raise
 
+    def create_business_scenarios_collection(self, vector_size: int = 384):
+        """
+        Create business scenarios collection (for ALL_USAGE_SCENARIOS_CATALOG.md)
+
+        Args:
+            vector_size: 384 for all-MiniLM-L6-v2, 1536 for OpenAI
+        """
+
+        collection_name = "business_scenarios"
+
+        try:
+            collections = self.client.get_collections().collections
+            if any(c.name == collection_name for c in collections):
+                logger.info(f"Collection {collection_name} already exists")
+                return
+
+            self.client.create_collection(
+                collection_name=collection_name,
+                vectors_config=VectorParams(
+                    size=vector_size,
+                    distance=Distance.COSINE
+                )
+            )
+
+            # Indexes for scenario filtering
+            self.client.create_payload_index(
+                collection_name=collection_name,
+                field_name="service",
+                field_schema="keyword"
+            )
+
+            self.client.create_payload_index(
+                collection_name=collection_name,
+                field_name="category",
+                field_schema="keyword"
+            )
+
+            logger.info(f"Created collection: {collection_name}")
+
+        except Exception as e:
+            logger.error(f"Failed to create collection {collection_name}: {e}")
+            raise
+
     def setup_all_collections(self, vector_size: int = 1536):
         """
         Setup all Qdrant collections
@@ -182,6 +225,7 @@ class QdrantCollectionSetup:
         self.create_bcm_knowledge_collection(vector_size)
         self.create_workflow_cases_collection(vector_size)
         self.create_documents_collection(vector_size)
+        self.create_business_scenarios_collection(vector_size=384)  # all-MiniLM-L6-v2
 
         logger.info("All collections setup complete!")
 

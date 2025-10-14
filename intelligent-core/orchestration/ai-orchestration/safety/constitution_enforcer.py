@@ -17,7 +17,7 @@ CONSTITUTION RULES (IMMUTABLE):
 import logging
 from typing import List
 
-from intelligent_core.ai_orchestration.models import (
+from .models import (
     Decision, FullContext, SafetyResult, SafetyConcern, ActionType
 )
 

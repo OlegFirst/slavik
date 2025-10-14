@@ -1,0 +1,734 @@
+meta:
+  id: "l3-operations-system-{system_name}"
+  name: "L3 Operations System Test Scenarios"
+  level: 3
+  category: "operations"
+  version: "1.0.0"
+  created: "2025-10-13"
+  template_type: "specialized"
+  applicable_to:
+    - "Operations & Deployment (system)"
+    - "DevOps Automation (system)"
+    - "CI/CD Pipeline (system)"
+    - "Configuration Management (system)"
+
+description: |
+  Specialized L3 template for Operations and DevOps systems testing.
+
+  Operations systems automate deployment, configuration, and maintenance through:
+  - CI/CD pipeline orchestration
+  - Infrastructure as Code (IaC)
+  - Configuration management and drift detection
+  - Automated testing and quality gates
+  - Deployment strategies (blue-green, canary, rolling)
+  - Environment management and provisioning
+
+  This template generates comprehensive operational test scenarios that validate
+  automation workflows, deployment safety, and operational excellence.
+
+systems_involved:
+  - "{system_name}"
+  - "GitHub Integration"
+  - "Docker Registry"
+  - "Service Discovery"
+  - "Infrastructure Coordinator"
+  - "EventBus"
+
+test_scenarios:
+  - name: "CI/CD Pipeline Execution"
+    scenario_id: "l3-ops-cicd-pipeline"
+    description: "Test continuous integration and deployment workflows"
+
+    pipeline_stages:
+      - stage: "source"
+        tests:
+          - name: "commit_triggers_pipeline"
+            event: "git_push"
+            branch: "main"
+            expected:
+              pipeline_triggered: true
+              commit_sha_captured: true
+              author_identified: true
+
+          - name: "pull_request_validation"
+            event: "pull_request_opened"
+            expected:
+              validation_pipeline_triggered: true
+              deployment_pipeline_blocked: true
+
+      - stage: "build"
+        tests:
+          - name: "successful_build"
+            source_code: "valid"
+            expected:
+              build_status: "success"
+              artifacts_created: true
+              build_duration: "< 5m"
+
+          - name: "build_failure"
+            source_code: "compilation_error"
+            expected:
+              build_status: "failure"
+              error_logs_captured: true
+              developer_notified: true
+              pipeline_stopped: true
+
+          - name: "docker_image_build"
+            dockerfile: "valid"
+            expected:
+              image_built: true
+              image_tagged: "sha-{commit_sha}"
+              image_pushed_to_registry: true
+              image_scanned_for_vulnerabilities: true
+
+      - stage: "test"
+        tests:
+          - name: "unit_tests"
+            test_suite: "pytest"
+            expected:
+              tests_passed: "100%"
+              coverage: "> 80%"
+              duration: "< 2m"
+
+          - name: "integration_tests"
+            dependencies: ["postgres", "redis"]
+            expected:
+              dependencies_available: true
+              tests_passed: true
+              duration: "< 5m"
+
+          - name: "test_failure"
+            failing_tests: 3
+            expected:
+              pipeline_status: "failed"
+              failure_report_generated: true
+              deployment_blocked: true
+
+      - stage: "security_scan"
+        tests:
+          - name: "vulnerability_scan"
+            image: "myapp:sha-abc123"
+            expected:
+              vulnerabilities_found: 0
+              scan_passed: true
+
+          - name: "critical_vulnerability_detected"
+            vulnerabilities: [{severity: "critical", cve: "CVE-2024-1234"}]
+            expected:
+              pipeline_blocked: true
+              security_team_notified: true
+              deployment_prevented: true
+
+      - stage: "deploy"
+        tests:
+          - name: "deploy_to_staging"
+            environment: "staging"
+            strategy: "rolling"
+            expected:
+              deployment_successful: true
+              health_checks_passed: true
+              smoke_tests_passed: true
+
+          - name: "deploy_to_production"
+            environment: "production"
+            strategy: "blue_green"
+            approval_required: true
+            expected:
+              approval_requested: true
+              deployment_on_approval: true
+
+    quality_gates:
+      - gate: "code_quality"
+        checks:
+          - metric: "code_coverage"
+            threshold: "> 80%"
+            blocker: true
+          - metric: "code_smells"
+            threshold: "< 10"
+            blocker: false
+          - metric: "duplicated_lines"
+            threshold: "< 3%"
+            blocker: false
+
+      - gate: "security"
+        checks:
+          - metric: "critical_vulnerabilities"
+            threshold: "= 0"
+            blocker: true
+          - metric: "high_vulnerabilities"
+            threshold: "< 3"
+            blocker: true
+
+      - gate: "performance"
+        checks:
+          - metric: "response_time_p95"
+            threshold: "< 200ms"
+            blocker: false
+          - metric: "throughput"
+            threshold: "> 1000 rps"
+            blocker: false
+
+    monitoring:
+      - metric: "pipeline_executions_total"
+        labels: ["pipeline", "branch", "status"]
+      - metric: "pipeline_duration_seconds"
+        labels: ["pipeline", "stage"]
+      - metric: "deployment_frequency"
+        labels: ["environment"]
+      - metric: "pipeline_failure_rate"
+        labels: ["stage"]
+
+  - name: "Deployment Strategies"
+    scenario_id: "l3-ops-deployment-strategies"
+    description: "Test different deployment strategies and rollback"
+
+    deployment_types:
+      - strategy: "blue_green"
+        tests:
+          - name: "successful_cutover"
+            blue_environment: "current_production"
+            green_environment: "new_version_v2"
+            expected:
+              green_deployed: true
+              health_checks_passed: true
+              traffic_switched_to_green: true
+              blue_kept_for_rollback: true
+
+          - name: "failed_health_check"
+            green_environment: "failing_health_checks"
+            expected:
+              cutover_aborted: true
+              traffic_remains_on_blue: true
+              incident_created: true
+
+          - name: "rollback"
+            green_environment: "production_issues_detected"
+            expected:
+              traffic_switched_back_to_blue: true
+              rollback_duration: "< 1m"
+              zero_downtime: true
+
+      - strategy: "canary"
+        tests:
+          - name: "gradual_rollout"
+            stages:
+              - stage: 1
+                traffic_percentage: 5
+                duration: "5m"
+                expected: {error_rate: "< 0.1%", latency: "normal"}
+              - stage: 2
+                traffic_percentage: 25
+                duration: "10m"
+                expected: {error_rate: "< 0.1%", latency: "normal"}
+              - stage: 3
+                traffic_percentage: 50
+                duration: "10m"
+                expected: {error_rate: "< 0.1%", latency: "normal"}
+              - stage: 4
+                traffic_percentage: 100
+                duration: "ongoing"
+                expected: {deployment_complete: true}
+
+          - name: "automatic_rollback"
+            canary_traffic: 25
+            canary_error_rate: 0.5  # 0.5% errors
+            baseline_error_rate: 0.05  # 0.05% baseline
+            threshold: "2x_baseline"
+            expected:
+              anomaly_detected: true
+              automatic_rollback_triggered: true
+              traffic_restored_to_stable: true
+
+      - strategy: "rolling"
+        tests:
+          - name: "instance_by_instance_update"
+            total_instances: 6
+            max_unavailable: 1
+            expected:
+              instances_updated_sequentially: true
+              availability_maintained: "> 83%"  # 5/6 instances
+              total_duration: "< 15m"
+
+          - name: "failed_instance_blocks_rollout"
+            instance_3_status: "failed_to_start"
+            expected:
+              rollout_paused: true
+              instances_1_2_updated: true
+              instances_4_5_6_unchanged: true
+              manual_intervention_required: true
+
+      - strategy: "recreate"
+        tests:
+          - name: "full_shutdown_and_redeploy"
+            old_version: "v1"
+            new_version: "v2"
+            expected:
+              all_v1_instances_terminated: true
+              downtime_occurred: true
+              all_v2_instances_started: true
+              downtime_duration: "< 2m"
+
+    monitoring:
+      - metric: "deployments_total"
+        labels: ["strategy", "environment", "status"]
+      - metric: "deployment_duration_seconds"
+        labels: ["strategy"]
+      - metric: "rollback_total"
+        labels: ["reason"]
+      - metric: "deployment_downtime_seconds"
+        labels: ["strategy"]
+
+  - name: "Infrastructure as Code"
+    scenario_id: "l3-ops-iac"
+    description: "Test infrastructure provisioning and management"
+
+    iac_tools:
+      - tool: "terraform"
+        tests:
+          - name: "plan_execution"
+            action: "terraform plan"
+            changes:
+              add: 3
+              change: 1
+              destroy: 0
+            expected:
+              plan_generated: true
+              changes_documented: true
+              no_unexpected_destroys: true
+
+          - name: "apply_infrastructure"
+            action: "terraform apply"
+            expected:
+              resources_created: 3
+              resources_modified: 1
+              state_updated: true
+              outputs_available: true
+
+          - name: "drift_detection"
+            terraform_state: "expects_3_instances"
+            actual_cloud: "has_4_instances"
+            expected:
+              drift_detected: true
+              alert_triggered: true
+              recommendation: "import_or_destroy_extra"
+
+      - tool: "ansible"
+        tests:
+          - name: "configuration_playbook"
+            playbook: "configure_servers.yml"
+            inventory: "production"
+            expected:
+              playbook_executed: true
+              all_hosts_configured: true
+              idempotent: true  # Re-run shows no changes
+
+          - name: "secrets_management"
+            playbook_requires: "database_password"
+            secrets_source: "ansible_vault"
+            expected:
+              secrets_decrypted: true
+              secrets_not_logged: true
+              configuration_applied: true
+
+    infrastructure_validation:
+      - validation: "pre_deployment_checks"
+        tests:
+          - check: "network_connectivity"
+            expected: {all_networks_reachable: true}
+          - check: "dns_resolution"
+            expected: {all_hostnames_resolve: true}
+          - check: "ssl_certificates"
+            expected: {valid: true, expires_in: "> 30_days"}
+
+      - validation: "post_deployment_checks"
+        tests:
+          - check: "service_health"
+            expected: {all_services_healthy: true}
+          - check: "database_migrations"
+            expected: {migrations_applied: true}
+          - check: "smoke_tests"
+            expected: {all_critical_paths_working: true}
+
+    environment_management:
+      - environment: "development"
+        provisioning:
+          instances: 1
+          resources: "minimal"
+          auto_shutdown: "after_8_hours_idle"
+        expected:
+          cost_optimized: true
+          quick_provisioning: "< 5m"
+
+      - environment: "staging"
+        provisioning:
+          instances: 2
+          resources: "production_like"
+          data: "sanitized_production_copy"
+        expected:
+          production_parity: true
+          pii_removed: true
+
+      - environment: "production"
+        provisioning:
+          instances: 6
+          resources: "high_availability"
+          backups: "automated"
+        expected:
+          sla_compliant: true
+          disaster_recovery_ready: true
+
+    monitoring:
+      - metric: "iac_executions_total"
+        labels: ["tool", "action", "status"]
+      - metric: "infrastructure_drift_detected"
+        labels: ["resource_type"]
+      - metric: "environment_provisioning_duration_seconds"
+        labels: ["environment"]
+
+  - name: "Configuration Management"
+    scenario_id: "l3-ops-config-management"
+    description: "Test configuration distribution and consistency"
+
+    configuration_sources:
+      - source: "environment_variables"
+        tests:
+          - name: "load_from_env"
+            env_vars:
+              DATABASE_URL: "postgresql://..."
+              LOG_LEVEL: "INFO"
+            expected:
+              config_loaded: true
+              sensitive_values_not_logged: true
+
+      - source: "config_files"
+        tests:
+          - name: "yaml_config"
+            file: "config.yaml"
+            expected:
+              config_parsed: true
+              schema_validated: true
+
+          - name: "invalid_config"
+            file: "config_with_errors.yaml"
+            expected:
+              validation_failed: true
+              service_start_prevented: true
+              error_message_clear: true
+
+      - source: "secrets_manager"
+        tests:
+          - name: "fetch_secrets"
+            secrets: ["db_password", "api_key"]
+            expected:
+              secrets_fetched: true
+              cached_locally: true
+              auto_refresh_on_rotation: true
+
+      - source: "feature_flags"
+        tests:
+          - name: "feature_enabled"
+            flag: "new_dashboard"
+            enabled_for: "beta_users"
+            expected:
+              beta_users_see_feature: true
+              regular_users_dont_see: true
+
+          - name: "gradual_rollout"
+            flag: "ai_recommendations"
+            rollout_percentage: 25
+            expected:
+              approximately_25_percent_enabled: true
+              consistent_per_user: true
+
+    configuration_distribution:
+      - scenario: "hot_reload"
+        tests:
+          - name: "config_change_without_restart"
+            change: "LOG_LEVEL: DEBUG"
+            expected:
+              config_reloaded: true
+              no_service_restart: true
+              new_config_active: "< 10s"
+
+      - scenario: "multi_service_update"
+        tests:
+          - name: "coordinated_config_push"
+            services: ["service-a", "service-b", "service-c"]
+            config_change: "API_TIMEOUT: 30s"
+            expected:
+              all_services_updated: true
+              update_coordinated: true
+              consistency_verified: true
+
+    configuration_validation:
+      - validation: "schema_compliance"
+        tests:
+          - config: {port: "not_a_number"}
+            expected: {validation_failed: true, error: "port_must_be_integer"}
+
+      - validation: "cross_service_consistency"
+        tests:
+          - scenario: "service_a_points_to_wrong_database"
+            expected: {inconsistency_detected: true, alert_triggered: true}
+
+    monitoring:
+      - metric: "config_updates_total"
+        labels: ["source", "service", "status"]
+      - metric: "config_validation_failures_total"
+        labels: ["service", "reason"]
+      - metric: "config_drift_detected"
+        labels: ["service"]
+
+  - name: "Automated Testing"
+    scenario_id: "l3-ops-automated-testing"
+    description: "Test automated testing frameworks and strategies"
+
+    test_levels:
+      - level: "unit"
+        framework: "pytest"
+        tests:
+          - name: "run_unit_tests"
+            test_count: 350
+            expected:
+              all_passed: true
+              duration: "< 30s"
+              coverage: "> 85%"
+
+      - level: "integration"
+        framework: "pytest"
+        tests:
+          - name: "run_integration_tests"
+            test_count: 120
+            dependencies: ["postgres", "redis"]
+            expected:
+              all_passed: true
+              duration: "< 3m"
+              dependencies_isolated: true
+
+      - level: "e2e"
+        framework: "playwright"
+        tests:
+          - name: "critical_user_journeys"
+            scenarios: ["login", "create_bia", "generate_report"]
+            expected:
+              all_passed: true
+              duration: "< 10m"
+              screenshots_captured: true
+
+      - level: "performance"
+        framework: "locust"
+        tests:
+          - name: "load_test"
+            users: 1000
+            duration: "5m"
+            expected:
+              response_time_p95: "< 200ms"
+              error_rate: "< 0.1%"
+              throughput: "> 5000 rps"
+
+      - level: "security"
+        framework: "owasp_zap"
+        tests:
+          - name: "security_scan"
+            target: "https://staging.example.com"
+            expected:
+              critical_vulnerabilities: 0
+              high_vulnerabilities: 0
+              scan_completed: true
+
+    test_data_management:
+      - strategy: "fixtures"
+        tests:
+          - name: "load_fixtures"
+            fixtures: ["users", "organizations", "bias"]
+            expected:
+              data_loaded: true
+              database_seeded: true
+
+      - strategy: "factories"
+        tests:
+          - name: "generate_test_data"
+            factory: "UserFactory"
+            count: 100
+            expected:
+              users_created: 100
+              data_realistic: true
+
+      - strategy: "anonymized_production"
+        tests:
+          - name: "import_production_subset"
+            pii_handling: "anonymize"
+            expected:
+              data_imported: true
+              pii_removed: true
+              data_volume: "10%_of_production"
+
+    test_parallelization:
+      - scenario: "parallel_execution"
+        tests:
+          - name: "run_tests_parallel"
+            workers: 8
+            test_count: 400
+            expected:
+              duration: "< 1m"  # vs 8m sequential
+              all_isolated: true
+              speedup: "~8x"
+
+    monitoring:
+      - metric: "test_executions_total"
+        labels: ["level", "framework", "status"]
+      - metric: "test_duration_seconds"
+        labels: ["level"]
+      - metric: "test_coverage_ratio"
+        labels: ["service"]
+      - metric: "test_flakiness_rate"
+        labels: ["test_name"]
+
+  - name: "Release Management"
+    scenario_id: "l3-ops-release-management"
+    description: "Test release planning, versioning, and changelog generation"
+
+    versioning:
+      - strategy: "semantic_versioning"
+        tests:
+          - name: "major_version_bump"
+            changes: ["breaking_api_change"]
+            current_version: "1.5.2"
+            expected:
+              new_version: "2.0.0"
+              breaking_change_documented: true
+
+          - name: "minor_version_bump"
+            changes: ["new_feature"]
+            current_version: "1.5.2"
+            expected:
+              new_version: "1.6.0"
+
+          - name: "patch_version_bump"
+            changes: ["bug_fix"]
+            current_version: "1.5.2"
+            expected:
+              new_version: "1.5.3"
+
+    changelog_generation:
+      - scenario: "automatic_changelog"
+        commits:
+          - {type: "feat", message: "Add user dashboard"}
+          - {type: "fix", message: "Fix login bug"}
+          - {type: "docs", message: "Update README"}
+        expected:
+          changelog_generated: true
+          features_section: ["Add user dashboard"]
+          fixes_section: ["Fix login bug"]
+          docs_changes_not_in_changelog: true
+
+    release_notes:
+      - scenario: "release_announcement"
+        version: "2.0.0"
+        expected:
+          release_notes_generated: true
+          breaking_changes_highlighted: true
+          migration_guide_included: true
+          github_release_created: true
+
+    monitoring:
+      - metric: "releases_total"
+        labels: ["version_type"]
+      - metric: "release_frequency_days"
+      - metric: "time_to_production_hours"
+        description: "From commit to production"
+
+monitoring:
+  required_metrics:
+    - name: "operations_system_health"
+      type: "gauge"
+      description: "Overall operations system health (0-1)"
+      labels: ["component"]
+
+    - name: "pipeline_executions_total"
+      type: "counter"
+      description: "CI/CD pipeline executions"
+      labels: ["pipeline", "branch", "status"]
+
+    - name: "deployments_total"
+      type: "counter"
+      description: "Deployments performed"
+      labels: ["strategy", "environment", "status"]
+
+    - name: "deployment_duration_seconds"
+      type: "histogram"
+      description: "Deployment duration"
+      labels: ["strategy"]
+
+    - name: "iac_executions_total"
+      type: "counter"
+      description: "Infrastructure as Code executions"
+      labels: ["tool", "action", "status"]
+
+    - name: "test_executions_total"
+      type: "counter"
+      description: "Automated test executions"
+      labels: ["level", "framework", "status"]
+
+    - name: "deployment_frequency"
+      type: "counter"
+      description: "Deployment frequency (DORA metric)"
+      labels: ["environment"]
+
+    - name: "lead_time_for_changes_seconds"
+      type: "histogram"
+      description: "Lead time from commit to production (DORA metric)"
+
+integration:
+  eventbus_events:
+    publishes:
+      - "operations.pipeline.started"
+      - "operations.pipeline.completed"
+      - "operations.deployment.started"
+      - "operations.deployment.completed"
+      - "operations.deployment.failed"
+      - "operations.rollback.triggered"
+      - "operations.config.updated"
+      - "operations.release.created"
+
+    subscribes:
+      - "github.commit.pushed"
+      - "github.pr.opened"
+      - "monitoring.alert.triggered"
+      - "infrastructure.resource.provisioned"
+
+  dependencies:
+    - service: "github-integration"
+      purpose: "Source code and CI/CD triggers"
+    - service: "docker-registry"
+      purpose: "Container image storage"
+    - service: "infrastructure-coordinator"
+      purpose: "Infrastructure provisioning"
+    - service: "eventbus"
+      purpose: "Operations event propagation"
+
+context_variables:
+  system_name: "Name of operations system (e.g., 'ci-cd-pipeline')"
+  deployment_strategies: "Supported deployment strategies"
+  environments: "Managed environments (dev, staging, prod)"
+  iac_tools: "Infrastructure as Code tools used"
+  testing_frameworks: "Automated testing frameworks"
+
+learning_integration:
+  collect_patterns:
+    - "successful_deployment_patterns"
+    - "common_pipeline_failures"
+    - "optimal_test_parallelization"
+    - "effective_rollback_triggers"
+
+  feedback_to_learning_system:
+    - "Optimize pipeline stages"
+    - "Improve deployment strategies"
+    - "Enhance test selection"
+    - "Refine rollback criteria"
+
+  recommendations:
+    - "Suggest deployment strategy improvements"
+    - "Recommend test coverage gaps"
+    - "Identify slow pipeline stages"
+    - "Propose configuration optimizations"

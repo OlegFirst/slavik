@@ -1,0 +1,293 @@
+# Service Information for Service Catalog
+# Auto-discovery by infrastructure/tools/doc-generators/scan_services.py
+
+name: scenario-intelligence
+display_name: Scenario Intelligence System
+
+registration:
+  type: intelligent-core/orchestration
+  status: active
+  version: 1.0.0
+  environment: development
+  category: intelligent-core
+
+description: |
+  Система сценарного интеллекта - верхний слой координации в intelligent-core.
+  Гибридная система управления поведением платформы через исполняемые сценарии,
+  объединяющая BPMN 2.0, Event Storming, ISO 22301, Google SRE, Netflix Chaos
+  Engineering и AWS Well-Architected Framework.
+
+  Поддерживает 4-уровневую иерархию сценариев:
+  - Level 1: Module (микросервисы и компоненты)
+  - Level 2: Subsystem (группы модулей)
+  - Level 3: Inter-system (взаимодействие между подсистемами)
+  - Level 4: User (полные E2E пользовательские workflows)
+
+capabilities:
+  - Scenario execution (YAML-based scenarios)
+  - BPMN Call Activity (synchronous scenario calls)
+  - Event Storming integration (pub/sub events)
+  - Netflix Chaos Engineering experiments
+  - ISO 22301 compliance checking and evidence generation
+  - Pattern detection and learning from executions
+  - Multi-level scenario hierarchy (Module → Subsystem → Inter-system → User)
+  - Scenario registry with multi-index search
+  - Behavioral testing (Gherkin/BDD format)
+  - SRE runbook execution
+  - AWS Well-Architected pillars validation
+
+features:
+  - 5 execution engines (Scenario, Call, Event, Chaos, Compliance)
+  - Hybrid storage (in-memory registry + PostgreSQL + Qdrant RAG)
+  - Learning system (execution recording, statistics, pattern detection)
+  - REST API (8 endpoints)
+  - YAML-based scenario definition language
+  - Variable substitution from context
+  - Timeout and retry policies
+  - Evidence generation with retention policies
+  - Progressive chaos rollout with abort conditions
+
+runtime:
+  port: 8090
+  protocol: HTTP/REST
+  host: localhost
+  base_path: /
+  healthcheck: http://localhost:8090/health
+
+dependencies:
+  required:
+    - Python 3.9+
+  python_packages:
+    - fastapi
+    - uvicorn
+    - pyyaml
+    - asyncio
+  optional:
+    - PostgreSQL (for persistent storage)
+    - Qdrant (for RAG semantic search)
+    - Redis (for distributed state)
+  services:
+    - EventBus (for event publishing)
+    - AI Orchestrator (for AI task execution)
+    - Workflow Intelligence (for workflow orchestration)
+    - Learning System (for pattern detection)
+
+integrations:
+  - service: PostgreSQL
+    integration_type: database
+    description: Persistent storage for scenarios, executions, statistics
+    schema: scenario_intelligence
+    status: planned
+
+  - service: Qdrant
+    integration_type: vector_db
+    description: RAG storage with embeddings for semantic scenario search
+    collection: scenarios
+    status: planned
+
+  - service: EventBus
+    integration_type: pub_sub
+    description: Publishes scenario.* events on execution
+    events:
+      - scenario.execution.started
+      - scenario.execution.completed
+      - scenario.execution.failed
+      - scenario.pattern.detected
+      - scenario.learning.updated
+    status: planned
+
+  - service: AI Orchestrator
+    integration_type: orchestration
+    description: Executes AI tasks within scenarios
+    port: 8888
+    status: planned
+
+  - service: Workflow Intelligence
+    integration_type: orchestration
+    description: Orchestrates business processes via scenarios
+    status: planned
+
+  - service: Learning System
+    integration_type: ml
+    description: Learns patterns from scenario executions
+    status: planned
+
+  - service: Service Discovery
+    integration_type: registration
+    description: Registers as scenario-intelligence:8090
+    status: planned
+
+known_issues:
+  critical: []
+  warnings:
+    - In-memory storage only (data loss on restart)
+    - No authentication/authorization on API
+    - No distributed execution support
+    - No scenario versioning/rollback
+  improvements:
+    - Implement PostgreSQL persistence
+    - Add RAG storage for semantic search
+    - Implement Pattern Detector
+    - Implement Predictor
+    - Implement Auto-Generator
+    - Add API authentication
+    - Add scenario versioning
+    - Add distributed execution
+    - Create 20-30 reference scenarios
+    - Add visual scenario editor
+
+limitations:
+  - Single instance only (no clustering)
+  - In-memory storage (volatile)
+  - No user/tenant isolation
+  - No rate limiting on API
+  - No caching of scenario results
+
+kpis:
+  - name: scenario_executions_total
+    type: counter
+    description: Total scenario executions
+
+  - name: scenario_success_rate
+    type: gauge
+    description: Success rate of scenario executions
+    target: 0.95
+
+  - name: scenario_duration_ms
+    type: histogram
+    description: Scenario execution duration
+    p50_target: 100
+    p95_target: 500
+    p99_target: 2000
+
+  - name: scenarios_registered_total
+    type: gauge
+    description: Total registered scenarios
+
+  - name: scenario_patterns_detected
+    type: counter
+    description: Patterns detected by learning system
+
+  - name: scenario_compliance_score
+    type: gauge
+    description: ISO 22301 compliance score
+    target: 1.0
+
+eventbus:
+  subscribes: []
+
+  publishes:
+    - event: scenario.execution.started
+      priority: low
+      payload: {scenario_id, level, type, timestamp}
+
+    - event: scenario.execution.completed
+      priority: normal
+      payload: {scenario_id, result, duration, timestamp}
+
+    - event: scenario.execution.failed
+      priority: high
+      payload: {scenario_id, error, timestamp}
+
+    - event: scenario.pattern.detected
+      priority: normal
+      payload: {pattern_type, scenarios, confidence}
+
+    - event: scenario.learning.updated
+      priority: low
+      payload: {scenario_id, statistics}
+
+deployment:
+  how_to_run: |
+    cd /Users/MD/AI-Platform-ISO/intelligent-core/scenario-intelligence
+    python3 -m api.api
+
+  docker: false
+
+  command: uvicorn api.api:app --host 0.0.0.0 --port 8090
+
+  environment_variables:
+    PORT:
+      required: false
+      default: 8090
+
+    DATABASE_URL:
+      required: false
+      description: PostgreSQL connection for persistent storage
+      secret: true
+
+    QDRANT_URL:
+      required: false
+      description: Qdrant vector DB for RAG storage
+      default: http://localhost:6333
+
+    EVENTBUS_URL:
+      required: false
+      description: EventBus for event publishing
+      default: http://localhost:8002
+
+    LOG_LEVEL:
+      required: false
+      default: INFO
+
+ownership:
+  team: Intelligent Core Team
+  primary_contact: Scenario Intelligence
+  on_call: AI Platform Infrastructure
+
+documentation:
+  main: /intelligent-core/scenario-intelligence/README.md
+  architecture: /intelligent-core/scenario-intelligence/FULL_IMPLEMENTATION_ARCHITECTURE.md
+  design: /intelligent-core/scenario-intelligence/HYBRID_ARCHITECTURE_DESIGN.md
+  review: /intelligent-core/scenario-intelligence/EXPERT_REVIEW.md
+  api: http://localhost:8090/docs (Swagger UI)
+
+testing:
+  unit_tests: /intelligent-core/scenario-intelligence/tests/unit/
+  integration_tests: /intelligent-core/scenario-intelligence/tests/integration/
+  e2e_tests: /intelligent-core/scenario-intelligence/tests/e2e/
+  main_test: /intelligent-core/scenario-intelligence/test_scenario_system.py
+  coverage_target: 80
+
+examples:
+  - path: /intelligent-core/scenario-intelligence/scenarios/level1-modules/vault/functional/store-secret.v1.0.0.yaml
+    description: Level 1 (Module) - Vault secret storage with ISO compliance
+
+  - path: /intelligent-core/scenario-intelligence/scenarios/level4-user/workflows/bia-complete-workflow.v1.0.0.yaml
+    description: Level 4 (User) - Complete BIA workflow with AI integration
+
+roadmap:
+  phase1:
+    name: Persistence and RAG
+    status: in_development
+    items:
+      - PostgreSQL schema and migration
+      - Database integration
+      - Qdrant RAG storage
+      - EventBus integration
+
+  phase2:
+    name: Advanced Learning
+    status: planned
+    items:
+      - Pattern Detector implementation
+      - Predictor implementation
+      - Auto-Generator implementation
+
+  phase3:
+    name: Scenario Library
+    status: planned
+    items:
+      - 20-30 reference scenarios (all levels)
+      - Scenario templates
+      - Best practices documentation
+
+  phase4:
+    name: Advanced Features
+    status: future
+    items:
+      - Visual scenario editor
+      - Scenario versioning and rollback
+      - A/B testing
+      - Distributed execution
+      - Real-time monitoring dashboard

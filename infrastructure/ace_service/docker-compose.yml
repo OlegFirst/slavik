@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  ace-service:
+    build: .
+    container_name: ace-service
+    ports:
+      - "8050:8050"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/bcm_platform
+      - ACE_SERVICE_PORT=8050
+      - LOG_LEVEL=INFO
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - ai-platform
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8050/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: ace-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bcm_platform
+    volumes:
+      - ace-postgres-data:/var/lib/postgresql/data
+      - ../database/schemas/ace_playbooks.sql:/docker-entrypoint-initdb.d/01-ace-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - ai-platform
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  ai-platform:
+    name: ai-platform
+    driver: bridge
+
+volumes:
+  ace-postgres-data:
+    name: ace-postgres-data

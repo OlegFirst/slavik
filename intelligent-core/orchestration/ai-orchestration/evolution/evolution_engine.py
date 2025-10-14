@@ -12,9 +12,9 @@ import logging
 from typing import Dict, Any
 from datetime import datetime, timedelta
 
-from intelligent_core.ai_orchestration.evolution.data_evolution import DataEvolution
-from intelligent_core.ai_orchestration.evolution.model_evolution import ModelEvolution
-from intelligent_core.ai_orchestration.evolution.code_evolution import CodeEvolution
+from .evolution.data_evolution import DataEvolution
+from .evolution.model_evolution import ModelEvolution
+from .evolution.code_evolution import CodeEvolution
 
 logger = logging.getLogger(__name__)
 

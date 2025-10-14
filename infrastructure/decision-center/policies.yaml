@@ -1,0 +1,266 @@
+# Infrastructure Governance Policies
+# Version: 1.0.0
+# Last Updated: 2025-10-14
+# Approved By: Platform Team
+# Effective Date: 2025-10-14
+# Review Date: 2025-11-14
+
+version: "1.0.0"
+approved_by: "Platform Team"
+effective_date: "2025-10-14"
+review_date: "2025-11-14"
+
+# Recovery Policies
+recovery:
+  # Default policy for all services
+  default:
+    max_auto_attempts: 3
+    escalation_timeout: 300  # seconds (5 minutes)
+    require_approval_after: 2  # attempts
+    backoff_multiplier: 2.0
+    initial_backoff: 5  # seconds
+
+  # Critical services with stricter policies
+  critical_services:
+    database:
+      priority: 1
+      rto: 120  # seconds - Recovery Time Objective
+      rpo: 300  # seconds - Recovery Point Objective
+      max_auto_attempts: 1  # Don't retry database - escalate immediately
+      escalation_timeout: 60  # 1 minute
+      escalate_immediately: true
+      require_manual_approval: true
+      notification_channels:
+        - email
+        - slack
+      notify_recipients:
+        - ops@ai-platform.com
+        - dba@ai-platform.com
+      iso_clause: "8.4"  # ISO 22301 - Incident Response
+
+    eventbus:
+      priority: 1
+      rto: 60  # seconds
+      rpo: 0  # no data loss acceptable
+      max_auto_attempts: 2
+      escalation_timeout: 180  # 3 minutes
+      escalate_immediately: true
+      notification_channels:
+        - email
+        - slack
+      notify_recipients:
+        - ops@ai-platform.com
+        - devops@ai-platform.com
+      iso_clause: "8.4"
+
+    api_gateway:
+      priority: 1
+      rto: 120  # seconds
+      rpo: 0
+      max_auto_attempts: 2
+      escalation_timeout: 180
+      escalate_immediately: true
+      notification_channels:
+        - email
+      notify_recipients:
+        - ops@ai-platform.com
+      iso_clause: "8.4"
+
+  # Standard services
+  standard_services:
+    redis:
+      priority: 2
+      rto: 300  # 5 minutes
+      rpo: 60  # 1 minute
+      max_auto_attempts: 3
+      escalation_timeout: 300
+      notification_channels:
+        - email
+      notify_recipients:
+        - ops@ai-platform.com
+
+    rag_pipeline:
+      priority: 2
+      rto: 300
+      rpo: 60
+      max_auto_attempts: 2
+      escalation_timeout: 240
+      notification_channels:
+        - email
+      notify_recipients:
+        - ai-ops@ai-platform.com
+
+# Resource Optimization Policies
+optimization:
+  # Thresholds for resource utilization
+  thresholds:
+    cpu:
+      high: 80  # percent
+      critical: 90
+      low: 30
+    memory:
+      high: 85
+      critical: 95
+      low: 40
+    disk:
+      high: 80
+      critical: 90
+      low: 50
+    network:
+      high: 70
+      critical: 85
+
+  # When to take action
+  actions:
+    preventive_threshold: 75  # Act before reaching high threshold
+    reactive_threshold: 90     # React immediately at this threshold
+    auto_scale_enabled: false  # Disabled by default - requires approval
+    require_approval_for_scale: true
+
+  # Optimization schedule
+  schedule:
+    optimization_interval: 300  # seconds (5 minutes)
+    avoid_business_hours: true
+    business_hours:
+      start: "09:00"
+      end: "18:00"
+      timezone: "UTC"
+    prefer_off_hours: true
+    off_hours:
+      start: "22:00"
+      end: "06:00"
+
+# Escalation Policies
+escalation:
+  # Pattern-based escalation
+  pattern_detection:
+    enabled: true
+    failure_pattern_threshold: 5  # Number of failures in window
+    pattern_window_seconds: 3600  # 1 hour
+    same_time_threshold: 3  # Failures at same time for 3 days = pattern
+
+  # Incident Management
+  incident_management:
+    auto_create_incident: true
+    incident_system: "thehive"  # TheHive integration
+    incident_priorities:
+      critical: 1
+      high: 2
+      medium: 3
+      low: 4
+
+  # Notification Configuration
+  notifications:
+    email:
+      enabled: true
+      smtp_host: "localhost"
+      smtp_port: 587
+      from_address: "infrastructure@ai-platform.com"
+    slack:
+      enabled: false  # Configure webhook to enable
+      webhook_url: ""
+    sms:
+      enabled: false  # Configure to enable
+    pagerduty:
+      enabled: false  # Configure to enable
+
+# Compliance Policies
+compliance:
+  # ISO 22301 Requirements
+  iso_22301:
+    audit_all_decisions: true
+    log_retention_days: 90
+    require_decision_justification: true
+    evidence_collection: true
+
+  # Audit Trail
+  audit:
+    enabled: true
+    log_level: "detailed"  # minimal, standard, detailed
+    include_context: true
+    include_system_state: true
+    tamper_proof: true
+
+# Goal Management
+goals:
+  # Infrastructure Goals
+  infrastructure:
+    availability:
+      target: 99.9  # percent
+      measurement: "uptime_percentage"
+      period: "monthly"
+      source: "program_level"
+
+    mttr:
+      target: 120  # seconds
+      measurement: "recovery_duration"
+      period: "incident"
+      source: "iso_22301_clause_8.4"
+
+    efficiency:
+      target: 80  # percent
+      measurement: "efficiency_score"
+      period: "daily"
+      source: "cost_optimization"
+
+    predictive_prevention:
+      target: 70  # percent of issues prevented
+      measurement: "prevention_rate"
+      period: "monthly"
+      source: "proactive_management"
+
+# Decision Making Rules
+decision_rules:
+  # Conflict Resolution
+  conflict_resolution:
+    availability_vs_cost: "availability_first"
+    performance_vs_cost: "balanced"
+    security_vs_usability: "security_first"
+
+  # Auto-Approval Rules
+  auto_approval:
+    restart_allowed: true
+    failover_allowed: true
+    scale_up_requires_approval: true
+    scale_down_requires_approval: false  # Can scale down automatically
+    configuration_change_requires_approval: true
+
+# System Context Awareness
+context:
+  # Business Context
+  business_context:
+    critical_business_hours:
+      - start: "09:00"
+        end: "18:00"
+        days: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+
+    peak_traffic_hours:
+      - start: "10:00"
+        end: "12:00"
+      - start: "14:00"
+        end: "16:00"
+
+  # System Context
+  system_context:
+    deployment_freeze_during_incidents: true
+    maintenance_windows:
+      - day: "sunday"
+        start: "02:00"
+        end: "06:00"
+
+# Reporting
+reporting:
+  # Compliance Reports
+  compliance_reports:
+    generate_monthly: true
+    include_iso_clause_mapping: true
+    recipients:
+      - compliance@ai-platform.com
+      - management@ai-platform.com
+
+  # Operational Reports
+  operational_reports:
+    generate_weekly: true
+    include_recommendations: true
+    recipients:
+      - ops@ai-platform.com

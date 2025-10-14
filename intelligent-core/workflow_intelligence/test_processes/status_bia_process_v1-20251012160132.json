@@ -1,0 +1,49 @@
+{
+  "instance_id": "bia_process_v1-20251012160132",
+  "process_id": "bia_process_v1",
+  "process_name": "Business Impact Analysis",
+  "status": "in_progress",
+  "current_step": {
+    "id": "assess_impact",
+    "name": "Assess Business Impact",
+    "type": "analysis",
+    "description": "Analyze the impact of function disruption",
+    "estimated_duration_minutes": 45,
+    "sla_hours": null
+  },
+  "completed_steps": [
+    {
+      "step_id": "identify_functions",
+      "step_name": "Identify Critical Functions",
+      "timestamp": "2025-10-12T16:01:32.847723",
+      "result": "success"
+    }
+  ],
+  "remaining_steps": [
+    {
+      "step_id": "assess_impact",
+      "step_name": "Assess Business Impact",
+      "estimated_duration_minutes": 45
+    },
+    {
+      "step_id": "identify_dependencies",
+      "step_name": "Identify Dependencies",
+      "estimated_duration_minutes": 25
+    },
+    {
+      "step_id": "approval",
+      "step_name": "Manager Approval",
+      "estimated_duration_minutes": 15
+    },
+    {
+      "step_id": "generate_report",
+      "step_name": "Generate BIA Report",
+      "estimated_duration_minutes": 10
+    }
+  ],
+  "progress_percentage": 20.0,
+  "estimated_completion": "2025-10-12T17:36:32.847734",
+  "total_duration_seconds": 1.5e-05,
+  "started_at": "2025-10-12T16:01:32.847715",
+  "updated_at": "2025-10-12T16:01:32.847743"
+}

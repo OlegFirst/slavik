@@ -5,10 +5,13 @@ Routes LLM queries to best available provider with async support
 """
 
 import os
+import sys
 import logging
 from typing import Optional, Dict, Any
 from enum import Enum
 
+# Add VaultClient to path
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO/infrastructure/security/secrets-management')
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +40,20 @@ class LLMRouter:
     """
 
     def __init__(self):
-        self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+        # Load API keys from Vault (fallback to env vars for backwards compatibility)
+        try:
+            from vault_client import get_secret
+            try:
+                self.anthropic_key = get_secret("anthropic-api-key")
+                logger.info("✅ Loaded ANTHROPIC_API_KEY from Vault")
+            except:
+                self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+                if self.anthropic_key:
+                    logger.warning("⚠️  Using ANTHROPIC_API_KEY from .env (migrate to Vault)")
+        except ImportError:
+            self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+            logger.warning("⚠️  VaultClient not available, using .env")
+
         self.openai_key = os.getenv("OPENAI_API_KEY")
 
         self.anthropic_client = None

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Бизнес-процесс работы с AI-Platform-ISO для партнеров">
+    <title>Бизнес-процесс | AI-Platform-ISO</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>AI-Platform-ISO</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="index.html#features">Возможности</a></li>
+                <li><a href="index.html#architecture">Архитектура</a></li>
+                <li><a href="business-flow.html" class="active">Бизнес-процесс</a></li>
+                <li><a href="user-flow.html">UX</a></li>
+                <li><a href="interfaces.html">Интерфейсы</a></li>
+                <li><a href="docs/index.html">Документация</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+                <li><button id="lang-toggle" class="lang-toggle">EN</button></li>
+                <li><button id="theme-toggle" class="theme-toggle">🌙</button></li>
+            </ul>
+
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang-ru="Бизнес-процесс партнерства" data-lang-en="Partnership Business Process">
+            Бизнес-процесс партнерства
+        </h1>
+        <p data-lang-ru="От регистрации до получения результатов — простой и прозрачный путь"
+           data-lang-en="From registration to results — simple and transparent journey">
+            От регистрации до получения результатов — простой и прозрачный путь
+        </p>
+    </section>
+
+    <!-- Business Flow Diagram -->
+    <section>
+        <h2 data-lang-ru="Визуальная схема процесса" data-lang-en="Process Visual Schema">
+            Визуальная схема процесса
+        </h2>
+        <div class="diagram-container">
+            <div class="mermaid">
+graph LR
+    A[Регистрация партнера] --> B[Настройка организации]
+    B --> C[Интеграция данных]
+    C --> D[Настройка процессов]
+    D --> E[Обучение команды]
+    E --> F[Запуск в работу]
+    F --> G[Непрерывная оптимизация]
+
+    G --> H{Результаты}
+    H --> I[Снижение рисков]
+    H --> J[Соответствие ISO]
+    H --> K[Автоматизация BCM]
+
+    style A fill:#60a5fa
+    style B fill:#60a5fa
+    style C fill:#a78bfa
+    style D fill:#a78bfa
+    style E fill:#34d399
+    style F fill:#34d399
+    style G fill:#fbbf24
+    style H fill:#f87171
+    style I fill:#10b981
+    style J fill:#10b981
+    style K fill:#10b981
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Steps -->
+    <section style="background: var(--bg-secondary);">
+        <h2 data-lang-ru="Детальные этапы" data-lang-en="Detailed Steps">Детальные этапы</h2>
+        <p class="subtitle" data-lang-ru="Пошаговое описание процесса внедрения и работы с платформой"
+           data-lang-en="Step-by-step description of implementation and work process">
+            Пошаговое описание процесса внедрения и работы с платформой
+        </p>
+
+        <div class="flow-steps">
+            <!-- Step 1 -->
+            <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Регистрация партнера" data-lang-en="Partner Registration">
+                        Регистрация партнера
+                    </h3>
+                    <p data-lang-ru="Заполните форму регистрации с основными данными организации. Получите доступ к платформе в течение 24 часов. Назначьте администратора системы."
+                       data-lang-en="Fill out registration form with basic organization data. Get platform access within 24 hours. Assign system administrator.">
+                        Заполните форму регистрации с основными данными организации. Получите доступ к платформе в течение 24 часов. Назначьте администратора системы.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 1 день</span>
+                        <span class="badge badge-success">✓ Автоматизировано</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Настройка организации" data-lang-en="Organization Setup">
+                        Настройка организации
+                    </h3>
+                    <p data-lang-ru="Создайте профиль организации: структура подразделений, ключевые процессы, критичные активы. AI помогает в структурировании данных. Импорт существующих документов."
+                       data-lang-en="Create organization profile: department structure, key processes, critical assets. AI helps structure data. Import existing documents.">
+                        Создайте профиль организации: структура подразделений, ключевые процессы, критичные активы. AI помогает в структурировании данных. Импорт существующих документов.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 2-3 дня</span>
+                        <span class="badge badge-warning">🤖 AI-ассистент</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Интеграция данных" data-lang-en="Data Integration">
+                        Интеграция данных
+                    </h3>
+                    <p data-lang-ru="Подключите внешние системы (ERP, CRM, HR). Настройте синхронизацию данных. Коннекторы для популярных систем (Odoo, Salesforce, HubSpot). Автоматическое обогащение данных."
+                       data-lang-en="Connect external systems (ERP, CRM, HR). Configure data synchronization. Connectors for popular systems (Odoo, Salesforce, HubSpot). Automatic data enrichment.">
+                        Подключите внешние системы (ERP, CRM, HR). Настройте синхронизацию данных. Коннекторы для популярных систем (Odoo, Salesforce, HubSpot). Автоматическое обогащение данных.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 3-5 дней</span>
+                        <span class="badge badge-success">✓ API готовы</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="flow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Настройка процессов BCM" data-lang-en="BCM Process Configuration">
+                        Настройка процессов BCM
+                    </h3>
+                    <p data-lang-ru="Определите требования к RTO/RPO для процессов. Настройте сценарии рисков и инцидентов. Создайте планы восстановления. AI генерирует рекомендации на основе 347+ кейсов."
+                       data-lang-en="Define RTO/RPO requirements for processes. Configure risk and incident scenarios. Create recovery plans. AI generates recommendations based on 347+ cases.">
+                        Определите требования к RTO/RPO для процессов. Настройте сценарии рисков и инцидентов. Создайте планы восстановления. AI генерирует рекомендации на основе 347+ кейсов.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 5-7 дней</span>
+                        <span class="badge badge-warning">🧠 Collective Intelligence</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="flow-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Обучение команды" data-lang-en="Team Training">
+                        Обучение команды
+                    </h3>
+                    <p data-lang-ru="Онлайн-тренинги для администраторов и пользователей. Интерактивная документация с примерами. Learning Service с персонализированными программами. Сертификация по ISO 22301."
+                       data-lang-en="Online training for administrators and users. Interactive documentation with examples. Learning Service with personalized programs. ISO 22301 certification.">
+                        Онлайн-тренинги для администраторов и пользователей. Интерактивная документация с примерами. Learning Service с персонализированными программами. Сертификация по ISO 22301.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 3-5 дней</span>
+                        <span class="badge badge-success">📚 Learning Service</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="flow-step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Запуск в работу" data-lang-en="Go Live">
+                        Запуск в работу
+                    </h3>
+                    <p data-lang-ru="Проведите тестовые симуляции инцидентов. Валидация планов восстановления. Первый полный цикл BIA. Активация мониторинга и оповещений. Переход в режим промышленной эксплуатации."
+                       data-lang-en="Conduct test incident simulations. Validate recovery plans. First complete BIA cycle. Activate monitoring and alerts. Transition to production operation.">
+                        Проведите тестовые симуляции инцидентов. Валидация планов восстановления. Первый полный цикл BIA. Активация мониторинга и оповещений. Переход в режим промышленной эксплуатации.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ 2-3 дня</span>
+                        <span class="badge badge-success">🚀 Production Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="flow-step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h3 data-lang-ru="Непрерывная оптимизация" data-lang-en="Continuous Optimization">
+                        Непрерывная оптимизация
+                    </h3>
+                    <p data-lang-ru="Регулярные обновления планов на основе AI-анализа. Предиктивная аналитика для превентивных действий. Участие в коллективном обучении. Автоматические рекомендации по улучшению. Квартальные аудиты соответствия."
+                       data-lang-en="Regular plan updates based on AI analysis. Predictive analytics for proactive actions. Collective learning participation. Automatic improvement recommendations. Quarterly compliance audits.">
+                        Регулярные обновления планов на основе AI-анализа. Предиктивная аналитика для превентивных действий. Участие в коллективном обучении. Автоматические рекомендации по улучшению. Квартальные аудиты соответствия.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge badge-primary">⏱️ Постоянно</span>
+                        <span class="badge badge-warning">🔮 Predictive AI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Benefits -->
+    <section>
+        <h2 data-lang-ru="Бизнес-результаты" data-lang-en="Business Results">Бизнес-результаты</h2>
+        <p class="subtitle" data-lang-ru="Измеримые преимущества для вашей организации"
+           data-lang-en="Measurable benefits for your organization">
+            Измеримые преимущества для вашей организации
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">📉</span>
+                <h3 data-lang-ru="Снижение рисков" data-lang-en="Risk Reduction">Снижение рисков</h3>
+                <p data-lang-ru="Проактивная идентификация и митигация рисков. Предсказание потенциальных проблем до их возникновения. Снижение финансовых потерь от инцидентов."
+                   data-lang-en="Proactive risk identification and mitigation. Predict potential issues before occurrence. Reduce financial losses from incidents.">
+                    Проактивная идентификация и митигация рисков. Предсказание потенциальных проблем до их возникновения. Снижение финансовых потерь от инцидентов.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">✅</span>
+                <h3 data-lang-ru="Соответствие ISO 22301" data-lang-en="ISO 22301 Compliance">Соответствие ISO 22301</h3>
+                <p data-lang-ru="Полное покрытие всех требований стандарта. Автоматическая подготовка к аудитам. Непрерывный мониторинг соответствия. Документация готова для сертификации."
+                   data-lang-en="Complete coverage of all standard requirements. Automatic audit preparation. Continuous compliance monitoring. Documentation ready for certification.">
+                    Полное покрытие всех требований стандарта. Автоматическая подготовка к аудитам. Непрерывный мониторинг соответствия. Документация готова для сертификации.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 data-lang-ru="Автоматизация процессов" data-lang-en="Process Automation">Автоматизация процессов</h3>
+                <p data-lang-ru="Автоматическая генерация отчетов и планов. Уменьшение ручного труда на 70%. Быстрое реагирование на инциденты. Оптимизация ресурсов."
+                   data-lang-en="Automatic report and plan generation. 70% manual work reduction. Fast incident response. Resource optimization.">
+                    Автоматическая генерация отчетов и планов. Уменьшение ручного труда на 70%. Быстрое реагирование на инциденты. Оптимизация ресурсов.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">💰</span>
+                <h3 data-lang-ru="Экономия затрат" data-lang-en="Cost Savings">Экономия затрат</h3>
+                <p data-lang-ru="Снижение стоимости владения BCM системой. Оптимизация инвестиций в восстановление. Уменьшение времени простоя. ROI через 6-12 месяцев."
+                   data-lang-en="Reduce BCM system ownership costs. Optimize recovery investments. Minimize downtime. ROI within 6-12 months.">
+                    Снижение стоимости владения BCM системой. Оптимизация инвестиций в восстановление. Уменьшение времени простоя. ROI через 6-12 месяцев.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3 data-lang-ru="Прозрачность и контроль" data-lang-en="Transparency and Control">Прозрачность и контроль</h3>
+                <p data-lang-ru="Реальное время визуализация состояния BCM. Дашборды для руководства. KPI и метрики эффективности. Аудит-логи для всех операций."
+                   data-lang-en="Real-time BCM status visualization. Executive dashboards. KPIs and efficiency metrics. Audit logs for all operations.">
+                    Реальное время визуализация состояния BCM. Дашборды для руководства. KPI и метрики эффективности. Аудит-логи для всех операций.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🌟</span>
+                <h3 data-lang-ru="Конкурентное преимущество" data-lang-en="Competitive Advantage">Конкурентное преимущество</h3>
+                <p data-lang-ru="Сертификация ISO 22301 повышает доверие клиентов. Обязательное требование для тендеров. Улучшение репутации и бренда. Привлечение новых клиентов."
+                   data-lang-en="ISO 22301 certification increases customer trust. Mandatory requirement for tenders. Brand and reputation improvement. Attract new customers.">
+                    Сертификация ISO 22301 повышает доверие клиентов. Обязательное требование для тендеров. Улучшение репутации и бренда. Привлечение новых клиентов.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section style="background: var(--bg-secondary);">
+        <h2 data-lang-ru="Временные рамки" data-lang-en="Timeline">Временные рамки</h2>
+        <div class="diagram-container">
+            <div class="mermaid">
+gantt
+    title Внедрение AI-Platform-ISO
+    dateFormat  YYYY-MM-DD
+    section Подготовка
+    Регистрация партнера           :2025-10-10, 1d
+    Настройка организации          :2025-10-11, 3d
+    section Интеграция
+    Интеграция данных              :2025-10-14, 5d
+    Настройка процессов BCM        :2025-10-19, 7d
+    section Обучение
+    Обучение команды               :2025-10-26, 5d
+    section Запуск
+    Тестирование и валидация       :2025-10-31, 3d
+    Запуск в работу                :2025-11-03, 1d
+    section Эксплуатация
+    Непрерывная оптимизация        :2025-11-04, 30d
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+            <strong data-lang-ru="Итого:" data-lang-en="Total:">Итого:</strong>
+            <span data-lang-ru="25-30 дней до полного запуска" data-lang-en="25-30 days to full launch">25-30 дней до полного запуска</span>
+        </p>
+    </section>
+
+    <!-- Success Metrics -->
+    <section>
+        <h2 data-lang-ru="Метрики успеха" data-lang-en="Success Metrics">Метрики успеха</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number" data-value="70">0</span>
+                <span class="stat-label" data-lang-ru="% снижение ручного труда" data-lang-en="% manual work reduction">% снижение ручного труда</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-value="87">0</span>
+                <span class="stat-label" data-lang-ru="% точность AI предсказаний" data-lang-en="% AI prediction accuracy">% точность AI предсказаний</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-value="100">0</span>
+                <span class="stat-label" data-lang-ru="% покрытие ISO 22301" data-lang-en="% ISO 22301 coverage">% покрытие ISO 22301</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-value="30">0</span>
+                <span class="stat-label" data-lang-ru="дней до запуска" data-lang-en="days to launch">дней до запуска</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; text-align: center; padding: 4rem 2rem;">
+        <h2 style="color: white; margin-bottom: 1rem;" data-lang-ru="Начните путь к соответствию ISO 22301"
+            data-lang-en="Start Your Journey to ISO 22301 Compliance">
+            Начните путь к соответствию ISO 22301
+        </h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9;">
+            <span data-lang-ru="Свяжитесь с нами для обсуждения партнерства"
+                  data-lang-en="Contact us to discuss partnership">
+                Свяжитесь с нами для обсуждения партнерства
+            </span>
+        </p>
+        <div class="cta-buttons">
+            <a href="contact.html" class="btn" style="background: white; color: var(--accent-primary);">
+                <i class="fas fa-envelope"></i>
+                <span data-lang-ru="Связаться с нами" data-lang-en="Contact Us">Связаться с нами</span>
+            </a>
+            <a href="user-flow.html" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">
+                <i class="fas fa-user"></i>
+                <span data-lang-ru="Посмотреть UX" data-lang-en="View UX">Посмотреть UX</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Платформа</h4>
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="index.html#features">Возможности</a></li>
+                    <li><a href="index.html#architecture">Архитектура</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Процессы</h4>
+                <ul>
+                    <li><a href="business-flow.html">Бизнес-процесс</a></li>
+                    <li><a href="user-flow.html">Пользовательский опыт</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Документация</h4>
+                <ul>
+                    <li><a href="docs/index.html">Библиотека документов</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="contact.html">Связаться с нами</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AI-Platform-ISO. Некоммерческий проект для здравоохранения</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

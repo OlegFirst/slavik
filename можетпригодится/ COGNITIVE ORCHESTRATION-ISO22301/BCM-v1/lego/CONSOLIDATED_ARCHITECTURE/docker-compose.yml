@@ -1,0 +1,218 @@
+# Docker Compose for Consolidated Cognitive Orchestration System
+# Full production-ready stack with all integrations
+
+version: '3.8'
+
+services:
+  # ===== CORE APPLICATION =====
+  cognitive-orchestration:
+    build:
+      context: .
+      target: development
+    container_name: cognitive-orchestration-app
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_URL=postgresql://postgres:cognitive123@postgres:5432/cognitive_orchestration
+      - DOCKER_SOCKET=unix:///var/run/docker.sock
+      - LOG_LEVEL=INFO
+    volumes:
+      - .:/home/cognitiveuser/app
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs:/home/cognitiveuser/app/logs
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - cognitive-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v2/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===== REDIS CACHE & EVENT BUS =====
+  redis:
+    image: redis:7-alpine
+    container_name: cognitive-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+      - ./config/redis.conf:/etc/redis/redis.conf:ro
+    networks:
+      - cognitive-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===== POSTGRESQL DATABASE =====
+  postgres:
+    image: postgres:15-alpine
+    container_name: cognitive-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=cognitive_orchestration
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=cognitive123
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    networks:
+      - cognitive-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cognitive_orchestration"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===== MONITORING STACK =====
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cognitive-prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - cognitive-network
+    restart: unless-stopped
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cognitive-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=cognitive123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - cognitive-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # ===== DEVELOPMENT TOOLS =====
+
+  # Redis Commander for Redis management
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: cognitive-redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    networks:
+      - cognitive-network
+    depends_on:
+      - redis
+    profiles:
+      - development
+
+  # pgAdmin for PostgreSQL management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: cognitive-pgadmin
+    ports:
+      - "8082:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@cognitive.local
+      - PGADMIN_DEFAULT_PASSWORD=cognitive123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - cognitive-network
+    depends_on:
+      - postgres
+    profiles:
+      - development
+
+  # ===== SANDBOX ENVIRONMENTS =====
+
+  # Python sandbox for experiments
+  python-sandbox:
+    image: python:3.11-slim
+    container_name: cognitive-python-sandbox
+    command: tail -f /dev/null
+    networks:
+      - cognitive-network
+    profiles:
+      - sandbox
+
+  # Node.js sandbox for experiments
+  nodejs-sandbox:
+    image: node:18-alpine
+    container_name: cognitive-nodejs-sandbox
+    command: tail -f /dev/null
+    networks:
+      - cognitive-network
+    profiles:
+      - sandbox
+
+# ===== NETWORKS =====
+networks:
+  cognitive-network:
+    driver: bridge
+    name: cognitive-orchestration-network
+
+# ===== VOLUMES =====
+volumes:
+  redis-data:
+    name: cognitive-redis-data
+  postgres-data:
+    name: cognitive-postgres-data
+  prometheus-data:
+    name: cognitive-prometheus-data
+  grafana-data:
+    name: cognitive-grafana-data
+  pgadmin-data:
+    name: cognitive-pgadmin-data
+
+# ===== USAGE EXAMPLES =====
+#
+# Development mode (with tools):
+# docker-compose --profile development up -d
+#
+# Production mode (minimal):
+# docker-compose up -d cognitive-orchestration redis postgres
+#
+# With monitoring:
+# docker-compose up -d cognitive-orchestration redis postgres prometheus grafana
+#
+# Full stack (development + monitoring + sandbox):
+# docker-compose --profile development --profile sandbox up -d
+#
+# Health check:
+# curl http://localhost:8000/api/v2/health
+#
+# Access points:
+# - Main API: http://localhost:8000
+# - API docs: http://localhost:8000/docs
+# - Grafana: http://localhost:3000 (admin/cognitive123)
+# - Prometheus: http://localhost:9090
+# - Redis Commander: http://localhost:8081
+# - pgAdmin: http://localhost:8082 (admin@cognitive.local/cognitive123)

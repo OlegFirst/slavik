@@ -216,6 +216,38 @@ system_bcm_improvements_total 12
 system_bcm_running 1
 system_bcm_cycle_duration_seconds 1.4
 system_bcm_insights_generated 3
+system_bcm_resource_snapshots_total 150
+system_bcm_cpu_available_percent 65.3
+system_bcm_memory_available_mb 2048.5
+```
+
+### Get Resource Status (NEW!)
+```bash
+GET /resources/status
+```
+
+**Response:**
+```json
+{
+  "available": {
+    "cpu_percent": 65.3,
+    "memory_mb": 2048.5,
+    "time_seconds": 60.0,
+    "disk_io_mb": 100.0
+  },
+  "state": "normal",
+  "stats": {
+    "total_snapshots": 150,
+    "deficit_events": 2,
+    "surplus_events": 5,
+    "cpu_trend": 0.15,
+    "memory_trend": -0.05
+  },
+  "predictions": {
+    "cpu_deficit_seconds": null,
+    "memory_deficit_seconds": 450.2
+  }
+}
 ```
 
 ---
@@ -290,11 +322,29 @@ platform.bcm.insight.generated     # Сгенерирован инсайт
 
 ### Документация по Интеграции
 
-Подробная документация:
-- 📘 **[PLATFORM_INTEGRATION.md](PLATFORM_INTEGRATION.md)** - Полное руководство по интеграции (20KB)
-- 🎨 **[INTEGRATION_DIAGRAM.md](INTEGRATION_DIAGRAM.md)** - Визуальные диаграммы архитектуры (15KB)
-- ✅ **[INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md)** - Статус интеграции и следующие шаги
-- 📋 **[INTEGRATION_CHECKLIST.md](INTEGRATION_CHECKLIST.md)** - Детальный чеклист интеграции
+**Основная документация** (корневая директория):
+- 📘 **[PLATFORM_INTEGRATION.md](PLATFORM_INTEGRATION.md)** - Полное руководство по интеграции (24KB)
+- 🎨 **[INTEGRATION_DIAGRAM.md](INTEGRATION_DIAGRAM.md)** - Визуальные диаграммы архитектуры (51KB)
+- ✅ **[INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md)** - Статус интеграции (25KB)
+- 🧠 **[FULL_AI_CORE_INTEGRATION.md](FULL_AI_CORE_INTEGRATION.md)** - AI Core детали (26KB)
+- 📋 **[INTEGRATION_PLAN.md](INTEGRATION_PLAN.md)** - План реализации (24KB)
+
+**Справочная документация** (`docs/`):
+- 📖 **[docs/COMPLETE_DEPLOYMENT_GUIDE.md](docs/COMPLETE_DEPLOYMENT_GUIDE.md)** - Пошаговое развёртывание
+- 🔍 **[docs/CRITICAL_ANALYSIS.md](docs/CRITICAL_ANALYSIS.md)** - Анализ архитектуры
+- 📊 **[docs/FINAL_SUMMARY.md](docs/FINAL_SUMMARY.md)** - Итоговая сводка
+- 🚀 **[docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)** - Настройка репозитория
+- 📊 **[docs/RESOURCE_TRACKER_INTEGRATION.md](docs/RESOURCE_TRACKER_INTEGRATION.md)** - ResourceTracker интеграция (NEW!)
+
+**Скрипты автоматизации** (`scripts/`):
+- 🤖 **[scripts/integrate-with-platform.sh](scripts/integrate-with-platform.sh)** - Автоинтеграция (12KB)
+- ✅ **[scripts/validate-deployment.sh](scripts/validate-deployment.sh)** - Валидация (14KB)
+- 🏥 **[scripts/health-check.sh](scripts/health-check.sh)** - Проверка здоровья (13KB)
+- 🚀 **[scripts/start.sh](scripts/start.sh)** - Запуск сервиса (3.3KB)
+- 📚 **[scripts/README.md](scripts/README.md)** - Документация по скриптам
+
+**Архив** (`docs/archive/`):
+- Процессная документация и промежуточные отчёты
 
 ---
 

@@ -15,7 +15,24 @@ import yaml
 
 class DependencyMapper:
     def __init__(self, config_path: str = "tools/config/analysis_config.yaml"):
-        with open(config_path) as f:
+        # Try to find config file - check multiple possible locations
+        from pathlib import Path as PathLib
+        possible_paths = [
+            PathLib(config_path),
+            PathLib(__file__).parent.parent / "config" / "analysis_config.yaml",
+            PathLib(__file__).parent / "config" / "analysis_config.yaml",
+        ]
+
+        config_file = None
+        for path in possible_paths:
+            if path.exists():
+                config_file = path
+                break
+
+        if not config_file:
+            raise FileNotFoundError(f"Could not find analysis_config.yaml in any of: {possible_paths}")
+
+        with open(config_file) as f:
             self.config = yaml.safe_load(f)
 
         self.dependencies: Dict[str, Set[str]] = defaultdict(set)
@@ -25,7 +42,10 @@ class DependencyMapper:
         """Анализировать зависимости между модулями"""
         print("🔗 Analyzing module dependencies...")
 
-        for scan_path in self.config['scan_paths']:
+        # Use 'analysis_targets' or 'scan_paths' depending on config format
+        scan_paths = self.config.get('scan_paths') or self.config.get('analysis_targets', [])
+
+        for scan_path in scan_paths:
             path = Path(scan_path)
             if not path.exists():
                 continue

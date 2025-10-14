@@ -1,0 +1,235 @@
+scenario:
+  # ========== METADATA ==========
+  meta:
+    id: "plans-service-create-bcm-plan"
+    version: "1.0.0"
+    level: 1  # Module level
+    type: "functional"
+    pillar: "operational_excellence"
+    domain: "business_continuity_planning"
+
+    created_at: "2025-10-12T10:00:00Z"
+    updated_at: "2025-10-12T10:00:00Z"
+    created_by: "platform-team"
+
+  # ========== OWNERSHIP ==========
+  ownership:
+    module: "plans-service"
+    subsystem: "platform-services"
+    team: "bcm-team"
+
+  # ========== DESCRIPTION ==========
+  description:
+    title: "Create Business Continuity Management Plan"
+    summary: "Create comprehensive BCM plan with recovery strategies and procedures"
+    business_value: "Enable systematic business continuity planning and disaster recovery"
+
+  # ========== BEHAVIOR (Gherkin) ==========
+  behavior:
+    feature: "BCM Plan Management"
+
+    scenario: "Create BCM plan"
+
+    given:
+      - "Plans Service is running"
+      - "User has permission 'plans:create'"
+      - "Organization exists"
+      - "BIA exists for the business process"
+
+    when:
+      - "User creates BCM plan for 'Customer Orders' process"
+      - "Plan includes recovery strategies and procedures"
+      - "Plan defines RTO and RPO targets"
+
+    then:
+      - "BCM plan is created in database"
+      - "Plan status is 'draft'"
+      - "Plan includes recovery procedures"
+      - "Audit log entry is created"
+      - "Response status is 201"
+      - "Event 'bcm.plan.created' is published"
+
+  # ========== EXECUTION ==========
+  execution:
+    timeout: 45
+    retry_policy:
+      max_retries: 3
+      backoff: exponential
+
+    steps:
+      - id: "validate_permissions"
+        action: "plans.check_permission"
+        params:
+          user_id: "{{user_id}}"
+          permission: "plans:create"
+        expect:
+          status: 200
+          has_permission: true
+        on_failure: "abort"
+
+      - id: "validate_organization"
+        action: "plans.validate_organization"
+        params:
+          organization_id: "{{organization_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "validate_bia_exists"
+        action: "plans.validate_bia"
+        params:
+          bia_id: "{{bia_id}}"
+        expect:
+          exists: true
+        on_failure: "abort"
+
+      - id: "validate_input"
+        action: "plans.validate_input"
+        params:
+          plan_name: "{{plan_name}}"
+          recovery_strategies: "{{recovery_strategies}}"
+          rto_target: "{{rto_target}}"
+          rpo_target: "{{rpo_target}}"
+        expect:
+          valid: true
+        on_failure: "abort"
+
+      - id: "create_bcm_plan"
+        action: "plans.create"
+        params:
+          organization_id: "{{organization_id}}"
+          bia_id: "{{bia_id}}"
+          plan_name: "{{plan_name}}"
+          description: "{{description}}"
+          recovery_strategies: "{{recovery_strategies}}"
+          recovery_procedures: "{{recovery_procedures}}"
+          rto_target: "{{rto_target}}"
+          rpo_target: "{{rpo_target}}"
+          created_by: "{{user_id}}"
+        expect:
+          status: 201
+          plan_id: "{{exists}}"
+
+      - id: "link_to_bia"
+        action: "plans.link_to_bia"
+        params:
+          plan_id: "{{steps.create_bcm_plan.result.plan_id}}"
+          bia_id: "{{bia_id}}"
+        expect:
+          status: 200
+
+      - id: "create_audit_log"
+        action: "plans.log_audit"
+        params:
+          event: "bcm_plan_created"
+          plan_id: "{{steps.create_bcm_plan.result.plan_id}}"
+          user_id: "{{user_id}}"
+        expect:
+          status: 200
+
+  # ========== INTEGRATION ==========
+  integration:
+    calls:
+      - scenario_id: "audit-service-create-audit-log"
+        level: 1
+        when: "after_create"
+        params:
+          event_type: "bcm_plan_created"
+          resource_id: "{{steps.create_bcm_plan.result.plan_id}}"
+
+    events:
+      emits:
+        - event_type: "bcm.plan.created"
+          aggregate: "BCMPlan"
+          aggregate_id: "{{steps.create_bcm_plan.result.plan_id}}"
+          payload:
+            plan_id: "{{steps.create_bcm_plan.result.plan_id}}"
+            organization_id: "{{organization_id}}"
+            bia_id: "{{bia_id}}"
+            plan_name: "{{plan_name}}"
+            rto_target: "{{rto_target}}"
+            rpo_target: "{{rpo_target}}"
+            status: "draft"
+            created_by: "{{user_id}}"
+
+      subscribes:
+        - event_type: "bia.created"
+          trigger_scenario: "plans-suggest-from-bia"
+
+  # ========== COMPLIANCE ==========
+  compliance:
+    iso_22301:
+      clauses:
+        - id: "8.4"
+          name: "Business continuity plans and procedures"
+          requirement: "Establish and maintain BCM procedures"
+
+        - id: "8.4.1"
+          name: "General"
+          requirement: "Document procedures for managing incidents"
+
+        - id: "8.4.2"
+          name: "Incident response structure"
+          requirement: "Define roles and responsibilities"
+
+        - id: "7.5.3"
+          name: "Control of documented information"
+          requirement: "Retain BCM plan documentation"
+
+      evidence_generated:
+        - type: "bcm_plan"
+          format: "JSON"
+          storage: "compliance_archive"
+          retention: "7 years"
+          includes:
+            - "plan_id"
+            - "organization_id"
+            - "bia_id"
+            - "plan_name"
+            - "recovery_strategies"
+            - "recovery_procedures"
+            - "rto_target"
+            - "rpo_target"
+            - "created_by"
+            - "timestamp"
+
+        - type: "audit_log"
+          format: "JSON"
+          storage: "audit_logs"
+          retention: "7 years"
+
+  # ========== OBSERVABILITY ==========
+  observability:
+    metrics:
+      - name: "bcm_plan_creation_duration_seconds"
+        type: "histogram"
+        labels:
+          - "organization_id"
+
+      - name: "bcm_plans_created_total"
+        type: "counter"
+        labels:
+          - "organization_id"
+          - "status"
+
+      - name: "bcm_plan_rto_target_hours"
+        type: "histogram"
+        buckets: [1, 4, 8, 24, 72]
+
+    logs:
+      level: "INFO"
+      include:
+        - "plan_id"
+        - "organization_id"
+        - "bia_id"
+        - "rto_target"
+        - "user_id"
+
+  # ========== CHANGELOG ==========
+  changelog:
+    - version: "1.0.0"
+      date: "2025-10-12"
+      author: "platform-team"
+      changes:
+        - "Initial version"
+        - "BCM plan creation with BIA linkage"

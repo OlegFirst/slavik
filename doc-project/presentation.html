@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Platform-ISO - Презентация для партнеров</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+        * { font-family: 'Inter', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            scroll-snap-align: start;
+        }
+
+        .container-slide {
+            max-width: 1400px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.3);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 50;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 768px) {
+            .container-slide {
+                padding: 1.5rem;
+            }
+            .nav-dots {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<div class="nav-dots hidden md:block">
+    <div class="nav-dot active" onclick="scrollToSlide(0)"></div>
+    <div class="nav-dot" onclick="scrollToSlide(1)"></div>
+    <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+    <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+    <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+</div>
+
+<!-- Slide 1: Hero -->
+<div class="slide" id="slide-0">
+    <div class="container-slide">
+        <div class="text-center">
+            <div class="inline-block mb-6">
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
+                    ISO 22301 • ISO 27001 • ISO 42001 Compliance
+                </div>
+            </div>
+
+            <h1 class="text-6xl md:text-7xl font-bold mb-6">
+                <span class="gradient-text">AI-Platform-ISO</span>
+            </h1>
+
+            <p class="text-2xl md:text-3xl text-gray-700 mb-8 font-light">
+                Интеллектуальная платформа управления<br>
+                непрерывностью бизнеса
+            </p>
+
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+                Современное решение для управления рисками, обеспечения соответствия стандартам<br class="hidden md:block">
+                и автоматизации процессов BCM с использованием искусственного интеллекта
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+                <div class="stat-card text-center">
+                    <div class="text-4xl font-bold mb-2">35</div>
+                    <div class="text-sm opacity-90">Модулей</div>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl font-bold mb-2">513+</div>
+                    <div class="text-sm opacity-90">API Endpoints</div>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl font-bold mb-2">14</div>
+                    <div class="text-sm opacity-90">AI Специалистов</div>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl font-bold mb-2">100%</div>
+                    <div class="text-sm opacity-90">Готовность</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Ключевые возможности -->
+<div class="slide" id="slide-1">
+    <div class="container-slide">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+            <span class="gradient-text">Ключевые возможности</span>
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="feature-card">
+                <div class="text-4xl mb-4">🤖</div>
+                <h3 class="text-xl font-bold mb-3">AI-анализ рисков</h3>
+                <p class="text-gray-600 mb-4">
+                    Автоматический анализ бизнес-процессов с использованием Claude API.
+                    Точность 87%.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Автоматический расчет RTO/RPO</li>
+                    <li>• Определение зависимостей</li>
+                    <li>• Генерация рекомендаций</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="text-4xl mb-4">📊</div>
+                <h3 class="text-xl font-bold mb-3">BIA + Симуляции</h3>
+                <p class="text-gray-600 mb-4">
+                    Полный анализ влияния на бизнес с Monte Carlo симуляциями.
+                    10,000 итераций.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Автоматизированные опросники</li>
+                    <li>• Визуализация зависимостей</li>
+                    <li>• Сценарное планирование</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="text-4xl mb-4">✅</div>
+                <h3 class="text-xl font-bold mb-3">ISO Compliance</h3>
+                <p class="text-gray-600 mb-4">
+                    Полное соответствие ISO 22301, 27001, 42001.
+                    Готовность к аудиту.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Автоматические отчеты</li>
+                    <li>• Gap analysis</li>
+                    <li>• Audit trail</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="text-4xl mb-4">📈</div>
+                <h3 class="text-xl font-bold mb-3">Predic tive Analytics</h3>
+                <p class="text-gray-600 mb-4">
+                    Предиктивная аналитика рисков и инцидентов на основе ML.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Прогноз инцидентов</li>
+                    <li>• Оценка зрелости BCM</li>
+                    <li>• Рекомендации по улучшению</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="text-4xl mb-4">🎯</div>
+                <h3 class="text-xl font-bold mb-3">Workflow Engine</h3>
+                <p class="text-gray-600 mb-4">
+                    BPMN 2.0 workflow engine с поддержкой Temporal.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Автоматизация процессов</li>
+                    <li>• Интеграция с системами</li>
+                    <li>• Event-driven архитектура</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="text-4xl mb-4">👥</div>
+                <h3 class="text-xl font-bold mb-3">Community Intelligence</h3>
+                <p class="text-gray-600 mb-4">
+                    База знаний с 347+ кейсами и лучшими практиками.
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>• Библиотека сценариев</li>
+                    <li>• Sharing best practices</li>
+                    <li>• AI-рекомендации</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Архитектура -->
+<div class="slide" id="slide-2">
+    <div class="container-slide">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+            <span class="gradient-text">Архитектура решения</span>
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl">
+                <div class="text-5xl mb-4">🧠</div>
+                <h3 class="text-xl font-bold mb-3">Intelligent Core</h3>
+                <p class="text-gray-600 text-sm mb-4">10 AI-модулей</p>
+                <div class="text-left text-sm text-gray-700 space-y-1">
+                    <div>• AI Foundation</div>
+                    <div>• Event Intelligence</div>
+                    <div>• Predictive Analytics</div>
+                    <div>• Workflow Engine</div>
+                    <div>• Expertise Center</div>
+                    <div>• Community Intelligence</div>
+                </div>
+            </div>
+
+            <div class="text-center p-6 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl">
+                <div class="text-5xl mb-4">⚙️</div>
+                <h3 class="text-xl font-bold mb-3">Platform Services</h3>
+                <p class="text-gray-600 text-sm mb-4">12 микросервисов</p>
+                <div class="text-left text-sm text-gray-700 space-y-1">
+                    <div>• BIA Service</div>
+                    <div>• Risk Management</div>
+                    <div>• Compliance</div>
+                    <div>• Response Service</div>
+                    <div>• Learning Platform</div>
+                    <div>• Governance</div>
+                </div>
+            </div>
+
+            <div class="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
+                <div class="text-5xl mb-4">🔧</div>
+                <h3 class="text-xl font-bold mb-3">Infrastructure</h3>
+                <p class="text-gray-600 text-sm mb-4">8 компонентов</p>
+                <div class="text-left text-sm text-gray-700 space-y-1">
+                    <div>• Event Bus (RabbitMQ)</div>
+                    <div>• Database (Supabase)</div>
+                    <div>• Observability</div>
+                    <div>• Security</div>
+                    <div>• AI-Office DevOps</div>
+                    <div>• Gateway</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-8 rounded-xl">
+            <h3 class="text-2xl font-bold mb-6 text-center">Технологический стек</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+                <span class="tech-badge font-semibold">Python 3.11+</span>
+                <span class="tech-badge font-semibold">FastAPI</span>
+                <span class="tech-badge font-semibold">Next.js 14</span>
+                <span class="tech-badge font-semibold">TypeScript</span>
+                <span class="tech-badge font-semibold">Supabase</span>
+                <span class="tech-badge font-semibold">PostgreSQL</span>
+                <span class="tech-badge font-semibold">RabbitMQ</span>
+                <span class="tech-badge font-semibold">Redis</span>
+                <span class="tech-badge font-semibold">Docker</span>
+                <span class="tech-badge font-semibold">Kubernetes</span>
+                <span class="tech-badge font-semibold">Temporal</span>
+                <span class="tech-badge font-semibold">Claude API</span>
+                <span class="tech-badge font-semibold">Anthropic</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Бизнес-ценность -->
+<div class="slide" id="slide-3">
+    <div class="container-slide">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+            <span class="gradient-text">Бизнес-ценность</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div>
+                <h3 class="text-2xl font-bold mb-6">💰 ROI и экономия</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                        <span class="font-semibold">Снижение времени BIA</span>
+                        <span class="text-2xl font-bold text-green-600">70%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                        <span class="font-semibold">Точность AI-анализа</span>
+                        <span class="text-2xl font-bold text-blue-600">87%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
+                        <span class="font-semibold">Ускорение onboarding</span>
+                        <span class="text-2xl font-bold text-purple-600">5x</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-orange-50 rounded-lg">
+                        <span class="font-semibold">Готовность к аудиту</span>
+                        <span class="text-2xl font-bold text-orange-600">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold mb-6">⚡ Преимущества</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <div>
+                            <div class="font-semibold">Автоматизация</div>
+                            <div class="text-sm text-gray-600">Снижение ручной работы на 80%</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <div>
+                            <div class="font-semibold">Compliance</div>
+                            <div class="text-sm text-gray-600">ISO 22301, 27001, 42001 ready</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <div>
+                            <div class="font-semibold">Scalability</div>
+                            <div class="text-sm text-gray-600">Микросервисы + event-driven</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <div>
+                            <div class="font-semibold">AI-powered</div>
+                            <div class="text-sm text-gray-600">14 AI специалистов, 87% точность</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <div>
+                            <div class="font-semibold">Production Ready</div>
+                            <div class="text-sm text-gray-600">MVP работает, документация 100%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-xl text-center">
+            <h3 class="text-3xl font-bold mb-4">Готовы к внедрению</h3>
+            <p class="text-xl mb-6">Срок запуска: 25-30 дней</p>
+            <div class="flex flex-wrap justify-center gap-6 text-sm">
+                <div><i class="fas fa-rocket mr-2"></i>MVP платформа</div>
+                <div><i class="fas fa-book mr-2"></i>1745+ документов</div>
+                <div><i class="fas fa-code mr-2"></i>513+ API endpoints</div>
+                <div><i class="fas fa-check mr-2"></i>100% покрытие</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Контакты -->
+<div class="slide" id="slide-4">
+    <div class="container-slide">
+        <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-5xl font-bold mb-8">
+                <span class="gradient-text">Начнем сотрудничество?</span>
+            </h2>
+
+            <p class="text-xl text-gray-600 mb-12">
+                Готовы обсудить интеграцию AI-Platform-ISO в вашу организацию
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-laptop-code text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">Демонстрация</h3>
+                    <p class="text-sm text-gray-600">Живая демо на localhost:3333</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-book text-4xl text-purple-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">Документация</h3>
+                    <p class="text-sm text-gray-600">localhost:4000 - полная док</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <i class="fas fa-code text-4xl text-green-600 mb-4"></i>
+                    <h3 class="font-bold mb-2">API</h3>
+                    <p class="text-sm text-gray-600">localhost:8888/docs - OpenAPI</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-8 rounded-xl mb-8">
+                <h3 class="text-2xl font-bold mb-6">Программы партнерства</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-left">
+                    <div class="p-4 bg-white rounded-lg">
+                        <h4 class="font-bold mb-2">🎯 Технологическое партнерство</h4>
+                        <p class="text-sm text-gray-600">Интеграция с вашими системами</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <h4 class="font-bold mb-2">💼 Бизнес-партнерство</h4>
+                        <p class="text-sm text-gray-600">White-label решение для консультантов</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <h4 class="font-bold mb-2">🎓 Академическое партнерство</h4>
+                        <p class="text-sm text-gray-600">Исследования и образование</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <h4 class="font-bold mb-2">🌍 Международное партнерство</h4>
+                        <p class="text-sm text-gray-600">Расширение на новые рынки</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-6xl mb-6">
+                <span class="gradient-text font-bold">AI-Platform-ISO</span>
+            </div>
+
+            <p class="text-gray-500">
+                Интеллектуальная платформа управления непрерывностью бизнеса<br>
+                <span class="text-sm">ISO 22301 • ISO 27001 • ISO 42001</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Scroll Indicator -->
+<div class="scroll-indicator">
+    <div class="text-white text-center">
+        <i class="fas fa-chevron-down text-3xl"></i>
+        <div class="text-sm mt-2">Прокрутите вниз</div>
+    </div>
+</div>
+
+<script>
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Update navigation dots on scroll
+    let slides = document.querySelectorAll('.slide');
+    let navDots = document.querySelectorAll('.nav-dot');
+
+    function updateNavDots() {
+        let currentSlide = 0;
+        slides.forEach((slide, index) => {
+            let rect = slide.getBoundingClientRect();
+            if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                currentSlide = index;
+            }
+        });
+
+        navDots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        // Hide scroll indicator after first slide
+        const indicator = document.querySelector('.scroll-indicator');
+        if (currentSlide > 0) {
+            indicator.style.display = 'none';
+        } else {
+            indicator.style.display = 'block';
+        }
+    }
+
+    window.addEventListener('scroll', updateNavDots);
+
+    // Scroll to slide function
+    function scrollToSlide(index) {
+        slides[index].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        let currentSlide = Array.from(slides).findIndex(slide => {
+            let rect = slide.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight / 2;
+        });
+
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+            e.preventDefault();
+            if (currentSlide < slides.length - 1) {
+                scrollToSlide(currentSlide + 1);
+            }
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            if (currentSlide > 0) {
+                scrollToSlide(currentSlide - 1);
+            }
+        }
+    });
+
+    // Animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    document.querySelectorAll('.feature-card, .stat-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

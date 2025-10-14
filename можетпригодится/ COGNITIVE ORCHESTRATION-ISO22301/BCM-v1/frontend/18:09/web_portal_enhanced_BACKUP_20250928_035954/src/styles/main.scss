@@ -1,0 +1,173 @@
+// Main stylesheet for BCM Platform v2
+// Modern design system with Anthropic-inspired styling
+
+// Import external dependencies
+@import 'nprogress/nprogress.css';
+
+// Import custom stylesheets
+@import 'variables';
+@import 'base';
+@import 'components';
+@import 'utilities';
+
+// Tailwind CSS (if using via CDN or npm)
+// Note: If using Tailwind via PostCSS, these would be handled differently
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Global application styles
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+}
+
+h5 {
+  font-size: var(--font-size-base);
+}
+
+h6 {
+  font-size: var(--font-size-sm);
+}
+
+p {
+  margin: 0 0 var(--spacing-4) 0;
+  color: var(--color-text-secondary);
+}
+
+// Links
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
+  }
+}
+
+// Form elements
+input, textarea, select {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+}
+
+// Focus styles
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+// Selection
+::selection {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+// Scrollbars
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+  border-radius: var(--border-radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: var(--border-radius-full);
+
+  &:hover {
+    background: var(--color-gray-400);
+  }
+}
+
+// Dark mode scrollbars
+.dark {
+  ::-webkit-scrollbar-track {
+    background: var(--color-gray-800);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gray-600);
+
+    &:hover {
+      background: var(--color-gray-500);
+    }
+  }
+}
+
+// Loading bar (NProgress)
+#nprogress {
+  pointer-events: none;
+
+  .bar {
+    background: var(--color-primary) !important;
+    height: 3px !important;
+  }
+
+  .peg {
+    box-shadow: 0 0 10px var(--color-primary), 0 0 5px var(--color-primary) !important;
+  }
+}
+
+// Print styles
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

@@ -26,11 +26,11 @@ Distributed Memory System
    - Continuous improvement
 """
 
-from intelligent_core.ai_orchestration.memory.distributed_memory import DistributedMemory
-from intelligent_core.ai_orchestration.memory.working_memory import WorkingMemory
-from intelligent_core.ai_orchestration.memory.short_term_memory import ShortTermMemory
-from intelligent_core.ai_orchestration.memory.long_term_memory import LongTermMemory
-from intelligent_core.ai_orchestration.memory.procedural_memory import ProceduralMemory
+from .memory.distributed_memory import DistributedMemory
+from .memory.working_memory import WorkingMemory
+from .memory.short_term_memory import ShortTermMemory
+from .memory.long_term_memory import LongTermMemory
+from .memory.procedural_memory import ProceduralMemory
 
 __all__ = [
     'DistributedMemory',

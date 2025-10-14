@@ -17,7 +17,7 @@ import logging
 from typing import Any, Dict, List
 from datetime import datetime, timedelta
 
-from intelligent_core.ai_orchestration.models import FullContext
+from .models import FullContext
 from infrastructure.database.managers.supabase_client import supabase_manager
 from infrastructure.database.managers.cache_manager import cache_manager
 
