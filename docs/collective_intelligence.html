@@ -6,6 +6,7 @@
   <title>Collective Intelligence - AI-Platform-ISO</title>
   <meta name="description" content="Revolutionary federated learning: Organizations help each other anonymously through 347+ collective cases">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -16,12 +17,12 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Services</a>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="collective-intelligence.html" class="active">Collective Intelligence</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Services</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="collective_intelligence.html" class="active">Collective Intelligence</a>
         <a href="architecture.html">Architecture</a>
         <a href="documentation.html">Documentation</a>
       </div>
@@ -29,7 +30,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 4rem 0;">
+  <section class="hero" style="padding: 4rem 0;">
     <div class="container">
       <h1 style="color: #333;">Collective Intelligence</h1>
       <p style="color: #555; font-size: 1.2rem;">Learn From Everyone, Share With Everyone, Protect Everyone's Privacy</p>
@@ -48,12 +49,12 @@
         </p>
       </div>
 
-      <div style="margin-top: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem; border-radius: 8px;">
+      <div style="margin-top: 3rem; background: var(--primary-color); color: white; padding: 3rem; border-radius: 8px;">
         <h3 style="text-align: center; margin-bottom: 2rem;">The Problem vs The Solution</h3>
 
         <div class="grid grid-2" style="gap: 2rem;">
           <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px;">
-            <h4 style="color: #ff6b6b;">❌ The Problem</h4>
+            <h4 style="color: #ff6b6b;">✗ The Problem</h4>
             <ul style="margin-top: 1rem; font-size: 0.95rem;">
               <li><strong>Organization A:</strong> Stuck on BIA supply chain mapping for 2 weeks</li>
               <li><strong>Organizations B, C, D, E:</strong> Already solved this exact problem successfully</li>
@@ -70,7 +71,7 @@
           </div>
 
           <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px;">
-            <h4 style="color: #51cf66;">✅ Our Solution</h4>
+            <h4 style="color: #51cf66;">✓ Our Solution</h4>
             <ul style="margin-top: 1rem; font-size: 0.95rem;">
               <li><strong>Step 1:</strong> Platform detects A is stuck (no progress 14 days)</li>
               <li><strong>Step 2:</strong> Finds B, C, D, E who solved this (from 347+ cases)</li>
@@ -164,7 +165,7 @@
 
         <div style="margin-top: 1.5rem; padding: 1rem; background: #e7f5ff; border-radius: 4px;">
           <p style="margin: 0; font-weight: 600; color: #1971c2;">
-            ✨ Result: User A got unstuck using wisdom from 5 organizations. Organizations B, C, D, E, F remain completely anonymous. Everyone wins!
+            Result: User A got unstuck using wisdom from 5 organizations. Organizations B, C, D, E, F remain completely anonymous. Everyone wins!
           </p>
         </div>
       </div>
@@ -191,7 +192,7 @@ graph TB
     Create --> Chat
     Chat --> Unstuck
 
-    Solvers -.->|Identity protected| Privacy[🔒 Privacy Layer<br/>Names never revealed]
+    Solvers -.->|Identity protected| Privacy[Privacy Layer<br/>Names never revealed]
     Privacy -.-> Create
 
     style Stuck fill:#ff6b6b,color:#fff
@@ -260,7 +261,7 @@ graph TB
           </div>
         </div>
 
-        <div style="margin-top: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 8px;">
+        <div style="margin-top: 2rem; background: var(--primary-color); color: white; padding: 2rem; border-radius: 8px;">
           <h3>5 Privacy Rules</h3>
           <div class="grid grid-2" style="margin-top: 1rem; gap: 1.5rem;">
             <div>
@@ -490,7 +491,7 @@ else:
 </code></pre>
           </div>
 
-          <div style="margin-top: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 8px;">
+          <div style="margin-top: 1.5rem; background: var(--primary-color); color: white; padding: 1.5rem; border-radius: 8px;">
             <h4>Example: Hospital A</h4>
             <ul style="font-size: 0.95rem; margin-top: 0.5rem;">
               <li>Days no progress: 14 → +3</li>
@@ -551,31 +552,31 @@ else:
           <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 4px; position: relative;">
             <div style="display: flex; align-items: center; margin: 1rem 0;">
               <span style="width: 80px; font-size: 0.85rem;">Q1 (25%)</span>
-              <div style="flex: 1; height: 30px; background: linear-gradient(to right, #e3f2fd, #90caf9); border-radius: 4px; position: relative;">
+              <div style="flex: 1; height: 30px; background: #90caf9; border-radius: 4px; position: relative;">
                 <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); padding-left: 10px; font-weight: 600;">35 days</span>
               </div>
             </div>
             <div style="display: flex; align-items: center; margin: 1rem 0;">
               <span style="width: 80px; font-size: 0.85rem;">Median</span>
-              <div style="flex: 1; height: 30px; background: linear-gradient(to right, #90caf9, #42a5f5); border-radius: 4px; position: relative;">
+              <div style="flex: 1; height: 30px; background: #42a5f5; border-radius: 4px; position: relative;">
                 <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); padding-left: 10px; font-weight: 600;">42 days</span>
               </div>
             </div>
             <div style="display: flex; align-items: center; margin: 1rem 0;">
               <span style="width: 80px; font-size: 0.85rem; color: #1971c2; font-weight: 600;">YOU →</span>
-              <div style="flex: 1; height: 40px; background: linear-gradient(to right, #667eea, #764ba2); border-radius: 4px; position: relative; border: 2px solid #1971c2;">
+              <div style="flex: 1; height: 40px; background: var(--primary-color); border-radius: 4px; position: relative; border: 2px solid #1971c2;">
                 <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); padding-left: 10px; font-weight: 600; color: white;">38 days</span>
               </div>
             </div>
             <div style="display: flex; align-items: center; margin: 1rem 0;">
               <span style="width: 80px; font-size: 0.85rem;">Mean</span>
-              <div style="flex: 1; height: 30px; background: linear-gradient(to right, #42a5f5, #1e88e5); border-radius: 4px; position: relative;">
+              <div style="flex: 1; height: 30px; background: #1e88e5; border-radius: 4px; position: relative;">
                 <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); padding-left: 10px; font-weight: 600;">45.2 days</span>
               </div>
             </div>
             <div style="display: flex; align-items: center; margin: 1rem 0;">
               <span style="width: 80px; font-size: 0.85rem;">Q3 (75%)</span>
-              <div style="flex: 1; height: 30px; background: linear-gradient(to right, #1e88e5, #1565c0); border-radius: 4px; position: relative;">
+              <div style="flex: 1; height: 30px; background: #1565c0; border-radius: 4px; position: relative;">
                 <span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); padding-left: 10px; font-weight: 600;">52 days</span>
               </div>
             </div>
@@ -623,19 +624,19 @@ else:
       <h2 class="text-center">Why This is Revolutionary</h2>
 
       <div class="grid grid-2" style="margin-top: 2rem; gap: 2rem;">
-        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div class="card" style="background: var(--primary-color); color: white;">
           <h3>1. Solves Privacy Paradox</h3>
           <ul style="margin-top: 1rem; font-size: 0.95rem;">
-            <li><strong>Want to share:</strong> ✅ Helps others, builds reputation</li>
-            <li><strong>Can't share:</strong> ❌ Confidentiality, competitive concerns</li>
-            <li><strong>Our solution:</strong> ✨ Share wisdom, not identity</li>
+            <li><strong>Want to share:</strong> ✓ Helps others, builds reputation</li>
+            <li><strong>Can't share:</strong> ✗ Confidentiality, competitive concerns</li>
+            <li><strong>Our solution:</strong> Share wisdom, not identity</li>
           </ul>
           <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3); font-weight: 600;">
             Result: Maximum sharing with zero risk
           </p>
         </div>
 
-        <div class="card" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+        <div class="card" style="background: var(--primary-color);">
           <h3>2. Network Effects Without Risk</h3>
           <ul style="margin-top: 1rem; font-size: 0.95rem;">
             <li>More organizations → More collective knowledge</li>
@@ -648,7 +649,7 @@ else:
           </p>
         </div>
 
-        <div class="card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+        <div class="card" style="background: var(--primary-color); color: white;">
           <h3>3. Democratizes Expertise</h3>
           <ul style="margin-top: 1rem; font-size: 0.95rem;">
             <li>50-person clinic learns from 500-bed hospitals</li>
@@ -661,7 +662,7 @@ else:
           </p>
         </div>
 
-        <div class="card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white;">
+        <div class="card" style="background: var(--primary-color); color: white;">
           <h3>4. Unique Differentiation</h3>
           <ul style="margin-top: 1rem; font-size: 0.95rem;">
             <li>No competitor does this (unique innovation)</li>
@@ -675,7 +676,7 @@ else:
         </div>
       </div>
 
-      <div style="margin-top: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem; border-radius: 8px; text-align: center;">
+      <div style="margin-top: 3rem; background: var(--primary-color); color: white; padding: 3rem; border-radius: 8px; text-align: center;">
         <h3 style="font-size: 2rem; margin-bottom: 1rem;">The Power of 347+ Cases</h3>
         <div class="grid grid-4" style="margin-top: 2rem;">
           <div>
@@ -712,19 +713,19 @@ else:
       </p>
 
       <div class="grid grid-3" style="margin-top: 2rem;">
-        <a href="eventbus-choreography.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="eventbus_choreography.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>EventBus</h3>
           <p>The Nervous System: Event-driven choreography connecting all 62 services</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">← Back</p>
         </a>
 
-        <a href="expertise-center.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="expertise_center.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Expertise Center</h3>
           <p>14 tactical AI assistants providing domain expertise for BIA, Risk, Plans</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
         </a>
 
-        <a href="predictive-intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="predictive_intelligence.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Predictive Intelligence</h3>
           <p>ML models for forecasting, anomaly detection, and proactive recommendations</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
@@ -732,7 +733,7 @@ else:
       </div>
 
       <div style="margin-top: 3rem;">
-        <a href="service-catalog-visual.html" class="btn btn-primary">View All 62 Services</a>
+        <a href="service_catalog_visual.html" class="btn btn-primary">View All 62 Services</a>
         <a href="architecture.html" class="btn btn-outline">Platform Architecture</a>
       </div>
     </div>
@@ -750,17 +751,17 @@ else:
 
       <div>
         <h4>Intelligence Layer</h4>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="collective-intelligence.html">Collective Intelligence</a>
-        <a href="expertise-center.html">Expertise Center</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="collective_intelligence.html">Collective Intelligence</a>
+        <a href="expertise_center.html">Expertise Center</a>
       </div>
 
       <div>
         <h4>Platform</h4>
-        <a href="service-catalog-visual.html">Services Catalog</a>
-        <a href="eventbus-choreography.html">EventBus</a>
-        <a href="decision-center.html">Decision Center</a>
+        <a href="service_catalog_visual.html">Services Catalog</a>
+        <a href="eventbus_choreography.html">EventBus</a>
+        <a href="decision_center.html">Decision Center</a>
         <a href="architecture.html">Architecture</a>
       </div>
 
@@ -768,8 +769,8 @@ else:
         <h4>Resources</h4>
         <a href="documentation.html">Documentation</a>
         <a href="deployment.html">Deployment Guide</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
       </div>
     </div>
 

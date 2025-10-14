@@ -6,6 +6,7 @@
   <title>Predictive Intelligence - AI-Platform-ISO</title>
   <meta name="description" content="ML-powered forecasting and predictions: Risk forecasting, journey prediction, and proactive recommendations">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
     mermaid.initialize({
@@ -28,7 +29,7 @@
   </script>
   <style>
     .hero-gradient {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background: var(--primary-color);
       color: white;
       padding: 4rem 2rem;
       text-align: center;
@@ -64,8 +65,8 @@
       font-weight: 500;
     }
     .ml-model-card {
-      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-      border: 2px solid #667eea;
+      background: rgba(var(--primary-color-rgb), 0.05);
+      border: 2px solid var(--primary-color);
       border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
@@ -85,7 +86,7 @@
       margin: 0.2rem;
     }
     .prediction-box {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      background: #f0f9ff;
       border-left: 4px solid #0ea5e9;
       padding: 1.5rem;
       border-radius: 8px;
@@ -113,14 +114,14 @@
       font-family: 'Courier New', monospace;
     }
     .algorithm-badge {
-      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      background: var(--primary-color);
       color: white;
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-weight: 600;
       display: inline-block;
       margin: 0.5rem 0;
-      box-shadow: 0 2px 4px rgba(139,92,246,0.3);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .comparison-grid {
       display: grid;
@@ -200,12 +201,12 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="platform-overview.html">Platform</a>
-        <a href="service-catalog-visual.html">Services</a>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="expertise-center.html">Expertise Center</a>
-        <a href="predictive-intelligence.html" class="active">Predictive Intelligence</a>
+        <a href="platform_overview.html">Platform</a>
+        <a href="service_catalog_visual.html">Services</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="expertise_center.html">Expertise Center</a>
+        <a href="predictive_intelligence.html" class="active">Predictive Intelligence</a>
         <a href="architecture.html">Architecture</a>
       </div>
     </div>
@@ -493,27 +494,27 @@ result = <span class="function">detect_anomalies</span>(<span class="number">42<
 
         <div class="grid grid-5" style="margin-top: 1.5rem;">
           <div style="text-align: center;">
-            <div style="background: #667eea; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">1</div>
+            <div style="background: var(--primary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">1</div>
             <strong style="color: #667eea;">Data Collection</strong>
             <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Gather completed workflows from case library</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #8b5cf6; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">2</div>
+            <div style="background: var(--secondary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">2</div>
             <strong style="color: #8b5cf6;">Feature Engineering</strong>
             <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Extract 8 ML features from each case</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #06b6d4; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">3</div>
+            <div style="background: var(--accent-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">3</div>
             <strong style="color: #06b6d4;">Train/Test Split</strong>
             <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">80% training, 20% validation</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #10b981; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">4</div>
+            <div style="background: var(--secondary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">4</div>
             <strong style="color: #10b981;">Model Evaluation</strong>
             <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">R² score, accuracy metrics</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #f59e0b; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">5</div>
+            <div style="background: var(--accent-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.5rem; font-weight: 700;">5</div>
             <strong style="color: #f59e0b;">Model Persistence</strong>
             <p style="font-size: 0.85rem; color: var(--medium-text); margin-top: 0.5rem;">Save to disk (pickle format)</p>
           </div>
@@ -1270,22 +1271,22 @@ Authorization: Bearer {token}
 
         <div class="grid grid-4">
           <div style="text-align: center;">
-            <div style="background: #667eea; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">1</div>
+            <div style="background: var(--primary-color); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">1</div>
             <strong>Org Completes BCM</strong>
             <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Hospital finishes BIA implementation</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #8b5cf6; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">2</div>
+            <div style="background: var(--secondary-color); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">2</div>
             <strong>Data Added to Training</strong>
             <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Case automatically added to collective intelligence</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #06b6d4; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">3</div>
+            <div style="background: var(--accent-color); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">3</div>
             <strong>Models Retrained</strong>
             <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">ML pipeline retrains with new case</p>
           </div>
           <div style="text-align: center;">
-            <div style="background: #10b981; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">4</div>
+            <div style="background: var(--secondary-color); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 700;">4</div>
             <strong>Better Predictions</strong>
             <p style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">Next org gets more accurate forecasts</p>
           </div>
@@ -1356,7 +1357,7 @@ Authorization: Bearer {token}
             Dive deeper into the ML infrastructure: LLM Router (6 providers), RAG with Qdrant vector DB,
             and the Learning & Knowledge System.
           </p>
-          <a href="ai-foundation.html" class="btn btn-primary" style="display: inline-block;">Explore AI Foundation</a>
+          <a href="ai_foundation.html" class="btn btn-primary" style="display: inline-block;">Explore AI Foundation</a>
         </div>
 
         <div class="card">
@@ -1365,7 +1366,7 @@ Authorization: Bearer {token}
             See how predictions integrate with workflow orchestration: Unified Workflow Engine,
             Case Library with 347+ cases, and PDCA lifecycle.
           </p>
-          <a href="workflow-intelligence.html" class="btn btn-primary" style="display: inline-block;">Explore Workflow Intelligence</a>
+          <a href="workflow_intelligence.html" class="btn btn-primary" style="display: inline-block;">Explore Workflow Intelligence</a>
         </div>
 
         <div class="card">
@@ -1374,12 +1375,12 @@ Authorization: Bearer {token}
             Learn how 14 domain specialists use predictions: BIA Specialist, Risk Analyst,
             Plan Creator, and 11 other tactical AI assistants.
           </p>
-          <a href="expertise-center.html" class="btn btn-primary" style="display: inline-block;">Explore Expertise Center</a>
+          <a href="expertise_center.html" class="btn btn-primary" style="display: inline-block;">Explore Expertise Center</a>
         </div>
       </div>
 
       <div class="text-center" style="margin-top: 2rem;">
-        <a href="service-catalog-visual.html" class="btn btn-outline">View All 62 Services</a>
+        <a href="service_catalog_visual.html" class="btn btn-outline">View All 62 Services</a>
         <a href="architecture.html" class="btn btn-outline" style="margin-left: 1rem;">Platform Architecture</a>
       </div>
     </div>
@@ -1398,16 +1399,16 @@ Authorization: Bearer {token}
 
       <div>
         <h4>Intelligent Core</h4>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="expertise-center.html">Expertise Center</a>
-        <a href="predictive-intelligence.html">Predictive Intelligence</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="expertise_center.html">Expertise Center</a>
+        <a href="predictive_intelligence.html">Predictive Intelligence</a>
       </div>
 
       <div>
         <h4>Platform</h4>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
         <a href="architecture.html">Architecture</a>
         <a href="deployment.html">Deployment</a>
       </div>
@@ -1415,7 +1416,7 @@ Authorization: Bearer {token}
       <div>
         <h4>Resources</h4>
         <a href="documentation.html">Documentation</a>
-        <a href="business-flow.html">Business Flows</a>
+        <a href="business_flow.html">Business Flows</a>
         <a href="mvp.html">MVP Demo</a>
         <a href="contact.html">Contact</a>
       </div>

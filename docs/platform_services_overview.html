@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Services - BCM Business Logic - AI-Platform-ISO</title>
+  <meta name="description" content="Deep dive into 11 core BCM business services implementing ISO 22301 standards">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">AI-Platform-ISO</a>
+      <button class="mobile-menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Services</a>
+        <a href="platform_services_overview.html" class="active">Platform Services</a>
+        <a href="documentation.html">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient">
+    <div class="container">
+      <h1 style="color: white;">Platform Services</h1>
+      <p style="font-size: 1.3rem; margin-top: 1rem; color: white;">
+        11 Core BCM Business Services Implementing ISO 22301 Standards
+      </p>
+      <p style="font-size: 1rem; opacity: 0.95; margin-top: 0.5rem; color: white;">
+        Ports 8004-8014 | FastAPI + PostgreSQL + EventBus | Production Ready
+      </p>
+    </div>
+  </section>
+
+  <!-- Stats Overview -->
+  <section>
+    <div class="container">
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h4>11 Services</h4>
+            <p>BCM business logic</p>
+          </div>
+          <div class="stat-item">
+            <h4>Ports 8004-8014</h4>
+            <p>Sequential allocation</p>
+          </div>
+          <div class="stat-item">
+            <h4>ISO 22301</h4>
+            <p>Full compliance</p>
+          </div>
+          <div class="stat-item">
+            <h4>PostgreSQL</h4>
+            <p>29 schemas, 46 migrations</p>
+          </div>
+          <div class="stat-item">
+            <h4>FastAPI</h4>
+            <p>RESTful APIs</p>
+          </div>
+          <div class="stat-item">
+            <h4>EventBus</h4>
+            <p>Choreography pattern</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What are Platform Services -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">What are Platform Services?</h2>
+      <p class="section-subtitle text-center">
+        The business logic layer between infrastructure and user applications
+      </p>
+
+      <div class="card" style="margin-top: 2rem; background: white;">
+        <h3 style="color: var(--primary-color);">Layer Positioning</h3>
+        <div class="mermaid">
+graph TB
+    subgraph Layer4["Layer 4: User Applications"]
+        APP1[BCM Portal :3000]
+        APP2[Simulation Platform :3001]
+        APP3[Expert Marketplace :3002]
+        APP4[Digital Twin :3003]
+    end
+
+    subgraph Layer3["Layer 3: Platform Services (This Layer)"]
+        PS1[BIA :8004]
+        PS2[Risk :8005]
+        PS3[Plans :8006]
+        PS4[Response :8007]
+        PS5[Compliance :8008]
+        PS6[Governance :8009]
+        PS7[Documents :8010]
+        PS8[Learning :8011]
+        PS9[Validation :8012]
+        PS10[Planning :8013]
+        PS11[Process Analytics :8014]
+    end
+
+    subgraph Layer2["Layer 2: Intelligent Core"]
+        IC1[Workflow Intelligence]
+        IC2[AI Foundation]
+        IC3[Expertise Center]
+        IC4[ACE Service]
+    end
+
+    subgraph Layer1["Layer 1: Infrastructure"]
+        INF1[PostgreSQL]
+        INF2[Redis]
+        INF3[EventBus]
+        INF4[API Gateway]
+    end
+
+    APP1 --> PS1
+    APP1 --> PS2
+    APP1 --> PS3
+    PS1 --> IC1
+    PS2 --> IC2
+    PS3 --> IC3
+    PS1 --> INF1
+    PS2 --> INF3
+
+    style Layer3 fill:#e0f2fe,stroke:#0369a1,stroke-width:3px
+        </div>
+
+        <div style="margin-top: 2rem;">
+          <h4>Platform Services Responsibilities:</h4>
+          <ul style="color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>Business Logic:</strong> Implement BCM workflows (BIA, Risk, Plans, etc.)</li>
+            <li><strong>Data Persistence:</strong> Store and retrieve domain data from PostgreSQL</li>
+            <li><strong>Event Choreography:</strong> Publish/subscribe to business events via EventBus</li>
+            <li><strong>ISO 22301 Compliance:</strong> Enforce standard requirements across all modules</li>
+            <li><strong>API Exposure:</strong> Provide RESTful APIs for applications and AI services</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Categories -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Three Service Categories</h2>
+      <p class="section-subtitle text-center">
+        11 services organized by function
+      </p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 style="color: var(--primary-color);">Core BCM Services</h3>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin: 0.5rem 0 1rem;">
+            Essential BCM activities: analysis, planning, response
+          </p>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li><strong>BIA Service (:8004)</strong> - Business Impact Analysis</li>
+            <li><strong>Risk Assessment (:8005)</strong> - Threat identification & scoring</li>
+            <li><strong>Plans Management (:8006)</strong> - BCP creation & versioning</li>
+            <li><strong>Response Management (:8007)</strong> - Incident response & crisis</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--secondary-color);">Governance & Compliance</h3>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin: 0.5rem 0 1rem;">
+            Oversight, compliance, documentation
+          </p>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li><strong>Compliance Monitoring (:8008)</strong> - ISO 22301 tracking</li>
+            <li><strong>Governance Service (:8009)</strong> - Policies & procedures</li>
+            <li><strong>Document Management (:8010)</strong> - Version control & templates</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--accent-color);">Enablement Services</h3>
+          <p style="font-size: 0.9rem; color: var(--medium-text); margin: 0.5rem 0 1rem;">
+            Training, testing, planning, analytics
+          </p>
+          <ul style="font-size: 0.9rem; color: var(--medium-text);">
+            <li><strong>Learning Service (:8011)</strong> - Training & competency</li>
+            <li><strong>Validation Service (:8012)</strong> - Testing & exercises</li>
+            <li><strong>Journey Planning (:8013)</strong> - BCM roadmap</li>
+            <li><strong>Process Analytics (:8014)</strong> - Process mining</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Details: Core BCM -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Core BCM Services</h2>
+
+      <!-- BIA Service -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--primary-color); margin: 0;">BIA Service</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Business Impact Analysis</p>
+          </div>
+          <div style="background: var(--primary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8004
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Identifies critical business functions, assesses impact of disruptions, and calculates
+          recovery time objectives (RTO) and recovery point objectives (RPO).
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Critical function identification</li>
+              <li>Impact assessment (financial, operational, reputational)</li>
+              <li>RTO/RPO calculation</li>
+              <li>Dependency mapping (internal/external)</li>
+              <li>Resource requirement analysis</li>
+              <li>BIA reporting & visualization</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 8.2.2:</strong> Business impact analysis</li>
+              <li><strong>Clause 8.2.3:</strong> Risk assessment integration</li>
+              <li><strong>Clause 8.4.3:</strong> Resource requirements</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Feeds into Risk Assessment (:8005)</li>
+              <li>Feeds into Plans Management (:8006)</li>
+              <li>Uses Workflow Intelligence (:8030)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--background-alt); border-radius: 0.5rem;">
+          <h4 style="font-size: 0.95rem; margin: 0 0 0.5rem;">Example API:</h4>
+          <pre style="background: white; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.85rem;"><code>POST /api/v1/bia/assessments
+{
+  "organization_id": "org_123",
+  "function_name": "Emergency Department Operations",
+  "impact_financial": "high",
+  "impact_operational": "critical",
+  "rto_hours": 4,
+  "rpo_hours": 1,
+  "dependencies": ["IT Infrastructure", "Medical Supplies"]
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Risk Assessment -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--primary-color); margin: 0;">Risk Assessment</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Threat Identification & Scoring</p>
+          </div>
+          <div style="background: var(--primary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8005
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Identifies threats and vulnerabilities, assesses likelihood and impact,
+          calculates risk scores, and develops mitigation strategies.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Threat identification (natural, technical, human)</li>
+              <li>Vulnerability assessment</li>
+              <li>Risk scoring (likelihood × impact)</li>
+              <li>Risk matrix generation</li>
+              <li>Mitigation strategy development</li>
+              <li>Risk register management</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 8.2.3:</strong> Risk assessment</li>
+              <li><strong>Clause 6.1:</strong> Actions to address risks</li>
+              <li><strong>Clause 8.3:</strong> Business continuity strategies</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Uses BIA results (:8004)</li>
+              <li>Feeds into Plans Management (:8006)</li>
+              <li>Uses Predictive Service (:8036)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--background-alt); border-radius: 0.5rem;">
+          <h4 style="font-size: 0.95rem; margin: 0 0 0.5rem;">Risk Scoring Formula:</h4>
+          <div style="background: white; padding: 1rem; border-radius: 0.5rem; text-align: center; font-size: 1.1rem; font-weight: 600;">
+            Risk Score = Likelihood (1-5) × Impact (1-5) = 1-25
+          </div>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--medium-text); text-align: center;">
+            High Risk: ≥15 | Medium Risk: 8-14 | Low Risk: ≤7
+          </p>
+        </div>
+      </div>
+
+      <!-- Plans Management -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--primary-color); margin: 0;">Plans Management</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">BCP Creation, Versioning & Activation</p>
+          </div>
+          <div style="background: var(--primary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8006
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Creates, manages, and versions Business Continuity Plans (BCPs). Supports
+          multiple plan types, scenario templates, and plan activation workflows.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>BCP creation & editing</li>
+              <li>Plan versioning & history</li>
+              <li>Scenario templates</li>
+              <li>Plan activation workflows</li>
+              <li>Plan testing & validation</li>
+              <li>AI-assisted plan generation</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 8.4:</strong> Business continuity procedures</li>
+              <li><strong>Clause 8.4.4:</strong> Recovery procedures</li>
+              <li><strong>Clause 8.5:</strong> Exercising and testing</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Uses BIA data (:8004)</li>
+              <li>Uses Risk assessment (:8005)</li>
+              <li>Triggers Response Management (:8007)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Response Management -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--primary-color); margin: 0;">Response Management</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Incident Response & Crisis Management</p>
+          </div>
+          <div style="background: var(--primary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8007
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Coordinates incident response, manages crisis situations, tracks response team
+          activities, and provides real-time emergency communication.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Incident tracking & escalation</li>
+              <li>Response team coordination</li>
+              <li>Emergency notifications (SMS, email, push)</li>
+              <li>Status updates & communication</li>
+              <li>Crisis timeline documentation</li>
+              <li>Post-incident reporting</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 8.4.2:</strong> Incident response structure</li>
+              <li><strong>Clause 8.4.5:</strong> Communication</li>
+              <li><strong>Clause 9.1:</strong> Monitoring and measurement</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Activates Plans (:8006)</li>
+              <li>Real-time WebSocket (:8050)</li>
+              <li>Uses AI Orchestrator (:8002)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Governance & Compliance Services -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Governance & Compliance Services</h2>
+
+      <!-- Compliance Monitoring -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--secondary-color); margin: 0;">Compliance Monitoring</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">ISO 22301 Clause Tracking & Gap Analysis</p>
+          </div>
+          <div style="background: var(--secondary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8008
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Monitors compliance with ISO 22301 standard, tracks all 10 clauses, performs
+          gap analysis, and prepares audit trails for certification.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>ISO 22301 clause tracking (all 10 clauses)</li>
+              <li>Gap analysis & remediation</li>
+              <li>Audit trail generation</li>
+              <li>Compliance scoring & dashboards</li>
+              <li>Certification readiness assessment</li>
+              <li>Evidence collection & management</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">10 ISO 22301 Clauses:</h4>
+            <div style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem;">
+              <strong>4.</strong> Context of the organization<br/>
+              <strong>5.</strong> Leadership<br/>
+              <strong>6.</strong> Planning<br/>
+              <strong>7.</strong> Support<br/>
+              <strong>8.</strong> Operation<br/>
+              <strong>9.</strong> Performance evaluation<br/>
+              <strong>10.</strong> Improvement
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Governance Service -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--secondary-color); margin: 0;">Governance Service</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Policies, Procedures & Approval Workflows</p>
+          </div>
+          <div style="background: var(--secondary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8009
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Manages governance framework including policies, procedures, roles & responsibilities,
+          and approval workflows for BCM activities.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Policy management & versioning</li>
+              <li>Procedure documentation</li>
+              <li>Role & responsibility assignment (RACI)</li>
+              <li>Approval workflows</li>
+              <li>Governance reporting</li>
+              <li>Policy compliance tracking</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 5.3:</strong> Organizational roles & responsibilities</li>
+              <li><strong>Clause 7.5:</strong> Documented information</li>
+              <li><strong>Clause 5.2:</strong> Policy</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Uses Policy Engine (infrastructure)</li>
+              <li>Feeds Compliance (:8008)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document Management -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--secondary-color); margin: 0;">Document Management</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Version Control, Templates & AI Generation</p>
+          </div>
+          <div style="background: var(--secondary-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8010
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Manages document lifecycle with version control, provides template library,
+          and enables AI-powered document generation for BCM artifacts.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Document versioning & history</li>
+              <li>Template library (BCPs, assessments, reports)</li>
+              <li>AI-powered document generation</li>
+              <li>Access control (RBAC)</li>
+              <li>Document approval workflows</li>
+              <li>Search & retrieval (metadata + full-text)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 7.5:</strong> Documented information</li>
+              <li><strong>Clause 7.5.2:</strong> Creating and updating</li>
+              <li><strong>Clause 7.5.3:</strong> Control of documented info</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Uses AI Foundation (:8031)</li>
+              <li>Uses Expertise Center (:8032)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enablement Services -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Enablement Services</h2>
+
+      <!-- Learning Service -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--accent-color); margin: 0;">Learning Service</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Training, Competency Tracking & Learning Paths</p>
+          </div>
+          <div style="background: var(--accent-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8011
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Manages personnel training programs, tracks competency levels, provides learning
+          paths, and supports BCM skills development with assessments and certifications.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Training program management</li>
+              <li>Competency tracking & matrices</li>
+              <li>Learning paths (beginner → expert)</li>
+              <li>Assessment & quizzes</li>
+              <li>Certification tracking</li>
+              <li>Training effectiveness measurement</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 7.2:</strong> Competence</li>
+              <li><strong>Clause 7.3:</strong> Awareness</li>
+              <li><strong>Clause 8.5:</strong> Exercising and testing</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Uses Learning System (intelligent-core)</li>
+              <li>Feeds Compliance (:8008)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validation Service -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--accent-color); margin: 0;">Validation Service</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Testing, Exercises & Drills</p>
+          </div>
+          <div style="background: var(--accent-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8012
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Validates BCP effectiveness through testing, exercises, and drills. Supports
+          tabletop exercises, full-scale simulations, and drill execution with results analysis.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Exercise planning & scheduling</li>
+              <li>Tabletop exercises</li>
+              <li>Full-scale drill execution</li>
+              <li>Results analysis & scoring</li>
+              <li>Lessons learned documentation</li>
+              <li>Improvement action tracking</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 8.5:</strong> Exercising and testing</li>
+              <li><strong>Clause 9.1:</strong> Monitoring, measurement, analysis</li>
+              <li><strong>Clause 10.2:</strong> Continual improvement</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Tests Plans (:8006)</li>
+              <li>Uses Simulation Platform (app :3001)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journey Planning -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--accent-color); margin: 0;">Journey Planning</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">BCM Roadmap & Milestone Tracking</p>
+          </div>
+          <div style="background: var(--accent-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8013
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Guides organizations through ISO 22301 implementation with roadmaps, milestone
+          tracking, task dependencies, and progress monitoring.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>BCM journey roadmap creation</li>
+              <li>Milestone tracking & alerts</li>
+              <li>Task dependencies (Gantt-style)</li>
+              <li>Progress monitoring & dashboards</li>
+              <li>Resource allocation planning</li>
+              <li>Timeline adjustments & forecasting</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 6.2:</strong> BCM objectives & planning</li>
+              <li><strong>Clause 8.1:</strong> Operational planning & control</li>
+              <li><strong>Clause 9.3:</strong> Management review</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Coordinates all services (:8004-8014)</li>
+              <li>Uses Workflow Intelligence (:8030)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process Analytics -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <div>
+            <h3 style="color: var(--accent-color); margin: 0;">Process Analytics</h3>
+            <p style="margin: 0.25rem 0 0; color: var(--medium-text);">Process Mining, Bottleneck Detection & Optimization</p>
+          </div>
+          <div style="background: var(--accent-color); color: white; padding: 0.25rem 1rem; border-radius: 0.5rem; font-weight: 600;">
+            :8014
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0;">
+          Analyzes business processes for BCM workflows, detects bottlenecks, measures
+          efficiency, and provides optimization recommendations.
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 1.5rem;">
+          <div>
+            <h4 style="font-size: 1rem;">Key Capabilities:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Process mining (event log analysis)</li>
+              <li>Bottleneck detection</li>
+              <li>Efficiency metrics (cycle time, throughput)</li>
+              <li>Optimization recommendations</li>
+              <li>Process conformance checking</li>
+              <li>Trend analysis & forecasting</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: 1rem;">ISO 22301 Mapping:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li><strong>Clause 9.1:</strong> Monitoring, measurement, analysis</li>
+              <li><strong>Clause 9.1.2:</strong> Evaluation of BCM capability</li>
+              <li><strong>Clause 10.2:</strong> Continual improvement</li>
+            </ul>
+
+            <h4 style="font-size: 1rem; margin-top: 1rem;">Integration:</h4>
+            <ul style="font-size: 0.9rem; color: var(--medium-text);">
+              <li>Analyzes all workflows (:8004-8014)</li>
+              <li>Uses EventBus (:8003) for event logs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Architecture -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Technical Architecture</h2>
+
+      <div class="card" style="margin-bottom: 2rem;">
+        <h3>Shared Architecture Pattern</h3>
+        <p style="margin: 1rem 0;">
+          All 11 platform services follow a consistent architecture pattern:
+        </p>
+
+        <div class="mermaid">
+graph TB
+    subgraph Client["Client (Application/AI)"]
+        APP[HTTP Request]
+    end
+
+    subgraph Gateway["API Gateway :8000"]
+        AUTH[Authentication]
+        RATE[Rate Limiting]
+        ROUTE[Routing]
+    end
+
+    subgraph Service["Platform Service :800X"]
+        API[FastAPI Router]
+        BL[Business Logic]
+        VAL[Validation]
+        EVENTS[EventBus Publisher]
+    end
+
+    subgraph Data["Data Layer"]
+        PG[(PostgreSQL<br/>Schema)]
+        REDIS[(Redis Cache)]
+    end
+
+    subgraph Integration["Integration"]
+        EB[EventBus :8003]
+        IC[Intelligent Core]
+    end
+
+    APP --> AUTH
+    AUTH --> RATE
+    RATE --> ROUTE
+    ROUTE --> API
+    API --> VAL
+    VAL --> BL
+    BL --> PG
+    BL --> REDIS
+    BL --> EVENTS
+    EVENTS --> EB
+    EB --> IC
+
+    style Service fill:#e0f2fe,stroke:#0369a1,stroke-width:3px
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>FastAPI Framework</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>Async/Await:</strong> High-performance async I/O</li>
+            <li><strong>Pydantic:</strong> Data validation & serialization</li>
+            <li><strong>OpenAPI:</strong> Auto-generated API docs</li>
+            <li><strong>Type Hints:</strong> Static type checking</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>PostgreSQL Storage</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>29 Schemas:</strong> Modular data organization</li>
+            <li><strong>RLS:</strong> Row-Level Security (multi-tenancy)</li>
+            <li><strong>JSONB:</strong> Flexible document storage</li>
+            <li><strong>Indexes:</strong> Optimized query performance</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>EventBus Integration</h3>
+          <ul style="font-size: 0.9rem; color: var(--medium-text); margin-top: 0.5rem;">
+            <li><strong>Pub/Sub:</strong> Event-driven choreography</li>
+            <li><strong>Redis Streams:</strong> Durable message queue</li>
+            <li><strong>Type-Safe:</strong> Structured event definitions</li>
+            <li><strong>Async:</strong> Non-blocking event handling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Flow Example -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Example: Cross-Service Workflow</h2>
+      <p class="section-subtitle text-center">
+        How services work together: BIA → Risk → Plans → Response
+      </p>
+
+      <div class="card">
+        <h3 style="margin-bottom: 1.5rem;">Scenario: New Hospital Emergency Department Assessment</h3>
+
+        <div class="mermaid">
+sequenceDiagram
+    participant User as BCM Manager
+    participant BIA as BIA :8004
+    participant Risk as Risk :8005
+    participant Plans as Plans :8006
+    participant Response as Response :8007
+    participant EB as EventBus :8003
+    participant AI as AI Orchestrator :8002
+
+    User->>BIA: Create BIA Assessment<br/>(Emergency Department)
+    BIA->>BIA: Calculate RTO=4h, RPO=1h
+    BIA->>EB: Publish bia.assessment.created
+    BIA-->>User: Assessment created
+
+    EB->>Risk: Receive bia.assessment.created
+    Risk->>Risk: Auto-create risk assessment
+    Risk->>Risk: Identify threats (power outage,<br/>equipment failure)
+    Risk->>EB: Publish risk.assessment.created
+    Risk-->>User: Risks identified
+
+    EB->>Plans: Receive risk.assessment.created
+    Plans->>AI: Request plan generation
+    AI->>Plans: Generated BCP template
+    Plans->>Plans: Create BCP v1.0
+    Plans->>EB: Publish plan.created
+    Plans-->>User: BCP ready for review
+
+    User->>Plans: Approve & activate BCP
+    Plans->>Response: Register active plan
+    Response->>EB: Publish plan.activated
+    Response-->>User: Plan activated, team notified
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: var(--background-alt); border-radius: 0.5rem;">
+          <h4 style="margin: 0 0 0.5rem;">Key Takeaways:</h4>
+          <ul style="color: var(--medium-text); margin: 0;">
+            <li><strong>Event-Driven:</strong> Services communicate via EventBus, not direct calls</li>
+            <li><strong>Loosely Coupled:</strong> Each service operates independently</li>
+            <li><strong>AI-Assisted:</strong> AI Orchestrator helps generate plans</li>
+            <li><strong>Automated Workflow:</strong> Minimal manual intervention required</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Models -->
+  <section>
+    <div class="container">
+      <h2 class="text-center">Common Data Models</h2>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>BIA Assessment Model</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8rem;"><code>{
+  "id": "bia_001",
+  "organization_id": "org_123",
+  "tenant_id": "tenant_456",
+  "function_name": "Emergency Department",
+  "description": "24/7 emergency care",
+  "impact_financial": "high",
+  "impact_operational": "critical",
+  "impact_reputational": "high",
+  "rto_hours": 4,
+  "rpo_hours": 1,
+  "mtd_hours": 8,
+  "dependencies": [
+    {"name": "IT Infrastructure", "type": "internal"},
+    {"name": "Medical Supplies", "type": "external"}
+  ],
+  "resources": [
+    {"type": "staff", "count": 15, "critical": true},
+    {"type": "equipment", "name": "MRI Scanner"}
+  ],
+  "created_at": "2025-10-14T...",
+  "updated_at": "2025-10-14T..."
+}</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>Risk Assessment Model</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8rem;"><code>{
+  "id": "risk_001",
+  "bia_id": "bia_001",
+  "threat": "Power outage",
+  "category": "natural",
+  "likelihood": 3,
+  "impact": 5,
+  "risk_score": 15,
+  "risk_level": "high",
+  "vulnerability": "Single power source",
+  "mitigation_strategy": {
+    "action": "Install backup generator",
+    "cost_estimate": 50000,
+    "timeline_days": 90,
+    "responsibility": "Facilities Manager"
+  },
+  "residual_risk": 6,
+  "status": "active",
+  "review_date": "2025-11-14"
+}</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>BCP Model</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8rem;"><code>{
+  "id": "plan_001",
+  "bia_id": "bia_001",
+  "risk_ids": ["risk_001", "risk_002"],
+  "title": "Emergency Department BCP",
+  "version": "1.0",
+  "status": "active",
+  "scenarios": [
+    {
+      "name": "Power Outage",
+      "procedures": [
+        "Activate backup generator within 5 min",
+        "Switch to emergency lighting",
+        "Notify all staff via SMS"
+      ],
+      "roles": [
+        {"role": "Incident Commander", "person": "Dr. Smith"},
+        {"role": "Facilities Lead", "person": "John Doe"}
+      ]
+    }
+  ],
+  "activation_criteria": [
+    "Power outage exceeds 30 minutes",
+    "Critical equipment failure"
+  ],
+  "approved_by": "BCM Manager",
+  "approved_at": "2025-10-14T..."
+}</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>Incident Model</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8rem;"><code>{
+  "id": "incident_001",
+  "plan_id": "plan_001",
+  "type": "power_outage",
+  "severity": "high",
+  "status": "active",
+  "detected_at": "2025-10-14T10:00:00Z",
+  "activated_at": "2025-10-14T10:05:00Z",
+  "timeline": [
+    {
+      "timestamp": "10:00",
+      "event": "Power outage detected",
+      "by": "Monitoring System"
+    },
+    {
+      "timestamp": "10:05",
+      "event": "BCP activated",
+      "by": "Incident Commander"
+    }
+  ],
+  "response_team": [
+    {"role": "Incident Commander", "status": "active"},
+    {"role": "Facilities Lead", "status": "active"}
+  ],
+  "resolved_at": null
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deployment -->
+  <section style="background: var(--background-alt);">
+    <div class="container">
+      <h2 class="text-center">Deployment & Configuration</h2>
+
+      <div class="card">
+        <h3>Docker Compose Configuration</h3>
+        <pre style="background: white; padding: 1.5rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.85rem;"><code>services:
+  # BIA Service
+  bia-service:
+    build: ./platform-services/bia-service
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+      - eventbus
+
+  # Risk Assessment Service
+  risk-service:
+    build: ./platform-services/risk-service
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+      - eventbus
+
+  # ... (9 more services: Plans, Response, Compliance,
+  #      Governance, Documents, Learning, Validation,
+  #      Planning, Process Analytics)
+
+  # Shared Infrastructure
+  postgres:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=bcm_platform
+    volumes:
+      - ./infrastructure/database/migrations:/migrations
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 512mb
+
+  eventbus:
+    build: ./infrastructure/eventbus
+    ports:
+      - "8003:8003"
+    depends_on:
+      - redis</code></pre>
+      </div>
+
+      <div class="grid grid-2" style="margin-top: 2rem;">
+        <div class="card">
+          <h3>Environment Variables</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem;"><code># Database
+DATABASE_URL=postgresql://user:pass@host:5432/bcm_platform
+
+# Redis
+REDIS_URL=redis://redis:6379/0
+
+# EventBus
+EVENTBUS_URL=redis://redis:6379/1
+EVENTBUS_BACKEND=redis_streams
+
+# Service-specific
+SERVICE_PORT=800X
+SERVICE_NAME=service-name
+
+# Logging
+LOG_LEVEL=INFO</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>Health Checks</h3>
+          <pre style="background: var(--background-alt); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem;"><code># All services expose /health
+GET http://localhost:800X/health
+
+Response:
+{
+  "status": "healthy",
+  "service": "bia-service",
+  "version": "1.0.0",
+  "database": "connected",
+  "redis": "connected",
+  "eventbus": "connected",
+  "timestamp": "2025-10-14T..."
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section>
+    <div class="container text-center">
+      <h2>Explore More Services</h2>
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <a href="workflow_intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Workflow Intelligence</h3>
+          <p>The "brain" coordinating all platform services</p>
+        </a>
+        <a href="ai_foundation.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>AI Foundation</h3>
+          <p>LLM Router, RAG, and ML models</p>
+        </a>
+        <a href="service_catalog_visual.html" class="card" style="text-decoration: none; color: inherit;">
+          <h3>Full Service Catalog</h3>
+          <p>All 63 platform services</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>AI-Platform-ISO</h4>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 0.5rem;">
+          11 Platform Services implementing ISO 22301 BCM standards
+        </p>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
+        <a href="architecture.html">Architecture</a>
+      </div>
+
+      <div>
+        <h4>Key Services</h4>
+        <a href="platform_services_overview.html">Platform Services</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="governance_layer.html">Governance Layer</a>
+      </div>
+
+      <div>
+        <h4>Resources</h4>
+        <a href="documentation.html">Documentation</a>
+        <a href="deployment.html">Deployment</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 AI-Platform-ISO. Built for resilient organizations worldwide.</p>
+    </div>
+  </footer>
+
+  <script src="assets/scripts.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      sequence: {
+        useMaxWidth: true,
+        wrap: true
+      }
+    });
+  </script>
+</body>
+</html>

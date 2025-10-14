@@ -6,6 +6,7 @@
   <title>Service Catalog - AI-Platform-ISO</title>
   <meta name="description" content="Visual catalog of all 62 platform services organized by subsystem">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
     .filter-bar {
@@ -216,7 +217,7 @@
     }
 
     .stats-overview {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--primary-color);
       color: white;
       padding: 3rem 2rem;
       border-radius: 1rem;
@@ -250,11 +251,11 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html" class="active">Services</a>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html" class="active">Services</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
         <a href="documentation.html">Docs</a>
       </div>
     </div>
@@ -264,7 +265,7 @@
   <section class="hero" style="padding: 3rem 0;">
     <div class="container">
       <h1>Platform Service Catalog</h1>
-      <p style="font-size: 1.2rem; margin-top: 1rem;">62 microservices organized in 12 functional subsystems</p>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">63 microservices organized in 12 functional subsystems</p>
     </div>
   </section>
 
@@ -275,7 +276,7 @@
         <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Platform at a Glance</h2>
         <div class="stats-grid-horizontal">
           <div class="stat-box">
-            <h3>62</h3>
+            <h3>63</h3>
             <p>Total Services</p>
           </div>
           <div class="stat-box">
@@ -316,7 +317,7 @@
   <section id="database_infrastructure" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">💾</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Database Infrastructure</h2>
           <p>Relational, cache, vector, and time-series data storage</p>
@@ -458,7 +459,7 @@
   <section id="runtime_services" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">⚡</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Runtime Services</h2>
           <p>Service discovery, WebSocket, message queues</p>
@@ -563,7 +564,7 @@
   <section id="gateway_layer" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">🚪</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Gateway Layer</h2>
           <p>Unified API gateway with routing and load balancing</p>
@@ -615,7 +616,7 @@
   <section id="observability" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">📊</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Observability</h2>
           <p>Metrics, monitoring, visualization, alerting</p>
@@ -694,7 +695,7 @@
   <section id="eventbus_core" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">📡</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>EventBus Core</h2>
           <p>Event-driven choreography and inter-service communication</p>
@@ -746,7 +747,7 @@
   <section id="security" class="subsystem-section" data-category="infrastructure critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">🔒</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Security</h2>
           <p>Authentication, authorization, secrets management</p>
@@ -853,7 +854,7 @@
   <section id="ai_office" class="subsystem-section" data-category="ai">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">🤖</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>AI Office Infrastructure</h2>
           <p>AI specialists, coordinators, and automation agents</p>
@@ -1069,7 +1070,7 @@
   <section id="shared_libraries" class="subsystem-section" data-category="infrastructure">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">📚</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Shared Libraries</h2>
           <p>Common utilities, helpers, and test infrastructure</p>
@@ -1144,7 +1145,7 @@
   <section id="platform_services" class="subsystem-section" data-category="business critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">📋</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Platform Services</h2>
           <p>BCM business logic services (BIA, Risk, Plans, Compliance, etc.)</p>
@@ -1473,15 +1474,15 @@
   <section id="intelligent_core" class="subsystem-section" data-category="ai critical">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">🧠</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Intelligent Core</h2>
-          <p>AI orchestration, learning, workflow intelligence, and domain expertise</p>
+          <p>AI orchestration, ACE, learning, workflow intelligence, and domain expertise</p>
         </div>
         <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
           <span class="critical-badge">CRITICAL</span>
           <div class="subsystem-badge">
-            <strong>12</strong> Services
+            <strong>13</strong> Services
           </div>
         </div>
       </div>
@@ -1656,6 +1657,37 @@
           <div class="service-tags">
             <span class="service-tag">Decision Center</span>
             <span class="service-tag">Orchestration</span>
+          </div>
+        </div>
+
+        <!-- ACE Service -->
+        <div class="service-card">
+          <div class="service-header">
+            <div>
+              <h3 class="service-name">ACE Service</h3>
+              <span class="service-status status-production">Production</span>
+            </div>
+            <span class="service-port">:8050*</span>
+          </div>
+          <p class="service-description">
+            Agentic Context Engineering - evolving playbooks providing +8-15%
+            platform-wide improvement through accumulated knowledge and
+            continuous learning.
+          </p>
+          <div class="service-capabilities">
+            <h4>Key Capabilities:</h4>
+            <ul>
+              <li>Generator: Enhanced context with playbooks</li>
+              <li>Reflector: Trajectory analysis and insights</li>
+              <li>Curator: Incremental playbook evolution</li>
+              <li>Knowledge accumulation (NO context collapse)</li>
+              <li>+8-15% improvement (backed by research)</li>
+            </ul>
+          </div>
+          <div class="service-tags">
+            <span class="service-tag">ACE</span>
+            <span class="service-tag">Evolving Context</span>
+            <span class="service-tag">Learning</span>
           </div>
         </div>
 
@@ -1834,7 +1866,7 @@
   <section id="user_applications" class="subsystem-section" data-category="applications">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">📱</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>User Applications</h2>
           <p>User-facing applications (4) and BCM modules (12)</p>
@@ -2026,7 +2058,7 @@
   <section id="interface_layer" class="subsystem-section" data-category="applications">
     <div class="container">
       <div class="subsystem-header">
-        <div class="subsystem-icon">🖥️</div>
+        <div class="subsystem-icon"></div>
         <div class="subsystem-info">
           <h2>Interface Layer</h2>
           <p>User interfaces and external integrations (planned)</p>
@@ -2132,11 +2164,11 @@
         Dive deeper into how specific services work together
       </p>
       <div class="grid grid-3">
-        <a href="decision-center.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="decision_center.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Decision Center</h3>
           <p>AI-powered decision routing and delegation architecture</p>
         </a>
-        <a href="mio-manager.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="mio_manager.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>MIO Manager</h3>
           <p>Platform observatory and smart task scheduling</p>
         </a>
@@ -2160,16 +2192,16 @@
 
       <div>
         <h4>Platform</h4>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
         <a href="architecture.html">Architecture</a>
       </div>
 
       <div>
         <h4>Key Services</h4>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
         <a href="modules.html">All Services</a>
       </div>
 

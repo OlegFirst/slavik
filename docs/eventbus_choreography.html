@@ -6,6 +6,7 @@
   <title>EventBus Choreography - AI-Platform-ISO</title>
   <meta name="description" content="The Nervous System: Event-driven architecture, Choreography pattern, Redis Streams + RabbitMQ">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -16,12 +17,12 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Services</a>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="eventbus-choreography.html" class="active">EventBus</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Services</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="eventbus_choreography.html" class="active">EventBus</a>
         <a href="architecture.html">Architecture</a>
         <a href="documentation.html">Documentation</a>
       </div>
@@ -29,7 +30,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero" style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); padding: 4rem 0;">
+  <section class="hero" style="padding: 4rem 0;">
     <div class="container">
       <h1 style="color: white;">EventBus Choreography</h1>
       <p style="color: rgba(255,255,255,0.95); font-size: 1.2rem;">The Nervous System: Connecting All Services</p>
@@ -161,7 +162,7 @@ graph LR
         </div>
       </div>
 
-      <div style="margin-top: 2rem; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 2rem; border-radius: 8px; text-align: center;">
+      <div style="margin-top: 2rem; background: var(--primary-color); color: white; padding: 2rem; border-radius: 8px; text-align: center;">
         <h3>Our Approach: Hybrid Pattern</h3>
         <p style="max-width: 800px; margin: 1rem auto;">
           We use <strong>BOTH patterns</strong> where each fits best:
@@ -523,20 +524,20 @@ await bus.subscribe('*', handler)</code></pre>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0; background: #f8f9fa;">
               <td style="padding: 1rem;"><strong>Persistence</strong></td>
-              <td style="padding: 1rem; text-align: center;">❌ Lost on restart</td>
-              <td style="padding: 1rem; text-align: center;">✅ Durable (Redis RDB/AOF)</td>
-              <td style="padding: 1rem; text-align: center;">✅ Durable (disk/memory)</td>
+              <td style="padding: 1rem; text-align: center;">✗ Lost on restart</td>
+              <td style="padding: 1rem; text-align: center;">✓ Durable (Redis RDB/AOF)</td>
+              <td style="padding: 1rem; text-align: center;">✓ Durable (disk/memory)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0;">
               <td style="padding: 1rem;"><strong>Multi-instance</strong></td>
-              <td style="padding: 1rem; text-align: center;">❌ Single process only</td>
-              <td style="padding: 1rem; text-align: center;">✅ Consumer groups</td>
-              <td style="padding: 1rem; text-align: center;">✅ Multiple consumers</td>
+              <td style="padding: 1rem; text-align: center;">✗ Single process only</td>
+              <td style="padding: 1rem; text-align: center;">✓ Consumer groups</td>
+              <td style="padding: 1rem; text-align: center;">✓ Multiple consumers</td>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0; background: #f8f9fa;">
               <td style="padding: 1rem;"><strong>Event History</strong></td>
-              <td style="padding: 1rem; text-align: center;">❌ No replay</td>
-              <td style="padding: 1rem; text-align: center;">✅ Replay from timestamp</td>
+              <td style="padding: 1rem; text-align: center;">✗ No replay</td>
+              <td style="padding: 1rem; text-align: center;">✓ Replay from timestamp</td>
               <td style="padding: 1rem; text-align: center;">⚠️ Limited retention</td>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0;">
@@ -553,15 +554,15 @@ await bus.subscribe('*', handler)</code></pre>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0;">
               <td style="padding: 1rem;"><strong>Pattern Matching</strong></td>
-              <td style="padding: 1rem; text-align: center;">✅ Regex-based</td>
+              <td style="padding: 1rem; text-align: center;">✓ Regex-based</td>
               <td style="padding: 1rem; text-align: center;">⚠️ Multiple streams</td>
-              <td style="padding: 1rem; text-align: center;">✅ Topic + routing keys</td>
+              <td style="padding: 1rem; text-align: center;">✓ Topic + routing keys</td>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0; background: #f8f9fa;">
               <td style="padding: 1rem;"><strong>Setup Complexity</strong></td>
-              <td style="padding: 1rem; text-align: center;">🟢 Zero dependencies</td>
-              <td style="padding: 1rem; text-align: center;">🟡 Requires Redis</td>
-              <td style="padding: 1rem; text-align: center;">🔴 Requires RabbitMQ</td>
+              <td style="padding: 1rem; text-align: center;">Zero dependencies</td>
+              <td style="padding: 1rem; text-align: center;">Requires Redis</td>
+              <td style="padding: 1rem; text-align: center;">Requires RabbitMQ</td>
             </tr>
             <tr style="border-bottom: 1px solid #e0e0e0;">
               <td style="padding: 1rem;"><strong>Delivery Guarantee</strong></td>
@@ -571,7 +572,7 @@ await bus.subscribe('*', handler)</code></pre>
             </tr>
             <tr style="background: #f8f9fa;">
               <td style="padding: 1rem;"><strong>Code Changes</strong></td>
-              <td style="padding: 1rem; text-align: center;" colspan="3">✅ <strong>ZERO</strong> - Just change config!</td>
+              <td style="padding: 1rem; text-align: center;" colspan="3">✓ <strong>ZERO</strong> - Just change config!</td>
             </tr>
           </tbody>
         </table>
@@ -860,19 +861,19 @@ sequenceDiagram
       </p>
 
       <div class="grid grid-3" style="margin-top: 2rem;">
-        <a href="workflow-intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="workflow_intelligence.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Workflow Intelligence</h3>
           <p>The Brain using EventBus to coordinate all workflows and PDCA cycles</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">← Back</p>
         </a>
 
-        <a href="collective-intelligence.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="collective_intelligence.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Collective Intelligence</h3>
           <p>Federated learning using EventBus for privacy-preserving knowledge sharing</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
         </a>
 
-        <a href="governance-layer.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="governance_layer.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Governance Layer</h3>
           <p>Policy Engine using EventBus for real-time policy enforcement</p>
           <p style="color: #667eea; font-weight: 600; margin-top: 1rem;">Explore →</p>
@@ -880,7 +881,7 @@ sequenceDiagram
       </div>
 
       <div style="margin-top: 3rem;">
-        <a href="service-catalog-visual.html" class="btn btn-primary">View All 62 Services</a>
+        <a href="service_catalog_visual.html" class="btn btn-primary">View All 62 Services</a>
         <a href="architecture.html" class="btn btn-outline">Platform Architecture</a>
       </div>
     </div>
@@ -898,17 +899,17 @@ sequenceDiagram
 
       <div>
         <h4>Intelligence Layer</h4>
-        <a href="ai-foundation.html">AI Foundation</a>
-        <a href="workflow-intelligence.html">Workflow Intelligence</a>
-        <a href="eventbus-choreography.html">EventBus</a>
-        <a href="collective-intelligence.html">Collective Intelligence</a>
+        <a href="ai_foundation.html">AI Foundation</a>
+        <a href="workflow_intelligence.html">Workflow Intelligence</a>
+        <a href="eventbus_choreography.html">EventBus</a>
+        <a href="collective_intelligence.html">Collective Intelligence</a>
       </div>
 
       <div>
         <h4>Platform</h4>
-        <a href="service-catalog-visual.html">Services Catalog</a>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="service_catalog_visual.html">Services Catalog</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
         <a href="architecture.html">Architecture</a>
       </div>
 
@@ -916,8 +917,8 @@ sequenceDiagram
         <h4>Resources</h4>
         <a href="documentation.html">Documentation</a>
         <a href="deployment.html">Deployment Guide</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
       </div>
     </div>
 

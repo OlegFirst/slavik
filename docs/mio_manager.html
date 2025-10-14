@@ -6,6 +6,7 @@
   <title>MIO Manager - Platform Eyes | AI-Platform-ISO</title>
   <meta name="description" content="Deep dive into MIO Manager: The Observatory pattern for intelligent monitoring, automation, and self-healing in the AI-Platform-ISO">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -16,11 +17,11 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Service Catalog</a>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html" class="active">MIO Manager</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html" class="active">MIO Manager</a>
         <a href="architecture.html">Architecture</a>
         <a href="documentation.html">Documentation</a>
       </div>
@@ -28,7 +29,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero" style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);">
+  <section class="hero">
     <div class="container">
       <h1>MIO Manager</h1>
       <p class="hero-subtitle">Intelligent Monitoring & Observability Manager</p>
@@ -49,15 +50,15 @@
 
       <div class="grid grid-3">
         <div class="card">
-          <h3 class="text-primary">👀 Observatory Pattern</h3>
+          <h3 class="text-primary">Observatory Pattern</h3>
           <p>Continuous observation without intervention. Publishes findings to EventBus for choreography-based responses.</p>
         </div>
         <div class="card">
-          <h3 class="text-primary">🗓️ Smart Scheduling</h3>
+          <h3 class="text-primary">Smart Scheduling</h3>
           <p>Multi-cycle monitoring: continuous (30s), hourly, daily (3am), weekly (Monday), monthly. Focused, deep analysis.</p>
         </div>
         <div class="card">
-          <h3 class="text-primary">🤖 Self-Healing Integration</h3>
+          <h3 class="text-primary">Self-Healing Integration</h3>
           <p>Integrates with DevOps Agent, AI Event Manager, Predictive Service for proactive problem detection and resolution.</p>
         </div>
       </div>
@@ -93,27 +94,27 @@
       <div class="diagram-container">
         <pre class="mermaid">
 graph TB
-    subgraph MIO["👀 MIO Manager (Port 8046)"]
+    subgraph MIO["MIO Manager (Port 8046)"]
         SS[Smart Scheduler]
         MCO[Metrics Coverage Observer]
         MHC[Metrics Health Checker]
         AT[Automation Toolkit]
     end
 
-    subgraph Monitoring["📊 Monitoring Sources"]
+    subgraph Monitoring["Monitoring Sources"]
         PROM[Prometheus :9090]
         SD[Service Discovery :8500]
         GRAF[Grafana :3000]
     end
 
-    subgraph Intelligence["🧠 Intelligence Layer"]
+    subgraph Intelligence["Intelligence Layer"]
         WI[Workflow Intelligence<br/>Brain]
         PRED[Predictive Service]
         OPT[Optimizer]
         COORD[Coordination Center]
     end
 
-    subgraph Actions["⚡ Action Systems"]
+    subgraph Actions["Action Systems"]
         DEVOPS[DevOps Agent]
         AIEM[AI Event Manager]
         POL[Policy Engine]
@@ -296,7 +297,7 @@ gantt
         How MIO observes a problem and triggers choreographed responses
       </p>
 
-      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); padding: 2rem; border-radius: 8px; color: white; margin: 2rem 0;">
+      <div style="background: var(--primary-color); padding: 2rem; border-radius: 8px; color: white; margin: 2rem 0;">
         <h3 style="color: white; margin-bottom: 1rem;">Scenario: Critical Service Failure</h3>
 
         <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem;">
@@ -368,19 +369,19 @@ await eventbus.publish(
           <div>
             <h4 class="text-primary">What MIO Does</h4>
             <ul style="margin-top: 0.5rem;">
-              <li>✅ Detects failure in 60 seconds</li>
-              <li>✅ Publishes observation to EventBus</li>
-              <li>✅ Continues monitoring for recovery</li>
-              <li>✅ Includes findings in daily report</li>
+              <li>✓ Detects failure in 60 seconds</li>
+              <li>✓ Publishes observation to EventBus</li>
+              <li>✓ Continues monitoring for recovery</li>
+              <li>✓ Includes findings in daily report</li>
             </ul>
           </div>
           <div>
             <h4 class="text-primary">What MIO Does NOT Do</h4>
             <ul style="margin-top: 0.5rem;">
-              <li>❌ Does not restart services (DevOps Agent does)</li>
-              <li>❌ Does not decide who to notify (Policy Engine does)</li>
-              <li>❌ Does not learn patterns (AI Event Manager does)</li>
-              <li>❌ Does not coordinate actions (Coordination Center does)</li>
+              <li>✗ Does not restart services (DevOps Agent does)</li>
+              <li>✗ Does not decide who to notify (Policy Engine does)</li>
+              <li>✗ Does not learn patterns (AI Event Manager does)</li>
+              <li>✗ Does not coordinate actions (Coordination Center does)</li>
             </ul>
           </div>
         </div>
@@ -398,7 +399,7 @@ await eventbus.publish(
 
       <div class="grid grid-3">
         <div class="card">
-          <h3>🧠 Intelligence Layer</h3>
+          <h3>Intelligence Layer</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>Workflow Intelligence:</strong> Reports daily/weekly/monthly findings</li>
             <li><strong>Predictive Service:</strong> Gets proactive recommendations, triggers ML retraining</li>
@@ -408,7 +409,7 @@ await eventbus.publish(
         </div>
 
         <div class="card">
-          <h3>⚡ Action Systems</h3>
+          <h3>Action Systems</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>DevOps Agent:</strong> Infrastructure scanning, container health</li>
             <li><strong>AI Event Manager:</strong> Event pattern learning</li>
@@ -418,7 +419,7 @@ await eventbus.publish(
         </div>
 
         <div class="card">
-          <h3>📊 Monitoring Stack</h3>
+          <h3>Monitoring Stack</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>Prometheus:</strong> Metrics collection, scrape job setup</li>
             <li><strong>Grafana:</strong> Dashboard creation</li>
@@ -428,7 +429,7 @@ await eventbus.publish(
         </div>
 
         <div class="card">
-          <h3>🔬 Expertise Services</h3>
+          <h3>Expertise Services</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>Expertise Center:</strong> Tactical assistants quality</li>
             <li><strong>Collective Intelligence:</strong> Stuck organization detection</li>
@@ -438,7 +439,7 @@ await eventbus.publish(
         </div>
 
         <div class="card">
-          <h3>🔧 Automation Toolkit</h3>
+          <h3>Automation Toolkit</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>Service Discovery:</strong> Find all services</li>
             <li><strong>Metrics Scraper:</strong> Collect Prometheus metrics</li>
@@ -448,7 +449,7 @@ await eventbus.publish(
         </div>
 
         <div class="card">
-          <h3>👀 MIO EYES (Phase 2.1)</h3>
+          <h3>MIO EYES (Phase 2.1)</h3>
           <ul style="margin-top: 1rem; font-size: 0.9rem;">
             <li><strong>Metrics Coverage Observer:</strong> Ensure all services have metrics</li>
             <li><strong>Metrics Health Checker:</strong> Check Prometheus targets health</li>
@@ -649,14 +650,14 @@ await eventbus.publish(
   <!-- Call to Action -->
   <section>
     <div class="container">
-      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); padding: 3rem 2rem; border-radius: 8px; text-align: center; color: white;">
+      <div style="background: var(--primary-color); padding: 3rem 2rem; border-radius: 8px; text-align: center; color: white;">
         <h2 style="color: white; margin-bottom: 1rem;">Explore More Platform Services</h2>
         <p style="margin-bottom: 2rem; font-size: 1.1rem; opacity: 0.9;">
           MIO Manager works with 15+ services to maintain platform health
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="service-catalog-visual.html" class="btn btn-outline" style="border-color: white; color: white;">View Service Catalog</a>
-          <a href="decision-center.html" class="btn btn-outline" style="border-color: white; color: white;">Decision Center</a>
+          <a href="service_catalog_visual.html" class="btn btn-outline" style="border-color: white; color: white;">View Service Catalog</a>
+          <a href="decision_center.html" class="btn btn-outline" style="border-color: white; color: white;">Decision Center</a>
           <a href="architecture.html" class="btn btn-outline" style="border-color: white; color: white;">Full Architecture</a>
         </div>
       </div>
@@ -675,9 +676,9 @@ await eventbus.publish(
 
       <div>
         <h4>Deep Dives</h4>
-        <a href="service-catalog-visual.html">Service Catalog</a>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
       </div>
 
       <div>

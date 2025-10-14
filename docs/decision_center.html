@@ -6,6 +6,7 @@
   <title>Decision Center Architecture - AI-Platform-ISO</title>
   <meta name="description" content="Deep dive into the AI Orchestrator Decision Center architecture and decision-making flow">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/unified_styles.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -16,11 +17,11 @@
       <button class="mobile-menu-toggle">☰</button>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Services</a>
-        <a href="decision-center.html" class="active">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Services</a>
+        <a href="decision_center.html" class="active">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
         <a href="documentation.html">Docs</a>
       </div>
     </div>
@@ -108,11 +109,11 @@
 
       <div class="mermaid">
 graph TB
-    subgraph Input["📥 Input"]
+    subgraph Input["Input"]
         SIT[Situation<br/>workflow_stuck,<br/>error, etc.]
     end
 
-    subgraph DecisionCenter["🧠 AI Orchestrator Decision Center"]
+    subgraph DecisionCenter["AI Orchestrator Decision Center"]
         CA[Context Aggregator<br/>Gather all relevant data]
         PE[Priority Engine<br/>Assess urgency level]
         SS[Strategy Selector<br/>Choose best action]
@@ -120,14 +121,14 @@ graph TB
         DM[Delegation Manager<br/>Route to specialists]
     end
 
-    subgraph Memory["💾 4-Layer Memory"]
+    subgraph Memory["4-Layer Memory"]
         WM[Working Memory<br/>Events, recent data]
         STM[Short-term Memory<br/>Decisions, outcomes]
         LTM[Long-term Memory<br/>Patterns, strategies]
         OM[Organizational Memory<br/>Domain knowledge]
     end
 
-    subgraph Execution["⚡ Execution"]
+    subgraph Execution["Execution"]
         AUTO[Auto-Resolve<br/>Call services]
         DEL[Delegate<br/>To AI specialists]
         ESC[Escalate<br/>To human]
@@ -173,13 +174,13 @@ graph TB
 
       <div class="mermaid">
 sequenceDiagram
-    participant User as 🧑 Situation
-    participant Orch as 🧠 AI Orchestrator
+    participant User as Situation
+    participant Orch as AI Orchestrator
     participant CA as Context Aggregator
     participant PE as Priority Engine
     participant SS as Strategy Selector
     participant SM as Safety Monitor
-    participant Exec as ⚡ Execution
+    participant Exec as Execution
 
     User->>Orch: decide(situation)
 
@@ -431,12 +432,12 @@ graph LR
         How Decision Center handles a stuck workflow
       </p>
 
-      <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem;">
+      <div class="card" style="background: var(--primary-color); color: white; padding: 2rem;">
         <h3 style="color: white; margin-bottom: 1.5rem;">Scenario: BIA Workflow Stuck for 30 Minutes</h3>
 
         <div class="grid grid-2" style="gap: 1.5rem;">
           <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px);">
-            <h4 style="color: white; margin-bottom: 1rem;">📥 Input</h4>
+            <h4 style="color: white; margin-bottom: 1rem;">Input</h4>
             <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem; color: #e0e0e0;"><code>{
   "workflow_stuck": true,
   "workflow_id": "bia_001",
@@ -446,7 +447,7 @@ graph LR
           </div>
 
           <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px);">
-            <h4 style="color: white; margin-bottom: 1rem;">⚡ Decision Made</h4>
+            <h4 style="color: white; margin-bottom: 1rem;">Decision Made</h4>
             <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; font-size: 0.85rem; color: #e0e0e0;"><code>{
   "action": "AUTO_RESOLVE",
   "rationale": "Restart workflow - similar case succeeded (92% confidence)",
@@ -458,14 +459,14 @@ graph LR
         </div>
 
         <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; backdrop-filter: blur(10px); margin-top: 1.5rem;">
-          <h4 style="color: white; margin-bottom: 1rem;">🔄 Execution Steps</h4>
+          <h4 style="color: white; margin-bottom: 1rem;">Execution Steps</h4>
           <ol style="margin: 0; padding-left: 1.5rem; font-size: 0.95rem;">
             <li style="margin-bottom: 0.75rem;"><strong>Context Aggregated:</strong> Found similar case (case_123) where restart succeeded</li>
             <li style="margin-bottom: 0.75rem;"><strong>Priority Assessed:</strong> HIGH (score: 72) - affects ongoing BIA assessment</li>
             <li style="margin-bottom: 0.75rem;"><strong>Strategy Selected:</strong> "Restart workflow" (confidence: 0.92)</li>
-            <li style="margin-bottom: 0.75rem;"><strong>Safety Validated:</strong> ✅ Passed all checks</li>
+            <li style="margin-bottom: 0.75rem;"><strong>Safety Validated:</strong> ✓ Passed all checks</li>
             <li style="margin-bottom: 0.75rem;"><strong>Auto-Resolved:</strong> Called Planning Service → POST /api/v1/workflows/bia_001/resume</li>
-            <li><strong>Result:</strong> ✅ Workflow resumed successfully in 2.3 seconds</li>
+            <li><strong>Result:</strong> ✓ Workflow resumed successfully in 2.3 seconds</li>
           </ol>
         </div>
       </div>
@@ -582,11 +583,11 @@ graph LR
     <div class="container text-center">
       <h2>Explore More Architecture</h2>
       <div class="grid grid-3" style="margin-top: 2rem;">
-        <a href="mio-manager.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="mio_manager.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>MIO Manager</h3>
           <p>Platform observatory and smart task scheduling</p>
         </a>
-        <a href="service-catalog-visual.html" class="card" style="text-decoration: none; color: inherit;">
+        <a href="service_catalog_visual.html" class="card" style="text-decoration: none; color: inherit;">
           <h3>Service Catalog</h3>
           <p>All 62 platform services explained</p>
         </a>
@@ -610,16 +611,16 @@ graph LR
 
       <div>
         <h4>Platform</h4>
-        <a href="bcm-philosophy.html">BCM Philosophy</a>
-        <a href="platform-overview.html">Platform Overview</a>
-        <a href="service-catalog-visual.html">Service Catalog</a>
+        <a href="bcm_philosophy.html">BCM Philosophy</a>
+        <a href="platform_overview.html">Platform Overview</a>
+        <a href="service_catalog_visual.html">Service Catalog</a>
         <a href="architecture.html">Architecture</a>
       </div>
 
       <div>
         <h4>Key Services</h4>
-        <a href="decision-center.html">Decision Center</a>
-        <a href="mio-manager.html">MIO Manager</a>
+        <a href="decision_center.html">Decision Center</a>
+        <a href="mio_manager.html">MIO Manager</a>
         <a href="modules.html">All Services</a>
       </div>
 
