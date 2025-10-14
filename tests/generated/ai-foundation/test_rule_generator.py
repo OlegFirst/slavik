@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai-foundation.rule_generator import *
+# from intelligent_core.ai_foundation.rule_generator import *
 
 
 class TestRuleGenerator:

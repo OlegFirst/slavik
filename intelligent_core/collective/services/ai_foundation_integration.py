@@ -1,7 +1,7 @@
 """
 AI Foundation Integration for Collective Intelligence
 
-Integrates RAG Pipeline and LLM Router from ai-foundation:
+Integrates RAG Pipeline and LLM Router from ai_foundation:
 - RAG: Retrieves similar case studies before agent creation
 - LLM: Uses unified router for response generation with automatic task routing
 """

@@ -116,7 +116,7 @@ class EscalationManager:
 
     Example:
         ```python
-        from infrastructure.decision-center.notification_service import NotificationService, NotificationConfig
+        from infrastructure.decision_center.notification_service import NotificationService, NotificationConfig
 
         config = NotificationConfig()
         notification_service = NotificationService(config, eventbus)

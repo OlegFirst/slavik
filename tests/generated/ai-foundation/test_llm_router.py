@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai-foundation.llm_router import *
+# from intelligent_core.ai_foundation.llm_router import *
 
 
 class TestLLMProvider:

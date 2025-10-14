@@ -577,7 +577,7 @@ class DocumentComparison(Base):
     # Comparison Metadata
     comparison_type = Column(String(50))  # "version_diff", "similar_content"
 
-    # Diff Results (from document-processor/services/comparator.py lines 45-102)
+    # Diff Results (from document_processor/services/comparator.py lines 45-102)
     similarity_score = Column(Float)  # 0.0-1.0
     text_added = Column(Integer)  # Characters added
     text_removed = Column(Integer)  # Characters removed

@@ -80,14 +80,14 @@ class LongTermMemory:
             return False
 
     async def retrieve(self, key: str) -> Optional[Any]:
-        """Retrieve item from long-term memory."""
+        """Retrieve item from long_term memory."""
         try:
             # TODO: Retrieve from vector DB
-            logger.debug(f"Retrieving from long-term memory: {key} (stub)")
+            logger.debug(f"Retrieving from long_term memory: {key} (stub)")
             return None
 
         except Exception as e:
-            logger.error(f"Error retrieving from long-term memory: {e}")
+            logger.error(f"Error retrieving from long_term memory: {e}")
             return None
 
     async def search_similar(

@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.workflow-engine.models import *
+# from intelligent_core.workflow_engine.models import *
 
 
 class TestProcessStatus:

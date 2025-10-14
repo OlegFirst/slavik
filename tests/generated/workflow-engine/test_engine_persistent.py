@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.workflow-engine.engine_persistent import *
+# from intelligent_core.workflow_engine.engine_persistent import *
 
 
 class TestBPMNEnginePersistent:

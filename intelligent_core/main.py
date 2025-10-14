@@ -412,7 +412,7 @@ async def find_incident_patterns(org_id: int):
 # WORKFLOW INTELLIGENCE INTEGRATION
 # ============================================
 
-# TEMPORARY: Commented out broken import - workflow_intelligence_api module incomplete
+# TEMPORARY: Commented out broken import _ workflow_intelligence_api module incomplete
 # from workflow_intelligence_api import router as workflow_router, initialize_workflow_intelligence
 
 # Include workflow intelligence routes

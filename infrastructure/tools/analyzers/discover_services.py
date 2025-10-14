@@ -253,7 +253,7 @@ class ServiceDiscovery:
                 # Find imports from other services
                 if 'from infrastructure' in content:
                     deps.append('infrastructure-services')
-                if 'from intelligent-core' in content or 'from ai_foundation' in content:
+                if 'from intelligent_core' in content or 'from ai_foundation' in content:
                     deps.append('ai-foundation')
                 if 'from workflow_intelligence' in content:
                     deps.append('workflow-intelligence')

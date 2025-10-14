@@ -124,7 +124,7 @@ class KnowledgeBaseAdapter:
 
 class PatternDetectorWrapper:
     """
-    Wrapper for Pattern Detector from ai-foundation
+    Wrapper for Pattern Detector from ai_foundation
 
     Provides async interface compatible with PDCA
     """
@@ -137,7 +137,7 @@ class PatternDetectorWrapper:
             )
             self._detector = RealPatternDetector()
             self.using_real = True
-            logger.info("✅ Using REAL PatternDetector from ai-foundation")
+            logger.info("✅ Using REAL PatternDetector from ai_foundation")
         except ImportError:
             logger.warning("⚠️ Could not import PatternDetector, using simple implementation")
             self._detector = None
@@ -206,7 +206,7 @@ async def initialize_pdca_with_real_dependencies(
     - PostgreSQL AsyncSession
     - CaseLibrary (from collective)
     - KnowledgeBase (adapter)
-    - PatternDetector (from ai-foundation)
+    - PatternDetector (from ai_foundation)
 
     Args:
         tenant_id: Tenant ID for RLS (default: "default-tenant")

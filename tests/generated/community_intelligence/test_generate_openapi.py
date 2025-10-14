@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.community_intelligence.generate_openapi import *
+# from intelligent_core.community_intelligence.generate_openapi import *
 
 
 def test_generate_openapi_spec_successful_execution():

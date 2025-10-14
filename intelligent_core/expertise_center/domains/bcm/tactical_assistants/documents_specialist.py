@@ -186,7 +186,7 @@ class DocumentsSpecialistAI(BaseTacticalAssistant):
             user_id: Optional user ID for personalized results
 
         Returns:
-            Search results from living-docs
+            Search results from living_docs
         """
         if not self.living_docs_enabled:
             return {
@@ -256,7 +256,7 @@ class DocumentsSpecialistAI(BaseTacticalAssistant):
 
     async def generate_example(self, topic: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Generate AI example from living-docs.
+        Generate AI example from living_docs.
 
         Args:
             topic: Topic for example (e.g., "bia_process_identification")

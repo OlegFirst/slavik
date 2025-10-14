@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.predictive.repository import *
+# from intelligent_core.predictive.repository import *
 
 
 class TestPredictiveRepository:

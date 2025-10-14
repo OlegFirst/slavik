@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.orchestration.models import *
+# from intelligent_core.orchestration.models import *
 
 
 class TestPriorityLevel:

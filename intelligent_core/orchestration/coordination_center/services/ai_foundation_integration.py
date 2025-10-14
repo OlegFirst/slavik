@@ -1,7 +1,7 @@
 """
 AI Foundation Integration for Coordination Center
 
-Integrates RAG Pipeline and LLM Router from ai-foundation:
+Integrates RAG Pipeline and LLM Router from ai_foundation:
 - RAG: Retrieves similar coordination patterns (conflict resolution, multi-service orchestration)
 - LLM: Generates execution plans and conflict resolution strategies
 - Pattern storage: Stores successful coordination patterns

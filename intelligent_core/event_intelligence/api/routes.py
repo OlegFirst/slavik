@@ -401,7 +401,7 @@ async def record_feedback(request: RecordFeedbackRequest):
     """
     Record developer feedback on suggestion
 
-    Enables learning from real-world decisions
+    Enables learning from real_world decisions
 
     Example:
     ```json

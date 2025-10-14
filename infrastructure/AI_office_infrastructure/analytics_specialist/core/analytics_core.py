@@ -430,7 +430,7 @@ class AnalyticsCore:
         return report
 
     async def _analyze_processes(self) -> Dict[str, Any]:
-        """Analyze processes from process-analytics"""
+        """Analyze processes from process_analytics"""
         insights = []
         recommendations = []
 

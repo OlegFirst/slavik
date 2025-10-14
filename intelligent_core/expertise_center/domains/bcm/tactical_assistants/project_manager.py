@@ -23,7 +23,7 @@ from expertise_center.shared.base import BaseTacticalAssistant
 logger = logging.getLogger(__name__)
 
 
-# Re-export enums from project-intelligence
+# Re-export enums from project_intelligence
 class BCMProjectType(str, Enum):
     """BCM project types"""
     recovery = "recovery"
@@ -55,7 +55,7 @@ class ProjectManagerAI(BaseTacticalAssistant):
     - Recovery strategies for troubled projects
     - Integration with 9 BCM modules
 
-    Integrates ProjectIntelligenceEngine (from project-intelligence service)
+    Integrates ProjectIntelligenceEngine (from project_intelligence service)
     with RAG for context-aware project advice.
     """
 

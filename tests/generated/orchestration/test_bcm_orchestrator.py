@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.orchestration.bcm_orchestrator import *
+# from intelligent_core.orchestration.bcm_orchestrator import *
 
 
 class TestExecutionStrategy:

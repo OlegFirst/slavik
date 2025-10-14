@@ -1,7 +1,7 @@
 """
 AI Foundation Integration for Predictive Service
 
-Integrates RAG Pipeline and LLM Router from ai-foundation:
+Integrates RAG Pipeline and LLM Router from ai_foundation:
 - RAG: Retrieves historical journey patterns and demand forecasts
 - LLM: Generates proactive recommendations with context
 - Pattern storage: Learns from successful predictions

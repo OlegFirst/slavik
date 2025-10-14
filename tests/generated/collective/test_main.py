@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.collective.main import *
+# from intelligent_core.collective.main import *
 
 
 @pytest.mark.asyncio

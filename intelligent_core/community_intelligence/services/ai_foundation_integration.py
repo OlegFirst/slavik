@@ -1,7 +1,7 @@
 """
 AI Foundation Integration for Community Intelligence
 
-Integrates RAG Pipeline and LLM Router from ai-foundation:
+Integrates RAG Pipeline and LLM Router from ai_foundation:
 - RAG: Retrieves similar case studies and community patterns
 - LLM: Generates insights from community contributions
 - Pattern storage: Stores successful community insights

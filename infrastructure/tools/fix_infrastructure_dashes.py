@@ -3,7 +3,7 @@
 Fix Infrastructure Directories with Dashes
 ==========================================
 
-Safely renames infrastructure directories from kebab-case to snake_case.
+Safely renames infrastructure directories from kebab_case to snake_case.
 
 Features:
 - Uses git mv to preserve history

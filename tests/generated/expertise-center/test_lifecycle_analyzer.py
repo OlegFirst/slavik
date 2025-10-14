@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.expertise-center.lifecycle_analyzer import *
+# from intelligent_core.expertise_center.lifecycle_analyzer import *
 
 
 class TestLifecycleMonitor:

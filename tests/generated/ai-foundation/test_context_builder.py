@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai-foundation.context_builder import *
+# from intelligent_core.ai_foundation.context_builder import *
 
 
 class TestContextBuilder:

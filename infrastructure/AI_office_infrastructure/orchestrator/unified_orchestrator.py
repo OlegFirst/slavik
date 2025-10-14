@@ -93,7 +93,7 @@ except ImportError as e:
     TaskContext = None
     HAS_ADAPTIVE_METRICS = False
 
-# Import BCM executor from platform-services
+# Import BCM executor from platform_services
 PLATFORM_SERVICES = Path(__file__).parent.parent.parent.parent / 'platform-services'
 sys.path.insert(0, str(PLATFORM_SERVICES / 'bcm-coordination-service'))
 try:

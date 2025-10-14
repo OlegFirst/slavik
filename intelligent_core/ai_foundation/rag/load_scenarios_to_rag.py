@@ -11,7 +11,7 @@ import logging
 from typing import List, Dict
 from pathlib import Path
 
-# Fix circular import - rename conflicting file or import directly
+# Fix circular import _ rename conflicting file or import directly
 try:
     from qdrant_client import QdrantClient as QdrantClientLib
     from qdrant_client.models import Distance, VectorParams, PointStruct

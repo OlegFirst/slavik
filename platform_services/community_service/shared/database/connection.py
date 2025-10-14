@@ -14,7 +14,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Load environment variables from AI-Platform-ISO/.env
+# Load environment variables from AI_Platform_ISO/.env
 env_path = Path(__file__).parent.parent.parent.parent.parent / ".env"
 load_dotenv(env_path)
 

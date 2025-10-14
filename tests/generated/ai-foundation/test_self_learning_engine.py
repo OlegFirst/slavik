@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai-foundation.self_learning_engine import *
+# from intelligent_core.ai_foundation.self_learning_engine import *
 
 
 class TestSelfLearningEngine:

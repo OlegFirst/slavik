@@ -12,7 +12,7 @@ def check_eventbus_integration():
 
     services_dir = Path("/Users/MD/AI-Platform-ISO/intelligent-core")
 
-    # Services from docker-compose.yml
+    # Services from docker_compose.yml
     services = {
         "intelligent-core-main": services_dir,
         "ai-foundation": services_dir / "ai-foundation" / "learning-knowledge",

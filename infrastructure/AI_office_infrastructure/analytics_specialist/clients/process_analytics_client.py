@@ -20,7 +20,7 @@ class ProcessAnalyticsClient:
     """
     Client for Process Analytics service
 
-    Provides methods to query process mining insights from process-analytics service.
+    Provides methods to query process mining insights from process_analytics service.
 
     Example:
         ```python

@@ -4,7 +4,7 @@ BIA Service - Main Application
 ISO 22301 Clause 8.2.2 - Business Impact Analysis
 
 FastAPI entry point with lifespan management and unified architecture.
-All original functionality preserved from 695-line monolithic main.py.
+All original functionality preserved from 695_line monolithic main.py.
 """
 
 import logging

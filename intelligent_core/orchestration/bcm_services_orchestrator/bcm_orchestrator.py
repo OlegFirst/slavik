@@ -13,7 +13,7 @@ Coordinates:
 Reports to: MEGA-BRAIN (ai-orchestration/)
 
 Architecture:
-- Strategic decisions come from MEGA-BRAIN via DelegationManager
+- Strategic decisions come from MEGA_BRAIN via DelegationManager
 - BCM Orchestrator determines execution strategy
 - Delegates to analyzers (AI analysis) or services (operational work)
 - Starts Temporal workflows for complex multi-step processes
@@ -47,7 +47,7 @@ class BCMServicesOrchestrator:
     BCM Services Orchestrator - Level 2 Manager.
 
     Responsibilities:
-    - Receive delegations from MEGA-BRAIN
+    - Receive delegations from MEGA_BRAIN
     - Determine execution strategy (analyzer/service/workflow)
     - Coordinate analyzers for AI-powered insights
     - Call BCM services for operational work
@@ -62,7 +62,7 @@ class BCMServicesOrchestrator:
             temporal_client=temporal
         )
 
-        # Delegated task from MEGA-BRAIN
+        # Delegated task from MEGA_BRAIN
         result = await orchestrator.execute_task({
             'task_type': 'bia_analysis',
             'input': {'organization_id': 'org-123'},
@@ -138,7 +138,7 @@ class BCMServicesOrchestrator:
         task: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Execute delegated task from MEGA-BRAIN.
+        Execute delegated task from MEGA_BRAIN.
 
         Args:
             task: Task definition with:

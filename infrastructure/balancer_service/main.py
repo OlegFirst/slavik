@@ -75,7 +75,7 @@ class BalancerService:
         self.roi_optimizer: Optional[PredictiveROIOptimizer] = None
         self.balancer_3d: Optional[ThreeDimensionalBalancer] = None
 
-        # Infrastructure state (from ai-event-manager)
+        # Infrastructure state (from ai_event_manager)
         self.infrastructure_state: Optional[dict] = None
 
         # Tasks
@@ -246,7 +246,7 @@ class BalancerService:
 
     async def _handle_infrastructure_state(self, event: dict):
         """
-        Handle infrastructure state update from ai-event-manager
+        Handle infrastructure state update from ai_event_manager
 
         NEW: Infrastructure-aware balancing decisions based on:
         - Database availability

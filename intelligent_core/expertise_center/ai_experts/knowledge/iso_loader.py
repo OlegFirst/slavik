@@ -1,7 +1,7 @@
 """
 ISO 22301 Knowledge Loader
 
-Loads ISO 22301:2019 clauses from ISO-22301-Library into Knowledge Graph
+Loads ISO 22301:2019 clauses from ISO_22301_Library into Knowledge Graph
 for use by AI Experts and RAG Pipeline.
 """
 
@@ -70,7 +70,7 @@ class ISO22301Clause:
 
 class ISO22301Loader:
     """
-    Load ISO 22301:2019 standard from ISO-22301-Library
+    Load ISO 22301:2019 standard from ISO_22301_Library
 
     Parses clauses_breakdown.md and extracts structured clause data
     """

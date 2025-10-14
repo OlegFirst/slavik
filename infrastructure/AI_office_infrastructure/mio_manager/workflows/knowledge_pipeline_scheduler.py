@@ -310,7 +310,7 @@ async def setup_pipeline_schedules():
     """
     Set up scheduled jobs for knowledge pipeline
 
-    Call this from mio-manager main.py startup
+    Call this from mio_manager main.py startup
     """
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 

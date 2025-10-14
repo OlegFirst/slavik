@@ -19,7 +19,7 @@ intelligent_core_path = Path(__file__).parent.parent.parent.parent.parent / "int
 sys.path.insert(0, str(intelligent_core_path))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Import from intelligent-core (templates and storage)
+# Import from intelligent_core (templates and storage)
 from template_loader import TemplateLoader
 from storage.registry import ScenarioRegistry
 

@@ -106,7 +106,7 @@ class ShortTermMemory:
             return False
 
     async def retrieve(self, key: str) -> Optional[Any]:
-        """Retrieve item from short-term memory."""
+        """Retrieve item from short_term memory."""
         try:
             async with self.db.get_session() as session:
                 query = text("""
@@ -127,7 +127,7 @@ class ShortTermMemory:
             return None
 
         except Exception as e:
-            logger.error(f"Error retrieving from short-term memory: {e}")
+            logger.error(f"Error retrieving from short_term memory: {e}")
             return None
 
     async def store_decision(

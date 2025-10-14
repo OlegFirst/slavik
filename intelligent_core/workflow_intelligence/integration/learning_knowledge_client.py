@@ -86,7 +86,7 @@ class LearningKnowledgeClient:
         tenant_id: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
-        Find similar workflow cases from learning-knowledge
+        Find similar workflow cases from learning_knowledge
 
         Args:
             module: Workflow module (bia, risk, planning, etc)
@@ -138,7 +138,7 @@ class LearningKnowledgeClient:
         include_guides: bool = False
     ) -> Optional[Dict[str, Any]]:
         """
-        Get ISO standard from learning-knowledge
+        Get ISO standard from learning_knowledge
 
         Args:
             standard_id: Standard ID (e.g., "iso/iso-22301")
@@ -225,7 +225,7 @@ class LearningKnowledgeClient:
         industry: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        Get benchmarks from learning-knowledge
+        Get benchmarks from learning_knowledge
 
         Args:
             module: Workflow module

@@ -215,7 +215,7 @@ class RealDataCollector:
         quality_improvement = 5.0  # Placeholder - should track over time
 
         # Pattern reuse rate
-        pattern_reuse_rate = 70.0  # Placeholder - from long-term memory
+        pattern_reuse_rate = 70.0  # Placeholder - from long_term memory
 
         return {
             'pdca_cycles': pdca_cycles,

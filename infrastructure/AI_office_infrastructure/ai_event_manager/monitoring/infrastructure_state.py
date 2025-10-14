@@ -3,10 +3,10 @@ Infrastructure State Monitoring - UNIFIED MONITORING SYSTEM
 
 Объединяет:
 - Infrastructure state (ex central-brain)
-- Resource tracking (from mio-manager)
-- Service health (from service-discovery)
+- Resource tracking (from mio_manager)
+- Service health (from service_discovery)
 - Metrics (from Prometheus)
-- Compliance (from project-manager)
+- Compliance (from project_manager)
 
 Публикует всё в EventBus для координации с:
 - balancer-service
@@ -60,7 +60,7 @@ class InfrastructureState:
     healthy_services: int
     unhealthy_services: int
 
-    # Ресурсы (from mio-manager)
+    # Ресурсы (from mio_manager)
     cpu_usage: Optional[float] = None
     memory_usage: Optional[float] = None
     disk_usage: Optional[float] = None
@@ -98,7 +98,7 @@ class InfrastructureStateMonitor:
     EventBus Events (СЛУШАЕТ):
     - platform.service.registered (new service)
     - platform.service.unregistered (service down)
-    - platform.resources.snapshot (from mio-manager)
+    - platform.resources.snapshot (from mio_manager)
     """
 
     def __init__(self, eventbus, config: Dict):
@@ -357,7 +357,7 @@ class InfrastructureStateMonitor:
 
 
     # ========================================================================
-    # STRATEGIC DECISIONS (from central-brain logic)
+    # STRATEGIC DECISIONS (from central_brain logic)
     # ========================================================================
 
     def suggest_scaling_strategy(self) -> Dict:

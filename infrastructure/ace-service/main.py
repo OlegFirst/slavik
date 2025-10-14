@@ -10,6 +10,7 @@ Database: Supabase PostgreSQL
 import os
 import asyncio
 import asyncpg
+import json
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException, Request
@@ -225,14 +226,14 @@ class ACEService:
                         INSERT INTO ace_trajectory_log (
                             playbook_id, task_type, input_context, output_result,
                             trajectory, insights, effectiveness, success
-                        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                        ) VALUES ($1, $2, $3::jsonb, $4::jsonb, $5::jsonb, $6::jsonb, $7, $8)
                     """,
                     playbook_id,
                     task_type,
-                    trajectory.get('input_context', {}),
-                    trajectory.get('output_result', {}),
-                    trajectory,
-                    insights,
+                    json.dumps(trajectory.get('input_context', {})),
+                    json.dumps(trajectory.get('output_result', {})),
+                    json.dumps(trajectory),
+                    json.dumps(insights),
                     effectiveness,
                     success
                     )
@@ -291,9 +292,9 @@ class ACEService:
                 INSERT INTO ace_playbooks (
                     task_type, module_name, playbook, version
                 )
-                VALUES ($1, $2, $3, $4)
+                VALUES ($1, $2, $3::jsonb, $4)
                 RETURNING id
-            """, task_type, module_name, updated_playbook, new_version)
+            """, task_type, module_name, json.dumps(updated_playbook), new_version)
 
             new_playbook_id = result['id']
 

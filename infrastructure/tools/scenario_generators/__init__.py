@@ -4,7 +4,7 @@ Scenario Generators - Infrastructure Tool
 Generates test scenarios from templates for the BCM platform.
 
 This is an infrastructure tool that:
-- Uses templates and knowledge from intelligent-core/scenario-intelligence
+- Uses templates and knowledge from intelligent_core/scenario-intelligence
 - Generates executable test scenarios
 - Coordinates with MIO Manager for orchestration
 - Provides CLI and API interfaces

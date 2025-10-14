@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.collective.stuck_detection import *
+# from intelligent_core.collective.stuck_detection import *
 
 
 @pytest.mark.asyncio

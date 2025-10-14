@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai-foundation.pattern_extractor import *
+# from intelligent_core.ai_foundation.pattern_extractor import *
 
 
 class TestPatternExtractor:

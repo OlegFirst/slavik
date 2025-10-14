@@ -13,8 +13,7 @@ Each strategy has:
 - Action: What to do
 - Rationale: Why this action
 - Confidence: How confident (0-1)
-- Source: Where it came from
-- Learned from: Which cases informed it
+- Source: Where it came from _ Learned from: Which cases informed it
 """
 
 import logging

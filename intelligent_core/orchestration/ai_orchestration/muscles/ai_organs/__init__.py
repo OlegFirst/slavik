@@ -1,7 +1,7 @@
 """
 AI Organs - Specialized Intelligence Units
 
-10 AI Organs for BCM Intelligence (migrated from ai-office)
+10 AI Organs for BCM Intelligence (migrated from ai_office)
 """
 
 from .base_organ import BaseAIOrgan

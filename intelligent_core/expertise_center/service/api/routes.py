@@ -25,7 +25,7 @@ try:
     router.include_router(tactical_router)
     router.include_router(analyzers_router)
 except ImportError as e:
-    logger.warning(f"Could not import sub-routers: {e}")
+    logger.warning(f"Could not import sub_routers: {e}")
     tactical_router = None
     analyzers_router = None
 

@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.collective.database import *
+# from intelligent_core.collective.database import *
 
 
 class TestAgentStatus:

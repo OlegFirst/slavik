@@ -483,7 +483,7 @@ Proposed budget:
 - Consulting and external support: $100K
 - **Total: $850K**
 
-ROI: Prevents potential $7M+ loss from 24-hour outage.
+ROI: Prevents potential $7M+ loss from 24_hour outage.
         """,
 
         "approver_name": "Michael Johnson",

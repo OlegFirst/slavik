@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.ai_workflow_optimizer.main import *
+# from intelligent_core.ai_workflow_optimizer.main import *
 
 
 def test_get_db_successful_execution():

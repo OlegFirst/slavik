@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.predictive.dependencies import *
+# from intelligent_core.predictive.dependencies import *
 
 
 def test_get_supabase_client_successful_execution():

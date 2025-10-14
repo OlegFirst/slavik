@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
-# Optional ciw import - gracefully handle if not installed
+# Optional ciw import _ gracefully handle if not installed
 try:
     import ciw
     CIW_AVAILABLE = True

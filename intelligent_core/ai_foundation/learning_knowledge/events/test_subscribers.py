@@ -417,7 +417,7 @@ async def test_full_reactive_learning_cycle():
     print(f"   • ML samples: {stats['ml_training_buffer_size']}")
     print(f"   • Competency updates: {len(subscriber.competency_tracker.updates)}")
     print(f"   • Model version: {stats['model_version']}")
-    print("\n🎉 Platform learned from real-world usage and improved itself!\n")
+    print("\n🎉 Platform learned from real_world usage and improved itself!\n")
 
 
 # ============================================================================

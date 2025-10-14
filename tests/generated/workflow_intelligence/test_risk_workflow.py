@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.workflow_intelligence.risk_workflow import *
+# from intelligent_core.workflow_intelligence.risk_workflow import *
 
 
 def test_inject_dependencies_successful_execution():

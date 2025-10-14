@@ -50,7 +50,7 @@ class KnowledgeDocument:
 
 class KnowledgeIngestionPipeline:
     """
-    Ingest knowledge from ISO-22301-Library into RAG pipeline
+    Ingest knowledge from ISO_22301_Library into RAG pipeline
 
     Sources:
     - ISO 22301:2019 clauses (structured)

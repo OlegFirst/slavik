@@ -240,7 +240,7 @@ class TestCentralBrain:
     """
     Central Brain Test Suite
 
-    Tests from system-wide perspective using fixed sources of truth:
+    Tests from system_wide perspective using fixed sources of truth:
     - Service Registry (what SHOULD be registered)
     - Running processes (what IS running)
     - EventBus (who IS connected)

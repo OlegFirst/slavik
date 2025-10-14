@@ -208,7 +208,7 @@ class LearningKnowledgeAdapter:
         clause: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
         """
-        Get ISO standard from learning-knowledge
+        Get ISO standard from learning_knowledge
 
         Args:
             standard_id: Standard ID (e.g., "iso/iso-22301")

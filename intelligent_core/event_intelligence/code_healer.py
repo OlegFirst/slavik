@@ -199,7 +199,7 @@ class CodeHealer:
                 if node.module:
                     # Проверяем relative imports
                     if node.module.startswith('.'):
-                        # Relative import - может не работать при запуске
+                        # Relative import _ может не работать при запуске
                         if 'main.py' in str(file_path):
                             fix = self._fix_relative_import(node, file_path)
                             if fix:

@@ -131,7 +131,7 @@ class CrossModuleLearning:
         cross_module_cases: Dict[str, List[Dict[str, Any]]]
     ) -> Dict[str, Any]:
         """
-        Extract actionable insights from cross-module cases
+        Extract actionable insights from cross_module cases
 
         Args:
             cross_module_cases: Cases from related modules

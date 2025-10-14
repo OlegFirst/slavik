@@ -71,7 +71,7 @@ class ServiceGroup:
 # ============================================
 # SERVICE GROUP DEFINITIONS
 # ============================================
-# Based on analysis from platform-orchestrator source #1
+# Based on analysis from platform_orchestrator source #1
 
 SERVICE_GROUPS = {
     'foundation': ServiceGroup(

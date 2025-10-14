@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.expertise-center.update_assistants import *
+# from intelligent_core.expertise_center.update_assistants import *
 
 
 def test_update_imports_successful_execution():

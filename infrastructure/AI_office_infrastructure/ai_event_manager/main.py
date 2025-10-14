@@ -39,7 +39,7 @@ logger = log_module.getLogger(__name__)
 project_root = Path(__file__).parents[3]
 sys.path.insert(0, str(project_root))
 
-# Import from intelligent-core (using underscore instead of hyphen)
+# Import from intelligent_core (using underscore instead of hyphen)
 try:
     from intelligent_core.event_intelligence import (
         EventAnalyzer,

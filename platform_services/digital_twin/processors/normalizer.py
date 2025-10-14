@@ -31,7 +31,7 @@ class EntityType(str, Enum):
 
 
 class DataQuality(str, Enum):
-    """Data quality levels (from organization-data-collector.js)"""
+    """Data quality levels (from organization_data_collector.js)"""
     EXCELLENT = "excellent"
     GOOD = "good"
     ACCEPTABLE = "acceptable"
@@ -101,7 +101,7 @@ class DataNormalizer:
     Data Normalizer
 
     Normalizes raw data from various sources to canonical schema
-    Implements quality scoring from organization-data-collector.js
+    Implements quality scoring from organization_data_collector.js
     """
 
     def __init__(self):

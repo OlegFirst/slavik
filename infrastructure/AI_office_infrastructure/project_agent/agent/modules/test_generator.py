@@ -379,7 +379,7 @@ def analyze_file(file_path: str) -> tuple:
 
 def run_test_generation(config: Dict, target_module: str = None, max_files: int = 10) -> Dict[str, Any]:
     """
-    Main entry point for test generation from project-agent
+    Main entry point for test generation from project_agent
 
     Args:
         config: Project agent configuration

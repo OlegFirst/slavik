@@ -1,6 +1,6 @@
 """
 Database connection for Marketplace Service
-Uses shared Supabase connection from community-service
+Uses shared Supabase connection from community_service
 """
 
 import sys

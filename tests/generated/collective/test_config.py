@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.collective.config import *
+# from intelligent_core.collective.config import *
 
 
 class TestCollectiveConfig:

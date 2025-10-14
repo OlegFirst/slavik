@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.orchestration.service_registry import *
+# from intelligent_core.orchestration.service_registry import *
 
 
 class TestISO22301Clause:

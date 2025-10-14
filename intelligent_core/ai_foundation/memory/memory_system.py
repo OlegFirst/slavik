@@ -460,7 +460,7 @@ class MemorySystem:
     Handles pattern lifecycle:
     1. New patterns start in short-term
     2. Successful patterns promoted to long-term
-    3. Failed patterns expire from short-term
+    3. Failed patterns expire from short_term
     """
 
     def __init__(
@@ -502,7 +502,7 @@ class MemorySystem:
         self.short_term.put(key, value, ttl_seconds)
 
     def recall_short_term(self, key: str) -> Optional[Any]:
-        """Recall from short-term memory"""
+        """Recall from short_term memory"""
         return self.short_term.get(key)
 
     def remember_pattern(

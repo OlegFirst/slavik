@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy import text
 from .models import Base
 
-# Load environment variables from AI-Platform-ISO/.env
+# Load environment variables from AI_Platform_ISO/.env
 env_path = Path(__file__).parent.parent.parent.parent.parent / ".env"
 load_dotenv(env_path)
 

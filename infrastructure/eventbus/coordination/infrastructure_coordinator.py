@@ -52,7 +52,7 @@ class InfrastructureCoordinator:
     Infrastructure Level Coordinator
 
     Coordinates all Infrastructure-level services:
-    - Health Monitor (from ai-orchestration)
+    - Health Monitor (from ai_orchestration)
     - Auto-Recovery
     - Resource Optimizer
     - Escalation Manager (Phase 1.1)

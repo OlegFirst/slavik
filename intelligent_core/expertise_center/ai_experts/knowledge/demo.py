@@ -252,7 +252,7 @@ Would you like me to help design the BIA workshop agenda?
 What we demonstrated:
 
 1. ✅ ISO 22301 Loading
-   - Loaded 25 clauses from ISO-22301-Library
+   - Loaded 25 clauses from ISO_22301_Library
    - Structured data: requirements, evidence, audit questions
 
 2. ✅ Knowledge Graph

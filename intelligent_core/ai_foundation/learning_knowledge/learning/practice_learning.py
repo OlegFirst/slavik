@@ -77,7 +77,7 @@ class PracticeLearningEngine:
         Returns:
             Learning results with insights and improvements
         """
-        logger.info("🎓 Learning from Self-Application: Analyzing practice results")
+        logger.info("🎓 Learning from Self_Application: Analyzing practice results")
 
         learning_results = {
             "learning_timestamp": datetime.utcnow().isoformat(),

@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 # Import module under test
-# from intelligent-core.orchestration.analyzer_coordinator import *
+# from intelligent_core.orchestration.analyzer_coordinator import *
 
 
 class TestAnalyzerType:

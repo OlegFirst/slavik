@@ -36,7 +36,7 @@ class AnthropicGovernanceBrain:
     """Anthropic Claude integration for governance intelligence"""
 
     def __init__(self):
-        # Use LLMRouter from ai-foundation
+        # Use LLMRouter from ai_foundation
         self.llm_router = LLMRouter()
 
         # Keep legacy API key for backward compatibility

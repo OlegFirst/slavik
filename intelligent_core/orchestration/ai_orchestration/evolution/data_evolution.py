@@ -118,7 +118,7 @@ class DataEvolution:
             if not self.memory:
                 return 0
 
-            # Consolidate from short-term to long-term
+            # Consolidate from short_term to long-term
             count = await self.memory.consolidate()
             return count.get('short_term_to_long_term', 0)
 
@@ -168,7 +168,7 @@ class DataEvolution:
             return 0
 
     async def _clean_old_data(self) -> int:
-        """Clean old data from short-term memory."""
+        """Clean old data from short_term memory."""
         try:
             if not self.memory:
                 return 0

@@ -96,7 +96,7 @@ class CompetencyTracker:
         """Calculate scores for core BCM competencies"""
         competencies = {}
 
-        # BIA Execution (from BIA-related exercises)
+        # BIA Execution (from BIA_related exercises)
         bia_results = [r for r in results if 'bia' in r.get('exercise_type', '').lower()]
         if bia_results:
             competencies['bia_execution'] = {
