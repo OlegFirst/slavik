@@ -19,6 +19,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
 import asyncpg
 import uvicorn
@@ -644,6 +645,55 @@ async def health_check():
 async def get_stats():
     """Get service statistics"""
     return ace_service.get_service_stats()
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+async def metrics():
+    """Prometheus metrics endpoint"""
+    try:
+        all_stats = await ace_service.get_all_playbooks_stats()
+        service_stats = ace_service.get_service_stats()
+
+        # Generate Prometheus metrics
+        metrics_output = []
+
+        # Counter metrics
+        metrics_output.append("# HELP ace_playbooks_total Total number of playbooks")
+        metrics_output.append("# TYPE ace_playbooks_total gauge")
+        metrics_output.append(f"ace_playbooks_total {len(all_stats)}")
+
+        metrics_output.append("# HELP ace_trajectories_total Total trajectories logged")
+        metrics_output.append("# TYPE ace_trajectories_total counter")
+        metrics_output.append(f"ace_trajectories_total {service_stats.get('trajectories_reflected', 0)}")
+
+        metrics_output.append("# HELP ace_contexts_generated_total Total contexts generated")
+        metrics_output.append("# TYPE ace_contexts_generated_total counter")
+        metrics_output.append(f"ace_contexts_generated_total {service_stats.get('contexts_generated', 0)}")
+
+        # Gauge metrics
+        if all_stats:
+            avg_effectiveness = sum(s.get('avg_effectiveness', 0) for s in all_stats) / len(all_stats)
+            avg_success_rate = sum(s.get('success_rate', 0) for s in all_stats) / len(all_stats)
+
+            metrics_output.append("# HELP ace_avg_effectiveness Average task effectiveness")
+            metrics_output.append("# TYPE ace_avg_effectiveness gauge")
+            metrics_output.append(f"ace_avg_effectiveness {avg_effectiveness:.4f}")
+
+            metrics_output.append("# HELP ace_success_rate Overall success rate")
+            metrics_output.append("# TYPE ace_success_rate gauge")
+            metrics_output.append(f"ace_success_rate {avg_success_rate:.4f}")
+
+        # Active modules
+        active_modules = len(set(s.get('module_name') for s in all_stats if s.get('module_name')))
+        metrics_output.append("# HELP ace_active_modules Number of active modules")
+        metrics_output.append("# TYPE ace_active_modules gauge")
+        metrics_output.append(f"ace_active_modules {active_modules}")
+
+        return "\n".join(metrics_output)
+
+    except Exception as e:
+        logger.error(f"Error generating metrics: {e}")
+        return "# Error generating metrics"
 
 
 @app.post("/api/v1/ace/generate-context")
