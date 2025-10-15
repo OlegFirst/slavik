@@ -22,6 +22,9 @@ from integrations.ai_integration import AIIntegration
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "infrastructure"))
 from eventbus import create_eventbus, Event
 
+# Service Recovery Handler (NEW!)
+from engines.service_recovery_handler import ServiceRecoveryHandler
+
 logger = logging.getLogger(__name__)
 
 
@@ -46,7 +49,7 @@ class SystemBCMCoordinator:
     РЕЗУЛЬТАТ: Интегрирован с ЯДРОМ платформы!
     """
 
-    def __init__(self, resource_tracker=None):
+    def __init__(self, resource_tracker=None, decision_center_url="http://localhost:8080"):
         """Инициализация координатора"""
         # EventBus
         self.eventbus = None
@@ -59,6 +62,10 @@ class SystemBCMCoordinator:
 
         # ResourceTracker (NEW!)
         self.resource_tracker = resource_tracker
+
+        # Service Recovery Handler with Decision Center (NEW!)
+        self.recovery_handler = None
+        self.decision_center_url = decision_center_url
 
         # State
         self.running = False
@@ -88,6 +95,13 @@ class SystemBCMCoordinator:
             # Setup EventBus
             self.eventbus = create_eventbus('redis')
             logger.info("✅ EventBus connected")
+
+            # Initialize Service Recovery Handler (NEW!)
+            self.recovery_handler = ServiceRecoveryHandler(
+                decision_center_url=self.decision_center_url,
+                eventbus=self.eventbus
+            )
+            logger.info("✅ Service Recovery Handler initialized with Decision Center governance")
 
             # Subscribe to platform events
             await self._subscribe_to_events()
@@ -353,6 +367,17 @@ class SystemBCMCoordinator:
         if resource_monitoring:
             result["resource_monitoring"] = resource_monitoring
 
+        # Add recovery statistics if available (NEW!)
+        if self.recovery_handler:
+            recovery_stats = self.recovery_handler.get_recovery_stats()
+            result["recovery_statistics"] = recovery_stats
+
+            logger.info(
+                f"   🔧 Recovery stats: {recovery_stats['total_attempts']} attempts, "
+                f"{recovery_stats['successful_recoveries']} successful "
+                f"(success rate: {recovery_stats['success_rate']:.1%})"
+            )
+
         return result
 
     async def _check_service_health(self, service: Dict[str, Any]) -> Dict[str, Any]:
@@ -448,7 +473,33 @@ class SystemBCMCoordinator:
         @self.eventbus.subscribe("platform.service.failed")
         async def on_service_failed(event: Event):
             logger.error(f"🚨 Service failed: {event.data}")
-            # Запустить recovery
+
+            # Trigger automatic recovery with Decision Center governance (NEW!)
+            if self.recovery_handler:
+                try:
+                    service_name = event.data.get("service")
+                    failure_type = event.data.get("failure_type", "health_check_failed")
+                    metrics = event.data.get("metrics", {})
+                    tier = event.data.get("tier", "standard")
+
+                    logger.info(
+                        f"🔧 Initiating recovery for {service_name} with Decision Center governance..."
+                    )
+
+                    recovery_result = await self.recovery_handler.handle_service_failure(
+                        service_name=service_name,
+                        failure_type=failure_type,
+                        metrics=metrics,
+                        tier=tier
+                    )
+
+                    logger.info(
+                        f"Recovery result: {recovery_result.get('outcome')} - "
+                        f"{recovery_result.get('justification')}"
+                    )
+
+                except Exception as e:
+                    logger.error(f"❌ Recovery handling failed: {e}", exc_info=True)
 
         logger.info("✅ Subscribed to platform events")
 
@@ -484,6 +535,11 @@ class SystemBCMCoordinator:
         """Выключение"""
         logger.info("🛑 Shutting down System BCM Coordinator...")
         self.running = False
+
+        # Close recovery handler (NEW!)
+        if self.recovery_handler:
+            logger.info("Closing Service Recovery Handler...")
+            await self.recovery_handler.close()
 
 
 # Export
