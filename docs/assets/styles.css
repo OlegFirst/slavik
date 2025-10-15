@@ -1,15 +1,15 @@
-/* AI-Platform-ISO - Professional Clean Stylesheet */
+/* AI-Platform-ISO - Anthropic-inspired Warm Professional Stylesheet */
 
 :root {
-  --primary-color: #2563eb;
-  --secondary-color: #059669;
-  --accent-color: #dc2626;
-  --dark-text: #1f2937;
-  --medium-text: #4b5563;
-  --light-text: #6b7280;
-  --border-color: #e5e7eb;
-  --background: #ffffff;
-  --background-alt: #f9fafb;
+  --primary-color: #8b6f47;
+  --secondary-color: #6b6560;
+  --accent-color: #c17d5f;
+  --dark-text: #2d2926;
+  --medium-text: #4a4541;
+  --light-text: #6b6560;
+  --border-color: #e5dfd6;
+  --background: #fffcf7;
+  --background-alt: #f7f4ef;
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
   --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
 }
@@ -98,17 +98,19 @@ nav {
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--background-alt);
+  color: var(--dark-text);
   padding: 5rem 2rem;
   text-align: center;
   border-radius: 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .hero h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
   font-weight: 800;
+  color: var(--dark-text);
 }
 
 .hero p {
@@ -118,6 +120,7 @@ nav {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  color: var(--medium-text);
 }
 
 .hero-buttons {
@@ -163,13 +166,13 @@ nav {
 
 .btn-outline {
   background: transparent;
-  color: white;
-  border: 2px solid white;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
 }
 
 .btn-outline:hover {
-  background: white;
-  color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
 }
 
 /* Cards */
