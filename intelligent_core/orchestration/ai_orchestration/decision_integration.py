@@ -475,7 +475,7 @@ class DecisionCenterIntegration:
         """
         Get predictive analysis from Predictive Intelligence
 
-        Forecasts potential issues and provides preventive recommendations.
+        Uses Infrastructure Prevention Advisor for failure forecasting.
 
         Args:
             service: Service name
@@ -501,11 +501,53 @@ class DecisionCenterIntegration:
             await self.event_bus.publish(prediction_event)
             logger.debug(f"Requested predictive forecast for {service}")
 
-            # TODO: In production, wait for predictive response
-            # For MVP, simulate predictive insight
-            insight = self._simulate_predictive_insight(service, context)
+            # Use Infrastructure Prevention Advisor
+            try:
+                from intelligent_core.predictive.services.infrastructure_prevention import (
+                    InfrastructurePreventionAdvisor
+                )
 
-            return insight
+                advisor = InfrastructurePreventionAdvisor(
+                    eventbus=self.event_bus,
+                    enable_logging=True
+                )
+
+                # Get failure prediction
+                prediction = await advisor.predict_failure_risk(
+                    service=service,
+                    context=context,
+                    horizon_hours=24
+                )
+
+                # Convert to dict format
+                insight = {
+                    'forecast': prediction.forecast,
+                    'failure_type': prediction.failure_type.value,
+                    'probability': prediction.probability,
+                    'time_to_failure_hours': prediction.time_to_failure_hours,
+                    'risk_level': prediction.risk_level.value,
+                    'reasoning': prediction.reasoning,
+                    'preventive_actions': prediction.preventive_actions,
+                    'confidence': prediction.confidence,
+                    'rto_risk': prediction.rto_risk,
+                    'rpo_risk': prediction.rpo_risk,
+                    'metrics_analyzed': prediction.metrics_analyzed
+                }
+
+                logger.info(
+                    f"✅ Predictive analysis: {prediction.forecast} "
+                    f"(risk: {prediction.risk_level.value}, confidence: {prediction.confidence:.2f})"
+                )
+
+                return insight
+
+            except ImportError as e:
+                logger.warning(f"Infrastructure Prevention Advisor not available: {e}")
+                logger.warning("Falling back to simulated predictive insight")
+
+                # Fallback to simulation
+                insight = self._simulate_predictive_insight(service, context)
+                return insight
 
         except Exception as e:
             logger.error(f"Error getting predictive insight: {e}")
