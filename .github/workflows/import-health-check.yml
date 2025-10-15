@@ -1,0 +1,73 @@
+name: Import Health Check
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  check-imports:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Run Import Health Check
+      run: |
+        python tests/check_imports.py --ci --json import-report.json
+
+    - name: Generate HTML Report
+      if: always()
+      run: |
+        python tests/check_imports.py --html
+
+    - name: Upload Report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: import-health-report
+        path: |
+          import-report.json
+          tests/reports/*.html
+        retention-days: 30
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('import-report.json', 'utf8'));
+
+          const body = `## 🔍 Import Health Check Results
+
+          **Status:** ❌ Issues Found
+
+          ### Summary
+          - **Total Issues:** ${report.summary.total_issues}
+          - **Critical:** ${report.summary.critical_issues}
+          - **Warnings:** ${report.summary.warnings}
+          - **Parse Errors:** ${report.summary.parse_errors}
+
+          ### Import Style
+          - **Absolute:** ${report.import_style.absolute} (${report.import_style.absolute_percent.toFixed(1)}%)
+          - **Relative:** ${report.import_style.relative}
+
+          Please review and fix the issues before merging.
+          `;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
