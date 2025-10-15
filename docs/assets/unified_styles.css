@@ -445,3 +445,237 @@ tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================
+   INTERACTIVE DIAGRAM VIEWER
+   ============================================ */
+.diagram-viewer-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  cursor: default;
+  animation: fadeIn 0.2s ease;
+}
+
+.diagram-viewer-modal.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.diagram-viewer-content {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.diagram-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: grab;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.diagram-viewer-container:active {
+  cursor: grabbing;
+}
+
+.diagram-viewer-svg {
+  transform-origin: center center;
+  transition: transform 0.2s ease;
+  display: block;
+  margin: 0 auto;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Controls Bar */
+.diagram-viewer-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 10001;
+}
+
+.diagram-viewer-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.diagram-viewer-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.diagram-viewer-btn:active {
+  transform: translateY(0);
+}
+
+.diagram-viewer-btn.close {
+  background: var(--error);
+  font-size: 1.5rem;
+}
+
+.diagram-viewer-btn.close:hover {
+  background: #b91c1c;
+}
+
+.diagram-viewer-btn.reset {
+  background: var(--secondary-color);
+}
+
+.diagram-viewer-btn.reset:hover {
+  background: var(--secondary-dark);
+}
+
+/* Zoom Info */
+.diagram-viewer-zoom-info {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 16px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  z-index: 10001;
+}
+
+/* Make diagrams clickable */
+.mermaid, .mermaid-container {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mermaid:hover, .mermaid-container:hover {
+  opacity: 0.9;
+  transform: scale(1.01);
+}
+
+.mermaid::after, .mermaid-container::after {
+  content: '🔍 Click to view full size';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(139, 111, 71, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mermaid:hover::after, .mermaid-container:hover::after {
+  opacity: 1;
+}
+
+/* Instructions */
+.diagram-viewer-instructions {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  z-index: 10001;
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease;
+}
+
+.diagram-viewer-instructions kbd {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin: 0 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .diagram-viewer-content {
+    width: 95%;
+    height: 95%;
+  }
+
+  .diagram-viewer-controls {
+    top: 10px;
+    right: 10px;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .diagram-viewer-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .diagram-viewer-instructions {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+    bottom: 10px;
+  }
+
+  .diagram-viewer-zoom-info {
+    bottom: 10px;
+    right: 10px;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  .mermaid::after, .mermaid-container::after {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+}
