@@ -43,7 +43,7 @@ This directory contains the static website for AI-Platform-ISO documentation, ho
 
 ```bash
 # Serve locally with Python
-cd docs-gh-pages
+cd docs
 python -m http.server 8000
 
 # Or with Node.js
@@ -58,8 +58,8 @@ This site is configured for GitHub Pages. To deploy:
 
 1. Push to `main` branch
 2. Enable GitHub Pages in repository settings
-3. Set source to `/docs-gh-pages` directory
-4. Site will be available at: `https://yourusername.github.io/AI-Platform-ISO/`
+3. Set source to `/docs` directory
+4. Site will be available at: `https://SEH-foundation.github.io/AI-Platform-ISO/`
 
 ## Dependencies
 
