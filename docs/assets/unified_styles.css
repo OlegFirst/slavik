@@ -1,56 +1,56 @@
 /**
  * Unified Professional Color Scheme
- * Based on Anthropic design principles
+ * Anthropic-inspired warm, accessible design
  * For ISO 22301 BCM Platform Documentation
  *
- * Philosophy: Clean, professional, accessible
+ * Philosophy: Warm, professional, human-centered
  * Audience: ISO auditors, BCM professionals, technical architects
  */
 
 :root {
   /* ============================================
-     PRIMARY COLORS - Professional Blue
+     PRIMARY COLORS - Warm Brown/Taupe
      ============================================ */
-  --primary-color: #2563eb;      /* blue-600 - Main CTAs, headings, links */
-  --primary-dark: #1e40af;       /* blue-700 - Hover states */
-  --primary-light: #3b82f6;      /* blue-500 - Light accents */
-  --primary-bg: #eff6ff;         /* blue-50 - Light backgrounds */
+  --primary-color: #8b6f47;      /* Warm brown - Main CTAs, headings, links */
+  --primary-dark: #6b5637;       /* Darker brown - Hover states */
+  --primary-light: #a68a5f;      /* Light brown - Light accents */
+  --primary-bg: #faf8f5;         /* Warm cream - Light backgrounds */
 
   /* ============================================
-     SECONDARY COLORS - Neutral Gray
+     SECONDARY COLORS - Warm Gray
      ============================================ */
-  --secondary-color: #64748b;    /* slate-500 - Body text, icons */
-  --secondary-dark: #475569;     /* slate-600 - Darker text */
-  --secondary-light: #94a3b8;    /* slate-400 - Muted text */
+  --secondary-color: #6b6560;    /* Warm gray - Body text, icons */
+  --secondary-dark: #4a4541;     /* Dark warm gray - Darker text */
+  --secondary-light: #9d938c;    /* Light warm gray - Muted text */
 
   /* ============================================
-     ACCENT COLOR - Subtle Teal
+     ACCENT COLOR - Soft Terracotta
      ============================================ */
-  --accent-color: #0891b2;       /* cyan-600 - Highlights, technical callouts */
-  --accent-dark: #0e7490;        /* cyan-700 - Hover states */
-  --accent-light: #06b6d4;       /* cyan-500 - Light accents */
+  --accent-color: #c17d5f;       /* Terracotta - Highlights, technical callouts */
+  --accent-dark: #a66850;        /* Dark terracotta - Hover states */
+  --accent-light: #d69577;       /* Light terracotta - Light accents */
 
   /* ============================================
      BACKGROUND COLORS
      ============================================ */
-  --background: #ffffff;         /* White - Main background */
-  --background-alt: #f8fafc;     /* slate-50 - Alternate sections */
-  --background-light: #f1f5f9;   /* slate-100 - Cards, panels */
+  --background: #fffcf7;         /* Warm white - Main background */
+  --background-alt: #f7f4ef;     /* Warm beige - Alternate sections */
+  --background-light: #f0ebe3;   /* Light beige - Cards, panels */
 
   /* ============================================
      TEXT COLORS
      ============================================ */
-  --text-primary: #0f172a;       /* slate-900 - Primary text */
-  --text-secondary: #334155;     /* slate-700 - Secondary text */
-  --medium-text: #64748b;        /* slate-500 - Muted text */
-  --text-light: #94a3b8;         /* slate-400 - Very light text */
+  --text-primary: #2d2926;       /* Dark brown - Primary text */
+  --text-secondary: #4a4541;     /* Medium brown - Secondary text */
+  --medium-text: #6b6560;        /* Warm gray - Muted text */
+  --text-light: #9d938c;         /* Light gray - Very light text */
 
   /* ============================================
      BORDER COLORS
      ============================================ */
-  --border-color: #e2e8f0;       /* slate-200 - Standard borders */
-  --border-dark: #cbd5e1;        /* slate-300 - Emphasized borders */
-  --border-light: #f1f5f9;       /* slate-100 - Subtle borders */
+  --border-color: #e5dfd6;       /* Warm beige - Standard borders */
+  --border-dark: #d4cdc1;        /* Medium beige - Emphasized borders */
+  --border-light: #f0ebe3;       /* Light beige - Subtle borders */
 
   /* ============================================
      STATUS COLORS (Minimal Use Only)
@@ -99,9 +99,10 @@
    HERO SECTIONS (Unified)
    ============================================ */
 .hero {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  color: white;
+  background: var(--background-light);
+  color: var(--text-primary);
   padding: 4rem 2rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .hero h1 {
