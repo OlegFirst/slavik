@@ -13,7 +13,7 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from ..core.decision_engine import DecisionEngine
 from ..core.policy_engine import PolicyEngine
 from ..core.escalation_manager import EscalationManager
-from ..integrations.ai_hub import AIIntelligenceHub
+from ..integrations.ai_hub_v2 import AIIntelligenceHub
 from ..utils.audit_logger import AuditLogger
 from ..utils.metrics import initialize_metrics
 from ..models.decision import DecisionRequest, Decision
@@ -94,7 +94,16 @@ async def startup():
     policy_engine = PolicyEngine(policy_file="policies.yaml")
     escalation_manager = EscalationManager()
     audit_logger = AuditLogger(log_dir="/var/log/decision_center")
-    ai_hub = AIIntelligenceHub(tier3_enabled=True)  # MVP: only Tier 3
+
+    # Initialize AI Hub with real Claude integration
+    # Tier 2 (Sonnet) is primary, Tier 3 (Haiku) for quick responses
+    # Set ANTHROPIC_API_KEY env var to enable real AI
+    ai_hub = AIIntelligenceHub(
+        tier2_enabled=True,   # Claude Sonnet (primary)
+        tier3_enabled=True,   # Claude Haiku (quick)
+        tier1_enabled=False,  # Claude Opus (expensive, disabled by default)
+        enable_fallback=True  # Fallback to heuristics if API unavailable
+    )
 
     decision_engine = DecisionEngine(
         policy_engine=policy_engine,
