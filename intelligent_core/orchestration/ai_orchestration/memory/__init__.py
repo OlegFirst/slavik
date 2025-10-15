@@ -26,11 +26,11 @@ Distributed Memory System
    - Continuous improvement
 """
 
-from .memory.distributed_memory import DistributedMemory
-from .memory.working_memory import WorkingMemory
-from .memory.short_term_memory import ShortTermMemory
-from .memory.long_term_memory import LongTermMemory
-from .memory.procedural_memory import ProceduralMemory
+from .distributed_memory import DistributedMemory
+from .working_memory import WorkingMemory
+from .short_term_memory import ShortTermMemory
+from .long_term_memory import LongTermMemory
+from .procedural_memory import ProceduralMemory
 
 __all__ = [
     'DistributedMemory',

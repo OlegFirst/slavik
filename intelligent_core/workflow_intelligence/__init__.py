@@ -98,7 +98,7 @@ async def initialize(
         vector_db_client: Optional Qdrant client for semantic search
 
     Example:
-        from workflow_intelligence import initialize
+        from intelligent_core.workflow_intelligence import initialize
         from shared.database import get_db_manager
         from bia.workflows.state_machine import BIAWorkflowEngine
 
@@ -148,7 +148,7 @@ def quick_start(module: str, existing_state_machine):
     This uses in-memory storage and demo case library.
 
     Example:
-        from workflow_intelligence import quick_start
+        from intelligent_core.workflow_intelligence import quick_start
         from bia.workflows.state_machine import BIAWorkflowEngine
 
         workflow, advisor = quick_start("bia", BIAWorkflowEngine)

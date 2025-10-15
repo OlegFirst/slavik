@@ -1,0 +1,339 @@
+# Service Registry Management - Service Catalog Entry
+# Auto-generated and enhanced
+# Created: 2025-10-15
+# Version: 1.0.0
+
+service_registry_management:
+  name: service_registry_management
+  display_name: Service Registry Management
+
+  registration:
+    type: infrastructure
+    status: production
+    port: 8200
+    version: 1.0.0
+    environment: production
+    created_date: '2025-10-15'
+
+  description: |
+    Centralized service registration and management system for AI Platform ISO.
+
+    Provides automated service registration, port management, template generation,
+    and integration with Service Discovery. Prevents port conflicts and ensures
+    all services are properly cataloged.
+
+  purpose:
+    - Automate service registration in catalog
+    - Manage port allocation and prevent conflicts
+    - Generate service templates (FastAPI)
+    - Track service lifecycle and statistics
+    - Integrate with Service Discovery and API Gateway
+    - Provide port usage analytics
+
+  capabilities:
+    - Automatic port assignment from predefined ranges
+    - Port conflict detection and prevention
+    - Service catalog YAML generation
+    - FastAPI service template generation
+    - Port usage statistics and reporting
+    - REST API for programmatic registration
+    - Integration with existing catalog_integration.py
+    - Prometheus metrics export
+
+  components:
+    - name: Port Manager
+      type: port_management
+      description: Manages port allocation across service types
+      functionality:
+        - Scans existing catalogs for used ports
+        - Assigns ports from appropriate ranges
+        - Detects and prevents port conflicts
+        - Provides port usage statistics
+
+    - name: Service Registrar
+      type: service_registration
+      description: Handles service registration in catalog
+      functionality:
+        - Creates structured YAML catalog entries
+        - Validates service metadata
+        - Generates catalog files
+        - Updates main SERVICE_CATALOG_DETAILED.yaml
+
+    - name: Template Generator
+      type: code_generation
+      description: Generates FastAPI service templates
+      functionality:
+        - Creates main.py with FastAPI app
+        - Generates requirements.txt
+        - Creates README.md documentation
+        - Includes health and metrics endpoints
+
+    - name: REST API
+      type: api_interface
+      description: Provides HTTP REST API for service management
+      functionality:
+        - Service registration endpoint
+        - Port suggestions endpoint
+        - Port usage statistics endpoint
+        - Service statistics endpoint
+
+  port_ranges:
+    platform_services:
+      start: 8000
+      end: 8099
+      capacity: 100
+
+    intelligent_core:
+      start: 8100
+      end: 8199
+      capacity: 100
+
+    infrastructure:
+      start: 8200
+      end: 8299
+      capacity: 100
+
+    integration:
+      start: 8300
+      end: 8399
+      capacity: 100
+
+    monitoring:
+      start: 9000
+      end: 9099
+      capacity: 100
+
+    databases:
+      start: 5000
+      end: 5099
+      capacity: 100
+
+  runtime:
+    port: 8200
+    protocol: HTTP/REST
+    framework: FastAPI
+    language: Python 3.11+
+    health_endpoint: /health
+    metrics_endpoint: /metrics
+    stats_endpoint: /api/v1/services/stats
+
+  api_endpoints:
+    - path: /health
+      method: GET
+      description: Health check endpoint
+      response: Service status and basic info
+
+    - path: /metrics
+      method: GET
+      description: Prometheus metrics endpoint
+      response: Prometheus text format metrics
+
+    - path: /api/v1/ports/usage
+      method: GET
+      description: Port usage statistics
+      response: Port usage by service type
+
+    - path: /api/v1/ports/suggestions/{service_type}
+      method: GET
+      description: Get port suggestions
+      query_params:
+        service_type: "Service type (platform_services, intelligent_core, etc.)"
+        count: "Number of suggestions (default: 5)"
+      response: List of available ports
+
+    - path: /api/v1/services/register
+      method: POST
+      description: Register new service
+      payload:
+        service_name: string
+        service_type: "learning_infrastructure | ai_core | platform | integration | infrastructure"
+        description: string
+        component: "platform_services | intelligent_core | infrastructure"
+        port: "integer (optional, auto-assigned if not provided)"
+        location: "string (optional, default: infrastructure/{service_name})"
+        create_template: "boolean (default: false)"
+        purpose: "array of strings (optional)"
+        capabilities: "array of strings (optional)"
+        dependencies: "array of strings (optional)"
+      response: Registration result with assigned port and catalog location
+
+    - path: /api/v1/services/stats
+      method: GET
+      description: Service statistics
+      response: Overall statistics and breakdown by type
+
+  dependencies:
+    required:
+      - catalogs directory structure
+      - Write access to /catalogs/platform-services/
+    optional:
+      - service_discovery integration
+      - api_gateway integration
+
+  integrations:
+    - service: Service Discovery
+      integration_type: future
+      description: Will register services in runtime discovery
+      location: /infrastructure/runtime/service_discovery/
+
+    - service: API Gateway
+      integration_type: future
+      description: Will integrate with API routing
+      location: /infrastructure/gateway/api_gateway/
+
+    - service: Catalog Integration
+      integration_type: uses
+      description: Uses existing catalog_integration.py
+      location: /infrastructure/runtime/service_discovery/catalog_integration.py
+
+  kpis:
+    - name: service_registry_registrations_total
+      type: counter
+      description: Total number of service registrations
+      labels: [service_type, status]
+      target: "> 50 registrations"
+      prometheus_metric: service_registry_registrations_total
+
+    - name: service_registry_active_services
+      type: gauge
+      description: Number of active registered services
+      target: "> 30 services"
+      prometheus_metric: service_registry_active_services
+
+    - name: service_registry_port_usage
+      type: gauge
+      description: Port usage by service type
+      labels: [service_type]
+      prometheus_metric: service_registry_port_usage
+
+    - name: service_registry_registration_duration_seconds
+      type: histogram
+      description: Time to register a service
+      target_p95: "< 500ms"
+      target_p99: "< 1s"
+      prometheus_metric: service_registry_registration_duration_seconds
+
+    - name: service_registry_port_conflicts_total
+      type: counter
+      description: Total port conflicts detected
+      target: "< 10 conflicts"
+      prometheus_metric: service_registry_port_conflicts_total
+
+    - name: service_registry_template_generations_total
+      type: counter
+      description: Total service templates generated
+      target: "> 20 templates"
+      prometheus_metric: service_registry_template_generations_total
+
+  performance_targets:
+    registration_time_p95: "< 500ms"
+    api_response_time_p95: "< 200ms"
+    port_scan_time: "< 100ms"
+    uptime: "> 99.5%"
+    success_rate: "> 95%"
+
+  deployment:
+    location: /infrastructure/runtime/service_registry_management/
+    files:
+      - main.py (900+ lines) - FastAPI service
+      - requirements.txt - Dependencies
+      - README.md - Documentation
+
+    startup:
+      command: python main.py
+      environment_vars:
+        - SERVICE_REGISTRY_PORT
+        - REPO_ROOT
+
+  monitoring:
+    health_check: curl http://localhost:8200/health
+    metrics: curl http://localhost:8200/metrics
+    stats: curl http://localhost:8200/api/v1/services/stats
+    port_usage: curl http://localhost:8200/api/v1/ports/usage
+    prometheus_job: service-registry-management
+    prometheus_scrape_interval: 10s
+
+  documentation:
+    main: /infrastructure/runtime/service_registry_management/README.md
+    catalog_entry: /catalogs/platform-services/service-registry-management.yaml
+    summary: /doc-project/SERVICE_REGISTRATION_SYSTEM_COMPLETE.md
+
+  usage_examples:
+    curl_register_service: |
+      curl -X POST http://localhost:8200/api/v1/services/register \
+        -H "Content-Type: application/json" \
+        -d '{
+          "service_name": "my_new_service",
+          "service_type": "platform",
+          "description": "My awesome new service",
+          "component": "platform_services",
+          "create_template": true,
+          "purpose": ["Purpose 1", "Purpose 2"],
+          "capabilities": ["Capability 1", "Capability 2"]
+        }'
+
+    curl_port_usage: |
+      curl http://localhost:8200/api/v1/ports/usage
+
+    curl_port_suggestions: |
+      curl http://localhost:8200/api/v1/ports/suggestions/platform_services?count=5
+
+    curl_service_stats: |
+      curl http://localhost:8200/api/v1/services/stats
+
+  python_client_example: |
+    import httpx
+
+    async def register_service():
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "http://localhost:8200/api/v1/services/register",
+                json={
+                    "service_name": "my_service",
+                    "service_type": "platform",
+                    "description": "My service description",
+                    "component": "platform_services",
+                    "create_template": True
+                }
+            )
+            print(response.json())
+
+  security:
+    authentication: None (internal service)
+    authorization: None (internal service)
+    network: Internal only (localhost:8200)
+    data_access: Read/write to /catalogs directory
+
+  compliance:
+    data_retention: Indefinite (catalog accumulation)
+    audit_logging: Via Prometheus metrics
+    privacy: No personal data stored
+
+  ownership:
+    team: AI Platform Core
+    role: Infrastructure
+    maintainer: Platform Team
+    contact: Platform Admin
+
+  version_history:
+    - version: 1.0.0
+      date: '2025-10-15'
+      status: Production
+      changes:
+        - Initial production release
+        - Full REST API
+        - Port management system
+        - Template generation
+        - Prometheus metrics
+        - Catalog integration
+
+  notes: |
+    Service Registry Management is the central hub for all service lifecycle management
+    in AI Platform ISO. It ensures:
+
+    - All services are properly cataloged
+    - No port conflicts occur
+    - Services follow standard templates
+    - Statistics are tracked and monitored
+
+    This service is essential infrastructure and should be running at all times.

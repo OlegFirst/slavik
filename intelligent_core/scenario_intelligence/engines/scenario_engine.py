@@ -213,7 +213,6 @@ class ScenarioEngine:
             )
 
             return result
-            }
 
     async def _execute_steps(
         self,

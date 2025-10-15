@@ -36,7 +36,7 @@ def update_file(filepath: Path):
 
 from typing import Dict, Any, Optional, List
 from expertise_center.shared.base import BaseSpecialist
-from ai_foundation import RAGPipeline, LLMRouter, ContextBuilder
+from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilder
 
 '''.format(docstring=content.split('"""')[1] if '"""' in content else f"{class_name} Specialist")
 

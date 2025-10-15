@@ -1,14 +1,14 @@
 """
 Compliance Service Configuration
 
-Inherits from shared BaseServiceSettings with Compliance-specific settings.
+Inherits from shared SharedSettings with Compliance-specific settings.
 """
 
 from typing import List
-from shared.config import BaseServiceSettings
+from shared.config import SharedSettings
 
 
-class ComplianceSettings(BaseServiceSettings):
+class ComplianceSettings(SharedSettings):
     """Compliance Service Settings"""
 
     # Service Identity (override defaults)

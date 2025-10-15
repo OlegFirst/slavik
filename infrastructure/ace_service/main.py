@@ -871,7 +871,7 @@ async def get_analytics():
 # ============================================================================
 
 if __name__ == "__main__":
-    port = int(os.getenv('ACE_SERVICE_PORT', 8050))
+    port = int(os.getenv('ACE_SERVICE_PORT', 8060))
 
     logger.info(f"Starting ACE Service on port {port}...")
     logger.info("Service provides:")

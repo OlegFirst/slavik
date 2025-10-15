@@ -6,7 +6,7 @@ Demonstrates how to use RAG pipeline with LLM router for intelligent Q&A
 
 import asyncio
 import logging
-from ai_foundation import RAGPipeline, LLMRouter, QdrantCollectionSetup
+from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, QdrantCollectionSetup
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

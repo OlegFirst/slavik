@@ -10,7 +10,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import logging
 
-from workflow_intelligence import CaseQuery, TimeRange, WorkflowRecommendation
+from intelligent_core.workflow_intelligence import CaseQuery, TimeRange, WorkflowRecommendation
 from workflow_intelligence.monitoring import health_checker
 import main
 

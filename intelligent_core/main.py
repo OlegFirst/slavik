@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Import Workflow Intelligence Engine
-from workflow_intelligence import (
+from intelligent_core.workflow_intelligence import (
     WorkflowEngine,
     ContextAdvisor,
     CaseCollector,

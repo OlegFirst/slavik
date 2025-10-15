@@ -12,7 +12,7 @@ from typing import Dict, Any, Optional, List
 from abc import ABC, abstractmethod
 
 # AI Foundation integration
-from ai_foundation import RAGPipeline, LLMRouter, ContextBuilder
+from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilder
 
 
 class BaseTacticalAssistant(ABC):

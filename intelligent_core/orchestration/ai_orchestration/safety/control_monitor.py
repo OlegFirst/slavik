@@ -10,10 +10,10 @@ Monitors for loss of control:
 """
 
 import logging
-from typing import List
+from typing import List, Optional
 from datetime import datetime, timedelta
 
-from .models import (
+from ..models import (
     Decision, FullContext, SafetyResult, SafetyConcern, ActionType
 )
 
@@ -127,7 +127,7 @@ class ControlMonitor:
     def _check_auto_resolve_rate(
         self,
         decision: Decision
-    ) -> SafetyConcern | None:
+    ) -> Optional[SafetyConcern]:
         """Check if too many auto-resolves."""
         if len(self.recent_decisions) < 10:
             return None
@@ -150,7 +150,7 @@ class ControlMonitor:
 
         return None
 
-    def _check_decision_velocity(self) -> SafetyConcern | None:
+    def _check_decision_velocity(self) -> Optional[SafetyConcern]:
         """Check if too many decisions per hour."""
         count = len(self.recent_decisions)
 
@@ -171,7 +171,7 @@ class ControlMonitor:
     def _check_consecutive_auto(
         self,
         decision: Decision
-    ) -> SafetyConcern | None:
+    ) -> Optional[SafetyConcern]:
         """Check for too many consecutive auto-resolves."""
         if self.consecutive_auto_count >= self.MAX_CONSECUTIVE_AUTO:
             return SafetyConcern(
@@ -191,7 +191,7 @@ class ControlMonitor:
         self,
         decision: Decision,
         context: FullContext
-    ) -> SafetyConcern | None:
+    ) -> Optional[SafetyConcern]:
         """Check if AI is exceeding authorized scope."""
         # Check if decision tries to do something not in governance rules
         metadata = decision.metadata

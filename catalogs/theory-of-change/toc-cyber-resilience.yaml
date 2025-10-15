@@ -40,45 +40,51 @@ inputs:
 # ====================
 activities:
   phase_1_assessment:
-    - Cyber risk assessment
-    - Current state analysis
-    - Gap identification
-    - Stakeholder interviews
+    tasks:
+      - Cyber risk assessment
+      - Current state analysis
+      - Gap identification
+      - Stakeholder interviews
     duration_weeks: 4
 
   phase_2_planning:
-    - Strategy development
-    - Roadmap creation
-    - Resource allocation
-    - KPI definition
+    tasks:
+      - Strategy development
+      - Roadmap creation
+      - Resource allocation
+      - KPI definition
     duration_weeks: 4
 
   phase_3_implementation:
-    - Security controls deployment
-    - Process documentation
-    - Tool configuration
-    - Integration with existing systems
+    tasks:
+      - Security controls deployment
+      - Process documentation
+      - Tool configuration
+      - Integration with existing systems
     duration_weeks: 16
 
   phase_4_training:
-    - Security awareness training (all staff)
-    - Technical training (IT team)
-    - Incident response training
-    - Simulation exercises
+    tasks:
+      - Security awareness training (all staff)
+      - Technical training (IT team)
+      - Incident response training
+      - Simulation exercises
     duration_weeks: 8
 
   phase_5_testing:
-    - Tabletop exercises
-    - Ransomware simulations
-    - Phishing campaigns
-    - Recovery drills
+    tasks:
+      - Tabletop exercises
+      - Ransomware simulations
+      - Phishing campaigns
+      - Recovery drills
     duration_weeks: 12
 
   phase_6_optimization:
-    - Lessons learned integration
-    - Process refinement
-    - Continuous improvement
-    - Ongoing monitoring
+    tasks:
+      - Lessons learned integration
+      - Process refinement
+      - Continuous improvement
+      - Ongoing monitoring
     duration_weeks: 8
 
 # ====================

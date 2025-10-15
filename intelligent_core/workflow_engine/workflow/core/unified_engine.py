@@ -1,5 +1,5 @@
 """
-Unified Workflow Engine
+Unified Workflow Engine (with ACE learning!)
 
 Объединяет BPMN Orchestration + Workflow Intelligence в единый интерфейс
 """
@@ -8,6 +8,11 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 import os
 import logging
+import sys
+
+# Add platform root for ACE integration
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO')
+from shared.ace_integration import ACEIntegration
 
 from ..bpmn.engine_persistent import BPMNEnginePersistent
 from ..bpmn.models import VisualState
@@ -62,6 +67,9 @@ class UnifiedWorkflowEngine:
             db_manager: DatabaseManager instance
             workflow_intelligence_enabled: Enable AI integration
         """
+        # ACE Integration for continuous learning
+        self.ace = ACEIntegration(module_name="workflow_engine")
+
         self.tenant_id = tenant_id
         self.module = module
         self.db_manager = db_manager
@@ -296,17 +304,55 @@ class UnifiedWorkflowEngine:
         task_name: str
     ) -> List[Dict[str, Any]]:
         """
-        Get AI recommendations for a task
+        Get AI recommendations for a task (with ACE learning!)
 
         Returns:
             List of recommendations with actions, reasons, and priorities
         """
+
+        # Use ACE for continuous learning of recommendation patterns!
+        result = await self.ace.execute_with_learning(
+            task_type=f"task_recommendation_{self.module}_{activity_id}",
+            base_context={
+                "instance_id": instance_id,
+                "task_id": task_id,
+                "activity_id": activity_id,
+                "task_name": task_name,
+                "module": self.module
+            },
+            execute_fn=self._get_task_recommendations_impl,
+            instance_id=instance_id,
+            task_id=task_id,
+            activity_id=activity_id,
+            task_name=task_name
+        )
+
+        return result.get('recommendations', [])
+
+    async def _get_task_recommendations_impl(
+        self,
+        context: Dict[str, Any],
+        instance_id: str,
+        task_id: str,
+        activity_id: str,
+        task_name: str
+    ) -> Dict[str, Any]:
+        """Internal task recommendation implementation (called by ACE)"""
+
+        # ACE provides enhanced context!
+        strategies = context.get('playbook_strategies', [])
+        if strategies:
+            logger.info(f"🎯 ACE enhanced recommendations with {len(strategies)} strategies")
+
         recommendations = []
 
         # Get instance data for context
         instance = await self.bpmn_engine.get_instance(instance_id)
         if not instance:
-            return recommendations
+            return {
+                'recommendations': [],
+                'effectiveness': 0.0
+            }
 
         # Try AI Advisor first (if Workflow Intelligence enabled)
         if self.workflow_intelligence_enabled and self.ai_advisor:
@@ -337,15 +383,26 @@ class UnifiedWorkflowEngine:
 
                 if recommendations:
                     logger.info(f"✅ AI Advisor provided {len(recommendations)} recommendations for task {task_id}")
-                    return recommendations
+                    # High effectiveness for AI recommendations
+                    avg_confidence = sum(r.get('confidence', 0.7) for r in recommendations) / len(recommendations)
+                    return {
+                        'recommendations': recommendations,
+                        'effectiveness': avg_confidence
+                    }
 
             except Exception as e:
                 logger.warning(f"⚠️ AI Advisor failed, falling back to rule-based: {e}")
 
         # Fallback: Rule-based recommendations
-        return await self._get_rule_based_recommendations(
+        recommendations = await self._get_rule_based_recommendations(
             instance, activity_id, task_name
         )
+
+        # Lower effectiveness for rule-based
+        return {
+            'recommendations': recommendations,
+            'effectiveness': 0.6
+        }
 
     async def _get_rule_based_recommendations(
         self,

@@ -15,9 +15,9 @@ CONSTITUTION RULES (IMMUTABLE):
 """
 
 import logging
-from typing import List
+from typing import List, Optional
 
-from .models import (
+from ..models import (
     Decision, FullContext, SafetyResult, SafetyConcern, ActionType
 )
 
@@ -150,7 +150,7 @@ class ConstitutionEnforcer:
         rule: dict,
         decision: Decision,
         context: FullContext
-    ) -> SafetyConcern | None:
+    ) -> Optional[SafetyConcern]:
         """Check individual rule."""
 
         # Rule CONST_004: Low confidence check

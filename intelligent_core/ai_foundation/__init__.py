@@ -18,15 +18,15 @@ __version__ = "1.0.0"
 
 # RAG Module
 from .rag.pipeline import RAGPipeline, KnowledgeSourceManager
-from .rag.embeddings import EmbeddingService
+from .rag.embeddings import EmbeddingGenerator
 from .rag.retrieval import HybridRetriever
 from .rag.reranking import Reranker
-from .rag.qdrant_client import QdrantVectorStore
+from .rag.qdrant_wrapper import QdrantVectorStore
 from .rag.setup_collections import QdrantCollectionSetup
 
 # ML Module
-from .ml.predictive_models import PredictiveModel
-from .ml.training_pipeline import MLTrainer
+from .ml.predictive_models import WorkflowPredictor
+from .ml.training_pipeline import TrainingPipeline
 from .ml.anomaly_detection import AnomalyDetector
 
 # Learning Module
@@ -44,14 +44,14 @@ __all__ = [
     # RAG
     "RAGPipeline",
     "KnowledgeSourceManager",
-    "EmbeddingService",
+    "EmbeddingGenerator",
     "HybridRetriever",
     "Reranker",
     "QdrantVectorStore",
     "QdrantCollectionSetup",
     # ML
-    "PredictiveModel",
-    "MLTrainer",
+    "WorkflowPredictor",
+    "TrainingPipeline",
     "AnomalyDetector",
     # Learning
     "SelfLearningEngine",

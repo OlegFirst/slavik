@@ -212,7 +212,7 @@ async def check_compliance(
 
 IMPORTS_TO_ADD = '''
 # Workflow Intelligence integration
-from workflow_intelligence import PostgresStorageAdapter, WorkflowEngine
+from intelligent_core.workflow_intelligence import PostgresStorageAdapter, WorkflowEngine
 from workflow_intelligence.audit import AuditLogger
 from workflow_intelligence.compliance import ISO22301Checker
 

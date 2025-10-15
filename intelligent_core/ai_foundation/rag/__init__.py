@@ -14,7 +14,7 @@ from .pipeline import RAGPipeline
 from .embeddings import EmbeddingGenerator
 from .retrieval import HybridRetriever
 from .reranking import Reranker
-from .qdrant_client import QdrantVectorStore
+from .qdrant_wrapper import QdrantVectorStore
 
 __all__ = [
     'RAGPipeline',

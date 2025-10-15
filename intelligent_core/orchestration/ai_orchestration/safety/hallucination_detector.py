@@ -12,7 +12,7 @@ Detects AI hallucinations:
 import logging
 from typing import List
 
-from .models import (
+from ..models import (
     Decision, SafetyResult, SafetyConcern, HallucinationScore
 )
 

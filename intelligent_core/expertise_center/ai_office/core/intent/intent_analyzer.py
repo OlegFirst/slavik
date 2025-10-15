@@ -1,5 +1,5 @@
 """
-Intent Analysis Engine
+Intent Analysis Engine (with ACE learning!)
 
 Extended from PDCA Assistant's _analyze_user_intent() with improved
 regex patterns and entity extraction for BCM-specific queries.
@@ -10,6 +10,11 @@ import logging
 from typing import Dict, List, Optional, Any
 from enum import Enum
 from pydantic import BaseModel
+import sys
+
+# Add platform root for ACE integration
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO')
+from shared.ace_integration import ACEIntegration
 
 logger = logging.getLogger(__name__)
 
@@ -89,11 +94,14 @@ class IntentAnalyzer:
 
     def __init__(self):
         """Initialize intent analyzer with pattern rules"""
+        # ACE Integration for continuous learning
+        self.ace = ACEIntegration(module_name="ai_office_intent")
+
         self.patterns = self._build_patterns()
 
-    def analyze(self, message: str, conversation_history: Optional[List[Dict]] = None) -> IntentResult:
+    async def analyze(self, message: str, conversation_history: Optional[List[Dict]] = None) -> IntentResult:
         """
-        Analyze user message to determine intent.
+        Analyze user message to determine intent (with ACE learning!)
 
         Args:
             message: User's message
@@ -102,6 +110,34 @@ class IntentAnalyzer:
         Returns:
             IntentResult with detected intent and entities
         """
+
+        # Use ACE for continuous learning of intent patterns!
+        result = await self.ace.execute_with_learning(
+            task_type="intent_analysis",
+            base_context={
+                "message": message,
+                "has_history": conversation_history is not None
+            },
+            execute_fn=self._analyze_impl,
+            message=message,
+            conversation_history=conversation_history
+        )
+
+        return result.get('intent_result')
+
+    async def _analyze_impl(
+        self,
+        context: Dict[str, Any],
+        message: str,
+        conversation_history: Optional[List[Dict]] = None
+    ) -> Dict[str, Any]:
+        """Internal intent analysis implementation (called by ACE)"""
+
+        # ACE provides enhanced context!
+        strategies = context.get('playbook_strategies', [])
+        if strategies:
+            logger.info(f"🎯 ACE enhanced intent analysis with {len(strategies)} strategies")
+
         message_lower = message.lower().strip()
 
         # Check if question
@@ -122,7 +158,7 @@ class IntentAnalyzer:
         # Check if requires context retrieval
         requires_context = self._requires_context(intent_type, is_question)
 
-        return IntentResult(
+        intent_result = IntentResult(
             intent_type=intent_type,
             confidence=confidence,
             module=module,
@@ -131,6 +167,12 @@ class IntentAnalyzer:
             is_question=is_question,
             requires_context=requires_context
         )
+
+        # Effectiveness = confidence (ACE will learn to improve!)
+        return {
+            'intent_result': intent_result,
+            'effectiveness': confidence
+        }
 
     def _build_patterns(self) -> Dict[IntentType, List[re.Pattern]]:
         """Build regex patterns for intent detection"""

@@ -20,7 +20,7 @@ import logging
 from typing import List, Optional
 from datetime import datetime
 
-from .models import (
+from ..models import (
     Strategy, Priority, FullContext, PriorityLevel
 )
 

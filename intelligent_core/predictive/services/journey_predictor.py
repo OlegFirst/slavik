@@ -1,5 +1,5 @@
 """
-Organization Journey Predictor
+Organization Journey Predictor (with ACE learning!)
 
 Predicts future BCM journey milestones based on similar organizations.
 
@@ -18,6 +18,11 @@ from collections import defaultdict
 import numpy as np
 from dataclasses import dataclass
 import logging
+import sys
+
+# Add platform root for ACE integration
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO')
+from shared.ace_integration import ACEIntegration
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +83,9 @@ class JourneyPredictor:
         Args:
             case_library: Access to historical journey data
         """
+        # ACE Integration for continuous learning
+        self.ace = ACEIntegration(module_name="predictive_intelligence")
+
         self.case_library = case_library
         self.min_similar_orgs = 3
         self.min_similarity_score = 0.5
@@ -88,7 +96,7 @@ class JourneyPredictor:
         horizon_days: int = 90
     ) -> List[PredictedMilestone]:
         """
-        Predict next milestones in organization's journey
+        Predict next milestones in organization's journey (with ACE learning!)
 
         Args:
             org_context: Current organization context
@@ -103,6 +111,39 @@ class JourneyPredictor:
             f"horizon: {horizon_days} days"
         )
 
+        # Use ACE for continuous learning of prediction patterns!
+        result = await self.ace.execute_with_learning(
+            task_type=f"predict_journey_{org_context.industry}",
+            base_context={
+                "org_id": str(org_context.org_id),
+                "industry": org_context.industry,
+                "size": org_context.size,
+                "maturity_level": org_context.maturity_level,
+                "current_stage": org_context.current_stage,
+                "horizon_days": horizon_days
+            },
+            execute_fn=self._predict_next_milestones_impl,
+            org_context=org_context,
+            horizon_days=horizon_days
+        )
+
+        return result.get('milestones', [])
+
+    async def _predict_next_milestones_impl(
+        self,
+        context: Dict[str, Any],
+        org_context: OrganizationContext,
+        horizon_days: int
+    ) -> Dict[str, Any]:
+        """Internal prediction implementation (called by ACE)"""
+
+        # ACE provides enhanced context with learned strategies!
+        strategies = context.get('playbook_strategies', [])
+        patterns_learned = context.get('known_patterns', [])
+
+        if strategies:
+            logger.info(f"🎯 ACE enhanced: {len(strategies)} strategies, {len(patterns_learned)} patterns")
+
         # Step 1: Find similar organizations
         similar_orgs = await self._find_similar_organizations(org_context)
 
@@ -111,7 +152,10 @@ class JourneyPredictor:
                 f"Insufficient similar organizations: {len(similar_orgs)} "
                 f"(need {self.min_similar_orgs})"
             )
-            return []
+            return {
+                'milestones': [],
+                'effectiveness': 0.0
+            }
 
         logger.info(f"Found {len(similar_orgs)} similar organizations")
 
@@ -128,14 +172,24 @@ class JourneyPredictor:
 
         logger.info(f"Generated {len(milestones)} milestone predictions")
 
-        return milestones
+        # Calculate effectiveness based on confidence scores
+        if milestones:
+            avg_confidence = sum(m.confidence for m in milestones) / len(milestones)
+            effectiveness = min(avg_confidence * 1.2, 1.0)  # Boost confidence slightly
+        else:
+            effectiveness = 0.0
+
+        return {
+            'milestones': milestones,
+            'effectiveness': effectiveness
+        }
 
     async def predict_certification_timeline(
         self,
         org_context: OrganizationContext
     ) -> Optional[CertificationPrediction]:
         """
-        Predict when organization will achieve ISO 22301 certification
+        Predict when organization will achieve ISO 22301 certification (with ACE learning!)
 
         Args:
             org_context: Current organization context
@@ -146,6 +200,34 @@ class JourneyPredictor:
 
         logger.info(f"Predicting certification for org {org_context.org_id}")
 
+        # Use ACE for continuous learning of certification predictions!
+        result = await self.ace.execute_with_learning(
+            task_type=f"predict_certification_{org_context.industry}",
+            base_context={
+                "org_id": str(org_context.org_id),
+                "industry": org_context.industry,
+                "size": org_context.size,
+                "maturity_level": org_context.maturity_level,
+                "current_stage": org_context.current_stage
+            },
+            execute_fn=self._predict_certification_impl,
+            org_context=org_context
+        )
+
+        return result.get('prediction')
+
+    async def _predict_certification_impl(
+        self,
+        context: Dict[str, Any],
+        org_context: OrganizationContext
+    ) -> Dict[str, Any]:
+        """Internal certification prediction implementation (called by ACE)"""
+
+        # ACE provides enhanced context!
+        strategies = context.get('playbook_strategies', [])
+        if strategies:
+            logger.info(f"🎯 ACE enhanced certification prediction with {len(strategies)} strategies")
+
         # Find similar successful organizations
         similar_orgs = await self._find_similar_organizations(
             org_context,
@@ -154,7 +236,10 @@ class JourneyPredictor:
 
         if len(similar_orgs) < self.min_similar_orgs:
             logger.warning("Insufficient certified organizations for prediction")
-            return None
+            return {
+                'prediction': None,
+                'effectiveness': 0.0
+            }
 
         # Calculate statistics
         cert_times = [org.get('time_to_cert_months', 0) for org in similar_orgs]
@@ -209,7 +294,11 @@ class JourneyPredictor:
             f"(confidence: {prediction.confidence})"
         )
 
-        return prediction
+        # Effectiveness = confidence (ACE will learn to improve!)
+        return {
+            'prediction': prediction,
+            'effectiveness': confidence
+        }
 
     async def _find_similar_organizations(
         self,

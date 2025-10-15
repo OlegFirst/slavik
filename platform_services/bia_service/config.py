@@ -1,14 +1,14 @@
 """
 BIA Service Configuration
 
-Inherits from shared BaseServiceSettings with BIA-specific settings.
+Inherits from shared SharedSettings with BIA-specific settings.
 """
 
 from typing import List
-from shared.config import BaseServiceSettings
+from shared.config import SharedSettings
 
 
-class BIASettings(BaseServiceSettings):
+class BIASettings(SharedSettings):
     """BIA Service Settings"""
 
     # Service Identity (override defaults)

@@ -9,10 +9,10 @@ Components:
 - DelegationManager: Delegates tasks to specialist agents
 """
 
-from .decision_center.context_aggregator import ContextAggregator
-from .decision_center.priority_engine import PriorityEngine
-from .decision_center.strategy_selector import StrategySelector
-from .decision_center.delegation_manager import DelegationManager
+from .context_aggregator import ContextAggregator
+from .priority_engine import PriorityEngine
+from .strategy_selector import StrategySelector
+from .delegation_manager import DelegationManager
 
 __all__ = [
     'ContextAggregator',

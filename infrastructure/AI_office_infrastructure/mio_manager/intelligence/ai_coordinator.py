@@ -21,7 +21,7 @@ sys.path.insert(0, str(INTELLIGENT_CORE))
 
 # Import ai-foundation components
 try:
-    from ai_foundation import (
+    from intelligent_core.ai_foundation import (
         RAGPipeline,
         LLMRouter,
         ContextBuilder,

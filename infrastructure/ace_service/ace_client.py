@@ -54,7 +54,7 @@ class ACEClient:
         """
         self.base_url = base_url or os.getenv(
             'ACE_SERVICE_URL',
-            'http://localhost:8050'
+            'http://localhost:8060'
         )
         self.timeout = aiohttp.ClientTimeout(total=timeout)
         self.session: Optional[aiohttp.ClientSession] = None

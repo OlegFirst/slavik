@@ -16,13 +16,13 @@ Blocks execution if any critical concerns found.
 import logging
 from typing import List
 
-from .models import (
+from ..models import (
     Decision, FullContext, SafetyResult, SafetyConcern
 )
-from .safety.constitution_enforcer import ConstitutionEnforcer
-from .safety.loop_detector import LoopDetector
-from .safety.hallucination_detector import HallucinationDetector
-from .safety.control_monitor import ControlMonitor
+from .constitution_enforcer import ConstitutionEnforcer
+from .loop_detector import LoopDetector
+from .hallucination_detector import HallucinationDetector
+from .control_monitor import ControlMonitor
 
 logger = logging.getLogger(__name__)
 

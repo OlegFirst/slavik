@@ -1,5 +1,5 @@
 """
-Event Learner - Обучение на паттернах событий
+Event Learner - Обучение на паттернах событий (with ACE learning!)
 
 Функции:
 - Обучение на исторических решениях
@@ -15,6 +15,11 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from collections import defaultdict
+import sys
+
+# Add platform root for ACE integration
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO')
+from shared.ace_integration import ACEIntegration
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +61,9 @@ class EventLearner:
     """
 
     def __init__(self, storage_path: str = None):
+        # ACE Integration for continuous learning
+        self.ace = ACEIntegration(module_name="event_intelligence")
+
         self.storage_path = Path(storage_path or '/Users/MD/AI-Platform-ISO/intelligent-core/event_intelligence/data')
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
@@ -217,11 +225,39 @@ class EventLearner:
 
     async def get_learned_confidence(self, event_name: str, suggested_action: str) -> float:
         """
-        Возвращает confidence на основе обучения
+        Возвращает confidence на основе обучения (with ACE learning!)
 
         Returns:
             float: Adjusted confidence (0-1)
         """
+
+        # Use ACE for continuous learning of confidence patterns!
+        result = await self.ace.execute_with_learning(
+            task_type=f"event_confidence_{suggested_action}",
+            base_context={
+                "event_name": event_name,
+                "suggested_action": suggested_action
+            },
+            execute_fn=self._get_learned_confidence_impl,
+            event_name=event_name,
+            suggested_action=suggested_action
+        )
+
+        return result.get('learned_confidence', 0.5)
+
+    async def _get_learned_confidence_impl(
+        self,
+        context: Dict,
+        event_name: str,
+        suggested_action: str
+    ) -> Dict:
+        """Internal confidence learning implementation (called by ACE)"""
+
+        # ACE provides enhanced context!
+        strategies = context.get('playbook_strategies', [])
+        if strategies:
+            logger.info(f"🎯 ACE enhanced confidence with {len(strategies)} strategies")
+
         base_confidence = 0.5
 
         # Проверяем, есть ли похожие примеры
@@ -233,7 +269,10 @@ class EventLearner:
         ]
 
         if not similar_examples:
-            return base_confidence
+            return {
+                'learned_confidence': base_confidence,
+                'effectiveness': 0.5
+            }
 
         # Вычисляем успешность на похожих примерах
         approved = sum(1 for ex in similar_examples if ex.developer_decision == 'approved')
@@ -241,7 +280,11 @@ class EventLearner:
 
         logger.info(f"🎯 Learned confidence for '{event_name}': {learned_confidence:.2f} (based on {len(similar_examples)} examples)")
 
-        return learned_confidence
+        # Effectiveness = learned_confidence (ACE will learn to improve!)
+        return {
+            'learned_confidence': learned_confidence,
+            'effectiveness': learned_confidence
+        }
 
     def _is_similar(self, event1: str, event2: str) -> bool:
         """Проверяет похожесть событий"""

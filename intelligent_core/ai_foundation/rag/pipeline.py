@@ -10,7 +10,7 @@ import logging
 
 from .embeddings import EmbeddingGenerator, DocumentChunker
 from .retrieval import HybridRetriever
-from .qdrant_client import QdrantVectorStore  # Real vector DB!
+from .qdrant_wrapper import QdrantVectorStore  # Real vector DB!
 from .reranking import Reranker, DiversityReranker
 
 logger = logging.getLogger(__name__)

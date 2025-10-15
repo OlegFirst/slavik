@@ -8,10 +8,10 @@ from pathlib import Path
 # Add shared to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "shared"))
 
-from shared.config import BaseServiceSettings
+from shared.config import SharedSettings
 
 
-class LearningServiceSettings(BaseServiceSettings):
+class LearningServiceSettings(SharedSettings):
     """Learning Service specific settings"""
 
     SERVICE_NAME: str = "learning"

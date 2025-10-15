@@ -21,10 +21,10 @@ Level 3: Code Evolution (Monthly)
 - REQUIRES HUMAN REVIEW before deployment
 """
 
-from .evolution.evolution_engine import EvolutionEngine
-from .evolution.data_evolution import DataEvolution
-from .evolution.model_evolution import ModelEvolution
-from .evolution.code_evolution import CodeEvolution
+from .evolution_engine import EvolutionEngine
+from .data_evolution import DataEvolution
+from .model_evolution import ModelEvolution
+from .code_evolution import CodeEvolution
 
 __all__ = [
     'EvolutionEngine',

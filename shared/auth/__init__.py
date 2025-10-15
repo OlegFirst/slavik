@@ -1,6 +1,6 @@
 """Authentication and authorization module."""
 
-from .jwt import JWTManager, init_jwt, get_current_user
+from .jwt import JWTManager, init_jwt, get_current_user, get_jwt_manager
 from .permissions import Role, Permission, ROLE_PERMISSIONS, require_permission
 from .dependencies import get_current_user_dep, require_role, require_admin
 
@@ -18,6 +18,7 @@ except ImportError:
 __all__ = [
     "JWTManager",
     "init_jwt",
+    "get_jwt_manager",
     "get_current_user",
     "get_current_user_dep",
     "require_role",

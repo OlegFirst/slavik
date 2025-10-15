@@ -9,7 +9,7 @@ ace_service:
   registration:
     type: learning_infrastructure
     status: production
-    port: 8050
+    port: 8060
     version: 2.0.0
     environment: production
     created_date: '2025-10-15'
@@ -90,7 +90,7 @@ ace_service:
                      ace_playbooks + trajectory_log + history
 
   runtime:
-    port: 8050
+    port: 8060
     protocol: HTTP/REST
     framework: FastAPI
     language: Python 3.11+
@@ -102,6 +102,7 @@ ace_service:
       timeout: 60
     health_endpoint: /health
     stats_endpoint: /stats
+    metrics_endpoint: /metrics
 
   api_endpoints:
     - path: /health
@@ -114,14 +115,20 @@ ace_service:
       description: Service statistics
       response: Total playbooks, trajectories, effectiveness metrics
 
+    - path: /metrics
+      method: GET
+      description: Prometheus metrics endpoint
+      format: Prometheus text format
+      response: All KPI metrics in Prometheus format
+
     - path: /api/v1/ace/generate-context
       method: POST
       description: Generate enhanced context (Generator)
       payload:
         task_type: string
         base_context: object
-        module_name: string (optional)
-        domain_knowledge: object (optional)
+        module_name: "string (optional)"
+        domain_knowledge: "object (optional)"
       response: Enhanced context with playbook strategies
 
     - path: /api/v1/ace/reflect
@@ -130,7 +137,7 @@ ace_service:
       payload:
         task_type: string
         trajectory: object
-        module_name: string (optional)
+        module_name: "string (optional)"
       response: Insights and recommendations
 
     - path: /api/v1/ace/curate
@@ -139,24 +146,24 @@ ace_service:
       payload:
         task_type: string
         insights: object
-        module_name: string (optional)
-        preserve_knowledge: boolean (default: true)
+        module_name: "string (optional)"
+        preserve_knowledge: "boolean (default: true)"
       response: Updated playbook with new version
 
     - path: /api/v1/ace/analytics
       method: GET
       description: Full analytics dashboard
       query_params:
-        module_name: string (optional)
-        task_type: string (optional)
+        module_name: "string (optional)"
+        task_type: "string (optional)"
       response: Complete analytics data
 
     - path: /api/v1/ace/playbooks
       method: GET
       description: List playbooks
       query_params:
-        module_name: string (optional)
-        task_type: string (optional)
+        module_name: "string (optional)"
+        task_type: "string (optional)"
       response: List of playbooks with metadata
 
   database:
@@ -243,48 +250,65 @@ ace_service:
       description: Modules use ACEClient library to connect
       usage_pattern: |
         from infrastructure.ace_service.ace_client import ACEClient
-        ace = ACEClient(base_url="http://localhost:8050")
+        ace = ACEClient(base_url="http://localhost:8060")
         result = await ace.ace_workflow(task_type, base_context, execute_fn)
 
     - service: Scenario Intelligence
       integration_type: http_client
+      status: ✅ INTEGRATED
       description: Scenario generation learning
       task_types:
         - scenario_L1_{module}_{operation}
-        - scenario_L2_{framework}_{context}
-        - scenario_L3_{advanced_analysis}
+      integrated_file: /intelligent_core/scenario_intelligence/learning/auto_generator.py
+      integrated_method: generate_module_scenario()
 
     - service: AI Orchestration
       integration_type: http_client
+      status: ✅ INTEGRATED
       description: Task delegation and strategy selection learning
       task_types:
         - ai_task_delegation
-        - strategy_selection
-        - safety_monitoring
-
-    - service: Community Intelligence
-      integration_type: http_client
-      description: Community analysis and recommendations
-      task_types:
-        - community_analysis
-        - expert_recommendation
-        - collective_intelligence
+      integrated_file: /intelligent_core/orchestration/ai_orchestration/decision_center/delegation_manager.py
+      integrated_method: delegate()
 
     - service: Predictive Intelligence
       integration_type: http_client
-      description: Forecasting and prediction improvements
+      status: ✅ INTEGRATED
+      description: Journey and certification prediction with learning
       task_types:
-        - demand_forecasting
-        - risk_prediction
-        - resource_optimization
+        - predict_journey_{industry}
+        - predict_certification_{industry}
+      integrated_file: /intelligent_core/predictive/services/journey_predictor.py
+      integrated_methods:
+        - predict_next_milestones()
+        - predict_certification_timeline()
 
-    - service: Workflow Intelligence
+    - service: Workflow Engine
       integration_type: http_client
-      description: Workflow optimization learning
+      status: ✅ INTEGRATED
+      description: BPMN task recommendations with learning
       task_types:
-        - workflow_optimization
-        - case_recommendation
-        - pattern_detection
+        - task_recommendation_{module}_{activity_id}
+      integrated_file: /intelligent_core/workflow_engine/workflow/core/unified_engine.py
+      integrated_method: _get_task_recommendations()
+
+    - service: AI Office
+      integration_type: http_client
+      status: ✅ INTEGRATED
+      description: Intent analysis with learning
+      task_types:
+        - intent_analysis
+      integrated_file: /intelligent_core/expertise_center/ai_office/core/intent/intent_analyzer.py
+      integrated_method: analyze()
+
+    - service: Event Intelligence
+      integration_type: http_client
+      status: ✅ INTEGRATED
+      description: Event confidence learning from developer feedback
+      task_types:
+        - event_confidence_{action}
+      integrated_file: /intelligent_core/event_intelligence/learner.py
+      integrated_method: get_learned_confidence()
 
   client_library:
     location: /infrastructure/ace_service/ace_client.py
@@ -318,7 +342,7 @@ ace_service:
       description: Number of modules using ACE
       target: "> 5 modules"
       prometheus_metric: ace_active_modules
-      current_value: 0 (ready for integration)
+      current_value: 6 (integrated)
 
     - name: ace_trajectories_total
       type: counter
@@ -440,9 +464,12 @@ ace_service:
     expected_output: "🎉 ALL TESTS PASSED!"
 
   monitoring:
-    health_check: curl http://localhost:8050/health
-    statistics: curl http://localhost:8050/stats
-    analytics: curl http://localhost:8050/api/v1/ace/analytics
+    health_check: curl http://localhost:8060/health
+    statistics: curl http://localhost:8060/stats
+    analytics: curl http://localhost:8060/api/v1/ace/analytics
+    metrics: curl http://localhost:8060/metrics
+    prometheus_job: ace-service
+    prometheus_scrape_interval: 10s
     logs: tail -f ace_service.log
     database_queries: See INTEGRATION_GUIDE.md section "Monitoring Queries"
 

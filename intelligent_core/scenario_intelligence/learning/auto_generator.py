@@ -13,8 +13,12 @@ Scenario Auto-Generator
 """
 
 import logging
+import sys
 from typing import Dict, List, Optional, Any
 import yaml
+
+# Add platform root to path for ACE integration
+sys.path.insert(0, '/Users/MD/AI-Platform-ISO')
 
 # Import all adapters
 from integration import (
@@ -27,6 +31,9 @@ from integration import (
     get_workflow_intel_adapter,
     get_simulation_adapter
 )
+
+# ACE Integration
+from shared.ace_integration import ACEIntegration
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +55,9 @@ class ScenarioAutoGenerator:
 
     def __init__(self):
         """Initialize Auto-Generator with all adapters"""
+        # ACE Integration for continuous learning
+        self.ace = ACEIntegration(module_name="scenario_intelligence")
+
         # Adapters
         self.predictive = get_predictive_adapter()
         self.community = get_community_adapter()
@@ -65,7 +75,7 @@ class ScenarioAutoGenerator:
             "success_rate": 0.0
         }
 
-        logger.info("Initialized ScenarioAutoGenerator with 8 adapters")
+        logger.info("✅ Initialized ScenarioAutoGenerator with 8 adapters + ACE learning")
 
     # ==========================================================================
     # LEVEL 1: Module Scenarios (Service-level testing)
@@ -78,7 +88,7 @@ class ScenarioAutoGenerator:
         framework: str = "ISO_22301"
     ) -> Dict[str, Any]:
         """
-        Автогенерация Level 1 сценария для модуля
+        Автогенерация Level 1 сценария для модуля (with ACE learning!)
 
         Args:
             module_name: Имя модуля (e.g., "notification-service")
@@ -96,6 +106,34 @@ class ScenarioAutoGenerator:
             )
         """
         logger.info(f"Generating L1 scenario: {module_name}.{operation}")
+
+        # Use ACE for continuous learning!
+        result = await self.ace.execute_with_learning(
+            task_type=f"scenario_L1_{module_name}_{operation}",
+            base_context={
+                "module_name": module_name,
+                "operation": operation,
+                "framework": framework
+            },
+            execute_fn=self._generate_module_scenario_impl
+        )
+
+        return result
+
+    async def _generate_module_scenario_impl(
+        self,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Internal implementation (called by ACE)"""
+        module_name = context["module_name"]
+        operation = context["operation"]
+        framework = context["framework"]
+
+        # ACE provides enhanced context with playbook strategies!
+        strategies = context.get('playbook_strategies', [])
+        patterns = context.get('known_patterns', [])
+
+        logger.info(f"ACE enhanced context: {len(strategies)} strategies, {len(patterns)} patterns")
 
         # 1. Get BCM domain expertise
         domain_info = await self.bcm.get_framework_info(framework)

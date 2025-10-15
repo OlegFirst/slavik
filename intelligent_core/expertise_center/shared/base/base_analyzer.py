@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional, List
 from abc import ABC, abstractmethod
 
 # AI Foundation integration
-from ai_foundation import RAGPipeline, LLMRouter, ContextBuilder, PredictiveModel, AnomalyDetector
+from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilder, WorkflowPredictor, AnomalyDetector
 
 
 class BaseAnalyzer(ABC):
@@ -34,7 +34,7 @@ class BaseAnalyzer(ABC):
     - self.rag: RAGPipeline for knowledge retrieval
     - self.llm: LLMRouter for AI-powered analysis
     - self.context_builder: ContextBuilder for context enrichment
-    - self.predictor: PredictiveModel for forecasting
+    - self.predictor: WorkflowPredictor for forecasting
     - self.anomaly_detector: AnomalyDetector for anomaly detection
     """
 
@@ -54,7 +54,7 @@ class BaseAnalyzer(ABC):
         self.rag = RAGPipeline()
         self.llm = LLMRouter()
         self.context_builder = ContextBuilder()
-        self.predictor = PredictiveModel()
+        self.predictor = WorkflowPredictor()
         self.anomaly_detector = AnomalyDetector()
 
     @abstractmethod

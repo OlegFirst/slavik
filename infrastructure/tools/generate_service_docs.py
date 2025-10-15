@@ -161,7 +161,7 @@ await event_bus.subscribe(
 Integrates with workflow intelligence for process orchestration:
 
 ```python
-from ai_foundation import WorkflowIntelligenceClient
+from intelligent_core.ai_foundation import WorkflowIntelligenceClient
 
 client = WorkflowIntelligenceClient()
 await client.start_workflow(type="{service_name.split('-')[0]}")

@@ -15,11 +15,11 @@ import logging
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 
-from .memory.working_memory import WorkingMemory
-from .memory.short_term_memory import ShortTermMemory
-from .memory.long_term_memory import LongTermMemory
-from .memory.procedural_memory import ProceduralMemory
-from .models import Memory, MemoryType
+from .working_memory import WorkingMemory
+from .short_term_memory import ShortTermMemory
+from .long_term_memory import LongTermMemory
+from .procedural_memory import ProceduralMemory
+from ..models import Memory, MemoryType
 
 logger = logging.getLogger(__name__)
 

@@ -31,7 +31,7 @@ def update_imports(content: str) -> str:
     )
     content = re.sub(
         r'from core import RAGPipeline.*?\n',
-        'from ai_foundation import RAGPipeline, LLMRouter, ContextBuilder\n',
+        'from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilder\n',
         content
     )
 
