@@ -14,6 +14,13 @@ from ..models.decision import (
     DecisionOutcome
 )
 
+# EventBus integration for deep AI consultation
+try:
+    from infrastructure.eventbus import create_eventbus, Event
+    EVENTBUS_AVAILABLE = True
+except ImportError:
+    EVENTBUS_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +40,9 @@ class DecisionEngine:
         policy_engine: PolicyEngine,
         escalation_manager: Optional['EscalationManager'] = None,
         audit_logger: Optional['AuditLogger'] = None,
-        ai_hub: Optional['AIIntelligenceHub'] = None
+        ai_hub: Optional['AIIntelligenceHub'] = None,
+        eventbus: Optional['IEventBus'] = None,
+        enable_deep_ai_integration: bool = False
     ):
         """
         Initialize Decision Engine
@@ -43,13 +52,24 @@ class DecisionEngine:
             escalation_manager: Escalation manager (optional for MVP)
             audit_logger: Audit logger (optional for MVP)
             ai_hub: AI Intelligence Hub (optional for MVP)
+            eventbus: EventBus for deep AI integration (optional)
+            enable_deep_ai_integration: Enable AI Orchestrator consultation via EventBus
         """
         self.policy_engine = policy_engine
         self.escalation_manager = escalation_manager
         self.audit_logger = audit_logger
         self.ai_hub = ai_hub
+        self.eventbus = eventbus
+        self.enable_deep_ai_integration = enable_deep_ai_integration
+
+        # Pending consultation responses (for async AI Orchestrator)
+        self._pending_consultations = {}  # request_id -> Future
 
         logger.info("Decision Engine initialized")
+        if enable_deep_ai_integration and eventbus:
+            logger.info("✅ Deep AI integration enabled (AI Orchestrator via EventBus)")
+        elif enable_deep_ai_integration and not eventbus:
+            logger.warning("⚠️  Deep AI integration requested but no EventBus provided")
 
     async def make_decision(
         self,
@@ -112,6 +132,10 @@ class DecisionEngine:
             # Audit logging
             if self.audit_logger:
                 await self.audit_logger.log_decision(decision, request, policies)
+
+            # Publish decision made event (for analytics and learning)
+            if self.enable_deep_ai_integration and self.eventbus:
+                await self._publish_decision_event(decision, request, policies)
 
             return decision
 
@@ -407,6 +431,32 @@ class DecisionEngine:
             )
         )
 
+        # Publish escalation event for AI learning (if deep integration enabled)
+        if self.enable_deep_ai_integration and self.eventbus:
+            try:
+                escalation_event = Event.create(
+                    event_type='infrastructure.decision.escalated',
+                    data={
+                        'decision_id': decision.decision_id,
+                        'request_id': request.request_id,
+                        'service': request.service,
+                        'action': request.action,
+                        'reason': request.reason,
+                        'escalation_reason': (
+                            f"Max attempts: {request.context.get('recovery_attempts', 0)}/"
+                            f"{policies.get('max_auto_attempts', 3)}"
+                        ),
+                        'context': request.context,
+                        'policies': policies
+                    },
+                    source='decision_center',
+                    tenant_id=request.context.get('tenant_id', 'default')
+                )
+                await self.eventbus.publish(escalation_event)
+                logger.info(f"✅ Published escalation event: {decision.decision_id}")
+            except Exception as e:
+                logger.error(f"Failed to publish escalation event: {e}")
+
         return decision
 
     async def _consult_ai(
@@ -417,6 +467,10 @@ class DecisionEngine:
         """
         Консультация с AI Intelligence Hub
 
+        Two modes:
+        1. Deep Integration (enabled): Publishes event to AI Orchestrator for multi-expert consultation
+        2. Direct (default): Calls AI Hub directly for quick consultation
+
         Args:
             request: Decision request
             policies: Service policies
@@ -424,13 +478,58 @@ class DecisionEngine:
         Returns:
             AI-consulted decision
         """
+        # Mode 1: Deep AI Integration via AI Orchestrator
+        if self.enable_deep_ai_integration and self.eventbus:
+            logger.info(
+                f"Deep AI consultation requested for {request.service}.{request.action} "
+                f"(request_id={request.request_id})"
+            )
+
+            try:
+                # Publish consultation request to AI Orchestrator
+                consultation_event = Event.create(
+                    event_type='infrastructure.decision.consultation_requested',
+                    data={
+                        'request_id': request.request_id,
+                        'service': request.service,
+                        'action': request.action,
+                        'reason': request.reason,
+                        'priority': request.priority,
+                        'context': request.context,
+                        'requester': request.requester,
+                        'policies': policies,
+                        'rto': policies.get('rto', 300),
+                        'rpo': policies.get('rpo', 60)
+                    },
+                    source='decision_center',
+                    tenant_id=request.context.get('tenant_id', 'default')
+                )
+
+                await self.eventbus.publish(consultation_event)
+                logger.info(
+                    f"✅ Published deep consultation request: {request.request_id}"
+                )
+
+                # For MVP: fallback to direct AI Hub while waiting for integration to be complete
+                # In production: wait for consultation_response event with timeout
+                logger.info(
+                    "Deep consultation published. Falling back to direct AI Hub for MVP."
+                )
+                # Continue to direct AI Hub below...
+
+            except Exception as e:
+                logger.error(f"Failed to publish deep consultation event: {e}")
+                logger.warning("Falling back to direct AI Hub consultation")
+                # Continue to direct AI Hub below...
+
+        # Mode 2: Direct AI Hub Consultation (fallback or default)
         if not self.ai_hub:
             # No AI hub - fallback to manual approval
             logger.warning("AI consultation needed but no AI Hub configured")
             return await self._request_approval(request, policies)
 
         try:
-            # Consult AI
+            # Consult AI directly
             ai_response = await self.ai_hub.consult(
                 problem=request.reason,
                 context=request.context,
@@ -452,8 +551,9 @@ class DecisionEngine:
                     decided_by="ai",
                     metadata={
                         "ai_model": ai_response.model_used,
-                        "ai_tier": ai_response.tier,
-                        "confidence": ai_response.confidence
+                        "ai_tier": ai_response.tier.value if hasattr(ai_response.tier, 'value') else str(ai_response.tier),
+                        "confidence": ai_response.confidence,
+                        "consultation_mode": "deep_integration" if self.enable_deep_ai_integration else "direct"
                     }
                 )
 
@@ -529,3 +629,57 @@ class DecisionEngine:
                 "safe_fallback": True
             }
         )
+
+    async def _publish_decision_event(
+        self,
+        decision: Decision,
+        request: DecisionRequest,
+        policies: Dict[str, Any]
+    ) -> None:
+        """
+        Publish decision event for analytics and AI learning
+
+        Args:
+            decision: The decision made
+            request: Original decision request
+            policies: Service policies used
+        """
+        if not self.eventbus:
+            return
+
+        try:
+            event_type = 'infrastructure.decision.made'
+
+            # Special events for auto-approvals (potential recovery successes)
+            if decision.decision_type == DecisionType.AUTO_APPROVED:
+                event_type = 'infrastructure.decision.auto_approved'
+
+            decision_event = Event.create(
+                event_type=event_type,
+                data={
+                    'decision_id': decision.decision_id,
+                    'request_id': request.request_id,
+                    'service': request.service,
+                    'action': request.action,
+                    'outcome': decision.outcome.value,
+                    'decision_type': decision.decision_type.value,
+                    'decided_by': decision.decided_by,
+                    'confidence': decision.metadata.get('confidence'),
+                    'ai_model': decision.metadata.get('ai_model'),
+                    'justification': decision.justification,
+                    'context': request.context,
+                    'policies': {
+                        'rto': policies.get('rto'),
+                        'rpo': policies.get('rpo'),
+                        'max_auto_attempts': policies.get('max_auto_attempts')
+                    }
+                },
+                source='decision_center',
+                tenant_id=request.context.get('tenant_id', 'default')
+            )
+
+            await self.eventbus.publish(decision_event)
+            logger.debug(f"📊 Published decision event: {event_type} ({decision.decision_id})")
+
+        except Exception as e:
+            logger.error(f"Failed to publish decision event: {e}")

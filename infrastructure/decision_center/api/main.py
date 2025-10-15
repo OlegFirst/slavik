@@ -18,6 +18,13 @@ from ..utils.audit_logger import AuditLogger
 from ..utils.metrics import initialize_metrics
 from ..models.decision import DecisionRequest, Decision
 
+# EventBus integration for deep AI consultation
+try:
+    from infrastructure.eventbus import create_eventbus
+    EVENTBUS_AVAILABLE = True
+except ImportError:
+    EVENTBUS_AVAILABLE = False
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -38,6 +45,7 @@ escalation_manager: Optional[EscalationManager] = None
 audit_logger: Optional[AuditLogger] = None
 ai_hub: Optional[AIIntelligenceHub] = None
 decision_engine: Optional[DecisionEngine] = None
+eventbus: Optional[Any] = None  # EventBus instance
 
 
 # Pydantic models for API
@@ -83,7 +91,7 @@ class HealthResponse(BaseModel):
 @app.on_event("startup")
 async def startup():
     """Initialize components on startup"""
-    global policy_engine, escalation_manager, audit_logger, ai_hub, decision_engine
+    global policy_engine, escalation_manager, audit_logger, ai_hub, decision_engine, eventbus
 
     logger.info("Starting Decision Center API...")
 
@@ -105,14 +113,50 @@ async def startup():
         enable_fallback=True  # Fallback to heuristics if API unavailable
     )
 
+    # Initialize EventBus for deep AI integration (optional)
+    enable_deep_ai = False
+    if EVENTBUS_AVAILABLE:
+        try:
+            logger.info("Initializing EventBus for deep AI integration...")
+            eventbus = create_eventbus('memory')  # Start with memory backend for MVP
+            await eventbus.connect()
+            enable_deep_ai = True
+            logger.info("✅ EventBus connected - deep AI integration enabled")
+        except Exception as e:
+            logger.warning(f"EventBus initialization failed: {e}")
+            logger.warning("⚠️  Running without deep AI integration (direct AI Hub only)")
+            eventbus = None
+    else:
+        logger.info("EventBus not available - running with direct AI Hub only")
+
     decision_engine = DecisionEngine(
         policy_engine=policy_engine,
         escalation_manager=escalation_manager,
         audit_logger=audit_logger,
-        ai_hub=ai_hub
+        ai_hub=ai_hub,
+        eventbus=eventbus,
+        enable_deep_ai_integration=enable_deep_ai
     )
 
     logger.info("Decision Center API started successfully")
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    """Cleanup on shutdown"""
+    global eventbus
+
+    logger.info("Shutting down Decision Center API...")
+
+    # Disconnect EventBus if connected
+    if eventbus:
+        try:
+            await eventbus.disconnect()
+            logger.info("✅ EventBus disconnected")
+        except Exception as e:
+            logger.error(f"EventBus disconnect error: {e}")
+
+    logger.info("Decision Center API shutdown complete")
 
 
 @app.get("/", response_model=Dict[str, str])
@@ -128,16 +172,29 @@ async def root():
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
+    components = {
+        "policy_engine": "ok" if policy_engine else "not_initialized",
+        "decision_engine": "ok" if decision_engine else "not_initialized",
+        "escalation_manager": "ok" if escalation_manager else "not_initialized",
+        "audit_logger": "ok" if audit_logger else "not_initialized",
+        "ai_hub": "ok" if ai_hub else "not_initialized"
+    }
+
+    # Add EventBus status if enabled
+    if eventbus:
+        components["eventbus"] = "connected"
+        components["deep_ai_integration"] = "enabled"
+    elif EVENTBUS_AVAILABLE:
+        components["eventbus"] = "available_but_disconnected"
+        components["deep_ai_integration"] = "disabled"
+    else:
+        components["eventbus"] = "not_available"
+        components["deep_ai_integration"] = "not_available"
+
     return HealthResponse(
         status="healthy",
         version="1.0.0-mvp",
-        components={
-            "policy_engine": "ok" if policy_engine else "not_initialized",
-            "decision_engine": "ok" if decision_engine else "not_initialized",
-            "escalation_manager": "ok" if escalation_manager else "not_initialized",
-            "audit_logger": "ok" if audit_logger else "not_initialized",
-            "ai_hub": "ok" if ai_hub else "not_initialized"
-        }
+        components=components
     )
 
 
