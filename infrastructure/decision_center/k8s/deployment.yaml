@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decision-center
+  namespace: decision-center
+  labels:
+    app: decision-center
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: decision-center
+  template:
+    metadata:
+      labels:
+        app: decision-center
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: decision-center-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: decision-center
+          image: decision-center:latest  # Replace with your registry
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          env:
+            # ConfigMap values
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: ENVIRONMENT
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: LOG_LEVEL
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_USER
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: REDIS_PORT
+            - name: AI_TIER1_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: AI_TIER1_ENABLED
+            - name: AI_TIER2_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: AI_TIER2_ENABLED
+            - name: AI_TIER3_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: AI_TIER3_ENABLED
+            - name: AI_ENABLE_FALLBACK
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: AI_ENABLE_FALLBACK
+            - name: EVENTBUS_BACKEND
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: EVENTBUS_BACKEND
+            - name: EVENTBUS_ENABLE_DEEP_AI
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: EVENTBUS_ENABLE_DEEP_AI
+
+            # Secret values
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: decision-center-secrets
+                  key: POSTGRES_PASSWORD
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: decision-center-secrets
+                  key: REDIS_PASSWORD
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: decision-center-secrets
+                  key: ANTHROPIC_API_KEY
+          volumeMounts:
+            - name: policies
+              mountPath: /app/policies.yaml
+              subPath: policies.yaml
+              readOnly: true
+            - name: logs
+              mountPath: /var/log/decision_center
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: policies
+          configMap:
+            name: policies-config
+        - name: logs
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: decision-center-sa
+  namespace: decision-center
+  labels:
+    app: decision-center
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: policies-config
+  namespace: decision-center
+  labels:
+    app: decision-center
+data:
+  policies.yaml: |
+    # Decision Center Policies
+    # This is a placeholder - replace with actual policies.yaml content
+
+    default_policy:
+      auto_approve_threshold: 0.8
+      require_consensus: true
+      escalation_levels:
+        - tier: L1
+          triggers: ["low_confidence", "no_policy"]
+        - tier: L2
+          triggers: ["repeated_failure", "critical_service"]
+        - tier: L3
+          triggers: ["security_incident", "data_loss_risk"]
+
+    services:
+      database:
+        auto_approve: true
+        confidence_threshold: 0.85
+        max_recovery_attempts: 3
+
+      redis:
+        auto_approve: true
+        confidence_threshold: 0.80
+        max_recovery_attempts: 2

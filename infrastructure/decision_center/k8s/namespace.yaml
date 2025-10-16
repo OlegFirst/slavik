@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: decision-center
+  labels:
+    name: decision-center
+    app: decision-center

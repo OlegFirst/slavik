@@ -1,0 +1,158 @@
+version: '3.8'
+
+services:
+  # Decision Center API
+  decision-center:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: decision-center
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Application
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+
+      # Database
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=decision_center
+      - POSTGRES_USER=decision_center
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me_in_production}
+
+      # Redis (EventBus backend)
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+
+      # AI Integration
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - AI_TIER1_ENABLED=false
+      - AI_TIER2_ENABLED=true   # Claude Sonnet
+      - AI_TIER3_ENABLED=true   # Claude Haiku
+      - AI_ENABLE_FALLBACK=true
+
+      # EventBus
+      - EVENTBUS_BACKEND=redis
+      - EVENTBUS_ENABLE_DEEP_AI=true
+
+      # Monitoring
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
+
+    volumes:
+      - decision-logs:/var/log/decision_center
+      - ./policies.yaml:/app/policies.yaml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - decision-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health', timeout=5.0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: decision-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=decision_center
+      - POSTGRES_USER=decision_center
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me_in_production}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - decision-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U decision_center"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (EventBus backend)
+  redis:
+    image: redis:7-alpine
+    container_name: decision-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+    volumes:
+      - redis-data:/data
+    networks:
+      - decision-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Prometheus (Metrics)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: decision-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - decision-network
+    depends_on:
+      - decision-center
+
+  # Grafana (Visualization)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: decision-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - decision-network
+    depends_on:
+      - prometheus
+
+networks:
+  decision-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  decision-logs:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

@@ -1,0 +1,219 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: decision-center
+  labels:
+    app: postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # storageClassName: standard  # Adjust based on your cluster
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: decision-center
+  labels:
+    app: postgres
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: postgres
+  selector:
+    app: postgres
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: decision-center
+  labels:
+    app: postgres
+spec:
+  serviceName: postgres-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: decision-center-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: decision-center-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_INITDB_ARGS
+              value: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - decision_center
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - decision_center
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        - name: init-scripts
+          configMap:
+            name: postgres-init-scripts
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: decision-center
+  labels:
+    app: postgres
+data:
+  init-db.sql: |
+    -- Decision Center - Database Initialization
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+    CREATE TABLE IF NOT EXISTS decisions (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        decision_id VARCHAR(255) UNIQUE NOT NULL,
+        request_id VARCHAR(255) NOT NULL,
+        service VARCHAR(255) NOT NULL,
+        action VARCHAR(255) NOT NULL,
+        decision_type VARCHAR(50) NOT NULL,
+        outcome VARCHAR(50) NOT NULL,
+        justification TEXT,
+        decided_by VARCHAR(255) NOT NULL,
+        decided_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        expires_at TIMESTAMP WITH TIME ZONE,
+        metadata JSONB,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS audit_logs (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        decision_id VARCHAR(255) REFERENCES decisions(decision_id),
+        event_type VARCHAR(100) NOT NULL,
+        service VARCHAR(255) NOT NULL,
+        action VARCHAR(255) NOT NULL,
+        outcome VARCHAR(50) NOT NULL,
+        operator VARCHAR(255),
+        reason TEXT,
+        context JSONB,
+        timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS escalations (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        escalation_id VARCHAR(255) UNIQUE NOT NULL,
+        request_id VARCHAR(255) NOT NULL,
+        service VARCHAR(255) NOT NULL,
+        action VARCHAR(255) NOT NULL,
+        escalation_level VARCHAR(50) NOT NULL,
+        urgency INTEGER NOT NULL,
+        reason TEXT NOT NULL,
+        assigned_to VARCHAR(255),
+        status VARCHAR(50) NOT NULL DEFAULT 'pending',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        resolved_at TIMESTAMP WITH TIME ZONE,
+        resolution TEXT,
+        operator VARCHAR(255)
+    );
+
+    CREATE TABLE IF NOT EXISTS consultation_logs (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        request_id VARCHAR(255) NOT NULL,
+        service VARCHAR(255) NOT NULL,
+        action VARCHAR(255) NOT NULL,
+        reason TEXT,
+        specialists_consulted JSONB,
+        recommendation VARCHAR(100),
+        confidence DECIMAL(5,4),
+        consensus BOOLEAN,
+        timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS policy_changes (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        service VARCHAR(255) NOT NULL,
+        change_type VARCHAR(100) NOT NULL,
+        old_value JSONB,
+        new_value JSONB,
+        changed_by VARCHAR(255) NOT NULL,
+        reason TEXT,
+        timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_decisions_service ON decisions(service);
+    CREATE INDEX IF NOT EXISTS idx_decisions_decided_at ON decisions(decided_at);
+    CREATE INDEX IF NOT EXISTS idx_decisions_outcome ON decisions(outcome);
+    CREATE INDEX IF NOT EXISTS idx_audit_service ON audit_logs(service);
+    CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_logs(timestamp);
+    CREATE INDEX IF NOT EXISTS idx_audit_decision_id ON audit_logs(decision_id);
+    CREATE INDEX IF NOT EXISTS idx_escalations_status ON escalations(status);
+    CREATE INDEX IF NOT EXISTS idx_escalations_service ON escalations(service);
+    CREATE INDEX IF NOT EXISTS idx_escalations_created_at ON escalations(created_at);
+    CREATE INDEX IF NOT EXISTS idx_consultation_service ON consultation_logs(service);
+    CREATE INDEX IF NOT EXISTS idx_consultation_timestamp ON consultation_logs(timestamp);
+
+    GRANT SELECT, INSERT, UPDATE ON decisions TO decision_center;
+    GRANT SELECT, INSERT ON audit_logs TO decision_center;
+    GRANT SELECT, INSERT, UPDATE ON escalations TO decision_center;
+    GRANT SELECT, INSERT ON consultation_logs TO decision_center;
+    GRANT SELECT, INSERT ON policy_changes TO decision_center;
