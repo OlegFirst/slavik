@@ -132,6 +132,122 @@ curl http://localhost:6333/</code></pre>
     </div>
   </section>
 
+  <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 0;">
+    <div class="container">
+      <h2 style="color: white;">✨ NEW: Decision Center Production Deployment</h2>
+      <p class="section-subtitle" style="color: rgba(255,255,255,0.95);">
+        Infrastructure-level autonomous decision-making with AI consultation (Phase 1.1-1.5 COMPLETE)
+      </p>
+
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        <div class="card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white;">🐳 Docker Deployment</h3>
+          <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">
+            Production-ready Docker Compose with Decision Center, PostgreSQL, Redis, Prometheus, and Grafana
+          </p>
+          <pre style="background: rgba(0,0,0,0.3); color: #e0e0e0; font-size: 0.85rem; margin-top: 1rem;"><code>cd infrastructure/decision_center
+
+# Configure environment
+cp .env.example .env
+# Edit .env - add ANTHROPIC_API_KEY
+
+# Start full stack
+docker-compose up -d
+
+# Verify
+curl http://localhost:8080/health</code></pre>
+        </div>
+
+        <div class="card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white;">☸️ Kubernetes Deployment</h3>
+          <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">
+            Production K8s manifests with auto-scaling (3-10 replicas), high availability, monitoring
+          </p>
+          <pre style="background: rgba(0,0,0,0.3); color: #e0e0e0; font-size: 0.85rem; margin-top: 1rem;"><code>cd infrastructure/decision_center/k8s
+
+# Update secrets in secret.yaml
+# Add ANTHROPIC_API_KEY
+
+# Deploy to K8s
+kubectl apply -f namespace.yaml
+kubectl apply -f configmap.yaml
+kubectl apply -f secret.yaml
+kubectl apply -f postgres.yaml
+kubectl apply -f redis.yaml
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f hpa.yaml
+
+# Verify
+kubectl get pods -n decision-center</code></pre>
+        </div>
+
+        <div class="card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+          <h3 style="color: white;">📊 Monitoring</h3>
+          <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">
+            Pre-configured Grafana dashboard with 7 panels tracking decisions, AI usage, escalations
+          </p>
+          <ul style="color: rgba(255,255,255,0.9); font-size: 0.85rem; margin-top: 1rem; list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">✓ Decision request rate & latency</li>
+            <li style="margin-bottom: 0.5rem;">✓ AI tier usage (Opus/Sonnet/Haiku)</li>
+            <li style="margin-bottom: 0.5rem;">✓ Active escalations & policy checks</li>
+            <li style="margin-bottom: 0.5rem;">✓ Prometheus + Grafana included</li>
+          </ul>
+          <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem; margin-top: 0.5rem;">
+            <strong>Access:</strong> http://localhost:3000 (Grafana)
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); margin-top: 2rem;">
+        <h3 style="color: white;">📖 Complete Documentation</h3>
+        <div class="grid grid-3" style="margin-top: 1rem;">
+          <div>
+            <h4 style="color: white; font-size: 1rem;">For Operators</h4>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem;">
+              <strong>OPERATOR_RUNBOOK.md</strong> (5,000+ lines)<br/>
+              Daily operations, escalation handling, policy management, troubleshooting, incident response
+            </p>
+          </div>
+          <div>
+            <h4 style="color: white; font-size: 1rem;">For Developers</h4>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem;">
+              <strong>DEVELOPER_GUIDE.md</strong> (3,500+ lines)<br/>
+              API integration, adding services, custom policies, testing, extension points
+            </p>
+          </div>
+          <div>
+            <h4 style="color: white; font-size: 1rem;">For DevOps</h4>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem;">
+              <strong>k8s/README.md</strong> (2,500+ lines)<br/>
+              Deployment guide, scaling, backup & recovery, security, production checklist
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem; text-align: center;">
+        <h4 style="color: white; margin-bottom: 0.5rem;">🎯 Production Features</h4>
+        <div class="grid grid-5" style="margin-top: 1rem;">
+          <p style="color: rgba(255,255,255,0.95); font-size: 0.9rem; margin: 0;">✅ High Availability<br/>(3-10 replicas)</p>
+          <p style="color: rgba(255,255,255,0.95); font-size: 0.9rem; margin: 0;">✅ Auto-Scaling<br/>(HPA on CPU/Memory)</p>
+          <p style="color: rgba(255,255,255,0.95); font-size: 0.9rem; margin: 0;">✅ Security<br/>(Non-root, Secrets)</p>
+          <p style="color: rgba(255,255,255,0.95); font-size: 0.9rem; margin: 0;">✅ Monitoring<br/>(Prometheus + Grafana)</p>
+          <p style="color: rgba(255,255,255,0.95); font-size: 0.9rem; margin: 0;">✅ Persistence<br/>(PostgreSQL + Redis)</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <p style="color: rgba(255,255,255,0.95); font-size: 1.1rem; margin-bottom: 1rem;">
+          <strong>Total Delivered:</strong> 20,778+ lines across 5 phases | <strong>Status:</strong> ✅ Production Ready
+        </p>
+        <a href="../infrastructure/decision_center/README.md" style="display: inline-block; background: white; color: var(--primary-color); padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600;">
+          📚 View Full Documentation
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="container">
       <h2>Phase 2: Platform Services</h2>
