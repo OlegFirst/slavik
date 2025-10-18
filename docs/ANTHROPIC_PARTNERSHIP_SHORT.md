@@ -33,6 +33,34 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 | 2 | 200 | 100,000 | $120K/year | $60K/year |
 | 3 | 1,000 | 150,000 | $180K/year | $90K/year |
 
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph LR
+    subgraph Y1["Year 1"]
+        O1[50 Orgs<br/>50K calls/mo]
+        C1[$30K<br/>50% saved]
+    end
+
+    subgraph Y2["Year 2"]
+        O2[200 Orgs<br/>100K calls/mo]
+        C2[$60K<br/>50% saved]
+    end
+
+    subgraph Y3["Year 3"]
+        O3[1,000 Orgs<br/>150K calls/mo]
+        C3[$90K<br/>50% saved]
+    end
+
+    Y1 ==> Y2
+    Y2 ==> Y3
+    Y3 ==> IMPACT[💚 IMPACT<br/>100K+ Lives Protected<br/>$150K Total Subsidy<br/>$1.50 per life]
+
+    style Y1 fill:#d4edda,stroke:#28a745
+    style Y2 fill:#fff3cd,stroke:#ffc107
+    style Y3 fill:#d1ecf1,stroke:#17a2b8
+    style IMPACT fill:#f8d7da,stroke:#dc3545,stroke-width:3px
+```
+
 **Total value:** $300K standard → $150K with discount = **$150K Anthropic contribution**
 
 **Cost per life protected:** $1.50 (Anthropic $150K ÷ 100,000 patients) - extremely cost-effective philanthropy
@@ -123,6 +151,29 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 
 ## Value Exchange
 
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph TB
+    ANTHRO[🤖 Anthropic<br/>GIVES<br/>$150K API Discount]
+
+    ANTHRO --> R1[📊 Research Data<br/>$50K value<br/>Human-AI partnership dataset]
+    ANTHRO --> R2[🎯 Brand Association<br/>$100K value<br/>Humanitarian story]
+    ANTHRO --> R3[🔧 Technical Insights<br/>$50K value<br/>Product feedback]
+    ANTHRO --> R4[💚 Impact Story<br/>PRICELESS<br/>100K+ lives protected]
+
+    R1 & R2 & R3 & R4 --> TOTAL[📈 TOTAL VALUE<br/>$200K+ tangible<br/>+ Priceless narrative]
+
+    TOTAL --> NET[✅ NET POSITIVE<br/>$50K+ value<br/>beyond discount]
+
+    style ANTHRO fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style R1 fill:#d4edda,stroke:#28a745
+    style R2 fill:#fff3cd,stroke:#ffc107
+    style R3 fill:#d1ecf1,stroke:#17a2b8
+    style R4 fill:#f8d7da,stroke:#dc3545
+    style TOTAL fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style NET fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+```
+
 **Anthropic gives:** $150K (50% API discount over 3 years)
 
 **Anthropic receives:**
@@ -178,6 +229,30 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 ---
 
 ## Implementation Timeline
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#d4edda','primaryTextColor':'#000','primaryBorderColor':'#28a745','lineColor':'#28a745','secondaryColor':'#fff3cd','tertiaryColor':'#d1ecf1'}}}%%
+gantt
+    title 3-Year Partnership Timeline
+    dateFormat YYYY-MM
+    section Year 1: Pilot & Validation
+    Partnership Agreement            :2026-01, 1M
+    API Discount Activated           :2026-02, 1M
+    Global Fund Pilot (50 orgs)      :2026-04, 9M
+    Research Data Collection         :2026-04, 9M
+    Year 1 Report + Blog Draft       :2026-10, 3M
+    section Year 2: Scale & Research
+    Scale to 200 Organizations       :2027-01, 12M
+    Research Paper Draft             :2027-03, 6M
+    Paper Submission (NeurIPS/ICML)  :2027-07, 3M
+    Case Study on Anthropic Website  :2027-09, 3M
+    section Year 3: Full Scale
+    Scale to 1,000 Organizations     :2028-01, 9M
+    100K+ Patients Protected         :2028-01, 12M
+    Final Research Report            :2028-10, 2M
+    Partnership Renewal Discussion   :2028-11, 1M
+    Media Campaign                   :2028-12, 1M
+```
 
 ### Year 1 (2026): Pilot & Validation
 

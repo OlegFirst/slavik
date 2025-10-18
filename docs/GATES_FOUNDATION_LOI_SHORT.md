@@ -134,6 +134,38 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 
 ## Impact Projections (3 Years)
 
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph LR
+    subgraph Y1["📅 Year 1: Foundation"]
+        O1[🏥 50 Orgs]
+        W1[👥 500+ Workers]
+        C1[📜 3-5 Certs]
+        P1[❤️ 5K Patients/day]
+    end
+
+    subgraph Y2["📅 Year 2: Scale"]
+        O2[🏥 200 Orgs<br/>4x growth]
+        W2[👥 2,000+ Workers<br/>4x growth]
+        C2[📜 15-20 Certs<br/>5x growth]
+        P2[❤️ 20K Patients/day<br/>4x growth]
+    end
+
+    subgraph Y3["📅 Year 3: Sustainability"]
+        O3[🏥 1,000 Orgs<br/>20x total]
+        W3[👥 10,000+ Workers<br/>20x total]
+        C3[📜 50+ Certs<br/>15x total]
+        P3[❤️ 100K+ Patients/day<br/>20x total]
+    end
+
+    Y1 ==> Y2
+    Y2 ==> Y3
+
+    style Y1 fill:#d4edda,stroke:#28a745
+    style Y2 fill:#fff3cd,stroke:#ffc107
+    style Y3 fill:#d1ecf1,stroke:#17a2b8
+```
+
 ### Quantitative Outcomes
 
 | Metric | Year 1 | Year 2 | Year 3 |
@@ -158,6 +190,28 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 ---
 
 ## Implementation Timeline (3 Years)
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#d4edda','primaryTextColor':'#000','primaryBorderColor':'#28a745','lineColor':'#28a745','secondaryColor':'#fff3cd','tertiaryColor':'#e1f5ff'}}}%%
+gantt
+    title 3-Year Implementation Roadmap
+    dateFormat YYYY-MM
+    section Year 1 (Foundation)
+    Platform Hardening           :2026-01, 3M
+    Global Fund Pilot (50 orgs)  :2026-04, 6M
+    French Localization          :2026-10, 3M
+    First ISO Certifications     :2026-10, 3M
+    section Year 2 (Scale)
+    Multi-Language Expansion     :2027-01, 3M
+    Mobile PWA Launch            :2027-01, 3M
+    Scale to 200 Organizations   :2027-04, 9M
+    15-20 ISO Certifications     :2027-04, 9M
+    section Year 3 (Sustainability)
+    Scale to 1,000 Organizations :2028-01, 9M
+    Multi-Region Infrastructure  :2028-01, 9M
+    Endowment Campaign ($5M)     :2028-10, 3M
+    Sustainability Transition    :2028-10, 3M
+```
 
 ### Year 1 (2026): Foundation & Pilot
 
@@ -222,6 +276,16 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 ---
 
 ## Partnership Structure
+
+```mermaid
+%%{init: {'theme':'base'}}%%
+pie title Funding Structure ($1M Total, 3 Years)
+    "Gates Foundation (45%)" : 450
+    "Global Fund (30%)" : 300
+    "Anthropic API Subsidy (15%)" : 150
+    "Cost-Recovery Revenue (5%)" : 50
+    "Individual Donors (5%)" : 50
+```
 
 ### Gates Foundation: Core Funder (45%)
 

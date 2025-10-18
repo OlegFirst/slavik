@@ -23,6 +23,45 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 
 **Countries:** Kenya, Tanzania, Nigeria, Uganda, Malawi, South Africa, Myanmar, Bangladesh, Honduras, Ukraine
 
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph TD
+    subgraph AF["🌍 Africa (6 countries)"]
+        KE[🇰🇪 Kenya<br/>5 orgs]
+        TZ[🇹🇿 Tanzania<br/>5 orgs]
+        NG[🇳🇬 Nigeria<br/>5 orgs]
+        UG[🇺🇬 Uganda<br/>5 orgs]
+        MW[🇲🇼 Malawi<br/>5 orgs]
+        ZA[🇿🇦 South Africa<br/>5 orgs]
+    end
+
+    subgraph AS["🌏 Asia (2 countries)"]
+        MM[🇲🇲 Myanmar<br/>5 orgs]
+        BD[🇧🇩 Bangladesh<br/>5 orgs]
+    end
+
+    subgraph LA["🌎 Latin America (1 country)"]
+        HN[🇭🇳 Honduras<br/>5 orgs]
+    end
+
+    subgraph EU["🇪🇺 Europe (1 country)"]
+        UA[🇺🇦 Ukraine<br/>5 orgs]
+    end
+
+    TOTAL[📊 TOTAL<br/>10 countries<br/>50 organizations]
+
+    KE & TZ & NG & UG & MW & ZA --> TOTAL
+    MM & BD --> TOTAL
+    HN --> TOTAL
+    UA --> TOTAL
+
+    style AF fill:#d4edda,stroke:#28a745
+    style AS fill:#fff3cd,stroke:#ffc107
+    style LA fill:#d1ecf1,stroke:#17a2b8
+    style EU fill:#f8d7da,stroke:#dc3545
+    style TOTAL fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+```
+
 **Pilot structure:**
 - 5 organizations per country (50 total)
 - 18-month implementation (Foundation → Capacity → Validation)
@@ -42,6 +81,21 @@ AI-Platform-ISO is the world's first AI-powered Business Continuity Management (
 **Example:** Hospital with BCM plan maintained 80% operations during COVID-19 vs. 40% for unprepared facilities
 
 ### 2. Massive Cost Savings
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#f8d7da','primaryTextColor':'#000','primaryBorderColor':'#dc3545','lineColor':'#28a745','secondaryColor':'#d4edda','tertiaryColor':'#fff3cd'}}}%%
+graph LR
+    A[Traditional Consulting<br/>50 orgs × $150K<br/>= $7.5M] -->|vs| B[AI-Platform-ISO<br/>$300K pilot + $500K<br/>= $800K]
+
+    B --> C[💰 SAVINGS<br/>$6.7 Million<br/>89% reduction]
+
+    C --> D[📊 ROI<br/>22x return<br/>on investment]
+
+    style A fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style B fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style C fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style D fill:#d1ecf1,stroke:#17a2b8,stroke-width:3px
+```
 
 **Traditional BCM consulting:** 50 orgs × $150K = **$7.5 million**
 
@@ -87,6 +141,17 @@ If 10-country pilot succeeds:
 
 ## Budget Breakdown ($300K)
 
+```mermaid
+%%{init: {'theme':'base'}}%%
+pie title Budget Allocation ($300K Total)
+    "Platform Support (33%)" : 100
+    "Training & Capacity (27%)" : 80
+    "Localization (13%)" : 40
+    "Onboarding (10%)" : 30
+    "M&E (10%)" : 30
+    "Travel & Workshops (7%)" : 20
+```
+
 | Category | Amount | Details |
 |----------|--------|---------|
 | **Platform support** | $100K | 50 orgs × $2K (AI API, infrastructure, maintenance) |
@@ -103,6 +168,30 @@ If 10-country pilot succeeds:
 ---
 
 ## Implementation Timeline (18 Months)
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#d4edda','primaryTextColor':'#000','primaryBorderColor':'#28a745','lineColor':'#28a745','secondaryColor':'#fff3cd','tertiaryColor':'#d1ecf1'}}}%%
+gantt
+    title 18-Month Implementation Roadmap
+    dateFormat YYYY-MM
+    section Phase 1: Foundation
+    Platform Hardening            :2026-01, 3M
+    French Localization           :2026-01, 3M
+    Country Coordinator Recruitment :2026-02, 2M
+    Kickoff Workshops (Virtual)   :2026-03, 1M
+    section Phase 2: Capacity Building
+    Onboard 50 Organizations      :2026-04, 9M
+    Train 500 Healthcare Workers  :2026-04, 9M
+    BIA Analyses (30+)            :2026-05, 8M
+    Risk Assessments (30+)        :2026-05, 8M
+    Continuity Plans (20+)        :2026-07, 6M
+    section Phase 3: Validation
+    ISO 22301 Certification (3-5) :2027-01, 6M
+    BCM Exercises (50+)           :2027-01, 6M
+    Impact Evaluation             :2027-03, 4M
+    Final Conference (10 countries) :2027-06, 1M
+    Scale Planning                :2027-05, 2M
+```
 
 ### Phase 1: Foundation (Months 1-3)
 - Platform hardening (security, governance)
