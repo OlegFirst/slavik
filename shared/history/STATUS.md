@@ -49,12 +49,12 @@
    - Column documentation
 
 #### Integration
-5. **services/bcm/bia/repositories/bia_repository.py** (Updated)
+5. **platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py** (Updated)
    - Enhanced update() method
    - Change tracking integration
    - Before/after state capture
 
-6. **services/bcm/bia/api/history.py** (120 lines)
+6. **platform_services/bcm_domain/services/bia_service/api/history.py** (120 lines)
    - GET /api/bia/history/processes/{id}
    - GET /api/bia/history/processes/{id}/fields/{field}
    - GET /api/bia/history/processes/{id}/snapshot/{version}
@@ -165,8 +165,8 @@ Table: change_history
 ✅ shared/history/models.py
 ✅ shared/history/tracker.py
 ✅ shared/history/__init__.py
-✅ services/bcm/bia/api/history.py
-✅ services/bcm/bia/repositories/bia_repository.py
+✅ platform_services/bcm_domain/services/bia_service/api/history.py
+✅ platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py
 ```
 
 ### Code Quality

@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: decision-center-config
+  namespace: decision-center
+  labels:
+    app: decision-center
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "INFO"
+
+  # Database
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "decision_center"
+  POSTGRES_USER: "decision_center"
+
+  # Redis
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+
+  # AI Configuration
+  AI_TIER1_ENABLED: "false"
+  AI_TIER2_ENABLED: "true"
+  AI_TIER3_ENABLED: "true"
+  AI_ENABLE_FALLBACK: "true"
+
+  # EventBus
+  EVENTBUS_BACKEND: "redis"
+  EVENTBUS_ENABLE_DEEP_AI: "true"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: decision-center
+  labels:
+    app: prometheus
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: 'decision-center-k8s'
+        environment: 'production'
+
+    scrape_configs:
+      - job_name: 'decision-center'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - decision-center
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: decision-center
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: pod
+          - source_labels: [__address__]
+            action: replace
+            regex: ([^:]+)(?::\d+)?
+            replacement: $1:8080
+            target_label: __address__
+
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']

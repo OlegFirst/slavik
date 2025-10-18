@@ -60,7 +60,7 @@ Comprehensive audit trail infrastructure has been successfully implemented for B
 
 ### 2. BIA Service Integration
 
-#### `/Users/MD/AI-Platform-ISO/services/bcm/bia/services/bia_service.py`
+#### `/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/services/bia_service.py`
 
 **Modified Methods** (5 total):
 
@@ -202,7 +202,7 @@ All files passed Python syntax checks:
 ✅ shared/audit/logger.py
 ✅ shared/audit/decorators.py
 ✅ shared/audit/__init__.py
-✅ services/bcm/bia/services/bia_service.py
+✅ platform_services/bcm_domain/services/bia_service/services/bia_service.py
 ✅ services/bcm/compliance/workflows/base_workflow.py
 ```
 
@@ -308,7 +308,7 @@ for log in logs.scalars():
 
 ### Modified Files (2)
 
-1. `/Users/MD/AI-Platform-ISO/services/bcm/bia/services/bia_service.py`
+1. `/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/services/bia_service.py`
    - Added imports: AuditLogger, AuditAction, AuditCategory, Request
    - Modified 6 methods (constructor + 5 operations)
    - Added ~50 lines of audit logging code

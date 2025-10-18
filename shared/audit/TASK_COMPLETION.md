@@ -162,7 +162,7 @@ await workflow.transition(
 ✅ shared/audit/logger.py
 ✅ shared/audit/decorators.py
 ✅ shared/audit/__init__.py
-✅ services/bcm/bia/services/bia_service.py
+✅ platform_services/bcm_domain/services/bia_service/services/bia_service.py
 ✅ services/bcm/compliance/workflows/base_workflow.py
 ```
 
@@ -369,7 +369,7 @@ shared/audit/
 ### Modified Files
 
 ```
-services/bcm/bia/services/bia_service.py
+platform_services/bcm_domain/services/bia_service/services/bia_service.py
 ├── Added imports (AuditLogger, AuditAction, AuditCategory)
 ├── Modified __init__() to accept audit_logger
 ├── Modified create_process() with audit logging

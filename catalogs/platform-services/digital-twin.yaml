@@ -1,0 +1,253 @@
+# Digital Twin Service - Service Information
+# Version: 2.0.0
+# Last Updated: 2025-10-16
+
+name: digital-twin
+display_name: Digital Twin Service - Personal User Dashboard
+version: 2.0.0
+
+registration:
+  type: platform_services/integration
+  status: production
+  port: 8096
+  iso_clause: "4.1, 4.2, 8.2"
+
+description: |
+  Digital Twin service as personal user dashboard with multi-tenant architecture.
+  Provides platform-wide integration layer with System Clone functionality, simulation
+  access, BCM management, and comprehensive organization data collection.
+
+  Core philosophy: Integration layer (not isolated microservice) that connects users
+  to all 13 platform services through unified dashboard.
+
+capabilities:
+  - Platform Topology Discovery (13 services auto-detection)
+  - System Clone (digital mirrors of services for what-if analysis)
+  - Simulation Integration (7 simulation engines access)
+  - BCM Integration (business continuity management)
+  - Organization Data Collection (8 methods, 10 categories)
+  - Multi-tenancy with Row-Level Security (RLS)
+  - JWT Authentication & Permission-based Access
+  - Impact Analysis & Dependency Mapping
+
+features:
+  - Multi-tenant architecture (organization_id, tenant_id)
+  - JWT authentication with infrastructure/security/auth integration
+  - Row-Level Security (RLS) context for database isolation
+  - Permission-based access control (admin, manager, user, viewer roles)
+  - Platform service discovery and health monitoring
+  - Service mirroring for configuration backup and what-if analysis
+  - 7 simulation engines (JaamSim, Monte Carlo, Scenario, What-If, BCM Queue, Advanced BIA, JaamSim Client)
+  - AI-powered scenario generation
+  - 8 data collection methods (interview, document_analysis, system_integration, survey, observation, api_extraction, database_query, file_upload)
+  - 10 data categories (structure, processes, technology, financial, hr, operations, compliance, strategic, performance, stakeholders)
+
+runtime:
+  port: 8096
+  protocol: HTTP/REST
+  framework: FastAPI
+  startup_command: uvicorn api.app:app --host 0.0.0.0 --port 8096
+
+dependencies:
+  required:
+    - PostgreSQL/Supabase - multi-tenant storage with RLS
+    - Redis - session caching and mirror storage
+    - Auth Service (8001) - JWT authentication
+    - EventBus (8055) - real-time updates
+  optional:
+    - Simulation Service (8095) - 7 simulation engines
+    - System BCM (8050) - BCM cycle management
+    - All 13 platform services - for topology discovery
+
+integrations:
+  - service: Simulation Service (8095)
+    integration_type: bridge
+    description: Access to 7 simulation engines via SimulationServiceBridge
+    endpoints:
+      - /api/v1/platform-bridges/simulation-service/*
+
+  - service: System BCM (8050)
+    integration_type: bridge
+    description: BCM cycle triggering and recovery management via SystemBCMBridge
+    endpoints:
+      - /api/v1/platform-bridges/system-bcm/*
+
+  - service: Auth Service (8001)
+    integration_type: authentication
+    description: JWT validation and user authentication
+    endpoint: http://localhost:8001
+
+  - service: All Platform Services
+    integration_type: discovery
+    description: Platform topology discovery and service mirroring
+    endpoints:
+      - /api/v1/topology/*
+      - /api/v1/system-clone/*
+
+  - service: EventBus (8055)
+    integration_type: choreography
+    description: Event-driven updates and notifications
+
+known_issues:
+  warnings:
+    - System Clone background tasks not yet implemented (placeholder)
+    - Mirror storage currently in Redis (should move to PostgreSQL for persistence)
+  improvements:
+    - Implement WebSocket for real-time topology updates
+    - Add historical topology trending and analytics
+    - Implement advanced service health predictions
+
+limitations:
+  - Mirror storage is temporary (Redis cache, 24h TTL)
+  - Platform clone is async but status tracking is basic
+  - No UI yet (API-only, Swagger UI available)
+
+kpis:
+  - name: dt_topology_discoveries_total
+    type: counter
+    description: Total platform topology discoveries
+
+  - name: dt_mirrors_created_total
+    type: counter
+    description: Total service mirrors created
+
+  - name: dt_simulations_executed_total
+    type: counter
+    description: Total simulations executed via bridge
+
+  - name: dt_bcm_cycles_triggered_total
+    type: counter
+    description: Total BCM cycles manually triggered
+
+  - name: dt_collection_sessions_total
+    type: counter
+    description: Total data collection sessions
+
+  - name: dt_platform_health_percentage
+    type: gauge
+    description: Overall platform health percentage
+    target: 80
+
+eventbus:
+  subscribes:
+    - event: platform.service.status_changed
+      action: Update topology cache
+
+    - event: simulation.execution.completed
+      action: Notify user via dashboard
+
+    - event: bcm.cycle.completed
+      action: Update platform continuity status
+
+  publishes:
+    - event: digital_twin.topology.discovered
+      priority: normal
+      payload:
+        total_services: int
+        running_services: int
+        platform_health: float
+
+    - event: digital_twin.mirror.created
+      priority: normal
+      payload:
+        service_name: string
+        user_id: string
+        mirror_id: string
+
+    - event: digital_twin.collection.completed
+      priority: normal
+      payload:
+        session_id: string
+        organization_id: string
+        quality_score: float
+
+deployment:
+  how_to_run: cd /platform-services/digital_twin && uvicorn api.app:app --reload
+  docker: false
+  command: uvicorn api.app:app --host 0.0.0.0 --port 8096
+  environment_variables:
+    PORT:
+      required: false
+      default: 8096
+
+    DATABASE_URL:
+      required: true
+      description: PostgreSQL connection string with RLS
+      secret: true
+      example: postgresql+asyncpg://user:pass@localhost:5432/bcm
+
+    REDIS_URL:
+      required: true
+      description: Redis for caching and mirror storage
+      example: redis://localhost:6379/0
+
+    AUTH_SERVICE_URL:
+      required: true
+      default: http://localhost:8001
+      description: Auth service URL for JWT validation
+
+    SIMULATION_SERVICE_URL:
+      required: false
+      default: http://localhost:8095
+      description: Simulation service URL
+
+    SYSTEM_BCM_URL:
+      required: false
+      default: http://localhost:8050
+      description: System BCM service URL
+
+    EVENTBUS_URL:
+      required: true
+      default: http://localhost:8055
+
+    JWT_SECRET_KEY:
+      required: true
+      secret: true
+      description: JWT signing secret (matches auth service)
+
+    JWT_ALGORITHM:
+      required: false
+      default: HS256
+
+ownership:
+  team: Platform Integration Team
+  primary_contact: Digital Twin & Integration Lead
+  role: Personal User Dashboard & Platform Integration Layer
+
+documentation:
+  main: /platform-services/digital_twin/README.md
+  api: http://localhost:8096/docs
+  technical: /platform-services/digital_twin/MULTI_TENANT_API_COMPLETE.md
+  quickstart: /platform-services/digital_twin/QUICK_START_RU.md
+  system_clone: /platform-services/digital_twin/SYSTEM_CLONE_INTEGRATION_COMPLETE.md
+
+endpoints:
+  base_url: http://localhost:8096
+  health: /api/v1/health
+  docs: /docs
+  redoc: /redoc
+
+  api_groups:
+    - name: Platform Topology
+      base: /api/v1/topology
+      description: Discover and monitor all 13 platform services
+
+    - name: System Clone
+      base: /api/v1/system-clone
+      description: Create digital mirrors of services
+
+    - name: Platform Bridges
+      base: /api/v1/platform-bridges
+      description: Integration with simulation_service and system_bcm
+
+    - name: Data Collection
+      base: /api/v1/data-collection
+      description: Organization data collection (8 methods, 10 categories)
+
+    - name: Organizations
+      base: /api/v1/organizations
+      description: Multi-tenant organization management
+
+    - name: Simulations
+      base: /api/v1/simulations
+      description: Digital Twin simulations (legacy)

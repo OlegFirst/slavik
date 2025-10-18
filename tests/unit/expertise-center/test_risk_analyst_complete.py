@@ -10,11 +10,11 @@ from typing import Dict, Any
 @pytest.fixture
 def risk_analyst():
     """Risk Analyst with mocked AI foundation components"""
-    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst import RiskAnalystAI
+    from platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst import RiskAnalystAI
 
-    with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.RAGPipeline'):
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.LLMRouter'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.ContextBuilder'):
+    with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.RAGPipeline'):
+        with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.LLMRouter'):
+            with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.ContextBuilder'):
                 analyst = RiskAnalystAI()
 
                 # Mock process_message to return FAIR analysis
@@ -45,10 +45,10 @@ class TestRiskAnalystInitialization:
     async def test_analyst_initializes_with_correct_attributes(self):
         """Test Risk Analyst initializes with BCM domain attributes"""
         # ARRANGE & ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst import RiskAnalystAI
+        with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst import RiskAnalystAI
                     analyst = RiskAnalystAI()
 
         # ASSERT
@@ -70,10 +70,10 @@ class TestRiskAnalystInitialization:
         }
 
         # ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst import RiskAnalystAI
+        with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst import RiskAnalystAI
                     analyst = RiskAnalystAI(config=custom_config)
 
         # ASSERT
@@ -497,11 +497,11 @@ class TestRiskAnalystSystemPrompt:
     async def test_system_prompt_includes_fair_methodology(self):
         """Test system prompt includes FAIR risk analysis context"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.risk_analyst import RiskAnalystAI
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.risk_analyst.risk_analyst import RiskAnalystAI
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     analyst = RiskAnalystAI()
 

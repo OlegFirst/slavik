@@ -1,0 +1,3 @@
+"""
+AI Intelligence Database Models
+"""

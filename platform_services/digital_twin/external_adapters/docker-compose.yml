@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  simpy-adapter:
+    build: ./simpy_adapter
+    container_name: dt-simpy-adapter
+    ports:
+      - "7001:7001"
+    environment:
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - digital-twin-network
+
+  mesa-adapter:
+    build: ./mesa_adapter
+    container_name: dt-mesa-adapter
+    ports:
+      - "7002:7002"
+    environment:
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - digital-twin-network
+
+  ml-adapter:
+    build: ./ml_adapter
+    container_name: dt-ml-adapter
+    ports:
+      - "7004:7004"
+    environment:
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - digital-twin-network
+
+networks:
+  digital-twin-network:
+    driver: bridge

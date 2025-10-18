@@ -10,11 +10,11 @@ from typing import Dict, Any
 @pytest.fixture
 def bia_specialist():
     """BIA Specialist with mocked AI foundation components"""
-    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist import BIASpecialistAI
+    from platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist import BIASpecialistAI
 
-    with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.RAGPipeline'):
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.LLMRouter'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.ContextBuilder'):
+    with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.RAGPipeline'):
+        with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.LLMRouter'):
+            with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.ContextBuilder'):
                 specialist = BIASpecialistAI()
 
                 # Mock process_message to return structured response
@@ -37,10 +37,10 @@ class TestBIASpecialistInitialization:
     async def test_specialist_initializes_with_correct_attributes(self):
         """Test BIA Specialist initializes with BCM domain attributes"""
         # ARRANGE & ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist import BIASpecialistAI
+        with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist import BIASpecialistAI
                     specialist = BIASpecialistAI()
 
         # ASSERT
@@ -61,10 +61,10 @@ class TestBIASpecialistInitialization:
         }
 
         # ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist import BIASpecialistAI
+        with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist import BIASpecialistAI
                     specialist = BIASpecialistAI(config=custom_config)
 
         # ASSERT
@@ -393,11 +393,11 @@ class TestBIASpecialistSystemPrompt:
     async def test_system_prompt_includes_bia_context(self):
         """Test system prompt includes BIA-specific context"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.bia_specialist import BIASpecialistAI
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.bia_specialist.bia_specialist import BIASpecialistAI
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     specialist = BIASpecialistAI()
 

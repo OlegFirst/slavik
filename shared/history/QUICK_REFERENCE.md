@@ -142,7 +142,7 @@ ChangeHistoryEntry(
 - **Models**: `/Users/MD/AI-Platform-ISO/shared/history/models.py`
 - **Tracker**: `/Users/MD/AI-Platform-ISO/shared/history/tracker.py`
 - **Migration**: `/Users/MD/AI-Platform-ISO/shared/history/migrations/001_create_change_history_table.sql`
-- **API**: `/Users/MD/AI-Platform-ISO/services/bcm/bia/api/history.py`
+- **API**: `/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/api/history.py`
 - **Full Docs**: `/Users/MD/AI-Platform-ISO/shared/history/README.md`
 
 ---
@@ -189,6 +189,6 @@ pip install deepdiff>=6.7.0
 ## Examples
 
 See:
-- BIA Repository: `/Users/MD/AI-Platform-ISO/services/bcm/bia/repositories/bia_repository.py`
-- API Endpoints: `/Users/MD/AI-Platform-ISO/services/bcm/bia/api/history.py`
+- BIA Repository: `/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py`
+- API Endpoints: `/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/api/history.py`
 - Tests: `/Users/MD/AI-Platform-ISO/shared/history/test_tracker.py`

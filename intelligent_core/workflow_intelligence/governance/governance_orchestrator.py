@@ -17,7 +17,7 @@ Decision Priority (when goals conflict with rules):
 Recursive Application:
 - User Level: User-created workflows
 - System Level: Workflow Intelligence itself
-- Component Level: Other platform components (AI Foundation, BIA Service)
+- Component Level: Other platform components (AI Foundation, BCM Domain BIA Service)
 - Platform Level: Entire AI-Platform-ISO
 
 Created: 2025-10-09

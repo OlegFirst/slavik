@@ -230,7 +230,7 @@ The module uses DeepDiff for intelligent change detection:
 
 ## Example: Full Integration
 
-See `/services/bcm/bia/repositories/bia_repository.py` for a complete integration example with the BIA module.
+See `/platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py` for a complete integration example with the BIA module.
 
 ## Support
 

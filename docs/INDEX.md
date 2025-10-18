@@ -8,6 +8,42 @@
 
 ## 🎯 START HERE
 
+### 🗺️ Navigation Map
+
+```mermaid
+graph TD
+    START[👋 Welcome to AI-Platform-ISO] --> WHO{Who are you?}
+
+    WHO -->|💰 Donor/Investor| DONOR[📄 Platform Overview<br/>2 pages, 5 min]
+    WHO -->|🏥 Healthcare Org| HEALTH[🎬 Demo Script<br/>5-minute flow]
+    WHO -->|👨‍💻 Developer| DEV[🏗️ Architecture Docs<br/>Technical deep-dive]
+    WHO -->|📋 Consultant| CONSULT[✅ ISO Compliance Matrix<br/>81% compliant]
+
+    DONOR --> DONOR_SHORT[📝 SHORT Proposals<br/>5 min each]
+    DONOR_SHORT --> DONOR_CHOOSE{Which funder?}
+    DONOR_CHOOSE -->|Global Fund| GF[🌍 Global Fund $300K<br/>10-country pilot]
+    DONOR_CHOOSE -->|Gates Foundation| GATES[💚 Gates $450K/3yr<br/>Health systems]
+    DONOR_CHOOSE -->|Anthropic| ANT[🤖 Anthropic $150K<br/>API partnership]
+
+    HEALTH --> PILOT[🚀 Join Pilot<br/>Free for LMICs]
+
+    DEV --> ARCH[📐 5-Layer Architecture]
+    DEV --> SEC[🔒 Security Audit<br/>79/100]
+    DEV --> REM[🔧 30-Day Remediation]
+
+    CONSULT --> ISO[📊 ISO 22301 Matrix]
+    CONSULT --> AUDIT[📋 Security Report]
+
+    style START fill:#e1f5ff
+    style DONOR fill:#d4edda
+    style HEALTH fill:#fff3cd
+    style DEV fill:#cce5ff
+    style CONSULT fill:#f8d7da
+    style GF fill:#28a745
+    style GATES fill:#17a2b8
+    style ANT fill:#6f42c1
+```
+
 **New to the project?** Read in this order:
 1. [Platform Overview](#platform-overview) (2 min read)
 2. [Executive Dashboard](#executive-dashboard) (5 min read)
@@ -155,6 +191,36 @@
 ---
 
 ## 🔧 TECHNICAL DOCUMENTATION
+
+### BCM Domain Migration (October 2025)
+
+**bcm-domain-migration.md** - *Captain's Log*
+
+**Migration:** Unify BCM capabilities into domain-driven architecture
+**Status:** ✅ Complete + All Fixes Verified (Oct 18-19, 2025)
+**Production Ready:** 100%
+
+**Content:**
+- The Story: Why we migrated (domain-driven design)
+- Three-Level Architecture (Meta, Strategic, Tactical)
+- What Changed: 12 services + 9 AI colleagues unified
+- Post-Migration Audit: 11,200+ files checked, 18 issues found & fixed
+- Zero Breaking Changes: Backward compatible with symlinks
+- Multi-Standard Scalability: Ready for ISO 27001, GDPR
+
+**Achievements:**
+- Files moved: 40+ (services, colleagues, knowledge)
+- Documentation: 2,500+ lines created
+- Audit: 6-agent team, comprehensive verification
+- Fixes: 15 files, ~15 minutes
+- Production readiness: 95% → 100%
+
+**Audience:** Developers, architects, stakeholders
+**Use case:** Understand platform architecture evolution
+
+**View:** [BCM Domain Migration](bcm-domain-migration.html) | [Markdown](bcm-domain-migration.md)
+
+---
 
 ### 30-Day Remediation Plan
 

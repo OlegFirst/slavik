@@ -150,7 +150,8 @@ def create_app(config: Dict[str, Any] = None) -> FastAPI:
     from .routers import (
         organizations, simulations, metrics, health, bridges,
         import_data, visualize, integrations, auth,
-        scenarios, exercises, predictions, bia  # NEW: Simulation Hub routers
+        scenarios, exercises, predictions, bia,  # Simulation Hub routers
+        topology, system_clone, platform_bridges, data_collector  # NEW: System Clone & Integration routers
     )
 
     # Auth router (FIRST - no /api/v1 prefix, just /auth)
@@ -231,6 +232,31 @@ def create_app(config: Dict[str, Any] = None) -> FastAPI:
         health.router,
         prefix="/api/v1",
         tags=["health"]
+    )
+
+    # System Clone & Integration routers (NEW - Multi-tenant platform integration)
+    app.include_router(
+        topology.router,
+        prefix="/api/v1/topology",
+        tags=["system-clone", "topology"]
+    )
+
+    app.include_router(
+        system_clone.router,
+        prefix="/api/v1/system-clone",
+        tags=["system-clone", "mirror"]
+    )
+
+    app.include_router(
+        platform_bridges.router,
+        prefix="/api/v1/platform-bridges",
+        tags=["integrations", "bridges"]
+    )
+
+    app.include_router(
+        data_collector.router,
+        prefix="/api/v1/data-collection",
+        tags=["data-collection", "organization"]
     )
 
     # Root endpoint

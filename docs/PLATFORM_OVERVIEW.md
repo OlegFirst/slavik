@@ -89,6 +89,19 @@ Unlike commercial BCM software for banks/telecoms, we're purpose-built for healt
 | Annual Maintenance | $15,000 | $1,000 | 93% |
 | **TOTAL (3 years)** | **$150,000** | **$10,000** | **93%** |
 
+**Visual ROI:**
+
+```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#d4edda','primaryTextColor':'#000','primaryBorderColor':'#28a745','lineColor':'#28a745','secondaryColor':'#f8d7da','tertiaryColor':'#fff3cd'}}}%%
+graph LR
+    A[Traditional<br/>$150,000] -->|vs| B[AI-Platform<br/>$10,000]
+    B --> C[💰 93% Savings<br/>$140,000 per org]
+
+    style A fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style B fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style C fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+```
+
 ### Time Comparison
 
 - Traditional: 18 months to ISO 22301 certification
@@ -108,6 +121,28 @@ Unlike commercial BCM software for banks/telecoms, we're purpose-built for healt
 - Scalability: Unlimited (software scales)
 - **Savings: $6.5 million (87% reduction)**
 
+**Impact at Scale (3 Years):**
+
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph TD
+    START[💰 $950K<br/>Total Investment] --> IMPACT{Impact Delivered}
+
+    IMPACT --> ORG[🏥 1,000 Organizations<br/>with BCM]
+    IMPACT --> LIVES[❤️ 100,000+ Lives<br/>Protected Daily]
+    IMPACT --> CERT[📜 50+ ISO Certifications<br/>Achieved]
+    IMPACT --> SAVE[💵 $150M Savings<br/>vs Traditional]
+
+    SAVE --> ROI[📊 ROI: 300x<br/>Value Delivered]
+
+    style START fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style ORG fill:#d4edda,stroke:#28a745
+    style LIVES fill:#f8d7da,stroke:#dc3545
+    style CERT fill:#fff3cd,stroke:#ffc107
+    style SAVE fill:#d1ecf1,stroke:#17a2b8
+    style ROI fill:#d4edda,stroke:#28a745,stroke-width:3px
+```
+
 ---
 
 ## 🏗️ Technical Foundation
@@ -115,6 +150,70 @@ Unlike commercial BCM software for banks/telecoms, we're purpose-built for healt
 ### Architecture
 
 **5-Layer Design:**
+
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph TB
+    subgraph L5["🖥️ LAYER 5: Human Interface"]
+        UI[Web App<br/>React + Next.js]
+        API[API Gateway<br/>1,067 endpoints]
+        MOB[Mobile PWA<br/>Planned]
+    end
+
+    subgraph L4["📋 LAYER 4: Platform Services"]
+        BIA[BIA Service]
+        RISK[Risk Service]
+        COMP[Compliance Service]
+        PLAN[Planning Service]
+        GOV[Governance Service]
+        MORE[... 7 more services]
+    end
+
+    subgraph L3["🧠 LAYER 3: Intelligent Core"]
+        ORCH[AI Orchestrator]
+        WF[Workflow Intelligence]
+        EXPERT[26 AI Specialists]
+        PRED[Predictive ML]
+        COLL[Collective Intelligence<br/>347+ cases]
+    end
+
+    subgraph L2["🔧 LAYER 2: Shared Libraries"]
+        AUTH[Auth + JWT]
+        MULTI[Multi-Tenancy RLS]
+        EVENT[EventBus]
+        LOG[Logging + Audit]
+    end
+
+    subgraph L1["🏗️ LAYER 1: Infrastructure"]
+        DB[(PostgreSQL<br/>Supabase)]
+        CACHE[(Redis)]
+        QUEUE[(RabbitMQ)]
+        VECTOR[(Qdrant<br/>Vector DB)]
+        MON[Prometheus +<br/>Grafana]
+    end
+
+    UI --> API
+    API --> BIA
+    API --> RISK
+    API --> COMP
+    BIA --> ORCH
+    RISK --> EXPERT
+    COMP --> WF
+    ORCH --> AUTH
+    EXPERT --> EVENT
+    WF --> DB
+    AUTH --> DB
+    EVENT --> QUEUE
+    MON --> DB
+
+    style L5 fill:#e1f5ff,stroke:#0066cc
+    style L4 fill:#d4edda,stroke:#28a745
+    style L3 fill:#fff3cd,stroke:#ffc107
+    style L2 fill:#f8d7da,stroke:#dc3545
+    style L1 fill:#d1ecf1,stroke:#17a2b8
+```
+
+**Layer breakdown:**
 1. **Infrastructure:** PostgreSQL, Redis, RabbitMQ, Qdrant (vector DB)
 2. **Shared Libraries:** Auth (JWT), Multi-tenancy (RLS), EventBus
 3. **Intelligent Core:** 26 AI agents, RAG pipeline, ML models

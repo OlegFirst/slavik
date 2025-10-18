@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASH 4.0 Digital Twin Visualization</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>NASH 4.0 Digital Twin</h1>
+                    <span class="subtitle">NPO Organization Visualization Platform</span>
+                </div>
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <span class="status-label">System Status:</span>
+                        <span class="status-value" id="systemStatus">Active</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Twins Created:</span>
+                        <span class="status-value" id="twinCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+            <button class="nav-btn" data-section="ai-organs">AI Organs Monitor</button>
+            <button class="nav-btn" data-section="ai-consultant">🤖 AI Consultant</button>
+            <button class="nav-btn" data-section="create">Create Twin</button>
+            <button class="nav-btn" data-section="visualization">Visualization</button>
+            <button class="nav-btn" data-section="scenarios">Scenarios</button>
+            <button class="nav-btn" data-section="analytics">Analytics</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-grid">
+                    <!-- Organization Overview -->
+                    <div class="card organization-overview">
+                        <div class="card-header">
+                            <h3>Organization Overview</h3>
+                            <select id="organizationSelect">
+                                <option value="">Select an organization...</option>
+                            </select>
+                        </div>
+                        <div class="card-content" id="organizationOverview">
+                            <div class="empty-state">
+                                <p>Create or select an organization to view its digital twin</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Metrics -->
+                    <div class="card health-metrics">
+                        <div class="card-header">
+                            <h3>Health Metrics</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="metrics-grid">
+                                <div class="metric-item">
+                                    <div class="metric-label">Overall Health</div>
+                                    <div class="metric-value" id="overallHealth">--</div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="overallHealthBar"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">Financial Health</div>
+                                    <div class="metric-value" id="financialHealth">--</div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="financialHealthBar"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">Operational Efficiency</div>
+                                    <div class="metric-value" id="operationalHealth">--</div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="operationalHealthBar"></div>
+                                    </div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">Technology Maturity</div>
+                                    <div class="metric-value" id="technologyHealth">--</div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="technologyHealthBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card quick-actions">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="actions-grid">
+                                <button class="action-btn" onclick="showCreateTwin()">
+                                    <span class="action-icon">+</span>
+                                    Create New Twin
+                                </button>
+                                <button class="action-btn" onclick="runAutomationScenario()">
+                                    <span class="action-icon">▶</span>
+                                    Run Automation
+                                </button>
+                                <button class="action-btn" onclick="runCrisisScenario()">
+                                    <span class="action-icon">⚠</span>
+                                    Test Crisis Response
+                                </button>
+                                <button class="action-btn" onclick="generateReport()">
+                                    <span class="action-icon">☰</span>
+                                    Generate Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card recent-activity">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="activity-list" id="activityList">
+                                <div class="activity-item">
+                                    <div class="activity-time">Now</div>
+                                    <div class="activity-text">Digital Twin platform initialized</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Organs Monitor Section -->
+            <section id="ai-organs" class="content-section">
+                <div class="ai-organs-grid">
+                    <!-- AI Organs Status Overview -->
+                    <div class="card ai-organs-overview">
+                        <div class="card-header">
+                            <h3>🧠 AI Organs Status</h3>
+                            <div class="refresh-controls">
+                                <button class="btn-small" onclick="refreshAIStatus()">Refresh</button>
+                                <span class="last-update" id="lastAIUpdate">Never</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="ai-organs-status" id="aiOrgansStatus">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Organs Performance -->
+                    <div class="card ai-performance">
+                        <div class="card-header">
+                            <h3>⚡ Performance Metrics</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="aiPerformanceChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent AI Analysis -->
+                    <div class="card recent-analysis">
+                        <div class="card-header">
+                            <h3>🔍 Recent AI Analysis</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="analysis-timeline" id="analysisTimeline">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights Dashboard -->
+                    <div class="card ai-insights">
+                        <div class="card-header">
+                            <h3>💡 Active AI Insights</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="insights-container" id="aiInsightsContainer">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Organs Control Panel -->
+                    <div class="card ai-controls">
+                        <div class="card-header">
+                            <h3>🎛️ AI Organs Control</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="control-grid">
+                                <button class="control-btn" onclick="runFullAIAnalysis()">
+                                    <span class="control-icon">🔄</span>
+                                    Run Full Analysis
+                                </button>
+                                <button class="control-btn" onclick="runRiskAnalysis()">
+                                    <span class="control-icon">⚠️</span>
+                                    Risk Analysis
+                                </button>
+                                <button class="control-btn" onclick="runComplianceCheck()">
+                                    <span class="control-icon">✅</span>
+                                    Compliance Check
+                                </button>
+                                <button class="control-btn" onclick="generatePredictions()">
+                                    <span class="control-icon">🔮</span>
+                                    Generate Predictions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Health -->
+                    <div class="card system-health">
+                        <div class="card-header">
+                            <h3>💓 System Health</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="health-metrics" id="systemHealthMetrics">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Consultant Section -->
+            <section id="ai-consultant" class="content-section">
+                <div class="ai-consultant-container">
+                    <div class="card chat-container">
+                        <div class="card-header">
+                            <h3>🤖 AI BCM Consultant</h3>
+                            <span class="ai-status" id="aiStatus">Online</span>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="ai-message">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <p>Привет! Я ваш AI консультант по управлению непрерывностью бизнеса (BCM).</p>
+                                    <p>Я могу помочь вам с:</p>
+                                    <ul>
+                                        <li>📊 Анализом рисков и оценкой воздействия</li>
+                                        <li>🎯 Разработкой стратегий восстановления</li>
+                                        <li>📝 Созданием планов непрерывности</li>
+                                        <li>🔮 Прогнозированием сценариев кризисов</li>
+                                        <li>✅ Проверкой соответствия ISO 22301</li>
+                                        <li>🧠 Анализом данных Digital Twin</li>
+                                    </ul>
+                                    <p>Задайте мне любой вопрос о вашей организации или BCM!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text"
+                                   id="chatInput"
+                                   class="chat-input"
+                                   placeholder="Введите ваш вопрос..."
+                                   onkeypress="if(event.key==='Enter') sendMessage()">
+                            <button onclick="sendMessage()" class="send-btn">
+                                <span>Отправить</span>
+                            </button>
+                        </div>
+                        <div class="quick-actions">
+                            <button onclick="askQuestion('Какие главные риски у моей организации?')" class="quick-btn">
+                                ⚠️ Анализ рисков
+                            </button>
+                            <button onclick="askQuestion('Оцените готовность к кризисам')" class="quick-btn">
+                                🛡️ Оценка готовности
+                            </button>
+                            <button onclick="askQuestion('Создайте план восстановления')" class="quick-btn">
+                                📋 План восстановления
+                            </button>
+                            <button onclick="askQuestion('Проверьте соответствие ISO 22301')" class="quick-btn">
+                                ✅ ISO 22301
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights Panel -->
+                    <div class="card ai-insights-panel">
+                        <div class="card-header">
+                            <h3>💡 AI Insights</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="insight-item">
+                                <span class="insight-icon">🎯</span>
+                                <div class="insight-text">
+                                    <strong>Текущий фокус:</strong>
+                                    <p id="currentFocus">Анализ операционных рисков</p>
+                                </div>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">📊</span>
+                                <div class="insight-text">
+                                    <strong>Уровень риска:</strong>
+                                    <div class="risk-meter">
+                                        <div class="risk-level" id="riskLevel" style="width: 35%"></div>
+                                    </div>
+                                    <span id="riskPercent">35%</span>
+                                </div>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">🔮</span>
+                                <div class="insight-text">
+                                    <strong>Прогноз на месяц:</strong>
+                                    <p id="monthlyForecast">Стабильная операционная деятельность</p>
+                                </div>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">💪</span>
+                                <div class="insight-text">
+                                    <strong>Рекомендация:</strong>
+                                    <p id="aiRecommendation">Обновить план коммуникаций в кризисных ситуациях</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Create Twin Section -->
+            <section id="create" class="content-section">
+                <div class="create-twin-form">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Create Digital Twin</h3>
+                            <p>Build a comprehensive digital representation of your NPO organization</p>
+                        </div>
+                        <div class="card-content">
+                            <form id="createTwinForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="organizationName">Organization Name</label>
+                                        <input type="text" id="organizationName" name="organizationName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="organizationMission">Mission Statement</label>
+                                        <textarea id="organizationMission" name="organizationMission" rows="3" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="organizationSize">Organization Size</label>
+                                        <input type="number" id="organizationSize" name="organizationSize" min="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="annualBudget">Annual Budget ($)</label>
+                                        <input type="number" id="annualBudget" name="annualBudget" min="1000" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h4>Departments</h4>
+                                    <div id="departmentsContainer">
+                                        <div class="department-item">
+                                            <div class="form-row">
+                                                <input type="text" placeholder="Department Name" class="dept-name" required>
+                                                <input type="number" placeholder="Head Count" class="dept-headcount" min="1" required>
+                                                <input type="number" placeholder="Budget" class="dept-budget" min="1000" required>
+                                                <button type="button" class="remove-dept">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addDepartment">Add Department</button>
+                                </div>
+
+                                <div class="form-section">
+                                    <h4>Technology Stack</h4>
+                                    <div class="tech-stack">
+                                        <label><input type="checkbox" name="tech" value="CRM"> CRM System</label>
+                                        <label><input type="checkbox" name="tech" value="Email"> Email Platform</label>
+                                        <label><input type="checkbox" name="tech" value="Accounting"> Accounting Software</label>
+                                        <label><input type="checkbox" name="tech" value="Website"> Website/CMS</label>
+                                        <label><input type="checkbox" name="tech" value="Social"> Social Media Tools</label>
+                                        <label><input type="checkbox" name="tech" value="Analytics"> Analytics Platform</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Create Digital Twin</button>
+                                    <button type="reset" class="btn-secondary">Reset Form</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Section -->
+            <section id="visualization" class="content-section">
+                <div class="visualization-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Organization Structure Visualization</h3>
+                            <div class="visualization-controls">
+                                <select id="visualizationType">
+                                    <option value="network">Network Diagram</option>
+                                    <option value="hierarchy">Hierarchy Tree</option>
+                                    <option value="process">Process Flow</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div id="networkVisualization" class="visualization-canvas"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scenarios Section -->
+            <section id="scenarios" class="content-section">
+                <div class="scenarios-grid">
+                    <div class="card scenario-card">
+                        <div class="card-header">
+                            <h3>Automation Scenario</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="scenario-form">
+                                <div class="form-group">
+                                    <label>Investment Amount ($)</label>
+                                    <input type="number" id="automationInvestment" value="50000" min="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Timeline (months)</label>
+                                    <input type="number" id="automationTimeline" value="12" min="1" max="60">
+                                </div>
+                                <button class="btn-primary" onclick="runAutomationScenario()">Run Simulation</button>
+                            </div>
+                            <div class="scenario-results" id="automationResults"></div>
+                        </div>
+                    </div>
+
+                    <div class="card scenario-card">
+                        <div class="card-header">
+                            <h3>Crisis Scenario</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="scenario-form">
+                                <div class="form-group">
+                                    <label>Crisis Type</label>
+                                    <select id="crisisType">
+                                        <option value="funding_loss">Funding Loss</option>
+                                        <option value="economic_downturn">Economic Downturn</option>
+                                        <option value="regulatory_change">Regulatory Change</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Severity (0-1)</label>
+                                    <input type="number" id="crisisSeverity" value="0.3" min="0.1" max="1" step="0.1">
+                                </div>
+                                <button class="btn-warning" onclick="runCrisisScenario()">Test Resilience</button>
+                            </div>
+                            <div class="scenario-results" id="crisisResults"></div>
+                        </div>
+                    </div>
+
+                    <div class="card scenario-card">
+                        <div class="card-header">
+                            <h3>Expansion Scenario</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="scenario-form">
+                                <div class="form-group">
+                                    <label>Expansion Type</label>
+                                    <select id="expansionType">
+                                        <option value="service_expansion">Service Expansion</option>
+                                        <option value="geographic_expansion">Geographic Expansion</option>
+                                        <option value="program_scaling">Program Scaling</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Investment Budget ($)</label>
+                                    <input type="number" id="expansionBudget" value="100000" min="10000">
+                                </div>
+                                <button class="btn-success" onclick="runExpansionScenario()">Explore Growth</button>
+                            </div>
+                            <div class="scenario-results" id="expansionResults"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section">
+                <div class="analytics-dashboard">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Performance Trends</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Resource Allocation</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="resourceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card insights-card">
+                        <div class="card-header">
+                            <h3>AI Insights & Recommendations</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="insights-list" id="insightsList">
+                                <div class="insight-item">
+                                    <div class="insight-type">Opportunity</div>
+                                    <div class="insight-text">Consider automating donor management processes for 40% efficiency gain</div>
+                                    <div class="insight-impact">High Impact</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing Digital Twin...</div>
+        </div>
+
+        <!-- Modal for Results -->
+        <div id="resultsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Simulation Results</h3>
+                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                </div>
+                <div class="modal-body" id="modalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/app.js"></script>
+    <script src="../static/js/visualization.js"></script>
+    <script src="../static/js/scenarios.js"></script>
+</body>
+</html>

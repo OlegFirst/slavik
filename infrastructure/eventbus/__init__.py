@@ -54,12 +54,22 @@ from infrastructure.eventbus.core.events import Event, EventPriority
 from infrastructure.eventbus.core.interface import IEventBus, EventHandler
 from infrastructure.eventbus.factory import create_eventbus
 
+# Import Intelligent Router (graceful choreography)
+try:
+    from infrastructure.eventbus.intelligent_router import IntelligentEventRouter
+    INTELLIGENT_ROUTER_AVAILABLE = True
+except ImportError:
+    IntelligentEventRouter = None
+    INTELLIGENT_ROUTER_AVAILABLE = False
+
 __all__ = [
     'Event',
     'EventPriority',
     'IEventBus',
     'EventHandler',
-    'create_eventbus'
+    'create_eventbus',
+    'IntelligentEventRouter',
+    'INTELLIGENT_ROUTER_AVAILABLE'
 ]
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'  # Updated with Intelligent Router support

@@ -10,11 +10,11 @@ from typing import Dict, Any
 @pytest.fixture
 def compliance_copilot():
     """Compliance Copilot with mocked AI foundation components"""
-    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
+    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
 
-    with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
+    with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
                 copilot = ComplianceCopilot()
 
                 # Mock process_message to return compliance analysis
@@ -56,10 +56,10 @@ class TestComplianceCopilotInitialization:
     async def test_copilot_initializes_with_correct_attributes(self):
         """Test Compliance Copilot initializes with ISO 22301 specialty"""
         # ARRANGE & ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
                     copilot = ComplianceCopilot()
 
         # ASSERT
@@ -79,10 +79,10 @@ class TestComplianceCopilotInitialization:
         }
 
         # ACT
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
                     copilot = ComplianceCopilot(config=custom_config)
 
         # ASSERT
@@ -293,11 +293,11 @@ class TestComplianceCopilotSystemPrompt:
     async def test_system_prompt_includes_iso_22301_expertise(self):
         """Test system prompt emphasizes ISO 22301 expertise"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     copilot = ComplianceCopilot()
 
@@ -314,11 +314,11 @@ class TestComplianceCopilotSystemPrompt:
     async def test_system_prompt_includes_context_specific_guidance(self):
         """Test system prompt adapts to different contexts"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     copilot = ComplianceCopilot()
 
@@ -440,11 +440,11 @@ class TestComplianceCopilotPostProcessing:
     async def test_post_process_adds_compliance_note(self):
         """Test post-processing adds compliance note for compliance context"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     copilot = ComplianceCopilot()
 
@@ -466,11 +466,11 @@ class TestComplianceCopilotPostProcessing:
     async def test_post_process_adds_friendly_intro(self):
         """Test post-processing adds friendly intro when appropriate"""
         # ARRANGE
-        with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.RAGPipeline'):
-            with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.LLMRouter'):
-                with patch('intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot.ContextBuilder'):
-                    from intelligent_core.expertise_center.domains.bcm.tactical_assistants.compliance_copilot import ComplianceCopilot
-                    from intelligent_core.expertise_center.shared.base.base_tactical_assistant import AssistantContext
+        with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.RAGPipeline'):
+            with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.LLMRouter'):
+                with patch('platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot.ContextBuilder'):
+                    from platform_services.bcm_domain.ai_colleagues.compliance_copilot.compliance_copilot import ComplianceCopilot
+                    from platform_services.bcm_domain.ai_colleagues.base.base_colleague import AssistantContext
 
                     copilot = ComplianceCopilot()
 

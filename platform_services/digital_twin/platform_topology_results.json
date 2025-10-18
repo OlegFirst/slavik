@@ -1,0 +1,296 @@
+{
+  "topology": {
+    "total_services": 13,
+    "running_services": 2,
+    "services": {
+      "eventbus": {
+        "port": 8055,
+        "status": "running",
+        "type": "platform_service"
+      },
+      "simulation_service": {
+        "port": 8095,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "digital_twin": {
+        "port": 8096,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "workflow_intelligence": {
+        "port": 8037,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "knowledge_center": {
+        "port": 8038,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "community_intelligence": {
+        "port": 8030,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "predictive_journey": {
+        "port": 8031,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "ai_foundation": {
+        "port": 8025,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "ai_orchestrator": {
+        "port": 8026,
+        "status": "stopped",
+        "type": "platform_service"
+      },
+      "scenario_intelligence": {
+        "port": 8060,
+        "status": "running",
+        "type": "intelligent_core"
+      },
+      "pdca_assistant": {
+        "port": 8061,
+        "status": "stopped",
+        "type": "intelligent_core"
+      },
+      "api_gateway": {
+        "port": 8000,
+        "status": "stopped",
+        "type": "infrastructure"
+      },
+      "unified_frontend": {
+        "port": 3000,
+        "status": "stopped",
+        "type": "frontend"
+      }
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "eventbus",
+        "label": "eventbus",
+        "type": "platform_service",
+        "status": "running",
+        "port": 8055,
+        "description": "Event choreography and pub/sub",
+        "response_time_ms": 36.704
+      },
+      {
+        "id": "simulation_service",
+        "label": "simulation_service",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8095,
+        "description": "BCM simulations and modeling",
+        "response_time_ms": null
+      },
+      {
+        "id": "digital_twin",
+        "label": "digital_twin",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8096,
+        "description": "Organization digital twin and personal dashboard",
+        "response_time_ms": null
+      },
+      {
+        "id": "workflow_intelligence",
+        "label": "workflow_intelligence",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8037,
+        "description": "PDCA cycles and case library",
+        "response_time_ms": null
+      },
+      {
+        "id": "knowledge_center",
+        "label": "knowledge_center",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8038,
+        "description": "Best practices and RAG",
+        "response_time_ms": null
+      },
+      {
+        "id": "community_intelligence",
+        "label": "community_intelligence",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8030,
+        "description": "Community sharing and insights",
+        "response_time_ms": null
+      },
+      {
+        "id": "predictive_journey",
+        "label": "predictive_journey",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8031,
+        "description": "Outcome forecasting",
+        "response_time_ms": null
+      },
+      {
+        "id": "ai_foundation",
+        "label": "ai_foundation",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8025,
+        "description": "RAG, LLM, ML foundation",
+        "response_time_ms": null
+      },
+      {
+        "id": "ai_orchestrator",
+        "label": "ai_orchestrator",
+        "type": "platform_service",
+        "status": "stopped",
+        "port": 8026,
+        "description": "Autonomous decision-making",
+        "response_time_ms": null
+      },
+      {
+        "id": "scenario_intelligence",
+        "label": "scenario_intelligence",
+        "type": "intelligent_core",
+        "status": "running",
+        "port": 8060,
+        "description": "Scenario generation and analysis",
+        "response_time_ms": 354.608
+      },
+      {
+        "id": "pdca_assistant",
+        "label": "pdca_assistant",
+        "type": "intelligent_core",
+        "status": "stopped",
+        "port": 8061,
+        "description": "Plan-Do-Check-Act automation",
+        "response_time_ms": null
+      },
+      {
+        "id": "api_gateway",
+        "label": "api_gateway",
+        "type": "infrastructure",
+        "status": "stopped",
+        "port": 8000,
+        "description": "Main API gateway",
+        "response_time_ms": null
+      },
+      {
+        "id": "unified_frontend",
+        "label": "unified_frontend",
+        "type": "frontend",
+        "status": "stopped",
+        "port": 3000,
+        "description": "Next.js unified frontend",
+        "response_time_ms": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "simulation_service",
+        "to": "eventbus",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "ai_orchestrator",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "workflow_intelligence",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "knowledge_center",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "community_intelligence",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "ai_foundation",
+        "type": "integration"
+      },
+      {
+        "from": "simulation_service",
+        "to": "digital_twin",
+        "type": "integration"
+      },
+      {
+        "from": "digital_twin",
+        "to": "simulation_service",
+        "type": "integration"
+      },
+      {
+        "from": "digital_twin",
+        "to": "eventbus",
+        "type": "integration"
+      },
+      {
+        "from": "digital_twin",
+        "to": "workflow_intelligence",
+        "type": "integration"
+      },
+      {
+        "from": "digital_twin",
+        "to": "knowledge_center",
+        "type": "integration"
+      },
+      {
+        "from": "workflow_intelligence",
+        "to": "eventbus",
+        "type": "integration"
+      },
+      {
+        "from": "workflow_intelligence",
+        "to": "simulation_service",
+        "type": "integration"
+      },
+      {
+        "from": "workflow_intelligence",
+        "to": "knowledge_center",
+        "type": "integration"
+      },
+      {
+        "from": "workflow_intelligence",
+        "to": "ai_foundation",
+        "type": "integration"
+      },
+      {
+        "from": "ai_foundation",
+        "to": "eventbus",
+        "type": "integration"
+      },
+      {
+        "from": "ai_foundation",
+        "to": "simulation_service",
+        "type": "integration"
+      },
+      {
+        "from": "ai_foundation",
+        "to": "workflow_intelligence",
+        "type": "integration"
+      },
+      {
+        "from": "ai_foundation",
+        "to": "knowledge_center",
+        "type": "integration"
+      }
+    ],
+    "metadata": {
+      "total_nodes": 13,
+      "total_edges": 19,
+      "generated_at": "2025-10-16T14:12:16.127149"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  decision-center-api:
+    build: .
+    container_name: decision-center-api
+    ports:
+      - "8080:8080"  # API
+      - "9090:9090"  # Metrics (exposed in main.py)
+    environment:
+      # EventBus (Redis)
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+      # Logging
+      - LOG_LEVEL=INFO
+
+      # AI Hub (optional)
+      - AI_HUB_ENABLED=true
+      - AI_HUB_TIER3_ENABLED=true
+
+      # Metrics
+      - METRICS_ENABLED=true
+
+    depends_on:
+      - redis
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    networks:
+      - decision-center-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: decision-center-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - decision-center-network
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  decision-center-network:
+    driver: bridge

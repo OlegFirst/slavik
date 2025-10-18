@@ -51,7 +51,9 @@ class InfrastructureDecisionCenter:
         policy_engine: Optional[PolicyEngine] = None,
         audit_logger: Optional[AuditLogger] = None,
         eventbus=None,
-        db_session_factory=None
+        db_session_factory=None,
+        ai_hub=None,
+        enable_metrics: bool = False
     ):
         """
         Initialize Decision Center
@@ -61,11 +63,15 @@ class InfrastructureDecisionCenter:
             audit_logger: AuditLogger instance (creates if None)
             eventbus: EventBus instance for notifications
             db_session_factory: Database session factory
+            ai_hub: AI Intelligence Hub for AI-assisted decisions (optional)
+            enable_metrics: Enable Prometheus metrics (optional)
         """
         self.policy_engine = policy_engine or PolicyEngine()
         self.audit_logger = audit_logger or AuditLogger(db_session_factory=db_session_factory)
         self.eventbus = eventbus
         self.db_session_factory = db_session_factory
+        self.ai_hub = ai_hub  # Optional AI consultation
+        self.enable_metrics = enable_metrics
 
         # Load policies only if policy_engine was not provided or not loaded
         if policy_engine is None or policy_engine._config is None:
@@ -86,10 +92,15 @@ class InfrastructureDecisionCenter:
             'rejected_decisions': 0,
             'escalated_decisions': 0,
             'auto_approved': 0,
-            'manual_approved': 0
+            'manual_approved': 0,
+            'ai_consultations': 0,
+            'ai_enhanced_decisions': 0
         }
 
-        logger.info("✅ InfrastructureDecisionCenter initialized")
+        # Initialize Prometheus metrics if enabled
+        self._init_metrics()
+
+        logger.info(f"✅ InfrastructureDecisionCenter initialized (AI: {ai_hub is not None}, Metrics: {enable_metrics})")
 
     async def decide_recovery_action(
         self,
@@ -112,6 +123,7 @@ class InfrastructureDecisionCenter:
         Returns:
             Tuple of (Decision, can_proceed: bool)
         """
+        start_time = datetime.utcnow()
         self.stats['total_decisions'] += 1
 
         # Create decision record
@@ -143,6 +155,18 @@ class InfrastructureDecisionCenter:
 
             decision.policy_reference = compliance_result.get('policy_reference')
             decision.reasoning = compliance_result['reason']
+
+            # AI consultation for uncertain cases (optional)
+            ai_recommendation = None
+            if current_attempt >= 2 or compliance_result.get('requires_escalation'):
+                ai_recommendation = await self._consult_ai(
+                    service_name, action_type, context, compliance_result
+                )
+                if ai_recommendation:
+                    self.stats['ai_enhanced_decisions'] += 1
+                    decision.parameters['ai_enhanced'] = True
+                    decision.parameters['ai_confidence'] = ai_recommendation['confidence']
+                    decision.parameters['ai_model'] = ai_recommendation['model']
 
             # Decision logic
             if not compliance_result['compliant']:
@@ -210,6 +234,10 @@ class InfrastructureDecisionCenter:
 
         # Publish decision event
         await self._publish_decision_event(decision)
+
+        # Record metrics
+        duration = (datetime.utcnow() - start_time).total_seconds()
+        self._record_metrics(decision, duration)
 
         # Return decision and whether can proceed
         can_proceed = decision.outcome == DecisionOutcome.APPROVED
@@ -368,6 +396,9 @@ class InfrastructureDecisionCenter:
 
         # Publish escalation event
         await self._publish_escalation_event(escalation)
+
+        # Record metrics
+        self._record_escalation_metrics(escalation)
 
         return escalation
 
@@ -608,3 +639,164 @@ class InfrastructureDecisionCenter:
             escalation for escalation in self.active_escalations.values()
             if escalation.status == EscalationStatus.PENDING
         ]
+
+    # ============================================
+    # Enhanced Features (Optional)
+    # ============================================
+
+    def _init_metrics(self) -> None:
+        """Initialize Prometheus metrics (optional)"""
+        if not self.enable_metrics:
+            return
+
+        try:
+            from prometheus_client import Counter, Histogram, Gauge
+
+            # Decision counters
+            self.metric_decisions_total = Counter(
+                'decision_center_decisions_total',
+                'Total decisions made',
+                ['outcome', 'service', 'action_type']
+            )
+
+            self.metric_decision_duration = Histogram(
+                'decision_center_decision_duration_seconds',
+                'Decision processing duration',
+                ['service', 'action_type']
+            )
+
+            self.metric_escalations_total = Counter(
+                'decision_center_escalations_total',
+                'Total escalations created',
+                ['severity', 'service']
+            )
+
+            self.metric_ai_consultations = Counter(
+                'decision_center_ai_consultations_total',
+                'Total AI consultations',
+                ['confidence_level']
+            )
+
+            self.metric_pending_approvals = Gauge(
+                'decision_center_pending_approvals',
+                'Number of pending approvals'
+            )
+
+            logger.info("✅ Prometheus metrics initialized")
+
+        except ImportError:
+            logger.warning("prometheus_client not available - metrics disabled")
+            self.enable_metrics = False
+
+    async def _consult_ai(
+        self,
+        service_name: str,
+        action_type: str,
+        context: Dict[str, Any],
+        compliance_result: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Consult AI Hub for decision assistance (optional)
+
+        Args:
+            service_name: Service name
+            action_type: Action type
+            context: Decision context
+            compliance_result: Policy compliance result
+
+        Returns:
+            AI recommendation or None if AI not available
+        """
+        if not self.ai_hub:
+            return None
+
+        try:
+            self.stats['ai_consultations'] += 1
+
+            # Determine complexity
+            current_attempt = context.get('current_attempt', 1)
+            if current_attempt >= 3:
+                complexity = "high"
+            elif current_attempt >= 2:
+                complexity = "medium"
+            else:
+                complexity = "low"
+
+            # Build problem description
+            problem = f"Service {service_name} requires {action_type} (attempt {current_attempt})"
+            if not compliance_result.get('compliant'):
+                problem += f". Policy issue: {compliance_result['reason']}"
+
+            # Consult AI
+            logger.debug(f"🧠 Consulting AI Hub: {service_name} - {action_type}")
+
+            ai_response = await self.ai_hub.consult(
+                problem=problem,
+                context=context,
+                service=service_name,
+                action=action_type,
+                complexity=complexity
+            )
+
+            if self.enable_metrics:
+                confidence_level = "high" if ai_response.confidence >= 0.8 else "medium" if ai_response.confidence >= 0.6 else "low"
+                self.metric_ai_consultations.labels(confidence_level=confidence_level).inc()
+
+            logger.info(
+                f"🧠 AI recommendation: {ai_response.recommendation} "
+                f"(confidence: {ai_response.confidence:.2f}, model: {ai_response.model_used})"
+            )
+
+            return {
+                'recommendation': ai_response.recommendation,
+                'confidence': ai_response.confidence,
+                'reasoning': ai_response.reasoning,
+                'model': ai_response.model_used,
+                'tier': ai_response.tier.value
+            }
+
+        except Exception as e:
+            logger.warning(f"AI consultation failed: {e}")
+            return None
+
+    def _record_metrics(
+        self,
+        decision: Decision,
+        duration_seconds: float
+    ) -> None:
+        """Record decision metrics (if enabled)"""
+        if not self.enable_metrics:
+            return
+
+        try:
+            # Record decision outcome
+            self.metric_decisions_total.labels(
+                outcome=decision.outcome.value,
+                service=decision.service_name,
+                action_type=decision.action_type or "unknown"
+            ).inc()
+
+            # Record duration
+            self.metric_decision_duration.labels(
+                service=decision.service_name,
+                action_type=decision.action_type or "unknown"
+            ).observe(duration_seconds)
+
+            # Update pending approvals gauge
+            self.metric_pending_approvals.set(len(self.pending_approvals))
+
+        except Exception as e:
+            logger.debug(f"Metrics recording failed: {e}")
+
+    def _record_escalation_metrics(self, escalation: EscalationRequest) -> None:
+        """Record escalation metrics (if enabled)"""
+        if not self.enable_metrics:
+            return
+
+        try:
+            self.metric_escalations_total.labels(
+                severity=escalation.severity,
+                service=escalation.service_name
+            ).inc()
+        except Exception as e:
+            logger.debug(f"Escalation metrics recording failed: {e}")

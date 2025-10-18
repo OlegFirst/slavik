@@ -4,17 +4,18 @@ This directory contains the static website for AI-Platform-ISO documentation, ho
 
 ## Website Structure
 
-### Main Pages (10)
+### Main Pages (11)
 1. **index.html** - Homepage with BCM philosophy, stats, key benefits
-2. **architecture.html** - 4-layer architecture, port map, EventBus diagrams
-3. **modules.html** - 17 AI modules + 21 platform services detailed
-4. **features.html** - 570+ usage scenarios, capabilities catalog
-5. **business-flow.html** - 233 business flows with Mermaid diagrams
-6. **technology.html** - Complete technology stack breakdown
-7. **deployment.html** - 4-phase deployment guide with commands
-8. **documentation.html** - Index of 320+ technical documents
-9. **mvp.html** - MVP platform demo and API reference
-10. **contact.html** - Community, contribution guidelines, support
+2. **bcm-domain-migration.html** - Captain's Log: BCM Domain Migration Story (NEW Oct 2025)
+3. **architecture.html** - 4-layer architecture, port map, EventBus diagrams
+4. **modules.html** - 17 AI modules + 21 platform services detailed
+5. **features.html** - 570+ usage scenarios, capabilities catalog
+6. **business-flow.html** - 233 business flows with Mermaid diagrams
+7. **technology.html** - Complete technology stack breakdown
+8. **deployment.html** - 4-phase deployment guide with commands
+9. **documentation.html** - Index of 320+ technical documents
+10. **mvp.html** - MVP platform demo and API reference
+11. **contact.html** - Community, contribution guidelines, support
 
 ### Assets
 - **assets/styles.css** - Professional clean stylesheet (light theme)

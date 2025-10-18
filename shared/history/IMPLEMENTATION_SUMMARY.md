@@ -52,13 +52,13 @@ All success criteria met:
 
 ### Integration Files
 
-6. **`/Users/MD/AI-Platform-ISO/services/bcm/bia/repositories/bia_repository.py`** (Updated)
+6. **`/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py`** (Updated)
    - Added `ChangeTracker` import
    - Enhanced `update()` method with change tracking
    - Parameters: `changed_by`, `change_reason`, `track_changes`
    - Captures before/after state and logs changes
 
-7. **`/Users/MD/AI-Platform-ISO/services/bcm/bia/api/history.py`** (120 lines)
+7. **`/Users/MD/AI-Platform-ISO/platform_services/bcm_domain/services/bia_service/api/history.py`** (120 lines)
    - `GET /api/bia/history/processes/{process_id}` - Complete history
    - `GET /api/bia/history/processes/{process_id}/fields/{field_name}` - Field history
    - `GET /api/bia/history/processes/{process_id}/snapshot/{version}` - Version snapshot
@@ -340,8 +340,8 @@ await repo.update(
 python3 -m py_compile shared/history/models.py          # ✓ PASS
 python3 -m py_compile shared/history/tracker.py         # ✓ PASS
 python3 -m py_compile shared/history/__init__.py        # ✓ PASS
-python3 -m py_compile services/bcm/bia/api/history.py   # ✓ PASS
-python3 -m py_compile services/bcm/bia/repositories/bia_repository.py  # ✓ PASS
+python3 -m py_compile platform_services/bcm_domain/services/bia_service/api/history.py   # ✓ PASS
+python3 -m py_compile platform_services/bcm_domain/services/bia_service/repositories/bia_repository.py  # ✓ PASS
 ```
 
 ---

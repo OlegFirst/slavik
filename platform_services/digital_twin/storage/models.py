@@ -7,7 +7,7 @@ Database models for Digital Twin Universal Service
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import (
-    Column, String, Integer, Float, Boolean, DateTime, JSON, Text, Enum as SQLEnum, ForeignKey, Index
+    Column, String, Integer, Float, Boolean, DateTime, JSON, Text, Enum as SQLEnum, ForeignKey, Index, UniqueConstraint
 )
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -750,4 +750,302 @@ class BIAAnalysisModel(Base):
         Index('idx_bia_tenant', 'tenant_id'),
         Index('idx_bia_type', 'analysis_type'),
         Index('idx_bia_status', 'status'),
+    )
+
+
+# ============================================
+# COMMUNITY LEVEL MODELS
+# ============================================
+
+class CommunityLearningModel(Base):
+    """
+    Community Learning - Knowledge exchange (anonymized)
+
+    Stores anonymized learnings shared across the community
+    """
+    __tablename__ = "community_learnings"
+
+    # Primary Key
+    learning_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Content
+    title: Mapped[str] = mapped_column(String(500))
+    challenge: Mapped[str] = mapped_column(Text)
+    solution: Mapped[str] = mapped_column(Text)
+    outcome: Mapped[str] = mapped_column(Text)
+    tags: Mapped[Optional[list]] = mapped_column(JSON)
+
+    # Context (anonymized)
+    industry: Mapped[str] = mapped_column(String(100), index=True)
+    size_category: Mapped[str] = mapped_column(String(50), index=True)
+    maturity_level: Mapped[str] = mapped_column(String(50), index=True)
+
+    # Metrics
+    effectiveness_score: Mapped[float] = mapped_column(Float)
+    times_used: Mapped[int] = mapped_column(Integer, default=0)
+    success_rate: Mapped[float] = mapped_column(Float, default=0.0)
+    average_rating: Mapped[Optional[float]] = mapped_column(Float)
+
+    # Anonymization
+    anonymization_level: Mapped[str] = mapped_column(String(50), default='standard')
+    contributor_twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"))
+    # PRIVATE - not exposed via API
+
+    # Verification
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    verification_date: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    feedback: Mapped[list["LearningFeedbackModel"]] = relationship(
+        back_populates="learning",
+        cascade="all, delete-orphan"
+    )
+
+    __table_args__ = (
+        Index('idx_learning_industry', 'industry'),
+        Index('idx_learning_size', 'size_category'),
+        Index('idx_learning_maturity', 'maturity_level'),
+        Index('idx_learning_effectiveness', 'effectiveness_score'),
+        Index('idx_learning_created', 'created_at'),
+    )
+
+
+class LearningFeedbackModel(Base):
+    """Learning Feedback - Track usage and effectiveness"""
+    __tablename__ = "learning_feedback"
+
+    # Primary Key
+    id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    learning_id: Mapped[str] = mapped_column(String(50), ForeignKey("community_learnings.learning_id"), index=True)
+    twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Feedback
+    applied: Mapped[bool] = mapped_column(Boolean)
+    was_helpful: Mapped[Optional[bool]] = mapped_column(Boolean)
+    outcome_rating: Mapped[Optional[float]] = mapped_column(Float)
+    comment: Mapped[Optional[str]] = mapped_column(Text)
+
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    learning: Mapped["CommunityLearningModel"] = relationship(back_populates="feedback")
+
+    __table_args__ = (
+        Index('idx_feedback_learning', 'learning_id'),
+        Index('idx_feedback_twin', 'twin_id'),
+    )
+
+
+class UserNetworkingProfileModel(Base):
+    """
+    User Networking Profile - Professional profiles for people matching
+    """
+    __tablename__ = "user_networking_profiles"
+
+    # Primary Key
+    user_id: Mapped[str] = mapped_column(String(50), ForeignKey("users.id"), primary_key=True)
+    twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Profile
+    display_name: Mapped[str] = mapped_column(String(255))
+    role: Mapped[str] = mapped_column(String(100), index=True)
+    experience_level: Mapped[str] = mapped_column(String(50), index=True)
+    bio: Mapped[Optional[str]] = mapped_column(Text)
+
+    # Skills and Interests (stored as JSON arrays)
+    bcm_certifications: Mapped[Optional[list]] = mapped_column(JSON)
+    expertise_areas: Mapped[Optional[list]] = mapped_column(JSON)
+    current_challenges: Mapped[Optional[list]] = mapped_column(JSON)
+    learning_interests: Mapped[Optional[list]] = mapped_column(JSON)
+
+    # Preferences
+    languages: Mapped[Optional[list]] = mapped_column(JSON)
+    open_to_mentoring: Mapped[bool] = mapped_column(Boolean, default=False)
+    seeking_mentor: Mapped[bool] = mapped_column(Boolean, default=False)
+    open_to_collaboration: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Privacy
+    visibility_level: Mapped[str] = mapped_column(String(50), default='connections_only')
+    show_organization: Mapped[bool] = mapped_column(Boolean, default=True)
+    show_real_name: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Activity
+    last_active: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_profile_twin', 'twin_id'),
+        Index('idx_profile_role', 'role'),
+        Index('idx_profile_experience', 'experience_level'),
+    )
+
+
+class CommunityPrivacySettingsModel(Base):
+    """Privacy Settings for Community features"""
+    __tablename__ = "community_privacy_settings"
+
+    # Primary Key
+    user_id: Mapped[str] = mapped_column(String(50), ForeignKey("users.id"), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Twin Matching Privacy
+    allow_twin_matching: Mapped[bool] = mapped_column(Boolean, default=True)
+    twin_visibility: Mapped[str] = mapped_column(String(50), default='community')
+
+    # Knowledge Sharing Privacy
+    share_learnings: Mapped[bool] = mapped_column(Boolean, default=True)
+    anonymize_contributions: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # People Matching Privacy
+    show_in_people_search: Mapped[bool] = mapped_column(Boolean, default=True)
+    allow_connection_requests: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Data Sharing
+    share_organizational_data: Mapped[bool] = mapped_column(Boolean, default=False)
+    share_behavioral_patterns: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+# ============================================
+# PASSIVE LEARNING MODELS
+# ============================================
+
+class LearningEventModel(Base):
+    """
+    Learning Event - Individual learning events from platform interactions
+    """
+    __tablename__ = "learning_events"
+
+    # Primary Key
+    event_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Event details
+    source: Mapped[str] = mapped_column(String(50), index=True)
+    # Sources: bia, risk_assessment, incident, training, document
+    event_type: Mapped[Optional[str]] = mapped_column(String(100))
+    raw_data: Mapped[Optional[dict]] = mapped_column(JSON)
+
+    # Extracted insights (JSONB for flexible schema)
+    insights: Mapped[dict] = mapped_column(JSON)
+
+    # Metadata
+    confidence: Mapped[Optional[float]] = mapped_column(Float)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+
+    __table_args__ = (
+        Index('idx_event_twin', 'twin_id'),
+        Index('idx_event_source', 'source'),
+        Index('idx_event_created', 'created_at'),
+    )
+
+
+class LearningInsightModel(Base):
+    """
+    Learning Insight - Accumulated insights (aggregated from events)
+    """
+    __tablename__ = "learning_insights"
+
+    # Primary Key
+    id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Insight details
+    insight_type: Mapped[str] = mapped_column(String(100), index=True)
+    # Types: risk_tolerance, decision_speed, organizational_culture,
+    #        communication_style, knowledge_level, etc.
+
+    insight_value: Mapped[dict] = mapped_column(JSON)
+    # Value can be string, number, array, or complex object
+
+    # Metadata
+    confidence: Mapped[float] = mapped_column(Float)
+    source_event_count: Mapped[int] = mapped_column(Integer, default=1)
+    last_updated_from_event_id: Mapped[Optional[str]] = mapped_column(String(50))
+
+    # Timestamps
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)
+
+    __table_args__ = (
+        Index('idx_insight_twin', 'twin_id'),
+        Index('idx_insight_type', 'insight_type'),
+        Index('idx_insight_updated', 'updated_at'),
+        # Unique constraint: one insight per twin per type
+        UniqueConstraint('twin_id', 'insight_type', name='uq_twin_insight_type'),
+    )
+
+
+class OrganizationContextModel(Base):
+    """
+    Organization Context - Pre-built context cache for performance
+
+    Stores the complete organizational context built from insights
+    """
+    __tablename__ = "organization_contexts"
+
+    # Primary Key
+    twin_id: Mapped[str] = mapped_column(String(50), ForeignKey("organizations.id"), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(50), ForeignKey("tenants.id"), index=True)
+
+    # Culture & Behavior
+    organizational_culture: Mapped[Optional[str]] = mapped_column(String(100))
+    decision_speed: Mapped[Optional[str]] = mapped_column(String(50))
+    thoroughness: Mapped[Optional[str]] = mapped_column(String(50))
+    learning_orientation: Mapped[Optional[str]] = mapped_column(String(50))
+
+    # Risk Profile
+    risk_tolerance: Mapped[Optional[str]] = mapped_column(String(50))
+    risk_appetite: Mapped[Optional[str]] = mapped_column(String(50))
+    control_preference: Mapped[Optional[str]] = mapped_column(String(50))
+
+    # Communication
+    communication_style: Mapped[Optional[str]] = mapped_column(String(50))
+    response_speed: Mapped[Optional[str]] = mapped_column(String(50))
+
+    # Operational Patterns
+    avg_rto_hours: Mapped[Optional[float]] = mapped_column(Float)
+    dependency_count: Mapped[Optional[int]] = mapped_column(Integer)
+    primary_risk_focus: Mapped[Optional[str]] = mapped_column(String(100))
+
+    # Knowledge & Capability
+    knowledge_level: Mapped[Optional[str]] = mapped_column(String(50))
+    knowledge_gaps: Mapped[Optional[list]] = mapped_column(JSON)
+    engagement_level: Mapped[Optional[str]] = mapped_column(String(50))
+
+    # BCM Maturity Indicators
+    critical_functions: Mapped[Optional[list]] = mapped_column(JSON)
+    recovery_time_hours: Mapped[Optional[float]] = mapped_column(Float)
+
+    # Patterns & Trends (JSONB for flexibility)
+    patterns: Mapped[Optional[dict]] = mapped_column(JSON)
+    trends: Mapped[Optional[dict]] = mapped_column(JSON)
+
+    # Metadata
+    total_events: Mapped[int] = mapped_column(Integer, default=0)
+    confidence_score: Mapped[float] = mapped_column(Float, default=0.0, index=True)
+    last_updated: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_context_twin', 'twin_id'),
+        Index('idx_context_updated', 'last_updated'),
+        Index('idx_context_confidence', 'confidence_score'),
     )
