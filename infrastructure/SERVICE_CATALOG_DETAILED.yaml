@@ -1274,6 +1274,173 @@ security:
       team: Security & Infrastructure Team
     documentation:
       main: /infrastructure/security/vault/README.md
+  encryption_service:
+    name: encryption-service
+    display_name: PII/Health Data Encryption Service
+    registration:
+      type: security/encryption
+      status: production
+      version: 1.0.0
+    description: 'Application-level encryption service for PII and health data using AES-256-CBC.
+      Complements database-level pgcrypto encryption for HIPAA/GDPR compliance.
+
+      '
+    capabilities:
+    - AES-256-CBC encryption via Fernet
+    - PBKDF2 key derivation (100,000 iterations)
+    - Health data encryption (JSONB)
+    - PII encryption (strings and dicts)
+    - Email/phone normalization and encryption
+    - FastAPI middleware integration
+    features:
+    - Symmetric encryption (Fernet)
+    - Singleton pattern for performance
+    - Type-safe encryption/decryption
+    - Automatic field encryption via middleware
+    - Batch encryption operations
+    runtime:
+      protocol: Library (not a service)
+      import_path: infrastructure.security.encryption
+    dependencies:
+      required:
+      - cryptography library (Fernet)
+      - ENCRYPTION_KEY environment variable
+      integration_with:
+      - BIA Service (patient data encryption)
+      - All BCM services (contact info, PII)
+    integrations:
+    - service: BIA Service
+      integration_type: encryption
+      description: Encrypts patient_data, health_records, contact_info
+    - service: PostgreSQL
+      integration_type: complementary
+      description: Works with pgcrypto for defense-in-depth
+    known_issues:
+      warnings:
+      - Fixed salt in PBKDF2 (should be configurable)
+      - Async versions not yet implemented
+      improvements:
+      - Add async encryption methods for FastAPI
+      - Configurable salt via environment
+      - Batch encryption optimization
+    kpis:
+    - name: encryption_operations_total
+      type: counter
+      labels:
+      - operation_type
+    - name: encryption_errors_total
+      type: counter
+    eventbus:
+      publishes:
+      - event: security.encryption_failed
+      - event: security.decryption_failed
+    deployment:
+      how_to_use: 'from infrastructure.security import encrypt_health_data, decrypt_health_data'
+      environment_variables:
+        ENCRYPTION_KEY:
+          required: true
+          secret: true
+          description: 32-byte master encryption key
+    ownership:
+      team: Security Team
+    documentation:
+      main: /infrastructure/security/encryption.py
+      migration: /infrastructure/database/postgresql/migrations_source/052_pii_encryption_pgcrypto.sql
+  notification_service:
+    name: notification-service
+    display_name: Governance Notification Service
+    registration:
+      type: infrastructure/notifications
+      status: production
+      version: 1.0.0
+    description: 'Multi-channel notification service for governance events (approvals, escalations,
+      decisions). Supports Email, Slack, and PagerDuty.
+
+      '
+    capabilities:
+    - Email notifications via SMTP
+    - Slack webhooks
+    - PagerDuty integration (critical escalations)
+    - Notification tracking in database
+    - Priority-based routing
+    features:
+    - Multi-channel support
+    - Priority filtering
+    - Notification templates
+    - Failure tracking and retry
+    - Database persistence
+    runtime:
+      protocol: Library (not a service)
+      import_path: infrastructure.policy_engine.notifications
+    dependencies:
+      required:
+      - SMTP server configuration
+      optional:
+      - Slack webhook URL
+      - PagerDuty API key
+      integration_with:
+      - Decision Center (approval/escalation notifications)
+    integrations:
+    - service: Decision Center
+      integration_type: notifications
+      description: Sends approval requests, escalations, decision outcomes
+    - service: PostgreSQL
+      integration_type: tracking
+      description: Tracks notifications in governance.notifications table
+    known_issues:
+      warnings:
+      - SMTP implementation is placeholder (not production-ready)
+      - No retry mechanism implemented
+      - No notification templates
+      improvements:
+      - Implement real SMTP with retry logic
+      - Add notification templates
+      - Add webhook support
+      - Implement exponential backoff for retries
+    kpis:
+    - name: notifications_sent_total
+      type: counter
+      labels:
+      - channel
+      - status
+    - name: notifications_failed_total
+      type: counter
+      labels:
+      - channel
+    eventbus:
+      publishes:
+      - event: notifications.sent
+      - event: notifications.failed
+    deployment:
+      how_to_use: 'from infrastructure.policy_engine.notifications import get_notification_service'
+      environment_variables:
+        SMTP_HOST:
+          required: false
+          default: localhost
+        SMTP_PORT:
+          required: false
+          default: 587
+        SMTP_USER:
+          required: false
+        SMTP_PASSWORD:
+          required: false
+          secret: true
+        SLACK_WEBHOOK_URL:
+          required: false
+        PAGERDUTY_API_KEY:
+          required: false
+          secret: true
+        APPROVAL_RECIPIENTS:
+          required: false
+          description: Comma-separated email list for approval notifications
+        ESCALATION_RECIPIENTS:
+          required: false
+          description: Comma-separated email list for escalation notifications
+    ownership:
+      team: Infrastructure Team
+    documentation:
+      main: /infrastructure/policy_engine/notifications.py
+      migration: /infrastructure/database/postgresql/migrations_source/053_governance_persistence.sql
 ai_office:
   mio_manager:
     name: mio-manager

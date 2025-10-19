@@ -184,6 +184,21 @@ class BIAProcess(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
 
+    # PII/Health Data Encryption (HIPAA/GDPR compliance)
+    # These fields store encrypted patient/health data using AES-256-CBC encryption
+    patient_data_encrypted: Optional[bytes] = Field(
+        None,
+        description="Encrypted patient demographic data (use encrypt_health_data() before storing)"
+    )
+    health_records_encrypted: Optional[bytes] = Field(
+        None,
+        description="Encrypted health/medical records (use encrypt_health_data() before storing)"
+    )
+    contact_info_encrypted: Optional[bytes] = Field(
+        None,
+        description="Encrypted contact information (use encrypt_pii() before storing)"
+    )
+
     @model_validator(mode='after')
     def validate_time_objectives(self):
         """Validate RTO >= RPO and MTPD >= RTO"""

@@ -6,8 +6,8 @@ Replaces in-memory Dict storage with PostgreSQL.
 """
 
 from datetime import datetime
-from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, JSON, Text, Index
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, JSON, Text, Index, LargeBinary
+from sqlalchemy.dialects.postgresql import UUID, BYTEA
 from shared.database.base import Base
 
 
@@ -133,6 +133,12 @@ class BIAProcessModel(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)  # indexed in composite
     updated_at = Column(DateTime, nullable=True, onupdate=datetime.utcnow, index=True)  # For recent updates
     created_by = Column(String(255), nullable=True, index=True)  # For creator-based queries
+
+    # PII/Health Data Encryption (HIPAA/GDPR compliance)
+    # Uses pgcrypto extension with AES-256-CBC encryption
+    patient_data_encrypted = Column(BYTEA, nullable=True, comment="Encrypted patient demographic data (PII)")
+    health_records_encrypted = Column(BYTEA, nullable=True, comment="Encrypted health/medical records")
+    contact_info_encrypted = Column(BYTEA, nullable=True, comment="Encrypted contact information (email, phone)")
 
     def __repr__(self):
         return f"<BIAProcess(id={self.id}, name='{self.name}', criticality='{self.criticality}')>"
