@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Platform-ISO Technical Overview: Architecture, Features, and Capabilities">
+    <title>Platform Overview | AI-Platform-ISO</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --text: #2d3748;
+            --text-light: #4a5568;
+            --bg: #ffffff;
+            --bg-light: #f7fafc;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #48bb78;
+            --warning: #ed8936;
+            --info: #4299e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg-light);
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav a.btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        nav a.btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        header .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        main {
+            background: white;
+            margin: 3rem auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+            overflow: hidden;
+        }
+
+        article {
+            padding: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 3rem 0 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+        }
+
+        strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .mermaid {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+            overflow-x: auto;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 3rem 0;
+        }
+
+        .section-highlight {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .section-info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left-color: var(--info);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            article {
+                padding: 2rem 1.5rem;
+            }
+
+            header {
+                padding: 3rem 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i> AI-Platform-ISO
+            </div>
+            <a href="index.html" class="btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Platform Technical Overview</h1>
+        <div class="subtitle">AI-Powered BCM Platform: Architecture & Capabilities</div>
+    </header>
+
+    <main class="container">
+        <article>
+            <h2><i class="fas fa-info-circle"></i> What Is AI-Platform-ISO?</h2>
+
+            <p>AI-powered Business Continuity Management (BCM) platform designed for healthcare organizations. Built on a 5-layer architecture with 40+ microservices, 26 AI specialists, and 347+ case library.</p>
+
+            <div class="section-highlight section-info">
+                <p style="margin: 0; font-size: 1.1rem;"><strong>Core Mission:</strong><br>
+                Democratize BCM expertise through AI, making enterprise-grade business continuity accessible to organizations of any size.</p>
+            </div>
+
+            <hr>
+
+            <h2><i class="fas fa-puzzle-piece"></i> Core Components</h2>
+
+            <h3>1. 26 AI Specialists (Virtual Consultants)</h3>
+            <p>Specialized AI agents powered by Claude 3.5 Sonnet and GPT-4:</p>
+            <ul>
+                <li><strong>BIA Specialist</strong> - Business Impact Analysis with WHO tier classification</li>
+                <li><strong>Risk Analyst</strong> - Context-aware threat assessment</li>
+                <li><strong>Compliance Auditor</strong> - Real-time ISO 22301 compliance tracking</li>
+                <li><strong>Plan Generator</strong> - Automated continuity plan creation</li>
+                <li><strong>Exercise Designer</strong> - BCM drills and tabletop simulations</li>
+                <li><strong>Emergency Coordinator</strong> - Crisis response orchestration</li>
+                <li><em>...20 more specialists</em></li>
+            </ul>
+
+            <h3>2. Community Intelligence (347+ Cases)</h3>
+            <ul>
+                <li>Privacy-preserving case library (k-anonymity k≥5)</li>
+                <li>Searchable by: threat type, geography, facility type, outcome</li>
+                <li>Peer learning network with continuous growth</li>
+                <li>Real-world scenarios from healthcare organizations globally</li>
+            </ul>
+
+            <h3>3. ISO 22301 Certification Engine</h3>
+            <ul>
+                <li>Real-time compliance tracking (10 clauses, 39 requirements)</li>
+                <li>Automated evidence generation and document control</li>
+                <li>Gap analysis and remediation planning</li>
+                <li>Certification readiness assessment</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-sitemap"></i> Technical Architecture</h2>
+
+            <h3>5-Layer Design</h3>
+            <div class="mermaid">
+%%{init: {'theme':'base'}}%%
+graph TB
+    subgraph L5["🖥️ Layer 5: Human Interface"]
+        UI[Web App<br/>React + Next.js]
+        API[API Gateway<br/>1,067 endpoints]
+        MOB[Mobile PWA]
+    end
+
+    subgraph L4["📋 Layer 4: Platform Services"]
+        BIA[BIA Service]
+        RISK[Risk Service]
+        COMP[Compliance Service]
+        PLAN[Planning Service]
+        GOV[Governance Service]
+        RESP[Response Service]
+        LEARN[Learning Service]
+        MORE[...5 more]
+    end
+
+    subgraph L3["🧠 Layer 3: Intelligent Core"]
+        ORCH[AI Orchestrator]
+        WF[Workflow Intelligence]
+        EXPERT[26 AI Specialists]
+        PRED[Predictive ML]
+        COLL[Collective Intelligence]
+    end
+
+    subgraph L2["🔧 Layer 2: Shared Libraries"]
+        AUTH[Auth + JWT]
+        MULTI[Multi-Tenancy RLS]
+        EVENT[EventBus]
+        LOG[Logging + Audit]
+    end
+
+    subgraph L1["🏗️ Layer 1: Infrastructure"]
+        DB[(PostgreSQL)]
+        CACHE[(Redis)]
+        QUEUE[(RabbitMQ)]
+        VECTOR[(Qdrant)]
+        MON[Prometheus]
+    end
+
+    UI --> API
+    API --> BIA
+    API --> RISK
+    API --> COMP
+    BIA --> ORCH
+    RISK --> EXPERT
+    COMP --> WF
+    ORCH --> AUTH
+    EXPERT --> EVENT
+    WF --> DB
+    AUTH --> DB
+    EVENT --> QUEUE
+    MON --> DB
+
+    style L5 fill:#e1f5ff,stroke:#0066cc
+    style L4 fill:#d4edda,stroke:#28a745
+    style L3 fill:#fff3cd,stroke:#ffc107
+    style L2 fill:#f8d7da,stroke:#dc3545
+    style L1 fill:#d1ecf1,stroke:#17a2b8
+            </div>
+
+            <h3>Technology Stack</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technologies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Backend</strong></td>
+                        <td>Python (FastAPI), TypeScript (Node.js)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database</strong></td>
+                        <td>PostgreSQL (Supabase), Qdrant (Vector DB)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cache & Queue</strong></td>
+                        <td>Redis, RabbitMQ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI</strong></td>
+                        <td>Claude 3.5 Sonnet (primary), GPT-4 (fallback)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Frontend</strong></td>
+                        <td>React, Next.js, TypeScript</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Infrastructure</strong></td>
+                        <td>Docker, Kubernetes, AWS/Azure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monitoring</strong></td>
+                        <td>Prometheus, Grafana, ELK Stack</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <h2><i class="fas fa-chart-bar"></i> Platform Scale</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">356,679+</div>
+                    <div class="label">Lines of Code</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">40+</div>
+                    <div class="label">Microservices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">1,067+</div>
+                    <div class="label">API Endpoints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">133</div>
+                    <div class="label">Event Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">347+</div>
+                    <div class="label">Case Library</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">26</div>
+                    <div class="label">AI Specialists</div>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2><i class="fas fa-shield-alt"></i> Security & Compliance</h2>
+
+            <h3>Security Audit Results</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Overall Security</td>
+                        <td>79/100</td>
+                        <td>STRONG</td>
+                    </tr>
+                    <tr>
+                        <td>Authentication</td>
+                        <td>92/100</td>
+                        <td>EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-Tenancy</td>
+                        <td>90/100</td>
+                        <td>EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td>Audit Trail</td>
+                        <td>95/100</td>
+                        <td>EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td>ISO 22301 Compliance</td>
+                        <td>81%</td>
+                        <td>CERTIFICATION-READY</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Security Features</h3>
+            <ul>
+                <li><strong>Authentication:</strong> JWT + Supabase Auth + bcrypt password hashing</li>
+                <li><strong>Multi-Tenancy:</strong> Row-Level Security (RLS) for data isolation</li>
+                <li><strong>Encryption:</strong> TLS 1.3 for data in transit</li>
+                <li><strong>Audit Trail:</strong> Dual-write system, 90-day retention</li>
+                <li><strong>Access Control:</strong> RBAC (Role-Based Access Control)</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-cogs"></i> Key Features</h2>
+
+            <h3>1. Business Impact Analysis (BIA)</h3>
+            <ul>
+                <li>WHO tier classification (Tier 1: ER/ICU, Tier 2: Lab/Pharmacy, Tier 3: Admin)</li>
+                <li>Dependency mapping and critical resource identification</li>
+                <li>MTPD (Maximum Tolerable Period of Disruption) calculation</li>
+                <li>Recovery time objectives (RTO) and recovery point objectives (RPO)</li>
+            </ul>
+
+            <h3>2. Risk Management</h3>
+            <ul>
+                <li>Context-aware threat assessment (regional data, facility type)</li>
+                <li>Risk scoring and prioritization matrix</li>
+                <li>Control effectiveness evaluation</li>
+                <li>Risk treatment planning and monitoring</li>
+            </ul>
+
+            <h3>3. Continuity Planning</h3>
+            <ul>
+                <li>Automated plan generation based on BIA and risk assessment</li>
+                <li>Workflow templates for common scenarios</li>
+                <li>Resource allocation and backup strategies</li>
+                <li>Communication plans and escalation procedures</li>
+            </ul>
+
+            <h3>4. Exercise & Testing</h3>
+            <ul>
+                <li>Tabletop exercises and simulation scenarios</li>
+                <li>Drill scheduling and execution tracking</li>
+                <li>Performance evaluation and gap identification</li>
+                <li>Continuous improvement recommendations</li>
+            </ul>
+
+            <h3>5. Compliance Management</h3>
+            <ul>
+                <li>Real-time ISO 22301 compliance tracking</li>
+                <li>Evidence collection and document control</li>
+                <li>Gap analysis and remediation planning</li>
+                <li>Certification readiness assessment</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-brain"></i> AI Capabilities</h2>
+
+            <h3>Multi-LLM Routing</h3>
+            <p>Intelligent routing between Claude 3.5 Sonnet (primary) and GPT-4 (fallback) based on:</p>
+            <ul>
+                <li>Task complexity and context length</li>
+                <li>Response quality and reliability</li>
+                <li>Cost optimization and performance</li>
+            </ul>
+
+            <h3>RAG Pipeline</h3>
+            <p>Retrieval-Augmented Generation for context-aware responses:</p>
+            <ul>
+                <li>Vector similarity search (Qdrant)</li>
+                <li>Contextual ranking and re-ranking</li>
+                <li>Source attribution and transparency</li>
+            </ul>
+
+            <h3>Self-Learning System</h3>
+            <ul>
+                <li>Continuous learning from user interactions</li>
+                <li>Pattern detection and best practice extraction</li>
+                <li>Scenario library growth and refinement</li>
+                <li>Quality feedback loops</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-rocket"></i> Deployment Options</h2>
+
+            <h3>Cloud Deployment</h3>
+            <ul>
+                <li><strong>AWS:</strong> ECS/EKS for containers, RDS for database</li>
+                <li><strong>Azure:</strong> AKS for containers, Azure Database for PostgreSQL</li>
+                <li><strong>Multi-region:</strong> Geographic redundancy and latency optimization</li>
+            </ul>
+
+            <h3>On-Premise Deployment</h3>
+            <ul>
+                <li>Docker Compose for development/testing</li>
+                <li>Kubernetes for production environments</li>
+                <li>Air-gapped deployment support</li>
+            </ul>
+
+            <h3>Hybrid Deployment</h3>
+            <ul>
+                <li>Core services on-premise, AI services in cloud</li>
+                <li>Data residency compliance</li>
+                <li>Network optimization for distributed architecture</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-code"></i> Development Story</h2>
+
+            <div class="section-highlight section-info">
+                <h3 style="margin-top: 0;">Human-AI Partnership</h3>
+                <p><strong>Built through collaboration between:</strong></p>
+                <ul>
+                    <li>1 domain expert (BCM, healthcare, ISO 22301)</li>
+                    <li>Claude 3.5 Sonnet (AI pair programmer)</li>
+                </ul>
+
+                <p><strong>Timeline:</strong> 6 months</p>
+
+                <p><strong>Output:</strong></p>
+                <ul style="margin-bottom: 0;">
+                    <li>356,679 lines of production-ready code</li>
+                    <li>40+ microservices with comprehensive tests</li>
+                    <li>1,067+ API endpoints</li>
+                    <li>Complete documentation (technical specs, user guides, API docs)</li>
+                </ul>
+            </div>
+
+            <h3>What This Proves</h3>
+            <ul>
+                <li><strong>AI can amplify human expertise</strong> - Not replace, but augment</li>
+                <li><strong>Rapid development</strong> - 20x faster than traditional approach</li>
+                <li><strong>Quality at scale</strong> - Enterprise-grade architecture from small team</li>
+                <li><strong>New collaboration paradigm</strong> - Human vision + AI execution</li>
+            </ul>
+
+            <hr>
+
+            <h2><i class="fas fa-link"></i> API Reference</h2>
+
+            <h3>Core Endpoints</h3>
+            <ul>
+                <li><code>POST /api/v1/bia/analyze</code> - Business Impact Analysis</li>
+                <li><code>POST /api/v1/risk/assess</code> - Risk Assessment</li>
+                <li><code>POST /api/v1/plans/generate</code> - Continuity Plan Generation</li>
+                <li><code>GET /api/v1/compliance/status</code> - ISO 22301 Compliance Status</li>
+                <li><code>POST /api/v1/exercises/create</code> - Create BCM Exercise</li>
+                <li><code>GET /api/v1/cases/search</code> - Search Case Library</li>
+            </ul>
+
+            <p><a href="api_reference.html">View Full API Documentation →</a></p>
+
+            <hr>
+
+            <h2><i class="fas fa-book"></i> Documentation</h2>
+
+            <ul>
+                <li><a href="INDEX.html">Documentation Index</a></li>
+                <li><a href="architecture.html">Technical Architecture</a></li>
+                <li><a href="ai_foundation.html">AI Foundation</a></li>
+                <li><a href="collective_intelligence.html">Collective Intelligence</a></li>
+                <li><a href="decision_center.html">Decision Center</a></li>
+            </ul>
+
+        </article>
+    </main>
+
+    <footer>
+        <p style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">
+            Built with human vision + AI execution 🤝🤖
+        </p>
+        <p>
+            <a href="index.html">Home</a> •
+            <a href="INDEX.html">Documentation</a> •
+            <a href="https://github.com/SEH-foundation/AI-Platform-ISO">GitHub</a>
+        </p>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.7;">
+            © 2025 AI-Platform-ISO. Version 1.0.
+        </p>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#d4edda',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#28a745'
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
