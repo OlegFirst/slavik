@@ -9,8 +9,8 @@ import { documentsAPI } from '@/lib/api/documents-client';
 import type {
   DocumentShare,
   ShareRequest,
-  SharePermission,
 } from '@/lib/api/documents-client';
+import { SharePermission } from '@/types/documents';
 
 // ==================== QUERY KEYS ====================
 
@@ -379,10 +379,10 @@ export function groupSharesByPermission(
   shares: DocumentShare[]
 ): SharesByPermission {
   return {
-    view: shares.filter((share) => share.permission === 'VIEW'),
-    approve: shares.filter((share) => share.permission === 'APPROVE'),
-    edit: shares.filter((share) => share.permission === 'EDIT'),
-    admin: shares.filter((share) => share.permission === 'ADMIN'),
+    view: shares.filter((share) => share.permission_level === SharePermission.VIEW),
+    approve: shares.filter((share) => share.permission_level === SharePermission.COMMENT),
+    edit: shares.filter((share) => share.permission_level === SharePermission.EDIT),
+    admin: shares.filter((share) => share.permission_level === SharePermission.ADMIN),
   };
 }
 
@@ -395,10 +395,10 @@ export function groupSharesByPermission(
  */
 export function getPermissionLabel(permission: SharePermission): string {
   const labels: Record<SharePermission, string> = {
-    VIEW: 'View Only',
-    APPROVE: 'Can Approve',
-    EDIT: 'Can Edit',
-    ADMIN: 'Admin Access',
+    [SharePermission.VIEW]: 'View Only',
+    [SharePermission.COMMENT]: 'Can Comment',
+    [SharePermission.EDIT]: 'Can Edit',
+    [SharePermission.ADMIN]: 'Admin Access',
   };
 
   return labels[permission] || permission;
@@ -412,10 +412,10 @@ export function getPermissionLabel(permission: SharePermission): string {
  */
 export function getPermissionIcon(permission: SharePermission): string {
   const icons: Record<SharePermission, string> = {
-    VIEW: 'eye',
-    APPROVE: 'check-circle',
-    EDIT: 'edit',
-    ADMIN: 'shield',
+    [SharePermission.VIEW]: 'eye',
+    [SharePermission.COMMENT]: 'message-circle',
+    [SharePermission.EDIT]: 'edit',
+    [SharePermission.ADMIN]: 'shield',
   };
 
   return icons[permission] || 'help-circle';

@@ -140,7 +140,7 @@ export function useCreateRetentionPolicy(
 
   return useMutation({
     mutationFn: (data: RetentionPolicyCreate) =>
-      documentsAPI.createRetentionPolicy(data),
+      documentsAPI.createRetentionPolicy(data as any),
 
     onSuccess: (data) => {
       // Invalidate policy list for this tenant
