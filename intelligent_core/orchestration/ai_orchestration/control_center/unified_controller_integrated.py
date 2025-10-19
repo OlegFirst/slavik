@@ -20,10 +20,18 @@ from datetime import datetime
 # Platform Integration - THE NEW WAY
 from infrastructure.platform_integration import init_platform, get_platform, shutdown_platform
 
-# Use relative imports to avoid circular import with platform module
-from ..platform import PlatformOrchestrator
-from ..ai import AIOrchestrator
-from ..scenario import ScenarioOrchestrator
+# Use absolute imports with platform_orch to avoid circular import with stdlib platform module
+import sys
+from pathlib import Path
+
+# Add parent directory to path to enable absolute imports
+parent_dir = Path(__file__).parent.parent
+if str(parent_dir) not in sys.path:
+    sys.path.insert(0, str(parent_dir))
+
+from platform_orch import PlatformOrchestrator
+from ai import AIOrchestrator
+from scenario import ScenarioOrchestrator
 
 logger = logging.getLogger(__name__)
 

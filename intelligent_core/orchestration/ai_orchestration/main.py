@@ -14,7 +14,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from control_center import UnifiedController
+from control_center.unified_controller_integrated import UnifiedController
 from models import (
     ScenarioGenerationRequest,
     EventPublishRequest,
