@@ -19,6 +19,16 @@ import json
 
 logger = logging.getLogger(__name__)
 
+# Lazy import vault_client
+def _get_vault_client():
+    """Lazy import of vault client"""
+    try:
+        from infrastructure.security.vault_client import get_vault_client
+        return get_vault_client()
+    except Exception as e:
+        logger.warning(f"Vault client not available: {e}")
+        return None
+
 
 class NotificationType(str, Enum):
     """Notification channel types"""
@@ -70,20 +80,54 @@ class NotificationService:
         """
         self.db_session_factory = db_session_factory
 
-        # SMTP configuration
-        self.smtp_config = smtp_config or {
-            'host': os.getenv('SMTP_HOST', 'localhost'),
-            'port': int(os.getenv('SMTP_PORT', '587')),
-            'user': os.getenv('SMTP_USER'),
-            'password': os.getenv('SMTP_PASSWORD'),
-            'from_email': os.getenv('SMTP_FROM_EMAIL', 'noreply@ai-platform-iso.org')
-        }
+        # Try to get vault client
+        vault = _get_vault_client()
 
-        # Slack configuration
-        self.slack_webhook = slack_webhook or os.getenv('SLACK_WEBHOOK_URL')
+        # SMTP configuration (try Vault first, fallback to env)
+        if smtp_config:
+            self.smtp_config = smtp_config
+        else:
+            smtp_password = None
+            if vault:
+                try:
+                    smtp_password = vault.get_secret_with_fallback('smtp_password', 'SMTP_PASSWORD', None)
+                except Exception as e:
+                    logger.debug(f"Could not get smtp_password from Vault: {e}")
+                    smtp_password = os.getenv('SMTP_PASSWORD')
+            else:
+                smtp_password = os.getenv('SMTP_PASSWORD')
 
-        # PagerDuty configuration
-        self.pagerduty_key = pagerduty_key or os.getenv('PAGERDUTY_API_KEY')
+            self.smtp_config = {
+                'host': os.getenv('SMTP_HOST', 'localhost'),
+                'port': int(os.getenv('SMTP_PORT', '587')),
+                'user': os.getenv('SMTP_USER'),
+                'password': smtp_password,
+                'from_email': os.getenv('SMTP_FROM_EMAIL', 'noreply@ai-platform-iso.org')
+            }
+
+        # Slack configuration (try Vault first)
+        if slack_webhook:
+            self.slack_webhook = slack_webhook
+        elif vault:
+            try:
+                self.slack_webhook = vault.get_secret_with_fallback('slack_webhook_url', 'SLACK_WEBHOOK_URL', None)
+            except Exception as e:
+                logger.debug(f"Could not get slack_webhook_url from Vault: {e}")
+                self.slack_webhook = os.getenv('SLACK_WEBHOOK_URL')
+        else:
+            self.slack_webhook = os.getenv('SLACK_WEBHOOK_URL')
+
+        # PagerDuty configuration (try Vault first)
+        if pagerduty_key:
+            self.pagerduty_key = pagerduty_key
+        elif vault:
+            try:
+                self.pagerduty_key = vault.get_secret_with_fallback('pagerduty_api_key', 'PAGERDUTY_API_KEY', None)
+            except Exception as e:
+                logger.debug(f"Could not get pagerduty_api_key from Vault: {e}")
+                self.pagerduty_key = os.getenv('PAGERDUTY_API_KEY')
+        else:
+            self.pagerduty_key = os.getenv('PAGERDUTY_API_KEY')
 
         # Notification statistics
         self.stats = {

@@ -214,17 +214,17 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ENCRYPTED COLUMNS FOR EXISTING TABLES
 -- ============================================
 
--- Add encrypted columns to bcm.business_impact_analyses
+-- Add encrypted columns to bia.processes (BIA processes table)
 -- These will store encrypted patient/health data
 
-ALTER TABLE bcm.business_impact_analyses
+ALTER TABLE bia.processes
 ADD COLUMN IF NOT EXISTS patient_data_encrypted BYTEA,
 ADD COLUMN IF NOT EXISTS health_records_encrypted BYTEA,
 ADD COLUMN IF NOT EXISTS contact_info_encrypted BYTEA;
 
-COMMENT ON COLUMN bcm.business_impact_analyses.patient_data_encrypted IS 'Encrypted patient demographic data';
-COMMENT ON COLUMN bcm.business_impact_analyses.health_records_encrypted IS 'Encrypted health/medical records';
-COMMENT ON COLUMN bcm.business_impact_analyses.contact_info_encrypted IS 'Encrypted contact information';
+COMMENT ON COLUMN bia.processes.patient_data_encrypted IS 'Encrypted patient demographic data';
+COMMENT ON COLUMN bia.processes.health_records_encrypted IS 'Encrypted health/medical records';
+COMMENT ON COLUMN bia.processes.contact_info_encrypted IS 'Encrypted contact information';
 
 -- Add encrypted columns to organizations table (if PII exists)
 ALTER TABLE organizations
@@ -242,24 +242,24 @@ ADD COLUMN IF NOT EXISTS personal_notes_encrypted BYTEA;
 -- ============================================
 
 -- Create view that auto-decrypts BIA data for authorized users
-CREATE OR REPLACE VIEW bcm.business_impact_analyses_decrypted AS
+CREATE OR REPLACE VIEW bia.processes_decrypted AS
 SELECT
     id,
     organization_id,
-    name,
+    process_name,
     description,
-    status,
+    criticality_level,
     security.decrypt_health_data(patient_data_encrypted) AS patient_data,
     security.decrypt_health_data(health_records_encrypted) AS health_records,
     security.decrypt_pii(contact_info_encrypted) AS contact_info,
     created_at,
     updated_at
-FROM bcm.business_impact_analyses
+FROM bia.processes
 WHERE
-    -- RLS policies will restrict access
-    organization_id IN (SELECT unnest(get_user_org_ids()));
+    -- RLS policies will restrict access based on organization_id
+    organization_id IN (SELECT get_user_org_ids());
 
-COMMENT ON VIEW bcm.business_impact_analyses_decrypted IS 'Decrypted view of BIA data - access controlled by RLS';
+COMMENT ON VIEW bia.processes_decrypted IS 'Decrypted view of BIA processes - access controlled by RLS';
 
 -- ============================================
 -- MIGRATION HELPERS
@@ -276,7 +276,7 @@ BEGIN
     -- This is a one-time migration - adjust based on your schema
 
     -- Example: If you have patient_data as JSONB, encrypt it
-    -- UPDATE bcm.business_impact_analyses
+    -- UPDATE bia.processes
     -- SET patient_data_encrypted = security.encrypt_health_data(patient_data)
     -- WHERE patient_data IS NOT NULL
     -- AND patient_data_encrypted IS NULL;
@@ -286,7 +286,7 @@ BEGIN
     -- Log the migration
     PERFORM security.log_encryption_operation(
         'migration',
-        'bcm.business_impact_analyses',
+        'bia.processes',
         'patient_data_encrypted',
         TRUE,
         format('Migrated %s rows', rows_updated)
@@ -322,7 +322,7 @@ REVOKE ALL ON security.encryption_audit_log FROM PUBLIC;
 GRANT SELECT ON security.encryption_audit_log TO authenticated;
 
 -- Grant access to decrypted views
-GRANT SELECT ON bcm.business_impact_analyses_decrypted TO authenticated;
+GRANT SELECT ON bia.processes_decrypted TO authenticated;
 
 -- ============================================
 -- VERIFICATION

@@ -30,6 +30,16 @@ import json
 
 logger = logging.getLogger(__name__)
 
+# Lazy import vault_client to avoid circular dependency
+def _get_vault_client():
+    """Lazy import of vault client"""
+    try:
+        from .vault_client import get_vault_client
+        return get_vault_client()
+    except Exception as e:
+        logger.warning(f"Vault client not available: {e}")
+        return None
+
 
 class EncryptionError(Exception):
     """Raised when encryption/decryption operations fail"""
@@ -55,16 +65,36 @@ class EncryptionService:
         Initialize encryption service
 
         Args:
-            encryption_key: Base encryption key. If None, reads from ENCRYPTION_KEY env var
+            encryption_key: Base encryption key. If None, tries Vault, then ENCRYPTION_KEY env var
 
         Raises:
             EncryptionError: If encryption key is not configured
         """
-        self.key = encryption_key or os.getenv("ENCRYPTION_KEY")
+        # Priority: 1) Explicit param, 2) Vault, 3) Environment variable
+        if encryption_key:
+            self.key = encryption_key
+        else:
+            # Try Vault first
+            vault = _get_vault_client()
+            if vault:
+                try:
+                    self.key = vault.get_secret_with_fallback(
+                        'encryption_key',
+                        'ENCRYPTION_KEY',
+                        None
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to get encryption key from Vault: {e}")
+                    self.key = os.getenv("ENCRYPTION_KEY")
+            else:
+                # Fallback to environment variable
+                self.key = os.getenv("ENCRYPTION_KEY")
 
         if not self.key:
             raise EncryptionError(
-                "Encryption key not configured. Set ENCRYPTION_KEY environment variable"
+                "Encryption key not configured. Add to Vault: "
+                "SELECT vault.create_secret('key', 'encryption_key') "
+                "or set ENCRYPTION_KEY environment variable"
             )
 
         # Derive Fernet key from master key
