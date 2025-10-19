@@ -1,0 +1,286 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orchestration-ingress
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    component: ingress
+  annotations:
+    # Nginx Ingress Controller
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+    # Rate Limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-connections: "50"
+
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+
+    # Load Balancing
+    nginx.ingress.kubernetes.io/load-balance: "ewma"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$request_uri"
+
+    # Security Headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+
+    # Certificate Management (cert-manager)
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/acme-challenge-type: "http01"
+spec:
+  tls:
+  - hosts:
+    - orchestration.bcm-platform.io
+    - api.bcm-platform.io
+    secretName: orchestration-tls
+
+  rules:
+  # Main Orchestration API
+  - host: orchestration.bcm-platform.io
+    http:
+      paths:
+      # Health Check
+      - path: /health
+        pathType: Exact
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # System Endpoints
+      - path: /api/v1/system
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Platform Orchestrator Endpoints
+      - path: /api/v1/platform
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # AI Orchestrator Endpoints
+      - path: /api/v1/ai
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Scenario Orchestrator Endpoints
+      - path: /api/v1/scenario
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # BCM Endpoints
+      - path: /api/v1/bcm
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Events
+      - path: /api/v1/events
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Workflows
+      - path: /api/v1/workflows
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Claude AI
+      - path: /api/v1/claude
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Deployment
+      - path: /api/v1/deployment
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+      # Auth
+      - path: /api/v1/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+  # API Gateway (aggregate)
+  - host: api.bcm-platform.io
+    http:
+      paths:
+      # Route to orchestration
+      - path: /orchestration
+        pathType: Prefix
+        backend:
+          service:
+            name: orchestration-service
+            port:
+              number: 8002
+
+---
+# Certificate for TLS
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: orchestration-tls-cert
+  namespace: bcm-platform
+spec:
+  secretName: orchestration-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - orchestration.bcm-platform.io
+  - api.bcm-platform.io
+
+---
+# NetworkPolicy for Orchestration
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: orchestration-network-policy
+  namespace: bcm-platform
+spec:
+  podSelector:
+    matchLabels:
+      app: orchestration
+  policyTypes:
+  - Ingress
+  - Egress
+
+  ingress:
+  # Allow from Ingress Controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8002
+
+  # Allow from Prometheus
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9090
+
+  # Allow from same namespace
+  - from:
+    - podSelector: {}
+    ports:
+    - protocol: TCP
+      port: 8002
+
+  egress:
+  # Allow to PostgreSQL
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+
+  # Allow to Redis
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+
+  # Allow to BCM Services
+  - to:
+    - podSelector:
+        matchLabels:
+          platform: bcm
+    ports:
+    - protocol: TCP
+      port: 8020
+    - protocol: TCP
+      port: 8030
+    - protocol: TCP
+      port: 8040
+    - protocol: TCP
+      port: 8050
+    - protocol: TCP
+      port: 8060
+    - protocol: TCP
+      port: 8070
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8090
+    - protocol: TCP
+      port: 8100
+    - protocol: TCP
+      port: 8110
+    - protocol: TCP
+      port: 8130
+
+  # Allow DNS
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: UDP
+      port: 53
+
+  # Allow HTTPS (for external API calls)
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443

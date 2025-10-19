@@ -1,0 +1,276 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestration-service
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    component: orchestration-layer
+    platform: bcm
+    version: v2.0.0
+  annotations:
+    description: "BCM Unified Orchestration System with Platform Integration"
+    iso-22301-clause: "All"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: orchestration
+      component: orchestration-layer
+  template:
+    metadata:
+      labels:
+        app: orchestration
+        component: orchestration-layer
+        platform: bcm
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8002"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: orchestration-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+
+      initContainers:
+      - name: wait-for-database
+        image: busybox:1.36
+        command: ['sh', '-c', 'until nc -z postgres-service 5432; do echo waiting for database; sleep 2; done;']
+
+      - name: wait-for-redis
+        image: busybox:1.36
+        command: ['sh', '-c', 'until nc -z redis-service 6379; do echo waiting for redis; sleep 2; done;']
+
+      containers:
+      - name: orchestration
+        image: ghcr.io/seh-foundation/ai-platform-iso/orchestration:v2.0.0
+        imagePullPolicy: Always
+
+        ports:
+        - name: http
+          containerPort: 8002
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+
+        env:
+        - name: PORT
+          value: "8002"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: ENVIRONMENT
+          value: "production"
+        - name: LOG_LEVEL
+          value: "INFO"
+
+        # Database
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: orchestration-secrets
+              key: database-url
+
+        # Redis
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: orchestration-secrets
+              key: redis-url
+
+        # Platform Integration
+        - name: PLATFORM_INTEGRATION_ENABLED
+          value: "true"
+        - name: INTELLIGENT_ROUTING_ENABLED
+          value: "true"
+        - name: SAGA_ENGINE_ENABLED
+          value: "true"
+        - name: SELF_AWARE_ENABLED
+          value: "true"
+        - name: CQRS_ENABLED
+          value: "true"
+
+        # AI Services
+        - name: ANTHROPIC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: orchestration-secrets
+              key: anthropic-api-key
+
+        # Temporal (if needed)
+        - name: TEMPORAL_CLOUD_NAMESPACE
+          valueFrom:
+            configMapKeyRef:
+              name: orchestration-config
+              key: temporal-namespace
+              optional: true
+
+        - name: TEMPORAL_CLOUD_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: orchestration-config
+              key: temporal-address
+              optional: true
+
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: logs
+          mountPath: /app/logs
+
+      volumes:
+      - name: config
+        configMap:
+          name: orchestration-config
+      - name: logs
+        emptyDir: {}
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - orchestration
+              topologyKey: kubernetes.io/hostname
+
+      tolerations:
+      - key: "workload"
+        operator: "Equal"
+        value: "bcm-platform"
+        effect: "NoSchedule"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestration-service
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    component: orchestration-layer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8002
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: orchestration
+    component: orchestration-layer
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: orchestration-sa
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+  annotations:
+    description: "Service account for orchestration layer"
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: orchestration-hpa
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: orchestration-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 30
+      - type: Pods
+        value: 2
+        periodSeconds: 30
+      selectPolicy: Max

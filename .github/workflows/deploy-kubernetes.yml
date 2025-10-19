@@ -1,0 +1,169 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      version:
+        description: 'Image version to deploy'
+        required: true
+        default: 'latest'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.get-url.outputs.url }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+
+    - name: Configure kubectl
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      run: |
+        mkdir -p $HOME/.kube
+        echo "$KUBE_CONFIG" | base64 -d > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
+
+    - name: Create namespace if not exists
+      run: |
+        kubectl create namespace bcm-platform --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Deploy secrets (if staging)
+      if: github.event.inputs.environment == 'staging'
+      env:
+        DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+        REDIS_URL: ${{ secrets.STAGING_REDIS_URL }}
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      run: |
+        kubectl create secret generic orchestration-secrets \
+          --from-literal=database-url="$DATABASE_URL" \
+          --from-literal=redis-url="$REDIS_URL" \
+          --from-literal=anthropic-api-key="$ANTHROPIC_API_KEY" \
+          --from-literal=jwt-secret-key="$JWT_SECRET_KEY" \
+          --namespace=bcm-platform \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+        kubectl create secret generic bcm-secrets \
+          --from-literal=database-url="$DATABASE_URL" \
+          --from-literal=redis-url="$REDIS_URL" \
+          --namespace=bcm-platform \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Deploy ConfigMaps
+      run: |
+        kubectl apply -f infrastructure/kubernetes/configmaps/ \
+          --namespace=bcm-platform
+
+    - name: Update image tags
+      run: |
+        # Update orchestration deployment
+        kubectl set image deployment/orchestration-service \
+          orchestration=ghcr.io/seh-foundation/ai-platform-iso/orchestration:${{ github.event.inputs.version }} \
+          --namespace=bcm-platform || echo "Deployment not found, will create"
+
+    - name: Deploy Orchestration Service
+      run: |
+        kubectl apply -f infrastructure/kubernetes/deployments/orchestration-deployment.yaml \
+          --namespace=bcm-platform
+
+    - name: Deploy BCM Services
+      run: |
+        kubectl apply -f infrastructure/kubernetes/deployments/bcm-services/ \
+          --namespace=bcm-platform
+
+    - name: Deploy Ingress
+      run: |
+        kubectl apply -f infrastructure/kubernetes/ingress/ \
+          --namespace=bcm-platform
+
+    - name: Deploy Monitoring
+      run: |
+        kubectl apply -f infrastructure/kubernetes/monitoring/ \
+          --namespace=bcm-platform
+
+    - name: Wait for deployments to be ready
+      run: |
+        kubectl wait --for=condition=available --timeout=300s \
+          deployment/orchestration-service \
+          --namespace=bcm-platform
+
+        # Wait for BCM services
+        kubectl wait --for=condition=available --timeout=300s \
+          deployment -l component=bcm-service \
+          --namespace=bcm-platform
+
+    - name: Run smoke tests
+      run: |
+        # Get orchestration service URL
+        ORCH_URL=$(kubectl get service orchestration-service -n bcm-platform -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+        # Health check
+        curl -f http://$ORCH_URL:8002/health || exit 1
+
+        # System status
+        curl -f http://$ORCH_URL:8002/api/v1/system/status || exit 1
+
+        echo "✅ Smoke tests passed"
+
+    - name: Get deployment URL
+      id: get-url
+      run: |
+        if [ "${{ github.event.inputs.environment }}" == "staging" ]; then
+          echo "url=https://staging.orchestration.bcm-platform.io" >> $GITHUB_OUTPUT
+        else
+          echo "url=https://orchestration.bcm-platform.io" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create deployment notification
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: deployment } = await github.rest.repos.createDeployment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: context.sha,
+            environment: '${{ github.event.inputs.environment }}',
+            description: 'Deploy version ${{ github.event.inputs.version }}',
+            auto_merge: false,
+            required_contexts: []
+          });
+
+          await github.rest.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: deployment.id,
+            state: 'success',
+            environment_url: '${{ steps.get-url.outputs.url }}',
+            description: 'Deployment successful'
+          });
+
+  rollback:
+    if: failure()
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Rollback deployment
+      run: |
+        kubectl rollout undo deployment/orchestration-service \
+          --namespace=bcm-platform
+
+        kubectl rollout undo deployment -l component=bcm-service \
+          --namespace=bcm-platform
+
+        echo "⚠️  Deployment rolled back due to failure"

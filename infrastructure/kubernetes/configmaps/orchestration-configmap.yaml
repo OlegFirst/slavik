@@ -1,0 +1,188 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orchestration-config
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    component: orchestration-layer
+  annotations:
+    description: "Configuration for BCM Orchestration Layer"
+data:
+  # Application Config
+  app.yaml: |
+    service:
+      name: orchestration-service
+      port: 8002
+      environment: production
+      log_level: INFO
+
+    platform_integration:
+      enabled: true
+      intelligent_routing: true
+      saga_engine: true
+      self_aware: true
+      cqrs: true
+
+    orchestrators:
+      platform:
+        enabled: true
+        startup_timeout: 30
+      ai:
+        enabled: true
+        startup_timeout: 30
+        max_concurrent_decisions: 50
+      scenario:
+        enabled: true
+        startup_timeout: 30
+        max_concurrent_scenarios: 20
+
+    intelligent_router:
+      ai_analysis_enabled: true
+      semantic_matching_enabled: true
+      max_concurrent_events: 100
+      routing_timeout_ms: 50
+      sla_target_ms: 20
+      priority_queues:
+        - CRITICAL
+        - HIGH
+        - NORMAL
+        - LOW
+
+    saga_engine:
+      state_store: redis
+      max_concurrent_sagas: 50
+      saga_timeout_seconds: 300
+      compensation_retry_max: 3
+      crash_recovery_enabled: true
+
+    self_aware:
+      health_check_interval_seconds: 10
+      load_threshold_percent: 80
+      degradation_threshold_percent: 90
+      capability_reporting_enabled: true
+
+    cqrs:
+      cache_ttl_seconds: 300
+      event_sourcing_enabled: true
+      read_model_cache_enabled: true
+
+  # Temporal Config (optional)
+  temporal-namespace: "quickstart-maxdemch-73cb5509.r3gxp"
+  temporal-address: "europe-west3.gcp.api.temporal.io:7233"
+
+  # Service Discovery
+  service-registry.yaml: |
+    services:
+      postgres:
+        host: postgres-service
+        port: 5432
+      redis:
+        host: redis-service
+        port: 6379
+      bcm-services:
+        - name: bia-service
+          host: bia-service
+          port: 8020
+        - name: risk-service
+          host: risk-service
+          port: 8040
+        - name: compliance-service
+          host: compliance-service
+          port: 8030
+        - name: planning-service
+          host: planning-service
+          port: 8050
+        - name: governance-service
+          host: governance-service
+          port: 8060
+        - name: plans-service
+          host: plans-service
+          port: 8070
+        - name: response-service
+          host: response-service
+          port: 8080
+        - name: documents-service
+          host: documents-service
+          port: 8090
+        - name: validation-service
+          host: validation-service
+          port: 8100
+        - name: learning-service
+          host: learning-service
+          port: 8110
+        - name: simulation-service
+          host: simulation-service
+          port: 8130
+
+  # Logging Config
+  logging.yaml: |
+    version: 1
+    formatters:
+      default:
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+      json:
+        class: pythonjsonlogger.jsonlogger.JsonFormatter
+        format: '%(asctime)s %(name)s %(levelname)s %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: json
+        stream: ext://sys.stdout
+      file:
+        class: logging.handlers.RotatingFileHandler
+        level: INFO
+        formatter: json
+        filename: /app/logs/orchestration.log
+        maxBytes: 10485760
+        backupCount: 10
+    root:
+      level: INFO
+      handlers:
+        - console
+        - file
+    loggers:
+      uvicorn:
+        level: INFO
+      fastapi:
+        level: INFO
+      intelligent_core:
+        level: INFO
+      infrastructure:
+        level: INFO
+
+  # Metrics Config
+  metrics.yaml: |
+    prometheus:
+      enabled: true
+      port: 9090
+      path: /metrics
+    metrics:
+      - name: orchestration_startup_time_seconds
+        type: histogram
+        description: "Time to start orchestration system"
+      - name: orchestration_events_total
+        type: counter
+        description: "Total events processed"
+      - name: orchestration_events_duration_seconds
+        type: histogram
+        description: "Event processing duration"
+      - name: intelligent_router_routing_time_ms
+        type: histogram
+        description: "Intelligent router routing time"
+      - name: intelligent_router_sla_compliance_rate
+        type: gauge
+        description: "SLA compliance rate"
+      - name: saga_active_count
+        type: gauge
+        description: "Active saga count"
+      - name: saga_success_rate
+        type: gauge
+        description: "Saga success rate"
+      - name: self_aware_health_score
+        type: gauge
+        description: "Self-aware service health score"
+      - name: self_aware_load_percent
+        type: gauge
+        description: "Self-aware service load percentage"

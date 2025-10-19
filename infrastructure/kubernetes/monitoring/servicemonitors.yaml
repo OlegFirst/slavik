@@ -1,0 +1,260 @@
+# Prometheus ServiceMonitors for BCM Platform
+# Enables automatic service discovery and metrics scraping
+
+---
+# Orchestration Service Monitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orchestration-monitor
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - bcm-platform
+
+---
+# BCM Services Monitor (all 11 services)
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: bcm-services-monitor
+  namespace: bcm-platform
+  labels:
+    component: bcm-service
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      component: bcm-service
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - bcm-platform
+
+---
+# Platform Integration Intelligent Router Monitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: intelligent-router-monitor
+  namespace: bcm-platform
+  labels:
+    component: intelligent-router
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  endpoints:
+  - port: metrics
+    interval: 15s  # More frequent for router metrics
+    path: /metrics/intelligent-router
+    scheme: http
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: pod
+    - sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
+
+---
+# Saga Engine Monitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: saga-engine-monitor
+  namespace: bcm-platform
+  labels:
+    component: saga-engine
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics/saga-engine
+    scheme: http
+
+---
+# Self-Aware Services Monitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: self-aware-monitor
+  namespace: bcm-platform
+  labels:
+    component: self-aware
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      platform: bcm
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics/self-aware
+    scheme: http
+
+---
+# CQRS Monitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cqrs-monitor
+  namespace: bcm-platform
+  labels:
+    component: cqrs
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics/cqrs
+    scheme: http
+
+---
+# PrometheusRule for Platform Integration Alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: platform-integration-alerts
+  namespace: bcm-platform
+  labels:
+    prometheus: kube-prometheus
+    role: alert-rules
+spec:
+  groups:
+  - name: intelligent-router
+    interval: 30s
+    rules:
+    - alert: IntelligentRouterHighLatency
+      expr: histogram_quantile(0.95, intelligent_router_routing_time_ms) > 50
+      for: 5m
+      labels:
+        severity: warning
+        component: intelligent-router
+      annotations:
+        summary: "Intelligent Router high routing latency"
+        description: "95th percentile routing time is {{ $value }}ms (threshold: 50ms)"
+
+    - alert: IntelligentRouterSLAViolation
+      expr: intelligent_router_sla_compliance_rate < 0.95
+      for: 5m
+      labels:
+        severity: critical
+        component: intelligent-router
+      annotations:
+        summary: "Intelligent Router SLA violation"
+        description: "SLA compliance rate is {{ $value }} (threshold: 0.95)"
+
+    - alert: IntelligentRouterQueueDepthHigh
+      expr: max(intelligent_router_queue_depth) > 100
+      for: 5m
+      labels:
+        severity: warning
+        component: intelligent-router
+      annotations:
+        summary: "Intelligent Router queue depth high"
+        description: "Queue depth is {{ $value }} events (threshold: 100)"
+
+  - name: saga-engine
+    interval: 30s
+    rules:
+    - alert: SagaEngineHighFailureRate
+      expr: (saga_failed_total / saga_started_total) > 0.05
+      for: 10m
+      labels:
+        severity: warning
+        component: saga-engine
+      annotations:
+        summary: "Saga Engine high failure rate"
+        description: "Saga failure rate is {{ $value }} (threshold: 0.05)"
+
+    - alert: SagaEngineActiveSagasHigh
+      expr: saga_active_count > 50
+      for: 5m
+      labels:
+        severity: warning
+        component: saga-engine
+      annotations:
+        summary: "High number of active sagas"
+        description: "{{ $value }} active sagas (threshold: 50)"
+
+  - name: self-aware-services
+    interval: 30s
+    rules:
+    - alert: ServiceHealthDegraded
+      expr: self_aware_health_score < 0.7
+      for: 5m
+      labels:
+        severity: warning
+        component: self-aware
+      annotations:
+        summary: "Service health degraded"
+        description: "Service {{ $labels.service }} health score is {{ $value }} (threshold: 0.7)"
+
+    - alert: ServiceHighLoad
+      expr: self_aware_load_percent > 90
+      for: 10m
+      labels:
+        severity: critical
+        component: self-aware
+      annotations:
+        summary: "Service high load"
+        description: "Service {{ $labels.service }} load is {{ $value }}% (threshold: 90%)"
+
+  - name: orchestration
+    interval: 30s
+    rules:
+    - alert: OrchestrationServiceDown
+      expr: up{app="orchestration"} == 0
+      for: 2m
+      labels:
+        severity: critical
+        component: orchestration
+      annotations:
+        summary: "Orchestration service is down"
+        description: "Orchestration service {{ $labels.instance }} is down"
+
+    - alert: BCMServiceDown
+      expr: up{component="bcm-service"} == 0
+      for: 5m
+      labels:
+        severity: warning
+        component: bcm-service
+      annotations:
+        summary: "BCM service is down"
+        description: "BCM service {{ $labels.app }} is down"
+
+  - name: cqrs
+    interval: 30s
+    rules:
+    - alert: CQRSCacheHitRateLow
+      expr: cqrs_cache_hit_rate < 0.80
+      for: 10m
+      labels:
+        severity: warning
+        component: cqrs
+      annotations:
+        summary: "CQRS cache hit rate low"
+        description: "Cache hit rate is {{ $value }} (threshold: 0.80)"
