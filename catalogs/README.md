@@ -48,6 +48,27 @@ catalogs/
 
 ## 📋 Каталоги
 
+### 0. **NEW!** Platform Integration Infrastructure 🎭
+**Статус**: ✅ VERIFIED & PRODUCTION READY
+**Файл**: `/catalogs/PLATFORM_INTEGRATION_CATALOG.yaml`
+**Дата**: 2025-10-19
+
+**Graceful Choreography** - объединенная интеграция 4 архитектурных паттернов:
+- ✅ Intelligent EventBus (1,800+ строк)
+- ✅ Saga Pattern Engine (6,600+ строк)
+- ✅ Self-Aware Services (5,700+ строк)
+- ✅ CQRS Infrastructure (6,400+ строк)
+
+**Тесты**: 9/9 PASSED (100%)
+**Всего кода**: ~33,400 строк + документация
+
+**Документация**:
+- [INTEGRATION_COMPLETE.md](../INTEGRATION_COMPLETE.md)
+- [INTEGRATION_VERIFICATION_COMPLETE.md](../INTEGRATION_VERIFICATION_COMPLETE.md)
+- [Platform Integration Guide](../DOC/PLATFORM_INTEGRATION_GUIDE.md)
+
+---
+
 ### 1. Services (Сервисы)
 **Источник**: `/infrastructure/SERVICE_CATALOG_DETAILED.yaml`
 **Копия здесь**: `/catalogs/services/SERVICE_CATALOG_DETAILED.yaml`

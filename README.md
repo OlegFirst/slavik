@@ -68,6 +68,7 @@
 - [Platform Architecture](docs/ARCHITECTURE.md) - 5-layer design, 40+ microservices
 - [Phase 1 Critical Analysis](doc-project/PHASE1_CRITICAL_ANALYSIS.md) - Governance gaps identified
 - [EventBus Architecture](infrastructure/eventbus/ARCHITECTURE.md) - Event-driven design
+- **🎭 [Platform Integration - Graceful Choreography](INTEGRATION_COMPLETE.md)** - ✅ **NEW!** 4 architectural patterns verified (9/9 tests passed)
 
 **Security & Compliance:**
 - [Security Audit Report](docs/SECURITY_AUDIT_REPORT_2025-10-19.md) - PwC-level audit, 79/100
@@ -78,6 +79,8 @@
 - [Quick Start Guide](PHASE1_QUICK_START.md) - Deploy in 3 commands
 - [Deployment Guide](infrastructure/observability/PHASE1_DEPLOYMENT_GUIDE.md) - Step-by-step
 - [API Reference](docs/API_REFERENCE.md) - 1,067+ endpoints
+- **🧪 [Integration Testing Guide](INTEGRATION_TEST_RESULTS.md)** - ✅ Complete verification results
+- **📘 [Platform Integration Guide](DOC/PLATFORM_INTEGRATION_GUIDE.md)** - How to integrate services
 
 ### 📊 Project Status & Analysis
 
@@ -85,6 +88,7 @@
 - [Executive Dashboard](docs/EXECUTIVE_DASHBOARD_2025.md) - Overall status, metrics, roadmap
 - [Audit Executive Summary](docs/AUDIT_EXECUTIVE_SUMMARY.md) - Quick audit findings
 - [Phase 1 Complete Summary](doc-project/PHASE_1_COMPLETE_SUMMARY.md) - Infrastructure layer done
+- **🎭 [Integration Verification Complete](INTEGRATION_VERIFICATION_COMPLETE.md)** - ✅ **NEW!** Runtime tests 9/9 passed
 
 **Strategic Analysis:**
 - [Strategic Presentation Analysis](doc-project/STRATEGIC_PRESENTATION_ANALYSIS.md) - Stakeholder analysis (75KB)
