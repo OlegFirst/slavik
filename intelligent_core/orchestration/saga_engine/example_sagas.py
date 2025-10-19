@@ -638,6 +638,10 @@ def compliance_assessment_saga() -> SagaDefinition:
     return saga
 
 
+# Backward compatibility aliases
+create_incident_response_saga = incident_response_saga
+
+
 def get_all_example_sagas() -> list[SagaDefinition]:
     """Get all example saga definitions"""
     return [
