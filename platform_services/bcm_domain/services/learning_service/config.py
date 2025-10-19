@@ -30,5 +30,4 @@ class LearningServiceSettings(SharedSettings):
 
 
 # Initialize settings
-from shared.config import init_settings
-settings = init_settings(LearningServiceSettings)
+settings = LearningServiceSettings()
