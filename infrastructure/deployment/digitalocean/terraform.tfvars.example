@@ -1,0 +1,91 @@
+# DigitalOcean Kubernetes Terraform Variables
+# Copy this file to terraform.tfvars and fill in your values
+
+# DigitalOcean API Token
+# Get from: https://cloud.digitalocean.com/account/api/tokens
+do_token = "dop_v1_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Cluster Configuration
+cluster_name = "bcm-platform-cluster"
+region       = "nyc1"  # Available: nyc1, nyc3, sfo2, sfo3, ams3, sgp1, lon1, fra1, tor1, blr1
+
+# Kubernetes Version
+# Get available versions: doctl kubernetes options versions
+k8s_version = "1.28.2-do.0"  # Use latest stable version
+
+# Node Pool Configuration
+node_pool_name = "worker-pool"
+node_size      = "s-4vcpu-8gb"  # See: doctl kubernetes options sizes
+node_count     = 3
+min_nodes      = 2  # For autoscaling
+max_nodes      = 10 # For autoscaling
+
+# High Availability Control Plane
+ha_control_plane = true
+
+# Auto-upgrade (automatically upgrade to latest patch version)
+auto_upgrade = false
+
+# Tags (for resource organization)
+tags = ["bcm-platform", "production", "kubernetes"]
+
+# VPC Configuration (optional)
+# Create VPC first: doctl vpcs create --name bcm-vpc --region nyc1
+# vpc_uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# 1-Click Applications
+# Available: ingress-nginx, monitoring, cert-manager
+one_clicks = ["ingress-nginx", "monitoring"]
+
+# DigitalOcean Spaces Configuration (for Velero backups)
+spaces_region      = "nyc3"
+spaces_bucket_name = "bcm-velero-backups"
+
+# Spaces Access Keys (for Velero)
+# Create from: https://cloud.digitalocean.com/account/api/tokens (Spaces Keys)
+spaces_access_key  = "DO00XXXXXXXXXXXXX"
+spaces_secret_key  = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Container Registry Configuration
+# Enable Container Registry: https://cloud.digitalocean.com/registry
+registry_name               = "bcm-platform"
+registry_subscription_tier  = "basic"  # basic, professional, or starter
+
+# Database Configuration (for managed databases - optional)
+# db_cluster_name    = "bcm-postgres"
+# db_engine          = "pg"
+# db_version         = "15"
+# db_size            = "db-s-2vcpu-4gb"
+# db_node_count      = 2
+
+# Monitoring & Logging
+# enable_cluster_monitoring = true
+# enable_cluster_logging    = true
+
+# Maintenance Window
+# maintenance_day   = "sunday"
+# maintenance_hour  = "04:00"
+
+# Environment
+environment = "production"
+
+# Domain Configuration
+domain_name = "bcm.example.com"
+
+# Let's Encrypt Email
+letsencrypt_email = "admin@example.com"
+
+# Backup Configuration
+backup_retention_days    = 30
+backup_schedule_cron     = "0 2 * * *"  # Daily at 2 AM UTC
+backup_schedule_timezone = "UTC"
+
+# Resource Quotas (optional)
+# namespace_cpu_limit    = "32"
+# namespace_memory_limit = "64Gi"
+
+# Network Policies
+# enable_network_policies = true
+
+# Pod Security Standards
+# pod_security_standard = "restricted"  # restricted, baseline, or privileged

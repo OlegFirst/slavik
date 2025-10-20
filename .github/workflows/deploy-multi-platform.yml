@@ -1,0 +1,233 @@
+name: Deploy BCM Platform (Multi-Platform)
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Target platform'
+        required: true
+        type: choice
+        options:
+          - gke
+          - digitalocean
+          - both
+      environment:
+        description: 'Environment'
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+      skip_tests:
+        description: 'Skip smoke tests'
+        required: false
+        type: boolean
+        default: false
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'intelligent_core/**'
+      - 'platform_services/**'
+      - 'infrastructure/kubernetes/**'
+      - '.github/workflows/deploy-multi-platform.yml'
+
+env:
+  NAMESPACE: bcm-platform
+
+jobs:
+  # Job 1: Deploy to GKE
+  deploy-gke:
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.platform == 'gke' || github.event.inputs.platform == 'both')) ||
+      (github.event_name == 'push' && contains(github.ref, 'main'))
+
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}-gke
+      url: https://orchestration.bcm-platform.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin
+
+      - name: Get GKE credentials
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} \
+            --region ${{ secrets.GCP_REGION }} \
+            --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Verify cluster access
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Deploy to GKE
+        run: |
+          cd infrastructure/deployment/gke
+          chmod +x *.sh
+
+          # Deploy BCM Platform
+          ./gke-deploy-bcm.sh
+
+      - name: Run smoke tests
+        if: ${{ !inputs.skip_tests }}
+        run: |
+          ./infrastructure/kubernetes/scripts/smoke-tests.sh ${{ env.NAMESPACE }}
+
+      - name: Get deployment status
+        if: always()
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods -n ${{ env.NAMESPACE }}
+
+          echo "=== Services ==="
+          kubectl get services -n ${{ env.NAMESPACE }}
+
+          echo "=== Ingress ==="
+          kubectl get ingress -n ${{ env.NAMESPACE }}
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::GKE deployment failed"
+
+  # Job 2: Deploy to DigitalOcean
+  deploy-digitalocean:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.platform == 'digitalocean' || github.event.inputs.platform == 'both')) ||
+      (github.event_name == 'push' && contains(github.ref, 'main'))
+
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}-do
+      url: https://orchestration.bcm-platform.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: Get DOKS credentials
+        run: |
+          doctl kubernetes cluster kubeconfig save ${{ secrets.DO_CLUSTER_NAME }}
+
+      - name: Verify cluster access
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Deploy to DigitalOcean
+        run: |
+          cd infrastructure/deployment/digitalocean
+          chmod +x *.sh
+
+          # Deploy BCM Platform
+          export DIGITALOCEAN_ACCESS_TOKEN="${{ secrets.DIGITALOCEAN_TOKEN }}"
+          ./do-deploy-bcm.sh
+
+      - name: Run smoke tests
+        if: ${{ !inputs.skip_tests }}
+        run: |
+          ./infrastructure/kubernetes/scripts/smoke-tests.sh ${{ env.NAMESPACE }}
+
+      - name: Get deployment status
+        if: always()
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods -n ${{ env.NAMESPACE }}
+
+          echo "=== Services ==="
+          kubectl get services -n ${{ env.NAMESPACE }}
+
+          echo "=== Ingress ==="
+          kubectl get ingress -n ${{ env.NAMESPACE }}
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::DigitalOcean deployment failed"
+
+  # Job 3: Verify both deployments (if both selected)
+  verify-multi-region:
+    name: Verify Multi-Region Deployment
+    runs-on: ubuntu-latest
+    needs: [deploy-gke, deploy-digitalocean]
+    if: |
+      always() &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.platform == 'both'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check GKE deployment
+        if: needs.deploy-gke.result == 'success'
+        run: echo "✅ GKE deployment successful"
+
+      - name: Check DO deployment
+        if: needs.deploy-digitalocean.result == 'success'
+        run: echo "✅ DigitalOcean deployment successful"
+
+      - name: Multi-region verification
+        if: |
+          needs.deploy-gke.result == 'success' &&
+          needs.deploy-digitalocean.result == 'success'
+        run: |
+          echo "✅ Multi-region deployment complete"
+          echo "Both GKE and DigitalOcean clusters are running BCM Platform"
+
+      - name: Generate deployment report
+        if: always()
+        run: |
+          cat <<EOF > deployment-report.md
+          # BCM Platform Deployment Report
+
+          **Date**: $(date)
+          **Trigger**: ${{ github.event_name }}
+          **Platform**: ${{ github.event.inputs.platform || 'auto' }}
+          **Environment**: ${{ github.event.inputs.environment || 'production' }}
+
+          ## Results
+
+          - **GKE**: ${{ needs.deploy-gke.result }}
+          - **DigitalOcean**: ${{ needs.deploy-digitalocean.result }}
+
+          ## Commit
+
+          - **SHA**: ${{ github.sha }}
+          - **Author**: ${{ github.actor }}
+          - **Message**: ${{ github.event.head_commit.message }}
+
+          EOF
+
+          cat deployment-report.md
+
+      - name: Upload deployment report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment-report.md

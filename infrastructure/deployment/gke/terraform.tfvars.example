@@ -1,0 +1,82 @@
+# GKE Deployment Configuration
+# Copy this file to terraform.tfvars and update with your values
+
+# ========================================
+# Google Cloud Project Settings
+# ========================================
+
+# Your Google Cloud Project ID
+# Find it at: https://console.cloud.google.com/
+project_id = "my-gcp-project-id"
+
+# ========================================
+# GKE Cluster Configuration
+# ========================================
+
+# Cluster name (alphanumeric and hyphens only)
+cluster_name = "bcm-platform-autopilot"
+
+# Region for the cluster
+# Available regions: https://cloud.google.com/compute/docs/regions-zones
+# Examples: us-central1, us-east1, europe-west1, asia-southeast1
+region = "us-central1"
+
+# Release channel for GKE version management
+# Options: rapid, regular, stable
+# Reference: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels
+release_channel = "regular"
+
+# ========================================
+# Network Configuration
+# ========================================
+
+# VPC Network name (use "default" or your custom VPC)
+network = "default"
+
+# Subnetwork name (use "default" or your custom subnet)
+subnetwork = "default"
+
+# ========================================
+# BCM Platform Configuration
+# ========================================
+
+# Kubernetes namespace for BCM Platform
+bcm_namespace = "bcm-platform"
+
+# Path to Kubernetes manifests directory (relative to this file)
+kubernetes_manifests_dir = "../../kubernetes"
+
+# ========================================
+# Add-ons Configuration
+# ========================================
+
+# Istio version to install
+# Check latest versions: https://github.com/istio/istio/releases
+istio_version = "1.20.2"
+
+# ========================================
+# Velero Backup Configuration
+# ========================================
+
+# GCS bucket name for Velero backups (must be globally unique)
+velero_backup_bucket = "bcm-platform-velero-backups"
+
+# Velero backup schedule (cron format)
+# Example: "0 2 * * *" = daily at 2 AM UTC
+velero_backup_schedule = "0 2 * * *"
+
+# Velero backup retention period (in days)
+velero_backup_retention_days = "30"
+
+# ========================================
+# Labels and Tags
+# ========================================
+
+# Environment label (e.g., production, staging, development)
+environment = "production"
+
+# Cost center or billing identifier
+cost_center = "bcm-platform"
+
+# Team or owner
+team = "platform-team"

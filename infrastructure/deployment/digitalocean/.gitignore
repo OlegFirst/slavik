@@ -1,0 +1,45 @@
+# Terraform files
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+!*.tfvars.example
+
+# Kubeconfig files
+kubeconfig-*.yaml
+*.kubeconfig
+
+# Credentials
+credentials-velero
+*.pem
+*.key
+
+# DigitalOcean specific
+.doctl/
+
+# Velero backups
+velero-backups/
+
+# Helm values with secrets
+values-*.yaml
+!values-digitalocean-template.yaml
+
+# Environment files
+.env
+.env.local
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log

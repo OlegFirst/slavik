@@ -1,0 +1,28 @@
+# Terraform and configuration files with secrets
+terraform.tfvars
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Service account keys and credentials
+credentials-*.json
+*.key
+*.pem
+
+# Istio downloads
+istio-*/
+
+# Local environment files
+.env
+.env.local
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

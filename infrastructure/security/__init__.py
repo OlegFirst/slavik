@@ -27,6 +27,14 @@ from .vault_client import (
     get_secret_with_fallback,
 )
 
+from .vault_helpers import (
+    get_temporal_config,
+    get_qdrant_config,
+    get_rabbitmq_config,
+    get_all_vault_secrets,
+    test_vault_connection,
+)
+
 __all__ = [
     # Encryption
     "EncryptionService",
@@ -42,4 +50,10 @@ __all__ = [
     "get_vault_client",
     "get_secret",
     "get_secret_with_fallback",
+    # Vault Helpers
+    "get_temporal_config",
+    "get_qdrant_config",
+    "get_rabbitmq_config",
+    "get_all_vault_secrets",
+    "test_vault_connection",
 ]
