@@ -75,3 +75,5 @@ test-results/
 # Build artifacts
 *.tar.gz
 *.zip
+# Archived ENV files
+_archive/env-files-archive-*/
