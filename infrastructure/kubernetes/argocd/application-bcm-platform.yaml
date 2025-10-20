@@ -1,0 +1,202 @@
+---
+# Main BCM Platform Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform
+  namespace: argocd
+  labels:
+    environment: production
+    managed-by: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io  # Cascade delete
+spec:
+  project: bcm-platform
+
+  # Source configuration
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/deployments
+
+    # Helm (if using Helm charts)
+    # helm:
+    #   releaseName: bcm-platform
+    #   valueFiles:
+    #   - values-production.yaml
+
+    # Kustomize (if using Kustomize)
+    # kustomize:
+    #   namePrefix: prod-
+    #   commonLabels:
+    #     environment: production
+
+  # Destination configuration
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: true       # Delete resources not in Git
+      selfHeal: true    # Auto-sync if manual changes detected
+      allowEmpty: false # Prevent empty sync
+
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+
+    # Retry configuration
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  # Ignore differences for certain fields
+  ignoreDifferences:
+  # Ignore HPA-managed replicas
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  # Ignore dynamic annotations
+  - group: apps
+    kind: Deployment
+    jqPathExpressions:
+    - '.spec.template.metadata.annotations."kubectl.kubernetes.io/restartedAt"'
+  # Ignore status fields
+  - group: "*"
+    kind: "*"
+    managedFieldsManagers:
+    - kube-controller-manager
+
+---
+# Orchestration Layer Application (sub-app)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform-orchestration
+  namespace: argocd
+spec:
+  project: bcm-platform
+
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/deployments
+
+    directory:
+      include: orchestration-deployment.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+# BCM Services Application (sub-app)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform-services
+  namespace: argocd
+spec:
+  project: bcm-platform
+
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/deployments/bcm-services
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - RespectIgnoreDifferences=true
+
+---
+# ConfigMaps Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform-configs
+  namespace: argocd
+spec:
+  project: bcm-platform
+
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/configmaps
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false  # Don't auto-heal configs to prevent accidental overrides
+
+---
+# Monitoring Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform-monitoring
+  namespace: argocd
+spec:
+  project: bcm-platform
+
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/monitoring
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+# Istio Configuration Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bcm-platform-istio
+  namespace: argocd
+spec:
+  project: bcm-platform
+
+  source:
+    repoURL: https://github.com/SEH-foundation/AI-Platform-ISO.git
+    targetRevision: main
+    path: infrastructure/kubernetes/istio
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bcm-platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=true  # Validate Istio resources before applying

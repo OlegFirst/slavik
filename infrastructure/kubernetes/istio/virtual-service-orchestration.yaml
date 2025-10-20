@@ -1,0 +1,122 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orchestration-vs
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+    component: routing
+spec:
+  hosts:
+  - orchestration.bcm-platform.io
+  - orchestration-service
+  - orchestration-service.bcm-platform.svc.cluster.local
+
+  gateways:
+  - bcm-platform-gateway
+  - mesh  # Also applies to internal service-to-service calls
+
+  http:
+  # Health check endpoints (high priority, no auth)
+  - match:
+    - uri:
+        exact: /health
+    - uri:
+        exact: /ready
+    - uri:
+        prefix: /metrics
+    route:
+    - destination:
+        host: orchestration-service
+        port:
+          number: 8002
+    retries:
+      attempts: 1
+      perTryTimeout: 1s
+    timeout: 2s
+
+  # API endpoints (protected, with retries)
+  - match:
+    - uri:
+        prefix: /api/v1/
+    route:
+    - destination:
+        host: orchestration-service
+        port:
+          number: 8002
+        subset: stable
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: 5xx,reset,connect-failure,refused-stream
+    timeout: 30s
+    # Circuit breaker
+    fault:
+      abort:
+        percentage:
+          value: 0.1
+        httpStatus: 503
+    # Rate limiting
+    headers:
+      request:
+        add:
+          x-request-id: "%REQ(X-REQUEST-ID)%"
+    mirror:
+      host: orchestration-service
+      subset: canary
+    mirrorPercentage:
+      value: 10.0  # Mirror 10% of traffic to canary
+
+  # Fallback route
+  - route:
+    - destination:
+        host: orchestration-service
+        port:
+          number: 8002
+        subset: stable
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: bcm-services-vs
+  namespace: bcm-platform
+  labels:
+    component: bcm-services
+spec:
+  hosts:
+  - "*.bcm-platform.svc.cluster.local"
+
+  http:
+  # BIA Service
+  - match:
+    - uri:
+        prefix: /
+      authority:
+        exact: bia-service.bcm-platform.svc.cluster.local
+    route:
+    - destination:
+        host: bia-service
+        port:
+          number: 8020
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+
+  # Risk Service
+  - match:
+    - uri:
+        prefix: /
+      authority:
+        exact: risk-service.bcm-platform.svc.cluster.local
+    route:
+    - destination:
+        host: risk-service
+        port:
+          number: 8040
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+
+  # Add more services as needed...

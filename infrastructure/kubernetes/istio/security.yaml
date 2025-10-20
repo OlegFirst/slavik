@@ -1,0 +1,198 @@
+---
+# Peer Authentication - Enable mTLS across namespace
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: bcm-platform
+spec:
+  mtls:
+    mode: STRICT  # Enforce mTLS for all services in namespace
+
+---
+# Allow permissive mode for specific services during migration
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: orchestration-permissive
+  namespace: bcm-platform
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  mtls:
+    mode: PERMISSIVE  # Allow both mTLS and plaintext (for migration)
+  portLevelMtls:
+    9090:  # Metrics port
+      mode: DISABLE  # No mTLS for metrics
+
+---
+# Authorization Policy - Allow all by default (customize as needed)
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-all
+  namespace: bcm-platform
+spec:
+  action: ALLOW
+  rules:
+  - {}  # Allow all traffic
+
+---
+# Authorization Policy - Deny access to metrics from outside namespace
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-external-metrics
+  namespace: bcm-platform
+spec:
+  action: DENY
+  rules:
+  - from:
+    - source:
+        notNamespaces: ["bcm-platform", "monitoring"]
+    to:
+    - operation:
+        ports: ["9090"]
+
+---
+# Authorization Policy - Allow health checks without authentication
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-health-checks
+  namespace: bcm-platform
+spec:
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        paths: ["/health", "/ready", "/healthz"]
+
+---
+# Authorization Policy - Require JWT for API endpoints
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: require-jwt-for-api
+  namespace: bcm-platform
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  action: ALLOW
+  rules:
+  # Allow health checks
+  - to:
+    - operation:
+        paths: ["/health", "/ready", "/metrics"]
+
+  # Require JWT for API
+  - to:
+    - operation:
+        paths: ["/api/v1/*"]
+    when:
+    - key: request.auth.claims[iss]
+      values: ["https://auth.bcm-platform.io"]
+    - key: request.auth.claims[aud]
+      values: ["bcm-platform-api"]
+
+---
+# Request Authentication - JWT validation
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-auth
+  namespace: bcm-platform
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  jwtRules:
+  - issuer: "https://auth.bcm-platform.io"
+    jwksUri: "https://auth.bcm-platform.io/.well-known/jwks.json"
+    audiences:
+    - "bcm-platform-api"
+    forwardOriginalToken: true
+    outputPayloadToHeader: "x-jwt-payload"
+
+---
+# Service-to-Service Authorization
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orchestration-to-services
+  namespace: bcm-platform
+spec:
+  selector:
+    matchLabels:
+      component: bcm-service
+  action: ALLOW
+  rules:
+  # Allow orchestration service to call BCM services
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/bcm-platform/sa/orchestration-sa"
+
+  # Allow services to call each other
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/bcm-platform/sa/*"
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+
+  # Allow monitoring namespace
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        paths: ["/metrics"]
+
+---
+# Rate Limiting (requires Envoy filter)
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: rate-limit-config
+  namespace: bcm-platform
+spec:
+  workloadSelector:
+    labels:
+      app: orchestration
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.router"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.local_ratelimit
+        typed_config:
+          "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+          type_url: type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
+          value:
+            stat_prefix: http_local_rate_limiter
+            token_bucket:
+              max_tokens: 100
+              tokens_per_fill: 100
+              fill_interval: 60s
+            filter_enabled:
+              runtime_key: local_rate_limit_enabled
+              default_value:
+                numerator: 100
+                denominator: HUNDRED
+            filter_enforced:
+              runtime_key: local_rate_limit_enforced
+              default_value:
+                numerator: 100
+                denominator: HUNDRED

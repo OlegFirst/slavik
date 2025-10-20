@@ -1,0 +1,42 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: bcm-platform-gateway
+  namespace: bcm-platform
+  labels:
+    app: bcm-platform
+    component: gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  # HTTPS
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: bcm-platform-tls  # K8s secret with TLS cert
+    hosts:
+    - orchestration.bcm-platform.io
+    - "*.bcm-platform.io"
+
+  # HTTP (redirect to HTTPS)
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - orchestration.bcm-platform.io
+    - "*.bcm-platform.io"
+    tls:
+      httpsRedirect: true
+
+  # Metrics port (internal only)
+  - port:
+      number: 9090
+      name: metrics
+      protocol: HTTP
+    hosts:
+    - metrics.bcm-platform.internal

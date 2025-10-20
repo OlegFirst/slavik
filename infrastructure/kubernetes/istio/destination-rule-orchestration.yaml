@@ -1,0 +1,149 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: orchestration-dr
+  namespace: bcm-platform
+  labels:
+    app: orchestration
+spec:
+  host: orchestration-service
+
+  # Traffic Policy
+  trafficPolicy:
+    # Load Balancing
+    loadBalancer:
+      simple: LEAST_REQUEST
+      localityLbSetting:
+        enabled: true
+        failover:
+        - from: us-central1
+          to: us-east1
+
+    # Connection Pool
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 3s
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+
+    # Outlier Detection (Circuit Breaker)
+    outlierDetection:
+      consecutive5xxErrors: 5
+      consecutiveGatewayErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+
+    # TLS Settings
+    tls:
+      mode: ISTIO_MUTUAL  # mTLS between services
+
+  # Subsets for canary/blue-green deployments
+  subsets:
+  - name: stable
+    labels:
+      version: v1
+    trafficPolicy:
+      connectionPool:
+        http:
+          maxRequestsPerConnection: 10
+
+  - name: canary
+    labels:
+      version: v2
+    trafficPolicy:
+      connectionPool:
+        http:
+          maxRequestsPerConnection: 5
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: bcm-services-dr
+  namespace: bcm-platform
+  labels:
+    component: bcm-services
+spec:
+  host: "*.bcm-platform.svc.cluster.local"
+
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 20
+        http2MaxRequests: 50
+
+    outlierDetection:
+      consecutive5xxErrors: 3
+      interval: 20s
+      baseEjectionTime: 20s
+      maxEjectionPercent: 30
+
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Specific rules for each BCM service
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: bia-service-dr
+  namespace: bcm-platform
+spec:
+  host: bia-service
+
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        httpHeaderName: x-tenant-id  # Sticky sessions by tenant
+
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: risk-service-dr
+  namespace: bcm-platform
+spec:
+  host: risk-service
+
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+
+    tls:
+      mode: ISTIO_MUTUAL

@@ -1,0 +1,144 @@
+---
+# ArgoCD Project for BCM Platform
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: bcm-platform
+  namespace: argocd
+  labels:
+    organization: seh-foundation
+spec:
+  description: BCM Platform - Business Continuity Management System
+
+  # Source repositories
+  sourceRepos:
+  - https://github.com/SEH-foundation/AI-Platform-ISO.git
+  - https://github.com/SEH-foundation/*  # Allow all SEH-foundation repos
+
+  # Destination clusters and namespaces
+  destinations:
+  - namespace: bcm-platform
+    server: https://kubernetes.default.svc
+  - namespace: bcm-platform-staging
+    server: https://kubernetes.default.svc
+  - namespace: monitoring
+    server: https://kubernetes.default.svc
+  - namespace: istio-system
+    server: https://kubernetes.default.svc
+
+  # Cluster resource whitelist (what can be deployed)
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: 'rbac.authorization.k8s.io'
+    kind: ClusterRole
+  - group: 'rbac.authorization.k8s.io'
+    kind: ClusterRoleBinding
+  - group: 'apiextensions.k8s.io'
+    kind: CustomResourceDefinition
+  - group: 'networking.istio.io'
+    kind: VirtualService
+  - group: 'networking.istio.io'
+    kind: DestinationRule
+  - group: 'networking.istio.io'
+    kind: Gateway
+  - group: 'security.istio.io'
+    kind: PeerAuthentication
+  - group: 'security.istio.io'
+    kind: AuthorizationPolicy
+
+  # Namespace resource whitelist (what can be deployed in namespaces)
+  namespaceResourceWhitelist:
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: Service
+  - group: ''
+    kind: ServiceAccount
+  - group: 'apps'
+    kind: Deployment
+  - group: 'apps'
+    kind: StatefulSet
+  - group: 'apps'
+    kind: DaemonSet
+  - group: 'batch'
+    kind: Job
+  - group: 'batch'
+    kind: CronJob
+  - group: 'autoscaling'
+    kind: HorizontalPodAutoscaler
+  - group: 'policy'
+    kind: PodDisruptionBudget
+  - group: 'networking.k8s.io'
+    kind: Ingress
+  - group: 'networking.k8s.io'
+    kind: NetworkPolicy
+  - group: 'monitoring.coreos.com'
+    kind: ServiceMonitor
+  - group: 'monitoring.coreos.com'
+    kind: PrometheusRule
+
+  # Roles - what users can do with this project
+  roles:
+  # Developer role - can sync apps
+  - name: developer
+    description: Developers can sync applications
+    policies:
+    - p, proj:bcm-platform:developer, applications, get, bcm-platform/*, allow
+    - p, proj:bcm-platform:developer, applications, sync, bcm-platform/*, allow
+    - p, proj:bcm-platform:developer, applications, override, bcm-platform/*, allow
+    groups:
+    - bcm-developers
+
+  # DevOps role - full access
+  - name: devops
+    description: DevOps team has full access
+    policies:
+    - p, proj:bcm-platform:devops, applications, *, bcm-platform/*, allow
+    - p, proj:bcm-platform:devops, repositories, *, bcm-platform/*, allow
+    groups:
+    - bcm-devops
+
+  # Readonly role - view only
+  - name: readonly
+    description: Readonly access for viewers
+    policies:
+    - p, proj:bcm-platform:readonly, applications, get, bcm-platform/*, allow
+    - p, proj:bcm-platform:readonly, logs, get, bcm-platform/*, allow
+    groups:
+    - bcm-viewers
+
+  # Orphaned resources monitoring
+  orphanedResources:
+    warn: true
+    ignore:
+    - group: ''
+      kind: ConfigMap
+      name: kube-root-ca.crt
+    - group: ''
+      kind: Secret
+      name: default-token-*
+
+  # Sync windows - when auto-sync is allowed
+  syncWindows:
+  # Allow sync during business hours on weekdays
+  - kind: allow
+    schedule: '0 8-18 * * 1-5'  # Mon-Fri, 8am-6pm
+    duration: 10h
+    applications:
+    - '*'
+    manualSync: true
+
+  # Deny sync during maintenance window
+  - kind: deny
+    schedule: '0 2-4 * * 0'  # Sunday, 2am-4am
+    duration: 2h
+    applications:
+    - '*'
+    manualSync: false
+
+  # Signature verification (optional, for signed commits)
+  signatureKeys:
+  - keyID: ABCDEF1234567890
