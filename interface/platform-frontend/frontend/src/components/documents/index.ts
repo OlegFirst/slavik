@@ -40,6 +40,12 @@ export { DocumentCreateForm } from './forms/DocumentCreateForm';
 export { DocumentUploadForm } from './forms/DocumentUploadForm';
 export { DocumentMetadataForm } from './forms/DocumentMetadataForm';
 
+// ==================== UTILITY COMPONENTS ====================
+// Week 4 - Reusable utility components
+
+export { DocumentUpload } from './DocumentUpload';
+export type { DocumentUploadProps } from './DocumentUpload';
+
 // ==================== APPROVAL COMPONENTS ====================
 // Round 3 Agent 10 - Approval workflow management
 
@@ -49,8 +55,20 @@ export type { ApprovalCardProps } from './ApprovalCard';
 export { ApprovalRequestDialog } from './ApprovalRequestDialog';
 export type { ApprovalRequestDialogProps } from './ApprovalRequestDialog';
 
+export { ApprovalRequest } from './ApprovalRequest';
+export type { ApprovalRequestProps } from './ApprovalRequest';
+
+export { ApprovalList } from './ApprovalList';
+export type { ApprovalListProps } from './ApprovalList';
+
 export { WorkflowTimeline } from './WorkflowTimeline';
 export type { WorkflowTimelineProps } from './WorkflowTimeline';
+
+export { WorkflowStatus } from './WorkflowStatus';
+export type { WorkflowStatusProps } from './WorkflowStatus';
+
+export { WorkflowActions } from './WorkflowActions';
+export type { WorkflowActionsProps } from './WorkflowActions';
 
 // ==================== SHARING COMPONENTS ====================
 // Round 3 Agent 11 - Document sharing and permissions
@@ -73,6 +91,8 @@ export type { SharesListProps } from './SharesList';
 // Round 3 Agent 12 - Version control and audit trails
 
 export { default as VersionHistory } from './VersionHistory';
+export { VersionComparison } from './VersionComparison';
+export type { VersionComparisonProps } from './VersionComparison';
 export { default as RetentionInfo } from './RetentionInfo';
 export { default as DocumentTimeline } from './DocumentTimeline';
 
@@ -104,5 +124,4 @@ export type {
   DocumentApproval,
   ApprovalStatus,
   RetentionPolicy,
-  WorkflowStatus,
 } from '@/types/documents';

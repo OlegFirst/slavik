@@ -2,13 +2,24 @@
 
 **Component**: Core AI & Intelligence Layer
 **Status**: Active
-**Version**: 2.0.0
+**Version**: 2.1.0
+**Last Updated**: 2025-10-19
 
 ## Overview
 
 The Intelligent Core represents the foundational AI and intelligence layer of the AI-Platform-ISO system. This layer provides enterprise-grade artificial intelligence, workflow orchestration, predictive analytics, and domain expertise capabilities that power all platform services.
 
 The Intelligent Core implements a comprehensive suite of AI services including machine learning, natural language processing, knowledge management, workflow automation, and collaborative intelligence. All modules adhere to ISO/IEC AI standards and provide standardized interfaces for service integration.
+
+### Important: BCM Domain Migration (October 2025)
+
+**Note:** The BCM tactical AI colleagues (BIA Specialist, Risk Analyst, etc.) have been **migrated** to `/platform_services/bcm_domain/ai_colleagues/`.
+
+The `expertise_center` now contains only:
+- **Strategic AI Experts** (`ai_experts/specialists/`) - Program-level BCM expertise
+- **Backward compatibility symlink** (`ai_office/`) - Points to `bcm_domain/ai_colleagues/`
+
+See [BCM Domain Migration](../docs/bcm-domain-migration.md) for details.
 
 ## Architecture
 
@@ -54,42 +65,52 @@ graph TB
 
 | Module | Description | LOC | Status |
 |--------|-------------|-----|--------|
-| [ai-foundation](./ai-foundation/README.md) | Core AI services: LLM routing, RAG, embeddings, ML | 23,019 | Active |
-| [workflow_intelligence](./workflow_intelligence/README.md) | Workflow orchestration, state machines, BPMN engine | 24,392 | Active |
-| [predictive](./predictive/README.md) | Predictive analytics and proactive recommendations | 4,761 | Active |
+| [ai_foundation](./ai_foundation/README.md) | Core AI services: LLM routing, RAG, embeddings, ML | 23,019 | ✅ Active |
+| [workflow_intelligence](./workflow_intelligence/README.md) | Workflow orchestration, state machines, BPMN engine | 24,392 | ✅ Active |
+| [predictive](./predictive/README.md) | Predictive analytics and proactive recommendations | 4,761 | ✅ Active |
+| [scenario_intelligence](./scenario_intelligence/README.md) | Scenario generation, simulation, and what-if analysis | 22,487 | ✅ Active |
 
 ### Orchestration Layer
 
 | Module | Description | LOC | Status |
 |--------|-------------|-----|--------|
-| [orchestration](./orchestration/README.md) | Centralized AI service coordination and control | 25,171 | Active |
-| [workflow-engine](./workflow-engine/README.md) | BPMN 2.0 compliant workflow execution engine | 6,361 | Active |
-| [event_intelligence](./event_intelligence/README.md) | Intelligent event analysis and automated healing | 3,545 | Active |
+| [orchestration](./orchestration/README.md) | Centralized AI service coordination and control | 25,171 | ✅ Active |
+| [workflow_engine](./workflow_engine/README.md) | BPMN 2.0 compliant workflow execution engine | 6,361 | ✅ Active |
+| [event_intelligence](./event_intelligence/README.md) | Intelligent event analysis and automated healing | 3,545 | ✅ Active |
 
 ### Intelligence Layer
 
 | Module | Description | LOC | Status |
 |--------|-------------|-----|--------|
-| [expertise-center](./expertise-center/README.md) | Domain expertise and specialized AI assistants | 11,846 | Active |
-| [collective](./collective/README.md) | Collective intelligence and privacy-preserving collaboration | 5,230 | Active |
-| [community_intelligence](./community_intelligence/README.md) | Knowledge sharing and collaborative learning | 8,116 | Active |
+| [expertise_center](./expertise_center/README.md) | Strategic AI experts and specialists (BCM Advisor, etc.) | 11,846 | ✅ Active |
+| [collective](./collective/README.md) | Collective intelligence and privacy-preserving collaboration | 5,230 | ✅ Active |
+| [community_intelligence](./community_intelligence/README.md) | Knowledge sharing and collaborative learning | 8,116 | ✅ Active |
 
 ### Optimization Layer
 
 | Module | Description | LOC | Status |
 |--------|-------------|-----|--------|
-| [ai_workflow_optimizer](./ai_workflow_optimizer/README.md) | ML-powered workflow optimization | 1,701 | Active |
+| [ai_workflow_optimizer](./ai_workflow_optimizer/README.md) | ML-powered workflow optimization | 1,701 | ✅ Active |
+
+### Platform Meta Layer
+
+| Module | Description | LOC | Status |
+|--------|-------------|-----|--------|
+| [system_bcm_service](./system_bcm_service/README.md) | Platform self-BCM: Platform applies BCM to itself | ~5,000 | ✅ Active |
+| [shared](./shared/README.md) | Shared utilities, models, and base classes for intelligent_core | ~3,000 | ✅ Active |
 
 ## Total Metrics
 
 | Metric | Value |
 |--------|-------|
-| **Total Modules** | 10 |
-| **Total Lines of Code** | 114,142 |
-| **Python Files** | 481 |
-| **Total Classes** | 664 |
-| **Total Functions** | 221 |
-| **API Endpoints** | 332 |
+| **Total Modules** | 13 |
+| **Total Lines of Code** | ~145,000 |
+| **Python Files** | 550+ |
+| **Total Classes** | 750+ |
+| **Total Functions** | 2,500+ |
+| **API Endpoints** | 400+ |
+
+**Note:** Metrics updated 2025-10-19 after BCM Domain migration
 
 ## Installation
 
@@ -234,6 +255,19 @@ Proprietary - AI-Platform-ISO
 
 ---
 
-**Last Updated**: 2025-10-08
+**Last Updated**: 2025-10-19
 **Maintainer**: AI Platform Team
 **Documentation Status**: Professional standards compliant (ISO/IEC/IEEE 26514:2022)
+
+## Recent Changes
+
+### October 2025 - BCM Domain Migration
+- ✅ BCM tactical AI colleagues migrated to `/platform_services/bcm_domain/`
+- ✅ Added `scenario_intelligence` module (22,487 LOC)
+- ✅ Added `system_bcm_service` (platform self-BCM)
+- ✅ Added `shared` module for intelligent_core utilities
+- ✅ Fixed naming: `ai-foundation` → `ai_foundation`, `workflow-engine` → `workflow_engine`
+- ✅ Total modules: 10 → 13
+- ✅ Total LOC: 114K → 145K
+
+See full migration report: [BCM Domain Migration Complete](../doc-project/BCM_DOMAIN_MIGRATION_COMPLETE.md)
