@@ -1,0 +1,144 @@
+name: Safe Cleanup Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  cleanup-validation:
+    name: Validate repository cleanliness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq shellcheck
+          npm install -g prettier
+
+      - name: Run safe cleanup validation
+        run: |
+          chmod +x scripts/safe-cleanup.sh
+          ./scripts/safe-cleanup.sh --validate -v
+
+      - name: Check for temporary files
+        id: temp-check
+        run: |
+          chmod +x scripts/safe-cleanup.sh
+          ./scripts/safe-cleanup.sh -v > cleanup-output.txt 2>&1 || true
+
+          TEMP_COUNT=$(grep "Temporary files:" cleanup-output.txt | grep -oE '[0-9]+' | head -1 || echo "0")
+          echo "temp_count=$TEMP_COUNT" >> $GITHUB_OUTPUT
+
+          if [ "$TEMP_COUNT" -gt 5 ]; then
+            echo "::warning::Found $TEMP_COUNT temporary files. Consider cleaning up."
+          fi
+
+      - name: Upload cleanup report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cleanup-report
+          path: |
+            .cleanup-report/
+            cleanup-output.txt
+          retention-days: 30
+
+      - name: Comment PR with cleanup summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read cleanup output
+            let output = '';
+            try {
+              output = fs.readFileSync('cleanup-output.txt', 'utf8');
+            } catch (e) {
+              output = 'No cleanup output found';
+            }
+
+            // Extract summary
+            const tempMatch = output.match(/Temporary files:\s+(\d+)/);
+            const jsonMatch = output.match(/JSON validation:\s+(\d+)\s+valid,\s+(\d+)\s+invalid/);
+            const yamlMatch = output.match(/YAML validation:\s+(\d+)\s+valid,\s+(\d+)\s+invalid/);
+
+            const tempCount = tempMatch ? tempMatch[1] : '0';
+            const jsonValid = jsonMatch ? jsonMatch[1] : '0';
+            const jsonInvalid = jsonMatch ? jsonMatch[2] : '0';
+            const yamlValid = yamlMatch ? yamlMatch[1] : '0';
+            const yamlInvalid = yamlMatch ? yamlMatch[2] : '0';
+
+            // Create comment body
+            const body = `## 🧹 Cleanup Validation Report
+
+            | Category | Status |
+            |----------|--------|
+            | Temporary files | ${tempCount} found ${tempCount > 5 ? '⚠️' : '✅'} |
+            | JSON validation | ${jsonValid} valid, ${jsonInvalid} invalid ${jsonInvalid > 0 ? '❌' : '✅'} |
+            | YAML validation | ${yamlValid} valid, ${yamlInvalid} invalid ${yamlInvalid > 0 ? '❌' : '✅'} |
+
+            ${tempCount > 5 ? '⚠️ **Warning:** Consider running `./scripts/safe-cleanup.sh --apply` to clean up temporary files.' : ''}
+            ${jsonInvalid > 0 || yamlInvalid > 0 ? '❌ **Error:** Fix invalid JSON/YAML files before merging.' : ''}
+
+            <details>
+            <summary>Full cleanup output</summary>
+
+            \`\`\`
+            ${output}
+            \`\`\`
+            </details>
+            `;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' && comment.body.includes('Cleanup Validation Report')
+            );
+
+            // Create or update comment
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+      - name: Fail if validation errors
+        run: |
+          if [ -f .cleanup-report/cleanup-report-*.md ]; then
+            REPORT=$(ls -t .cleanup-report/cleanup-report-*.md | head -1)
+
+            JSON_INVALID=$(grep "JSON invalid" "$REPORT" | grep -oE '[0-9]+' || echo "0")
+            YAML_INVALID=$(grep "YAML invalid" "$REPORT" | grep -oE '[0-9]+' || echo "0")
+
+            if [ "$JSON_INVALID" -gt 0 ] || [ "$YAML_INVALID" -gt 0 ]; then
+              echo "::error::Validation failed! Fix invalid JSON/YAML files."
+              exit 1
+            fi
+          fi
