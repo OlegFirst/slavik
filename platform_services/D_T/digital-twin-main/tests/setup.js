@@ -23,4 +23,4 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-console.log('🧪 Test environment initialized');
+console.log(' Test environment initialized');

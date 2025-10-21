@@ -1,7 +1,7 @@
 """
 AI Event Manager - Infrastructure Service
 
-🏗️ ИНФРАСТРУКТУРНЫЙ СЛОЙ для управления событиями:
+️ ИНФРАСТРУКТУРНЫЙ СЛОЙ для управления событиями:
 - FastAPI service
 - REST API endpoints
 - Практическое применение рекомендаций
@@ -96,7 +96,7 @@ async def lifespan(app: FastAPI):
     """Application lifespan management"""
     global integration_manager
 
-    logger.info("🚀 AI Event Manager starting...")
+    logger.info(" AI Event Manager starting...")
 
     # Initialize integration manager
     integration_manager = IntegrationManager({
@@ -113,7 +113,7 @@ async def lifespan(app: FastAPI):
     # Initialize all integrations
     await integration_manager.initialize_all()
 
-    logger.info("✅ AI Event Manager ready with full integration")
+    logger.info(" AI Event Manager ready with full integration")
 
     yield
 
@@ -121,7 +121,7 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down AI Event Manager...")
     if integration_manager:
         await integration_manager.close()
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 # FastAPI app
 app = FastAPI(

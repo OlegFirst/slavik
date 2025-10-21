@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🤝 BCM Collective Intelligence MCP Server
+ BCM Collective Intelligence MCP Server
 
 Model Context Protocol server providing Claude access to
 privacy-preserving collective wisdom via Partisia Blockchain.
@@ -71,7 +71,7 @@ class PartisiaClient:
 
     def __init__(self, contract_address: str = "collective_intelligence.mpc"):
         self.contract = contract_address
-        logger.info(f"📡 Connected to Partisia contract: {contract_address}")
+        logger.info(f" Connected to Partisia contract: {contract_address}")
 
     async def query_collective_wisdom(
         self,
@@ -85,7 +85,7 @@ class PartisiaClient:
         Privacy-preserving computation on blockchain
         """
 
-        logger.info(f"🔍 MPC Query: {problem_type}")
+        logger.info(f" MPC Query: {problem_type}")
 
         # Simulate MPC computation
         # In production: Real blockchain query
@@ -148,7 +148,7 @@ class PartisiaClient:
         MPC aggregation across similar organizations
         """
 
-        logger.info(f"📊 Benchmark Query: {metric}")
+        logger.info(f" Benchmark Query: {metric}")
 
         await asyncio.sleep(0.3)
 
@@ -195,7 +195,7 @@ class PartisiaClient:
         Proves correctness WITHOUT revealing source data
         """
 
-        logger.info(f"✅ Verifying computation: {query_id}")
+        logger.info(f" Verifying computation: {query_id}")
 
         await asyncio.sleep(0.2)
 
@@ -229,7 +229,7 @@ async def list_resources() -> List[Resource]:
     Resources are blockchain-backed, privacy-preserving
     """
 
-    logger.info("📚 Listing resources")
+    logger.info(" Listing resources")
 
     return [
         Resource(
@@ -284,7 +284,7 @@ async def read_resource(uri: str) -> str:
     Data retrieved via Partisia MPC (privacy-preserving)
     """
 
-    logger.info(f"📖 Reading resource: {uri}")
+    logger.info(f" Reading resource: {uri}")
 
     # Parse URI
     parts = uri.split("/")
@@ -322,7 +322,7 @@ async def list_tools() -> List[Tool]:
     List available tools for querying collective intelligence
     """
 
-    logger.info("🔧 Listing tools")
+    logger.info(" Listing tools")
 
     return [
         Tool(
@@ -421,7 +421,7 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
     All tools query Partisia blockchain via MPC
     """
 
-    logger.info(f"🛠️  Calling tool: {name}")
+    logger.info(f"️  Calling tool: {name}")
 
     if name == "query_collective_wisdom":
         # Call Partisia MPC smart contract
@@ -432,7 +432,7 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
         )
 
         response = f"""
-🤝 **Collective Wisdom: {arguments['problem_type']}**
+ **Collective Wisdom: {arguments['problem_type']}**
 
 **Patterns Identified:**
 """
@@ -457,7 +457,7 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
         response += f"• Source Organizations: {result['privacy']['source_count']} (identities protected)\n"
         response += f"• K-Anonymity: {result['privacy']['k_anonymity']}\n"
         response += f"• Risk Score: {result['privacy']['risk_score']:.2f}\n"
-        response += f"• MPC Verified: ✅\n"
+        response += f"• MPC Verified: \n"
         response += f"• ZK Proof: {result['privacy']['zk_proof']}\n"
 
         return [TextContent(type="text", text=response)]
@@ -473,11 +473,11 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
         if "error" in result:
             return [TextContent(
                 type="text",
-                text=f"❌ {result['error']}\n\nAvailable metrics: {', '.join(result.get('available_metrics', []))}"
+                text=f" {result['error']}\n\nAvailable metrics: {', '.join(result.get('available_metrics', []))}"
             )]
 
         response = f"""
-📊 **Benchmark: {arguments['metric']}**
+ **Benchmark: {arguments['metric']}**
 
 **Statistics (from {result['org_count']} similar organizations):**
 • Median: {result['median']}
@@ -505,7 +505,7 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
         )
 
         response = f"""
-✅ **Computation Verified**
+ **Computation Verified**
 
 **Zero-Knowledge Proof:**
 • Proof Hash: {proof['proof_hash']}
@@ -517,7 +517,7 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
 The collective intelligence computation was performed correctly on the blockchain
 WITHOUT revealing any source organization data.
 
-This is cryptographically proven - no trust required! 🔐
+This is cryptographically proven - no trust required! 
         """
 
         return [TextContent(type="text", text=response)]
@@ -532,7 +532,7 @@ This is cryptographically proven - no trust required! 🔐
 async def list_prompts() -> List[Prompt]:
     """Provide prompt templates for collective intelligence queries"""
 
-    logger.info("💭 Listing prompts")
+    logger.info(" Listing prompts")
 
     return [
         Prompt(
@@ -579,7 +579,7 @@ async def list_prompts() -> List[Prompt]:
 async def get_prompt(name: str, arguments: dict) -> GetPromptResult:
     """Get prompt template"""
 
-    logger.info(f"💬 Getting prompt: {name}")
+    logger.info(f" Getting prompt: {name}")
 
     if name == "ask_collective":
         challenge = arguments["challenge"]
@@ -662,10 +662,10 @@ Use the blockchain-based collective intelligence tools to access privacy-preserv
 async def main():
     """Run MCP server"""
 
-    logger.info("🚀 Starting BCM Collective Intelligence MCP Server")
-    logger.info("📡 Connected to Partisia Blockchain MPC")
-    logger.info("🔒 Privacy: K-anonymity (minimum 5 organizations)")
-    logger.info("✅ Ready to serve collective intelligence to Claude!")
+    logger.info(" Starting BCM Collective Intelligence MCP Server")
+    logger.info(" Connected to Partisia Blockchain MPC")
+    logger.info(" Privacy: K-anonymity (minimum 5 organizations)")
+    logger.info(" Ready to serve collective intelligence to Claude!")
 
     async with stdio_server() as (read_stream, write_stream):
         await app.run(

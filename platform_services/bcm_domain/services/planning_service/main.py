@@ -99,11 +99,11 @@ async def lifespan(app: FastAPI):
             # Initialize Audit Logger
             audit_logger = AuditLogger(storage_adapter=workflow_storage)
             await audit_logger.ensure_schema()
-            logger.info("✅ Audit logging initialized")
+            logger.info(" Audit logging initialized")
 
             # Initialize ISO Compliance Checker
             iso_checker = ISO22301Checker()
-            logger.info("✅ ISO 22301 compliance checker initialized")
+            logger.info(" ISO 22301 compliance checker initialized")
 
             # Initialize Security Middleware
             jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -112,7 +112,7 @@ async def lifespan(app: FastAPI):
                 iso_checker=iso_checker,
                 jwt_secret=jwt_secret
             )
-            logger.info("✅ Security middleware initialized")
+            logger.info(" Security middleware initialized")
 
             # Set health metrics
             workflow_metrics.set_health("workflow_intelligence", True)
@@ -120,7 +120,7 @@ async def lifespan(app: FastAPI):
             workflow_metrics.set_health("audit_logging", True)
             workflow_metrics.set_health("iso_compliance", True)
 
-            logger.info("✅ Workflow Intelligence initialized (Planning module)")
+            logger.info(" Workflow Intelligence initialized (Planning module)")
         except Exception as e:
             logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -210,14 +210,14 @@ app = FastAPI(
 
     Strategy development and selection service aligned with ISO 22301:2019 Clause 8.3 requirements.
 
-    ## 🎯 Core Features
+    ##  Core Features
     - **Strategy Development**: Create and manage BC strategies based on BIA results
     - **Cost-Benefit Analysis**: NPV, ROI, Payback Period calculations
     - **Resource Planning**: Personnel, technology, facility requirements
     - **Approval Workflow**: Draft → Review → Approved state machine
     - **Financial Modeling**: Multi-year TCO and benefit projections
 
-    ## 📊 API Endpoints
+    ##  API Endpoints
 
     ### Strategy Management
     - `POST /api/strategies` - Create BC strategy
@@ -236,20 +236,20 @@ app = FastAPI(
     - `POST /api/strategies/{id}/submit-review` - Submit for review (Draft → Review)
     - `POST /api/strategies/{id}/approve` - Approve strategy (Review → Approved)
 
-    ## 🔐 Authentication
+    ##  Authentication
     - **JWT Bearer Token** required
     - **Tenant Isolation**: Automatic filtering by tenant_id from JWT
     - **RBAC**: STRATEGY_CREATE, STRATEGY_VIEW, STRATEGY_APPROVE permissions
 
-    ## 🏗️ ISO 22301:2019 Clause 8.3 Compliance
+    ## ️ ISO 22301:2019 Clause 8.3 Compliance
 
-    ✅ **Strategy Selection Criteria**
+     **Strategy Selection Criteria**
     - Based on BIA results (RTO/RPO requirements)
     - Cost-benefit analysis
     - Resource availability
     - Regulatory requirements
 
-    ✅ **Strategy Types**
+     **Strategy Types**
     - DO_NOTHING: Accept the risk
     - MANUAL_WORKAROUND: Temporary manual procedures
     - RECIPROCAL_ARRANGEMENT: Agreement with another organization
@@ -258,13 +258,13 @@ app = FastAPI(
     - FAST_RECOVERY: Hot standby, rapid recovery
     - IMMEDIATE_RECOVERY: Real-time failover
 
-    ✅ **Resource Planning**
+     **Resource Planning**
     - Personnel requirements
     - Technology infrastructure
     - Facilities and workspace
     - Third-party services
 
-    ## 💰 Financial Calculations
+    ##  Financial Calculations
 
     ### Net Present Value (NPV)
     ```
@@ -281,7 +281,7 @@ app = FastAPI(
     Time when Cumulative_Benefits >= Total_Investment
     ```
 
-    ## 📚 Request/Response Examples
+    ##  Request/Response Examples
 
     ### Create Strategy
     ```json
@@ -330,7 +330,7 @@ app = FastAPI(
     }
     ```
 
-    ## 🔍 Error Codes
+    ##  Error Codes
     - `400` - Validation error
     - `401` - Unauthorized
     - `403` - Forbidden (tenant mismatch)
@@ -338,12 +338,12 @@ app = FastAPI(
     - `409` - Invalid state transition
     - `422` - Business rule violation
 
-    ## 📖 Documentation
+    ##  Documentation
     - **Swagger UI**: /docs
     - **ReDoc**: /redoc
     - **Health Check**: /health
 
-    ## 🚀 Integration
+    ##  Integration
     - **Service Port**: 8011
     - **EventBus**: Port 8001
     - **Listens to**: bia.analysis.completed, risk.assessment.completed

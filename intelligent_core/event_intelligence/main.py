@@ -47,7 +47,7 @@ HOST = "0.0.0.0"
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     # Startup
-    logger.info("🚀 Starting Event Intelligence Service...")
+    logger.info(" Starting Event Intelligence Service...")
 
     # Initialize EventBus
     try:
@@ -55,33 +55,33 @@ async def lifespan(app: FastAPI):
             service_name="event-intelligence",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     # Initialize Auto-Discovery Engine
     try:
         await init_auto_discovery()
-        logger.info("✅ Auto-Discovery Engine started")
+        logger.info(" Auto-Discovery Engine started")
     except Exception as e:
-        logger.warning(f"⚠️ Auto-Discovery init failed: {e}")
+        logger.warning(f"️ Auto-Discovery init failed: {e}")
 
     # Initialize event intelligence components
     try:
         await initialize_event_intelligence()
-        logger.info("✅ Event Intelligence components ready")
+        logger.info(" Event Intelligence components ready")
     except Exception as e:
-        logger.warning(f"⚠️ Component init warning: {e}")
+        logger.warning(f"️ Component init warning: {e}")
 
-    logger.info("✅ Event Intelligence Service fully operational")
+    logger.info(" Event Intelligence Service fully operational")
     yield
 
     # Shutdown
-    logger.info("🛑 Shutting down Event Intelligence Service...")
+    logger.info(" Shutting down Event Intelligence Service...")
     bus = get_event_bus()
     if bus:
         await bus.close()
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 app = FastAPI(
     lifespan=lifespan,

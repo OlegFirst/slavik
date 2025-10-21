@@ -53,7 +53,7 @@ async def setup_event_subscribers(eventbus: EventBusClient):
         handler=on_case_approved
     )
 
-    logger.info("✅ Event subscribers registered")
+    logger.info(" Event subscribers registered")
 
 
 async def on_workflow_completed(event: Dict[str, Any]):
@@ -211,7 +211,7 @@ async def on_case_approved(event: Dict[str, Any]):
                 await db.commit()
 
                 logger.info(
-                    f"✅ Contribution {contribution_id} synced to workflow library "
+                    f" Contribution {contribution_id} synced to workflow library "
                     f"as {workflow_case_id}"
                 )
             elif contribution:
@@ -219,7 +219,7 @@ async def on_case_approved(event: Dict[str, Any]):
                 contribution.added_to_library = False
                 await db.commit()
                 logger.warning(
-                    f"⚠️ Contribution {contribution_id} approved but not synced to workflow library"
+                    f"️ Contribution {contribution_id} approved but not synced to workflow library"
                 )
 
             break  # Only need first iteration

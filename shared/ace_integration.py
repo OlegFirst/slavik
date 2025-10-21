@@ -58,9 +58,9 @@ class ACEIntegration:
                 from infrastructure.ace_service.ace_client import ACEClient
 
                 self.client = ACEClient(base_url=self.ace_url)
-                logger.info(f"✅ ACE Integration enabled for {module_name}")
+                logger.info(f" ACE Integration enabled for {module_name}")
             except Exception as e:
-                logger.warning(f"⚠️  ACE Integration disabled: {e}")
+                logger.warning(f"️  ACE Integration disabled: {e}")
                 self.enabled = False
         else:
             logger.info(f"ACE Integration disabled for {module_name} (ACE_ENABLED=false)")

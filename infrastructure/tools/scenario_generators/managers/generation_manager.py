@@ -176,15 +176,15 @@ class GenerationManager:
         """Initialize PostgreSQL, Qdrant, and EventBus if enabled."""
         if self.postgres_storage:
             await self.postgres_storage.initialize()
-            logger.info("✅ PostgreSQL storage initialized")
+            logger.info(" PostgreSQL storage initialized")
 
         if self.qdrant_storage:
             await self.qdrant_storage.initialize()
-            logger.info("✅ Qdrant storage initialized")
+            logger.info(" Qdrant storage initialized")
 
         if self.eventbus_client:
             await self.eventbus_client.initialize()
-            logger.info("✅ EventBus client initialized")
+            logger.info(" EventBus client initialized")
 
     async def close_storages(self):
         """Close storage connections."""
@@ -218,20 +218,20 @@ class GenerationManager:
         if self.postgres_storage:
             try:
                 result = await self.postgres_storage.bulk_register(full_scenarios)
-                logger.info(f"✅ PostgreSQL: {result['success']} scenarios saved, {result['failed']} failed")
+                logger.info(f" PostgreSQL: {result['success']} scenarios saved, {result['failed']} failed")
                 if result['errors']:
                     for error in result['errors'][:5]:  # First 5 errors
                         logger.error(f"  - {error}")
             except Exception as e:
-                logger.error(f"❌ PostgreSQL save failed: {e}")
+                logger.error(f" PostgreSQL save failed: {e}")
 
         # Save to Qdrant
         if self.qdrant_storage:
             try:
                 result = await self.qdrant_storage.bulk_register(full_scenarios)
-                logger.info(f"✅ Qdrant: {result['success']} scenarios indexed, {result['failed']} failed")
+                logger.info(f" Qdrant: {result['success']} scenarios indexed, {result['failed']} failed")
             except Exception as e:
-                logger.error(f"❌ Qdrant save failed: {e}")
+                logger.error(f" Qdrant save failed: {e}")
 
     async def generate_all(self, levels: Optional[List[str]] = None) -> Dict[str, Any]:
         """
@@ -331,7 +331,7 @@ class GenerationManager:
             self.stats["by_level"]["l1_platform"] = gen_stats
             self.stats["total_scenarios"] += gen_stats["generated"]
 
-            logger.info(f"✅ L1 Platform: {gen_stats['generated']}/{gen_stats['total']} scenarios")
+            logger.info(f" L1 Platform: {gen_stats['generated']}/{gen_stats['total']} scenarios")
 
             # Publish EventBus event
             if self.eventbus_client and EVENTBUS_AVAILABLE:
@@ -393,7 +393,7 @@ class GenerationManager:
             self.stats["by_level"]["l1_applications"] = gen_stats
             self.stats["total_scenarios"] += gen_stats["generated"]
 
-            logger.info(f"✅ L1 Applications: {gen_stats['generated']}/{gen_stats['total']} scenarios")
+            logger.info(f" L1 Applications: {gen_stats['generated']}/{gen_stats['total']} scenarios")
 
             return generated_ids
 
@@ -437,7 +437,7 @@ class GenerationManager:
             self.stats["by_level"]["l2_subsystems"] = gen_stats
             self.stats["total_scenarios"] += gen_stats["generated"]
 
-            logger.info(f"✅ L2 Subsystems: {gen_stats['generated']}/{gen_stats['total']} scenarios")
+            logger.info(f" L2 Subsystems: {gen_stats['generated']}/{gen_stats['total']} scenarios")
 
             return generated_ids
 
@@ -481,7 +481,7 @@ class GenerationManager:
             self.stats["by_level"]["l3_systems"] = gen_stats
             self.stats["total_scenarios"] += gen_stats["generated"]
 
-            logger.info(f"✅ L3 Systems: {gen_stats['generated']}/{gen_stats['total']} scenarios")
+            logger.info(f" L3 Systems: {gen_stats['generated']}/{gen_stats['total']} scenarios")
 
             return generated_ids
 
@@ -525,7 +525,7 @@ class GenerationManager:
             self.stats["by_level"]["l4_workflows"] = gen_stats
             self.stats["total_scenarios"] += gen_stats["generated"]
 
-            logger.info(f"✅ L4 Workflows: {gen_stats['generated']}/{gen_stats['total']} scenarios")
+            logger.info(f" L4 Workflows: {gen_stats['generated']}/{gen_stats['total']} scenarios")
 
             # Publish EventBus event
             if self.eventbus_client and EVENTBUS_AVAILABLE:
@@ -630,7 +630,7 @@ async def main():
               f"({progress.get('generated', 0)}/{progress.get('total', 0)})")
 
     if report['errors']:
-        print(f"\n⚠️  Errors ({len(report['errors'])}):")
+        print(f"\n️  Errors ({len(report['errors'])}):")
         for error in report['errors']:
             print(f"  - {error}")
 

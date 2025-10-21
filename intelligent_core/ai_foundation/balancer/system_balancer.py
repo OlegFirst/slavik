@@ -119,7 +119,7 @@ class SystemBalancer:
         self.running = False
         self.monitor_task: Optional[asyncio.Task] = None
 
-        logger.info("🧠 System Balancer initialized (check interval: {}s)".format(check_interval_seconds))
+        logger.info(" System Balancer initialized (check interval: {}s)".format(check_interval_seconds))
 
     async def start(self):
         """Запустить глобальный мониторинг баланса"""
@@ -143,7 +143,7 @@ class SystemBalancer:
         # Запустить мониторинг
         self.monitor_task = asyncio.create_task(self.monitor_global_balance())
 
-        logger.info("✅ System Balancer started")
+        logger.info(" System Balancer started")
 
     async def stop(self):
         """Остановить балансировщик"""
@@ -154,7 +154,7 @@ class SystemBalancer:
                 await self.monitor_task
             except asyncio.CancelledError:
                 pass
-        logger.info("✅ System Balancer stopped")
+        logger.info(" System Balancer stopped")
 
     async def monitor_global_balance(self):
         """
@@ -178,7 +178,7 @@ class SystemBalancer:
 
                 if imbalance and imbalance.state != BalanceState.BALANCED:
                     self.stats['imbalances_detected'] += 1
-                    logger.warning(f"⚠️  Global imbalance detected: {imbalance.state.value} (severity: {imbalance.severity:.2f})")
+                    logger.warning(f"️  Global imbalance detected: {imbalance.state.value} (severity: {imbalance.severity:.2f})")
 
                     # 3. Получить доступные ресурсы
                     available_resources = await self.get_available_resources()
@@ -353,7 +353,7 @@ class SystemBalancer:
             )
 
             allocations.append(allocation)
-            logger.debug(f"💰 {module_name}: {reasoning}")
+            logger.debug(f" {module_name}: {reasoning}")
 
         return allocations
 
@@ -382,7 +382,7 @@ class SystemBalancer:
                 })
 
             logger.info(
-                f"⚖️  Allocated resources to {allocation.module_name}: "
+                f"️  Allocated resources to {allocation.module_name}: "
                 f"CPU={allocation.allocated_cpu:.1f}%, "
                 f"Memory={allocation.allocated_memory:.0f}MB, "
                 f"Priority={allocation.priority_score:.2f}"
@@ -399,7 +399,7 @@ class SystemBalancer:
         """
         self.stats['stabilizations_triggered'] += 1
 
-        logger.warning(f"🚨 CRITICAL imbalance - triggering STABILIZATION")
+        logger.warning(f" CRITICAL imbalance - triggering STABILIZATION")
 
         # Опубликовать emergency event
         if self.eventbus:
@@ -454,7 +454,7 @@ class SystemBalancer:
             priority_level=3  # medium by default
         )
 
-        logger.debug(f"📊 Updated health for {module_name}: {health_score:.1f}")
+        logger.debug(f" Updated health for {module_name}: {health_score:.1f}")
 
     async def _handle_resource_snapshot(self, event: Dict[str, Any]):
         """Обработать snapshot ресурсов"""

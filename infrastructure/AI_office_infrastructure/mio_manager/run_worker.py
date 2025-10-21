@@ -80,17 +80,17 @@ async def main() -> None:
 
     Registers all workflows and activities, then runs the worker.
     """
-    logger.info("🚀 Starting MIO Manager Temporal Worker...")
+    logger.info(" Starting MIO Manager Temporal Worker...")
 
     try:
         # Connect to Temporal
         client = await get_temporal_client()
-        logger.info(f"✅ Connected to Temporal")
+        logger.info(f" Connected to Temporal")
         logger.info(f"   Namespace: {client.namespace}")
         logger.info(f"   Task Queue: {TASK_QUEUE}")
 
         # Create worker
-        logger.info("📦 Registering workflows and activities...")
+        logger.info(" Registering workflows and activities...")
 
         worker = Worker(
             client,
@@ -119,7 +119,7 @@ async def main() -> None:
             ]
         )
 
-        logger.info("✅ Worker configured")
+        logger.info(" Worker configured")
         logger.info("   Workflows:")
         logger.info("     - ObservationWorkflow (continuous monitoring)")
         logger.info("     - ReactionWorkflow (automated response)")
@@ -128,14 +128,14 @@ async def main() -> None:
         logger.info("   Activities: 10 registered")
 
         # Run worker (blocks until interrupted)
-        logger.info("🏃 Worker running... (Ctrl+C to stop)")
+        logger.info(" Worker running... (Ctrl+C to stop)")
         await worker.run()
 
     except KeyboardInterrupt:
-        logger.info("\n👋 Worker stopped by user")
+        logger.info("\n Worker stopped by user")
 
     except Exception as e:
-        logger.error(f"❌ Worker failed: {e}", exc_info=True)
+        logger.error(f" Worker failed: {e}", exc_info=True)
         sys.exit(1)
 
 

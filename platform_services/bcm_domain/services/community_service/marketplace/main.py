@@ -50,41 +50,41 @@ request_duration = Histogram(
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
-    logger.info("🚀 Marketplace Service starting...")
+    logger.info(" Marketplace Service starting...")
     await init_db()
-    logger.info("✅ Database initialized")
+    logger.info(" Database initialized")
 
     # Initialize EventBus
     eventbus_url = os.getenv('EVENTBUS_URL', 'http://localhost:8001')
     await init_eventbus(eventbus_url, service_name="marketplace-service")
-    logger.info(f"✅ EventBus initialized ({eventbus_url})")
+    logger.info(f" EventBus initialized ({eventbus_url})")
 
     # Register event subscribers
     try:
         from events.subscribers import setup_subscriptions
         await setup_subscriptions()
-        logger.info("✅ Event subscribers registered")
+        logger.info(" Event subscribers registered")
     except Exception as e:
-        logger.warning(f"⚠️  Failed to register event subscribers: {e}")
+        logger.warning(f"️  Failed to register event subscribers: {e}")
         # Don't fail startup if event subscriptions fail
 
     # Log integration endpoints
-    logger.info(f"📡 Portal URL: {os.getenv('PORTAL_URL', 'http://localhost:8031')}")
+    logger.info(f" Portal URL: {os.getenv('PORTAL_URL', 'http://localhost:8031')}")
 
     yield
 
     # Shutdown
-    logger.info("🛑 Marketplace Service shutting down...")
+    logger.info(" Marketplace Service shutting down...")
 
     # Close EventBus
     eventbus = get_eventbus()
     if eventbus:
         await eventbus.disconnect()
-    logger.info("✅ EventBus disconnected")
+    logger.info(" EventBus disconnected")
 
     await close_db()
     await portal_client.close()
-    logger.info("✅ All connections closed")
+    logger.info(" All connections closed")
 
 
 # Create FastAPI app
@@ -116,7 +116,7 @@ app.include_router(reviews.router)
 metrics_app = make_asgi_app()
 app.mount("/metrics", metrics_app)
 
-logger.info("✅ All API routers registered")
+logger.info(" All API routers registered")
 logger.info("   - Specialists: /api/marketplace/specialists")
 logger.info("   - Projects: /api/marketplace/projects")
 logger.info("   - Proposals: /api/marketplace/proposals")

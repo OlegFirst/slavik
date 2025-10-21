@@ -81,11 +81,11 @@ async def lifespan(app: FastAPI):
             # Initialize Audit Logger
             audit_logger = AuditLogger(storage_adapter=workflow_storage)
             await audit_logger.ensure_schema()
-            logger.info("✅ Audit logging initialized")
+            logger.info(" Audit logging initialized")
 
             # Initialize ISO Compliance Checker
             iso_checker = ISO22301Checker()
-            logger.info("✅ ISO 22301 compliance checker initialized")
+            logger.info(" ISO 22301 compliance checker initialized")
 
             # Initialize Security Middleware
             jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -94,7 +94,7 @@ async def lifespan(app: FastAPI):
                 iso_checker=iso_checker,
                 jwt_secret=jwt_secret
             )
-            logger.info("✅ Security middleware initialized")
+            logger.info(" Security middleware initialized")
 
             # Set health metrics
             workflow_metrics.set_health("workflow_intelligence", True)
@@ -102,7 +102,7 @@ async def lifespan(app: FastAPI):
             workflow_metrics.set_health("audit_logging", True)
             workflow_metrics.set_health("iso_compliance", True)
 
-            logger.info("✅ Workflow Intelligence initialized (Plans module)")
+            logger.info(" Workflow Intelligence initialized (Plans module)")
         except Exception as e:
             logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -197,7 +197,7 @@ app = FastAPI(
 
     Comprehensive BC plan management aligned with ISO 22301:2019 Clause 8.4 requirements.
 
-    ## 🎯 Core Features
+    ##  Core Features
     - **Plan Management**: Create, version, and maintain BC plans
     - **Procedure Tracking**: Step-by-step recovery procedures with dependencies
     - **Resource Management**: Track personnel, facilities, technology, supplies
@@ -206,7 +206,7 @@ app = FastAPI(
     - **Testing & Exercises**: Schedule and track plan tests
     - **Review Workflow**: Draft → Under Review → Approved → Active
 
-    ## 📊 API Endpoints (25+)
+    ##  API Endpoints (25+)
 
     ### Plan Management
     - `POST /api/plans/plans` - Create BC plan
@@ -248,39 +248,39 @@ app = FastAPI(
     - `GET /api/plans/plans/{id}/reviews` - List plan reviews
     - **Review Triggers**: SCHEDULED, POST_INCIDENT, POST_EXERCISE, REGULATORY
 
-    ## 🔐 Authentication
+    ##  Authentication
     - **JWT Bearer Token** required
     - **Tenant Isolation**: Automatic filtering by tenant_id
     - **RBAC**: PLAN_CREATE, PLAN_VIEW, PLAN_APPROVE, PLAN_ACTIVATE permissions
 
-    ## 🏗️ ISO 22301:2019 Clause 8.4 Compliance
+    ## ️ ISO 22301:2019 Clause 8.4 Compliance
 
     ### Clause 8.4.1 - General
-    ✅ Documented BC plans and procedures
-    ✅ Plan scope and objectives
-    ✅ Version control and change management
-    ✅ Review and update schedules
+     Documented BC plans and procedures
+     Plan scope and objectives
+     Version control and change management
+     Review and update schedules
 
     ### Clause 8.4.2 - Incident Response Structure
-    ✅ Incident response team roles
-    ✅ Decision-making authority
-    ✅ Escalation procedures
-    ✅ Command and control structure
+     Incident response team roles
+     Decision-making authority
+     Escalation procedures
+     Command and control structure
 
     ### Clause 8.4.3 - Warning and Communication
-    ✅ Contact lists (internal/external)
-    ✅ Communication methods
-    ✅ Message templates
-    ✅ Communication cascades
+     Contact lists (internal/external)
+     Communication methods
+     Message templates
+     Communication cascades
 
     ### Clause 8.4.4 - BC Plans and Procedures Content
-    ✅ Step-by-step procedures
-    ✅ Resource requirements
-    ✅ Dependencies and prerequisites
-    ✅ Recovery priorities
-    ✅ Roles and responsibilities
+     Step-by-step procedures
+     Resource requirements
+     Dependencies and prerequisites
+     Recovery priorities
+     Roles and responsibilities
 
-    ## 📚 Request/Response Examples
+    ##  Request/Response Examples
 
     ### Create Plan
     ```json
@@ -321,7 +321,7 @@ app = FastAPI(
     }
     ```
 
-    ## 🔄 Plan Lifecycle Workflow
+    ##  Plan Lifecycle Workflow
 
     ```
     DRAFT → UNDER_REVIEW → APPROVED → ACTIVE → RETIRED
@@ -337,7 +337,7 @@ app = FastAPI(
     - ACTIVE → SUSPENDED (suspend temporarily)
     - ACTIVE/SUSPENDED → RETIRED (retire/archive)
 
-    ## 🔍 Error Codes
+    ##  Error Codes
     - `400` - Validation error
     - `401` - Unauthorized
     - `403` - Forbidden
@@ -345,12 +345,12 @@ app = FastAPI(
     - `409` - Invalid state transition
     - `422` - Business rule violation (e.g., circular dependencies)
 
-    ## 📖 Documentation
+    ##  Documentation
     - **Swagger UI**: /docs
     - **ReDoc**: /redoc
     - **Health Check**: /health
 
-    ## 🚀 Integration
+    ##  Integration
     - **Service Port**: 8023
     - **EventBus**: Port 8001
     - **Listens to**: planning.strategy.approved, bia.analysis.completed, exercise.completed

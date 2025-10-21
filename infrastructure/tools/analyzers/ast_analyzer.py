@@ -75,7 +75,7 @@ class ASTAnalyzer:
 
     def analyze_project(self) -> Dict[str, Any]:
         """Сканировать весь проект"""
-        print("🔍 Scanning project for functions, classes, endpoints...")
+        print(" Scanning project for functions, classes, endpoints...")
 
         # Use 'analysis_targets' or 'scan_paths' depending on config format
         scan_paths = self.config.get('scan_paths') or self.config.get('analysis_targets', [])
@@ -83,10 +83,10 @@ class ASTAnalyzer:
         for scan_path in scan_paths:
             path = Path(scan_path)
             if not path.exists():
-                print(f"⚠️  Path not found: {path}")
+                print(f"️  Path not found: {path}")
                 continue
 
-            print(f"\n📂 Analyzing: {scan_path}")
+            print(f"\n Analyzing: {scan_path}")
             self._scan_directory(path)
 
         return {
@@ -112,15 +112,15 @@ class ASTAnalyzer:
             try:
                 self._analyze_file(py_file)
             except SyntaxError as e:
-                error_msg = f"⚠️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
+                error_msg = f"️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
                 print(error_msg)
                 errors.append({'file': str(py_file), 'error': str(e), 'type': 'SyntaxError'})
             except UnicodeDecodeError as e:
-                error_msg = f"⚠️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
+                error_msg = f"️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
                 print(error_msg)
                 errors.append({'file': str(py_file), 'error': str(e), 'type': 'UnicodeDecodeError'})
             except Exception as e:
-                error_msg = f"⚠️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
+                error_msg = f"️  Error analyzing {py_file}: {e.__class__.__name__}: {e}"
                 print(error_msg)
                 errors.append({'file': str(py_file), 'error': str(e), 'type': type(e).__name__})
 
@@ -295,7 +295,7 @@ class ASTAnalyzer:
         json_file = output_path / "ast_analysis.json"
         with open(json_file, 'w') as f:
             json.dump(results, f, indent=2)
-        print(f"\n✅ JSON report: {json_file}")
+        print(f"\n JSON report: {json_file}")
 
         # Errors log
         if hasattr(self, 'errors') and self.errors:
@@ -308,15 +308,15 @@ class ASTAnalyzer:
                     f.write(f"Type: {error['type']}\n")
                     f.write(f"Error: {error['error']}\n")
                     f.write("-" * 80 + "\n\n")
-            print(f"⚠️  Error log: {errors_file} ({len(self.errors)} errors)")
+            print(f"️  Error log: {errors_file} ({len(self.errors)} errors)")
 
         # Markdown
         md_file = output_path / "ast_analysis.md"
         self._generate_markdown(results, md_file)
-        print(f"✅ Markdown report: {md_file}")
+        print(f" Markdown report: {md_file}")
 
         # Summary
-        print(f"\n📊 SUMMARY:")
+        print(f"\n SUMMARY:")
         print(f"   Functions: {results['summary']['total_functions']}")
         print(f"   Classes: {results['summary']['total_classes']}")
         print(f"   Endpoints: {results['summary']['total_endpoints']}")

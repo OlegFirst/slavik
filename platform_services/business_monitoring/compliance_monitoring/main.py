@@ -372,7 +372,7 @@ Action may be required to maintain compliance.
             async with aiofiles.open(latest_file, 'w') as f:
                 await f.write(json.dumps(data, indent=2, default=str))
 
-            logger.info(f"💾 Compliance data saved to {snapshot_file}")
+            logger.info(f" Compliance data saved to {snapshot_file}")
 
         except Exception as e:
             logger.error(f"Failed to save compliance data: {e}")
@@ -417,7 +417,7 @@ Action may be required to maintain compliance.
 
                 self.audit_requirements[audit_id] = AuditRequirement(**audit_data)
 
-            logger.info(f"📂 Compliance data loaded: {len(self.alerts)} alerts, {len(self.nonconformities)} nonconformities")
+            logger.info(f" Compliance data loaded: {len(self.alerts)} alerts, {len(self.nonconformities)} nonconformities")
 
         except Exception as e:
             logger.error(f"Failed to load compliance data: {e}")
@@ -434,10 +434,10 @@ try:
     from automation_toolkit import AutomationToolkitIntegration
 
     toolkit = AutomationToolkitIntegration()
-    logger.info("✅ Automation Toolkit integration loaded")
+    logger.info(" Automation Toolkit integration loaded")
 except ImportError as e:
     toolkit = None
-    logger.warning(f"⚠️  Automation Toolkit not available: {e}")
+    logger.warning(f"️  Automation Toolkit not available: {e}")
 
 # Setup scheduler for automated jobs
 scheduler = AsyncIOScheduler()
@@ -460,8 +460,8 @@ async def startup_event():
     os.makedirs(Config.PROMETHEUS_SD_DIR, exist_ok=True)
 
     logger.info("ISO 22301 Compliance Service started successfully")
-    logger.info(f"📁 Compliance data directory: {Config.COMPLIANCE_DATA_DIR}")
-    logger.info(f"📝 Prometheus SD directory: {Config.PROMETHEUS_SD_DIR}")
+    logger.info(f" Compliance data directory: {Config.COMPLIANCE_DATA_DIR}")
+    logger.info(f" Prometheus SD directory: {Config.PROMETHEUS_SD_DIR}")
 
     # Load previous compliance data
     await storage.load_from_disk()
@@ -471,18 +471,18 @@ async def startup_event():
     # Start automated jobs if toolkit is available
     if toolkit:
         scheduler.start()
-        logger.info("🤖 Automation Toolkit scheduler started")
+        logger.info(" Automation Toolkit scheduler started")
 
         # Add daily backup job
         @scheduler.scheduled_job('cron', hour=3, minute=0, id='daily_backup')
         async def job_daily_backup():
             """Save compliance data snapshot daily at 3 AM"""
             try:
-                logger.info("💾 Running daily compliance data backup...")
+                logger.info(" Running daily compliance data backup...")
                 await storage.save_to_disk()
-                logger.info("✅ Daily backup complete")
+                logger.info(" Daily backup complete")
             except Exception as e:
-                logger.error(f"❌ Daily backup failed: {e}")
+                logger.error(f" Daily backup failed: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -928,7 +928,7 @@ if toolkit:
     async def job_auto_discover():
         """Auto-discover new services every 5 minutes"""
         try:
-            logger.info("🔍 Running automated service discovery...")
+            logger.info(" Running automated service discovery...")
             results = await toolkit.discover_services()
 
             # Save results to disk
@@ -942,15 +942,15 @@ if toolkit:
 
             if 'coverage' in results:
                 coverage = results['coverage']['percentage']
-                logger.info(f"✅ Service discovery complete: {coverage:.1f}% coverage")
+                logger.info(f" Service discovery complete: {coverage:.1f}% coverage")
 
                 # Auto-register if new services found
                 if coverage < 100:
-                    logger.info("📝 Auto-registering discovered services...")
+                    logger.info(" Auto-registering discovered services...")
                     await toolkit.register_discovered_services()
 
         except Exception as e:
-            logger.error(f"❌ Auto-discovery job failed: {e}")
+            logger.error(f" Auto-discovery job failed: {e}")
 
 
     # Job 2: Security scan every hour
@@ -958,7 +958,7 @@ if toolkit:
     async def job_security_scan():
         """Run security scan every hour"""
         try:
-            logger.info("🔒 Running hourly security scan...")
+            logger.info(" Running hourly security scan...")
             results = await toolkit.run_security_scan()
 
             # Save results to disk
@@ -974,7 +974,7 @@ if toolkit:
                 high = results.get('high_severity', 0)
                 medium = results.get('medium_severity', 0)
 
-                logger.warning(f"⚠️  Security issues: HIGH={high}, MEDIUM={medium}")
+                logger.warning(f"️  Security issues: HIGH={high}, MEDIUM={medium}")
 
                 # Create compliance alert if HIGH issues found
                 if high > 0:
@@ -990,7 +990,7 @@ if toolkit:
                     storage.add_alert(alert)
 
         except Exception as e:
-            logger.error(f"❌ Security scan job failed: {e}")
+            logger.error(f" Security scan job failed: {e}")
 
 
     # Job 3: Code complexity analysis daily at 2 AM
@@ -998,7 +998,7 @@ if toolkit:
     async def job_complexity_analysis():
         """Run code complexity analysis daily"""
         try:
-            logger.info("📊 Running daily code complexity analysis...")
+            logger.info(" Running daily code complexity analysis...")
             results = await toolkit.analyze_code_complexity()
 
             # Save results to disk
@@ -1014,7 +1014,7 @@ if toolkit:
                 avg = results['avg_complexity']
                 high_funcs = len(results.get('high_complexity_functions', []))
 
-                logger.info(f"📈 Complexity: avg={avg:.1f}, high_complexity_functions={high_funcs}")
+                logger.info(f" Complexity: avg={avg:.1f}, high_complexity_functions={high_funcs}")
 
                 # Alert if average complexity is too high
                 if avg > 10:
@@ -1030,10 +1030,10 @@ if toolkit:
                     storage.add_alert(alert)
 
         except Exception as e:
-            logger.error(f"❌ Complexity analysis job failed: {e}")
+            logger.error(f" Complexity analysis job failed: {e}")
 
 
-    logger.info("🤖 Automated jobs configured:")
+    logger.info(" Automated jobs configured:")
     logger.info("  - Service discovery: every 5 minutes")
     logger.info("  - Security scan: every hour")
     logger.info("  - Complexity analysis: daily at 2 AM")
@@ -1171,7 +1171,7 @@ async def get_compliance_dashboard():
                                 <p><strong>Type:</strong> ${info.type}</p>
                                 <p><strong>ISO Clauses:</strong><br>${clausesHtml}</p>
                                 <p>${info.description}</p>
-                                ${info.compliance_critical ? '<p style="color: #dc3545; font-weight: bold;">⚠ COMPLIANCE CRITICAL</p>' : ''}
+                                ${info.compliance_critical ? '<p style="color: #dc3545; font-weight: bold;"> COMPLIANCE CRITICAL</p>' : ''}
                             </div>
                         `;
                     }

@@ -465,7 +465,7 @@ async def run_full_learning_cycle(
 async def _process_learning_cycle(needs_result: dict):
     """Background task для полного цикла"""
     try:
-        logger.info("🔄 Processing full learning cycle...")
+        logger.info(" Processing full learning cycle...")
 
         # Step 2-3: Create learning paths from KB
         for need in needs_result['prioritized_needs'][:10]:  # Top 10
@@ -481,7 +481,7 @@ async def _process_learning_cycle(needs_result: dict):
         # Step 5: Sync external
         await kb_integrator.sync_external_knowledge()
 
-        logger.info("✅ Full learning cycle complete")
+        logger.info(" Full learning cycle complete")
 
     except Exception as e:
         logger.error(f"Error in learning cycle: {e}")

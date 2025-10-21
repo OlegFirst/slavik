@@ -42,7 +42,7 @@ class InfrastructureExecutor:
         Returns:
             Deployment result
         """
-        logger.info(f"🚀 Deploying layer: {layer}")
+        logger.info(f" Deploying layer: {layer}")
 
         try:
             compose_file = self.deployment_dir / 'generated' / f'docker-compose.{layer}.yml'
@@ -62,21 +62,21 @@ class InfrastructureExecutor:
             )
 
             if result.returncode == 0:
-                logger.info(f"✅ Layer {layer} deployed successfully")
+                logger.info(f" Layer {layer} deployed successfully")
                 return {
                     'success': True,
                     'layer': layer,
                     'output': result.stdout
                 }
             else:
-                logger.error(f"❌ Deployment failed: {result.stderr}")
+                logger.error(f" Deployment failed: {result.stderr}")
                 return {
                     'success': False,
                     'error': result.stderr
                 }
 
         except Exception as e:
-            logger.error(f"❌ Error deploying: {e}")
+            logger.error(f" Error deploying: {e}")
             return {'success': False, 'error': str(e)}
 
     async def restart_service(self, service: str) -> Dict:
@@ -89,7 +89,7 @@ class InfrastructureExecutor:
         Returns:
             Restart result
         """
-        logger.info(f"🔄 Restarting service: {service}")
+        logger.info(f" Restarting service: {service}")
 
         try:
             result = subprocess.run(
@@ -99,21 +99,21 @@ class InfrastructureExecutor:
             )
 
             if result.returncode == 0:
-                logger.info(f"✅ Service {service} restarted")
+                logger.info(f" Service {service} restarted")
                 return {
                     'success': True,
                     'service': service,
                     'output': result.stdout
                 }
             else:
-                logger.error(f"❌ Restart failed: {result.stderr}")
+                logger.error(f" Restart failed: {result.stderr}")
                 return {
                     'success': False,
                     'error': result.stderr
                 }
 
         except Exception as e:
-            logger.error(f"❌ Error restarting: {e}")
+            logger.error(f" Error restarting: {e}")
             return {'success': False, 'error': str(e)}
 
     async def stop_service(self, service: str) -> Dict:
@@ -126,7 +126,7 @@ class InfrastructureExecutor:
         Returns:
             Stop result
         """
-        logger.info(f"🛑 Stopping service: {service}")
+        logger.info(f" Stopping service: {service}")
 
         try:
             result = subprocess.run(
@@ -136,21 +136,21 @@ class InfrastructureExecutor:
             )
 
             if result.returncode == 0:
-                logger.info(f"✅ Service {service} stopped")
+                logger.info(f" Service {service} stopped")
                 return {
                     'success': True,
                     'service': service,
                     'output': result.stdout
                 }
             else:
-                logger.error(f"❌ Stop failed: {result.stderr}")
+                logger.error(f" Stop failed: {result.stderr}")
                 return {
                     'success': False,
                     'error': result.stderr
                 }
 
         except Exception as e:
-            logger.error(f"❌ Error stopping: {e}")
+            logger.error(f" Error stopping: {e}")
             return {'success': False, 'error': str(e)}
 
     async def health_check(self, service: str) -> Dict:

@@ -34,7 +34,7 @@ class WorkflowSubscriber(BaseSubscriber):
         )
 
     async def handle_workflow_event(self, event: Event):
-        print(f"📝 Workflow event: {event.type}")
+        print(f" Workflow event: {event.type}")
 
 
 class NotificationSubscriber(BaseSubscriber):
@@ -49,7 +49,7 @@ class NotificationSubscriber(BaseSubscriber):
 
     async def handle_notification(self, event: Event):
         message = event.data.get('message')
-        print(f"🔔 Notification: {message}")
+        print(f" Notification: {message}")
 
 
 class AuditSubscriber(BaseSubscriber):
@@ -101,7 +101,7 @@ async def startup():
 
     This is called once when FastAPI starts.
     """
-    print("🚀 Starting BCM Platform...")
+    print(" Starting BCM Platform...")
     print()
 
     # 1. Create EventBus
@@ -114,7 +114,7 @@ async def startup():
         # redis_url='redis://localhost:6379'
     )
 
-    print("✅ EventBus created (backend: memory)")
+    print(" EventBus created (backend: memory)")
 
     # 2. Initialize subscribers
     subscribers = [
@@ -127,14 +127,14 @@ async def startup():
     for subscriber in subscribers:
         await subscriber.setup_subscriptions(eventbus)
         sub_count = subscriber.get_subscription_count()
-        print(f"✅ {subscriber.__class__.__name__}: {sub_count} subscriptions")
+        print(f" {subscriber.__class__.__name__}: {sub_count} subscriptions")
 
     # 4. Store in app state for dependency injection
     app.state.eventbus = eventbus
     app.state.subscribers = subscribers
 
     print()
-    print("🎉 BCM Platform ready!")
+    print(" BCM Platform ready!")
     print()
 
 
@@ -146,7 +146,7 @@ async def shutdown():
     This is called when FastAPI shuts down (e.g., Ctrl+C).
     """
     print()
-    print("👋 Shutting down BCM Platform...")
+    print(" Shutting down BCM Platform...")
 
     # Cleanup subscribers
     for subscriber in app.state.subscribers:
@@ -155,7 +155,7 @@ async def shutdown():
     # Close EventBus
     await app.state.eventbus.close()
 
-    print("✅ Cleanup complete")
+    print(" Cleanup complete")
 
 
 # ============================================================================
@@ -250,7 +250,7 @@ async def complete_workflow(
     notification_event = Event.create(
         event_type='notification.send',
         data={
-            'message': f"🎉 Workflow '{workflow_id}' completed!"
+            'message': f" Workflow '{workflow_id}' completed!"
         },
         source='api',
         tenant_id='tenant_default',
@@ -346,7 +346,7 @@ async def demo():
     # Show stats
     print("-" * 60)
     stats = await bus.get_stats()
-    print(f"📊 Statistics:")
+    print(f" Statistics:")
     print(f"   Published: {stats['published']}")
     print(f"   Consumed: {stats['consumed']}")
     print(f"   Errors: {stats['errors']}")

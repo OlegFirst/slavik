@@ -33,7 +33,7 @@ try {
             process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
         );
     } else {
-        console.log('🔧 Development mode: Supabase disabled');
+        console.log(' Development mode: Supabase disabled');
         supabase = {
             // Mock Supabase interface for development
             from: () => ({
@@ -45,7 +45,7 @@ try {
         };
     }
 } catch (error) {
-    console.log('⚠️ Supabase connection failed, using mock interface:', error.message);
+    console.log('️ Supabase connection failed, using mock interface:', error.message);
     supabase = {
         from: () => ({
             select: () => Promise.resolve({ data: [], error: null }),
@@ -171,9 +171,9 @@ app.get('/api/organizations', async (req, res) => {
                     bcm_client_id: org.bcm_client_id?.[0] || null,
                     last_updated: org.last_updated
                 }));
-                console.log(`📊 Retrieved ${organizations.length} organizations from Odoo`);
+                console.log(` Retrieved ${organizations.length} organizations from Odoo`);
             } catch (odooError) {
-                console.log('⚠️ Odoo unavailable, falling back to PostgreSQL:', odooError.message);
+                console.log('️ Odoo unavailable, falling back to PostgreSQL:', odooError.message);
             }
         }
 
@@ -238,9 +238,9 @@ app.post('/api/organizations', async (req, res) => {
                     created_at: new Date().toISOString()
                 };
                 createdInOdoo = true;
-                console.log(`✅ Organization created in Odoo with ID: ${odooId}`);
+                console.log(` Organization created in Odoo with ID: ${odooId}`);
             } catch (odooError) {
-                console.log('⚠️ Failed to create in Odoo:', odooError.message);
+                console.log('️ Failed to create in Odoo:', odooError.message);
                 if (integrationMode === 'odoo-only') {
                     throw odooError;
                 }
@@ -251,7 +251,7 @@ app.post('/api/organizations', async (req, res) => {
             // Fallback к PostgreSQL
             const pgOrganization = await database.createOrganization(req.body);
             organization = { ...pgOrganization, source: 'postgresql' };
-            console.log(`✅ Organization created in PostgreSQL with ID: ${pgOrganization.id}`);
+            console.log(` Organization created in PostgreSQL with ID: ${pgOrganization.id}`);
         }
 
         res.status(201).json({
@@ -400,7 +400,7 @@ app.put('/api/digital-twins/:id/sync', async (req, res) => {
         const organizationId = req.params.id;
         const syncData = req.body;
 
-        console.log(`🔄 Syncing organization ${organizationId} with BCM data`);
+        console.log(` Syncing organization ${organizationId} with BCM data`);
 
         // Mock sync process - в реальности здесь будет обращение к базе данных
         const updatedConfig = {
@@ -422,7 +422,7 @@ app.put('/api/digital-twins/:id/sync', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Sync failed:', error);
+        console.error(' Sync failed:', error);
         res.status(500).json({
             success: false,
             error: error.message
@@ -552,12 +552,12 @@ async function generateAIConsultantResponse(message, context) {
         return {
             text: `Оценка готовности к кризисам показывает:
 
-✅ **Сильные стороны:**
+ **Сильные стороны:**
 - Наличие базового плана BCM
 - Обученная команда реагирования
 - Резервные системы данных
 
-⚠️ **Области для улучшения:**
+️ **Области для улучшения:**
 - Тестирование планов (последнее - 6 месяцев назад)
 - Обновление контактов экстренной связи
 - Интеграция с поставщиками
@@ -574,7 +574,7 @@ async function generateAIConsultantResponse(message, context) {
         return {
             text: `Создаю план восстановления для вашей организации:
 
-**📋 План восстановления бизнеса**
+** План восстановления бизнеса**
 
 **1. Критические процессы (RTO < 4 часа):**
 - Обработка платежей клиентов
@@ -605,19 +605,19 @@ async function generateAIConsultantResponse(message, context) {
         return {
             text: `Проверка соответствия ISO 22301:
 
-**📊 Результаты аудита:**
+** Результаты аудита:**
 
-✅ **Соответствует (78%):**
+ **Соответствует (78%):**
 - Контекст организации
 - Лидерство и обязательства
 - Планирование BCM
 - Документированная информация
 
-⚠️ **Частично соответствует (15%):**
+️ **Частично соответствует (15%):**
 - Оценка эффективности
 - Внутренний аудит
 
-❌ **Требует доработки (7%):**
+ **Требует доработки (7%):**
 - Непрерывное улучшение
 - Метрики производительности
 
@@ -646,10 +646,10 @@ async function generateAIConsultantResponse(message, context) {
 - Готовность к кризисам: Хорошая
 
 Могу предоставить детальный анализ по следующим направлениям:
-- 📊 Анализ рисков
-- 🛡️ Оценка готовности
-- 📋 Планы восстановления
-- ✅ Соответствие ISO 22301
+-  Анализ рисков
+- ️ Оценка готовности
+-  Планы восстановления
+-  Соответствие ISO 22301
 
 Что именно вас интересует?`,
             insights: {
@@ -666,7 +666,7 @@ app.post('/api/bcm/scenarios/business-continuity', async (req, res) => {
     try {
         const { scenarioType, organizationData, parameters } = req.body;
 
-        console.log(`🔬 Running BCM scenario: ${scenarioType}`);
+        console.log(` Running BCM scenario: ${scenarioType}`);
 
         // Advanced business continuity scenario simulation
         const scenarioResults = await runBCMScenarioSimulation(scenarioType, organizationData, parameters);
@@ -680,7 +680,7 @@ app.post('/api/bcm/scenarios/business-continuity', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ BCM scenario failed:', error);
+        console.error(' BCM scenario failed:', error);
         res.status(500).json({
             success: false,
             error: error.message
@@ -1265,7 +1265,7 @@ async function startServer() {
 ║                                           ║
 ║   URL: http://localhost:${PORT}               ║
 ║   API: http://localhost:${PORT}/api           ║
-║   Database: ${dbConnected ? '✅ Connected' : '⚠️ In-Memory'}    ║
+║   Database: ${dbConnected ? ' Connected' : '️ In-Memory'}    ║
 ║                                           ║
 ║   Press Ctrl+C to stop                   ║
 ╚═══════════════════════════════════════════╝

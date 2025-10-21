@@ -113,9 +113,9 @@ async def startup_event():
 
         if supabase_url and supabase_key:
             supabase = create_client(supabase_url, supabase_key)
-            logger.info("✅ Connected to Supabase PostgreSQL")
+            logger.info(" Connected to Supabase PostgreSQL")
         else:
-            logger.warning("⚠️  Supabase not configured - notifications will only be cached in Redis")
+            logger.warning("️  Supabase not configured - notifications will only be cached in Redis")
 
         # Redis подключение
         redis_url = os.getenv("REDIS_URL")
@@ -127,9 +127,9 @@ async def startup_event():
                 socket_keepalive=True
             )
             redis_client.ping()
-            logger.info("✅ Connected to Redis")
+            logger.info(" Connected to Redis")
         else:
-            logger.error("❌ Redis URL not configured")
+            logger.error(" Redis URL not configured")
             raise Exception("REDIS_URL is required")
 
         # RabbitMQ подключение (optional)
@@ -144,14 +144,14 @@ async def startup_event():
             rabbitmq_channel.queue_declare(queue='notifications.push', durable=True)
             rabbitmq_channel.queue_declare(queue='notifications.webhook', durable=True)
 
-            logger.info("✅ Connected to RabbitMQ")
+            logger.info(" Connected to RabbitMQ")
         else:
             logger.info("ℹ️  RabbitMQ not configured (direct delivery only)")
 
-        logger.info("🚀 Notification Service started successfully")
+        logger.info(" Notification Service started successfully")
 
     except Exception as e:
-        logger.error(f"❌ Startup error: {e}")
+        logger.error(f" Startup error: {e}")
         raise
 
 @app.on_event("shutdown")
@@ -161,7 +161,7 @@ async def shutdown_event():
         rabbitmq_connection.close()
     if redis_client:
         redis_client.close()
-    logger.info("🛑 Notification Service stopped")
+    logger.info(" Notification Service stopped")
 
 # ============================================
 # Helper Functions
@@ -198,7 +198,7 @@ async def save_notification_to_db(
 
         if result.data:
             notification_id = result.data[0]["id"]
-            logger.info(f"📝 Notification saved to DB: {notification_id}")
+            logger.info(f" Notification saved to DB: {notification_id}")
             return notification_id
         else:
             logger.error("Failed to save notification to DB")
@@ -231,7 +231,7 @@ async def update_notification_status(
             update_data["error_message"] = error_message
 
         supabase.table("notifications").update(update_data).eq("id", notification_id).execute()
-        logger.info(f"✅ Notification {notification_id} status updated to {status}")
+        logger.info(f" Notification {notification_id} status updated to {status}")
 
     except Exception as e:
         logger.error(f"Error updating notification status: {e}")
@@ -283,7 +283,7 @@ async def publish_to_rabbitmq(
             )
         )
 
-        logger.info(f"📤 Message published to RabbitMQ queue: {queue_name}")
+        logger.info(f" Message published to RabbitMQ queue: {queue_name}")
         return True
 
     except Exception as e:
@@ -315,7 +315,7 @@ async def send_email(notification: EmailNotification, background_tasks: Backgrou
     start_time = datetime.now()
 
     try:
-        logger.info(f"📧 Отправка email: {notification.subject} -> {notification.to}")
+        logger.info(f" Отправка email: {notification.subject} -> {notification.to}")
 
         # 1. Save to database
         notification_id = await save_notification_to_db(
@@ -366,7 +366,7 @@ async def send_email(notification: EmailNotification, background_tasks: Backgrou
         }
 
     except Exception as e:
-        logger.error(f"❌ Ошибка отправки email: {e}")
+        logger.error(f" Ошибка отправки email: {e}")
         notifications_sent.labels(channel="email", status="failed").inc()
 
         if notification_id:
@@ -386,13 +386,13 @@ async def process_email_notification(notification: EmailNotification, notificati
 
         if all([smtp_host, smtp_user, smtp_password]):
             # Actual SMTP sending would go here
-            logger.info(f"📤 Sending email via SMTP: {smtp_host}")
+            logger.info(f" Sending email via SMTP: {smtp_host}")
             # ... SMTP implementation ...
 
-        logger.info(f"✅ Email processed successfully: {notification_id}")
+        logger.info(f" Email processed successfully: {notification_id}")
 
     except Exception as e:
-        logger.error(f"❌ Error processing email: {e}")
+        logger.error(f" Error processing email: {e}")
         await update_notification_status(notification_id, "failed", str(e))
 
 @app.post("/sms/send")

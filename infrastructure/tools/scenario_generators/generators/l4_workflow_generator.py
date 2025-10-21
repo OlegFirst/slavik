@@ -111,7 +111,7 @@ class L4WorkflowGenerator(BaseGenerator):
                     try:
                         enhanced_context = await self._generate_journey_with_llm(item, context)
                         context.update(enhanced_context)
-                        logger.info(f"✨ LLM-enhanced context for workflow: {item['name']}")
+                        logger.info(f" LLM-enhanced context for workflow: {item['name']}")
                     except Exception as e:
                         logger.warning(f"LLM enhancement failed for {item['name']}: {e}. Using fallback.")
 
@@ -131,7 +131,7 @@ class L4WorkflowGenerator(BaseGenerator):
                 # Record successful generation
                 scenario_id = scenario.get('meta', {}).get('id', 'unknown')
                 record_scenario_generated('l4', 'l4_workflow', 'manual', count=1)
-                logger.info(f"📊 Metrics recorded for L4 scenario: {scenario_id}")
+                logger.info(f" Metrics recorded for L4 scenario: {scenario_id}")
 
                 return scenario
 
@@ -1002,9 +1002,9 @@ async def main():
 
     # Print results
     stats = generator.get_statistics()
-    print(f"\n✅ Generated {stats['generated']}/{stats['total']} workflow scenarios")
-    print(f"📁 Saved to: generated/l4/")
-    print(f"🎯 Scenario IDs: {len(scenario_ids)}")
+    print(f"\n Generated {stats['generated']}/{stats['total']} workflow scenarios")
+    print(f" Saved to: generated/l4/")
+    print(f" Scenario IDs: {len(scenario_ids)}")
 
 
 if __name__ == "__main__":

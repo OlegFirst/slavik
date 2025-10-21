@@ -290,15 +290,15 @@ async def list_organs():
     """List all available AI organs"""
     return {
         "organs": [
-            {"name": "governance_brain", "emoji": "🧠", "description": "Strategic intelligence and policy guidance"},
-            {"name": "emergency_response", "emoji": "🚨", "description": "Crisis management and incident response"},
-            {"name": "impact_oracle", "emoji": "🔮", "description": "Predictive business impact analysis"},
-            {"name": "scenario_creator", "emoji": "📝", "description": "AI-powered scenario generation"},
-            {"name": "risk_advisor", "emoji": "⚡", "description": "Risk analysis and mitigation"},
-            {"name": "compliance_guardian", "emoji": "🛡️", "description": "Standards compliance monitoring"},
-            {"name": "performance_analyst", "emoji": "📊", "description": "BCM KPI intelligence"},
-            {"name": "learning_coach", "emoji": "🎓", "description": "Training optimization"},
-            {"name": "plan_generator", "emoji": "📋", "description": "BCM plan creation"},
-            {"name": "lifecycle_monitor", "emoji": "💓", "description": "Lifecycle health monitoring"}
+            {"name": "governance_brain", "emoji": "", "description": "Strategic intelligence and policy guidance"},
+            {"name": "emergency_response", "emoji": "", "description": "Crisis management and incident response"},
+            {"name": "impact_oracle", "emoji": "", "description": "Predictive business impact analysis"},
+            {"name": "scenario_creator", "emoji": "", "description": "AI-powered scenario generation"},
+            {"name": "risk_advisor", "emoji": "", "description": "Risk analysis and mitigation"},
+            {"name": "compliance_guardian", "emoji": "️", "description": "Standards compliance monitoring"},
+            {"name": "performance_analyst", "emoji": "", "description": "BCM KPI intelligence"},
+            {"name": "learning_coach", "emoji": "", "description": "Training optimization"},
+            {"name": "plan_generator", "emoji": "", "description": "BCM plan creation"},
+            {"name": "lifecycle_monitor", "emoji": "", "description": "Lifecycle health monitoring"}
         ]
     }

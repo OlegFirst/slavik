@@ -70,7 +70,7 @@ class NotificationClient:
                 json={
                     "type": "security_alert",
                     "severity": severity,
-                    "title": f"🔒 Security Alert: {issue_count} {severity.upper()} issues detected",
+                    "title": f" Security Alert: {issue_count} {severity.upper()} issues detected",
                     "message": message,
                     "channels": channels,
                     "recipients": recipients or self._get_default_security_recipients(),
@@ -98,13 +98,13 @@ class NotificationClient:
             result = response.json()
 
             logger.info(
-                f"✅ Security alert sent: {severity} | "
+                f" Security alert sent: {severity} | "
                 f"notification_id={result.get('notification_id')}"
             )
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to send security alert: {e}")
+            logger.error(f" Failed to send security alert: {e}")
             return {
                 "notification_id": None,
                 "status": "failed",
@@ -128,7 +128,7 @@ class NotificationClient:
         """
         try:
             message = f"""
-🚨 **SERVICE DOWN ALERT**
+ **SERVICE DOWN ALERT**
 
 **Service:** {service_name}
 **Status:** DOWN
@@ -157,7 +157,7 @@ class NotificationClient:
                 json={
                     "type": "service_down",
                     "severity": "critical",
-                    "title": f"🚨 CRITICAL: {service_name} is DOWN",
+                    "title": f" CRITICAL: {service_name} is DOWN",
                     "message": message,
                     "channels": ["email", "slack", "webhook", "sms"],  # Все каналы
                     "recipients": self._get_default_incident_recipients(),
@@ -188,11 +188,11 @@ class NotificationClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.warning(f"🚨 Service down alert sent for {service_name}")
+            logger.warning(f" Service down alert sent for {service_name}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to send service down alert: {e}")
+            logger.error(f" Failed to send service down alert: {e}")
             return {"status": "failed", "error": str(e)}
 
     # ========================================================================
@@ -214,7 +214,7 @@ class NotificationClient:
         """
         try:
             message = f"""
-🔄 **Workflow Update**
+ **Workflow Update**
 
 **Workflow ID:** {workflow_id}
 **Type:** {workflow_type}
@@ -244,7 +244,7 @@ class NotificationClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to send workflow update: {e}")
+            logger.error(f" Failed to send workflow update: {e}")
             return {"status": "failed", "error": str(e)}
 
     # ========================================================================
@@ -266,7 +266,7 @@ class NotificationClient:
         """
         try:
             message = f"""
-📋 **New Task Delegated**
+ **New Task Delegated**
 
 **Task ID:** {task_id}
 **Type:** {task_type}
@@ -310,7 +310,7 @@ class NotificationClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to send task delegation notification: {e}")
+            logger.error(f" Failed to send task delegation notification: {e}")
             return {"status": "failed", "error": str(e)}
 
     # ========================================================================
@@ -332,7 +332,7 @@ class NotificationClient:
         """
         try:
             message = f"""
-✅ **Issue Resolved**
+ **Issue Resolved**
 
 **Issue ID:** {issue_id}
 **Type:** {issue_type}
@@ -347,7 +347,7 @@ class NotificationClient:
                 json={
                     "type": "issue_resolved",
                     "severity": "success",
-                    "title": f"✅ Issue Resolved: {issue_type}",
+                    "title": f" Issue Resolved: {issue_type}",
                     "message": message,
                     "channels": ["slack", "webhook"],
                     "metadata": {
@@ -363,7 +363,7 @@ class NotificationClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to send issue resolved notification: {e}")
+            logger.error(f" Failed to send issue resolved notification: {e}")
             return {"status": "failed", "error": str(e)}
 
     # ========================================================================
@@ -381,7 +381,7 @@ class NotificationClient:
         """
         try:
             message = f"""
-📊 **Daily MIO Manager Summary**
+ **Daily MIO Manager Summary**
 
 **Date:** {datetime.utcnow().strftime('%Y-%m-%d')}
 
@@ -400,7 +400,7 @@ class NotificationClient:
                 json={
                     "type": "daily_summary",
                     "severity": "info",
-                    "title": "📊 MIO Manager Daily Summary",
+                    "title": " MIO Manager Daily Summary",
                     "message": message,
                     "channels": ["email", "slack"],
                     "recipients": self._get_default_summary_recipients(),
@@ -412,7 +412,7 @@ class NotificationClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to send daily summary: {e}")
+            logger.error(f" Failed to send daily summary: {e}")
             return {"status": "failed", "error": str(e)}
 
     # ========================================================================
@@ -448,7 +448,7 @@ class NotificationClient:
     ) -> str:
         """Построить сообщение security alert"""
         message = f"""
-🔒 **Security Alert - {severity.upper()}**
+ **Security Alert - {severity.upper()}**
 
 **Issues Found:** {issue_count} HIGH severity vulnerabilities
 

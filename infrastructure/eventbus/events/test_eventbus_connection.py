@@ -17,17 +17,17 @@ async def test_eventbus():
             exchange_name="bcm_events"
         )
 
-        print("✅ EventBus client initialized")
+        print(" EventBus client initialized")
 
         # Connect
         await eventbus.connect()
-        print("✅ Connected to RabbitMQ")
+        print(" Connected to RabbitMQ")
 
         # Check connection
         if eventbus.is_connected():
-            print("✅ Connection verified")
+            print(" Connection verified")
         else:
-            print("❌ Not connected")
+            print(" Not connected")
             return
 
         # Publish test event
@@ -41,19 +41,19 @@ async def test_eventbus():
         )
 
         if success:
-            print("✅ Test event published successfully")
+            print(" Test event published successfully")
         else:
-            print("❌ Failed to publish test event")
+            print(" Failed to publish test event")
 
         # Disconnect
         await eventbus.disconnect()
-        print("✅ Disconnected from RabbitMQ")
+        print(" Disconnected from RabbitMQ")
 
-        print("\n🎉 EventBus Integration Test PASSED!")
+        print("\n EventBus Integration Test PASSED!")
         return True
 
     except Exception as e:
-        print(f"❌ EventBus test failed: {e}")
+        print(f" EventBus test failed: {e}")
         import traceback
         traceback.print_exc()
         return False

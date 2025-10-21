@@ -40,7 +40,7 @@ async def test_valid_jwt_token_accepted_all_services(
         response = await http_client.get(url, headers=auth_headers)
         assert response.status_code == 200, f"{service_name} rejected valid token"
 
-    print(f"✅ Valid JWT accepted by all services")
+    print(f" Valid JWT accepted by all services")
 
 
 @pytest.mark.integration
@@ -68,7 +68,7 @@ async def test_missing_jwt_token_rejected(
         # Should return 401 Unauthorized or 403 Forbidden
         assert response.status_code in [401, 403], f"{service_name} accepted unauthenticated request"
 
-    print(f"✅ Missing JWT rejected by all services")
+    print(f" Missing JWT rejected by all services")
 
 
 @pytest.mark.integration
@@ -98,7 +98,7 @@ async def test_expired_jwt_token_rejected(
     )
 
     assert response.status_code in [401, 403]
-    print(f"✅ Expired JWT rejected")
+    print(f" Expired JWT rejected")
 
 
 @pytest.mark.integration
@@ -149,7 +149,7 @@ async def test_tenant_isolation_across_services(
     # Should be forbidden or not found
     assert response.status_code in [403, 404]
 
-    print(f"✅ Tenant isolation verified")
+    print(f" Tenant isolation verified")
 
 
 @pytest.mark.integration
@@ -211,7 +211,7 @@ async def test_role_based_access_control(
         # Approval should require admin/manager role
         assert response.status_code in [403, 401, 200]  # 200 if RBAC not implemented yet
 
-    print(f"✅ RBAC verified")
+    print(f" RBAC verified")
 
 
 @pytest.mark.integration
@@ -262,7 +262,7 @@ async def test_admin_can_access_all_resources(
         # Admin should have access
         assert response.status_code in [200, 403, 404]  # Implementation dependent
 
-    print(f"✅ Admin access verified")
+    print(f" Admin access verified")
 
 
 @pytest.mark.integration
@@ -314,7 +314,7 @@ async def test_jwt_claims_propagation(
     cleanup_test_data["strategies"].append(strategy.get("id") or strategy.get("strategy_id"))
 
     # Resource should be associated with tenant from JWT
-    print(f"✅ JWT claims propagation verified")
+    print(f" JWT claims propagation verified")
 
 
 @pytest.mark.integration
@@ -344,4 +344,4 @@ async def test_invalid_jwt_signature_rejected(
     )
 
     assert response.status_code in [401, 403]
-    print(f"✅ Invalid JWT signature rejected")
+    print(f" Invalid JWT signature rejected")

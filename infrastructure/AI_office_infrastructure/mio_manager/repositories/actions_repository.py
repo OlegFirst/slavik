@@ -53,7 +53,7 @@ class ActionsRepository:
             )
             db.add(action)
 
-        logger.info(f"✅ Created action: {action_id} ({action_type})")
+        logger.info(f" Created action: {action_id} ({action_type})")
         return action_id
 
     @staticmethod
@@ -68,7 +68,7 @@ class ActionsRepository:
         with get_db() as db:
             action = db.query(MIOAction).filter(MIOAction.action_id == action_id).first()
             if not action:
-                logger.error(f"❌ Action not found: {action_id}")
+                logger.error(f" Action not found: {action_id}")
                 return
 
             action.status = status
@@ -91,7 +91,7 @@ class ActionsRepository:
             if result_data:
                 action.result_data = result_data
 
-        logger.info(f"✅ Updated action {action_id}: {status}")
+        logger.info(f" Updated action {action_id}: {status}")
 
     @staticmethod
     def save_task_delegation(
@@ -114,7 +114,7 @@ class ActionsRepository:
             )
             db.add(task)
 
-        logger.info(f"✅ Saved task delegation: {task_id}")
+        logger.info(f" Saved task delegation: {task_id}")
         return task_id
 
     @staticmethod
@@ -128,7 +128,7 @@ class ActionsRepository:
         with get_db() as db:
             task = db.query(TaskDelegation).filter(TaskDelegation.task_id == task_id).first()
             if not task:
-                logger.error(f"❌ Task not found: {task_id}")
+                logger.error(f" Task not found: {task_id}")
                 return
 
             task.status = status
@@ -142,7 +142,7 @@ class ActionsRepository:
             if assigned_to:
                 task.assigned_to = assigned_to
 
-        logger.info(f"✅ Updated task {task_id}: {status}")
+        logger.info(f" Updated task {task_id}: {status}")
 
     @staticmethod
     def create_issue(
@@ -169,7 +169,7 @@ class ActionsRepository:
             )
             db.add(issue)
 
-        logger.info(f"✅ Created issue: {issue_id} ({severity})")
+        logger.info(f" Created issue: {issue_id} ({severity})")
         return issue_id
 
     @staticmethod
@@ -182,7 +182,7 @@ class ActionsRepository:
         with get_db() as db:
             issue = db.query(IssueTracking).filter(IssueTracking.issue_id == issue_id).first()
             if not issue:
-                logger.error(f"❌ Issue not found: {issue_id}")
+                logger.error(f" Issue not found: {issue_id}")
                 return
 
             issue.status = "resolved"
@@ -191,7 +191,7 @@ class ActionsRepository:
             if resolution_notes:
                 issue.resolution_notes = resolution_notes
 
-        logger.info(f"✅ Resolved issue: {issue_id}")
+        logger.info(f" Resolved issue: {issue_id}")
 
     @staticmethod
     def save_metrics_snapshot(
@@ -217,7 +217,7 @@ class ActionsRepository:
             )
             db.add(snapshot)
 
-        logger.info(f"✅ Saved metrics snapshot: {snapshot_id}")
+        logger.info(f" Saved metrics snapshot: {snapshot_id}")
         return snapshot_id
 
     @staticmethod

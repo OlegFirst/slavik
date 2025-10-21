@@ -15,11 +15,11 @@ def test_core_imports() -> Tuple[bool, List[str]]:
         from core.health_monitor import HealthMonitor
         from core.event_coordinator import EventCoordinator
         from core.docker_manager import DockerManager
-        print("✅ Core modules imported successfully")
+        print(" Core modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Core import error: {e}")
-        print(f"❌ Core import failed: {e}")
+        print(f" Core import failed: {e}")
         return False, errors
 
 def test_model_imports() -> Tuple[bool, List[str]]:
@@ -30,11 +30,11 @@ def test_model_imports() -> Tuple[bool, List[str]]:
         from models.ai_models import AIDecision, Decision
         from models.scenario_models import ScenarioGenerationRequest
         from models.deployment_models import DeploymentPlan
-        print("✅ Model modules imported successfully")
+        print(" Model modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Model import error: {e}")
-        print(f"❌ Model import failed: {e}")
+        print(f" Model import failed: {e}")
         return False, errors
 
 def test_platform_imports() -> Tuple[bool, List[str]]:
@@ -44,11 +44,11 @@ def test_platform_imports() -> Tuple[bool, List[str]]:
         from platform.service_groups import ServiceGroup
         from platform.platform_orchestrator import PlatformOrchestrator
         from platform.deployment_manager import DeploymentManager
-        print("✅ Platform modules imported successfully")
+        print(" Platform modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Platform import error: {e}")
-        print(f"❌ Platform import failed: {e}")
+        print(f" Platform import failed: {e}")
         return False, errors
 
 def test_ai_imports() -> Tuple[bool, List[str]]:
@@ -60,11 +60,11 @@ def test_ai_imports() -> Tuple[bool, List[str]]:
         from ai.devops_engine import DevOpsEngine
         from ai.claude_engine import ClaudeProEngine
         from ai.agent_router import AIAgentRouter, AgentCapability
-        print("✅ AI modules imported successfully")
+        print(" AI modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"AI import error: {e}")
-        print(f"❌ AI import failed: {e}")
+        print(f" AI import failed: {e}")
         return False, errors
 
 def test_scenario_imports() -> Tuple[bool, List[str]]:
@@ -73,11 +73,11 @@ def test_scenario_imports() -> Tuple[bool, List[str]]:
     try:
         from scenario.scenario_orchestrator import ScenarioOrchestrator
         from scenario.learning_engine import LearningEngine
-        print("✅ Scenario modules imported successfully")
+        print(" Scenario modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Scenario import error: {e}")
-        print(f"❌ Scenario import failed: {e}")
+        print(f" Scenario import failed: {e}")
         return False, errors
 
 def test_control_center_imports() -> Tuple[bool, List[str]]:
@@ -85,11 +85,11 @@ def test_control_center_imports() -> Tuple[bool, List[str]]:
     errors = []
     try:
         from control_center.unified_controller import UnifiedController
-        print("✅ Control center modules imported successfully")
+        print(" Control center modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Control center import error: {e}")
-        print(f"❌ Control center import failed: {e}")
+        print(f" Control center import failed: {e}")
         return False, errors
 
 def test_integration_imports() -> Tuple[bool, List[str]]:
@@ -97,11 +97,11 @@ def test_integration_imports() -> Tuple[bool, List[str]]:
     errors = []
     try:
         from integrations.github_client import GitHubTokenManager
-        print("✅ Integration modules imported successfully")
+        print(" Integration modules imported successfully")
         return True, errors
     except Exception as e:
         errors.append(f"Integration import error: {e}")
-        print(f"❌ Integration import failed: {e}")
+        print(f" Integration import failed: {e}")
         return False, errors
 
 def test_main_imports() -> Tuple[bool, List[str]]:
@@ -114,15 +114,15 @@ def test_main_imports() -> Tuple[bool, List[str]]:
         if spec and spec.loader:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            print("✅ Main application module loaded successfully")
+            print(" Main application module loaded successfully")
             return True, errors
         else:
             errors.append("Could not load main.py spec")
-            print("❌ Main application import failed: No spec")
+            print(" Main application import failed: No spec")
             return False, errors
     except Exception as e:
         errors.append(f"Main import error: {e}")
-        print(f"❌ Main import failed: {e}")
+        print(f" Main import failed: {e}")
         return False, errors
 
 def main():
@@ -161,7 +161,7 @@ def main():
     total = len(results)
 
     for test_name, success in results:
-        status = "✅ PASS" if success else "❌ FAIL"
+        status = " PASS" if success else " FAIL"
         print(f"{status}: {test_name}")
 
     print()
@@ -177,11 +177,11 @@ def main():
 
     if passed == total:
         print()
-        print("🎉 ALL IMPORTS VERIFIED SUCCESSFULLY!")
+        print(" ALL IMPORTS VERIFIED SUCCESSFULLY!")
         return 0
     else:
         print()
-        print("⚠️  SOME IMPORTS FAILED - CHECK ERRORS ABOVE")
+        print("️  SOME IMPORTS FAILED - CHECK ERRORS ABOVE")
         return 1
 
 if __name__ == "__main__":

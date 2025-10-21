@@ -31,7 +31,7 @@ def test_models_syntax():
     print(f"  RECORD_CREATE: {ChangeType.RECORD_CREATE.value}")
     print(f"  RECORD_DELETE: {ChangeType.RECORD_DELETE.value}")
     print(f"  STATE_CHANGE: {ChangeType.STATE_CHANGE.value}")
-    print("✓ ChangeType enum works\n")
+    print(" ChangeType enum works\n")
 
     # Test FieldChange model
     print("Testing FieldChange model:")
@@ -46,7 +46,7 @@ def test_models_syntax():
     print(f"  Old value: {field_change.old_value}")
     print(f"  New value: {field_change.new_value}")
     print(f"  Changed by: {field_change.changed_by}")
-    print("✓ FieldChange model works\n")
+    print(" FieldChange model works\n")
 
     # Test ChangeHistoryEntry model
     print("Testing ChangeHistoryEntry model:")
@@ -65,7 +65,7 @@ def test_models_syntax():
     print(f"  Field: {entry.field_name}")
     print(f"  Change: {entry.old_value} -> {entry.new_value}")
     print(f"  Reason: {entry.change_reason}")
-    print("✓ ChangeHistoryEntry model works\n")
+    print(" ChangeHistoryEntry model works\n")
 
     # Test EntityHistory model
     print("Testing EntityHistory model:")
@@ -86,17 +86,17 @@ def test_models_syntax():
     print(f"  Total changes: {history.total_changes}")
     print(f"  Created by: {history.created_by}")
     print(f"  Last modified by: {history.last_modified_by}")
-    print("✓ EntityHistory model works\n")
+    print(" EntityHistory model works\n")
 
     # Test model serialization
     print("Testing model serialization:")
     entry_dict = entry.model_dump()
     print(f"  Serialized keys: {list(entry_dict.keys())}")
     print(f"  Can convert to JSON: {bool(entry_dict)}")
-    print("✓ Model serialization works\n")
+    print(" Model serialization works\n")
 
     print("=" * 60)
-    print("All model tests passed! ✓")
+    print("All model tests passed! ")
     print("=" * 60)
 
 

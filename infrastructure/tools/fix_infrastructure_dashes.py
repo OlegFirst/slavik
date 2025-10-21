@@ -62,14 +62,14 @@ def check_git_status() -> bool:
         )
 
         if result.stdout.strip():
-            print("⚠️  WARNING: Git working directory is not clean!")
+            print("️  WARNING: Git working directory is not clean!")
             print("Uncommitted changes detected:")
             print(result.stdout)
             return False
 
         return True
     except subprocess.CalledProcessError:
-        print("❌ ERROR: Not in a git repository or git command failed")
+        print(" ERROR: Not in a git repository or git command failed")
         return False
 
 
@@ -83,7 +83,7 @@ def create_backup(dry_run: bool = True) -> bool:
         print(f"  ⏭️  Backup already exists at {BACKUP_ROOT}")
         return True
 
-    print(f"  📦 Creating backup at {BACKUP_ROOT}...")
+    print(f"   Creating backup at {BACKUP_ROOT}...")
     try:
         shutil.copytree(
             PROJECT_ROOT,
@@ -93,10 +93,10 @@ def create_backup(dry_run: bool = True) -> bool:
                 'venv', '.venv', '*.egg-info', '.pytest_cache'
             )
         )
-        print(f"  ✅ Backup created successfully")
+        print(f"   Backup created successfully")
         return True
     except Exception as e:
-        print(f"  ❌ Backup failed: {e}")
+        print(f"   Backup failed: {e}")
         return False
 
 
@@ -195,7 +195,7 @@ def main():
 
     # Load renames
     if not AUDIT_REPORT_PATH.exists():
-        print(f"❌ ERROR: Audit report not found at {AUDIT_REPORT_PATH}")
+        print(f" ERROR: Audit report not found at {AUDIT_REPORT_PATH}")
         return 1
 
     print(f"Loading rename plan from audit report...")
@@ -204,7 +204,7 @@ def main():
     print()
 
     if not renames:
-        print("✅ No infrastructure directories need renaming!")
+        print(" No infrastructure directories need renaming!")
         return 0
 
     # Sort by depth (deepest first)
@@ -214,7 +214,7 @@ def main():
     if not dry_run and not args.skip_git_check:
         print("Checking git status...")
         if not check_git_status():
-            print("\n⚠️  Git working directory is not clean!")
+            print("\n️  Git working directory is not clean!")
             print("Use --skip-git-check to bypass this check")
             return 1
         print()
@@ -223,7 +223,7 @@ def main():
     if not dry_run and not args.skip_backup:
         print("Creating backup...")
         if not create_backup(dry_run=False):
-            print("\n❌ Backup failed! Aborting.")
+            print("\n Backup failed! Aborting.")
             return 1
         print()
 
@@ -242,7 +242,7 @@ def main():
 
     if dry_run:
         print("=" * 80)
-        print("⚠️  DRY-RUN MODE - No changes will be made")
+        print("️  DRY-RUN MODE - No changes will be made")
         print("=" * 80)
         print()
         print("To execute, run:")
@@ -253,7 +253,7 @@ def main():
     # Confirm
     if not args.yes:
         print("=" * 80)
-        print("⚠️  READY TO EXECUTE")
+        print("️  READY TO EXECUTE")
         print("=" * 80)
         print()
         print(f"This will rename {len(renames)} directories using git mv")
@@ -265,7 +265,7 @@ def main():
             return 1
         print()
     else:
-        print("\n🚀 Auto-confirming (--yes flag)")
+        print("\n Auto-confirming (--yes flag)")
         print()
 
     # Execute renames
@@ -288,10 +288,10 @@ def main():
         success, message = rename_directory(old_path, new_path, dry_run=False)
 
         if success:
-            print(f"  ✅ {message}")
+            print(f"   {message}")
             success_count += 1
         else:
-            print(f"  ❌ {message}")
+            print(f"   {message}")
             fail_count += 1
             failed_items.append({
                 'old_path': old_path,
@@ -319,7 +319,7 @@ def main():
 
     if fail_count > 0:
         print("=" * 80)
-        print("⚠️  SOME RENAMES FAILED")
+        print("️  SOME RENAMES FAILED")
         print("=" * 80)
         print()
         print("To rollback:")
@@ -329,7 +329,7 @@ def main():
         return 1
 
     print("=" * 80)
-    print("✅ ALL RENAMES COMPLETED")
+    print(" ALL RENAMES COMPLETED")
     print("=" * 80)
     print()
     print("Next steps:")

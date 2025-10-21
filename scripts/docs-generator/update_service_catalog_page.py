@@ -24,7 +24,7 @@ def generate_service_markdown(catalog: Dict) -> str:
     """Generate comprehensive markdown for all services"""
     lines = []
 
-    lines.append("# 🏢 Comprehensive Service Catalog\n")
+    lines.append("#  Comprehensive Service Catalog\n")
     lines.append(f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}\n")
     lines.append(f"**Version**: {catalog.get('version', '3.0.0')}\n")
     lines.append(f"**Total Services**: {catalog.get('total_services', 'N/A')}\n")
@@ -117,13 +117,13 @@ def update_comprehensive_page():
     catalog_path = CATALOGS_DIR / "platform-services" / "SERVICE_CATALOG_DETAILED.yaml"
 
     if not catalog_path.exists():
-        print(f"❌ Service catalog not found: {catalog_path}")
+        print(f" Service catalog not found: {catalog_path}")
         return
 
-    print(f"📖 Reading service catalog...")
+    print(f" Reading service catalog...")
     catalog = load_yaml(catalog_path)
 
-    print(f"🔨 Generating markdown...")
+    print(f" Generating markdown...")
     markdown = generate_service_markdown(catalog)
 
     # Save markdown
@@ -131,16 +131,16 @@ def update_comprehensive_page():
     output_md.parent.mkdir(parents=True, exist_ok=True)
     output_md.write_text(markdown, encoding='utf-8')
 
-    print(f"✅ Updated: {output_md}")
+    print(f" Updated: {output_md}")
 
     # Also save as JSON for JavaScript
     output_json = DOCS_DIR / "service-catalog-comprehensive" / "service-catalog-full.json"
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Updated: {output_json}")
+    print(f" Updated: {output_json}")
 
 
 if __name__ == "__main__":
     update_comprehensive_page()
-    print("\n✅ Service catalog page updated successfully!")
+    print("\n Service catalog page updated successfully!")

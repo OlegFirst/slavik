@@ -27,7 +27,7 @@ class NotificationIntegration:
         self.enabled = os.getenv("NOTIFICATIONS_ENABLED", "true").lower() == "true"
 
         if not self.enabled:
-            logger.info("📢 Notifications disabled by configuration")
+            logger.info(" Notifications disabled by configuration")
 
     async def send_alert_notification(
         self,
@@ -73,14 +73,14 @@ class NotificationIntegration:
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Alert notification sent: {alert_id}")
+                    logger.info(f" Alert notification sent: {alert_id}")
                     return True
                 else:
-                    logger.error(f"❌ Failed to send alert notification: {response.text}")
+                    logger.error(f" Failed to send alert notification: {response.text}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Error sending alert notification: {e}")
+            logger.error(f" Error sending alert notification: {e}")
             return False
 
 
@@ -115,7 +115,7 @@ class NotificationIntegration:
                     f"{self.base_url}/email/send",
                     json={
                         "to": recipients,
-                        "subject": f"🚨 New Nonconformity: {nc_id} - {title}",
+                        "subject": f" New Nonconformity: {nc_id} - {title}",
                         "body": f"""
 New ISO 22301 Nonconformity Detected
 
@@ -132,7 +132,7 @@ View details: http://localhost:8045/nonconformities/{nc_id}
                         "html_body": f"""
 <html>
 <body>
-<h2>🚨 New ISO 22301 Nonconformity Detected</h2>
+<h2> New ISO 22301 Nonconformity Detected</h2>
 
 <table>
 <tr><td><strong>Nonconformity ID:</strong></td><td>{nc_id}</td></tr>
@@ -152,14 +152,14 @@ View details: http://localhost:8045/nonconformities/{nc_id}
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Nonconformity notification sent: {nc_id}")
+                    logger.info(f" Nonconformity notification sent: {nc_id}")
                     return True
                 else:
-                    logger.error(f"❌ Failed to send NC notification: {response.text}")
+                    logger.error(f" Failed to send NC notification: {response.text}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Error sending NC notification: {e}")
+            logger.error(f" Error sending NC notification: {e}")
             return False
 
 
@@ -189,7 +189,7 @@ View details: http://localhost:8045/nonconformities/{nc_id}
                     f"{self.base_url}/email/send",
                     json={
                         "to": recipients,
-                        "subject": f"📋 ISO 22301 Audit Update: {audit_id} - {status}",
+                        "subject": f" ISO 22301 Audit Update: {audit_id} - {status}",
                         "body": f"""
 ISO 22301 Audit Status Update
 
@@ -205,14 +205,14 @@ View details: http://localhost:8045/audits/{audit_id}
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Audit notification sent: {audit_id}")
+                    logger.info(f" Audit notification sent: {audit_id}")
                     return True
                 else:
-                    logger.error(f"❌ Failed to send audit notification: {response.text}")
+                    logger.error(f" Failed to send audit notification: {response.text}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Error sending audit notification: {e}")
+            logger.error(f" Error sending audit notification: {e}")
             return False
 
 
@@ -252,14 +252,14 @@ View details: http://localhost:8045/audits/{audit_id}
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Metric breach notification sent: {service_name}/{metric_type}")
+                    logger.info(f" Metric breach notification sent: {service_name}/{metric_type}")
                     return True
                 else:
-                    logger.error(f"❌ Failed to send metric breach notification: {response.text}")
+                    logger.error(f" Failed to send metric breach notification: {response.text}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Error sending metric breach notification: {e}")
+            logger.error(f" Error sending metric breach notification: {e}")
             return False
 
 
@@ -300,14 +300,14 @@ View details: http://localhost:8045/audits/{audit_id}
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Service health notification sent: {service_name}")
+                    logger.info(f" Service health notification sent: {service_name}")
                     return True
                 else:
-                    logger.error(f"❌ Failed to send service health notification: {response.text}")
+                    logger.error(f" Failed to send service health notification: {response.text}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Error sending service health notification: {e}")
+            logger.error(f" Error sending service health notification: {e}")
             return False
 
 

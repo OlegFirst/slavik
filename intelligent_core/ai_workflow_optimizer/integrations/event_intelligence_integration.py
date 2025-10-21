@@ -51,7 +51,7 @@ class EventIntelligenceIntegration:
         Returns:
             Dict с результатами анализа workflow-специфичных событий
         """
-        logger.info("🔍 Analyzing workflow events...")
+        logger.info(" Analyzing workflow events...")
 
         # Сканируем код
         self.eis.scan_codebase()
@@ -92,7 +92,7 @@ class EventIntelligenceIntegration:
         Returns:
             List оптимизаций с приоритетами и кодом
         """
-        logger.info("💡 Generating workflow optimizations...")
+        logger.info(" Generating workflow optimizations...")
 
         # Запускаем auto-discovery
         self.eis.discover_potential_events()
@@ -156,7 +156,7 @@ class EventIntelligenceIntegration:
         # Определяем тип события
         if 'complete' in event_name:
             recommendation = f"""
-🤖 AI Recommendation: IMPLEMENT
+ AI Recommendation: IMPLEMENT
 
 Event '{event_name}' signals completion of a critical workflow step.
 
@@ -172,7 +172,7 @@ Recommended Subscribers:
 """
         elif 'fail' in event_name or 'error' in event_name:
             recommendation = f"""
-🤖 AI Recommendation: CRITICAL - IMPLEMENT ASAP
+ AI Recommendation: CRITICAL - IMPLEMENT ASAP
 
 Event '{event_name}' signals failure condition.
 
@@ -186,7 +186,7 @@ Recommended Action: Implement immediately with high priority subscribers.
 """
         else:
             recommendation = f"""
-🤖 AI Recommendation: EVALUATE
+ AI Recommendation: EVALUATE
 
 Event '{event_name}' provides state change notification.
 
@@ -210,7 +210,7 @@ Otherwise: May be optional depending on architecture needs.
         Returns:
             bool: Success status
         """
-        logger.info(f"🔧 Applying optimization: {optimization['event_name']}")
+        logger.info(f" Applying optimization: {optimization['event_name']}")
 
         try:
             # Step 1: Prepare optimization changes
@@ -238,9 +238,9 @@ Otherwise: May be optional depending on architecture needs.
             pr_url = await self._create_pull_request(optimization, changes)
 
             if pr_url:
-                logger.info(f"✅ Pull request created: {pr_url}")
+                logger.info(f" Pull request created: {pr_url}")
 
-            logger.info(f"✅ Optimization applied successfully: {optimization['event_name']}")
+            logger.info(f" Optimization applied successfully: {optimization['event_name']}")
             return True
 
         except Exception as e:
@@ -467,7 +467,7 @@ Otherwise: May be optional depending on architecture needs.
 
         if len(high_priority) > 5:
             recommendations.append(
-                f"⚠️ {len(high_priority)} high-priority event optimizations pending. "
+                f"️ {len(high_priority)} high-priority event optimizations pending. "
                 "Review and implement critical workflow events."
             )
 
@@ -511,4 +511,4 @@ async def optimize_workflow_events():
         if opt['priority'] == 'high' and opt['confidence'] > 0.8:
             await integration.apply_optimization(opt)
 
-    logger.info(f"✅ Processed {len(optimizations)} optimization suggestions")
+    logger.info(f" Processed {len(optimizations)} optimization suggestions")

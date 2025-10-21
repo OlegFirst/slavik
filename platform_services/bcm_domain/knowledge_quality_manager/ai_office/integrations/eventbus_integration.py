@@ -56,9 +56,9 @@ class AIEventBusIntegration:
             # Test EventBus connection
             response = await self.http_client.get(f"{self.eventbus_url}/health")
             if response.status_code == 200:
-                logger.info(f"✅ Connected to EventBus at {self.eventbus_url}")
+                logger.info(f" Connected to EventBus at {self.eventbus_url}")
             else:
-                logger.warning(f"⚠️  EventBus responded with status {response.status_code}")
+                logger.warning(f"️  EventBus responded with status {response.status_code}")
 
             # Subscribe to BCM events
             await self._register_subscriptions()
@@ -85,7 +85,7 @@ class AIEventBusIntegration:
             self.subscriptions[event_pattern] = handler
             logger.info(f"Registered subscription: {event_pattern}")
 
-        logger.info(f"✅ Registered {len(self.subscriptions)} event subscriptions")
+        logger.info(f" Registered {len(self.subscriptions)} event subscriptions")
 
     async def publish_event(
         self,

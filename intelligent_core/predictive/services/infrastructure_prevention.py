@@ -428,7 +428,7 @@ class InfrastructurePreventionAdvisor:
         actions = []
 
         if risk_level == RiskLevel.CRITICAL:
-            actions.append("⚠️  URGENT: Immediate action required to prevent failure")
+            actions.append("️  URGENT: Immediate action required to prevent failure")
 
         # Type-specific actions
         if failure_type == FailureType.RESOURCE_EXHAUSTION:
@@ -613,7 +613,7 @@ class InfrastructurePreventionAdvisor:
             'preventive_actions_count': len(insight.preventive_actions)
         }
 
-        logger.info(f"🔮 Prediction logged: {log_entry}")
+        logger.info(f" Prediction logged: {log_entry}")
 
         # TODO: Store in database for ML training
         # TODO: Publish to EventBus for learning

@@ -98,7 +98,7 @@ class PlatformIntegration:
             logger.warning("Platform already initialized")
             return
 
-        logger.info("🚀 Initializing Platform Integration...")
+        logger.info(" Initializing Platform Integration...")
 
         tasks = []
 
@@ -126,17 +126,17 @@ class PlatformIntegration:
                 raise result
 
         self._initialized = True
-        logger.info("✅ Platform Integration initialized successfully")
+        logger.info(" Platform Integration initialized successfully")
 
     async def _init_intelligent_eventbus(self):
         """Initialize Intelligent EventBus with AI routing"""
-        logger.info("  📡 Initializing Intelligent EventBus...")
+        logger.info("   Initializing Intelligent EventBus...")
 
         try:
             from infrastructure.eventbus import create_eventbus, IntelligentEventRouter, INTELLIGENT_ROUTER_AVAILABLE
 
             if not INTELLIGENT_ROUTER_AVAILABLE:
-                logger.warning("  ⚠️  Intelligent Router not available, falling back to basic EventBus")
+                logger.warning("  ️  Intelligent Router not available, falling back to basic EventBus")
                 return await self._init_basic_eventbus()
 
             # Create base eventbus
@@ -151,26 +151,26 @@ class PlatformIntegration:
 
             await self.intelligent_router.initialize()
 
-            logger.info("  ✅ Intelligent EventBus initialized")
+            logger.info("   Intelligent EventBus initialized")
 
         except Exception as e:
-            logger.error(f"  ❌ Failed to initialize Intelligent EventBus: {e}")
-            logger.info("  ⚠️  Falling back to basic EventBus")
+            logger.error(f"   Failed to initialize Intelligent EventBus: {e}")
+            logger.info("  ️  Falling back to basic EventBus")
             return await self._init_basic_eventbus()
 
     async def _init_basic_eventbus(self):
         """Initialize basic EventBus (fallback)"""
-        logger.info("  📡 Initializing Basic EventBus...")
+        logger.info("   Initializing Basic EventBus...")
 
         from infrastructure.eventbus import create_eventbus
 
         self.eventbus = create_eventbus(self.config.eventbus_backend)
 
-        logger.info("  ✅ Basic EventBus initialized")
+        logger.info("   Basic EventBus initialized")
 
     async def _init_saga_engine(self):
         """Initialize Saga Pattern Engine"""
-        logger.info("  🔄 Initializing Saga Engine...")
+        logger.info("   Initializing Saga Engine...")
 
         try:
             from intelligent_core.orchestration.saga_engine import (
@@ -202,18 +202,18 @@ class PlatformIntegration:
                 event_publisher=self._publish_event
             )
 
-            logger.info("  ✅ Saga Engine initialized with %s state store", self.config.saga_state_store)
+            logger.info("   Saga Engine initialized with %s state store", self.config.saga_state_store)
 
         except ImportError as e:
-            logger.warning(f"  ⚠️  Saga Engine not available: {e}")
+            logger.warning(f"  ️  Saga Engine not available: {e}")
             self.saga_orchestrator = None
         except Exception as e:
-            logger.error(f"  ❌ Failed to initialize Saga Engine: {e}")
+            logger.error(f"   Failed to initialize Saga Engine: {e}")
             self.saga_orchestrator = None
 
     async def _init_cqrs(self):
         """Initialize CQRS Infrastructure"""
-        logger.info("  ⚡ Initializing CQRS Infrastructure...")
+        logger.info("   Initializing CQRS Infrastructure...")
 
         try:
             from platform_services.bcm_domain._cqrs import (
@@ -233,14 +233,14 @@ class PlatformIntegration:
             self.cqrs_command_handler = get_command_handler()
             self.cqrs_query_handler = get_query_handler()
 
-            logger.info("  ✅ CQRS Infrastructure initialized")
+            logger.info("   CQRS Infrastructure initialized")
 
         except ImportError as e:
-            logger.warning(f"  ⚠️  CQRS not available: {e}")
+            logger.warning(f"  ️  CQRS not available: {e}")
             self.cqrs_command_handler = None
             self.cqrs_query_handler = None
         except Exception as e:
-            logger.error(f"  ❌ Failed to initialize CQRS: {e}")
+            logger.error(f"   Failed to initialize CQRS: {e}")
             self.cqrs_command_handler = None
             self.cqrs_query_handler = None
 
@@ -284,7 +284,7 @@ class PlatformIntegration:
 
     async def shutdown(self):
         """Shutdown all platform components"""
-        logger.info("🛑 Shutting down Platform Integration...")
+        logger.info(" Shutting down Platform Integration...")
 
         tasks = []
 
@@ -308,7 +308,7 @@ class PlatformIntegration:
             await asyncio.gather(*tasks, return_exceptions=True)
 
         self._initialized = False
-        logger.info("✅ Platform Integration shutdown complete")
+        logger.info(" Platform Integration shutdown complete")
 
     def get_status(self) -> Dict[str, Any]:
         """Get platform integration status"""

@@ -56,9 +56,9 @@ async def lifespan(app: FastAPI):
     global audit_logger, iso_checker, security_middleware
 
     # Startup
-    logger.info("🚀 Risk Management Service starting...")
+    logger.info(" Risk Management Service starting...")
     await init_db()
-    logger.info("✅ Database initialized")
+    logger.info(" Database initialized")
 
     # Initialize Workflow Intelligence
     try:
@@ -74,11 +74,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -87,7 +87,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -97,15 +97,15 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("✅ Workflow Intelligence initialized (risk module)")
+        logger.info(" Workflow Intelligence initialized (risk module)")
     except Exception as e:
         logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
-    logger.info(f"✅ Risk Management Service ready on port {settings.PORT}")
+    logger.info(f" Risk Management Service ready on port {settings.PORT}")
     yield
 
     # Shutdown
-    logger.info("🛑 Risk Management Service shutting down...")
+    logger.info(" Risk Management Service shutting down...")
 
     # Close Workflow Intelligence
     if workflow_storage:
@@ -116,7 +116,7 @@ async def lifespan(app: FastAPI):
             logger.error(f"Error closing Workflow Intelligence: {e}")
 
     await close_db()
-    logger.info("✅ Database connections closed")
+    logger.info(" Database connections closed")
 
 
 # Create FastAPI app

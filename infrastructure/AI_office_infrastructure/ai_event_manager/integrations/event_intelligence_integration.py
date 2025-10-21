@@ -38,7 +38,7 @@ class EventIntelligenceIntegration:
             response = await self.client.get(f"{self.base_url}/health")
             if response.status_code == 200:
                 self.available = True
-                logger.info("✅ Event Intelligence service available")
+                logger.info(" Event Intelligence service available")
             else:
                 logger.warning(f"Event Intelligence service returned {response.status_code}")
         except Exception as e:

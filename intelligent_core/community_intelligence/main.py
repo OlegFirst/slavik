@@ -28,22 +28,22 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    logger.info("🚀 Community Intelligence Service starting...")
+    logger.info(" Community Intelligence Service starting...")
 
     # Setup event subscribers
     try:
         eventbus = get_eventbus_client()
         await setup_event_subscribers(eventbus)
-        logger.info("✅ EventBus subscribers registered")
+        logger.info(" EventBus subscribers registered")
     except Exception as e:
-        logger.error(f"❌ Failed to setup event subscribers: {e}")
+        logger.error(f" Failed to setup event subscribers: {e}")
 
-    logger.info(f"✅ Community Intelligence Service ready on port {settings.PORT}")
+    logger.info(f" Community Intelligence Service ready on port {settings.PORT}")
 
     yield
 
     # Cleanup
-    logger.info("👋 Community Intelligence Service shutting down...")
+    logger.info(" Community Intelligence Service shutting down...")
 
 
 # Create FastAPI app

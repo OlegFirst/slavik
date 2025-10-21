@@ -48,14 +48,14 @@ class ServiceHealthMonitor:
                 }
 
                 if is_healthy:
-                    logger.info(f"✅ {config.name} is healthy")
+                    logger.info(f" {config.name} is healthy")
                 else:
-                    logger.warning(f"⚠️  {config.name} unhealthy (status: {response.status_code})")
+                    logger.warning(f"️  {config.name} unhealthy (status: {response.status_code})")
 
                 return is_healthy
 
         except Exception as e:
-            logger.error(f"❌ Health check failed for {config.name}: {e}")
+            logger.error(f" Health check failed for {config.name}: {e}")
             self.health_status[config.service_type] = {
                 'status': 'unhealthy',
                 'last_check': datetime.now().isoformat(),

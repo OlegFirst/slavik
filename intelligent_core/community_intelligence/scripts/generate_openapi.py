@@ -31,7 +31,7 @@ def generate_openapi_spec():
     with open(json_path, 'w') as f:
         json.dump(spec, f, indent=2)
 
-    print(f"✅ OpenAPI JSON saved to: {json_path}")
+    print(f" OpenAPI JSON saved to: {json_path}")
 
     # Try to save as YAML (if pyyaml available)
     try:
@@ -39,20 +39,20 @@ def generate_openapi_spec():
         yaml_path = Path(__file__).parent.parent / 'openapi.yaml'
         with open(yaml_path, 'w') as f:
             yaml.dump(spec, f, sort_keys=False)
-        print(f"✅ OpenAPI YAML saved to: {yaml_path}")
+        print(f" OpenAPI YAML saved to: {yaml_path}")
     except ImportError:
-        print("⚠️  pyyaml not installed - skipping YAML output")
+        print("️  pyyaml not installed - skipping YAML output")
         print("   Install with: pip install pyyaml")
 
     # Print summary
-    print("\n📊 API Summary:")
+    print("\n API Summary:")
     print(f"   Title: {spec['info']['title']}")
     print(f"   Version: {spec['info']['version']}")
     print(f"   Endpoints: {len(spec['paths'])}")
     print(f"   Tags: {len(spec.get('tags', []))}")
 
     # List all endpoints
-    print("\n🔗 Endpoints:")
+    print("\n Endpoints:")
     for path, methods in spec['paths'].items():
         for method in methods.keys():
             if method in ['get', 'post', 'put', 'delete', 'patch']:

@@ -660,7 +660,7 @@ class PlatformClient:
             self.config.default_timeout
         )
 
-        logger.info("✅ Platform Client initialized")
+        logger.info(" Platform Client initialized")
         logger.info(f"  - AI Foundation: {self.config.ai_foundation_url}")
         logger.info(f"  - Expertise Center: {self.config.expertise_center_url}")
         logger.info(f"  - Workflow Intelligence: {self.config.workflow_intelligence_url}")

@@ -248,7 +248,7 @@ class ImpactDashboard {
                 <div class="validation-metrics">
                     <div class="accuracy">Точность: ${(accuracy * 100).toFixed(1)}%</div>
                     ${validation.impactCertificate ? 
-                        `<div class="certificate">✓ Сертификат выдан</div>` : ''
+                        `<div class="certificate"> Сертификат выдан</div>` : ''
                     }
                 </div>
             </div>
@@ -584,12 +584,12 @@ class ImpactDashboard {
 
     getAchievementIcon(icon) {
         const icons = {
-            'star': '⭐',
-            'target': '🎯',
-            'shield': '🛡️',
-            'trophy': '🏆'
+            'star': '',
+            'target': '',
+            'shield': '️',
+            'trophy': ''
         };
-        return icons[icon] || '🏅';
+        return icons[icon] || '';
     }
 
     setupEventHandlers() {

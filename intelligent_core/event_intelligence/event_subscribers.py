@@ -59,14 +59,14 @@ async def on_bia_event(event: Event):
     - bcm.bia.completed
     - bcm.bia.critical_process_identified
     """
-    logger.info(f"📊 BIA Event: {event.type}")
+    logger.info(f" BIA Event: {event.type}")
 
     # Extract BIA context for learning
     bia_id = event.data.get("bia_id")
     if bia_id:
         # Track BIA workflow patterns
         if event.type == "bcm.bia.completed":
-            logger.info(f"✅ BIA {bia_id} completed - capturing patterns")
+            logger.info(f" BIA {bia_id} completed - capturing patterns")
 
 
 # ============================================================================
@@ -85,7 +85,7 @@ async def on_exercise_event(event: Event):
     - bcm.exercise.inject_delivered
     - bcm.exercise.response_submitted
     """
-    logger.info(f"🎯 Exercise Event: {event.type}")
+    logger.info(f" Exercise Event: {event.type}")
 
     if event.type == "bcm.exercise.completed":
         exercise_id = event.data.get("exercise_id")
@@ -93,7 +93,7 @@ async def on_exercise_event(event: Event):
         gaps = results.get("gaps", [])
 
         logger.info(
-            f"✅ Exercise {exercise_id} completed with {len(gaps)} gaps identified"
+            f" Exercise {exercise_id} completed with {len(gaps)} gaps identified"
         )
 
 
@@ -111,13 +111,13 @@ async def on_incident_event(event: Event):
     - response.incident.escalated
     - response.incident.resolved
     """
-    logger.info(f"🚨 Incident Event: {event.type}")
+    logger.info(f" Incident Event: {event.type}")
 
     if event.type == "response.incident.resolved":
         incident_id = event.data.get("incident_id")
         resolution_time = event.data.get("resolution_time_hours")
 
-        logger.info(f"✅ Incident {incident_id} resolved in {resolution_time}h")
+        logger.info(f" Incident {incident_id} resolved in {resolution_time}h")
 
         # Learn from incident patterns
         # Predict future incidents
@@ -141,7 +141,7 @@ async def on_bpmn_event(event: Event):
     - bpmn.task.created
     - bpmn.task.completed
     """
-    logger.info(f"⚙️  BPMN Event: {event.type}")
+    logger.info(f"️  BPMN Event: {event.type}")
 
     # Learn workflow execution patterns
     # Predict bottlenecks
@@ -164,7 +164,7 @@ async def on_compliance_event(event: Event):
     - bcm.compliance.improvement_created
     - bcm.compliance.improvement_verified
     """
-    logger.info(f"📋 Compliance Event: {event.type}")
+    logger.info(f" Compliance Event: {event.type}")
 
 
 # ============================================================================
@@ -182,7 +182,7 @@ async def on_governance_event(event: Event):
     - bcm.governance.control_updated
     - bcm.governance.stakeholder_added
     """
-    logger.info(f"👔 Governance Event: {event.type}")
+    logger.info(f" Governance Event: {event.type}")
 
 
 # ============================================================================
@@ -198,12 +198,12 @@ async def on_kpi_event(event: Event):
     - bcm.kpi.calculated
     - bcm.kpi.threshold_exceeded
     """
-    logger.info(f"📈 KPI Event: {event.type}")
+    logger.info(f" KPI Event: {event.type}")
 
     if event.type == "bcm.kpi.calculated":
         kpi_name = event.data.get("kpi_name")
         value = event.data.get("value")
-        logger.info(f"📊 KPI {kpi_name} = {value}")
+        logger.info(f" KPI {kpi_name} = {value}")
 
 
 # ============================================================================
@@ -221,7 +221,7 @@ async def on_plan_event(event: Event):
     - bcm.plan.activated
     - bcm.plan.tested
     """
-    logger.info(f"📝 Plan Event: {event.type}")
+    logger.info(f" Plan Event: {event.type}")
 
 
 # ============================================================================
@@ -239,7 +239,7 @@ async def on_document_event(event: Event):
     - bcm.document.approved
     - bcm.document.archived
     """
-    logger.info(f"📄 Document Event: {event.type}")
+    logger.info(f" Document Event: {event.type}")
 
 
 # ============================================================================
@@ -257,7 +257,7 @@ async def on_auth_event(event: Event):
     - auth.invalid
     - auth.missing
     """
-    logger.debug(f"🔐 Auth Event: {event.type}")
+    logger.debug(f" Auth Event: {event.type}")
 
 
 # ============================================================================
@@ -275,14 +275,14 @@ async def on_service_started(event: Event):
     service_name = event.data.get("service_name")
     subscriptions = event.data.get("subscriptions", [])
 
-    logger.info(f"🚀 Service started: {service_name} with {len(subscriptions)} subscriptions")
+    logger.info(f" Service started: {service_name} with {len(subscriptions)} subscriptions")
 
 
 @subscribe_to("service.stopped")
 async def on_service_stopped(event: Event):
     """Handle service shutdown events."""
     service_name = event.data.get("service_name")
-    logger.info(f"🛑 Service stopped: {service_name}")
+    logger.info(f" Service stopped: {service_name}")
 
 
 # ============================================================================
@@ -298,7 +298,7 @@ async def on_proactive_event(event: Event):
     - proactive.daily_digest
     - specialist.demand_forecast
     """
-    logger.info(f"🔮 Proactive Event: {event.type}")
+    logger.info(f" Proactive Event: {event.type}")
 
 
 # ============================================================================
@@ -311,5 +311,5 @@ async def register_all_subscribers():
 
     This is called automatically by init_event_bus() via @subscribe_to decorators.
     """
-    logger.info("✅ All Event Intelligence subscribers registered")
-    logger.info(f"📊 Total subscribers: {len([f for f in globals().values() if hasattr(f, '_is_event_handler')])}")
+    logger.info(" All Event Intelligence subscribers registered")
+    logger.info(f" Total subscribers: {len([f for f in globals().values() if hasattr(f, '_is_event_handler')])}")

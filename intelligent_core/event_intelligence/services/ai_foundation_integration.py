@@ -50,16 +50,16 @@ class EventIntelligenceAIFoundation:
         try:
             # Initialize RAG Pipeline
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Event Intelligence")
+            logger.info(" RAG Pipeline initialized for Event Intelligence")
 
             # Initialize LLM Router
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Event Intelligence")
+            logger.info(" LLM Router initialized for Event Intelligence")
 
             self._initialized = True
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize AI Foundation: {e}")
+            logger.error(f" Failed to initialize AI Foundation: {e}")
             raise
 
     # ============================================================
@@ -106,7 +106,7 @@ class EventIntelligenceAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(similar_patterns)} similar event patterns for {event_name}")
+            logger.info(f" Retrieved {len(similar_patterns)} similar event patterns for {event_name}")
             return similar_patterns
 
         except Exception as e:
@@ -186,7 +186,7 @@ Provide analysis in this JSON format:
             import json
             analysis = json.loads(response_text)
 
-            logger.info(f"🤖 Generated AI analysis for {event_name} (confidence: {analysis.get('confidence', 0)})")
+            logger.info(f" Generated AI analysis for {event_name} (confidence: {analysis.get('confidence', 0)})")
             return analysis
 
         except Exception as e:
@@ -239,7 +239,7 @@ Provide analysis in this JSON format:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(gap_patterns)} gap patterns")
+            logger.info(f" Retrieved {len(gap_patterns)} gap patterns")
             return gap_patterns
 
         except Exception as e:
@@ -321,7 +321,7 @@ Provide predictions in JSON format:
             import json
             predictions = json.loads(response_text)
 
-            logger.info(f"🔮 Generated {len(predictions.get('predictions', []))} gap predictions")
+            logger.info(f" Generated {len(predictions.get('predictions', []))} gap predictions")
             return predictions
 
         except Exception as e:
@@ -370,7 +370,7 @@ Provide predictions in JSON format:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(strategies)} healing strategies for {gap_type}")
+            logger.info(f" Retrieved {len(strategies)} healing strategies for {gap_type}")
             return strategies
 
         except Exception as e:
@@ -448,7 +448,7 @@ Provide in JSON format:
             import json
             healing_result = json.loads(response_text)
 
-            logger.info(f"🔧 Generated healing code for {gap_type} in {service_name}")
+            logger.info(f" Generated healing code for {gap_type} in {service_name}")
             return healing_result
 
         except Exception as e:
@@ -510,7 +510,7 @@ Confidence: {analysis_result.get('confidence', 0.0)}
                 source_type="event_patterns"
             )
 
-            logger.info(f"💾 Stored analysis pattern for {event_name}")
+            logger.info(f" Stored analysis pattern for {event_name}")
 
         except Exception as e:
             logger.warning(f"Failed to store analysis pattern: {e}")
@@ -555,7 +555,7 @@ This pattern was {'successful' if success else 'unsuccessful'} in resolving {gap
                 source_type="gap_patterns"
             )
 
-            logger.info(f"💾 Stored gap resolution pattern: {gap_type}")
+            logger.info(f" Stored gap resolution pattern: {gap_type}")
 
         except Exception as e:
             logger.warning(f"Failed to store gap pattern: {e}")
@@ -601,7 +601,7 @@ This strategy has proven effective for {gap_type} gaps in {service_language} ser
                 source_type="healing_strategies"
             )
 
-            logger.info(f"💾 Stored healing strategy for {gap_type}")
+            logger.info(f" Stored healing strategy for {gap_type}")
 
         except Exception as e:
             logger.warning(f"Failed to store healing strategy: {e}")

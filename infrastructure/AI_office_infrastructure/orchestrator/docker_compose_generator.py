@@ -98,7 +98,7 @@ class DockerComposeGenerator:
 
     def generate_all(self):
         """Генерирует все docker-compose файлы"""
-        print("\n🏗️  Docker Compose Generator")
+        print("\n️  Docker Compose Generator")
         print("=" * 60)
 
         # 1. Генерировать compose файлы по слоям
@@ -107,24 +107,24 @@ class DockerComposeGenerator:
             if self.services_by_layer[layer]:
                 filepath = self.generate_layer(layer)
                 compose_files.append(filepath)
-                print(f"✅ {layer}: {filepath.name}")
+                print(f" {layer}: {filepath.name}")
 
         # 2. Генерировать full compose (объединяет все слои)
         full_file = self.generate_full(compose_files)
-        print(f"✅ full: {full_file.name}")
+        print(f" full: {full_file.name}")
 
         # 3. Генерировать .env.template
         env_file = self.generate_env_template()
-        print(f"✅ environment: {env_file.name}")
+        print(f" environment: {env_file.name}")
 
         # 4. Генерировать startup скрипты
         startup_scripts = self.generate_startup_scripts()
         for script in startup_scripts:
-            print(f"✅ script: {script.name}")
+            print(f" script: {script.name}")
 
         print("\n" + "=" * 60)
-        print("✅ All configurations generated successfully!")
-        print(f"📁 Output directory: {self.output_dir}")
+        print(" All configurations generated successfully!")
+        print(f" Output directory: {self.output_dir}")
 
     def generate_layer(self, layer_name: str) -> Path:
         """Генерирует docker-compose файл для конкретного слоя"""
@@ -366,52 +366,52 @@ set -e
 LAYER=${1:-full}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "🚀 Starting AI Platform Infrastructure - Layer: $LAYER"
+echo " Starting AI Platform Infrastructure - Layer: $LAYER"
 echo ""
 
 # Check if .env exists
 if [ ! -f "$SCRIPT_DIR/.env" ]; then
-    echo "⚠️  .env file not found. Copying from template..."
+    echo "️  .env file not found. Copying from template..."
     cp "$SCRIPT_DIR/.env.template" "$SCRIPT_DIR/.env"
-    echo "⚠️  Please edit .env and set your actual values!"
+    echo "️  Please edit .env and set your actual values!"
     exit 1
 fi
 
 # Start the appropriate layer
 case $LAYER in
     gateway)
-        echo "📡 Starting Gateway layer..."
+        echo " Starting Gateway layer..."
         docker-compose -f docker-compose.gateway.yml up -d
         ;;
     runtime)
-        echo "⚡ Starting Runtime layer..."
+        echo " Starting Runtime layer..."
         docker-compose -f docker-compose.runtime.yml up -d
         ;;
     observability)
-        echo "👁️  Starting Observability layer..."
+        echo "️  Starting Observability layer..."
         docker-compose -f docker-compose.observability.yml up -d
         ;;
     integration)
-        echo "🔗 Starting Integration layer..."
+        echo " Starting Integration layer..."
         docker-compose -f docker-compose.integration.yml up -d
         ;;
     full)
-        echo "🌟 Starting all services..."
+        echo " Starting all services..."
         docker-compose -f docker-compose.full.yml up -d
         ;;
     *)
-        echo "❌ Unknown layer: $LAYER"
+        echo " Unknown layer: $LAYER"
         echo "Valid layers: gateway, runtime, observability, integration, full"
         exit 1
         ;;
 esac
 
 echo ""
-echo "✅ Services started successfully!"
+echo " Services started successfully!"
 echo ""
-echo "📊 Check status: docker-compose -f docker-compose.$LAYER.yml ps"
-echo "📋 View logs: docker-compose -f docker-compose.$LAYER.yml logs -f"
-echo "🛑 Stop services: ./stop_infrastructure.sh $LAYER"
+echo " Check status: docker-compose -f docker-compose.$LAYER.yml ps"
+echo " View logs: docker-compose -f docker-compose.$LAYER.yml logs -f"
+echo " Stop services: ./stop_infrastructure.sh $LAYER"
 """
 
         start_script = self.output_dir / "start_infrastructure.sh"
@@ -429,14 +429,14 @@ set -e
 LAYER=${1:-full}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "🛑 Stopping AI Platform Infrastructure - Layer: $LAYER"
+echo " Stopping AI Platform Infrastructure - Layer: $LAYER"
 
 case $LAYER in
     gateway|runtime|observability|integration|full)
         docker-compose -f "docker-compose.$LAYER.yml" down
         ;;
     all)
-        echo "🛑 Stopping all layers..."
+        echo " Stopping all layers..."
         for layer in gateway runtime observability integration full; do
             if [ -f "docker-compose.$layer.yml" ]; then
                 docker-compose -f "docker-compose.$layer.yml" down 2>/dev/null || true
@@ -444,12 +444,12 @@ case $LAYER in
         done
         ;;
     *)
-        echo "❌ Unknown layer: $LAYER"
+        echo " Unknown layer: $LAYER"
         exit 1
         ;;
 esac
 
-echo "✅ Services stopped successfully!"
+echo " Services stopped successfully!"
 """
 
         stop_script = self.output_dir / "stop_infrastructure.sh"
@@ -462,7 +462,7 @@ echo "✅ Services stopped successfully!"
         health_content = """#!/bin/bash
 # Health check script for all services
 
-echo "🏥 Checking service health..."
+echo " Checking service health..."
 echo ""
 
 docker-compose -f docker-compose.full.yml ps
@@ -478,14 +478,14 @@ for container in $(docker-compose -f docker-compose.full.yml ps -q); do
 
     if [ "$status" = "running" ]; then
         if [ "$health" = "healthy" ]; then
-            echo "✅ $name - $status ($health)"
+            echo " $name - $status ($health)"
         elif [ "$health" = "no healthcheck" ]; then
-            echo "⚪ $name - $status (no healthcheck)"
+            echo " $name - $status (no healthcheck)"
         else
-            echo "⚠️  $name - $status ($health)"
+            echo "️  $name - $status ($health)"
         fi
     else
-        echo "❌ $name - $status"
+        echo " $name - $status"
     fi
 done
 """
@@ -517,9 +517,9 @@ def main():
     if args.layer:
         if args.layer in generator.LAYERS:
             filepath = generator.generate_layer(args.layer)
-            print(f"✅ Generated: {filepath}")
+            print(f" Generated: {filepath}")
         else:
-            print(f"❌ Unknown layer: {args.layer}")
+            print(f" Unknown layer: {args.layer}")
             print(f"Available layers: {', '.join(generator.LAYERS.keys())}")
     else:
         generator.generate_all()

@@ -96,7 +96,7 @@ class ComplianceMonitoringClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Alert created: {result.get('alert_id')}")
+            logger.info(f" Alert created: {result.get('alert_id')}")
             return result
 
         except Exception as e:
@@ -147,7 +147,7 @@ class ComplianceMonitoringClient:
                 json={'status': 'acknowledged'}
             )
             response.raise_for_status()
-            logger.info(f"✅ Alert acknowledged: {alert_id}")
+            logger.info(f" Alert acknowledged: {alert_id}")
             return True
 
         except Exception as e:
@@ -162,7 +162,7 @@ class ComplianceMonitoringClient:
                 json={'status': 'resolved'}
             )
             response.raise_for_status()
-            logger.info(f"✅ Alert resolved: {alert_id}")
+            logger.info(f" Alert resolved: {alert_id}")
             return True
 
         except Exception as e:
@@ -217,7 +217,7 @@ class ComplianceMonitoringClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Nonconformity created: {result.get('nc_id')}")
+            logger.info(f" Nonconformity created: {result.get('nc_id')}")
             return result
 
         except Exception as e:
@@ -283,7 +283,7 @@ class ComplianceMonitoringClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Audit created: {result.get('audit_id')}")
+            logger.info(f" Audit created: {result.get('audit_id')}")
             return result
 
         except Exception as e:

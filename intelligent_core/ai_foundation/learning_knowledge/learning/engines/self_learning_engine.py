@@ -65,11 +65,11 @@ class SelfLearningEngine:
                 'status': 'pending'
             }
 
-            logger.info(f"📝 Recorded prediction {prediction_id}: {prediction_data.get('predicted_score')}")
+            logger.info(f" Recorded prediction {prediction_id}: {prediction_data.get('predicted_score')}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Error recording prediction: {e}")
+            logger.error(f" Error recording prediction: {e}")
             return False
 
     def record_actual_outcome(
@@ -92,7 +92,7 @@ class SelfLearningEngine:
             True если успешно, False если предсказание не найдено
         """
         if prediction_id not in self.predictions_store:
-            logger.warning(f"⚠️ Prediction {prediction_id} not found")
+            logger.warning(f"️ Prediction {prediction_id} not found")
             return False
 
         try:
@@ -102,7 +102,7 @@ class SelfLearningEngine:
                 'status': 'completed'
             })
 
-            logger.info(f"✅ Recorded outcome for {prediction_id}: {actual_data.get('actual_score')}")
+            logger.info(f" Recorded outcome for {prediction_id}: {actual_data.get('actual_score')}")
 
             # Триггер: Анализ и обучение
             self._trigger_learning(prediction_id)
@@ -110,7 +110,7 @@ class SelfLearningEngine:
             return True
 
         except Exception as e:
-            logger.error(f"❌ Error recording outcome: {e}")
+            logger.error(f" Error recording outcome: {e}")
             return False
 
     def _trigger_learning(self, prediction_id: str):
@@ -139,7 +139,7 @@ class SelfLearningEngine:
             'timestamp': datetime.now().isoformat()
         }
 
-        logger.info(f"📊 Prediction error: {error:.2f} ({error_type})")
+        logger.info(f" Prediction error: {error:.2f} ({error_type})")
 
         # Сохранить для анализа
         self.performance_history.append(error_analysis)
@@ -167,7 +167,7 @@ class SelfLearningEngine:
 
         Сейчас: Simplified version
         """
-        logger.info(f"🔄 Starting model retraining (buffer size: {len(self.training_buffer)})...")
+        logger.info(f" Starting model retraining (buffer size: {len(self.training_buffer)})...")
 
         try:
             # Extract features and targets
@@ -190,7 +190,7 @@ class SelfLearningEngine:
                 self.current_model_score = 100 - new_error  # Simplified score
 
                 logger.info(
-                    f"✅ Model updated to v{self.current_model_version:.1f}, "
+                    f" Model updated to v{self.current_model_version:.1f}, "
                     f"score improved: {old_error:.2f} → {new_error:.2f}"
                 )
 
@@ -207,12 +207,12 @@ class SelfLearningEngine:
                 })
             else:
                 logger.warning(
-                    f"⚠️ New model worse (error: {old_error:.2f} → {new_error:.2f}), "
+                    f"️ New model worse (error: {old_error:.2f} → {new_error:.2f}), "
                     f"keeping current version"
                 )
 
         except Exception as e:
-            logger.error(f"❌ Model retraining error: {e}")
+            logger.error(f" Model retraining error: {e}")
 
     def analyze_learning_effectiveness(self) -> Dict[str, Any]:
         """
@@ -374,7 +374,7 @@ class SelfLearningEngine:
 
         TODO: Persist to database (learning.model_versions table)
         """
-        logger.info(f"💾 Saved model version: v{version_info['version']}")
+        logger.info(f" Saved model version: v{version_info['version']}")
 
         # TODO: INSERT INTO learning.model_versions
         pass

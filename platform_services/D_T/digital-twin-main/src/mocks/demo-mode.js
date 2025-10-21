@@ -29,7 +29,7 @@ export class DemoMode {
             capacity: {
                 name: 'Capacity & Staffing Optimization',
                 description: 'Optimize staff allocation and service capacity',
-                icon: '👥',
+                icon: '',
                 params: {
                     arrival_rate: { value: 12, min: 5, max: 50, unit: 'per hour' },
                     agents: { value: 8, min: 2, max: 20, unit: 'agents' },
@@ -46,7 +46,7 @@ export class DemoMode {
             bcm_outage: {
                 name: 'Business Continuity - Outage Simulation',
                 description: 'Test resilience against system failures',
-                icon: '🔥',
+                icon: '',
                 params: {
                     rto_hours: { value: 24, min: 1, max: 72, unit: 'hours' },
                     rpo_hours: { value: 4, min: 1, max: 24, unit: 'hours' },
@@ -66,7 +66,7 @@ export class DemoMode {
             grant_optimization: {
                 name: 'Grant-KPI Optimization',
                 description: 'Align grant disbursements with impact KPIs',
-                icon: '💰',
+                icon: '',
                 params: {
                     grant_amount: { value: 2000000, min: 100000, max: 10000000, unit: '$' },
                     kpi_targets: { value: 3, min: 1, max: 10, unit: 'indicators' },
@@ -83,7 +83,7 @@ export class DemoMode {
             demand_surge: {
                 name: 'Demand Surge Response',
                 description: 'Handle sudden increase in service demand',
-                icon: '📈',
+                icon: '',
                 params: {
                     surge_factor: { value: 2.5, min: 1.5, max: 5, unit: 'x normal' },
                     duration_days: { value: 30, min: 7, max: 90, unit: 'days' },
@@ -100,7 +100,7 @@ export class DemoMode {
             theory_of_change: {
                 name: 'Theory of Change Optimizer',
                 description: 'AI-driven impact maximization through causal optimization',
-                icon: '🎯',
+                icon: '',
                 params: {
                     sms_intensity: { value: 1.0, min: 0, max: 3, unit: 'x', step: 0.1 },
                     transport_intensity: { value: 1.0, min: 0, max: 2, unit: 'x', step: 0.1 },

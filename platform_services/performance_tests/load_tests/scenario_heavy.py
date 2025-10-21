@@ -358,12 +358,12 @@ def on_test_stop(environment, **kwargs):
         # Performance assessment
         p95 = stats.total.get_response_time_percentile(0.95)
         if p95 < 200:
-            print("✅ Performance: EXCELLENT (P95 < 200ms)")
+            print(" Performance: EXCELLENT (P95 < 200ms)")
         elif p95 < 500:
-            print("✅ Performance: GOOD (P95 < 500ms)")
+            print(" Performance: GOOD (P95 < 500ms)")
         elif p95 < 1000:
-            print("⚠️  Performance: ACCEPTABLE (P95 < 1000ms)")
+            print("️  Performance: ACCEPTABLE (P95 < 1000ms)")
         else:
-            print("❌ Performance: POOR (P95 > 1000ms)")
+            print(" Performance: POOR (P95 > 1000ms)")
 
     print("=" * 80)

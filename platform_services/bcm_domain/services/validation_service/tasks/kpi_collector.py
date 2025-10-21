@@ -65,10 +65,10 @@ async def record_kpi_measurement(
         db.add(measurement)
         db.commit()
 
-        logger.info(f"✅ Recorded KPI {kpi_code} = {value} for tenant {tenant_id}")
+        logger.info(f" Recorded KPI {kpi_code} = {value} for tenant {tenant_id}")
 
     except Exception as e:
-        logger.error(f"❌ Failed to record KPI {kpi_code}: {e}")
+        logger.error(f" Failed to record KPI {kpi_code}: {e}")
         db.rollback()
 
 
@@ -80,7 +80,7 @@ def collect_plan_currency_rate(tenant_id: str):
     Collect Plan Currency Rate KPI
     Measures % of BC plans that are current (reviewed within period)
     """
-    logger.info(f"📊 Collecting Plan Currency Rate for tenant {tenant_id}")
+    logger.info(f" Collecting Plan Currency Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -108,7 +108,7 @@ def collect_rto_achievement_rate(tenant_id: str):
     Collect RTO Achievement Rate KPI
     Measures % of incidents recovered within RTO
     """
-    logger.info(f"📊 Collecting RTO Achievement Rate for tenant {tenant_id}")
+    logger.info(f" Collecting RTO Achievement Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -136,7 +136,7 @@ def collect_exercise_completion_rate(tenant_id: str):
     Collect Exercise Completion Rate KPI
     Measures % of planned exercises completed
     """
-    logger.info(f"📊 Collecting Exercise Completion Rate for tenant {tenant_id}")
+    logger.info(f" Collecting Exercise Completion Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -172,7 +172,7 @@ def collect_training_completion_rate(tenant_id: str):
     Collect Training Completion Rate KPI
     Measures % of assigned trainings completed
     """
-    logger.info(f"📊 Collecting Training Completion Rate for tenant {tenant_id}")
+    logger.info(f" Collecting Training Completion Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -200,7 +200,7 @@ def collect_audit_finding_closure_rate(tenant_id: str):
     Collect Audit Finding Closure Rate KPI
     Measures % of audit findings closed
     """
-    logger.info(f"📊 Collecting Audit Finding Closure Rate for tenant {tenant_id}")
+    logger.info(f" Collecting Audit Finding Closure Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -228,7 +228,7 @@ def collect_capa_effectiveness_rate(tenant_id: str):
     Collect CAPA Effectiveness Rate KPI
     Measures % of CAPAs that are effective
     """
-    logger.info(f"📊 Collecting CAPA Effectiveness Rate for tenant {tenant_id}")
+    logger.info(f" Collecting CAPA Effectiveness Rate for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -256,7 +256,7 @@ def collect_incident_response_time(tenant_id: str):
     Collect Average Incident Response Time KPI
     Measures average time to respond to incidents (minutes)
     """
-    logger.info(f"📊 Collecting Incident Response Time for tenant {tenant_id}")
+    logger.info(f" Collecting Incident Response Time for tenant {tenant_id}")
 
     async def _collect():
         client = get_bcm_client()
@@ -286,7 +286,7 @@ def collect_all_kpis():
     Master task: Collect all KPIs for all active tenants
     Runs daily via Celery Beat
     """
-    logger.info("🚀 Starting daily KPI collection for all tenants")
+    logger.info(" Starting daily KPI collection for all tenants")
 
     try:
         db = next(get_db())
@@ -296,7 +296,7 @@ def collect_all_kpis():
         tenants = db.query(KPIDefinition.tenant_id).distinct().all()
 
         for (tenant_id,) in tenants:
-            logger.info(f"📊 Collecting KPIs for tenant: {tenant_id}")
+            logger.info(f" Collecting KPIs for tenant: {tenant_id}")
 
             # Trigger individual KPI collection tasks
             collect_plan_currency_rate.delay(tenant_id)
@@ -307,10 +307,10 @@ def collect_all_kpis():
             collect_capa_effectiveness_rate.delay(tenant_id)
             collect_incident_response_time.delay(tenant_id)
 
-        logger.info(f"✅ KPI collection triggered for {len(tenants)} tenants")
+        logger.info(f" KPI collection triggered for {len(tenants)} tenants")
 
     except Exception as e:
-        logger.error(f"❌ Master KPI collection failed: {e}")
+        logger.error(f" Master KPI collection failed: {e}")
 
 
 # ===== ON-DEMAND COLLECTION =====
@@ -321,7 +321,7 @@ def collect_kpis_for_tenant(tenant_id: str):
     On-demand: Collect all KPIs for specific tenant
     Can be triggered via API
     """
-    logger.info(f"📊 On-demand KPI collection for tenant {tenant_id}")
+    logger.info(f" On-demand KPI collection for tenant {tenant_id}")
 
     # Trigger all individual tasks
     tasks = [
@@ -334,5 +334,5 @@ def collect_kpis_for_tenant(tenant_id: str):
         collect_incident_response_time.delay(tenant_id)
     ]
 
-    logger.info(f"✅ Triggered {len(tasks)} KPI collection tasks for tenant {tenant_id}")
+    logger.info(f" Triggered {len(tasks)} KPI collection tasks for tenant {tenant_id}")
     return {"tenant_id": tenant_id, "tasks_triggered": len(tasks)}

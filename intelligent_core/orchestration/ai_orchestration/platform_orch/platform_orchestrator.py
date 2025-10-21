@@ -260,10 +260,10 @@ class PlatformOrchestrator(BaseOrchestrator):
                 # Track in database
                 await self._track_service_status(service_name, "running")
 
-                logger.info(f"  ✓ {service_name} started")
+                logger.info(f"   {service_name} started")
             else:
                 failed_services.append(service_name)
-                logger.error(f"  ✗ {service_name} failed to start")
+                logger.error(f"   {service_name} failed to start")
 
                 # Track failure
                 await self.service_registry.update_status(service_name, "failed")
@@ -287,7 +287,7 @@ class PlatformOrchestrator(BaseOrchestrator):
             }
         )
 
-        logger.info(f"✓ Group '{group_name}' ready")
+        logger.info(f" Group '{group_name}' ready")
         return True
 
     async def wait_for_dependencies(self, group_name: str, timeout: int = 300) -> bool:

@@ -207,7 +207,7 @@ class PortConflictDetector:
 
                 conflicts.append(conflict)
                 logger.error(
-                    f"❌ КОНФЛИКТ ПОРТА {port}: "
+                    f" КОНФЛИКТ ПОРТА {port}: "
                     f"{', '.join(services)} "
                     f"(фактически занят: {actual_ports.get(port, 'не занят')})"
                 )
@@ -219,7 +219,7 @@ class PortConflictDetector:
             if port not in reserved_ports:
                 # Порт занят, но не зарезервирован ни одним сервисом
                 logger.warning(
-                    f"⚠️  Порт {port} занят процессом '{process}', "
+                    f"️  Порт {port} занят процессом '{process}', "
                     f"но не зарезервирован ни одним сервисом"
                 )
 
@@ -227,9 +227,9 @@ class PortConflictDetector:
 
         # Итоговый отчет
         if conflicts:
-            logger.error(f"❌ Обнаружено {len(conflicts)} конфликтов портов")
+            logger.error(f" Обнаружено {len(conflicts)} конфликтов портов")
         else:
-            logger.info("✅ Конфликтов портов не обнаружено")
+            logger.info(" Конфликтов портов не обнаружено")
 
         return conflicts
 
@@ -273,7 +273,7 @@ class PortConflictDetector:
         report.append("")
 
         if self.conflicts:
-            report.append(f"❌ ОБНАРУЖЕНО КОНФЛИКТОВ: {len(self.conflicts)}")
+            report.append(f" ОБНАРУЖЕНО КОНФЛИКТОВ: {len(self.conflicts)}")
             report.append("")
 
             for conflict in self.conflicts:
@@ -288,7 +288,7 @@ class PortConflictDetector:
 
                 report.append("")
         else:
-            report.append("✅ Конфликтов не обнаружено")
+            report.append(" Конфликтов не обнаружено")
             report.append("")
 
         # Статистика по назначениям

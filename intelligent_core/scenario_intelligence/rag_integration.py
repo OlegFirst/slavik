@@ -33,18 +33,18 @@ class ScenarioRAGIntegration:
             # Try to import Qdrant wrapper
             from qdrant_wrapper import QdrantWrapper
             self.qdrant = QdrantWrapper()
-            logger.info("✅ Qdrant client initialized")
+            logger.info(" Qdrant client initialized")
         except Exception as e:
-            logger.warning(f"⚠️  Qdrant client not available: {e}")
+            logger.warning(f"️  Qdrant client not available: {e}")
             self.qdrant = None
 
         try:
             # Try to import LLM router for embeddings
             from llm_router import LLMRouter
             self.llm = LLMRouter()
-            logger.info("✅ LLM router initialized")
+            logger.info(" LLM router initialized")
         except Exception as e:
-            logger.warning(f"⚠️  LLM router not available: {e}")
+            logger.warning(f"️  LLM router not available: {e}")
             self.llm = None
 
     async def store_scenario(self, scenario: dict) -> bool:
@@ -65,7 +65,7 @@ class ScenarioRAGIntegration:
         scenario_id = scenario.get('id')
 
         if not self.qdrant or not self.llm:
-            logger.warning(f"⚠️  RAG not available, scenario {scenario_id} not stored")
+            logger.warning(f"️  RAG not available, scenario {scenario_id} not stored")
             return False
 
         try:
@@ -96,11 +96,11 @@ class ScenarioRAGIntegration:
                 }]
             )
 
-            logger.info(f"✅ Stored scenario in RAG: {scenario_id}")
+            logger.info(f" Stored scenario in RAG: {scenario_id}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to store scenario {scenario_id}: {e}")
+            logger.error(f" Failed to store scenario {scenario_id}: {e}")
             return False
 
     async def find_similar_scenarios(
@@ -126,7 +126,7 @@ class ScenarioRAGIntegration:
         """
 
         if not self.qdrant or not self.llm:
-            logger.warning(f"⚠️  RAG not available, returning empty results")
+            logger.warning(f"️  RAG not available, returning empty results")
             return []
 
         try:
@@ -170,19 +170,19 @@ class ScenarioRAGIntegration:
                 scenario['_similarity_score'] = result.get('score', 0.0)
                 scenarios.append(scenario)
 
-            logger.info(f"🔍 Found {len(scenarios)} similar scenarios for query: {query}")
+            logger.info(f" Found {len(scenarios)} similar scenarios for query: {query}")
 
             return scenarios
 
         except Exception as e:
-            logger.error(f"❌ Failed to search scenarios: {e}")
+            logger.error(f" Failed to search scenarios: {e}")
             return []
 
     async def get_scenario_by_id(self, scenario_id: str) -> Optional[dict]:
         """Get scenario by exact ID"""
 
         if not self.qdrant:
-            logger.warning(f"⚠️  RAG not available")
+            logger.warning(f"️  RAG not available")
             return None
 
         try:
@@ -197,7 +197,7 @@ class ScenarioRAGIntegration:
             return None
 
         except Exception as e:
-            logger.error(f"❌ Failed to get scenario {scenario_id}: {e}")
+            logger.error(f" Failed to get scenario {scenario_id}: {e}")
             return None
 
     async def list_all_scenarios(
@@ -208,7 +208,7 @@ class ScenarioRAGIntegration:
         """List all scenarios (with optional filters)"""
 
         if not self.qdrant:
-            logger.warning(f"⚠️  RAG not available")
+            logger.warning(f"️  RAG not available")
             return []
 
         try:
@@ -242,19 +242,19 @@ class ScenarioRAGIntegration:
 
             scenarios = [r['payload']['scenario'] for r in results]
 
-            logger.info(f"📋 Listed {len(scenarios)} scenarios")
+            logger.info(f" Listed {len(scenarios)} scenarios")
 
             return scenarios
 
         except Exception as e:
-            logger.error(f"❌ Failed to list scenarios: {e}")
+            logger.error(f" Failed to list scenarios: {e}")
             return []
 
     async def delete_scenario(self, scenario_id: str) -> bool:
         """Delete scenario from RAG"""
 
         if not self.qdrant:
-            logger.warning(f"⚠️  RAG not available")
+            logger.warning(f"️  RAG not available")
             return False
 
         try:
@@ -263,11 +263,11 @@ class ScenarioRAGIntegration:
                 points_selector=[scenario_id]
             )
 
-            logger.info(f"🗑️  Deleted scenario: {scenario_id}")
+            logger.info(f"️  Deleted scenario: {scenario_id}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to delete scenario {scenario_id}: {e}")
+            logger.error(f" Failed to delete scenario {scenario_id}: {e}")
             return False
 
     async def update_scenario(self, scenario: dict) -> bool:
@@ -349,7 +349,7 @@ class ScenarioRAGIntegration:
         """Create Qdrant collection for scenarios if it doesn't exist"""
 
         if not self.qdrant:
-            logger.warning(f"⚠️  RAG not available")
+            logger.warning(f"️  RAG not available")
             return False
 
         try:
@@ -364,14 +364,14 @@ class ScenarioRAGIntegration:
                     distance="Cosine"
                 )
 
-                logger.info(f"✅ Created collection: {self.collection_name}")
+                logger.info(f" Created collection: {self.collection_name}")
                 return True
             else:
-                logger.info(f"✅ Collection already exists: {self.collection_name}")
+                logger.info(f" Collection already exists: {self.collection_name}")
                 return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to create collection: {e}")
+            logger.error(f" Failed to create collection: {e}")
             return False
 
 
@@ -423,12 +423,12 @@ async def main():
     }
 
     # Store
-    print("\n📝 Storing test scenario...")
+    print("\n Storing test scenario...")
     success = await rag.store_scenario(test_scenario)
-    print(f"  {'✅' if success else '❌'} Store result: {success}")
+    print(f"  {'' if success else ''} Store result: {success}")
 
     # Search
-    print("\n🔍 Searching for BIA scenarios...")
+    print("\n Searching for BIA scenarios...")
     results = await rag.find_similar_scenarios(
         query="healthcare BIA workflow",
         scenario_type="user_workflow"

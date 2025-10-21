@@ -68,16 +68,16 @@ async def initialize_database():
     if _primary_db is None:
         _primary_db = supabase_manager
         await _primary_db.connect()
-        logger.info("✅ Database connections initialized")
+        logger.info(" Database connections initialized")
 
     # Initialize sync managers for admin tasks
     try:
         _system_db.connect(min_conn=1, max_conn=5)
         _platform_db.connect(min_conn=1, max_conn=5)
         _business_db.connect(min_conn=2, max_conn=10)
-        logger.info("✅ Sync database managers initialized")
+        logger.info(" Sync database managers initialized")
     except Exception as e:
-        logger.warning(f"⚠️  Sync managers initialization failed (non-critical): {e}")
+        logger.warning(f"️  Sync managers initialization failed (non-critical): {e}")
 
 
 async def shutdown_database():
@@ -90,16 +90,16 @@ async def shutdown_database():
     if _primary_db:
         await _primary_db.disconnect()
         _primary_db = None
-        logger.info("✅ Database connections closed")
+        logger.info(" Database connections closed")
 
     # Shutdown sync managers
     try:
         _system_db.disconnect()
         _platform_db.disconnect()
         _business_db.disconnect()
-        logger.info("✅ Sync database managers closed")
+        logger.info(" Sync database managers closed")
     except Exception as e:
-        logger.warning(f"⚠️  Sync managers shutdown failed: {e}")
+        logger.warning(f"️  Sync managers shutdown failed: {e}")
 
 
 # =============================================================================

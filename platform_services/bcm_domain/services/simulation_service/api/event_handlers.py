@@ -329,9 +329,9 @@ async def register_event_handlers(
                 pattern=sub["pattern"],
                 handler=sub["handler"]
             )
-            logger.info(f"✅ Subscribed to: {sub['pattern']}")
+            logger.info(f" Subscribed to: {sub['pattern']}")
         except Exception as e:
-            logger.error(f"❌ Failed to subscribe to {sub['pattern']}: {e}")
+            logger.error(f" Failed to subscribe to {sub['pattern']}: {e}")
 
     logger.info("EventBus event handlers registered successfully")
 

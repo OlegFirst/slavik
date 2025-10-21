@@ -80,7 +80,7 @@ class ScenarioPredictor:
 
                 predictions[scenario_id] = prediction
 
-            logger.info(f"✅ Predicted failures for {len(predictions)} scenarios")
+            logger.info(f" Predicted failures for {len(predictions)} scenarios")
 
             return predictions
 
@@ -264,7 +264,7 @@ class ScenarioPredictor:
 
                 priorities[scenario_id] = priority_data
 
-            logger.info(f"✅ Calculated priorities for {len(priorities)} scenarios")
+            logger.info(f" Calculated priorities for {len(priorities)} scenarios")
 
             return priorities
 

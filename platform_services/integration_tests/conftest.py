@@ -102,7 +102,7 @@ async def wait_for_services(service_urls: Dict[str, str]) -> None:
     """
     health_check_timeout = int(os.getenv("HEALTH_CHECK_TIMEOUT", "60"))
 
-    print("\n🔍 Waiting for services to become healthy...")
+    print("\n Waiting for services to become healthy...")
 
     services_to_check = {
         "BIA": f"{service_urls['bia']}/health",
@@ -117,11 +117,11 @@ async def wait_for_services(service_urls: Dict[str, str]) -> None:
         is_healthy = await wait_for_service(health_url, timeout=health_check_timeout)
 
         if not is_healthy:
-            pytest.fail(f"❌ {service_name} service failed to become healthy within {health_check_timeout}s")
+            pytest.fail(f" {service_name} service failed to become healthy within {health_check_timeout}s")
 
-        print(f"   ✅ {service_name} is healthy")
+        print(f"    {service_name} is healthy")
 
-    print("✅ All services are healthy!\n")
+    print(" All services are healthy!\n")
 
 
 # ===== AUTHENTICATION FIXTURES =====
@@ -267,7 +267,7 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
     yield created_resources
 
     # Cleanup after test
-    print("\n🧹 Cleaning up test data...")
+    print("\n Cleaning up test data...")
 
     # Delete Plans
     for plan_id in created_resources.get("plans", []):
@@ -277,7 +277,7 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
                 headers=admin_auth_headers
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to delete plan {plan_id}: {e}")
+            print(f"   ️ Failed to delete plan {plan_id}: {e}")
 
     # Delete Strategies
     for strategy_id in created_resources.get("strategies", []):
@@ -287,7 +287,7 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
                 headers=admin_auth_headers
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to delete strategy {strategy_id}: {e}")
+            print(f"   ️ Failed to delete strategy {strategy_id}: {e}")
 
     # Delete BIA Processes
     for process_id in created_resources.get("bia_processes", []):
@@ -297,7 +297,7 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
                 headers=admin_auth_headers
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to delete BIA process {process_id}: {e}")
+            print(f"   ️ Failed to delete BIA process {process_id}: {e}")
 
     # Delete Nonconformities
     for nc_id in created_resources.get("nonconformities", []):
@@ -307,7 +307,7 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
                 headers=admin_auth_headers
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to delete NC {nc_id}: {e}")
+            print(f"   ️ Failed to delete NC {nc_id}: {e}")
 
     # Delete Audits
     for audit_id in created_resources.get("audits", []):
@@ -317,9 +317,9 @@ async def cleanup_test_data(http_client: httpx.AsyncClient, service_urls: Dict[s
                 headers=admin_auth_headers
             )
         except Exception as e:
-            print(f"   ⚠️ Failed to delete audit {audit_id}: {e}")
+            print(f"   ️ Failed to delete audit {audit_id}: {e}")
 
-    print("✅ Cleanup complete\n")
+    print(" Cleanup complete\n")
 
 
 # ===== EVENTBUS HELPER FIXTURES =====
@@ -421,7 +421,7 @@ def retry_async():
                 last_exception = e
 
                 if attempt < max_attempts - 1:
-                    print(f"   ⚠️ Attempt {attempt + 1} failed: {e}. Retrying in {delay}s...")
+                    print(f"   ️ Attempt {attempt + 1} failed: {e}. Retrying in {delay}s...")
                     await asyncio.sleep(delay)
                     delay *= backoff_factor
 

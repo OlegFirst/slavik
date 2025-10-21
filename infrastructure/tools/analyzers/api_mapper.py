@@ -41,18 +41,18 @@ class APIMapper:
 
     def scan_project(self, directories: List[str]):
         """Scan project for APIs."""
-        print("🔍 Scanning for ALL APIs...\n")
+        print(" Scanning for ALL APIs...\n")
 
         for directory in directories:
             dir_path = self.root_dir / directory
             if not dir_path.exists():
-                print(f"⚠️  Directory not found: {directory}")
+                print(f"️  Directory not found: {directory}")
                 continue
 
-            print(f"📂 Scanning: {directory}")
+            print(f" Scanning: {directory}")
             self._scan_directory(dir_path, directory)
 
-        print(f"\n✅ Scan complete!")
+        print(f"\n Scan complete!")
 
     def _scan_directory(self, path: Path, module_name: str):
         """Recursively scan directory."""
@@ -284,7 +284,7 @@ class APIMapper:
                 'apis': self.apis
             }, f, indent=2)
 
-        print(f"✅ JSON report: {json_path}")
+        print(f" JSON report: {json_path}")
 
         # Markdown report
         md_path = output_path / "api_map.md"
@@ -334,10 +334,10 @@ class APIMapper:
                 for handler in sorted(self.apis['eventbus_handlers'], key=lambda x: x['event_type']):
                     f.write(f"| `{handler['event_type']}` | `{handler['handler']}()` | {handler['module']} | {handler['file']}:{handler['line']} |\n")
 
-        print(f"✅ Markdown report: {md_path}")
+        print(f" Markdown report: {md_path}")
 
         # Summary
-        print(f"\n📊 API SUMMARY:")
+        print(f"\n API SUMMARY:")
         print(f"   Total APIs: {total_apis}")
         for api_type, count in sorted(self.stats.items(), key=lambda x: x[1], reverse=True):
             print(f"   {api_type}: {count}")

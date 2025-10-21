@@ -316,7 +316,7 @@ class KnowledgeGraphBuilder:
         self._add_clause_dependencies()
 
         stats = self.graph.get_statistics()
-        logger.info(f"✅ Knowledge graph built: {stats['total_nodes']} nodes, {stats['total_edges']} edges")
+        logger.info(f" Knowledge graph built: {stats['total_nodes']} nodes, {stats['total_edges']} edges")
 
         return self.graph
 
@@ -433,7 +433,7 @@ if __name__ == "__main__":
 
     # Print statistics
     stats = kg.get_statistics()
-    print(f"\n📊 Knowledge Graph Statistics:")
+    print(f"\n Knowledge Graph Statistics:")
     print(f"  Total Nodes: {stats['total_nodes']}")
     print(f"  Total Edges: {stats['total_edges']}")
     print(f"\n  Nodes by Type:")
@@ -444,7 +444,7 @@ if __name__ == "__main__":
         print(f"    {edge_type}: {count}")
 
     # Example queries
-    print(f"\n\n🔍 Example Queries:")
+    print(f"\n\n Example Queries:")
 
     # Evidence for BIA
     evidence = kg.get_iso_clause_evidence('8.2.2')

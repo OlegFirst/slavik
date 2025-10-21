@@ -146,7 +146,7 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
             )
 
         try:
-            # ✅ NEW: Verify token via Auth Service
+            #  NEW: Verify token via Auth Service
             auth_service_url = getattr(settings, 'auth_service_url', 'http://localhost:8001')
 
             async with httpx.AsyncClient(timeout=5.0) as client:
@@ -173,7 +173,7 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
             request.state.user_claims = user_data
 
             logger.info(
-                f"✅ Authenticated: user={request.state.email}, path={method} {path}"
+                f" Authenticated: user={request.state.email}, path={method} {path}"
             )
 
             # Continue to next middleware/handler

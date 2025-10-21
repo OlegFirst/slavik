@@ -56,7 +56,7 @@ def update_all_models(self) -> Dict[str, Any]:
 
     Runs at 2 AM daily
     """
-    logger.info("🔄 Starting daily model update...")
+    logger.info(" Starting daily model update...")
 
     try:
         # Import here to avoid circular dependencies
@@ -80,7 +80,7 @@ def update_all_models(self) -> Dict[str, Any]:
         # Deploy if validation passed
         if validation_results['passed']:
             engine.deploy_models()
-            logger.info(f"✅ Models updated successfully: {results}")
+            logger.info(f" Models updated successfully: {results}")
 
             return {
                 'status': 'success',
@@ -89,14 +89,14 @@ def update_all_models(self) -> Dict[str, Any]:
                 'validation': validation_results
             }
         else:
-            logger.warning("⚠️ Validation failed - keeping old models")
+            logger.warning("️ Validation failed - keeping old models")
             return {
                 'status': 'validation_failed',
                 'validation': validation_results
             }
 
     except Exception as exc:
-        logger.error(f"❌ Model update failed: {exc}")
+        logger.error(f" Model update failed: {exc}")
         # Retry with exponential backoff
         raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
 
@@ -106,7 +106,7 @@ def extract_patterns(self) -> Dict[str, Any]:
     """
     Hourly task: Extract patterns from recent activities
     """
-    logger.info("🔍 Extracting patterns from recent activities...")
+    logger.info(" Extracting patterns from recent activities...")
 
     try:
         from intelligent_core.workflow_intelligence.case_library.pattern_detector import PatternDetector
@@ -120,7 +120,7 @@ def extract_patterns(self) -> Dict[str, Any]:
             # Store patterns to case library
             detector.store_patterns(patterns)
 
-            logger.info(f"✅ Extracted {len(patterns)} new patterns")
+            logger.info(f" Extracted {len(patterns)} new patterns")
             return {
                 'status': 'success',
                 'patterns_count': len(patterns),
@@ -130,7 +130,7 @@ def extract_patterns(self) -> Dict[str, Any]:
             return {'status': 'no_patterns', 'patterns_count': 0}
 
     except Exception as exc:
-        logger.error(f"❌ Pattern extraction failed: {exc}")
+        logger.error(f" Pattern extraction failed: {exc}")
         raise
 
 
@@ -141,7 +141,7 @@ def full_model_retrain(self) -> Dict[str, Any]:
 
     Runs every Sunday at 3 AM
     """
-    logger.info("🔄 Starting weekly full model retraining...")
+    logger.info(" Starting weekly full model retraining...")
 
     try:
         from intelligent_core.ai_foundation.learning.self_learning_engine import SelfLearningEngine
@@ -159,7 +159,7 @@ def full_model_retrain(self) -> Dict[str, Any]:
 
         if validation['passed']:
             engine.deploy_models()
-            logger.info(f"✅ Full retraining completed: {results}")
+            logger.info(f" Full retraining completed: {results}")
 
             return {
                 'status': 'success',
@@ -168,14 +168,14 @@ def full_model_retrain(self) -> Dict[str, Any]:
                 'validation': validation
             }
         else:
-            logger.error("❌ Validation failed after retraining")
+            logger.error(" Validation failed after retraining")
             return {
                 'status': 'validation_failed',
                 'validation': validation
             }
 
     except Exception as exc:
-        logger.error(f"❌ Model retraining failed: {exc}")
+        logger.error(f" Model retraining failed: {exc}")
         raise self.retry(exc=exc, countdown=3600)  # Retry after 1 hour
 
 
@@ -186,7 +186,7 @@ def learn_from_case(case_id: str, outcome: str) -> Dict[str, Any]:
 
     Triggered by: case.completed event
     """
-    logger.info(f"📚 Learning from case: {case_id}")
+    logger.info(f" Learning from case: {case_id}")
 
     try:
         from intelligent_core.workflow_intelligence.case_library.case_library import CaseLibrary
@@ -209,5 +209,5 @@ def learn_from_case(case_id: str, outcome: str) -> Dict[str, Any]:
         }
 
     except Exception as exc:
-        logger.error(f"❌ Learning from case failed: {exc}")
+        logger.error(f" Learning from case failed: {exc}")
         raise

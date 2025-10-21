@@ -73,12 +73,12 @@ class ScenarioDatabaseManager(DatabaseManager):
         try:
             result = self.execute(query, params, commit=True)
             if result:
-                logger.info(f"✅ Scenario saved: {result[0][0]}")
+                logger.info(f" Scenario saved: {result[0][0]}")
                 return True
             return False
 
         except Exception as e:
-            logger.error(f"❌ Error saving scenario: {e}")
+            logger.error(f" Error saving scenario: {e}")
             return False
 
     def get_scenario(self, scenario_id: str) -> Optional[Dict[str, Any]]:
@@ -106,7 +106,7 @@ class ScenarioDatabaseManager(DatabaseManager):
             return None
 
         except Exception as e:
-            logger.error(f"❌ Error getting scenario: {e}")
+            logger.error(f" Error getting scenario: {e}")
             return None
 
     def find_scenarios(
@@ -154,7 +154,7 @@ class ScenarioDatabaseManager(DatabaseManager):
             return [row[0] for row in results] if results else []
 
         except Exception as e:
-            logger.error(f"❌ Error finding scenarios: {e}")
+            logger.error(f" Error finding scenarios: {e}")
             return []
 
     # =====================================================================
@@ -211,12 +211,12 @@ class ScenarioDatabaseManager(DatabaseManager):
             exec_result = self.execute(query, params, commit=True)
             if exec_result and len(exec_result) > 0:
                 execution_id = str(exec_result[0][0])
-                logger.info(f"✅ Execution saved: {execution_id}")
+                logger.info(f" Execution saved: {execution_id}")
                 return execution_id
             return None
 
         except Exception as e:
-            logger.error(f"❌ Error saving execution: {e}")
+            logger.error(f" Error saving execution: {e}")
             return None
 
     def get_executions(
@@ -270,7 +270,7 @@ class ScenarioDatabaseManager(DatabaseManager):
             return executions
 
         except Exception as e:
-            logger.error(f"❌ Error getting executions: {e}")
+            logger.error(f" Error getting executions: {e}")
             return []
 
     # =====================================================================
@@ -322,7 +322,7 @@ class ScenarioDatabaseManager(DatabaseManager):
             return None
 
         except Exception as e:
-            logger.error(f"❌ Error getting statistics: {e}")
+            logger.error(f" Error getting statistics: {e}")
             return None
 
     def get_all_statistics(self) -> Dict[str, Any]:
@@ -356,7 +356,7 @@ class ScenarioDatabaseManager(DatabaseManager):
             return stats_dict
 
         except Exception as e:
-            logger.error(f"❌ Error getting all statistics: {e}")
+            logger.error(f" Error getting all statistics: {e}")
             return {}
 
 
@@ -371,10 +371,10 @@ scenario_db_manager = ScenarioDatabaseManager()
 def initialize_db():
     """Initialize database connection"""
     scenario_db_manager.connect(min_conn=2, max_conn=10)
-    logger.info("✅ Scenario Database Manager initialized")
+    logger.info(" Scenario Database Manager initialized")
 
 
 def close_db():
     """Close database connection"""
     scenario_db_manager.disconnect()
-    logger.info("✅ Scenario Database Manager closed")
+    logger.info(" Scenario Database Manager closed")

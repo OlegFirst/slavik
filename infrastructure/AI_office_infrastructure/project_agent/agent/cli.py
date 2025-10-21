@@ -49,8 +49,8 @@ def init_cmd(domain, force):
     # Save config
     save_config(config)
 
-    console.print(f"\n[green]✓[/green] Configuration created: {config_path}")
-    console.print(f"[green]✓[/green] Domain: [bold]{domain}[/bold]")
+    console.print(f"\n[green][/green] Configuration created: {config_path}")
+    console.print(f"[green][/green] Domain: [bold]{domain}[/bold]")
     console.print("\nNext steps:")
     console.print("  1. Review and edit config: .project-agent.yml")
     console.print("  2. Run analysis: project-agent scan")
@@ -79,9 +79,9 @@ def scan_cmd(module):
             results["security"] = run_security_checks(config)
             status = results["security"]["summary"]["status"]
             color = "green" if status == "OK" else "red"
-            console.print(f"[{color}]✓ Security: {status}[/{color}]\n")
+            console.print(f"[{color}] Security: {status}[/{color}]\n")
         except Exception as e:
-            console.print(f"[red]✗ Security failed: {e}[/red]\n")
+            console.print(f"[red] Security failed: {e}[/red]\n")
 
     # Testing
     if "testing" in modules_to_run:
@@ -91,27 +91,27 @@ def scan_cmd(module):
             status = results["testing"]["summary"]["status"]
             coverage = results["testing"]["summary"]["average_coverage"]
             color = "green" if status == "OK" else "yellow"
-            console.print(f"[{color}]✓ Testing: {status} (coverage: {coverage}%)[/{color}]\n")
+            console.print(f"[{color}] Testing: {status} (coverage: {coverage}%)[/{color}]\n")
         except Exception as e:
-            console.print(f"[red]✗ Testing failed: {e}[/red]\n")
+            console.print(f"[red] Testing failed: {e}[/red]\n")
 
     # Quality
     if "quality" in modules_to_run:
         console.print("[cyan]→ Running quality analysis...[/cyan]")
         try:
             results["quality"] = run_quality_checks(config)
-            console.print(f"[green]✓ Quality: OK[/green]\n")
+            console.print(f"[green] Quality: OK[/green]\n")
         except Exception as e:
-            console.print(f"[red]✗ Quality failed: {e}[/red]\n")
+            console.print(f"[red] Quality failed: {e}[/red]\n")
 
     # Compliance (ISO)
     if "compliance" in modules_to_run:
         console.print("[cyan]→ Running compliance checks...[/cyan]")
         try:
             compliance.run_iso_coverage()
-            console.print(f"[green]✓ Compliance: OK[/green]\n")
+            console.print(f"[green] Compliance: OK[/green]\n")
         except Exception as e:
-            console.print(f"[red]✗ Compliance failed: {e}[/red]\n")
+            console.print(f"[red] Compliance failed: {e}[/red]\n")
 
     console.print("[green]Scan complete! Reports saved to docs/reports/[/green]")
 
@@ -133,7 +133,7 @@ def status_cmd():
     modules = config.get("modules", {})
     for module_name, module_config in modules.items():
         enabled = module_config.get("enabled", False)
-        status = "✓ Enabled" if enabled else "✗ Disabled"
+        status = " Enabled" if enabled else " Disabled"
         config_str = json.dumps(module_config, indent=None)[:60]
         table.add_row(module_name, status, config_str)
 
@@ -186,7 +186,7 @@ def generate_tests_cmd(module, max_files):
     """Auto-generate pytest tests for intelligent-core modules"""
     config = load_config()
 
-    console.print("[cyan]🚀 Test Auto-Generator Starting...[/cyan]\n")
+    console.print("[cyan] Test Auto-Generator Starting...[/cyan]\n")
 
     if module:
         console.print(f"[cyan]Target module:[/cyan] {module}")
@@ -199,7 +199,7 @@ def generate_tests_cmd(module, max_files):
         results = run_test_generation(config, target_module=module, max_files=max_files)
 
         if "error" in results:
-            console.print(f"[red]✗ Error: {results['error']}[/red]")
+            console.print(f"[red] Error: {results['error']}[/red]")
             return
 
         # Display results
@@ -219,14 +219,14 @@ def generate_tests_cmd(module, max_files):
 
         # Summary
         summary = results["summary"]
-        console.print(f"\n[green]✅ Test Generation Complete![/green]")
-        console.print(f"[green]📊 Modules processed:[/green] {summary['modules_processed']}")
-        console.print(f"[green]📁 Files processed:[/green] {summary['total_files']}")
-        console.print(f"[green]🧪 Test suites generated:[/green] {summary['total_tests']}")
-        console.print(f"\n[cyan]📂 Tests location:[/cyan] tests/generated/")
+        console.print(f"\n[green] Test Generation Complete![/green]")
+        console.print(f"[green] Modules processed:[/green] {summary['modules_processed']}")
+        console.print(f"[green] Files processed:[/green] {summary['total_files']}")
+        console.print(f"[green] Test suites generated:[/green] {summary['total_tests']}")
+        console.print(f"\n[cyan] Tests location:[/cyan] tests/generated/")
 
     except Exception as e:
-        console.print(f"[red]✗ Test generation failed: {e}[/red]")
+        console.print(f"[red] Test generation failed: {e}[/red]")
         import traceback
         traceback.print_exc()
 
@@ -237,7 +237,7 @@ def analyze_architecture_cmd(module, output_format):
     """Analyze project architecture (modules, dependencies, API, business logic)"""
     config = load_config()
 
-    console.print("[cyan]🏗️  Architecture Analysis Starting...[/cyan]\n")
+    console.print("[cyan]️  Architecture Analysis Starting...[/cyan]\n")
 
     if module:
         console.print(f"[cyan]Target module:[/cyan] {module}")
@@ -248,7 +248,7 @@ def analyze_architecture_cmd(module, output_format):
         results = run_architecture_analysis(config, target_module=module)
 
         if "error" in results:
-            console.print(f"[red]✗ Error: {results['error']}[/red]")
+            console.print(f"[red] Error: {results['error']}[/red]")
             return
 
         # Display summary
@@ -262,7 +262,7 @@ def analyze_architecture_cmd(module, output_format):
 
         # Issues
         if results["issues"]:
-            console.print(f"\n[yellow]⚠️  Issues Found:[/yellow] {summary['issues_count']}")
+            console.print(f"\n[yellow]️  Issues Found:[/yellow] {summary['issues_count']}")
 
             table = Table(title="Architecture Issues")
             table.add_column("Severity", style="cyan")
@@ -280,13 +280,13 @@ def analyze_architecture_cmd(module, output_format):
 
             console.print(table)
         else:
-            console.print(f"\n[green]✅ No issues found![/green]")
+            console.print(f"\n[green] No issues found![/green]")
 
         # Report location
         reports_dir = get_repo_path() / "docs" / "reports"
-        console.print(f"\n[cyan]📊 Full report:[/cyan] {reports_dir}/architecture_report.{output_format}")
+        console.print(f"\n[cyan] Full report:[/cyan] {reports_dir}/architecture_report.{output_format}")
 
     except Exception as e:
-        console.print(f"[red]✗ Architecture analysis failed: {e}[/red]")
+        console.print(f"[red] Architecture analysis failed: {e}[/red]")
         import traceback
         traceback.print_exc()

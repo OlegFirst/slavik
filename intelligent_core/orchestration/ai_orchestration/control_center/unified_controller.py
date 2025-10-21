@@ -71,7 +71,7 @@ class UnifiedController:
             # Step 1: Start Platform Orchestrator (MUST complete first)
             logger.info("Step 1/2: Starting Platform Orchestrator...")
             await self.platform.start()
-            logger.info("✓ Platform ready")
+            logger.info(" Platform ready")
 
             # Step 2: Start AI & Scenario in parallel
             logger.info("Step 2/2: Starting AI & Scenario Orchestrators...")
@@ -85,12 +85,12 @@ class UnifiedController:
             if isinstance(results[0], Exception):
                 logger.error(f"AI Orchestrator failed: {results[0]}")
             else:
-                logger.info("✓ AI Orchestrator ready")
+                logger.info(" AI Orchestrator ready")
 
             if isinstance(results[1], Exception):
                 logger.error(f"Scenario Orchestrator failed: {results[1]}")
             else:
-                logger.info("✓ Scenario Orchestrator ready")
+                logger.info(" Scenario Orchestrator ready")
 
             # Mark startup complete
             self.startup_completed = True
@@ -157,12 +157,12 @@ class UnifiedController:
                 self.ai.stop(),
                 return_exceptions=True
             )
-            logger.info("✓ AI & Scenario stopped")
+            logger.info(" AI & Scenario stopped")
 
             # Step 2: Stop Platform
             logger.info("Step 2/2: Stopping Platform Orchestrator...")
             await self.platform.stop()
-            logger.info("✓ Platform stopped")
+            logger.info(" Platform stopped")
 
             elapsed = (datetime.utcnow() - stop_time).total_seconds()
 

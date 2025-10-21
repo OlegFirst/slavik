@@ -384,7 +384,7 @@ async def compare_mirror_with_live(
                 "mirror": "running",
                 "live": live_status
             }
-            recommendations.append(f"⚠️  Service is {live_status} - may need restart")
+            recommendations.append(f"️  Service is {live_status} - may need restart")
 
         # Compare health
         if service_info.health_data:
@@ -399,7 +399,7 @@ async def compare_mirror_with_live(
         differences_detected = len(differences) > 0
 
         if not differences_detected:
-            recommendations.append("✅ Mirror is up to date with live service")
+            recommendations.append(" Mirror is up to date with live service")
 
         return MirrorComparisonResponse(
             service_name=service_name,
@@ -457,7 +457,7 @@ async def clone_entire_platform(
     """
     Create digital clone of entire platform
 
-    **⚠️  Long-running operation**
+    **️  Long-running operation**
 
     Creates mirrors for ALL running services in platform.
     This is the "System Clone" feature - creates complete digital copy

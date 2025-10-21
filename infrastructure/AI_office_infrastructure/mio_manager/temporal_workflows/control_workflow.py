@@ -35,7 +35,7 @@ def inject_dependencies(coordination_client, brain_client):
     global _coordination_client, _brain_client
     _coordination_client = coordination_client
     _brain_client = brain_client
-    logger.info("✅ Dependencies injected into Control workflow")
+    logger.info(" Dependencies injected into Control workflow")
 
 
 # ============================================================================
@@ -49,7 +49,7 @@ async def check_task_status(task_id: str) -> Dict[str, Any]:
 
     Wrapper around coordination_center_client.
     """
-    logger.info(f"🔍 Checking task status: {task_id}")
+    logger.info(f" Checking task status: {task_id}")
 
     try:
         # TODO: Real coordination_center_client implementation
@@ -70,7 +70,7 @@ async def check_task_status(task_id: str) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Task status check failed: {e}")
+        logger.error(f" Task status check failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -84,7 +84,7 @@ async def report_progress_to_brain(task_id: str, progress: Dict[str, Any]) -> bo
 
     Wrapper around workflow_intelligence_client.
     """
-    logger.info(f"🧠 Reporting progress to brain: {task_id} - {progress.get('progress', 0)*100}%")
+    logger.info(f" Reporting progress to brain: {task_id} - {progress.get('progress', 0)*100}%")
 
     try:
         # TODO: Real workflow_intelligence_client implementation
@@ -93,7 +93,7 @@ async def report_progress_to_brain(task_id: str, progress: Dict[str, Any]) -> bo
         return True
 
     except Exception as e:
-        logger.error(f"❌ Progress reporting failed: {e}")
+        logger.error(f" Progress reporting failed: {e}")
         return False
 
 
@@ -104,7 +104,7 @@ async def handle_task_completion(task_id: str, result: Dict[str, Any]) -> Dict[s
 
     Wrapper around completion handlers.
     """
-    logger.info(f"✅ Handling task completion: {task_id}")
+    logger.info(f" Handling task completion: {task_id}")
 
     try:
         success = result.get('status') == 'completed'
@@ -121,7 +121,7 @@ async def handle_task_completion(task_id: str, result: Dict[str, Any]) -> Dict[s
         }
 
     except Exception as e:
-        logger.error(f"❌ Completion handling failed: {e}")
+        logger.error(f" Completion handling failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -135,7 +135,7 @@ async def handle_task_failure(task_id: str, error: Dict[str, Any]) -> Dict[str, 
 
     Wrapper around failure handlers.
     """
-    logger.error(f"❌ Handling task failure: {task_id}")
+    logger.error(f" Handling task failure: {task_id}")
 
     try:
         # TODO: Real failure handling
@@ -150,7 +150,7 @@ async def handle_task_failure(task_id: str, error: Dict[str, Any]) -> Dict[str, 
         }
 
     except Exception as e:
-        logger.error(f"❌ Failure handling failed: {e}")
+        logger.error(f" Failure handling failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -194,7 +194,7 @@ class ControlWorkflow:
             }
         """
         task_id = config.get('task_id')
-        workflow.logger.info(f"🚀 Starting Control Workflow for task: {task_id}")
+        workflow.logger.info(f" Starting Control Workflow for task: {task_id}")
 
         check_interval = config.get('check_interval', 30)
         max_time = config.get('max_monitoring_time', 86400)
@@ -224,7 +224,7 @@ class ControlWorkflow:
                     "monitoring_time": elapsed
                 }
 
-            workflow.logger.info(f"🔍 Control iteration {iteration} (elapsed: {elapsed}s)")
+            workflow.logger.info(f" Control iteration {iteration} (elapsed: {elapsed}s)")
 
             try:
                 # 1. Check task status
@@ -254,11 +254,11 @@ class ControlWorkflow:
 
                     if reported:
                         last_report_time = workflow.now()
-                        workflow.logger.info(f"✅ Progress reported to brain")
+                        workflow.logger.info(f" Progress reported to brain")
 
                 # 3. Handle completion
                 if current_status == 'completed':
-                    workflow.logger.info(f"✅ Task completed: {task_id}")
+                    workflow.logger.info(f" Task completed: {task_id}")
 
                     completion_result = await workflow.execute_activity(
                         handle_task_completion,
@@ -276,7 +276,7 @@ class ControlWorkflow:
 
                 # 4. Handle failure
                 elif current_status == 'failed':
-                    workflow.logger.error(f"❌ Task failed: {task_id}")
+                    workflow.logger.error(f" Task failed: {task_id}")
 
                     failure_result = await workflow.execute_activity(
                         handle_task_failure,
@@ -297,7 +297,7 @@ class ControlWorkflow:
                     workflow.logger.info(f"⏳ Task still {current_status}, continuing...")
 
             except Exception as e:
-                workflow.logger.error(f"❌ Control iteration failed: {e}")
+                workflow.logger.error(f" Control iteration failed: {e}")
 
             # Sleep until next check
             await workflow.asyncio.sleep(check_interval)

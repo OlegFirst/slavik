@@ -293,7 +293,7 @@ class OptimizedOrchestrator:
         self.cache_hits = 0
         self.avg_latency_ms = 0.0
 
-        logger.info("✅ Performance optimizer initialized")
+        logger.info(" Performance optimizer initialized")
 
     async def decide_optimized(
         self,

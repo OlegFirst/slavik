@@ -113,7 +113,7 @@ class CommandHandler:
                     ON {table}({column})
                 """))
 
-            logger.info(f"✅ Created index: {index_name} on {table}({column})")
+            logger.info(f" Created index: {index_name} on {table}({column})")
 
             return {
                 "optimization_applied": "create_index",
@@ -156,7 +156,7 @@ class CommandHandler:
 
             terminated = result.scalar()
 
-        logger.info(f"🔪 Killed query PID {pid}: {reason}")
+        logger.info(f" Killed query PID {pid}: {reason}")
 
         return {
             "killed": terminated,
@@ -193,7 +193,7 @@ class CommandHandler:
                 {vacuum_cmd} {schema}.{table}
             """))
 
-        logger.info(f"✅ {vacuum_cmd} {schema}.{table}")
+        logger.info(f" {vacuum_cmd} {schema}.{table}")
 
         return {
             "vacuum_type": "full" if full else "standard",
@@ -223,7 +223,7 @@ class CommandHandler:
                 ANALYZE {schema}.{table}
             """))
 
-        logger.info(f"✅ ANALYZE {schema}.{table}")
+        logger.info(f" ANALYZE {schema}.{table}")
 
         return {
             "schema": schema,
@@ -278,7 +278,7 @@ class CommandHandler:
         async with get_db_session() as session:
             await session.execute(text(cmd))
 
-        logger.info(f"✅ Created index: {index_name}")
+        logger.info(f" Created index: {index_name}")
 
         return {
             "index_name": index_name,
@@ -315,7 +315,7 @@ class CommandHandler:
         async with get_db_session() as session:
             await session.execute(text(cmd))
 
-        logger.info(f"✅ REINDEX {schema}.{table}")
+        logger.info(f" REINDEX {schema}.{table}")
 
         return {
             "schema": schema,

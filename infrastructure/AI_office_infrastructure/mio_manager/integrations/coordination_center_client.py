@@ -86,7 +86,7 @@ class CoordinationCenterClient:
             result = response.json()
 
             logger.info(
-                f"✅ Task delegated: {result.get('task_id')} → {result.get('assigned_to')}"
+                f" Task delegated: {result.get('task_id')} → {result.get('assigned_to')}"
             )
 
             return result
@@ -212,7 +212,7 @@ class CoordinationCenterClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Task {task_id} cancelled: {reason}")
+            logger.info(f" Task {task_id} cancelled: {reason}")
 
             return result
 
@@ -346,7 +346,7 @@ class CoordinationCenterClient:
             result = response.json()
 
             logger.info(
-                f"✅ Multi-agent coordination started: {result.get('coordination_id')}"
+                f" Multi-agent coordination started: {result.get('coordination_id')}"
             )
 
             return result

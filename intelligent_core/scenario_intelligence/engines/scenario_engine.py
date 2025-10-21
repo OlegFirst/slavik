@@ -114,7 +114,7 @@ class ScenarioEngine:
         scenario_level = meta.get('level', 0)
         scenario_type = meta.get('type', 'unknown')
 
-        logger.info(f"🎬 Executing scenario: {scenario_id} (Level {scenario_level}, Type: {scenario_type})")
+        logger.info(f" Executing scenario: {scenario_id} (Level {scenario_level}, Type: {scenario_type})")
 
         try:
             # 1. Выполнить шаги сценария
@@ -122,7 +122,7 @@ class ScenarioEngine:
 
             # 2. Обработать Call Activity (синхронные вызовы других сценариев)
             if 'integration' in scenario and 'calls' in scenario.get('integration', {}):
-                logger.info(f"  📞 Processing Call Activity...")
+                logger.info(f"   Processing Call Activity...")
                 call_results = await self.call_engine.execute_calls(
                     scenario['integration']['calls'],
                     {**context, **execution_result.get('context', {})}
@@ -134,7 +134,7 @@ class ScenarioEngine:
                 events_config = scenario['integration']['events']
 
                 if 'emits' in events_config:
-                    logger.info(f"  📡 Emitting events...")
+                    logger.info(f"   Emitting events...")
                     await self.event_engine.emit_events(
                         events_config['emits'],
                         {**context, **execution_result.get('context', {})}
@@ -142,7 +142,7 @@ class ScenarioEngine:
 
             # 4. Если это chaos сценарий - запустить chaos engine
             if 'chaos' in scenario:
-                logger.info(f"  💥 Executing Chaos Experiment...")
+                logger.info(f"   Executing Chaos Experiment...")
                 chaos_result = await self.chaos_engine.execute_chaos(
                     scenario['chaos'],
                     {**context, **execution_result.get('context', {})}
@@ -151,7 +151,7 @@ class ScenarioEngine:
 
             # 5. Проверить compliance
             if 'compliance' in scenario:
-                logger.info(f"  ✅ Checking Compliance...")
+                logger.info(f"   Checking Compliance...")
                 compliance_result = await self.compliance_engine.check_compliance(
                     scenario['compliance'],
                     execution_result
@@ -187,7 +187,7 @@ class ScenarioEngine:
             return result
 
         except Exception as e:
-            logger.error(f"❌ Scenario {scenario_id} failed: {e}", exc_info=True)
+            logger.error(f" Scenario {scenario_id} failed: {e}", exc_info=True)
 
             end_time = datetime.utcnow()
             duration = (end_time - start_time).total_seconds()
@@ -226,7 +226,7 @@ class ScenarioEngine:
         steps = scenario.get('execution', {}).get('steps', [])
 
         if not steps:
-            logger.warning("  ⚠️  No execution steps defined")
+            logger.warning("  ️  No execution steps defined")
             return {'steps': [], 'context': context}
 
         results = []
@@ -236,7 +236,7 @@ class ScenarioEngine:
             step_id = step.get('id', 'unknown')
             action = step.get('action', 'unknown')
 
-            logger.info(f"  ▶️  Step: {step_id} (action: {action})")
+            logger.info(f"  ️  Step: {step_id} (action: {action})")
 
             try:
                 # Выполнить action
@@ -244,7 +244,7 @@ class ScenarioEngine:
 
                 # Обработать on_error (BPMN Boundary Events)
                 if step_result.get('error') and 'on_error' in step:
-                    logger.warning(f"    ⚠️  Error detected, handling...")
+                    logger.warning(f"    ️  Error detected, handling...")
                     step_result = await self._handle_error(
                         step['on_error'],
                         step_result,
@@ -253,7 +253,7 @@ class ScenarioEngine:
 
                 # Обработать вложенные calls
                 if 'calls' in step:
-                    logger.info(f"    📞 Step has nested calls...")
+                    logger.info(f"     Step has nested calls...")
                     call_results = await self.call_engine.execute_calls(
                         step['calls'],
                         local_context
@@ -274,7 +274,7 @@ class ScenarioEngine:
                     self._validate_expectations(step['expect'], step_result)
 
             except Exception as e:
-                logger.error(f"    ❌ Step {step_id} failed: {e}")
+                logger.error(f"     Step {step_id} failed: {e}")
                 results.append({
                     'step_id': step_id,
                     'status': 'error',
@@ -308,7 +308,7 @@ class ScenarioEngine:
         # Симуляция выполнения (в реальности - вызов сервисов)
         # TODO: Интеграция с реальными сервисами
 
-        logger.info(f"    🔧 Executing action: {action}")
+        logger.info(f"     Executing action: {action}")
         logger.debug(f"       Params: {resolved_params}")
 
         # Для тестирования - возвращаем mock результат
@@ -389,13 +389,13 @@ class ScenarioEngine:
             actual_status = result.get('status')
 
             if actual_status != expected_status:
-                logger.warning(f"    ⚠️  Expected status {expected_status}, got {actual_status}")
+                logger.warning(f"    ️  Expected status {expected_status}, got {actual_status}")
 
         # Проверить наличие полей
         if 'response_contains' in expectations:
             for field in expectations['response_contains']:
                 if field not in result:
-                    logger.warning(f"    ⚠️  Expected field '{field}' not in response")
+                    logger.warning(f"    ️  Expected field '{field}' not in response")
 
     async def _handle_error(
         self,
@@ -415,7 +415,7 @@ class ScenarioEngine:
             if handler_type == error_type or handler_type == 'any':
                 action = handler.get('action')
 
-                logger.info(f"    🔧 Handling error with action: {action}")
+                logger.info(f"     Handling error with action: {action}")
 
                 if action == 'retry':
                     max_retries = handler.get('max_retries', 3)
@@ -498,7 +498,7 @@ class ScenarioEngine:
                 context=context
             )
         except Exception as e:
-            logger.warning(f"  ⚠️  Failed to send to learning system: {e}")
+            logger.warning(f"  ️  Failed to send to learning system: {e}")
 
 
 # Test

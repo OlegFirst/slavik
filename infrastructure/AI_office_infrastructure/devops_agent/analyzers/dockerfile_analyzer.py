@@ -37,7 +37,7 @@ class DockerfileAnalyzer:
 
     def find_services(self) -> List[ServiceMetadata]:
         """Find all services in the project"""
-        logger.info("🔍 Scanning for services...")
+        logger.info(" Scanning for services...")
 
         # Scan common service directories
         service_dirs = [
@@ -60,7 +60,7 @@ class DockerfileAnalyzer:
                     self.services.append(service_metadata)
                     self.services_count += 1
 
-        logger.info(f"✅ Found {len(self.services)} services")
+        logger.info(f" Found {len(self.services)} services")
         return self.services
 
     def _analyze_service(self, service_path: Path) -> Optional[ServiceMetadata]:
@@ -141,7 +141,7 @@ class DockerfileAnalyzer:
         """Find services without Dockerfiles"""
         self.find_services()
         missing = [s for s in self.services if not s.has_dockerfile]
-        logger.info(f"⚠️  {len(missing)} services without Dockerfiles")
+        logger.info(f"️  {len(missing)} services without Dockerfiles")
         return missing
 
     def analyze_existing(self) -> List[Dict]:

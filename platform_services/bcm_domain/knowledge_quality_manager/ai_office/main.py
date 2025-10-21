@@ -50,8 +50,8 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     """Initialize on startup"""
-    logger.info("🚀 Starting AI Intelligence Service...")
-    logger.info("🧠 Initializing 10 AI Organs...")
+    logger.info(" Starting AI Intelligence Service...")
+    logger.info(" Initializing 10 AI Organs...")
 
     # Initialize database
     init_db()
@@ -60,7 +60,7 @@ async def startup_event():
     # Initialize Redis
     init_redis()
 
-    logger.info("✅ AI Intelligence Service started successfully")
+    logger.info(" AI Intelligence Service started successfully")
 
 
 @app.on_event("shutdown")
@@ -88,16 +88,16 @@ async def root():
         "version": "2.0.0",
         "description": "10 Specialized AI Organs for BCM Intelligence",
         "organs": [
-            "🧠 Governance Brain",
-            "🚨 Emergency Response",
-            "🔮 Impact Oracle",
-            "📝 Scenario Creator",
-            "⚡ Risk Advisor",
-            "🛡️ Compliance Guardian",
-            "📊 Performance Analyst",
-            "🎓 Learning Coach",
-            "📋 Plan Generator",
-            "💓 Lifecycle Monitor"
+            " Governance Brain",
+            " Emergency Response",
+            " Impact Oracle",
+            " Scenario Creator",
+            " Risk Advisor",
+            "️ Compliance Guardian",
+            " Performance Analyst",
+            " Learning Coach",
+            " Plan Generator",
+            " Lifecycle Monitor"
         ],
         "docs": "/docs"
     }

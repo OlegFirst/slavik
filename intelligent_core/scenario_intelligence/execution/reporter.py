@@ -72,7 +72,7 @@ class ExecutionReporter:
         Returns:
             ExecutionReport
         """
-        logger.info(f"📊 Generating {report_type} report for {len(results)} execution(s)")
+        logger.info(f" Generating {report_type} report for {len(results)} execution(s)")
 
         report_id = f"report-{datetime.utcnow().strftime('%Y%m%d-%H%M%S')}"
 
@@ -97,7 +97,7 @@ class ExecutionReporter:
             metadata=metadata or {}
         )
 
-        logger.info(f"  ✅ Report generated: {report_id}")
+        logger.info(f"   Report generated: {report_id}")
         logger.info(f"     Status: {summary['overall_status']}")
         logger.info(f"     Success Rate: {summary['success_rate']:.1%}")
 
@@ -449,7 +449,7 @@ class ExecutionReporter:
         with open(filepath, 'w') as f:
             f.write(content)
 
-        logger.info(f"  💾 Report saved: {filepath}")
+        logger.info(f"   Report saved: {filepath}")
 
 
 # Test

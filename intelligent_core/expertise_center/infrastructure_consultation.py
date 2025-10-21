@@ -488,7 +488,7 @@ class InfrastructureConsultationAPI:
             'consensus': recommendation.get('consensus')
         }
 
-        logger.info(f"📊 Consultation logged: {log_entry}")
+        logger.info(f" Consultation logged: {log_entry}")
 
         # TODO: Store in database for pattern learning
         # TODO: Publish to EventBus for AI learning

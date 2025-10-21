@@ -148,7 +148,7 @@ class ServiceDiscoveryEventBusIntegration:
         self.last_heartbeat[service_name] = datetime.utcnow()
 
         logger.info(
-            f"✅ Service CONNECTED: {service_name} "
+            f" Service CONNECTED: {service_name} "
             f"(orchestrator: {orchestrator}, port: {port})"
         )
 
@@ -190,7 +190,7 @@ class ServiceDiscoveryEventBusIntegration:
                 'data': registration_event['data']
             })
 
-        logger.info(f"📢 Broadcasted registration to {len(interested_services)} interested services")
+        logger.info(f" Broadcasted registration to {len(interested_services)} interested services")
 
     async def _handle_service_stopped(self, event: Dict[str, Any]) -> None:
         """
@@ -217,7 +217,7 @@ class ServiceDiscoveryEventBusIntegration:
             del self.last_heartbeat[service_name]
 
         logger.warning(
-            f"⚠️  Service DISCONNECTED: {service_name} (reason: {reason})"
+            f"️  Service DISCONNECTED: {service_name} (reason: {reason})"
         )
 
         # Call callback if set
@@ -255,7 +255,7 @@ class ServiceDiscoveryEventBusIntegration:
                 'data': disconnect_event['data']
             })
 
-        logger.info(f"📢 Broadcasted disconnect to {len(interested_topics)} interested services")
+        logger.info(f" Broadcasted disconnect to {len(interested_topics)} interested services")
 
     async def _handle_service_heartbeat(self, event: Dict[str, Any]) -> None:
         """
@@ -279,7 +279,7 @@ class ServiceDiscoveryEventBusIntegration:
         if service:
             service.last_seen = datetime.utcnow()
 
-        logger.debug(f"💓 Heartbeat received from {service_name}")
+        logger.debug(f" Heartbeat received from {service_name}")
 
     async def _handle_service_health(self, event: Dict[str, Any]) -> None:
         """
@@ -300,7 +300,7 @@ class ServiceDiscoveryEventBusIntegration:
         # Update health in registry
         await self.registry.update_health(service_name, health_status)
 
-        logger.info(f"🏥 Health update: {service_name} -> {health_status}")
+        logger.info(f" Health update: {service_name} -> {health_status}")
 
         # Alert if unhealthy
         if health_status in ('unhealthy', 'degraded'):
@@ -353,7 +353,7 @@ class ServiceDiscoveryEventBusIntegration:
                         if time_since_heartbeat > timeout:
                             # Service hasn't sent heartbeat - mark as failed
                             logger.error(
-                                f"❌ CRITICAL: {service.name} hasn't sent heartbeat "
+                                f" CRITICAL: {service.name} hasn't sent heartbeat "
                                 f"for {time_since_heartbeat.total_seconds():.0f}s "
                                 f"(timeout: {self.heartbeat_timeout}s)"
                             )
@@ -401,7 +401,7 @@ class ServiceDiscoveryEventBusIntegration:
                                 })
 
                             logger.error(
-                                f"📢 CRITICAL: Broadcasted timeout alert for {service.name} "
+                                f" CRITICAL: Broadcasted timeout alert for {service.name} "
                                 f"to {len(critical_topics)} services"
                             )
 

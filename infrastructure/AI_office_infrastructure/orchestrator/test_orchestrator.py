@@ -303,17 +303,17 @@ class OrchestratorTester:
         print("="*80 + "\n")
 
         # Imports
-        print("📦 IMPORTS:")
+        print(" IMPORTS:")
         for name, result in self.results['imports'].items():
-            status_icon = "✅" if result['status'] == 'OK' else "❌"
+            status_icon = "" if result['status'] == 'OK' else ""
             print(f"  {status_icon} {name}: {result['status']}")
             if result.get('error'):
                 print(f"     Error: {result['error']}")
 
         # Initialization
-        print("\n🚀 INITIALIZATION:")
+        print("\n INITIALIZATION:")
         for name, result in self.results['initialization'].items():
-            status_icon = "✅" if result['status'] == 'OK' else "❌"
+            status_icon = "" if result['status'] == 'OK' else ""
             print(f"  {status_icon} {name}: {result['status']}")
             if result.get('error'):
                 print(f"     Error: {result['error']}")
@@ -324,14 +324,14 @@ class OrchestratorTester:
                     print(f"     Deployment Dir: {result['deployment_dir']}")
 
         # Executors
-        print("\n⚙️  EXECUTORS:")
+        print("\n️  EXECUTORS:")
         for name, result in self.results['executors'].items():
             if result['status'] == 'AVAILABLE':
-                status_icon = "✅"
+                status_icon = ""
             elif 'optional' in result.get('error', '').lower():
-                status_icon = "⚠️ "
+                status_icon = "️ "
             else:
-                status_icon = "⚠️ "
+                status_icon = "️ "
 
             print(f"  {status_icon} {name}: {result['status']}")
             if result.get('error'):
@@ -340,23 +340,23 @@ class OrchestratorTester:
                 print(f"     Methods: {', '.join(result['methods'])}")
 
         # Components
-        print("\n🔧 COMPONENTS:")
+        print("\n COMPONENTS:")
         for name, result in self.results['components'].items():
             if result['status'] == 'AVAILABLE':
-                status_icon = "✅"
+                status_icon = ""
             elif 'optional' in result.get('error', '').lower():
-                status_icon = "⚠️ "
+                status_icon = "️ "
             else:
-                status_icon = "⚠️ "
+                status_icon = "️ "
 
             print(f"  {status_icon} {name}: {result['status']}")
             if result.get('error'):
                 print(f"     Note: {result['error']}")
 
         # Methods
-        print("\n📋 METHODS:")
+        print("\n METHODS:")
         for name, result in self.results['methods'].items():
-            status_icon = "✅" if result['status'] == 'AVAILABLE' and result.get('callable') else "❌"
+            status_icon = "" if result['status'] == 'AVAILABLE' and result.get('callable') else ""
             print(f"  {status_icon} {name}: {result['status']}")
             if result.get('error'):
                 print(f"     Error: {result['error']}")
@@ -367,19 +367,19 @@ class OrchestratorTester:
         print("="*80)
         summary = self.results['summary']
         print(f"  Total Tests: {summary['total_tests']}")
-        print(f"  ✅ Passed: {summary['passed']}")
-        print(f"  ❌ Failed: {summary['failed']}")
-        print(f"  ⚠️  Warnings: {summary['warnings']}")
+        print(f"   Passed: {summary['passed']}")
+        print(f"   Failed: {summary['failed']}")
+        print(f"  ️  Warnings: {summary['warnings']}")
         print(f"  Success Rate: {summary['success_rate']}")
 
         # Overall status
         print("\n" + "="*80)
         if summary['failed'] == 0:
-            print("✅ ALL TESTS PASSED! Orchestrator is ready to use.")
+            print(" ALL TESTS PASSED! Orchestrator is ready to use.")
         elif summary['failed'] <= summary['warnings']:
-            print("⚠️  TESTS PASSED WITH WARNINGS. Some optional components not available.")
+            print("️  TESTS PASSED WITH WARNINGS. Some optional components not available.")
         else:
-            print("❌ TESTS FAILED. Critical components missing.")
+            print(" TESTS FAILED. Critical components missing.")
         print("="*80 + "\n")
 
         # Unavailable components list
@@ -394,7 +394,7 @@ class OrchestratorTester:
                 unavailable.append(f"Component: {name}")
 
         if unavailable:
-            print("❌ UNAVAILABLE COMPONENTS:")
+            print(" UNAVAILABLE COMPONENTS:")
             for item in unavailable:
                 print(f"   - {item}")
             print()

@@ -36,7 +36,7 @@ def inject_dependencies(toolkit_manager, reporting_engine):
     global _toolkit_manager, _reporting_engine
     _toolkit_manager = toolkit_manager
     _reporting_engine = reporting_engine
-    logger.info("✅ Dependencies injected into Reporting workflow")
+    logger.info(" Dependencies injected into Reporting workflow")
 
 
 # ============================================================================
@@ -50,7 +50,7 @@ async def collect_platform_metrics() -> Dict[str, Any]:
 
     Wrapper around AutomationToolkitManager + Prometheus.
     """
-    logger.info("📊 Collecting platform metrics for report")
+    logger.info(" Collecting platform metrics for report")
 
     try:
         # Service discovery
@@ -76,7 +76,7 @@ async def collect_platform_metrics() -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Metrics collection failed: {e}")
+        logger.error(f" Metrics collection failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -90,7 +90,7 @@ async def generate_report(metrics: Dict[str, Any], report_type: str) -> Dict[str
 
     Wrapper around ReportingEngine.
     """
-    logger.info(f"📝 Generating {report_type} report")
+    logger.info(f" Generating {report_type} report")
 
     try:
         # TODO: Real ReportingEngine implementation
@@ -115,7 +115,7 @@ async def generate_report(metrics: Dict[str, Any], report_type: str) -> Dict[str
         }
 
     except Exception as e:
-        logger.error(f"❌ Report generation failed: {e}")
+        logger.error(f" Report generation failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -129,7 +129,7 @@ async def publish_report_to_brain(report: Dict[str, Any]) -> bool:
 
     Wrapper around workflow_intelligence_client.
     """
-    logger.info(f"🧠 Publishing report to brain: {report.get('report_id')}")
+    logger.info(f" Publishing report to brain: {report.get('report_id')}")
 
     try:
         # TODO: Real workflow_intelligence_client implementation
@@ -138,7 +138,7 @@ async def publish_report_to_brain(report: Dict[str, Any]) -> bool:
         return True
 
     except Exception as e:
-        logger.error(f"❌ Publishing to brain failed: {e}")
+        logger.error(f" Publishing to brain failed: {e}")
         return False
 
 
@@ -149,7 +149,7 @@ async def notify_stakeholders(report: Dict[str, Any], stakeholders: List[str]) -
 
     Wrapper around NotificationService.
     """
-    logger.info(f"📧 Notifying {len(stakeholders)} stakeholders")
+    logger.info(f" Notifying {len(stakeholders)} stakeholders")
 
     try:
         # TODO: Real NotificationService implementation
@@ -159,7 +159,7 @@ async def notify_stakeholders(report: Dict[str, Any], stakeholders: List[str]) -
         return len(stakeholders)
 
     except Exception as e:
-        logger.error(f"❌ Stakeholder notification failed: {e}")
+        logger.error(f" Stakeholder notification failed: {e}")
         return 0
 
 
@@ -199,7 +199,7 @@ class ReportingWorkflow:
             }
         """
         report_type = config.get('report_type', 'daily')
-        workflow.logger.info(f"🚀 Starting Reporting Workflow: {report_type}")
+        workflow.logger.info(f" Starting Reporting Workflow: {report_type}")
 
         retry_policy = RetryPolicy(
             initial_interval=timedelta(seconds=1),
@@ -240,7 +240,7 @@ class ReportingWorkflow:
                 }
 
             report = report_result['report']
-            workflow.logger.info(f"✅ Report generated: {report.get('report_id')}")
+            workflow.logger.info(f" Report generated: {report.get('report_id')}")
 
             # 3. Publish to brain (if requested)
             if config.get('publish_to_brain', True):
@@ -252,9 +252,9 @@ class ReportingWorkflow:
                 )
 
                 if published:
-                    workflow.logger.info("✅ Published to brain")
+                    workflow.logger.info(" Published to brain")
                 else:
-                    workflow.logger.warning("⚠️ Failed to publish to brain")
+                    workflow.logger.warning("️ Failed to publish to brain")
 
             # 4. Notify stakeholders
             stakeholders = config.get('stakeholders', [])
@@ -266,7 +266,7 @@ class ReportingWorkflow:
                     retry_policy=retry_policy
                 )
 
-                workflow.logger.info(f"✅ Notified {notified} stakeholders")
+                workflow.logger.info(f" Notified {notified} stakeholders")
 
             return {
                 "status": "success",
@@ -276,7 +276,7 @@ class ReportingWorkflow:
             }
 
         except Exception as e:
-            workflow.logger.error(f"❌ Reporting workflow failed: {e}")
+            workflow.logger.error(f" Reporting workflow failed: {e}")
             return {
                 "status": "failed",
                 "error": str(e)

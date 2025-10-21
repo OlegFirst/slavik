@@ -28,5 +28,5 @@ async def health():
 
 if __name__ == "__main__":
     PORT = int(os.getenv("SECRETS_MANAGER_PORT", "8063"))
-    logger.warning("⚠️  This service is deprecated. Use secrets-management instead.")
+    logger.warning("️  This service is deprecated. Use secrets-management instead.")
     uvicorn.run("main:app", host="0.0.0.0", port=PORT)

@@ -65,13 +65,13 @@ class PostgresScenarioStorage:
                 max_size=10,
                 command_timeout=60
             )
-            logger.info("✅ PostgreSQL pool created")
+            logger.info(" PostgreSQL pool created")
 
     async def close(self):
         """Закрыть connection pool"""
         if self.pool and not self._external_pool:
             await self.pool.close()
-            logger.info("✅ PostgreSQL pool closed")
+            logger.info(" PostgreSQL pool closed")
 
     async def register(self, scenario: Dict[str, Any], organization_id: Optional[str] = None) -> bool:
         """
@@ -143,7 +143,7 @@ class PostgresScenarioStorage:
                 )
 
                 logger.info(
-                    f"✅ Saved scenario: {scenario_id} "
+                    f" Saved scenario: {scenario_id} "
                     f"(level {level}, type {scenario_type}, "
                     f"created: {result['created_at']}, updated: {result['updated_at']})"
                 )
@@ -151,7 +151,7 @@ class PostgresScenarioStorage:
                 return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to save scenario {scenario_id}: {e}")
+            logger.error(f" Failed to save scenario {scenario_id}: {e}")
             return False
 
     async def get_scenario_by_id(self, scenario_id: str) -> Optional[Dict[str, Any]]:
@@ -188,7 +188,7 @@ class PostgresScenarioStorage:
                     return None
 
         except Exception as e:
-            logger.error(f"❌ Failed to get scenario {scenario_id}: {e}")
+            logger.error(f" Failed to get scenario {scenario_id}: {e}")
             return None
 
     async def get_scenario(
@@ -236,7 +236,7 @@ class PostgresScenarioStorage:
                     return None
 
         except Exception as e:
-            logger.error(f"❌ Failed to get scenario {scenario_id}: {e}")
+            logger.error(f" Failed to get scenario {scenario_id}: {e}")
             return None
 
     async def find_scenarios(
@@ -325,7 +325,7 @@ class PostgresScenarioStorage:
                 return scenarios
 
         except Exception as e:
-            logger.error(f"❌ Failed to find scenarios: {e}")
+            logger.error(f" Failed to find scenarios: {e}")
             return []
 
     async def list_all(self, limit: int = 1000) -> List[Dict[str, Any]]:
@@ -364,7 +364,7 @@ class PostgresScenarioStorage:
                 return scenarios
 
         except Exception as e:
-            logger.error(f"❌ Failed to list all scenarios: {e}")
+            logger.error(f" Failed to list all scenarios: {e}")
             return []
 
     async def get_statistics(self) -> Dict[str, Any]:
@@ -421,7 +421,7 @@ class PostgresScenarioStorage:
                     return {}
 
         except Exception as e:
-            logger.error(f"❌ Failed to get statistics: {e}")
+            logger.error(f" Failed to get statistics: {e}")
             return {}
 
     async def delete_scenario(self, scenario_id: str) -> bool:
@@ -449,14 +449,14 @@ class PostgresScenarioStorage:
                 result = await conn.fetchrow(query, scenario_id)
 
                 if result:
-                    logger.info(f"✅ Deleted scenario: {scenario_id}")
+                    logger.info(f" Deleted scenario: {scenario_id}")
                     return True
                 else:
-                    logger.warning(f"⚠️ Scenario not found: {scenario_id}")
+                    logger.warning(f"️ Scenario not found: {scenario_id}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Failed to delete scenario {scenario_id}: {e}")
+            logger.error(f" Failed to delete scenario {scenario_id}: {e}")
             return False
 
     async def bulk_register(
@@ -541,7 +541,7 @@ class PostgresScenarioStorage:
                         failed_count += 1
                         errors.append(f"{scenario_id}: {str(e)}")
 
-        logger.info(f"✅ Bulk register: {success_count} success, {failed_count} failed")
+        logger.info(f" Bulk register: {success_count} success, {failed_count} failed")
 
         return {
             'success': success_count,
@@ -586,27 +586,27 @@ async def main():
 
         # Register
         success = await storage.register(test_scenario)
-        print(f"\n✅ Register: {success}")
+        print(f"\n Register: {success}")
 
         # Get by ID
         scenario = await storage.get_scenario_by_id('test-postgres-vault-store')
-        print(f"✅ Get by ID: {scenario['meta']['id']}")
+        print(f" Get by ID: {scenario['meta']['id']}")
 
         # Find by filters
         scenarios = await storage.find_scenarios(level=1, type='functional')
-        print(f"✅ Find by filters: {len(scenarios)} scenarios")
+        print(f" Find by filters: {len(scenarios)} scenarios")
 
         # Full-text search
         scenarios = await storage.find_scenarios(query='vault')
-        print(f"✅ Full-text search: {len(scenarios)} scenarios")
+        print(f" Full-text search: {len(scenarios)} scenarios")
 
         # Statistics
         stats = await storage.get_statistics()
-        print(f"✅ Statistics: {stats}")
+        print(f" Statistics: {stats}")
 
         # Delete
         # deleted = await storage.delete_scenario('test-postgres-vault-store')
-        # print(f"✅ Delete: {deleted}")
+        # print(f" Delete: {deleted}")
 
     finally:
         await storage.close()

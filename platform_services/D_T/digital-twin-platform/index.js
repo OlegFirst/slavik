@@ -50,7 +50,7 @@ async function startApplication() {
         });
 
         await digitalTwin.initialize();
-        console.log('✓ Digital Twin Module initialized\n');
+        console.log(' Digital Twin Module initialized\n');
 
         // API Routes
         app.get('/api/status', (req, res) => {

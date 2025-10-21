@@ -293,7 +293,7 @@ if __name__ == "__main__":
     PORT = int(os.getenv("SCENARIO_INTELLIGENCE_PORT", "8090"))
     HOST = os.getenv("SCENARIO_INTELLIGENCE_HOST", "0.0.0.0")
 
-    logger.info(f"🎬 Starting Scenario Intelligence API on {HOST}:{PORT}")
+    logger.info(f" Starting Scenario Intelligence API on {HOST}:{PORT}")
 
     uvicorn.run(
         "api:app",

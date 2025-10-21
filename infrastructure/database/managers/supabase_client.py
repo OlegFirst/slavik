@@ -44,9 +44,9 @@ class SupabaseManager:
                 self.supabase_url,
                 self.supabase_service_key  # Use service role for backend
             )
-            logger.info("✅ Supabase client initialized")
+            logger.info(" Supabase client initialized")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize Supabase client: {e}")
+            logger.error(f" Failed to initialize Supabase client: {e}")
             raise
 
         # 2. Initialize SQLAlchemy async engine
@@ -83,17 +83,17 @@ class SupabaseManager:
             async with self.engine.begin() as conn:
                 await conn.execute(text("SELECT 1"))
 
-            logger.info("✅ PostgreSQL connection pool initialized")
+            logger.info(" PostgreSQL connection pool initialized")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to PostgreSQL: {e}")
+            logger.error(f" Failed to connect to PostgreSQL: {e}")
             raise
 
     async def disconnect(self):
         """Close database connections"""
         if self.engine:
             await self.engine.dispose()
-            logger.info("✅ Database connections closed")
+            logger.info(" Database connections closed")
 
     async def get_session(self) -> AsyncSession:
         """Get async database session"""

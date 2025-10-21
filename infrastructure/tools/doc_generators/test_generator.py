@@ -28,10 +28,10 @@ class TestGenerator:
     def generate_all_tests(self):
         """Генерировать тесты для всех сервисов"""
         if not self.ast_data:
-            print("❌ No AST data. Run AST analyzer first!")
+            print(" No AST data. Run AST analyzer first!")
             return
 
-        print("🧪 Generating tests...\n")
+        print(" Generating tests...\n")
 
         # Группировать эндпоинты по сервисам
         services = self._group_by_service()
@@ -42,7 +42,7 @@ class TestGenerator:
         # Генерировать Tavern scenarios
         self._generate_tavern_scenarios(services)
 
-        print("\n🎉 Test generation complete!")
+        print("\n Test generation complete!")
 
     def _group_by_service(self) -> Dict[str, List]:
         """Группировать эндпоинты по сервисам"""
@@ -148,7 +148,7 @@ async def test_{{ endpoint.function }}(client: AsyncClient):
         with open(output_file, 'w') as f:
             f.write(content)
 
-        print(f"✅ {service_name}: {output_file} ({len(endpoints)} tests)")
+        print(f" {service_name}: {output_file} ({len(endpoints)} tests)")
 
     def _generate_tavern_scenarios(self, services: Dict):
         """Генерировать Tavern test scenarios (YAML)"""
@@ -186,14 +186,14 @@ stages:
             with open(output_file, 'w') as f:
                 f.write(content)
 
-            print(f"✅ Tavern: {output_file}")
+            print(f" Tavern: {output_file}")
 
     def generate_unit_tests(self):
         """Генерировать unit тесты для сервисных классов"""
         if not self.ast_data:
             return
 
-        print("\n🔬 Generating unit tests...\n")
+        print("\n Generating unit tests...\n")
 
         # Группировать классы по файлам
         classes_by_file = {}
@@ -250,7 +250,7 @@ class Test{{ cls.name }}:
             with open(output_file, 'w') as f:
                 f.write(content)
 
-            print(f"✅ Unit tests: {output_file}")
+            print(f" Unit tests: {output_file}")
 
     def generate_pytest_config(self):
         """Генерировать pytest.ini и conftest.py"""
@@ -298,13 +298,13 @@ def user_id():
         pytest_file = self.output_dir.parent / "pytest.ini"
         with open(pytest_file, 'w') as f:
             f.write(pytest_ini)
-        print(f"\n✅ Config: {pytest_file}")
+        print(f"\n Config: {pytest_file}")
 
         # conftest.py
         conftest_file = self.output_dir / "conftest.py"
         with open(conftest_file, 'w') as f:
             f.write(conftest)
-        print(f"✅ Config: {conftest_file}")
+        print(f" Config: {conftest_file}")
 
     def generate_requirements_test(self):
         """Генерировать requirements-test.txt"""
@@ -321,7 +321,7 @@ faker>=19.0.0
         output_file = self.output_dir.parent / "requirements-test.txt"
         with open(output_file, 'w') as f:
             f.write(requirements)
-        print(f"✅ Requirements: {output_file}")
+        print(f" Requirements: {output_file}")
 
 
 if __name__ == "__main__":
@@ -331,14 +331,14 @@ if __name__ == "__main__":
     generator.generate_pytest_config()
     generator.generate_requirements_test()
 
-    print("\n📝 Generated test files:")
+    print("\n Generated test files:")
     print("   - tests/generated/test_*_api.py (API integration tests)")
     print("   - tests/generated/test_*_unit.py (Unit tests)")
     print("   - tests/generated/tavern_test_*.yaml (Tavern scenarios)")
     print("   - tests/pytest.ini (pytest configuration)")
     print("   - tests/requirements-test.txt (test dependencies)")
 
-    print("\n🚀 Run tests:")
+    print("\n Run tests:")
     print("   pip install -r tests/requirements-test.txt")
     print("   pytest tests/generated/ -v")
     print("   pytest tests/generated/ --cov=platform-services")

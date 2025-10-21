@@ -95,7 +95,7 @@ class AutoRecovery:
         await self.eventbus.subscribe('infrastructure.health.unhealthy', self._handle_unhealthy)
         await self.eventbus.subscribe('infrastructure.health.degraded', self._handle_degraded)
 
-        logger.info("✅ AutoRecovery started - listening for health events")
+        logger.info(" AutoRecovery started - listening for health events")
 
     async def stop(self):
         """Stop auto-recovery service"""
@@ -121,7 +121,7 @@ class AutoRecovery:
             event: Event with service health status
         """
         service_name = event.data['service_name']
-        logger.warning(f"🚨 Service {service_name} is UNHEALTHY - triggering recovery")
+        logger.warning(f" Service {service_name} is UNHEALTHY - triggering recovery")
 
         await self._trigger_recovery(service_name, event)
 
@@ -136,7 +136,7 @@ class AutoRecovery:
             event: Event with service health status
         """
         service_name = event.data['service_name']
-        logger.info(f"⚠️  Service {service_name} is DEGRADED - monitoring closely")
+        logger.info(f"️  Service {service_name} is DEGRADED - monitoring closely")
 
         # Track when service became degraded
         if service_name not in self.degraded_timers:
@@ -174,13 +174,13 @@ class AutoRecovery:
 
         # Check if recovery is blocked by escalation (Phase 1.1)
         if self.escalation_manager and not self.escalation_manager.is_recovery_allowed(service_name):
-            logger.warning(f"❌ Recovery BLOCKED for {service_name} - escalation in progress")
+            logger.warning(f" Recovery BLOCKED for {service_name} - escalation in progress")
             return
 
         # Get recovery strategy
         strategy = self.strategies.get(service_name)
         if not strategy:
-            logger.error(f"❌ No recovery strategy registered for {service_name}")
+            logger.error(f" No recovery strategy registered for {service_name}")
             return
 
         self.recovery_in_progress[service_name] = True
@@ -201,7 +201,7 @@ class AutoRecovery:
             correlation_id=trigger_event.id
         ))
 
-        logger.info(f"🔧 Starting {strategy.strategy_type} recovery for {service_name}")
+        logger.info(f" Starting {strategy.strategy_type} recovery for {service_name}")
 
         # Execute recovery with retries
         success = await self._execute_recovery(strategy)
@@ -229,7 +229,7 @@ class AutoRecovery:
                 tenant_id='system',
                 correlation_id=trigger_event.id
             ))
-            logger.info(f"✅ Recovery SUCCESSFUL for {service_name}")
+            logger.info(f" Recovery SUCCESSFUL for {service_name}")
         else:
             await self.eventbus.publish(Event.create(
                 event_type='infrastructure.recovery.failed',
@@ -243,7 +243,7 @@ class AutoRecovery:
                 tenant_id='system',
                 correlation_id=trigger_event.id
             ))
-            logger.error(f"❌ Recovery FAILED for {service_name} after {strategy.max_attempts} attempts")
+            logger.error(f" Recovery FAILED for {service_name} after {strategy.max_attempts} attempts")
 
         self.recovery_in_progress[service_name] = False
 
@@ -290,7 +290,7 @@ class AutoRecovery:
                 )
 
                 if should_escalate:
-                    logger.warning(f"🚨 ESCALATING {service_name} - {reason.value}")
+                    logger.warning(f" ESCALATING {service_name} - {reason.value}")
 
                     # Calculate recovery duration
                     recovery_duration = (datetime.utcnow() - recovery_start_time).total_seconds()
@@ -309,7 +309,7 @@ class AutoRecovery:
                     )
 
                     # STOP recovery - escalation manager has taken over
-                    logger.warning(f"🛑 Stopping auto-recovery for {service_name} - escalated to humans")
+                    logger.warning(f" Stopping auto-recovery for {service_name} - escalated to humans")
                     return False
 
             try:
@@ -327,11 +327,11 @@ class AutoRecovery:
 
                 # In production, would check service health here
                 # For now, assume success after wait
-                logger.info(f"✅ Attempt {attempt} completed")
+                logger.info(f" Attempt {attempt} completed")
                 return True
 
             except Exception as e:
-                logger.error(f"❌ Recovery attempt {attempt} failed: {e}")
+                logger.error(f" Recovery attempt {attempt} failed: {e}")
 
                 # Record failure for pattern detection
                 if self.escalation_manager:
@@ -349,7 +349,7 @@ class AutoRecovery:
 
             from infrastructure.policy_engine.escalation_manager import EscalationReason
 
-            logger.warning(f"🚨 All recovery attempts failed for {service_name} - ESCALATING")
+            logger.warning(f" All recovery attempts failed for {service_name} - ESCALATING")
 
             await self.escalation_manager.escalate(
                 service_name=service_name,
@@ -372,18 +372,18 @@ class AutoRecovery:
             strategy: RecoveryStrategy to execute
         """
         if strategy.strategy_type == 'restart':
-            logger.info(f"🔄 Restarting {strategy.service_name}...")
+            logger.info(f" Restarting {strategy.service_name}...")
             # TODO: Call Docker restart or systemctl restart
             # For demo, just log
             await asyncio.sleep(1)
 
         elif strategy.strategy_type == 'failover':
-            logger.info(f"🔀 Failing over {strategy.service_name}...")
+            logger.info(f" Failing over {strategy.service_name}...")
             # TODO: Redirect traffic to backup instance
             await asyncio.sleep(1)
 
         elif strategy.strategy_type == 'circuit_breaker':
-            logger.info(f"⚡ Opening circuit breaker for {strategy.service_name}...")
+            logger.info(f" Opening circuit breaker for {strategy.service_name}...")
             # TODO: Stop sending traffic, use fallback
             await asyncio.sleep(1)
 

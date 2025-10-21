@@ -1,5 +1,5 @@
 """
-🚨 Emergency Response
+ Emergency Response
 
 Crisis management and incident response intelligence
 """
@@ -23,7 +23,7 @@ class EmergencyResponse(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Emergency Response",
-            emoji="🚨",
+            emoji="",
             llm_router=llm_router
         )
 

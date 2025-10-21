@@ -294,7 +294,7 @@ export default function ScenariosPage() {
                 <ul className="space-y-2">
                   {generatedScenario.objectives.map((obj, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-blue-600 font-bold mt-0.5">✓</span>
+                      <span className="text-blue-600 font-bold mt-0.5"></span>
                       <span className="text-gray-700">{obj}</span>
                     </li>
                   ))}

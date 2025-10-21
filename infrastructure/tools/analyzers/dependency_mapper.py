@@ -40,7 +40,7 @@ class DependencyMapper:
 
     def analyze_dependencies(self) -> Dict:
         """Анализировать зависимости между модулями"""
-        print("🔗 Analyzing module dependencies...")
+        print(" Analyzing module dependencies...")
 
         # Use 'analysis_targets' or 'scan_paths' depending on config format
         scan_paths = self.config.get('scan_paths') or self.config.get('analysis_targets', [])
@@ -50,7 +50,7 @@ class DependencyMapper:
             if not path.exists():
                 continue
 
-            print(f"📂 Scanning: {scan_path}")
+            print(f" Scanning: {scan_path}")
             self._scan_directory(path)
 
         return {
@@ -68,7 +68,7 @@ class DependencyMapper:
             try:
                 self._analyze_file(py_file)
             except Exception as e:
-                print(f"⚠️  Error: {py_file}: {e}")
+                print(f"️  Error: {py_file}: {e}")
 
     def _analyze_file(self, file_path: Path):
         """Анализировать импорты в файле"""
@@ -213,7 +213,7 @@ class DependencyMapper:
 
     def generate_graph(self, output_file: str = "infrastructure/AI-office-infrastructure/devops-agent/reports-generated/dependency_graph.png"):
         """Генерировать граф зависимостей"""
-        print("\n📊 Generating dependency graph...")
+        print("\n Generating dependency graph...")
 
         G = nx.DiGraph()
 
@@ -243,16 +243,16 @@ class DependencyMapper:
         output_path = Path(output_file)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
-        print(f"✅ Graph saved: {output_path}")
+        print(f" Graph saved: {output_path}")
 
         # Также сохранить в формате GraphML для Gephi/Cytoscape
         graphml_file = output_path.with_suffix('.graphml')
         nx.write_graphml(G, graphml_file)
-        print(f"✅ GraphML saved: {graphml_file}")
+        print(f" GraphML saved: {graphml_file}")
 
     def detect_circular_dependencies(self) -> List[List[str]]:
         """Обнаружить циклические зависимости"""
-        print("\n🔄 Detecting circular dependencies...")
+        print("\n Detecting circular dependencies...")
 
         G = nx.DiGraph()
         for module, deps in self.dependencies.items():
@@ -262,11 +262,11 @@ class DependencyMapper:
         try:
             cycles = list(nx.simple_cycles(G))
             if cycles:
-                print(f"⚠️  Found {len(cycles)} circular dependencies!")
+                print(f"️  Found {len(cycles)} circular dependencies!")
                 for i, cycle in enumerate(cycles[:5]):  # Show first 5
                     print(f"   {i+1}. {' → '.join(cycle + [cycle[0]])}")
             else:
-                print("✅ No circular dependencies found")
+                print(" No circular dependencies found")
             return cycles
         except:
             return []
@@ -282,12 +282,12 @@ class DependencyMapper:
         json_file = output_path / "dependencies.json"
         with open(json_file, 'w') as f:
             json.dump(results, f, indent=2)
-        print(f"\n✅ Dependencies JSON: {json_file}")
+        print(f"\n Dependencies JSON: {json_file}")
 
         # Markdown
         md_file = output_path / "dependencies.md"
         self._generate_markdown(results, md_file)
-        print(f"✅ Dependencies Markdown: {md_file}")
+        print(f" Dependencies Markdown: {md_file}")
 
         # Graph
         self.generate_graph(str(output_path / "dependency_graph.png"))
@@ -298,10 +298,10 @@ class DependencyMapper:
             cycles_file = output_path / "circular_dependencies.json"
             with open(cycles_file, 'w') as f:
                 json.dump(cycles, f, indent=2)
-            print(f"⚠️  Circular dependencies: {cycles_file}")
+            print(f"️  Circular dependencies: {cycles_file}")
 
         # Stats
-        print(f"\n📊 STATISTICS:")
+        print(f"\n STATISTICS:")
         print(f"   Total modules: {results['statistics']['total_modules']}")
         print(f"   Total dependencies: {results['statistics']['total_dependencies']}")
         print(f"   Avg dependencies: {results['statistics']['avg_dependencies']:.1f}")

@@ -83,7 +83,7 @@ class ServiceRegistry:
         """
         self.configs[config.service_type] = config
         logger.info(
-            f"📝 Registered service: {config.name} "
+            f" Registered service: {config.name} "
             f"({config.service_type}) at {config.get_full_url()}"
         )
 

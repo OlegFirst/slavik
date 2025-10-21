@@ -54,7 +54,7 @@ class ReportsRepository:
             )
             db.add(report)
 
-        logger.info(f"✅ Saved {analysis_type} report: {report_id}")
+        logger.info(f" Saved {analysis_type} report: {report_id}")
         return report_id
 
     @staticmethod
@@ -81,7 +81,7 @@ class ReportsRepository:
             )
             db.add(discovery)
 
-        logger.info(f"✅ Saved service discovery: {discovery_id}")
+        logger.info(f" Saved service discovery: {discovery_id}")
         return discovery_id
 
     @staticmethod
@@ -112,7 +112,7 @@ class ReportsRepository:
             )
             db.add(scan)
 
-        logger.info(f"✅ Saved security scan: {scan_id} (status: {status})")
+        logger.info(f" Saved security scan: {scan_id} (status: {status})")
         return scan_id
 
     @staticmethod
@@ -137,7 +137,7 @@ class ReportsRepository:
             )
             db.add(complexity)
 
-        logger.info(f"✅ Saved complexity analysis: {analysis_id} for {service_name}")
+        logger.info(f" Saved complexity analysis: {analysis_id} for {service_name}")
         return analysis_id
 
     @staticmethod
@@ -162,7 +162,7 @@ class ReportsRepository:
             )
             db.add(dep_analysis)
 
-        logger.info(f"✅ Saved dependency analysis: {analysis_id}")
+        logger.info(f" Saved dependency analysis: {analysis_id}")
         return analysis_id
 
     @staticmethod

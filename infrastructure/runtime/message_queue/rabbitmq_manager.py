@@ -76,10 +76,10 @@ class RabbitMQManager:
                 durable=True
             )
 
-            logger.info(f"✅ Connected to RabbitMQ: {self.url}")
+            logger.info(f" Connected to RabbitMQ: {self.url}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to RabbitMQ: {e}")
+            logger.error(f" Failed to connect to RabbitMQ: {e}")
             raise
 
     async def disconnect(self):
@@ -131,7 +131,7 @@ class RabbitMQManager:
             routing_key=routing_key
         )
 
-        logger.debug(f"📤 Published message to '{routing_key}': {message}")
+        logger.debug(f" Published message to '{routing_key}': {message}")
 
     async def subscribe(
         self,
@@ -175,10 +175,10 @@ class RabbitMQManager:
                     # Вызываем callback
                     await callback(body)
 
-                    logger.debug(f"📥 Processed message from '{routing_key}'")
+                    logger.debug(f" Processed message from '{routing_key}'")
 
                 except Exception as e:
-                    logger.error(f"❌ Error processing message: {e}")
+                    logger.error(f" Error processing message: {e}")
                     # Сообщение будет отправлено в DLQ если настроено
                     raise
 
@@ -186,7 +186,7 @@ class RabbitMQManager:
         await queue.consume(message_handler)
 
         self.consumers[routing_key] = queue
-        logger.info(f"📡 Subscribed to '{routing_key}' on queue '{queue_name}'")
+        logger.info(f" Subscribed to '{routing_key}' on queue '{queue_name}'")
 
     async def create_work_queue(
         self,
@@ -237,16 +237,16 @@ class RabbitMQManager:
                 try:
                     body = json.loads(message.body.decode())
                     await callback(body)
-                    logger.debug(f"✅ Task completed: {queue_name}")
+                    logger.debug(f" Task completed: {queue_name}")
                 except Exception as e:
-                    logger.error(f"❌ Task failed: {e}")
+                    logger.error(f" Task failed: {e}")
                     # Сообщение пойдет в DLQ
                     raise
 
         await queue.consume(task_handler)
 
         self.consumers[queue_name] = queue
-        logger.info(f"🔧 Work queue '{queue_name}' created")
+        logger.info(f" Work queue '{queue_name}' created")
 
     async def publish_task(
         self,
@@ -279,7 +279,7 @@ class RabbitMQManager:
             routing_key=queue_name
         )
 
-        logger.debug(f"📋 Task published to '{queue_name}': {task}")
+        logger.debug(f" Task published to '{queue_name}': {task}")
 
     async def get_queue_stats(self, queue_name: str) -> Dict[str, int]:
         """Получить статистику очереди"""

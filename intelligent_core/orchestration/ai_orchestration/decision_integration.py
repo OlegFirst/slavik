@@ -95,7 +95,7 @@ class DecisionCenterIntegration:
             await self._subscribe_to_decision_events()
 
             self.initialized = True
-            logger.info("✅ Decision Center Integration initialized")
+            logger.info(" Decision Center Integration initialized")
             logger.info("   - Subscribed to decision center events")
             logger.info("   - Ready to provide AI consultation")
 
@@ -535,7 +535,7 @@ class DecisionCenterIntegration:
                 }
 
                 logger.info(
-                    f"✅ Predictive analysis: {prediction.forecast} "
+                    f" Predictive analysis: {prediction.forecast} "
                     f"(risk: {prediction.risk_level.value}, confidence: {prediction.confidence:.2f})"
                 )
 
@@ -803,7 +803,7 @@ class DecisionCenterIntegration:
 
         try:
             await self.event_bus.close()
-            logger.info("✅ Decision Center Integration shutdown complete")
+            logger.info(" Decision Center Integration shutdown complete")
 
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
@@ -853,7 +853,7 @@ async def setup_decision_center_integration(
 
     await integration.initialize()
 
-    logger.info("✅ Decision Center integration setup complete")
+    logger.info(" Decision Center integration setup complete")
     logger.info("   - AI Orchestrator <-> Decision Center bridge active")
     logger.info("   - Multi-expert consultation enabled")
     logger.info("   - Predictive analysis enabled")

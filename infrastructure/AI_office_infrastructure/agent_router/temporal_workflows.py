@@ -348,7 +348,7 @@ class CircuitBreakerRecoveryWorkflow:
                 )
 
                 if reset_success:
-                    workflow.logger.info(f"✅ Circuit breaker reset for {agent_name}")
+                    workflow.logger.info(f" Circuit breaker reset for {agent_name}")
                     return {
                         "success": True,
                         "attempts": attempt,
@@ -360,7 +360,7 @@ class CircuitBreakerRecoveryWorkflow:
             await asyncio.sleep(backoff)
 
         # Max attempts reached
-        workflow.logger.warning(f"❌ Max recovery attempts reached for {agent_name}")
+        workflow.logger.warning(f" Max recovery attempts reached for {agent_name}")
 
         # Send alert
         await workflow.execute_activity(
@@ -520,7 +520,7 @@ async def start_all_workflows(
         id="agent-router-health-monitoring",
         task_queue="agent-router-workflows"
     )
-    logger.info("✅ Started AgentHealthMonitoringWorkflow")
+    logger.info(" Started AgentHealthMonitoringWorkflow")
 
     # 2. Service discovery sync (if registry provided)
     if registry_config:
@@ -531,7 +531,7 @@ async def start_all_workflows(
             id="agent-router-service-discovery",
             task_queue="agent-router-workflows"
         )
-        logger.info("✅ Started ServiceDiscoverySyncWorkflow")
+        logger.info(" Started ServiceDiscoverySyncWorkflow")
 
     # 3. Metrics export
     await temporal_client.start_workflow(
@@ -540,6 +540,6 @@ async def start_all_workflows(
         id="agent-router-metrics-export",
         task_queue="agent-router-workflows"
     )
-    logger.info("✅ Started MetricsExportWorkflow")
+    logger.info(" Started MetricsExportWorkflow")
 
-    logger.info("🚀 All agent router workflows started!")
+    logger.info(" All agent router workflows started!")

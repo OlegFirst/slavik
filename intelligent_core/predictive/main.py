@@ -42,7 +42,7 @@ scheduler = AsyncIOScheduler()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    logger.info("🚀 Predictive Service starting...")
+    logger.info(" Predictive Service starting...")
 
     # Initialize EventBus FIRST (before dependencies need it)
     try:
@@ -50,9 +50,9 @@ async def lifespan(app: FastAPI):
             service_name="predictive",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     # Initialize dependencies
     from .integration.dependencies import get_dependencies
@@ -60,10 +60,10 @@ async def lifespan(app: FastAPI):
     try:
         deps = await get_dependencies()
         app.state.deps = deps
-        logger.info("✅ Dependencies initialized (Case Library, Notification Service, Database, EventBus)")
+        logger.info(" Dependencies initialized (Case Library, Notification Service, Database, EventBus)")
     except Exception as e:
-        logger.error(f"❌ Failed to initialize dependencies: {e}")
-        logger.warning("⚠️  Service will run with limited functionality")
+        logger.error(f" Failed to initialize dependencies: {e}")
+        logger.warning("️  Service will run with limited functionality")
 
     # Initialize EventBus handlers and subscriptions
     if hasattr(app.state, 'deps') and app.state.deps.eventbus:
@@ -87,12 +87,12 @@ async def lifespan(app: FastAPI):
             app.state.event_handlers = event_handlers
             app.state.journey_predictor = journey_predictor
 
-            logger.info("✅ EventBus integration active (8+ publishers, 5+ subscribers)")
+            logger.info(" EventBus integration active (8+ publishers, 5+ subscribers)")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize EventBus handlers: {e}")
+            logger.error(f" Failed to initialize EventBus handlers: {e}")
     else:
-        logger.warning("⚠️  EventBus not available, prediction events will not be published")
+        logger.warning("️  EventBus not available, prediction events will not be published")
 
     # Start scheduler for daily digests
     if os.getenv("ENABLE_DAILY_DIGESTS", "true").lower() == "true":
@@ -118,37 +118,37 @@ async def lifespan(app: FastAPI):
             )
 
             scheduler.start()
-            logger.info("✅ Scheduler started: Daily digests at 8:00 AM")
+            logger.info(" Scheduler started: Daily digests at 8:00 AM")
 
         except Exception as e:
-            logger.error(f"❌ Failed to start scheduler: {e}")
+            logger.error(f" Failed to start scheduler: {e}")
 
-    logger.info(f"✅ Predictive Service ready on port 8031")
+    logger.info(f" Predictive Service ready on port 8031")
 
     yield
 
     # Cleanup
-    logger.info("👋 Predictive Service shutting down...")
+    logger.info(" Predictive Service shutting down...")
 
     if scheduler.running:
         scheduler.shutdown()
-        logger.info("✅ Scheduler stopped")
+        logger.info(" Scheduler stopped")
 
     from .integration.dependencies import cleanup_dependencies
     await cleanup_dependencies()
-    logger.info("✅ Dependencies cleaned up")
+    logger.info(" Dependencies cleaned up")
 
     # Close EventBus
     bus = get_event_bus()
     if bus:
         await bus.close()
-        logger.info("✅ EventBus closed")
+        logger.info(" EventBus closed")
 
 
 # Create FastAPI app with lifespan
 app = FastAPI(
     title="Predictive Journey Service",
-    description="🔮 Magic predictions for BCM journeys",
+    description=" Magic predictions for BCM journeys",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -179,7 +179,7 @@ async def health_check():
         "status": "healthy",
         "service": "predictive-journey",
         "version": "1.0.0",
-        "magic_level": "🔮🔮🔮🔮🔮"
+        "magic_level": ""
     }
 
 

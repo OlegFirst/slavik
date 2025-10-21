@@ -433,7 +433,7 @@ class HealthMonitor:
             )
 
             await self.eventbus.publish(event)
-            logger.info(f"📤 Published health event: {service_name} → {result.status.value}")
+            logger.info(f" Published health event: {service_name} → {result.status.value}")
 
         except Exception as e:
             logger.error(f"Failed to publish health event for {service_name}: {e}")

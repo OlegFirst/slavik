@@ -63,28 +63,28 @@ async def lifespan(app: FastAPI):
     """Application lifespan management"""
     global service_registry, catalog_integration, eventbus_integration, eventbus, scheduler
 
-    logger.info("🚀 Service Discovery v2.0 starting...")
-    logger.info("   📊 Enhanced with Catalog Integration")
+    logger.info(" Service Discovery v2.0 starting...")
+    logger.info("    Enhanced with Catalog Integration")
 
     # Initialize Service Registry
     service_registry = ServiceRegistry()
-    logger.info("   ✅ Service Registry initialized")
+    logger.info("    Service Registry initialized")
 
     # Initialize Catalog Integration
     try:
         catalog_integration = CatalogIntegration()
         await catalog_integration.initialize()
-        logger.info("   ✅ Catalog Integration initialized")
+        logger.info("    Catalog Integration initialized")
     except Exception as e:
-        logger.error(f"   ❌ Catalog Integration failed: {e}")
-        logger.warning("   ⚠️  Running without Catalog")
+        logger.error(f"    Catalog Integration failed: {e}")
+        logger.warning("   ️  Running without Catalog")
 
     # Initialize EventBus Integration
     if EVENTBUS_AVAILABLE:
         try:
             eventbus = create_eventbus('redis')
             await eventbus.connect()
-            logger.info("   ✅ EventBus connected")
+            logger.info("    EventBus connected")
 
             eventbus_integration = ServiceDiscoveryEventBusIntegration(
                 service_registry=service_registry,
@@ -92,21 +92,21 @@ async def lifespan(app: FastAPI):
                 heartbeat_timeout=60
             )
             await eventbus_integration.start()
-            logger.info("   ✅ EventBus Integration started")
+            logger.info("    EventBus Integration started")
 
         except Exception as e:
-            logger.error(f"   ❌ EventBus integration failed: {e}")
-            logger.warning("   ⚠️  Running without EventBus")
+            logger.error(f"    EventBus integration failed: {e}")
+            logger.warning("   ️  Running without EventBus")
             eventbus_integration = None
     else:
-        logger.warning("   ⚠️  EventBus not available")
+        logger.warning("   ️  EventBus not available")
 
     # Initialize Prometheus Metrics Export
     if catalog_integration:
         try:
             # Initial export
             await export_catalog_metrics(catalog_integration, service_registry)
-            logger.info("   ✅ Initial metrics exported to Prometheus")
+            logger.info("    Initial metrics exported to Prometheus")
 
             # Start periodic export (every 30 seconds)
             scheduler = AsyncIOScheduler()
@@ -119,24 +119,24 @@ async def lifespan(app: FastAPI):
                 name='Export catalog metrics to Prometheus'
             )
             scheduler.start()
-            logger.info("   ✅ Metrics export scheduler started (30s interval)")
+            logger.info("    Metrics export scheduler started (30s interval)")
         except Exception as e:
-            logger.error(f"   ❌ Metrics export initialization failed: {e}")
-            logger.warning("   ⚠️  Running without Prometheus metrics")
+            logger.error(f"    Metrics export initialization failed: {e}")
+            logger.warning("   ️  Running without Prometheus metrics")
 
-    logger.info("✅ Service Discovery v2.0 ready on port 8500")
-    logger.info("   🔍 Consul-compatible endpoints available")
-    logger.info("   📊 Unified Catalog + Registry view enabled")
-    logger.info("   📈 Prometheus metrics available at /metrics")
+    logger.info(" Service Discovery v2.0 ready on port 8500")
+    logger.info("    Consul-compatible endpoints available")
+    logger.info("    Unified Catalog + Registry view enabled")
+    logger.info("    Prometheus metrics available at /metrics")
 
     yield
 
     # Shutdown
-    logger.info("👋 Service Discovery shutting down...")
+    logger.info(" Service Discovery shutting down...")
 
     if scheduler:
         scheduler.shutdown()
-        logger.info("   ✅ Metrics scheduler stopped")
+        logger.info("    Metrics scheduler stopped")
 
     if eventbus_integration:
         await eventbus_integration.stop()
@@ -144,7 +144,7 @@ async def lifespan(app: FastAPI):
     if eventbus:
         await eventbus.disconnect()
 
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 app = FastAPI(
     title="Service Discovery v2.0",

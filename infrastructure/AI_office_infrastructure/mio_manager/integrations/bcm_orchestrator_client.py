@@ -71,7 +71,7 @@ class BCMOrchestratorClient:
         Returns:
             Analysis result with insights and recommendations
         """
-        logger.info(f"🔍 Routing analysis to {analyzer_type}")
+        logger.info(f" Routing analysis to {analyzer_type}")
 
         try:
             response = await self.client.post(
@@ -86,7 +86,7 @@ class BCMOrchestratorClient:
 
             if response.status_code == 200:
                 result = response.json()
-                logger.info(f"✅ Analysis completed by {result.get('analyzer')}")
+                logger.info(f" Analysis completed by {result.get('analyzer')}")
                 return {
                     'success': True,
                     'result': result
@@ -98,7 +98,7 @@ class BCMOrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Analysis request failed: {e}")
+            logger.error(f" Analysis request failed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -123,7 +123,7 @@ class BCMOrchestratorClient:
         Returns:
             Batch analysis results
         """
-        logger.info(f"🔄 Batch analysis: {len(analyzer_sequence)} analyzers")
+        logger.info(f" Batch analysis: {len(analyzer_sequence)} analyzers")
 
         try:
             response = await self.client.post(
@@ -137,7 +137,7 @@ class BCMOrchestratorClient:
 
             if response.status_code == 200:
                 result = response.json()
-                logger.info(f"✅ Batch analysis completed: {result.get('steps')} steps")
+                logger.info(f" Batch analysis completed: {result.get('steps')} steps")
                 return {
                     'success': True,
                     'result': result
@@ -149,7 +149,7 @@ class BCMOrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Batch analysis failed: {e}")
+            logger.error(f" Batch analysis failed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -436,7 +436,7 @@ class BCMOrchestratorClient:
         Returns:
             Clause-specific analysis
         """
-        logger.info(f"📖 Analyzing ISO clause {clause}")
+        logger.info(f" Analyzing ISO clause {clause}")
 
         return await self.analyze(
             analyzer_type='auto',  # Auto-route based on clause

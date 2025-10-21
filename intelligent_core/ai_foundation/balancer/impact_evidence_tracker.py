@@ -168,7 +168,7 @@ class ImpactEvidenceTracker:
             'failed_interventions': 0
         }
 
-        logger.info(f"📊 Impact Evidence Tracker initialized (eval delay: {evaluation_delay_seconds}s)")
+        logger.info(f" Impact Evidence Tracker initialized (eval delay: {evaluation_delay_seconds}s)")
 
     def record_baseline(
         self,
@@ -204,7 +204,7 @@ class ImpactEvidenceTracker:
 
         self.baselines[module_name] = baseline
 
-        logger.debug(f"📸 Baseline recorded for {module_name}: health={health_score:.1f}")
+        logger.debug(f" Baseline recorded for {module_name}: health={health_score:.1f}")
 
         return baseline
 
@@ -259,7 +259,7 @@ class ImpactEvidenceTracker:
         self.interventions[intervention_id] = intervention
 
         logger.info(
-            f"🎯 Intervention recorded: {intervention_id} ({intervention_type.value}) "
+            f" Intervention recorded: {intervention_id} ({intervention_type.value}) "
             f"for {module_name}"
         )
 
@@ -312,7 +312,7 @@ class ImpactEvidenceTracker:
         impact = self.calculate_impact(intervention_id)
 
         logger.info(
-            f"📈 Outcome recorded for {intervention_id}: "
+            f" Outcome recorded for {intervention_id}: "
             f"health={health_score:.1f} (Δ{impact.health_delta:+.1f})"
         )
 
@@ -413,7 +413,7 @@ class ImpactEvidenceTracker:
         self._update_avg_stats()
 
         logger.info(
-            f"📊 Impact calculated: {intervention_id} → {impact_level.value} "
+            f" Impact calculated: {intervention_id} → {impact_level.value} "
             f"(confidence: {confidence:.2f}, ROI: {roi:.2f})"
         )
 
@@ -508,12 +508,12 @@ class ImpactEvidenceTracker:
         )
 
         if confidence < self.min_confidence:
-            reasoning += " ⚠️  Low confidence - may not be causal."
+            reasoning += " ️  Low confidence - may not be causal."
 
         if roi < 0:
-            reasoning += " ❌ Negative ROI - inefficient use of resources."
+            reasoning += "  Negative ROI - inefficient use of resources."
         elif roi > 1.0:
-            reasoning += " ✅ Positive ROI - good investment."
+            reasoning += "  Positive ROI - good investment."
 
         return reasoning
 
@@ -644,29 +644,29 @@ class ImpactEvidenceTracker:
 
         if reward_success < 50:
             recommendations.append(
-                f"⚠️  REWARDS только {reward_success:.0f}% успешны - "
+                f"️  REWARDS только {reward_success:.0f}% успешны - "
                 "возможно коэффициент 0.7 слишком агрессивный, попробовать 0.8"
             )
 
         if penalty_success < 50:
             recommendations.append(
-                f"⚠️  PENALTIES только {penalty_success:.0f}% успешны - "
+                f"️  PENALTIES только {penalty_success:.0f}% успешны - "
                 "возможно коэффициент 1.5 недостаточен, попробовать 1.7"
             )
 
         if reward_roi < 0:
             recommendations.append(
-                "❌ REWARDS имеют негативный ROI - пересмотреть стратегию поощрения"
+                " REWARDS имеют негативный ROI - пересмотреть стратегию поощрения"
             )
 
         if penalty_roi > 2.0:
             recommendations.append(
-                "✅ PENALTIES очень эффективны (ROI > 2) - увеличить использование"
+                " PENALTIES очень эффективны (ROI > 2) - увеличить использование"
             )
 
         if not recommendations:
             recommendations.append(
-                "✅ Текущая стратегия работает хорошо - продолжать"
+                " Текущая стратегия работает хорошо - продолжать"
             )
 
         return recommendations

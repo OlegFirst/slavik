@@ -36,8 +36,8 @@ class DocumentationGenerator:
 
         # Проверка существования отчётов
         if not self.reports_dir.exists():
-            print(f"❌ Директория с отчётами не найдена: {self.reports_dir}")
-            print("💡 Запустите сначала: python3 tools/analyzers/module_scanner.py --section intelligent-core")
+            print(f" Директория с отчётами не найдена: {self.reports_dir}")
+            print(" Запустите сначала: python3 tools/analyzers/module_scanner.py --section intelligent-core")
             sys.exit(1)
 
     def generate_module_readme(self, scan_data: Dict, module_path: Path) -> str:
@@ -57,7 +57,7 @@ class DocumentationGenerator:
 
 > {self._generate_module_description(name, module_type)}
 
-## 📊 Обзор
+##  Обзор
 
 | Метрика | Значение |
 |---------|----------|
@@ -99,11 +99,11 @@ class DocumentationGenerator:
         readme += f"""
 ---
 
-## 📚 Дополнительные материалы
+##  Дополнительные материалы
 
 - [Архитектура платформы](../../doc-project/FINAL_UNIFIED_ARCHITECTURE_SPECIFICATION.md)
-- [API Reference](./API.md) {'✅' if endpoints else '⚠️ Нет API'}
-- [Тесты](./tests/) {'✅' if (module_path / 'tests').exists() else '⚠️ Тесты отсутствуют'}
+- [API Reference](./API.md) {'' if endpoints else '️ Нет API'}
+- [Тесты](./tests/) {'' if (module_path / 'tests').exists() else '️ Тесты отсутствуют'}
 
 **Сгенерировано автоматически:** {datetime.now().strftime('%Y-%m-%d %H:%M')}
 **Инструмент:** `tools/generators/documentation_generator.py`
@@ -136,7 +136,7 @@ class DocumentationGenerator:
 
 ---
 
-## 📋 Содержание
+##  Содержание
 
 """
         # Оглавление
@@ -168,7 +168,7 @@ class DocumentationGenerator:
 
         # Footer
         api_doc += f"""
-## 🔗 Интеграция
+##  Интеграция
 
 ### Authentication
 ```python
@@ -204,7 +204,7 @@ https://api.example.com  # Production
 
 > Архитектура и структура слоя {layer_name}
 
-## 📊 Статистика слоя
+##  Статистика слоя
 
 | Метрика | Значение |
 |---------|----------|
@@ -217,7 +217,7 @@ https://api.example.com  # Production
 
 ---
 
-## 🏗️ Модули
+## ️ Модули
 
 """
 
@@ -238,7 +238,7 @@ https://api.example.com  # Production
         arch_doc += "\n---\n\n"
 
         # Граф зависимостей между модулями
-        arch_doc += "## 🔗 Граф зависимостей\n\n"
+        arch_doc += "##  Граф зависимостей\n\n"
         arch_doc += "```mermaid\ngraph TD\n"
 
         for module in modules_data:
@@ -255,7 +255,7 @@ https://api.example.com  # Production
         arch_doc += "```\n\n---\n\n"
 
         # Детальное описание каждого модуля
-        arch_doc += "## 📦 Детальное описание модулей\n\n"
+        arch_doc += "##  Детальное описание модулей\n\n"
 
         for module in sorted(modules_data, key=lambda x: x['module_name']):
             name = module['module_name']
@@ -279,7 +279,7 @@ https://api.example.com  # Production
 
         # Footer
         arch_doc += f"""
-## 🎯 Roadmap
+##  Roadmap
 
 - [ ] Полное покрытие тестами (>80%)
 - [ ] API документация (OpenAPI/Swagger)
@@ -303,17 +303,17 @@ https://api.example.com  # Production
         name = scan_data['module_name'].lower()
 
         if endpoints:
-            return "🌐 API Service"
+            return " API Service"
         elif 'orchestrat' in name:
-            return "🎯 Orchestrator"
+            return " Orchestrator"
         elif any(x in name for x in ['ai', 'intelligence', 'collective', 'predictive']):
-            return "🤖 AI Module"
+            return " AI Module"
         elif 'foundation' in name:
-            return "🏗️ Foundation Layer"
+            return "️ Foundation Layer"
         elif classes and len(classes) > 10:
-            return "📚 Library"
+            return " Library"
         else:
-            return "🔧 Utility Module"
+            return " Utility Module"
 
     def _generate_module_description(self, name: str, module_type: str) -> str:
         """Генерировать описание модуля"""
@@ -334,7 +334,7 @@ https://api.example.com  # Production
     def _generate_api_section(self, endpoints: List[Dict]) -> str:
         """Секция API endpoints"""
 
-        section = "## 🌐 API Endpoints\n\n"
+        section = "##  API Endpoints\n\n"
 
         # Группировать по методам
         by_method = defaultdict(list)
@@ -356,7 +356,7 @@ https://api.example.com  # Production
     def _generate_architecture_section(self, classes: List[Dict], functions: List[Dict]) -> str:
         """Секция Architecture"""
 
-        section = "## 🏗️ Архитектура\n\n"
+        section = "## ️ Архитектура\n\n"
 
         if classes:
             top_classes = sorted(classes, key=lambda x: x.get('methods', 0), reverse=True)[:5]
@@ -375,7 +375,7 @@ https://api.example.com  # Production
     def _generate_dependencies_section(self, deps: List[str]) -> str:
         """Секция Dependencies"""
 
-        section = "## 🔗 Зависимости\n\n"
+        section = "##  Зависимости\n\n"
 
         # Группировать по типу
         internal = [d for d in deps if any(x in d for x in ['ai_foundation', 'ai_services', 'shared'])]
@@ -407,7 +407,7 @@ https://api.example.com  # Production
     def _generate_usage_section(self, name: str, module_type: str, endpoints: List) -> str:
         """Секция Usage"""
 
-        section = "## 💻 Использование\n\n"
+        section = "##  Использование\n\n"
 
         if endpoints:
             # API Service
@@ -437,7 +437,7 @@ https://api.example.com  # Production
     def _generate_config_section(self, config_files: Dict) -> str:
         """Секция Configuration"""
 
-        section = "## ⚙️ Конфигурация\n\n"
+        section = "## ️ Конфигурация\n\n"
 
         section += "**Конфигурационные файлы:**\n\n"
         for file_name in config_files.keys():
@@ -500,8 +500,8 @@ https://api.example.com  # Production
         json_file = self.reports_dir / f"{module_name}_scan.json"
 
         if not json_file.exists():
-            print(f"❌ Отчёт не найден: {json_file}")
-            print(f"💡 Запустите: python3 tools/analyzers/module_scanner.py {module_name}")
+            print(f" Отчёт не найден: {json_file}")
+            print(f" Запустите: python3 tools/analyzers/module_scanner.py {module_name}")
             return
 
         # Загрузить данные
@@ -512,7 +512,7 @@ https://api.example.com  # Production
         module_path = self.project_root / scan_data['path']
 
         print(f"\n{'='*60}")
-        print(f"📝 Генерация документации: {module_name}")
+        print(f" Генерация документации: {module_name}")
         print(f"{'='*60}\n")
 
         # Генерировать README.md
@@ -522,7 +522,7 @@ https://api.example.com  # Production
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(readme_content)
 
-        print(f"✅ README.md -> {readme_path}")
+        print(f" README.md -> {readme_path}")
 
         # Генерировать API.md (если есть endpoints)
         api_content = self.generate_module_api_doc(scan_data)
@@ -530,9 +530,9 @@ https://api.example.com  # Production
             api_path = module_path / "API.md"
             with open(api_path, 'w', encoding='utf-8') as f:
                 f.write(api_content)
-            print(f"✅ API.md    -> {api_path}")
+            print(f" API.md    -> {api_path}")
 
-        print(f"\n✅ Документация для '{module_name}' сгенерирована!\n")
+        print(f"\n Документация для '{module_name}' сгенерирована!\n")
 
     def generate_for_all_modules(self):
         """Генерировать документацию для всех отсканированных модулей"""
@@ -541,11 +541,11 @@ https://api.example.com  # Production
         json_files = list(self.reports_dir.glob("*_scan.json"))
 
         if not json_files:
-            print("❌ Не найдено отчётов сканирования")
-            print("💡 Запустите: python3 tools/analyzers/module_scanner.py --section intelligent-core")
+            print(" Не найдено отчётов сканирования")
+            print(" Запустите: python3 tools/analyzers/module_scanner.py --section intelligent-core")
             return
 
-        print(f"\n🚀 Найдено модулей для документирования: {len(json_files)}\n")
+        print(f"\n Найдено модулей для документирования: {len(json_files)}\n")
 
         for json_file in sorted(json_files):
             module_name = json_file.stem.replace('_scan', '')
@@ -556,13 +556,13 @@ https://api.example.com  # Production
 
             self.generate_for_module(module_name)
 
-        print(f"\n✅ Документация для {len(json_files)} модулей сгенерирована!\n")
+        print(f"\n Документация для {len(json_files)} модулей сгенерирована!\n")
 
     def generate_architecture_docs(self):
         """Генерировать архитектурные документы по слоям"""
 
         print(f"\n{'='*60}")
-        print(f"🏗️  Генерация архитектурной документации")
+        print(f"️  Генерация архитектурной документации")
         print(f"{'='*60}\n")
 
         # Загрузить все отчёты
@@ -598,9 +598,9 @@ https://api.example.com  # Production
             with open(arch_path, 'w', encoding='utf-8') as f:
                 f.write(arch_content)
 
-            print(f"✅ {layer_name}/ARCHITECTURE.md ({len(modules_data)} модулей)")
+            print(f" {layer_name}/ARCHITECTURE.md ({len(modules_data)} модулей)")
 
-        print(f"\n✅ Архитектурная документация сгенерирована!\n")
+        print(f"\n Архитектурная документация сгенерирована!\n")
 
 
 def main():

@@ -28,7 +28,7 @@ class APIDocsGenerator:
 
     async def fetch_openapi_specs(self):
         """Получить OpenAPI спецификации от запущенных сервисов"""
-        print("📡 Fetching OpenAPI specifications from services...\n")
+        print(" Fetching OpenAPI specifications from services...\n")
 
         async with httpx.AsyncClient(timeout=5.0) as client:
             for service_name, port in self.services.items():
@@ -37,15 +37,15 @@ class APIDocsGenerator:
                     response = await client.get(url)
                     if response.status_code == 200:
                         self.specs[service_name] = response.json()
-                        print(f"✅ {service_name}: {len(self.specs[service_name].get('paths', {}))} endpoints")
+                        print(f" {service_name}: {len(self.specs[service_name].get('paths', {}))} endpoints")
                     else:
-                        print(f"⚠️  {service_name}: Service not responding (port {port})")
+                        print(f"️  {service_name}: Service not responding (port {port})")
                 except Exception as e:
-                    print(f"⚠️  {service_name}: {str(e)[:50]}")
+                    print(f"️  {service_name}: {str(e)[:50]}")
 
     def generate_markdown_docs(self):
         """Генерировать Markdown документацию"""
-        print("\n📝 Generating Markdown documentation...\n")
+        print("\n Generating Markdown documentation...\n")
 
         for service_name, spec in self.specs.items():
             self._generate_service_markdown(service_name, spec)
@@ -104,7 +104,7 @@ class APIDocsGenerator:
                         name = param.get('name', '')
                         param_type = param.get('schema', {}).get('type', 'string')
                         location = param.get('in', '')
-                        required = '✅' if param.get('required', False) else '❌'
+                        required = '' if param.get('required', False) else ''
                         description = param.get('description', '')
                         md_content += f"| `{name}` | {param_type} | {location} | {required} | {description} |\n"
                     md_content += "\n"
@@ -131,7 +131,7 @@ class APIDocsGenerator:
         with open(output_file, 'w') as f:
             f.write(md_content)
 
-        print(f"✅ {service_name}: {output_file}")
+        print(f" {service_name}: {output_file}")
 
     def _generate_index(self):
         """Генерировать индексный файл"""
@@ -152,11 +152,11 @@ class APIDocsGenerator:
         with open(output_file, 'w') as f:
             f.write(md_content)
 
-        print(f"\n✅ Index: {output_file}")
+        print(f"\n Index: {output_file}")
 
     def generate_postman_collection(self):
         """Генерировать Postman коллекцию"""
-        print("\n📮 Generating Postman collection...\n")
+        print("\n Generating Postman collection...\n")
 
         collection = {
             "info": {
@@ -207,17 +207,17 @@ class APIDocsGenerator:
         with open(output_file, 'w') as f:
             json.dump(collection, f, indent=2)
 
-        print(f"✅ Postman collection: {output_file}")
+        print(f" Postman collection: {output_file}")
         print(f"   Import to Postman: Collections → Import → {output_file.name}")
 
     async def run(self):
         """Запустить генерацию документации"""
-        print("🚀 API Documentation Generator\n")
+        print(" API Documentation Generator\n")
 
         await self.fetch_openapi_specs()
 
         if not self.specs:
-            print("\n⚠️  No services are running. Start services first:")
+            print("\n️  No services are running. Start services first:")
             print("   cd platform-services/validation-service && python main.py")
             print("   cd platform-services/documents-service && python main.py")
             return
@@ -225,7 +225,7 @@ class APIDocsGenerator:
         self.generate_markdown_docs()
         self.generate_postman_collection()
 
-        print("\n🎉 Documentation generation complete!")
+        print("\n Documentation generation complete!")
         print(f"\nDocumentation: {self.output_dir.absolute()}")
 
 

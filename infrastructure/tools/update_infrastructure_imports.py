@@ -186,7 +186,7 @@ def main():
 
     if dry_run:
         print("=" * 80)
-        print("⚠️  DRY-RUN MODE - No files will be modified")
+        print("️  DRY-RUN MODE - No files will be modified")
         print("=" * 80)
         print()
 
@@ -248,7 +248,7 @@ def main():
 
     if dry_run:
         print("=" * 80)
-        print("⚠️  DRY-RUN MODE - No files were modified")
+        print("️  DRY-RUN MODE - No files were modified")
         print("=" * 80)
         print()
         print("To execute, run:")
@@ -256,7 +256,7 @@ def main():
         print()
     else:
         print("=" * 80)
-        print("✅ IMPORTS UPDATED")
+        print(" IMPORTS UPDATED")
         print("=" * 80)
         print()
         print("Next steps:")

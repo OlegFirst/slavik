@@ -254,7 +254,7 @@ class ScenarioFlowManager:
 
         if scenario.jaamsim_config:
             content += "\n## JaamSim Configuration Available\n\n"
-            content += "✅ JaamSim simulation configuration has been generated.\n\n"
+            content += " JaamSim simulation configuration has been generated.\n\n"
             content += "```\n"
             content += scenario.jaamsim_config[:500]
             if len(scenario.jaamsim_config) > 500:
@@ -263,7 +263,7 @@ class ScenarioFlowManager:
 
         if scenario.nics_setup:
             content += "\n## NICS Setup Available\n\n"
-            content += "✅ NICS (Incident Command System) setup has been prepared.\n\n"
+            content += " NICS (Incident Command System) setup has been prepared.\n\n"
             content += f"**Incident Type**: {scenario.nics_setup.get('incident_type', 'N/A')}\n\n"
 
         return content

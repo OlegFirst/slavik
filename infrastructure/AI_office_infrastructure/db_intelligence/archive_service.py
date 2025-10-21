@@ -84,7 +84,7 @@ class ArchiveService:
     def __init__(self, db_session: AsyncSession):
         self.db = db_session
         self.configs = {f"{c.schema}.{c.table}": c for c in ARCHIVE_CONFIGS}
-        logger.info(f"📦 Archive Service initialized with {len(self.configs)} configurations")
+        logger.info(f" Archive Service initialized with {len(self.configs)} configurations")
 
     async def check_archive_status(self) -> Dict[str, Any]:
         """
@@ -254,7 +254,7 @@ class ArchiveService:
             report["success"] = True
             report["message"] = f"Archived {len(rows)} records to {filename}"
 
-            logger.info(f"✅ Archived {len(rows)} records from {config_key} to {filename}")
+            logger.info(f" Archived {len(rows)} records from {config_key} to {filename}")
 
             # Update catalog
             await self._update_archive_catalog(
@@ -270,7 +270,7 @@ class ArchiveService:
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to archive data from {config_key}: {e}")
+            logger.error(f" Failed to archive data from {config_key}: {e}")
 
         return report
 
@@ -315,7 +315,7 @@ class ArchiveService:
             with open(full_path, 'wb') as f:
                 f.write(data)
 
-            logger.info(f"📁 Saved archive to {full_path}")
+            logger.info(f" Saved archive to {full_path}")
             return full_path
 
         except Exception as e:
@@ -387,7 +387,7 @@ class ArchiveService:
             })
 
             await self.db.commit()
-            logger.info(f"✅ Updated archive catalog for {schema}.{table}")
+            logger.info(f" Updated archive catalog for {schema}.{table}")
 
         except Exception as e:
             logger.error(f"Failed to update archive catalog: {e}")
@@ -552,7 +552,7 @@ class ArchiveService:
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to restore from {archive_filename}: {e}")
+            logger.error(f" Failed to restore from {archive_filename}: {e}")
 
         return report
 

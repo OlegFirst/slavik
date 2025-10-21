@@ -44,14 +44,14 @@ class CoordinationAIFoundation:
         try:
             # Initialize RAG for coordination pattern retrieval
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Coordination Center")
+            logger.info(" RAG Pipeline initialized for Coordination Center")
 
             # Initialize LLM Router for execution plan generation
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Coordination Center")
+            logger.info(" LLM Router initialized for Coordination Center")
 
         except Exception as e:
-            logger.error(f"❌ AI Foundation initialization failed: {e}")
+            logger.error(f" AI Foundation initialization failed: {e}")
             raise
 
     async def retrieve_coordination_patterns(
@@ -106,7 +106,7 @@ class CoordinationAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(similar_patterns)} coordination patterns from RAG")
+            logger.info(f" Retrieved {len(similar_patterns)} coordination patterns from RAG")
 
             return similar_patterns
 
@@ -154,7 +154,7 @@ class CoordinationAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"🔧 Retrieved {len(resolutions)} conflict resolution strategies from RAG")
+            logger.info(f" Retrieved {len(resolutions)} conflict resolution strategies from RAG")
 
             return resolutions
 
@@ -246,7 +246,7 @@ Format as structured JSON with clear step ordering."""
             # Calculate confidence
             confidence = self._calculate_plan_confidence(coordination_patterns, services)
 
-            logger.info(f"✅ Generated execution plan with {len(execution_plan.get('steps', []))} steps, confidence: {confidence:.2f}")
+            logger.info(f" Generated execution plan with {len(execution_plan.get('steps', []))} steps, confidence: {confidence:.2f}")
 
             return {
                 'execution_plan': execution_plan,
@@ -256,7 +256,7 @@ Format as structured JSON with clear step ordering."""
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM execution plan generation failed: {e}")
+            logger.error(f" LLM execution plan generation failed: {e}")
             return {'execution_plan': {}, 'steps': [], 'confidence': 0.0}
 
     async def generate_conflict_resolution_strategy(
@@ -336,7 +336,7 @@ Format as clear, actionable steps."""
             # Calculate confidence
             confidence = self._calculate_resolution_confidence(similar_resolutions)
 
-            logger.info(f"✅ Generated conflict resolution strategy, confidence: {confidence:.2f}")
+            logger.info(f" Generated conflict resolution strategy, confidence: {confidence:.2f}")
 
             return {
                 'strategy': response_text,
@@ -345,7 +345,7 @@ Format as clear, actionable steps."""
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM conflict resolution generation failed: {e}")
+            logger.error(f" LLM conflict resolution generation failed: {e}")
             return {'strategy': '', 'steps': [], 'confidence': 0.0}
 
     async def store_successful_coordination(
@@ -409,7 +409,7 @@ Format as clear, actionable steps."""
                 source_type="coordination_patterns"
             )
 
-            logger.info(f"💾 Stored successful coordination pattern: {task_type}")
+            logger.info(f" Stored successful coordination pattern: {task_type}")
 
         except Exception as e:
             logger.warning(f"Failed to store pattern in RAG: {e}")
@@ -469,7 +469,7 @@ Format as clear, actionable steps."""
                 source_type="conflict_resolutions"
             )
 
-            logger.info(f"💾 Stored conflict resolution: {conflict_type}")
+            logger.info(f" Stored conflict resolution: {conflict_type}")
 
         except Exception as e:
             logger.warning(f"Failed to store conflict resolution: {e}")

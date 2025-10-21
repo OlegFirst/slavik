@@ -136,36 +136,36 @@ class AIOrchestrator:
         try:
             # Initialize memory
             await self.memory.initialize()
-            logger.info("✅ Memory initialized")
+            logger.info(" Memory initialized")
 
             # Initialize context aggregator
             await self.context_aggregator.initialize()
-            logger.info("✅ Context aggregator initialized")
+            logger.info(" Context aggregator initialized")
 
             # Initialize strategy selector
             await self.strategy_selector.initialize(self.memory)
-            logger.info("✅ Strategy selector initialized")
+            logger.info(" Strategy selector initialized")
 
             # Initialize delegation manager
             await self.delegation_manager.initialize(self.event_bus)
-            logger.info("✅ Delegation manager initialized")
+            logger.info(" Delegation manager initialized")
 
             # Initialize safety monitor
             if self.safety_monitor:
                 await self.safety_monitor.initialize()
-                logger.info("✅ Safety monitor initialized")
+                logger.info(" Safety monitor initialized")
 
             # Initialize evolution engine
             if self.evolution_engine:
                 await self.evolution_engine.initialize(self.memory)
-                logger.info("✅ Evolution engine initialized")
+                logger.info(" Evolution engine initialized")
 
                 # Start evolution cycles
                 asyncio.create_task(self._run_evolution_cycles())
 
             # Initialize service registry
             await self.service_registry.initialize()
-            logger.info("✅ Service registry initialized")
+            logger.info(" Service registry initialized")
 
             # Register platform services
             await self._register_platform_services()
@@ -183,7 +183,7 @@ class AIOrchestrator:
             await self._initialize_ace_engine()
 
             self.initialized = True
-            logger.info("🚀 AI Orchestrator initialized successfully")
+            logger.info(" AI Orchestrator initialized successfully")
 
         except Exception as e:
             logger.error(f"Failed to initialize orchestrator: {e}")
@@ -245,7 +245,7 @@ class AIOrchestrator:
                     source='orchestrator'
                 )
                 if crisis_id:
-                    logger.warning(f"🚨 Crisis detected: {crisis_id}")
+                    logger.warning(f" Crisis detected: {crisis_id}")
                     # Crisis will be handled by crisis coordinator
                     # Continue with normal decision-making, but track crisis
 
@@ -290,7 +290,7 @@ class AIOrchestrator:
                     decision.rationale = f"Safety concerns: {', '.join([c.description for c in safety_result.get_blocking_concerns()])}"
                     self.stats['safety_blocks'] += 1
                 else:
-                    logger.info("✅ Safety check passed")
+                    logger.info(" Safety check passed")
 
             # Step 6: Store in memory
             await self._store_decision(decision, context)
@@ -385,7 +385,7 @@ class AIOrchestrator:
             # Close memory
             await self.memory.close()
 
-            logger.info("✅ AI Orchestrator shutdown complete")
+            logger.info(" AI Orchestrator shutdown complete")
 
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
@@ -422,11 +422,11 @@ class AIOrchestrator:
         for name, url, health_endpoint in services:
             try:
                 await self.service_registry.register_service(name, url, health_endpoint)
-                logger.info(f"✅ Registered service '{name}' at {url}")
+                logger.info(f" Registered service '{name}' at {url}")
             except Exception as e:
                 logger.warning(f"Failed to register service '{name}': {e}")
 
-        logger.info(f"✅ Platform services registration complete: {len(services)} services")
+        logger.info(f" Platform services registration complete: {len(services)} services")
 
     async def _subscribe_to_events(self) -> None:
         """Subscribe to relevant platform events."""
@@ -451,7 +451,7 @@ class AIOrchestrator:
         try:
             from workflow_intelligence.enable_pdca import enable_pdca_for_platform_eventbus
 
-            logger.info("🔄 Initializing PDCA Rules Engine...")
+            logger.info(" Initializing PDCA Rules Engine...")
 
             # Enable PDCA with platform EventBus
             pdca_engine = await enable_pdca_for_platform_eventbus(
@@ -462,20 +462,20 @@ class AIOrchestrator:
             # Store reference
             self.pdca_engine = pdca_engine
 
-            logger.info("✅ PDCA Rules Engine initialized and connected to EventBus")
+            logger.info(" PDCA Rules Engine initialized and connected to EventBus")
             logger.info("   - Plan-Do-Check-Act cycle activated")
             logger.info("   - Continuous improvement enabled")
             logger.info("   - Learning from workflow outcomes")
 
         except Exception as e:
-            logger.warning(f"⚠️ PDCA initialization failed (non-critical): {e}")
+            logger.warning(f"️ PDCA initialization failed (non-critical): {e}")
             logger.warning("   Orchestrator will continue without PDCA")
             self.pdca_engine = None
 
     async def _initialize_crisis_coordinator(self) -> None:
         """Initialize Crisis Coordinator for crisis response."""
         try:
-            logger.info("🔄 Initializing Crisis Coordinator...")
+            logger.info(" Initializing Crisis Coordinator...")
 
             # Create Crisis Coordinator
             self.crisis_coordinator = CrisisCoordinator(
@@ -486,13 +486,13 @@ class AIOrchestrator:
             # Initialize coordinator
             await self.crisis_coordinator.initialize()
 
-            logger.info("✅ Crisis Coordinator initialized")
+            logger.info(" Crisis Coordinator initialized")
             logger.info("   - Crisis detection enabled")
             logger.info("   - Multi-service coordination ready")
             logger.info("   - BC plan activation ready")
 
         except Exception as e:
-            logger.warning(f"⚠️ Crisis Coordinator initialization failed (non-critical): {e}")
+            logger.warning(f"️ Crisis Coordinator initialization failed (non-critical): {e}")
             logger.warning("   Orchestrator will continue without crisis coordination")
             self.crisis_coordinator = None
 
@@ -1198,7 +1198,7 @@ class AIOrchestrator:
     async def _initialize_ace_engine(self) -> None:
         """Initialize ACE Engine for evolving context playbooks."""
         try:
-            logger.info("🔄 Initializing ACE Engine...")
+            logger.info(" Initializing ACE Engine...")
 
             # Import ACE Engine
             import sys
@@ -1212,13 +1212,13 @@ class AIOrchestrator:
             # Get ACE Engine instance
             self.ace_engine = get_ace_engine()
 
-            logger.info("✅ ACE Engine initialized")
+            logger.info(" ACE Engine initialized")
             logger.info("   - Evolving context playbooks enabled")
             logger.info("   - Knowledge accumulation active")
             logger.info("   - +8-15% expected improvement")
 
         except Exception as e:
-            logger.warning(f"⚠️ ACE Engine initialization failed (non-critical): {e}")
+            logger.warning(f"️ ACE Engine initialization failed (non-critical): {e}")
             logger.warning("   Orchestrator will continue without ACE")
             self.ace_engine = None
 
@@ -1266,7 +1266,7 @@ class AIOrchestrator:
         try:
             # Step 1: Generator - Create enhanced context with ACE
             if self.ace_engine and require_ace:
-                logger.info(f"🧠 Generating ACE-enhanced context for {task_type}")
+                logger.info(f" Generating ACE-enhanced context for {task_type}")
 
                 enhanced_context = await self.ace_engine.generate_context(
                     task=task_type,
@@ -1275,7 +1275,7 @@ class AIOrchestrator:
                 )
 
                 logger.info(
-                    f"✅ Enhanced context with {len(enhanced_context.get('playbook_strategies', []))} strategies, "
+                    f" Enhanced context with {len(enhanced_context.get('playbook_strategies', []))} strategies, "
                     f"{len(enhanced_context.get('known_patterns', []))} patterns"
                 )
             else:
@@ -1323,7 +1323,7 @@ class AIOrchestrator:
 
             # Step 3 & 4: Reflector + Curator - Learn from execution (if ACE enabled)
             if self.ace_engine and require_ace and ai_result['success']:
-                logger.info(f"🧠 Reflecting on trajectory for {task_type}")
+                logger.info(f" Reflecting on trajectory for {task_type}")
 
                 # Create trajectory
                 trajectory = {
@@ -1361,7 +1361,7 @@ class AIOrchestrator:
                 }
 
                 logger.info(
-                    f"✅ Playbook updated for {task_type}: "
+                    f" Playbook updated for {task_type}: "
                     f"{len(updated_playbook.get('strategies', []))} strategies, "
                     f"{len(updated_playbook.get('patterns', []))} patterns"
                 )

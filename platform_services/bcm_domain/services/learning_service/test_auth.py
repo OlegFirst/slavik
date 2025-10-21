@@ -38,42 +38,42 @@ def test_jwt_functions():
         tenant_id='tenant_456',
         roles=['admin', 'bcm_manager']
     )
-    print(f"   ✓ Token created successfully!")
+    print(f"    Token created successfully!")
     print(f"   Token (first 60 chars): {token[:60]}...")
 
     # Test 2: Verify token
     print("\n2. Verifying JWT token...")
     try:
         payload = verify_token(token)
-        print(f"   ✓ Token verified successfully!")
+        print(f"    Token verified successfully!")
         print(f"   Payload: {payload}")
     except Exception as e:
-        print(f"   ✗ Verification failed: {e}")
+        print(f"    Verification failed: {e}")
         return False
 
     # Test 3: Extract user from token
     print("\n3. Extracting user information...")
     try:
         user = get_current_user(token)
-        print(f"   ✓ User extracted successfully!")
+        print(f"    User extracted successfully!")
         print(f"   User ID: {user['user_id']}")
         print(f"   Tenant ID: {user['tenant_id']}")
         print(f"   Roles: {user['roles']}")
     except Exception as e:
-        print(f"   ✗ User extraction failed: {e}")
+        print(f"    User extraction failed: {e}")
         return False
 
     # Test 4: Test with invalid token
     print("\n4. Testing with invalid token...")
     try:
         verify_token("invalid.token.here")
-        print("   ✗ Should have failed!")
+        print("    Should have failed!")
         return False
     except Exception as e:
-        print(f"   ✓ Correctly rejected invalid token")
+        print(f"    Correctly rejected invalid token")
 
     print("\n" + "=" * 60)
-    print("✅ All JWT tests passed!")
+    print(" All JWT tests passed!")
     print("=" * 60)
     return True
 

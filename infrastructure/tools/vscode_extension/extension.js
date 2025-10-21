@@ -3,7 +3,7 @@ const vscode = require('vscode');
 const axios = require('axios');
 
 function activate(context) {
-    console.log('🚀 BCM AI DevOps activated!');
+    console.log(' BCM AI DevOps activated!');
 
     // Команда анализа конфигурации
     const analyzeConfig = vscode.commands.registerCommand('bcm.analyzeConfig', async () => {
@@ -18,7 +18,7 @@ function activate(context) {
         const aiOrchestrator = config.get('aiOrchestrator');
 
         try {
-            vscode.window.showInformationMessage('🧠 AI анализирует конфигурацию...');
+            vscode.window.showInformationMessage(' AI анализирует конфигурацию...');
             
             const response = await axios.post(`${aiOrchestrator}/claude/analyze-changes`, {
                 changes: content,
@@ -29,21 +29,21 @@ function activate(context) {
             
             const panel = vscode.window.createWebviewPanel(
                 'bcmAnalysis',
-                '🧠 BCM AI Analysis',
+                ' BCM AI Analysis',
                 vscode.ViewColumn.Beside,
                 {}
             );
 
             panel.webview.html = `
-                <h1>🧠 AI Analysis Results</h1>
-                <h2>📊 Risk: ${analysis.deployment_risk || 'Unknown'}</h2>
-                <h2>🚀 Strategy: ${analysis.recommended_strategy || 'Standard'}</h2>
+                <h1> AI Analysis Results</h1>
+                <h2> Risk: ${analysis.deployment_risk || 'Unknown'}</h2>
+                <h2> Strategy: ${analysis.recommended_strategy || 'Standard'}</h2>
                 <h2>⏱️ Time: ${analysis.estimated_deployment_time || 'N/A'}</h2>
-                <h2>💡 Recommendations:</h2>
+                <h2> Recommendations:</h2>
                 <ul>
                     ${(analysis.optimizations || []).map(opt => `<li>${opt}</li>`).join('')}
                 </ul>
-                <p>🧠 Memory sources: ${analysis.memory_sources || 0}</p>
+                <p> Memory sources: ${analysis.memory_sources || 0}</p>
             `;
         } catch (error) {
             vscode.window.showErrorMessage(`AI analysis failed: ${error.message}`);
@@ -54,7 +54,7 @@ function activate(context) {
     const chatAI = vscode.commands.registerCommand('bcm.chatAI', () => {
         const panel = vscode.window.createWebviewPanel(
             'bcmChat',
-            '💬 BCM AI Chat',
+            ' BCM AI Chat',
             vscode.ViewColumn.Beside,
             { enableScripts: true }
         );
@@ -72,7 +72,7 @@ function activate(context) {
                 </style>
             </head>
             <body>
-                <h2>🧠 BCM AI DevOps Assistant</h2>
+                <h2> BCM AI DevOps Assistant</h2>
                 <div class="chat" id="chat">
                     <div class="message ai">AI: Привет! Спрашивайте о развертывании, архитектуре, оптимизации!</div>
                 </div>
@@ -87,7 +87,7 @@ function activate(context) {
                         
                         if (message) {
                             chat.innerHTML += '<div class="message user">Вы: ' + message + '</div>';
-                            chat.innerHTML += '<div class="message ai">AI: Анализирую ваш запрос... 🤖</div>';
+                            chat.innerHTML += '<div class="message ai">AI: Анализирую ваш запрос... </div>';
                             input.value = '';
                             chat.scrollTop = chat.scrollHeight;
                         }
@@ -103,7 +103,7 @@ function activate(context) {
 
     context.subscriptions.push(analyzeConfig, chatAI);
     
-    vscode.window.showInformationMessage('🧠 BCM AI DevOps ready! Команды: Ctrl+Shift+P → BCM AI');
+    vscode.window.showInformationMessage(' BCM AI DevOps ready! Команды: Ctrl+Shift+P → BCM AI');
 }
 
 function deactivate() {}

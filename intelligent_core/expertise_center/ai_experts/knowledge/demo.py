@@ -35,18 +35,18 @@ def print_section(title: str):
 async def demo():
     """Run complete demo"""
 
-    print_section("🚀 INTELLIGENCE LAYER + ISO-22301-LIBRARY DEMO")
+    print_section(" INTELLIGENCE LAYER + ISO-22301-LIBRARY DEMO")
 
     # ========================================================================
     # PART 1: ISO 22301 Loader
     # ========================================================================
 
-    print_section("📚 Part 1: Loading ISO 22301 Clauses")
+    print_section(" Part 1: Loading ISO 22301 Clauses")
 
     loader = ISO22301Loader()
     clauses = loader.load_all_clauses()
 
-    print(f"✅ Loaded {len(clauses)} ISO 22301:2019 clauses\n")
+    print(f" Loaded {len(clauses)} ISO 22301:2019 clauses\n")
 
     # Show clause 8.2.2 (BIA) details
     print("Example: ISO 22301:2019 Clause 8.2.2 (BIA)")
@@ -85,14 +85,14 @@ async def demo():
     # PART 2: Knowledge Graph
     # ========================================================================
 
-    print_section("🕸️  Part 2: Building Knowledge Graph")
+    print_section("️  Part 2: Building Knowledge Graph")
 
     builder = KnowledgeGraphBuilder()
     kg = builder.build_from_iso_clauses(clauses)
 
     stats = kg.get_statistics()
 
-    print(f"✅ Knowledge Graph built!\n")
+    print(f" Knowledge Graph built!\n")
     print(f"Total Nodes: {stats['total_nodes']}")
     print(f"Total Edges: {stats['total_edges']}")
 
@@ -138,7 +138,7 @@ async def demo():
     # PART 3: RAG Ingestion (Simulated)
     # ========================================================================
 
-    print_section("🔍 Part 3: Knowledge Ingestion (Simulated RAG)")
+    print_section(" Part 3: Knowledge Ingestion (Simulated RAG)")
 
     print("Note: RAG pipeline not provided, simulating ingestion...\n")
 
@@ -148,7 +148,7 @@ async def demo():
 
     ingestion_stats = await ingestion_pipeline.ingest_all_knowledge()
 
-    print(f"✅ Knowledge ingestion complete!\n")
+    print(f" Knowledge ingestion complete!\n")
     print(f"Documents by Source:")
     print(f"  - ISO Clauses: {ingestion_stats['iso_clauses']}")
     print(f"  - BCI Practices: {ingestion_stats['bci_practices']}")
@@ -160,7 +160,7 @@ async def demo():
     # PART 4: Full Initialization
     # ========================================================================
 
-    print_section("🎯 Part 4: Full Knowledge Base Initialization")
+    print_section(" Part 4: Full Knowledge Base Initialization")
 
     initializer = await initialize_intelligence_layer_knowledge(
         rag_pipeline=None  # Simulate without RAG
@@ -168,7 +168,7 @@ async def demo():
 
     init_stats = initializer.get_ingestion_stats()
 
-    print(f"✅ Knowledge base fully initialized!\n")
+    print(f" Knowledge base fully initialized!\n")
     print(f"Status: SUCCESS")
     print(f"ISO Clauses: {init_stats['iso_clauses']}")
     print(f"RAG Documents: {init_stats['total_documents']}")
@@ -178,7 +178,7 @@ async def demo():
     # PART 5: Use Case Example
     # ========================================================================
 
-    print_section("💡 Part 5: Real-World Use Case")
+    print_section(" Part 5: Real-World Use Case")
 
     print("Scenario: BCM Advisor helping with BIA for healthcare organization\n")
 
@@ -246,35 +246,35 @@ Would you like me to help design the BIA workshop agenda?
     # Summary
     # ========================================================================
 
-    print_section("✅ DEMO COMPLETE - SUMMARY")
+    print_section(" DEMO COMPLETE - SUMMARY")
 
     print("""
 What we demonstrated:
 
-1. ✅ ISO 22301 Loading
+1.  ISO 22301 Loading
    - Loaded 25 clauses from ISO_22301_Library
    - Structured data: requirements, evidence, audit questions
 
-2. ✅ Knowledge Graph
+2.  Knowledge Graph
    - 200+ nodes (clauses, evidence, audit questions, BCI practices)
    - 300+ edges (requires, maps_to, depends_on)
    - Query capabilities
 
-3. ✅ RAG Ingestion
+3.  RAG Ingestion
    - 34 documents for semantic search
    - ISO + BCI + Healthcare guidance
 
-4. ✅ One-Command Initialization
+4.  One-Command Initialization
    - Complete knowledge base ready in seconds
 
-5. ✅ Real-World Use Case
+5.  Real-World Use Case
    - BCM Advisor with accurate ISO references
    - Evidence requirements for auditors
    - Healthcare-specific guidance
    - BCI best practices alignment
 
 INTEGRATION STATUS: 95% Complete
-READY FOR PRODUCTION: ✅ YES
+READY FOR PRODUCTION:  YES
 
 The Intelligence Layer now has complete access to ISO 22301:2019 and
 BCI Professional Practices knowledge!

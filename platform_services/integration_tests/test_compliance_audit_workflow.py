@@ -59,7 +59,7 @@ async def test_audit_gap_to_nonconformity_to_capa(
     audit_id = audit.get("id") or audit.get("audit_id")
     cleanup_test_data["audits"].append(audit_id)
 
-    print(f"✅ Created audit: {audit_id}")
+    print(f" Created audit: {audit_id}")
 
     # Step 2: Conduct audit and find gap (update audit)
     audit_update = {
@@ -83,7 +83,7 @@ async def test_audit_gap_to_nonconformity_to_capa(
     )
 
     assert response.status_code == 200
-    print(f"✅ Audit updated with findings")
+    print(f" Audit updated with findings")
 
     # Step 3: Create nonconformity from audit finding
     nc_data = {
@@ -109,7 +109,7 @@ async def test_audit_gap_to_nonconformity_to_capa(
     nc_id = nc.get("id") or nc.get("nc_id")
     cleanup_test_data["nonconformities"].append(nc_id)
 
-    print(f"✅ Created nonconformity: {nc_id}")
+    print(f" Created nonconformity: {nc_id}")
 
     # Step 4: Create corrective action (CAPA)
     capa_data = {
@@ -136,14 +136,14 @@ async def test_audit_gap_to_nonconformity_to_capa(
 
     # Endpoint might not exist yet
     if response.status_code == 404:
-        print(f"⚠️ CAPA endpoint not implemented, skipping")
+        print(f"️ CAPA endpoint not implemented, skipping")
         return
 
     assert response.status_code in [201, 404]
     if response.status_code == 201:
         capa = response.json()
         capa_id = capa.get("id")
-        print(f"✅ Created CAPA: {capa_id}")
+        print(f" Created CAPA: {capa_id}")
 
         # Step 5: Verify CAPA effectiveness
         verify_data = {
@@ -161,7 +161,7 @@ async def test_audit_gap_to_nonconformity_to_capa(
         )
 
         assert response.status_code in [200, 404]
-        print(f"✅ CAPA verified")
+        print(f" CAPA verified")
 
     # Step 6: Close audit
     close_data = {
@@ -177,7 +177,7 @@ async def test_audit_gap_to_nonconformity_to_capa(
     )
 
     assert response.status_code == 200
-    print(f"✅ Complete audit lifecycle verified")
+    print(f" Complete audit lifecycle verified")
 
 
 @pytest.mark.integration
@@ -239,7 +239,7 @@ async def test_bia_triggers_compliance_audit(
     audit = response.json()
     cleanup_test_data["audits"].append(audit.get("id") or audit.get("audit_id"))
 
-    print(f"✅ BIA process referenced in compliance audit")
+    print(f" BIA process referenced in compliance audit")
 
 
 @pytest.mark.integration
@@ -319,7 +319,7 @@ async def test_plan_testing_through_compliance(
     # Evidence endpoint might not exist
     assert response.status_code in [201, 404]
 
-    print(f"✅ Plan testing verified through compliance process")
+    print(f" Plan testing verified through compliance process")
 
 
 @pytest.mark.integration
@@ -387,12 +387,12 @@ async def test_continuous_improvement_cycle(
 
     # Endpoint might not exist
     if response.status_code == 404:
-        print(f"⚠️ Improvements endpoint not implemented")
+        print(f"️ Improvements endpoint not implemented")
         return
 
     assert response.status_code in [201, 404]
 
-    print(f"✅ Continuous improvement cycle verified")
+    print(f" Continuous improvement cycle verified")
 
 
 @pytest.mark.integration
@@ -442,7 +442,7 @@ async def test_cross_service_audit_evidence_gathering(
 
     assert response.status_code == 200
     bia_processes = response.json()
-    print(f"✅ Gathered BIA evidence: {len(bia_processes.get('items', []))} processes")
+    print(f" Gathered BIA evidence: {len(bia_processes.get('items', []))} processes")
 
     # Gather evidence from Planning service
     response = await http_client.get(
@@ -453,7 +453,7 @@ async def test_cross_service_audit_evidence_gathering(
 
     assert response.status_code == 200
     strategies = response.json()
-    print(f"✅ Gathered Planning evidence")
+    print(f" Gathered Planning evidence")
 
     # Gather evidence from Plans service
     response = await http_client.get(
@@ -464,7 +464,7 @@ async def test_cross_service_audit_evidence_gathering(
 
     assert response.status_code == 200
     plans = response.json()
-    print(f"✅ Gathered Plans evidence")
+    print(f" Gathered Plans evidence")
 
     # Complete audit with consolidated findings
     completion_data = {
@@ -485,7 +485,7 @@ async def test_cross_service_audit_evidence_gathering(
     )
 
     assert response.status_code == 200
-    print(f"✅ Cross-service audit evidence gathering complete")
+    print(f" Cross-service audit evidence gathering complete")
 
 
 @pytest.mark.integration
@@ -523,7 +523,7 @@ async def test_gap_remediation_tracking(
 
     # Gap endpoint might not exist
     if response.status_code == 404:
-        print(f"⚠️ Gap endpoint not implemented")
+        print(f"️ Gap endpoint not implemented")
         return
 
     assert response.status_code in [201, 404]
@@ -546,4 +546,4 @@ async def test_gap_remediation_tracking(
         )
 
         assert response.status_code in [200, 404]
-        print(f"✅ Gap remediation tracking verified")
+        print(f" Gap remediation tracking verified")

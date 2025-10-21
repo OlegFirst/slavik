@@ -42,12 +42,12 @@ program
         try {
             const response = await fetch('http://localhost:3000/health');
             if (response.ok) {
-                console.log('✅ Connection successful');
+                console.log(' Connection successful');
             } else {
-                console.log('❌ Connection failed');
+                console.log(' Connection failed');
             }
         } catch (error) {
-            console.log('❌ Server not running');
+            console.log(' Server not running');
             console.log('Start with: npm start');
         }
     });

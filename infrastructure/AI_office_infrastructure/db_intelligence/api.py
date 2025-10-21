@@ -429,7 +429,7 @@ async def execute_admin_command(command: AdminCommand):
             }
 
         # Execute command
-        logger.info(f"🔧 Executing admin command: {command.command_type}")
+        logger.info(f" Executing admin command: {command.command_type}")
         result = await service.command_handler.handle_command(orchestrator_command)
 
         return {

@@ -204,12 +204,12 @@ class NotificationService:
         """Send notification to console (logging)"""
         priority_prefix = {
             NotificationPriority.LOW: "ℹ️ ",
-            NotificationPriority.NORMAL: "📢",
-            NotificationPriority.HIGH: "⚠️ ",
-            NotificationPriority.CRITICAL: "🚨"
+            NotificationPriority.NORMAL: "",
+            NotificationPriority.HIGH: "️ ",
+            NotificationPriority.CRITICAL: ""
         }
 
-        prefix = priority_prefix.get(notification.priority, "📢")
+        prefix = priority_prefix.get(notification.priority, "")
 
         print(f"\n{prefix} {notification.priority.name} NOTIFICATION {prefix}")
         print(f"Title: {notification.title}")

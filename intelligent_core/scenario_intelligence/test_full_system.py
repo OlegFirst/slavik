@@ -35,7 +35,7 @@ async def test_configuration():
 
     warnings = config.validate()
     if warnings:
-        print("\n⚠️  Warnings:")
+        print("\n️  Warnings:")
         for warning in warnings:
             print(f"   {warning}")
 
@@ -52,7 +52,7 @@ async def test_database():
 
     conn_string = os.getenv('DATABASE_URL')
     if not conn_string:
-        print("❌ DATABASE_URL not configured")
+        print(" DATABASE_URL not configured")
         return False
 
     try:
@@ -60,14 +60,14 @@ async def test_database():
         await storage.initialize()
 
         stats = await storage.get_statistics()
-        print(f"✅ Database connected!")
+        print(f" Database connected!")
         print(f"   Total scenarios: {stats.get('total_scenarios', 0)}")
         print(f"   By level: {stats.get('by_level', {})}")
 
         await storage.close()
         return True
     except Exception as e:
-        print(f"❌ Database connection failed: {e}")
+        print(f" Database connection failed: {e}")
         return False
 
 
@@ -93,10 +93,10 @@ async def test_metrics():
         with ExecutionMetricsContext(level='l1'):
             record_scenario_executed('l1', 'success', 0.1, 5, 0)
 
-        print("✅ Metrics system working")
+        print(" Metrics system working")
         return True
     except Exception as e:
-        print(f"❌ Metrics failed: {e}")
+        print(f" Metrics failed: {e}")
         return False
 
 
@@ -113,11 +113,11 @@ async def test_l4_generation():
 
         from generators.l4_workflow_generator import L4WorkflowGenerator
 
-        print("✅ L4 Generator imports successful")
+        print(" L4 Generator imports successful")
         print("   (Skipping actual generation in test)")
         return True
     except Exception as e:
-        print(f"⚠️  L4 Generator import failed: {e}")
+        print(f"️  L4 Generator import failed: {e}")
         print("   (This is OK if LLM not configured)")
         return True
 
@@ -159,13 +159,13 @@ async def test_execution():
 
         report = await engine.execute_scenario_direct(test_scenario)
 
-        print(f"✅ Execution completed")
+        print(f" Execution completed")
         print(f"   Status: {report.summary['overall_status']}")
         print(f"   Duration: {report.summary['timing']['total_duration']:.2f}s")
 
         return report.summary['overall_status'] == 'success'
     except Exception as e:
-        print(f"❌ Execution failed: {e}")
+        print(f" Execution failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -180,11 +180,11 @@ async def test_grafana_dashboard():
     dashboard_path = Path(__file__).parent.parent.parent / "infrastructure/observability/grafana/provisioning/dashboards/scenario-intelligence.json"
 
     if dashboard_path.exists():
-        print("✅ Grafana dashboard file exists")
+        print(" Grafana dashboard file exists")
         print(f"   Path: {dashboard_path}")
         return True
     else:
-        print("❌ Grafana dashboard not found")
+        print(" Grafana dashboard not found")
         return False
 
 
@@ -212,7 +212,7 @@ async def main():
     total = len(results)
 
     for test_name, passed_test in results.items():
-        status = "✅ PASS" if passed_test else "❌ FAIL"
+        status = " PASS" if passed_test else " FAIL"
         print(f"   {status} - {test_name}")
 
     print("\n" + "="*70)
@@ -220,10 +220,10 @@ async def main():
     print("="*70)
 
     if passed == total:
-        print("\n🎉 ALL TESTS PASSED! System is ready for deployment.")
+        print("\n ALL TESTS PASSED! System is ready for deployment.")
         return 0
     else:
-        print(f"\n⚠️  {total - passed} test(s) failed. Please check configuration.")
+        print(f"\n️  {total - passed} test(s) failed. Please check configuration.")
         return 1
 
 

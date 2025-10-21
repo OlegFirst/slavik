@@ -64,12 +64,12 @@ class ScenarioGenerator:
                     "qdrant_local"
                 )
                 self.qdrant_client = QdrantClient(path=qdrant_path)
-                logger.info(f"✅ RAG initialized (local Qdrant at {qdrant_path})")
+                logger.info(f" RAG initialized (local Qdrant at {qdrant_path})")
             except Exception as e:
                 logger.warning(f"RAG initialization failed: {e}")
                 self.qdrant_client = None
 
-        logger.info("🤖 ScenarioGenerator initialized")
+        logger.info(" ScenarioGenerator initialized")
 
     async def generate(self, gaps: List[KnowledgeGap]) -> List[Scenario]:
         """
@@ -84,7 +84,7 @@ class ScenarioGenerator:
 
         for gap in gaps:
             try:
-                logger.info(f"📝 Generating scenario for gap: {gap.description[:50]}...")
+                logger.info(f" Generating scenario for gap: {gap.description[:50]}...")
 
                 # Route to appropriate generator based on gap type
                 if gap.type == GapType.STANDARD_REQUIREMENT:
@@ -111,8 +111,8 @@ class ScenarioGenerator:
                 logger.error(f"Generation error for gap {gap.id}: {e}")
                 continue
 
-        logger.info(f"✅ Generated {len(scenarios)} scenarios")
-        logger.info(f"💰 Knowledge value: {self.knowledge_value:.2f} units")
+        logger.info(f" Generated {len(scenarios)} scenarios")
+        logger.info(f" Knowledge value: {self.knowledge_value:.2f} units")
 
         return scenarios
 
@@ -122,7 +122,7 @@ class ScenarioGenerator:
 
         PROTECTION focus: Ensures compliance and safety
         """
-        logger.info(f"📚 Generating from standard: {gap.standard} {gap.clause}")
+        logger.info(f" Generating from standard: {gap.standard} {gap.clause}")
 
         # 1. Fetch RAG context (similar scenarios)
         rag_context = await self._get_rag_context(
@@ -206,7 +206,7 @@ Generate ONLY the scenario content, no explanations."""
 
         SELF-REALIZATION focus: Turns capabilities into value
         """
-        logger.info(f"⚙️ Generating from capability: {gap.service} - {gap.capability}")
+        logger.info(f"️ Generating from capability: {gap.service} - {gap.capability}")
 
         # 1. Get platform API documentation
         api_docs = await self._get_api_docs(gap.service)
@@ -283,7 +283,7 @@ Generate ONLY the scenario content."""
 
         KNOWLEDGE focus: Answers user questions with actionable scenarios
         """
-        logger.info(f"❓ Generating from user request: {gap.user_question}")
+        logger.info(f" Generating from user request: {gap.user_question}")
 
         # 1. Search existing knowledge
         rag_context = await self._get_rag_context(gap.user_question)
@@ -356,7 +356,7 @@ Generate ONLY the scenario content."""
 
         KNOWLEDGE focus: Collective intelligence
         """
-        logger.info(f"👥 Generating from community pattern")
+        logger.info(f" Generating from community pattern")
 
         # Get anonymized patterns from Community Intelligence
         try:
@@ -422,7 +422,7 @@ Generate ONLY the scenario content."""
                         f"**{r.payload['title']}**\n{r.payload['content'][:200]}..."
                         for r in results.points
                     ])
-                    logger.info(f"✅ RAG found {len(results.points)} similar scenarios")
+                    logger.info(f" RAG found {len(results.points)} similar scenarios")
                     return context
 
             except Exception as e:
@@ -560,7 +560,7 @@ Generate ONLY the scenario content."""
                 f.write("---\n\n")
                 f.write(scenario.content)
 
-            logger.info(f"💾 Saved scenario: {filepath}")
+            logger.info(f" Saved scenario: {filepath}")
 
         except Exception as e:
             logger.error(f"Save error: {e}")

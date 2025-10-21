@@ -447,7 +447,19 @@ export function RiskMatrix({
               {/* Cells for this likelihood row */}
               {IMPACT_LABELS.map(({ value: impact }) => {
                 const cellKey = formatCellKey(likelihood, impact);
-                const cellRisks = heatMapData.risks_by_cell[cellKey] || [];
+                const rawCellRisks = heatMapData.risks_by_cell[cellKey] || [];
+
+                // Convert Risk[] to RiskMatrixPosition[]
+                const cellRisks: RiskMatrixPosition[] = rawCellRisks.map(risk => ({
+                  risk_id: risk.id || '',
+                  risk_title: risk.risk_title,
+                  likelihood: risk.likelihood,
+                  impact: risk.impact,
+                  score: risk.inherent_risk_score,
+                  severity: getRiskSeverity(risk.inherent_risk_score),
+                  category: risk.risk_category,
+                }));
+
                 const isCellHovered = hoveredCell?.likelihood === likelihood && hoveredCell?.impact === impact;
 
                 return (

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-📊 Workflow Intelligence Metrics Exporter
+ Workflow Intelligence Metrics Exporter
 ==========================================
 
 Standalone HTTP server для экспорта метрик Workflow Intelligence.
@@ -72,8 +72,8 @@ def main():
                        help='Host to bind (default: 0.0.0.0)')
     args = parser.parse_args()
 
-    logger.info(f"🚀 Starting Workflow Intelligence Metrics Exporter on {args.host}:{args.port}")
-    logger.info(f"📊 Metrics endpoint: http://{args.host}:{args.port}/metrics")
+    logger.info(f" Starting Workflow Intelligence Metrics Exporter on {args.host}:{args.port}")
+    logger.info(f" Metrics endpoint: http://{args.host}:{args.port}/metrics")
 
     app = create_app()
     run_simple(args.host, args.port, app)

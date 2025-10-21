@@ -34,7 +34,7 @@ try:
     EMBEDDINGS_AVAILABLE = True
 except ImportError:
     EMBEDDINGS_AVAILABLE = False
-    print("⚠️  sentence-transformers not installed. Install with: pip install sentence-transformers")
+    print("️  sentence-transformers not installed. Install with: pip install sentence-transformers")
 
 try:
     from qdrant_client import QdrantClient
@@ -42,7 +42,7 @@ try:
     QDRANT_AVAILABLE = True
 except ImportError:
     QDRANT_AVAILABLE = False
-    print("⚠️  qdrant-client not installed. Install with: pip install qdrant-client")
+    print("️  qdrant-client not installed. Install with: pip install qdrant-client")
 
 
 @dataclass
@@ -143,9 +143,9 @@ class ComprehensiveDocsLoader:
         self.embedding_model = None
         self.qdrant_client = None
 
-        print(f"📁 Documents path: {self.docs_path}")
-        print(f"🔧 Qdrant: {qdrant_url}:{qdrant_port}")
-        print(f"🤖 Embedding model: {embedding_model}")
+        print(f" Documents path: {self.docs_path}")
+        print(f" Qdrant: {qdrant_url}:{qdrant_port}")
+        print(f" Embedding model: {embedding_model}")
 
     def _init_embedding_model(self):
         """Initialize sentence transformer model"""
@@ -155,7 +155,7 @@ class ComprehensiveDocsLoader:
         if self.embedding_model is None:
             print(f"⏳ Loading embedding model: {self.embedding_model_name}...")
             self.embedding_model = SentenceTransformer(self.embedding_model_name)
-            print(f"✅ Embedding model loaded (dimension: {self.embedding_model.get_sentence_embedding_dimension()})")
+            print(f" Embedding model loaded (dimension: {self.embedding_model.get_sentence_embedding_dimension()})")
 
     def _init_qdrant_client(self):
         """Initialize Qdrant client"""
@@ -165,7 +165,7 @@ class ComprehensiveDocsLoader:
         if self.qdrant_client is None:
             print(f"⏳ Connecting to Qdrant at {self.qdrant_url}:{self.qdrant_port}...")
             self.qdrant_client = QdrantClient(host=self.qdrant_url, port=self.qdrant_port)
-            print("✅ Connected to Qdrant")
+            print(" Connected to Qdrant")
 
     def _create_collections(self):
         """Create Qdrant collections if they don't exist"""
@@ -181,7 +181,7 @@ class ComprehensiveDocsLoader:
             # Check if collection exists
             try:
                 self.qdrant_client.get_collection(collection_name)
-                print(f"✅ Collection '{collection_name}' already exists")
+                print(f" Collection '{collection_name}' already exists")
             except Exception:
                 # Create collection
                 print(f"⏳ Creating collection '{collection_name}' ({description})...")
@@ -192,7 +192,7 @@ class ComprehensiveDocsLoader:
                         distance=Distance.COSINE
                     )
                 )
-                print(f"✅ Collection '{collection_name}' created")
+                print(f" Collection '{collection_name}' created")
 
     def _chunk_document(self, content: str, doc_info: Dict[str, Any]) -> List[DocumentChunk]:
         """Chunk document by logical sections
@@ -311,7 +311,7 @@ class ComprehensiveDocsLoader:
         for chunk, embedding in zip(chunks, embeddings):
             chunk.embedding = embedding.tolist()
 
-        print(f"✅ Embeddings created ({len(chunks)} chunks)")
+        print(f" Embeddings created ({len(chunks)} chunks)")
         return chunks
 
     def _index_chunks(self, chunks: List[DocumentChunk]) -> int:
@@ -353,7 +353,7 @@ class ComprehensiveDocsLoader:
             )
 
             total_indexed += len(collection_chunks)
-            print(f"✅ Indexed {len(collection_chunks)} chunks into '{collection_name}'")
+            print(f" Indexed {len(collection_chunks)} chunks into '{collection_name}'")
 
         return total_indexed
 
@@ -368,7 +368,7 @@ class ComprehensiveDocsLoader:
             Statistics dictionary
         """
         print("=" * 60)
-        print("🚀 Comprehensive Platform Documentation Loader")
+        print(" Comprehensive Platform Documentation Loader")
         print("=" * 60)
 
         # Initialize components
@@ -389,10 +389,10 @@ class ComprehensiveDocsLoader:
             doc_path = self.docs_path / doc_info["file"]
 
             if not doc_path.exists():
-                print(f"⚠️  Document not found: {doc_path}")
+                print(f"️  Document not found: {doc_path}")
                 continue
 
-            print(f"\n📄 Processing: {doc_info['file']}...")
+            print(f"\n Processing: {doc_info['file']}...")
 
             # Read document
             with open(doc_path, 'r', encoding='utf-8') as f:
@@ -400,7 +400,7 @@ class ComprehensiveDocsLoader:
 
             # Chunk document
             chunks = self._chunk_document(content, doc_info)
-            print(f"   ✅ Created {len(chunks)} chunks")
+            print(f"    Created {len(chunks)} chunks")
 
             all_chunks.extend(chunks)
             stats["documents_processed"] += 1
@@ -413,7 +413,7 @@ class ComprehensiveDocsLoader:
 
         # Apply limit if in test mode
         if mode == "test" and limit:
-            print(f"\n⚠️  TEST MODE: Limiting to {limit} chunks")
+            print(f"\n️  TEST MODE: Limiting to {limit} chunks")
             all_chunks = all_chunks[:limit]
 
         stats["total_chunks"] = len(all_chunks)
@@ -428,13 +428,13 @@ class ComprehensiveDocsLoader:
 
         # Print summary
         print("\n" + "=" * 60)
-        print("✅ LOADING COMPLETE")
+        print(" LOADING COMPLETE")
         print("=" * 60)
-        print(f"📊 Statistics:")
+        print(f" Statistics:")
         print(f"   Documents processed: {stats['documents_processed']}")
         print(f"   Total chunks: {stats['total_chunks']}")
         print(f"   Indexed chunks: {stats['indexed_chunks']}")
-        print(f"\n📦 Chunks by collection:")
+        print(f"\n Chunks by collection:")
         for collection, count in stats["chunks_by_collection"].items():
             print(f"   {collection}: {count} chunks")
         print("=" * 60)
@@ -449,7 +449,7 @@ class ComprehensiveDocsLoader:
             collection: Collection name
             limit: Number of results
         """
-        print(f"\n🔍 Testing search: '{query}'")
+        print(f"\n Testing search: '{query}'")
         print(f"   Collection: {collection}")
 
         # Create query embedding
@@ -463,7 +463,7 @@ class ComprehensiveDocsLoader:
             with_payload=True
         )
 
-        print(f"\n📊 Found {len(results)} results:")
+        print(f"\n Found {len(results)} results:")
         for i, result in enumerate(results, 1):
             print(f"\n   {i}. Score: {result.score:.3f}")
             print(f"      Document: {result.payload['source_document']}")

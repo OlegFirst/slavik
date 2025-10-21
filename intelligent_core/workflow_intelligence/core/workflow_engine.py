@@ -1,5 +1,5 @@
 """
-🧠 WORKFLOW ENGINE - Универсальный движок для любых workflows
+ WORKFLOW ENGINE - Универсальный движок для любых workflows
 
 Это ЯДРО Workflow Intelligence Platform.
 Управляет state machines, событиями, валидацией и контекстом.

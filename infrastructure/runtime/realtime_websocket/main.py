@@ -57,17 +57,17 @@ async def lifespan(app: FastAPI):
     try:
         redis_client = redis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
         await redis_client.ping()
-        logger.info("✅ Connected to Redis")
+        logger.info(" Connected to Redis")
     except Exception as e:
-        logger.warning(f"⚠️ Redis connection failed: {e}. Running without Redis.")
+        logger.warning(f"️ Redis connection failed: {e}. Running without Redis.")
         redis_client = None
 
     # Create database tables
     try:
         Base.metadata.create_all(bind=engine)
-        logger.info("✅ Database tables created")
+        logger.info(" Database tables created")
     except Exception as e:
-        logger.error(f"❌ Database initialization failed: {e}")
+        logger.error(f" Database initialization failed: {e}")
 
     yield
 
@@ -244,7 +244,7 @@ class ConnectionManager:
             )
             await self.disconnect(oldest_connection)
 
-        logger.info(f"✅ User {username} ({user_id}) connected to channel {channel_id}")
+        logger.info(f" User {username} ({user_id}) connected to channel {channel_id}")
 
         # Notify channel about new user
         await self.broadcast_to_channel(
@@ -294,7 +294,7 @@ class ConnectionManager:
 
         del self.connections[websocket]
 
-        logger.info(f"❌ User {username} ({user_id}) disconnected from channel {channel_id}")
+        logger.info(f" User {username} ({user_id}) disconnected from channel {channel_id}")
 
         # Notify channel about user leaving
         if channel_id in self.channels:
@@ -698,7 +698,7 @@ async def get_websocket_test_page():
         </style>
     </head>
     <body>
-        <h1>🚀 BCM Real-time WebSocket Test</h1>
+        <h1> BCM Real-time WebSocket Test</h1>
 
         <div>
             <label>User ID: <input type="text" id="userId" value="test-user-001" /></label>

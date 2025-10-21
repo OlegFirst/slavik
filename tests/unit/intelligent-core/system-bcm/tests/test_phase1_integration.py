@@ -287,4 +287,4 @@ if __name__ == "__main__":
     asyncio.run(test_pattern_success_rate())
     asyncio.run(test_best_patterns())
 
-    print("✅ All Phase 1 integration tests passed")
+    print(" All Phase 1 integration tests passed")

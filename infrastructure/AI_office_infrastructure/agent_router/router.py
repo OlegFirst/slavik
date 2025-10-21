@@ -145,12 +145,12 @@ class AIAgentRouter:
         self.circuit_breaker_manager = None
         if enable_circuit_breaker and CIRCUIT_BREAKER_AVAILABLE:
             self.circuit_breaker_manager = CircuitBreakerManager()
-            logger.info("✅ Circuit Breaker enabled")
+            logger.info(" Circuit Breaker enabled")
 
         # Metrics
         self.metrics_enabled = enable_metrics and METRICS_AVAILABLE
         if self.metrics_enabled:
-            logger.info("✅ Prometheus metrics enabled")
+            logger.info(" Prometheus metrics enabled")
 
         # Statistics для advanced load balancing
         self.agent_stats: Dict[str, Dict] = defaultdict(lambda: {
@@ -613,7 +613,7 @@ class AIAgentRouter:
 
             # Register
             self.agents[name] = agent
-            logger.info(f"✅ Dynamically registered agent: {name} ({role}) with {len(capability_enums)} capabilities")
+            logger.info(f" Dynamically registered agent: {name} ({role}) with {len(capability_enums)} capabilities")
 
             # Update metrics
             if self.metrics_enabled:
@@ -687,7 +687,7 @@ class AIAgentRouter:
                 if agent_name not in ["ai_orchestrator", "unified_ai", "pdca_assistant", "github_app", "document_ai"]:
                     await self.unregister_agent(agent_name)
 
-            logger.info(f"✅ Synced with service registry: {len(self.agents)} agents")
+            logger.info(f" Synced with service registry: {len(self.agents)} agents")
 
         except Exception as e:
             logger.error(f"Failed to sync with service registry: {e}")

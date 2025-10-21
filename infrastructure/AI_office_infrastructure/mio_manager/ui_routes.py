@@ -298,7 +298,7 @@ async def mio_dashboard():
         <!-- Header -->
         <div class="header">
             <h1>
-                🎯 MiО Manager
+                 MiО Manager
                 <span class="status-badge" id="systemStatus">● OPERATIONAL</span>
             </h1>
             <p>AI Office Resource Coordination & Monitoring Dashboard</p>
@@ -308,7 +308,7 @@ async def mio_dashboard():
         <div class="dashboard-grid">
             <!-- System Health Card -->
             <div class="card">
-                <h2>🏥 System Health</h2>
+                <h2> System Health</h2>
                 <div class="metric">
                     <span class="metric-label">Overall Status</span>
                     <span class="metric-value good" id="overallStatus">Healthy</span>
@@ -333,7 +333,7 @@ async def mio_dashboard():
 
             <!-- Resource Allocation Card -->
             <div class="card">
-                <h2>📊 Resource Allocation</h2>
+                <h2> Resource Allocation</h2>
                 <div class="metric">
                     <span class="metric-label">CPU Usage</span>
                     <span class="metric-value" id="cpuUsage">Loading...</span>
@@ -354,7 +354,7 @@ async def mio_dashboard():
 
             <!-- AI Orchestration Card -->
             <div class="card">
-                <h2>🤖 AI Orchestration</h2>
+                <h2> AI Orchestration</h2>
                 <div class="metric">
                     <span class="metric-label">Decision Engine</span>
                     <span class="metric-value good">Operational</span>
@@ -376,7 +376,7 @@ async def mio_dashboard():
 
         <!-- Services Status -->
         <div class="card">
-            <h2>🔧 AI Office Services Status</h2>
+            <h2> AI Office Services Status</h2>
             <div class="services-grid" id="servicesGrid">
                 <div class="service-card loading">
                     <div class="service-name">Loading services...</div>
@@ -384,20 +384,20 @@ async def mio_dashboard():
                 </div>
             </div>
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="refreshServices()">🔄 Refresh Services</button>
-                <button class="btn btn-success" onclick="startAllServices()">▶️ Start All</button>
+                <button class="btn btn-primary" onclick="refreshServices()"> Refresh Services</button>
+                <button class="btn btn-success" onclick="startAllServices()">️ Start All</button>
                 <button class="btn btn-danger" onclick="stopAllServices()">⏸️ Stop All</button>
             </div>
         </div>
 
         <!-- Monitoring Integration -->
         <div class="monitoring-section">
-            <h2 style="color: #4299e1; margin-bottom: 15px;">📈 Monitoring Integration</h2>
+            <h2 style="color: #4299e1; margin-bottom: 15px;"> Monitoring Integration</h2>
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="openPrometheus()">📊 Prometheus Metrics</button>
-                <button class="btn btn-primary" onclick="openMonitoringBackend()">🖥️ Monitoring Backend</button>
-                <button class="btn btn-primary" onclick="openAnalytics()">📊 Analytics Specialist</button>
-                <button class="btn btn-primary" onclick="openDBIntel()">💾 DB Intelligence</button>
+                <button class="btn btn-primary" onclick="openPrometheus()"> Prometheus Metrics</button>
+                <button class="btn btn-primary" onclick="openMonitoringBackend()">️ Monitoring Backend</button>
+                <button class="btn btn-primary" onclick="openAnalytics()"> Analytics Specialist</button>
+                <button class="btn btn-primary" onclick="openDBIntel()"> DB Intelligence</button>
             </div>
             <div class="chart-placeholder">
                 <div>Real-time metrics charts will appear here</div>

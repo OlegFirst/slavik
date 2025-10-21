@@ -242,7 +242,7 @@ class MetricsCollector:
         with open(output_file, 'w') as f:
             json.dump(self.metrics, f, indent=2)
 
-        print(f"✅ Metrics saved to: {output_file}")
+        print(f" Metrics saved to: {output_file}")
 
     def generate_summary(self) -> Dict[str, Any]:
         """Generate summary statistics from collected metrics"""
@@ -312,7 +312,7 @@ def main():
 
     # Generate and display summary
     summary = collector.generate_summary()
-    print("\n📊 Collection Summary:")
+    print("\n Collection Summary:")
     print(json.dumps(summary, indent=2))
 
 

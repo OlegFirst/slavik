@@ -61,7 +61,7 @@ class ClaudeProEngine:
         Returns:
             Analysis with recommendations, risk assessment, strategy
         """
-        logger.info("🧠 Claude analyzing code changes with AI memory...")
+        logger.info(" Claude analyzing code changes with AI memory...")
 
         try:
             # Search for similar situations in Supabase
@@ -179,14 +179,14 @@ class ClaudeProEngine:
         Returns:
             Generated configuration (docker-compose or kubernetes)
         """
-        logger.info("🧠 Claude generating deployment config...")
+        logger.info(" Claude generating deployment config...")
 
         environment = requirements.get('environment', 'production')
         risk_level = requirements.get('risk_level', 'medium')
         load = requirements.get('load', 'medium')
         ai_intensive = requirements.get('ai_intensive', False)
 
-        config_template = f"""# 🤖 Claude-Generated Deployment Config
+        config_template = f"""#  Claude-Generated Deployment Config
 # Optimized for: {environment}
 # Risk Level: {risk_level}
 
@@ -265,7 +265,7 @@ services:
         Returns:
             Analysis with assessment and recommendations
         """
-        logger.info("🧠 Claude analyzing deployment results...")
+        logger.info(" Claude analyzing deployment results...")
 
         success_rate = deployment_data.get('success_rate', 0)
         execution_time = deployment_data.get('execution_time', 0)
@@ -328,46 +328,46 @@ services:
         Returns:
             PR information (title, description, labels, reviewers)
         """
-        logger.info("🧠 Claude creating intelligent PR...")
+        logger.info(" Claude creating intelligent PR...")
 
         success_rate = context.get('success_rate', 'N/A')
         avg_time = context.get('avg_time', 'N/A')
         risk_level = context.get('risk_level', 'medium')
 
-        pr_title = "🤖 Claude AI: Deployment optimizations and performance improvements"
+        pr_title = " Claude AI: Deployment optimizations and performance improvements"
 
-        pr_description = f"""# 🧠 AI-Generated Improvements
+        pr_description = f"""#  AI-Generated Improvements
 
 This PR contains intelligent optimizations suggested by Claude AI after analyzing deployment patterns.
 
-## 📊 Analysis Summary
+##  Analysis Summary
 - Deployment success rate: {success_rate}%
 - Average deployment time: {avg_time} seconds
 - Risk assessment: {risk_level}
 
-## 🚀 Improvements Included
+##  Improvements Included
 """
 
         for i, improvement in enumerate(improvements, 1):
             pr_description += f"{i}. {improvement}\n"
 
         pr_description += """
-## 🤖 AI Confidence
+##  AI Confidence
 This PR has been automatically generated and tested by Claude AI. The confidence level is **85%**.
 
-## 🔍 Recommended Testing
+##  Recommended Testing
 1. Review the proposed changes
 2. Test in staging environment
 3. Monitor deployment metrics after merge
 4. Validate performance improvements
 
-## 📈 Expected Impact
+##  Expected Impact
 - Improved deployment success rate
 - Reduced deployment time
 - Better resource utilization
 - Enhanced failure recovery
 
-## 🛡️ Safety Measures
+## ️ Safety Measures
 - All changes follow safe deployment practices
 - Gradual rollout recommended
 - Rollback plan included
@@ -396,7 +396,7 @@ This PR has been automatically generated and tested by Claude AI. The confidence
         Returns:
             Learning insights and pattern updates
         """
-        logger.info("🧠 Claude learning from workflow...")
+        logger.info(" Claude learning from workflow...")
 
         # Extract patterns
         patterns = {

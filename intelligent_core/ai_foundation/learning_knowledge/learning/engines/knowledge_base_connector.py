@@ -59,17 +59,17 @@ class KnowledgeBaseClient:
 
                 if response.status_code == 200:
                     results = response.json()
-                    logger.info(f"✅ Found {len(results)} resources for query: {query}")
+                    logger.info(f" Found {len(results)} resources for query: {query}")
                     return results
                 else:
-                    logger.warning(f"⚠️ KB search failed: {response.status_code}")
+                    logger.warning(f"️ KB search failed: {response.status_code}")
                     return []
 
         except httpx.ConnectError:
-            logger.warning(f"⚠️ KB Service not available at {self.base_url}, using fallback")
+            logger.warning(f"️ KB Service not available at {self.base_url}, using fallback")
             return self._fallback_search(query, filters, limit)
         except Exception as e:
-            logger.error(f"❌ KB search error: {e}")
+            logger.error(f" KB search error: {e}")
             return []
 
     async def create_article(self, article_data: Dict[str, Any]) -> Optional[str]:
@@ -92,18 +92,18 @@ class KnowledgeBaseClient:
                 if response.status_code in [200, 201]:
                     result = response.json()
                     article_id = result.get('id')
-                    logger.info(f"✅ Created article: {article_data.get('title')} (ID: {article_id})")
+                    logger.info(f" Created article: {article_data.get('title')} (ID: {article_id})")
                     return article_id
                 else:
-                    logger.warning(f"⚠️ Article creation failed: {response.status_code}")
+                    logger.warning(f"️ Article creation failed: {response.status_code}")
                     return None
 
         except httpx.ConnectError:
-            logger.warning(f"⚠️ KB Service not available, article saved to queue")
+            logger.warning(f"️ KB Service not available, article saved to queue")
             # TODO: Save to queue for later sync
             return None
         except Exception as e:
-            logger.error(f"❌ Article creation error: {e}")
+            logger.error(f" Article creation error: {e}")
             return None
 
     async def update_article(
@@ -129,14 +129,14 @@ class KnowledgeBaseClient:
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"✅ Updated article: {article_id}")
+                    logger.info(f" Updated article: {article_id}")
                     return True
                 else:
-                    logger.warning(f"⚠️ Article update failed: {response.status_code}")
+                    logger.warning(f"️ Article update failed: {response.status_code}")
                     return False
 
         except Exception as e:
-            logger.error(f"❌ Article update error: {e}")
+            logger.error(f" Article update error: {e}")
             return False
 
     async def get_article(self, article_id: str) -> Optional[Dict[str, Any]]:
@@ -153,7 +153,7 @@ class KnowledgeBaseClient:
                     return None
 
         except Exception as e:
-            logger.error(f"❌ Get article error: {e}")
+            logger.error(f" Get article error: {e}")
             return None
 
     def _fallback_search(
@@ -299,7 +299,7 @@ class KnowledgeAutoCreator:
         article_id = await self.kb_client.create_article(article)
 
         if article_id:
-            logger.info(f"✅ Auto-created article for pattern: {issue}")
+            logger.info(f" Auto-created article for pattern: {issue}")
 
         return article_id
 
@@ -316,13 +316,13 @@ class KnowledgeAutoCreator:
 
         content = f"""# {issue}
 
-## 📊 Выявленная Проблема
+##  Выявленная Проблема
 
 Данная проблема была обнаружена в **{occurrences}** упражнениях с уровнем достоверности **{confidence:.0%}**.
 
 **Тип сценария:** {scenario_type}
 
-## 🔍 Анализ
+##  Анализ
 
 Эта проблема регулярно возникает в BCM упражнениях, что указывает на системный пробел в процессах или компетенциях.
 
@@ -332,7 +332,7 @@ class KnowledgeAutoCreator:
 - Отсутствие практики в данной области
 - Технические или организационные барьеры
 
-## 💡 Рекомендации
+##  Рекомендации
 
 ### 1. Немедленные действия
 - Провести анализ корневых причин
@@ -349,13 +349,13 @@ class KnowledgeAutoCreator:
 - Автоматизировать где возможно
 - Измерять прогресс со временем
 
-## 📚 Связанные Ресурсы
+##  Связанные Ресурсы
 
 - Основы BCM процессов
 - ISO 22301 требования
 - Лучшие практики индустрии
 
-## 📈 Отслеживание Прогресса
+##  Отслеживание Прогресса
 
 После внедрения улучшений, проведите контрольные упражнения для проверки эффективности.
 
@@ -383,7 +383,7 @@ class ExternalKnowledgeSync:
 
         TODO: Подключить реальный ISO API
         """
-        logger.info("📥 Syncing ISO standards updates...")
+        logger.info(" Syncing ISO standards updates...")
 
         # Mock ISO updates (в реальности - API call)
         iso_updates = [
@@ -418,7 +418,7 @@ class ExternalKnowledgeSync:
             if article_id:
                 synced.append(update)
 
-        logger.info(f"✅ Synced {len(synced)} ISO updates")
+        logger.info(f" Synced {len(synced)} ISO updates")
         return synced
 
     async def sync_threat_intelligence(self) -> List[Dict[str, Any]]:
@@ -427,7 +427,7 @@ class ExternalKnowledgeSync:
 
         TODO: Подключить threat intelligence feeds
         """
-        logger.info("📥 Syncing threat intelligence...")
+        logger.info(" Syncing threat intelligence...")
 
         # Mock threat data
         threats = [
@@ -462,12 +462,12 @@ class ExternalKnowledgeSync:
             if article_id:
                 synced.append(threat)
 
-        logger.info(f"✅ Synced {len(synced)} threat intelligence updates")
+        logger.info(f" Synced {len(synced)} threat intelligence updates")
         return synced
 
     async def sync_all(self) -> Dict[str, int]:
         """Синхронизировать все внешние источники"""
-        logger.info("🔄 Starting full knowledge sync...")
+        logger.info(" Starting full knowledge sync...")
 
         iso_updates = await self.sync_iso_standards()
         threat_updates = await self.sync_threat_intelligence()
@@ -479,7 +479,7 @@ class ExternalKnowledgeSync:
             'synced_at': datetime.now().isoformat()
         }
 
-        logger.info(f"✅ Knowledge sync complete: {summary['total_synced']} updates")
+        logger.info(f" Knowledge sync complete: {summary['total_synced']} updates")
         return summary
 
 
@@ -609,7 +609,7 @@ class EnhancedKnowledgeIntegrator:
             if article_id:
                 created_ids.append(article_id)
 
-        logger.info(f"✅ Auto-created {len(created_ids)} articles from patterns")
+        logger.info(f" Auto-created {len(created_ids)} articles from patterns")
         return created_ids
 
     async def sync_external_knowledge(self) -> Dict[str, int]:

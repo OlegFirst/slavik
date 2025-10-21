@@ -1,7 +1,7 @@
 """
 Wishlist Integration для Decision Center (Phase 2)
 
-🧠 МОЗГ принимает тактические решения о wishes:
+ МОЗГ принимает тактические решения о wishes:
 - Когда action не может быть выполнен сейчас → добавить в wishlist
 - Приоритизация wishes на основе available resources
 - Выполнение wishes когда ресурсы доступны
@@ -85,7 +85,7 @@ class WishlistDecisionIntegration:
             max_item_age_seconds=86400.0  # 24 hours
         )
 
-        logger.info("✅ Wishlist System initialized in Decision Center")
+        logger.info(" Wishlist System initialized in Decision Center")
 
     async def start_executor(self):
         """Start background task для выполнения wishes"""
@@ -95,7 +95,7 @@ class WishlistDecisionIntegration:
 
         self.running = True
         self.executor_task = asyncio.create_task(self._executor_loop())
-        logger.info("✅ Wishlist executor started")
+        logger.info(" Wishlist executor started")
 
     async def stop_executor(self):
         """Stop background executor"""
@@ -106,7 +106,7 @@ class WishlistDecisionIntegration:
                 await self.executor_task
             except asyncio.CancelledError:
                 pass
-        logger.info("✅ Wishlist executor stopped")
+        logger.info(" Wishlist executor stopped")
 
     async def postpone_decision_to_wishlist(
         self,
@@ -163,7 +163,7 @@ class WishlistDecisionIntegration:
         decision.outcome = DecisionOutcome.PENDING
         decision.reasoning = f"Postponed to wishlist: {wish.id}"
 
-        logger.info(f"📝 Decision postponed to wishlist: {wish.id} ({decision.service_name})")
+        logger.info(f" Decision postponed to wishlist: {wish.id} ({decision.service_name})")
 
         return wish
 
@@ -196,7 +196,7 @@ class WishlistDecisionIntegration:
                         continue
 
                     # Execute wish
-                    logger.info(f"🎯 Executing wish: {wish.description}")
+                    logger.info(f" Executing wish: {wish.description}")
                     wish.status = "active"
 
                     success = await self._execute_wish(wish)
@@ -204,11 +204,11 @@ class WishlistDecisionIntegration:
                     if success:
                         self.wishlist.complete_wish(wish.id, success=True)
                         self.stats['wishes_executed'] += 1
-                        logger.info(f"✅ Wish executed successfully: {wish.id}")
+                        logger.info(f" Wish executed successfully: {wish.id}")
                     else:
                         self.wishlist.complete_wish(wish.id, success=False)
                         self.stats['wishes_failed'] += 1
-                        logger.warning(f"❌ Wish execution failed: {wish.id}")
+                        logger.warning(f" Wish execution failed: {wish.id}")
 
                 # Cleanup obsolete
                 obsolete_count = len(self.wishlist.cleanup_obsolete())

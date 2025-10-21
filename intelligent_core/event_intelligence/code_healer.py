@@ -1,7 +1,7 @@
 """
 Code Healer - Автоматическое исправление кода intelligent-core
 
-🔧 УМНОЕ ИСПРАВЛЕНИЕ:
+ УМНОЕ ИСПРАВЛЕНИЕ:
 - Анализ импортов и автофикс
 - Установка недостающих зависимостей
 - Исправление путей и относительных импортов
@@ -112,11 +112,11 @@ class CodeHealer:
         Returns:
             HealingResult с результатами
         """
-        logger.info(f"🏥 Healing service: {service_name}")
+        logger.info(f" Healing service: {service_name}")
 
         service_dir = self.intelligent_core / service_name
         if not service_dir.exists():
-            logger.error(f"❌ Service not found: {service_dir}")
+            logger.error(f" Service not found: {service_dir}")
             return HealingResult(str(service_dir), 0, 0, [], False)
 
         # Собираем все Python файлы
@@ -158,7 +158,7 @@ class CodeHealer:
 
         self.healing_history.append(result)
 
-        logger.info(f"✅ Healed {service_name}: {fixed_count}/{len(all_issues)} issues fixed")
+        logger.info(f" Healed {service_name}: {fixed_count}/{len(all_issues)} issues fixed")
         return result
 
     # ========================================================================
@@ -174,10 +174,10 @@ class CodeHealer:
                 content = f.read()
                 tree = ast.parse(content)
         except SyntaxError as e:
-            logger.warning(f"⚠️ Syntax error in {file_path}: {e}")
+            logger.warning(f"️ Syntax error in {file_path}: {e}")
             return []
         except Exception as e:
-            logger.warning(f"⚠️ Cannot parse {file_path}: {e}")
+            logger.warning(f"️ Cannot parse {file_path}: {e}")
             return []
 
         # Анализируем импорты
@@ -334,10 +334,10 @@ class CodeHealer:
                 with open(file_path, 'w') as f:
                     f.writelines(lines)
 
-                logger.info(f"   ✅ Added {len(import_fixes)} imports to {file_path.name}")
+                logger.info(f"    Added {len(import_fixes)} imports to {file_path.name}")
 
         except Exception as e:
-            logger.error(f"   ❌ Error fixing {file_path}: {e}")
+            logger.error(f"    Error fixing {file_path}: {e}")
 
         return fixed_count
 
@@ -407,7 +407,7 @@ class CodeHealer:
 
     def _install_dependencies(self, deps: Set[str]):
         """Устанавливает недостающие зависимости"""
-        logger.info(f"📦 Installing {len(deps)} dependencies: {deps}")
+        logger.info(f" Installing {len(deps)} dependencies: {deps}")
 
         for dep in deps:
             try:
@@ -415,9 +415,9 @@ class CodeHealer:
                     ['pip3', 'install', dep, '--quiet'],
                     stdout=subprocess.DEVNULL
                 )
-                logger.info(f"   ✅ Installed {dep}")
+                logger.info(f"    Installed {dep}")
             except subprocess.CalledProcessError as e:
-                logger.error(f"   ❌ Failed to install {dep}: {e}")
+                logger.error(f"    Failed to install {dep}: {e}")
 
     # ========================================================================
     # BATCH HEALING
@@ -425,7 +425,7 @@ class CodeHealer:
 
     async def heal_all_services(self, dry_run: bool = False) -> List[HealingResult]:
         """Исцеляет все сервисы в intelligent-core"""
-        logger.info("🏥 Starting batch healing of intelligent-core services...")
+        logger.info(" Starting batch healing of intelligent-core services...")
 
         services = [
             'community_intelligence',
@@ -444,19 +444,19 @@ class CodeHealer:
     def _print_summary(self, results: List[HealingResult]):
         """Выводит сводку"""
         print("\n" + "="*70)
-        print("🏥 CODE HEALER SUMMARY")
+        print(" CODE HEALER SUMMARY")
         print("="*70)
 
         total_issues = sum(r.issues_found for r in results)
         total_fixed = sum(r.issues_fixed for r in results)
 
-        print(f"\n📊 Total Issues: {total_issues}")
-        print(f"✅ Fixed: {total_fixed}")
-        print(f"⚠️ Remaining: {total_issues - total_fixed}")
+        print(f"\n Total Issues: {total_issues}")
+        print(f" Fixed: {total_fixed}")
+        print(f"️ Remaining: {total_issues - total_fixed}")
 
-        print(f"\n📁 Services:")
+        print(f"\n Services:")
         for r in results:
-            status = "✅" if r.success else "⚠️"
+            status = "" if r.success else "️"
             service_name = Path(r.file_path).name
             print(f"  {status} {service_name}: {r.issues_fixed}/{r.issues_found} fixed")
 

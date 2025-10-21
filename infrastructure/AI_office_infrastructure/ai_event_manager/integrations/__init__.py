@@ -96,9 +96,9 @@ class IntegrationManager:
             )
             await self.eventbus.initialize()
             self.stats["integrations_active"] += 1
-            logger.info("✅ EventBus integration initialized")
+            logger.info(" EventBus integration initialized")
         except Exception as e:
-            logger.error(f"❌ EventBus initialization failed: {e}")
+            logger.error(f" EventBus initialization failed: {e}")
 
         # 2. Event Intelligence (AI analysis)
         try:
@@ -107,9 +107,9 @@ class IntegrationManager:
             )
             await self.event_intelligence.initialize()
             self.stats["integrations_active"] += 1
-            logger.info("✅ Event Intelligence integration initialized")
+            logger.info(" Event Intelligence integration initialized")
         except Exception as e:
-            logger.error(f"❌ Event Intelligence initialization failed: {e}")
+            logger.error(f" Event Intelligence initialization failed: {e}")
 
         # 3. DevOps Agent (infrastructure scanning)
         try:
@@ -119,9 +119,9 @@ class IntegrationManager:
             )
             await self.devops_agent.initialize()
             self.stats["integrations_active"] += 1
-            logger.info("✅ DevOps Agent integration initialized")
+            logger.info(" DevOps Agent integration initialized")
         except Exception as e:
-            logger.error(f"❌ DevOps Agent initialization failed: {e}")
+            logger.error(f" DevOps Agent initialization failed: {e}")
 
         # 4. GitHub Integration (code repository)
         try:
@@ -130,9 +130,9 @@ class IntegrationManager:
             )
             await self.github.initialize()
             self.stats["integrations_active"] += 1
-            logger.info("✅ GitHub Integration initialized")
+            logger.info(" GitHub Integration initialized")
         except Exception as e:
-            logger.error(f"❌ GitHub Integration initialization failed: {e}")
+            logger.error(f" GitHub Integration initialization failed: {e}")
 
         # 5. MIO Manager (platform coordination)
         try:
@@ -141,9 +141,9 @@ class IntegrationManager:
             )
             await self.mio_manager.initialize()
             self.stats["integrations_active"] += 1
-            logger.info("✅ MIO Manager integration initialized")
+            logger.info(" MIO Manager integration initialized")
         except Exception as e:
-            logger.error(f"❌ MIO Manager initialization failed: {e}")
+            logger.error(f" MIO Manager initialization failed: {e}")
 
         # 6. Continuous Monitor (automated monitoring)
         try:
@@ -153,9 +153,9 @@ class IntegrationManager:
             )
             await self.monitor.start()
             self.stats["integrations_active"] += 1
-            logger.info("✅ Continuous Monitor started")
+            logger.info(" Continuous Monitor started")
         except Exception as e:
-            logger.error(f"❌ Continuous Monitor initialization failed: {e}")
+            logger.error(f" Continuous Monitor initialization failed: {e}")
 
         # 7. Infrastructure State Monitor (NEW! - unified monitoring)
         try:
@@ -176,13 +176,13 @@ class IntegrationManager:
                     self.infrastructure_monitor.start_continuous_monitoring()
                 )
                 self.stats["integrations_active"] += 1
-                logger.info("✅ Infrastructure State Monitor started")
+                logger.info(" Infrastructure State Monitor started")
             else:
-                logger.warning("⚠️ EventBus not available, skipping Infrastructure State Monitor")
+                logger.warning("️ EventBus not available, skipping Infrastructure State Monitor")
         except Exception as e:
-            logger.error(f"❌ Infrastructure State Monitor initialization failed: {e}")
+            logger.error(f" Infrastructure State Monitor initialization failed: {e}")
 
-        logger.info(f"✅ Integration Manager ready: {self.stats['integrations_active']}/7 integrations active")
+        logger.info(f" Integration Manager ready: {self.stats['integrations_active']}/7 integrations active")
 
     async def publish_event(self, event_name: str, data: Dict, priority: str = "normal") -> bool:
         """
@@ -380,7 +380,7 @@ class IntegrationManager:
             })
             results["steps_completed"].append("mio_report")
 
-        logger.info(f"✅ Full analysis cycle completed: {len(results['steps_completed'])} steps")
+        logger.info(f" Full analysis cycle completed: {len(results['steps_completed'])} steps")
 
         return results
 
@@ -425,7 +425,7 @@ class IntegrationManager:
         if self.mio_manager:
             await self.mio_manager.close()
 
-        logger.info("✅ All integrations closed")
+        logger.info(" All integrations closed")
 
     def _default_config(self) -> Dict:
         """Default configuration"""

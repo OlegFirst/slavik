@@ -118,7 +118,7 @@ class EventBusClient:
             else:
                 self.bus = create_eventbus('memory')
 
-            logger.info(f"✅ EventBus connected: {self.backend}")
+            logger.info(f" EventBus connected: {self.backend}")
 
         except Exception as e:
             logger.error(f"Failed to initialize EventBus: {e}")
@@ -249,7 +249,7 @@ class EventBusClient:
 
             await self.bus.publish(event)
 
-            logger.debug(f"✅ Published event: {event_type}")
+            logger.debug(f" Published event: {event_type}")
             return True
 
         except Exception as e:
@@ -329,7 +329,7 @@ class EventBusClient:
 
             self.subscriptions[event_type] = wrapped_callback
 
-            logger.info(f"✅ Subscribed to: {event_type}")
+            logger.info(f" Subscribed to: {event_type}")
 
         except Exception as e:
             logger.error(f"Failed to subscribe to {event_type}: {e}")
@@ -355,7 +355,7 @@ class EventBusClient:
         self._running = True
         self._consumer_task = asyncio.create_task(self._consume_loop())
 
-        logger.info("✅ EventBus consumer started")
+        logger.info(" EventBus consumer started")
 
     async def stop_consumer(self):
         """Остановить background consumer."""
@@ -371,7 +371,7 @@ class EventBusClient:
             except asyncio.CancelledError:
                 pass
 
-        logger.info("✅ EventBus consumer stopped")
+        logger.info(" EventBus consumer stopped")
 
     async def _consume_loop(self):
         """
@@ -406,7 +406,7 @@ class EventBusClient:
 
         if self.bus:
             await self.bus.close()
-            logger.info("✅ EventBus connection closed")
+            logger.info(" EventBus connection closed")
 
     # ========================================================================
     # HELPERS
@@ -450,7 +450,7 @@ class DefaultEventHandlers:
 
         Может быть от monitoring, других MIO instances, etc.
         """
-        logger.info(f"📨 Received problem from {event.source}: {event.data}")
+        logger.info(f" Received problem from {event.source}: {event.data}")
 
         # Проанализировать и решить, нужна ли реакция
         problem = event.data.get('problem', {})
@@ -470,7 +470,7 @@ class DefaultEventHandlers:
 
         Задача, которую мы делегировали, выполнена.
         """
-        logger.info(f"✅ Task completed: {event.data}")
+        logger.info(f" Task completed: {event.data}")
 
         task_id = event.data.get('task_id')
         result = event.data.get('result')
@@ -484,7 +484,7 @@ class DefaultEventHandlers:
 
         Мозг дал директиву - нужно выполнить.
         """
-        logger.info(f"🧠 Directive from brain: {event.data}")
+        logger.info(f" Directive from brain: {event.data}")
 
         directive = event.data.get('directive', {})
         action = directive.get('action')
@@ -503,7 +503,7 @@ class DefaultEventHandlers:
 
         Новый сервис задеплоен - нужно добавить в мониторинг.
         """
-        logger.info(f"🚀 Service deployed: {event.data}")
+        logger.info(f" Service deployed: {event.data}")
 
         service_name = event.data.get('service_name')
 
@@ -516,7 +516,7 @@ class DefaultEventHandlers:
 
         Алерт сработал - нужно проанализировать и отреагировать.
         """
-        logger.info(f"🚨 Alert triggered: {event.data}")
+        logger.info(f" Alert triggered: {event.data}")
 
         alert = event.data.get('alert', {})
         severity = alert.get('severity', 'medium')

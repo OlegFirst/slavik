@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { SecurityManager } from '../core/security/security-manager.js';
 import { constructor, initializeComponents, setupAuditLog, initialize, validateSecurityConfig, generateSecureSecret, generateEncryptionKey, validateInput, sanitizeInput, generateToken, verifyToken, revokeToken, hashPassword, verifyPassword, encryptData, decryptData, checkRateLimit, checkBruteForce, generateCSRFToken, verifyCSRFToken, getSecurityHeaders, getCSPPolicy, createSession, validateSession, destroySession, auditAction, removeSensitiveData, flushAuditLog, getSafeConfig, getMetrics, healthCheck, shutdown } from '../core/security/security-manager.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('security-manager', () => {
@@ -536,7 +536,7 @@ describe('security-manager', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in security-manager');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

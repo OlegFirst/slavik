@@ -138,7 +138,7 @@ async def init_db():
         async with engine.begin() as conn:
             result = await conn.execute(text("SELECT version()"))
             version = result.scalar()
-            logger.info(f"✅ Connected to PostgreSQL: {version}")
+            logger.info(f" Connected to PostgreSQL: {version}")
 
             # Check if learning schema exists
             result = await conn.execute(
@@ -151,12 +151,12 @@ async def init_db():
             schema = result.scalar()
 
             if schema:
-                logger.info("✅ Learning schema found")
+                logger.info(" Learning schema found")
             else:
-                logger.warning("⚠️  Learning schema not found - run migrations")
+                logger.warning("️  Learning schema not found - run migrations")
 
     except Exception as e:
-        logger.error(f"❌ Database connection failed: {e}")
+        logger.error(f" Database connection failed: {e}")
         raise
 
 async def close_db():
@@ -166,7 +166,7 @@ async def close_db():
 
     logger.info("Closing database connection...")
     await engine.dispose()
-    logger.info("✅ Database connection closed")
+    logger.info(" Database connection closed")
 
 async def check_db_health() -> dict:
     """

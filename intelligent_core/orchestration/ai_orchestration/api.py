@@ -83,7 +83,7 @@ async def startup_event():
     """Initialize orchestrator on startup."""
     global orchestrator
     try:
-        logger.info("🔄 Initializing AI Orchestrator...")
+        logger.info(" Initializing AI Orchestrator...")
 
         # Create Policy-Aware Orchestrator (integrates both AI + Infrastructure governance)
         orchestrator = PolicyAwareOrchestrator(
@@ -95,10 +95,10 @@ async def startup_event():
         # Initialize all components
         await orchestrator.initialize()
 
-        logger.info("✅ AI Orchestrator API started successfully")
+        logger.info(" AI Orchestrator API started successfully")
 
     except Exception as e:
-        logger.error(f"❌ Failed to initialize orchestrator: {e}", exc_info=True)
+        logger.error(f" Failed to initialize orchestrator: {e}", exc_info=True)
         raise
 
 
@@ -109,7 +109,7 @@ async def shutdown_event():
     if orchestrator:
         try:
             await orchestrator.shutdown()
-            logger.info("✅ AI Orchestrator shutdown complete")
+            logger.info(" AI Orchestrator shutdown complete")
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
 

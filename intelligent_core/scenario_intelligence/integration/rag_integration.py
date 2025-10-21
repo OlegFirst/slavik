@@ -50,9 +50,9 @@ class ScenarioRAGStorage:
         """Create collection if it doesn't exist"""
         try:
             self.client.get_collection(self.collection_name)
-            print(f"✅ Qdrant collection '{self.collection_name}' exists")
+            print(f" Qdrant collection '{self.collection_name}' exists")
         except Exception as e:
-            print(f"📝 Creating Qdrant collection '{self.collection_name}'...")
+            print(f" Creating Qdrant collection '{self.collection_name}'...")
             self.client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=VectorParams(
@@ -60,7 +60,7 @@ class ScenarioRAGStorage:
                     distance=Distance.COSINE
                 )
             )
-            print(f"✅ Collection created")
+            print(f" Collection created")
 
     async def _create_embedding(self, text: str) -> List[float]:
         """
@@ -85,7 +85,7 @@ class ScenarioRAGStorage:
             )
             return response['data'][0]['embedding']
         except Exception as e:
-            print(f"⚠️ OpenAI embedding failed: {e}")
+            print(f"️ OpenAI embedding failed: {e}")
             # Fallback to dummy
             import random
             return [random.random() for _ in range(VECTOR_SIZE)]
@@ -176,11 +176,11 @@ class ScenarioRAGStorage:
                 ]
             )
 
-            print(f"✅ Indexed scenario: {scenario_id}")
+            print(f" Indexed scenario: {scenario_id}")
             return True
 
         except Exception as e:
-            print(f"❌ Failed to index scenario: {e}")
+            print(f" Failed to index scenario: {e}")
             return False
 
     async def search_similar(
@@ -261,7 +261,7 @@ class ScenarioRAGStorage:
             return scenarios
 
         except Exception as e:
-            print(f"❌ Search failed: {e}")
+            print(f" Search failed: {e}")
             return []
 
     async def get_by_id(self, scenario_id: str) -> Optional[Dict[str, Any]]:
@@ -286,7 +286,7 @@ class ScenarioRAGStorage:
             return None
 
         except Exception as e:
-            print(f"❌ Failed to get scenario: {e}")
+            print(f" Failed to get scenario: {e}")
             return None
 
     async def delete_scenario(self, scenario_id: str) -> bool:
@@ -305,11 +305,11 @@ class ScenarioRAGStorage:
                 points_selector=[scenario_id]
             )
 
-            print(f"✅ Deleted scenario: {scenario_id}")
+            print(f" Deleted scenario: {scenario_id}")
             return True
 
         except Exception as e:
-            print(f"❌ Failed to delete scenario: {e}")
+            print(f" Failed to delete scenario: {e}")
             return False
 
     async def index_all_scenarios(self, scenarios: List[Dict[str, Any]]):
@@ -319,14 +319,14 @@ class ScenarioRAGStorage:
         Args:
             scenarios: List of scenario dicts
         """
-        print(f"📝 Indexing {len(scenarios)} scenarios...")
+        print(f" Indexing {len(scenarios)} scenarios...")
 
         success_count = 0
         for scenario in scenarios:
             if await self.index_scenario(scenario):
                 success_count += 1
 
-        print(f"✅ Indexed {success_count}/{len(scenarios)} scenarios")
+        print(f" Indexed {success_count}/{len(scenarios)} scenarios")
 
     def get_collection_info(self) -> Dict[str, Any]:
         """Get collection statistics"""

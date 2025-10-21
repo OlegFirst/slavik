@@ -185,10 +185,10 @@ class BaseGenerator(ABC):
                 output_file = self._get_output_path(item)
                 self._save_scenario_to_file(scenario, output_file)
 
-                logger.info(f"✅ Generated: {item.get('name')} ({scenario_id})")
+                logger.info(f" Generated: {item.get('name')} ({scenario_id})")
 
             except Exception as e:
-                logger.error(f"❌ Failed to process {item.get('name', 'unknown')}: {e}", exc_info=True)
+                logger.error(f" Failed to process {item.get('name', 'unknown')}: {e}", exc_info=True)
                 self.stats["failed"] += 1
                 continue
 
@@ -226,8 +226,8 @@ class BaseGenerator(ABC):
         logger.info(f"{self.__class__.__name__} GENERATION COMPLETE")
         logger.info("="*70)
         logger.info(f"Total items:      {self.stats['total']}")
-        logger.info(f"✅ Generated:     {self.stats['generated']}")
-        logger.info(f"❌ Failed:        {self.stats['failed']}")
+        logger.info(f" Generated:     {self.stats['generated']}")
+        logger.info(f" Failed:        {self.stats['failed']}")
         logger.info(f"⏭️  Skipped:       {self.stats['skipped']}")
         logger.info(f"Success rate:     {self.stats['generated'] / max(self.stats['total'], 1) * 100:.1f}%")
         logger.info("="*70)

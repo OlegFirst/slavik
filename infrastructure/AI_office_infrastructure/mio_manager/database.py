@@ -34,9 +34,9 @@ def init_database():
     """
     try:
         Base.metadata.create_all(bind=engine)
-        logger.info("✅ Database initialized successfully")
+        logger.info(" Database initialized successfully")
     except Exception as e:
-        logger.error(f"❌ Failed to initialize database: {e}")
+        logger.error(f" Failed to initialize database: {e}")
         raise
 
 

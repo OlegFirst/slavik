@@ -46,7 +46,7 @@ class DevOpsAgent:
     DevOps Agent - AI Digital Colleague
 
     Responsibilities:
-    - Platform compliance checks (6 priorities) ⭐ NEW!
+    - Platform compliance checks (6 priorities)  NEW!
     - Continuous code analysis
     - Event architecture monitoring
     - Dockerfile generation
@@ -69,7 +69,7 @@ class DevOpsAgent:
         self.report_manager = ReportManager(project_root)
         self.workflow_intelligence: Optional[WorkflowIntelligenceClient] = None
 
-        # Platform Compliance Toolkit ⭐ NEW!
+        # Platform Compliance Toolkit  NEW!
         from tools import ComplianceRunner
         self.compliance_runner = ComplianceRunner()
 
@@ -78,32 +78,32 @@ class DevOpsAgent:
         self.issues_detected = 0
         self.fixes_applied = 0
 
-        logger.info(f"🤖 {self.name} initialized")
-        logger.info(f"   ✅ Platform Compliance Toolkit integrated")
+        logger.info(f" {self.name} initialized")
+        logger.info(f"    Platform Compliance Toolkit integrated")
 
     async def initialize(self):
         """Initialize AI components"""
         try:
             # Initialize RAG for knowledge retrieval
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized")
+            logger.info(" RAG Pipeline initialized")
 
             # Initialize LLM for AI analysis
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized")
+            logger.info(" LLM Router initialized")
 
             # Initialize EventBus for communication
             self.eventbus = create_eventbus('memory')  # or 'redis' based on config
             if self.eventbus:
                 # Memory backend doesn't need connect, but Redis does
-                logger.info("✅ EventBus initialized")
+                logger.info(" EventBus initialized")
 
             # Initialize Workflow Intelligence client
             self.workflow_intelligence = WorkflowIntelligenceClient()
-            logger.info("✅ Workflow Intelligence client initialized")
+            logger.info(" Workflow Intelligence client initialized")
 
         except Exception as e:
-            logger.error(f"❌ Initialization error: {e}")
+            logger.error(f" Initialization error: {e}")
             raise
 
     async def run_compliance_checks(self) -> Dict:
@@ -121,11 +121,11 @@ class DevOpsAgent:
                 "summary": {...}
             }
         """
-        logger.info("🔍 Running platform compliance checks...")
+        logger.info(" Running platform compliance checks...")
 
         results = await self.compliance_runner.run_all_checks()
 
-        logger.info(f"✅ Compliance checks completed: {results['overall_status']}")
+        logger.info(f" Compliance checks completed: {results['overall_status']}")
         logger.info(f"   Passed: {results['summary']['passed']}/{results['summary']['total']}")
 
         return results
@@ -140,7 +140,7 @@ class DevOpsAgent:
         Returns:
             Analysis results
         """
-        logger.info(f"🔍 Starting {scan_type} infrastructure scan...")
+        logger.info(f" Starting {scan_type} infrastructure scan...")
 
         results = {
             "timestamp": datetime.utcnow().isoformat(),
@@ -149,7 +149,7 @@ class DevOpsAgent:
         }
 
         if scan_type in ["full", "compliance"]:
-            # Platform compliance checks ⭐ NEW!
+            # Platform compliance checks  NEW!
             compliance_results = await self.run_compliance_checks()
             results["compliance"] = compliance_results
 
@@ -242,13 +242,13 @@ class DevOpsAgent:
 
         Uses RAG to retrieve historical patterns, then LLM to analyze
         """
-        logger.info("🧠 Running AI analysis with knowledge retrieval...")
+        logger.info(" Running AI analysis with knowledge retrieval...")
 
         if not self.llm:
             logger.warning("LLM not initialized, skipping AI analysis")
             return {"recommendations": []}
 
-        # 🔹 STEP 1: Retrieve relevant knowledge from RAG
+        #  STEP 1: Retrieve relevant knowledge from RAG
         relevant_knowledge = []
 
         if self.rag:
@@ -284,9 +284,9 @@ class DevOpsAgent:
                 except Exception as e:
                     logger.warning(f"RAG retrieval failed for '{query}': {e}")
 
-            logger.info(f"📚 Retrieved {len(relevant_knowledge)} knowledge chunks from RAG")
+            logger.info(f" Retrieved {len(relevant_knowledge)} knowledge chunks from RAG")
 
-        # 🔹 STEP 2: Build enriched context
+        #  STEP 2: Build enriched context
         knowledge_context = self._format_knowledge_context(relevant_knowledge)
         scan_context = self._format_scan_results(scan_results)
 
@@ -322,7 +322,7 @@ class DevOpsAgent:
         }}
         """
 
-        # 🔹 STEP 3: Query LLM with full context
+        #  STEP 3: Query LLM with full context
         try:
             response = await self.llm.query(
                 system_prompt="""You are an expert DevOps infrastructure analyst.
@@ -365,7 +365,7 @@ class DevOpsAgent:
         Returns:
             Fix results
         """
-        logger.info("🛠️ Requesting approval from Workflow Intelligence...")
+        logger.info("️ Requesting approval from Workflow Intelligence...")
 
         # 1. Request decision from мозг
         if self.workflow_intelligence:
@@ -377,9 +377,9 @@ class DevOpsAgent:
             })
 
             approved_actions = brain_decision.get("approved_actions", [])
-            logger.info(f"✅ Brain approved {len(approved_actions)}/{len(recommendations)} actions")
+            logger.info(f" Brain approved {len(approved_actions)}/{len(recommendations)} actions")
         else:
-            logger.warning("⚠️  No brain connection - applying all (UNSAFE!)")
+            logger.warning("️  No brain connection - applying all (UNSAFE!)")
             approved_actions = recommendations
 
         # 2. Apply only approved fixes
@@ -411,7 +411,7 @@ class DevOpsAgent:
                 results["fixes_successful"] += 1
                 self.fixes_applied += 1
 
-                # 🔹 STORE SUCCESSFUL PATTERN IN RAG
+                #  STORE SUCCESSFUL PATTERN IN RAG
                 await self._store_successful_pattern(action, fix_result)
 
                 # Send feedback to brain
@@ -555,7 +555,7 @@ class DevOpsAgent:
                 source_type="devops_patterns"
             )
 
-            logger.info(f"💾 Successful pattern stored in RAG: {action.get('category')}")
+            logger.info(f" Successful pattern stored in RAG: {action.get('category')}")
 
         except Exception as e:
             logger.warning(f"Failed to store pattern in RAG: {e}")
@@ -568,7 +568,7 @@ class DevOpsAgent:
         - Publishes via EventBus
         - Sends to Workflow Intelligence API
         """
-        logger.info("📡 Reporting to Workflow Intelligence...")
+        logger.info(" Reporting to Workflow Intelligence...")
 
         report = {
             "agent_id": self.agent_id,
@@ -585,8 +585,8 @@ class DevOpsAgent:
 
         # 1. SAVE TO DISK (JSON + HTML)
         saved_paths = self.report_manager.save_report(report)
-        logger.info(f"💾 Report saved: {saved_paths['json_path']}")
-        logger.info(f"🌐 HTML dashboard: {saved_paths['html_path']}")
+        logger.info(f" Report saved: {saved_paths['json_path']}")
+        logger.info(f" HTML dashboard: {saved_paths['html_path']}")
 
         # 2. Publish to brain via EventBus
         if self.eventbus:
@@ -594,31 +594,31 @@ class DevOpsAgent:
                 "devops.infrastructure.analyzed",
                 report
             )
-            logger.info("📡 EventBus: Report published")
+            logger.info(" EventBus: Report published")
 
         # 3. Send to Workflow Intelligence API
         if self.workflow_intelligence:
             brain_response = await self.workflow_intelligence.report_infrastructure_analysis(analysis)
-            logger.info(f"🧠 Brain response: {brain_response.get('status')}")
+            logger.info(f" Brain response: {brain_response.get('status')}")
 
-        logger.info("✅ Report sent to all channels")
+        logger.info(" Report sent to all channels")
 
     async def run_full_cycle(self):
         """Run complete DevOps Agent cycle"""
-        logger.info("🚀 Starting DevOps Agent full cycle...")
+        logger.info(" Starting DevOps Agent full cycle...")
 
         # 1. Scan infrastructure
         scan_results = await self.scan_infrastructure(scan_type="full")
-        logger.info(f"✅ Scan completed: {scan_results.get('total_issues', 0)} issues found")
+        logger.info(f" Scan completed: {scan_results.get('total_issues', 0)} issues found")
 
         # 2. AI analysis
         ai_analysis = await self.ai_analysis(scan_results)
-        logger.info(f"✅ AI analysis completed: {len(ai_analysis.get('ai_recommendations', []))} recommendations")
+        logger.info(f" AI analysis completed: {len(ai_analysis.get('ai_recommendations', []))} recommendations")
 
         # 3. Apply fixes if approved
         if ai_analysis.get('auto_fix_approved'):
             fix_results = await self.apply_fixes(ai_analysis['ai_recommendations'])
-            logger.info(f"✅ Auto-fix: {fix_results['fixes_successful']}/{fix_results['fixes_attempted']} successful")
+            logger.info(f" Auto-fix: {fix_results['fixes_successful']}/{fix_results['fixes_attempted']} successful")
 
         # 4. Report to brain
         await self.report_to_brain({
@@ -626,7 +626,7 @@ class DevOpsAgent:
             "ai_analysis": ai_analysis
         })
 
-        logger.info("🎉 DevOps Agent cycle completed!")
+        logger.info(" DevOps Agent cycle completed!")
 
         return {
             "status": "completed",
@@ -669,7 +669,7 @@ async def main():
 
         if args.report:
             print("\n" + "="*70)
-            print("📊 DEVOPS AGENT - INFRASTRUCTURE REPORT")
+            print(" DEVOPS AGENT - INFRASTRUCTURE REPORT")
             print("="*70)
             print(f"\nScan Results: {results['scan_results']}")
             print(f"\nAI Analysis: {results['ai_analysis']}")

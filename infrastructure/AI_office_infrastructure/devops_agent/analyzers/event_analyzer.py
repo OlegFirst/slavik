@@ -109,7 +109,7 @@ class EventIntelligenceSystem:
                     'address': event_def.get('address', event_name)
                 }
 
-        logger.info(f"✅ Loaded {len(events)} events from AsyncAPI schema")
+        logger.info(f" Loaded {len(events)} events from AsyncAPI schema")
         self.schema_events = events
         return events
 
@@ -122,7 +122,7 @@ class EventIntelligenceSystem:
         with open(self.catalog_path, 'r') as f:
             catalog = json.load(f)
 
-        logger.info(f"✅ Loaded catalog: {catalog.get('stats', {})}")
+        logger.info(f" Loaded catalog: {catalog.get('stats', {})}")
         self.catalog_data = catalog
         return catalog
 
@@ -132,7 +132,7 @@ class EventIntelligenceSystem:
 
     def scan_codebase(self) -> Dict[str, EventDefinition]:
         """Сканирует весь codebase и находит все события"""
-        logger.info("🔍 Scanning codebase for events...")
+        logger.info(" Scanning codebase for events...")
 
         events = {}
         python_files = list(self.intelligent_core.rglob("*.py"))
@@ -144,7 +144,7 @@ class EventIntelligenceSystem:
             file_events = self._scan_file(py_file)
             events.update(file_events)
 
-        logger.info(f"✅ Found {len(events)} event references in code")
+        logger.info(f" Found {len(events)} event references in code")
         self.code_events = events
         return events
 
@@ -226,7 +226,7 @@ class EventIntelligenceSystem:
 
     def analyze_gaps(self) -> List[EventGap]:
         """Находит пробелы в покрытии событий"""
-        logger.info("🔍 Analyzing event coverage gaps...")
+        logger.info(" Analyzing event coverage gaps...")
 
         gaps = []
 
@@ -271,7 +271,7 @@ class EventIntelligenceSystem:
                         affected_services=[]
                     ))
 
-        logger.info(f"⚠️ Found {len(gaps)} coverage gaps")
+        logger.info(f"️ Found {len(gaps)} coverage gaps")
         self.gaps = gaps
         return gaps
 
@@ -288,7 +288,7 @@ class EventIntelligenceSystem:
         - Изменения состояния без уведомлений
         - CRUD операции без событий
         """
-        logger.info("🤖 Discovering potential events...")
+        logger.info(" Discovering potential events...")
 
         potential = []
         python_files = list(self.intelligent_core.rglob("*.py"))
@@ -300,7 +300,7 @@ class EventIntelligenceSystem:
             file_potential = self._analyze_file_for_potential_events(py_file)
             potential.extend(file_potential)
 
-        logger.info(f"💡 Discovered {len(potential)} potential events")
+        logger.info(f" Discovered {len(potential)} potential events")
         self.potential_events = potential
         return potential
 
@@ -353,7 +353,7 @@ async def {method_name}(self, ...):
     # Существующий код
     result = await self._do_{entity}_operation(...)
 
-    # ✨ Добавить:
+    #  Добавить:
     await self.eventbus.publish(
         '{suggested_event}',
         {{
@@ -405,7 +405,7 @@ async def {method_name}(self, ...):
             with open(output_file, 'w') as f:
                 json.dump(report, f, indent=2)
 
-            logger.info(f"📄 Report saved to {output_file}")
+            logger.info(f" Report saved to {output_file}")
 
         return report
 
@@ -448,19 +448,19 @@ async def {method_name}(self, ...):
     def print_summary(self):
         """Выводит краткую сводку в консоль"""
         print("\n" + "="*70)
-        print("📊 EVENT INTELLIGENCE SYSTEM - SUMMARY")
+        print(" EVENT INTELLIGENCE SYSTEM - SUMMARY")
         print("="*70)
 
-        print(f"\n📋 Schema Events: {len(self.schema_events)}")
-        print(f"💻 Code Events: {len(set(e.name for e in self.code_events.values()))}")
+        print(f"\n Schema Events: {len(self.schema_events)}")
+        print(f" Code Events: {len(set(e.name for e in self.code_events.values()))}")
 
-        print(f"\n⚠️ Gaps Found: {len(self.gaps)}")
+        print(f"\n️ Gaps Found: {len(self.gaps)}")
         for severity in ['critical', 'warning', 'info']:
             count = len([g for g in self.gaps if g.severity == severity])
             if count > 0:
                 print(f"   - {severity.capitalize()}: {count}")
 
-        print(f"\n💡 Potential Events: {len(self.potential_events)}")
+        print(f"\n Potential Events: {len(self.potential_events)}")
         high_conf = len([pe for pe in self.potential_events if pe.confidence > 0.7])
         print(f"   - High confidence (>0.7): {high_conf}")
 

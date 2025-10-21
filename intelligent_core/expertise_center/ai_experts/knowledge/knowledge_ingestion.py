@@ -85,35 +85,35 @@ class KnowledgeIngestionPipeline:
             'total_documents': 0
         }
 
-        logger.info("🚀 Starting knowledge ingestion...")
+        logger.info(" Starting knowledge ingestion...")
 
         # 1. ISO 22301 clauses
         logger.info("Loading ISO 22301:2019 clauses...")
         iso_docs = await self.ingest_iso_clauses()
         stats['iso_clauses'] = len(iso_docs)
-        logger.info(f"✅ Loaded {stats['iso_clauses']} ISO clauses")
+        logger.info(f" Loaded {stats['iso_clauses']} ISO clauses")
 
         # 2. BCI Professional Practices
         logger.info("Loading BCI Professional Practices...")
         bci_docs = await self.ingest_bci_practices()
         stats['bci_practices'] = len(bci_docs)
-        logger.info(f"✅ Loaded {stats['bci_practices']} BCI practices")
+        logger.info(f" Loaded {stats['bci_practices']} BCI practices")
 
         # 3. ISO/BCI/Platform mapping
         logger.info("Loading platform mapping...")
         mapping_docs = await self.ingest_platform_mapping()
         stats['platform_mappings'] = len(mapping_docs)
-        logger.info(f"✅ Loaded {stats['platform_mappings']} mapping documents")
+        logger.info(f" Loaded {stats['platform_mappings']} mapping documents")
 
         # 4. Healthcare-specific guides
         logger.info("Loading healthcare guidance...")
         health_docs = await self.ingest_healthcare_guides()
         stats['healthcare_guides'] = len(health_docs)
-        logger.info(f"✅ Loaded {stats['healthcare_guides']} healthcare guides")
+        logger.info(f" Loaded {stats['healthcare_guides']} healthcare guides")
 
         stats['total_documents'] = sum(stats.values())
 
-        logger.info(f"🎉 Knowledge ingestion complete! Total: {stats['total_documents']} documents")
+        logger.info(f" Knowledge ingestion complete! Total: {stats['total_documents']} documents")
 
         return stats
 
@@ -425,7 +425,7 @@ if __name__ == "__main__":
         # Ingest all knowledge
         stats = await pipeline.ingest_all_knowledge()
 
-        print(f"\n📊 Ingestion Statistics:")
+        print(f"\n Ingestion Statistics:")
         print(f"  ISO Clauses: {stats['iso_clauses']}")
         print(f"  BCI Practices: {stats['bci_practices']}")
         print(f"  Platform Mappings: {stats['platform_mappings']}")

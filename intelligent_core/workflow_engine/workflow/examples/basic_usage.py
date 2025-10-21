@@ -63,20 +63,20 @@ async def example_1_start_bia_process():
         process_name="Acme Corp BIA 2025"
     )
 
-    print(f"✅ BIA process started!")
+    print(f" BIA process started!")
     print(f"   Instance ID: {instance_id}")
 
     # Get visual state (for UI)
     state = await workflow.get_visual_state(instance_id)
 
-    print(f"\n📊 Current State:")
+    print(f"\n Current State:")
     print(f"   Type: {state.type}")
     print(f"   Current Activities: {state.current_activities}")
     print(f"   Active Tasks: {len(state.active_tasks)}")
 
     if state.active_tasks:
         first_task = state.active_tasks[0]
-        print(f"\n📋 First Task:")
+        print(f"\n First Task:")
         print(f"   Name: {first_task['name']}")
         print(f"   Activity ID: {first_task['activity_id']}")
         print(f"   AI Tip: {first_task['ai_tip']}")
@@ -94,7 +94,7 @@ async def example_2_complete_task(instance_id, workflow):
     state = await workflow.get_visual_state(instance_id)
     first_task = state.active_tasks[0]
 
-    print(f"🎯 Completing task: {first_task['name']}")
+    print(f" Completing task: {first_task['name']}")
 
     # Complete task with data
     await workflow.complete_task(
@@ -111,12 +111,12 @@ async def example_2_complete_task(instance_id, workflow):
         completed_by="user-john"
     )
 
-    print(f"✅ Task completed!")
+    print(f" Task completed!")
 
     # Get new state
     state = await workflow.get_visual_state(instance_id)
 
-    print(f"\n📊 Updated State:")
+    print(f"\n Updated State:")
     print(f"   Current Activities: {state.current_activities}")
     print(f"   Next Task: {state.active_tasks[0]['name'] if state.active_tasks else 'None'}")
 
@@ -148,14 +148,14 @@ async def example_3_assign_tasks():
         assignee="user-sarah"
     )
 
-    print(f"✅ Task assigned to user-sarah")
+    print(f" Task assigned to user-sarah")
 
     # Get user's tasks
     user_tasks = await workflow.get_active_tasks_for_user(
         assignee="user-sarah"
     )
 
-    print(f"\n📋 Tasks for user-sarah:")
+    print(f"\n Tasks for user-sarah:")
     for task in user_tasks:
         print(f"   - {task['name']} (Activity: {task['activity_id']})")
 
@@ -186,7 +186,7 @@ async def example_4_monitor_workflow():
 
         task = state.active_tasks[0]
 
-        print(f"📍 Step {step_num}: {task['name']}")
+        print(f" Step {step_num}: {task['name']}")
         print(f"   Activity: {task['activity_id']}")
         print(f"   AI Tip: {task['ai_tip']}")
 
@@ -196,11 +196,11 @@ async def example_4_monitor_workflow():
             variables={f"step_{step_num}_completed": True}
         )
 
-        print(f"   ✅ Completed\n")
+        print(f"    Completed\n")
 
     # Final state
     instance = await workflow.bpmn_engine.get_instance(instance_id)
-    print(f"📊 Final Status: {instance.status.value}")
+    print(f" Final Status: {instance.status.value}")
 
 
 async def example_5_event_handling():
@@ -217,15 +217,15 @@ async def example_5_event_handling():
     # Register event handlers
     @workflow.bpmn_engine.on_event("bpmn.instance.started")
     async def on_started(event):
-        print(f"🎬 Process started: {event['data']['instance_id']}")
+        print(f" Process started: {event['data']['instance_id']}")
 
     @workflow.bpmn_engine.on_event("bpmn.task.created")
     async def on_task_created(event):
-        print(f"📋 Task created: {event['data']['name']}")
+        print(f" Task created: {event['data']['name']}")
 
     @workflow.bpmn_engine.on_event("bpmn.task.completed")
     async def on_task_completed(event):
-        print(f"✅ Task completed: {event['data']['task_id']}")
+        print(f" Task completed: {event['data']['task_id']}")
 
     # Start process - events will fire
     instance_id = await workflow.start_process_from_bpmn(
@@ -257,7 +257,7 @@ async def example_6_terminate_workflow():
         initial_variables={"org_id": "org-456"}
     )
 
-    print(f"▶️  Process started: {instance_id}")
+    print(f"️  Process started: {instance_id}")
 
     # Terminate
     await workflow.terminate_process(
@@ -267,7 +267,7 @@ async def example_6_terminate_workflow():
 
     # Check status
     instance = await workflow.bpmn_engine.get_instance(instance_id)
-    print(f"🛑 Process terminated: {instance.status.value}")
+    print(f" Process terminated: {instance.status.value}")
 
 
 async def main():
@@ -295,7 +295,7 @@ async def main():
     await example_6_terminate_workflow()
 
     print("\n" + "="*60)
-    print("✅ All examples completed!")
+    print(" All examples completed!")
     print("="*60 + "\n")
 
 

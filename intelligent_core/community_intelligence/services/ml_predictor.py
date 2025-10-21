@@ -71,19 +71,19 @@ class MLPredictor:
 
             if success_path.exists():
                 self.success_model = joblib.load(success_path)
-                logger.info("✅ Loaded success predictor model")
+                logger.info(" Loaded success predictor model")
 
             if duration_path.exists():
                 self.duration_model = joblib.load(duration_path)
-                logger.info("✅ Loaded duration predictor model")
+                logger.info(" Loaded duration predictor model")
 
             if scaler_path.exists():
                 self.scaler = joblib.load(scaler_path)
-                logger.info("✅ Loaded feature scaler")
+                logger.info(" Loaded feature scaler")
 
             if encoders_path.exists():
                 self.label_encoders = joblib.load(encoders_path)
-                logger.info("✅ Loaded label encoders")
+                logger.info(" Loaded label encoders")
 
         except Exception as e:
             logger.error(f"Error loading models: {e}")
@@ -99,7 +99,7 @@ class MLPredictor:
         if not ML_AVAILABLE:
             return {'error': 'sklearn not available'}
 
-        logger.info("🤖 Starting ML model training...")
+        logger.info(" Starting ML model training...")
 
         # Get approved cases
         result = await self.db.execute(
@@ -154,7 +154,7 @@ class MLPredictor:
         self._save_models()
 
         logger.info(
-            f"✅ ML models trained: success_acc={success_score:.3f}, "
+            f" ML models trained: success_acc={success_score:.3f}, "
             f"duration_r2={duration_score:.3f}"
         )
 
@@ -273,7 +273,7 @@ class MLPredictor:
             joblib.dump(self.scaler, self.models_path / "scaler.pkl")
             joblib.dump(self.label_encoders, self.models_path / "label_encoders.pkl")
 
-            logger.info("💾 ML models saved to disk")
+            logger.info(" ML models saved to disk")
 
         except Exception as e:
             logger.error(f"Error saving models: {e}")

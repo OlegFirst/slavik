@@ -144,7 +144,7 @@ class SafetyMonitor:
             self.stats['warnings'] += 1
             logger.warning(f"Safety validation passed with {len(concerns)} warnings")
         else:
-            logger.info("✅ Safety validation passed")
+            logger.info(" Safety validation passed")
 
         return result
 

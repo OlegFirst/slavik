@@ -16,7 +16,7 @@ try:
     import psycopg2
     from psycopg2 import sql
 except ImportError:
-    print("❌ psycopg2 не установлен. Установите: pip3 install psycopg2-binary")
+    print(" psycopg2 не установлен. Установите: pip3 install psycopg2-binary")
     sys.exit(1)
 
 from config.settings import settings
@@ -26,37 +26,37 @@ def init_database():
     """Инициализация базы данных"""
 
     print("=" * 60)
-    print("🗄️  KQM DATABASE INITIALIZATION")
+    print("️  KQM DATABASE INITIALIZATION")
     print("=" * 60)
 
     # Parse DATABASE_URL
     db_url = settings.DATABASE_URL
-    print(f"\n📍 Database URL: {db_url[:50]}...")
+    print(f"\n Database URL: {db_url[:50]}...")
 
     try:
         # Connect to PostgreSQL
-        print("\n🔌 Подключение к PostgreSQL...")
+        print("\n Подключение к PostgreSQL...")
         conn = psycopg2.connect(db_url)
         conn.autocommit = True
         cursor = conn.cursor()
 
-        print("✅ Подключение установлено")
+        print(" Подключение установлено")
 
         # Read schema file
         schema_file = Path(__file__).parent / "schema.sql"
-        print(f"\n📄 Читаем schema: {schema_file}")
+        print(f"\n Читаем schema: {schema_file}")
 
         with open(schema_file, 'r', encoding='utf-8') as f:
             schema_sql = f.read()
 
         # Execute schema
-        print("\n🔨 Создаём таблицы...")
+        print("\n Создаём таблицы...")
         cursor.execute(schema_sql)
 
-        print("✅ Таблицы созданы")
+        print(" Таблицы созданы")
 
         # Verify tables
-        print("\n📊 Проверка созданных таблиц...")
+        print("\n Проверка созданных таблиц...")
         cursor.execute("""
             SELECT table_name
             FROM information_schema.tables
@@ -67,12 +67,12 @@ def init_database():
 
         tables = cursor.fetchall()
 
-        print(f"\n✅ Создано {len(tables)} таблиц:")
+        print(f"\n Создано {len(tables)} таблиц:")
         for table in tables:
             print(f"   - {table[0]}")
 
         # Count rows
-        print("\n📊 Статистика:")
+        print("\n Статистика:")
         for table in tables:
             table_name = table[0]
             cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
@@ -83,13 +83,13 @@ def init_database():
         conn.close()
 
         print("\n" + "=" * 60)
-        print("✅ БАЗА ДАННЫХ ГОТОВА!")
+        print(" БАЗА ДАННЫХ ГОТОВА!")
         print("=" * 60)
 
         return True
 
     except Exception as e:
-        print(f"\n❌ Ошибка: {e}")
+        print(f"\n Ошибка: {e}")
         import traceback
         traceback.print_exc()
         return False

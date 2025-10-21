@@ -90,9 +90,9 @@ class ValidationServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
                     "validation.improvement"
                 ]
             )
-            logger.info("✅ Validation Service initialized as Self-Aware")
+            logger.info(" Validation Service initialized as Self-Aware")
         else:
-            logger.warning("⚠️  Validation Service running in basic mode (Self-Aware not available)")
+            logger.warning("️  Validation Service running in basic mode (Self-Aware not available)")
 
     async def initialize(self):
         """Initialize Validation Service-specific capabilities"""
@@ -103,7 +103,7 @@ class ValidationServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
             self.register_handler("validation.review.*", self.handle_review_event, priority=EventPriority.NORMAL)
             self.register_handler("validation.improvement.*", self.handle_improvement_event, priority=EventPriority.NORMAL)
 
-            logger.info("✅ Validation Service event handlers registered")
+            logger.info(" Validation Service event handlers registered")
 
     async def handle_exercise_event(self, event):
         """Handle validation.exercise events"""
@@ -155,10 +155,10 @@ async def lifespan(app: FastAPI):
 
     # === STARTUP ===
     logger.info("=" * 60)
-    logger.info("🚀 Starting Validation Service (Integrated with Graceful Choreography)")
+    logger.info(" Starting Validation Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f"📍 Port: 8100")
-    logger.info(f"📋 ISO 22301 Clause: 8.5")
+    logger.info(f" Port: 8100")
+    logger.info(f" ISO 22301 Clause: 8.5")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -180,7 +180,7 @@ async def lifespan(app: FastAPI):
         # === 2. Initialize Database ===
         logger.info("\n2️⃣  Initializing Database...")
         await init_db()
-        logger.info(f"   ✅ Database initialized")
+        logger.info(f"    Database initialized")
 
         # === 3. Initialize Self-Aware Service ===
         if SELF_AWARE_AVAILABLE:
@@ -190,7 +190,7 @@ async def lifespan(app: FastAPI):
 
             # Subscribe to events via platform EventBus
             if platform.intelligent_router:
-                logger.info("   📡 Registering with Intelligent EventBus...")
+                logger.info("    Registering with Intelligent EventBus...")
                 # Register service capabilities with router
                 await platform.intelligent_router.register_subscriber(
                     subscriber_id="validation_service",
@@ -204,13 +204,13 @@ async def lifespan(app: FastAPI):
                         "semantic_tags": ["validation", "testing", "exercise", "review"]
                     }
                 )
-                logger.info("   ✅ Self-Aware Service registered with Intelligent Router")
+                logger.info("    Self-Aware Service registered with Intelligent Router")
             elif platform.eventbus:
-                logger.info("   📡 Registering with Basic EventBus...")
+                logger.info("    Registering with Basic EventBus...")
                 await platform.eventbus.subscribe("validation.*", "exercise.*", "test.*", service_self_aware.on_event)
-                logger.info("   ✅ Self-Aware Service registered with EventBus")
+                logger.info("    Self-Aware Service registered with EventBus")
         else:
-            logger.warning("\n3️⃣  ⚠️  Self-Aware Services not available (basic mode)")
+            logger.warning("\n3️⃣  ️  Self-Aware Services not available (basic mode)")
 
         # === 4. Initialize Workflow Intelligence ===
         logger.info("\n4️⃣  Initializing Workflow Intelligence...")
@@ -240,7 +240,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("   ✅ Workflow Intelligence initialized")
+        logger.info("    Workflow Intelligence initialized")
 
         # === 5. Register Sagas (if saga engine available) ===
         if platform.saga_orchestrator:
@@ -254,41 +254,41 @@ async def lifespan(app: FastAPI):
                 platform.saga_orchestrator.register_saga(create_bcm_program_saga())
                 platform.saga_orchestrator.register_saga(create_incident_response_saga())
 
-                logger.info("   ✅ Sagas registered")
+                logger.info("    Sagas registered")
             except ImportError:
-                logger.warning("   ⚠️  Saga definitions not found")
+                logger.warning("   ️  Saga definitions not found")
 
         logger.info("\n" + "=" * 60)
-        logger.info("✅ Validation Service ready (with Graceful Choreography)")
+        logger.info(" Validation Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"   🌐 Docs: http://localhost:8100/docs")
-        logger.info(f"   📊 Metrics: http://localhost:8100/metrics")
-        logger.info(f"   ❤️  Health: http://localhost:8100/health")
+        logger.info(f"    Docs: http://localhost:8100/docs")
+        logger.info(f"    Metrics: http://localhost:8100/metrics")
+        logger.info(f"   ️  Health: http://localhost:8100/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
-        logger.error(f"❌ Failed to start Validation Service: {e}", exc_info=True)
+        logger.error(f" Failed to start Validation Service: {e}", exc_info=True)
         raise
 
     yield  # Application running
 
     # === SHUTDOWN ===
     logger.info("\n" + "=" * 60)
-    logger.info("🛑 Shutting down Validation Service...")
+    logger.info(" Shutting down Validation Service...")
     logger.info("=" * 60)
 
     if workflow_storage:
         await workflow_storage.close()
-        logger.info("   ✅ Workflow storage closed")
+        logger.info("    Workflow storage closed")
 
     await close_db()
-    logger.info("   ✅ Database closed")
+    logger.info("    Database closed")
 
     await shutdown_platform()
-    logger.info("   ✅ Platform integration shutdown")
+    logger.info("    Platform integration shutdown")
 
     logger.info("=" * 60)
-    logger.info("✅ Validation Service shutdown complete")
+    logger.info(" Validation Service shutdown complete")
     logger.info("=" * 60)
 
 

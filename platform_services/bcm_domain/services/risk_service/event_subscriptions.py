@@ -36,17 +36,17 @@ async def setup_event_subscriptions(eventbus):
 
         # Subscribe to BIA events
         await eventbus.subscribe('bia.assessment.completed', handlers.on_bia_completed)
-        logger.info("📥 Subscribed to: bia.assessment.completed")
+        logger.info(" Subscribed to: bia.assessment.completed")
 
         await eventbus.subscribe('bia.criticality.changed', handlers.on_criticality_changed)
-        logger.info("📥 Subscribed to: bia.criticality.changed")
+        logger.info(" Subscribed to: bia.criticality.changed")
 
         await eventbus.subscribe('bia.critical.process.identified', handlers.on_critical_process_identified)
-        logger.info("📥 Subscribed to: bia.critical.process.identified")
+        logger.info(" Subscribed to: bia.critical.process.identified")
 
-        logger.info("✅ Risk event choreography configured")
-        logger.info("📥 Listening for: BIA events")
-        logger.info("📤 Ready to publish: risk.assessment.completed, risk.severity.changed, etc.")
+        logger.info(" Risk event choreography configured")
+        logger.info(" Listening for: BIA events")
+        logger.info(" Ready to publish: risk.assessment.completed, risk.severity.changed, etc.")
 
     except Exception as e:
         logger.error(f"Failed to setup event subscriptions: {e}", exc_info=True)

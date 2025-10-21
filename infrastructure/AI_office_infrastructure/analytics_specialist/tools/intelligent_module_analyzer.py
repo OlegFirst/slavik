@@ -135,7 +135,7 @@ class IntelligentModuleAnalyzer:
         как работает, и как может быть улучшена
         """
         logger.info("="*60)
-        logger.info("🧠 Starting Intelligent Module Analysis")
+        logger.info(" Starting Intelligent Module Analysis")
         logger.info("="*60)
 
         all_analyses = {}
@@ -143,10 +143,10 @@ class IntelligentModuleAnalyzer:
         # Analyze each category
         for category, base_path in self.module_categories.items():
             if not base_path.exists():
-                logger.warning(f"⚠️  Category not found: {category}")
+                logger.warning(f"️  Category not found: {category}")
                 continue
 
-            logger.info(f"\n📂 Analyzing category: {category}")
+            logger.info(f"\n Analyzing category: {category}")
 
             # Find all modules in category
             modules = self._find_modules(base_path, category)
@@ -157,7 +157,7 @@ class IntelligentModuleAnalyzer:
                 module_name = module_path.name
 
                 try:
-                    logger.info(f"\n   🔍 Analyzing: {module_name}")
+                    logger.info(f"\n    Analyzing: {module_name}")
 
                     analysis = await self.analyze_module(
                         module_path=module_path,
@@ -170,16 +170,16 @@ class IntelligentModuleAnalyzer:
                     # Save individual report
                     await self._save_module_report(analysis)
 
-                    logger.info(f"   ✅ {module_name} complete")
+                    logger.info(f"    {module_name} complete")
 
                 except Exception as e:
-                    logger.error(f"   ❌ {module_name} failed: {e}")
+                    logger.error(f"    {module_name} failed: {e}")
 
         # Generate master report
         await self._generate_master_report(all_analyses)
 
         logger.info("\n" + "="*60)
-        logger.info(f"✅ Analysis complete! {len(all_analyses)} modules analyzed")
+        logger.info(f" Analysis complete! {len(all_analyses)} modules analyzed")
         logger.info("="*60)
 
         return all_analyses
@@ -875,7 +875,7 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 📊 Code Metrics
+##  Code Metrics
 
 | Metric | Value |
 |--------|-------|
@@ -887,7 +887,7 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 🎯 Module Purpose
+##  Module Purpose
 
 {analysis.behavior_model['purpose']}
 
@@ -898,7 +898,7 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 💡 Usage Scenarios
+##  Usage Scenarios
 
 ### Base Scenarios ({len(analysis.base_usage_scenarios)})
 
@@ -912,7 +912,7 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 🧠 Domain Expertise
+##  Domain Expertise
 
 **Domain:** {analysis.domain_knowledge['domain']}
 
@@ -924,7 +924,7 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 🔗 Integrations
+##  Integrations
 
 {chr(10).join(f"- **{i['type'].upper()}**: {i['target']}" for i in analysis.integrations[:10])}
 
@@ -934,13 +934,13 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 🚀 Improvement Roadmap
+##  Improvement Roadmap
 
 {chr(10).join(f"### {r['quarter']}: {r['focus']}{chr(10)}{chr(10).join(f'- {item}' for item in r['items'])}{chr(10)}" for r in analysis.roadmap)}
 
 ---
 
-## 📈 Suggested Improvements
+##  Suggested Improvements
 
 {chr(10).join(f"**{i['category'].upper()}** (Priority: {i['priority']}){chr(10)}- {i['suggestion']}{chr(10)}- *Benefit: {i['benefit']}*{chr(10)}" for i in analysis.improvement_suggestions)}
 
@@ -963,14 +963,14 @@ class IntelligentModuleAnalyzer:
 
         expert_modules = [a.module_name for a in all_analyses.values() if a.expertise_level == "expert"]
 
-        md = f"""# 🧠 Master Analysis Report - AI Platform ISO
+        md = f"""#  Master Analysis Report - AI Platform ISO
 
 **Total Modules Analyzed:** {total_modules}
 **Generated:** {datetime.now().isoformat()}
 
 ---
 
-## 📊 Platform Overview
+##  Platform Overview
 
 | Metric | Value |
 |--------|-------|
@@ -982,19 +982,19 @@ class IntelligentModuleAnalyzer:
 
 ---
 
-## 🎯 Module Breakdown
+##  Module Breakdown
 
 {chr(10).join(f"### {name}{chr(10)}- **Type:** {analysis.module_type}{chr(10)}- **Purpose:** {analysis.behavior_model['purpose']}{chr(10)}- **Expertise:** {analysis.expertise_level}{chr(10)}- **Scenarios:** {len(analysis.ai_extended_scenarios)}{chr(10)}" for name, analysis in all_analyses.items())}
 
 ---
 
-## 🌟 Expert Modules
+##  Expert Modules
 
 {chr(10).join(f"- **{name}**" for name in expert_modules)}
 
 ---
 
-## 🔍 Key Insights
+##  Key Insights
 
 This intelligent analysis created a **self-learning system** that:
 
@@ -1021,7 +1021,7 @@ This intelligent analysis created a **self-learning system** that:
         with open(master_file, 'w') as f:
             f.write(md)
 
-        logger.info(f"\n📊 Master report: {master_file}")
+        logger.info(f"\n Master report: {master_file}")
 
 
 async def main():

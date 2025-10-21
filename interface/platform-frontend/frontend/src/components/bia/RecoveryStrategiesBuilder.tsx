@@ -36,12 +36,12 @@ interface RecoveryStrategiesBuilderProps {
 }
 
 const STRATEGY_TYPES = [
-  { value: 'manual_workaround', label: 'Manual Workaround', icon: '✍️' },
-  { value: 'alternate_location', label: 'Alternate Location', icon: '📍' },
-  { value: 'alternate_supplier', label: 'Alternate Supplier', icon: '🏢' },
-  { value: 'backup_system', label: 'Backup System', icon: '💾' },
-  { value: 'staff_reallocation', label: 'Staff Reallocation', icon: '👥' },
-  { value: 'other', label: 'Other', icon: '⚙️' },
+  { value: 'manual_workaround', label: 'Manual Workaround', icon: '️' },
+  { value: 'alternate_location', label: 'Alternate Location', icon: '' },
+  { value: 'alternate_supplier', label: 'Alternate Supplier', icon: '' },
+  { value: 'backup_system', label: 'Backup System', icon: '' },
+  { value: 'staff_reallocation', label: 'Staff Reallocation', icon: '' },
+  { value: 'other', label: 'Other', icon: '️' },
 ];
 
 export function RecoveryStrategiesBuilder({
@@ -356,7 +356,7 @@ export function RecoveryStrategiesBuilder({
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Edit"
                       >
-                        ✏️
+                        ️
                       </button>
                       <button
                         onClick={() => strategy.id && handleRemoveStrategy(strategy.id)}
@@ -529,7 +529,7 @@ function StrategyForm({ initialData, processRTO, onSubmit, onCancel }: StrategyF
               />
               {formData.rto_capability_hours > processRTO && (
                 <p className="text-red-600 text-xs mt-1">
-                  ⚠️ Exceeds target RTO of {processRTO}h
+                  ️ Exceeds target RTO of {processRTO}h
                 </p>
               )}
             </div>

@@ -1,5 +1,5 @@
 """
-🎨 AI Example Generator
+ AI Example Generator
 
 Generates perfect examples ON DEMAND for any scenario.
 
@@ -55,7 +55,7 @@ class AIExampleGenerator:
         self.collective = collective_intelligence
         self.cases = case_library
 
-        logger.info("🎨 AI Example Generator initialized")
+        logger.info(" AI Example Generator initialized")
 
     async def generate(
         self,
@@ -75,7 +75,7 @@ class AIExampleGenerator:
             Complete example with metadata
         """
 
-        logger.info(f"🎨 Generating example: {topic} for {context.get('industry')}")
+        logger.info(f" Generating example: {topic} for {context.get('industry')}")
 
         # Get real data from collective intelligence
         real_data = await self._get_real_data(topic, context)
@@ -473,11 +473,11 @@ class ExampleLibrary:
             # Try to find existing example
             existing = await self._find_similar_example(topic, context)
             if existing:
-                logger.info(f"📚 Returning cached example for {topic}")
+                logger.info(f" Returning cached example for {topic}")
                 return existing
 
         # Generate new example
-        logger.info(f"🎨 Generating new example for {topic}")
+        logger.info(f" Generating new example for {topic}")
         example = await self.generator.generate(topic, context)
 
         # Store in library
@@ -501,7 +501,7 @@ class ExampleLibrary:
         """Store example in library"""
         # Save to database
         # Placeholder
-        logger.info(f"💾 Example stored: {example['topic']}")
+        logger.info(f" Example stored: {example['topic']}")
 
 
 class InteractiveExampleRunner:

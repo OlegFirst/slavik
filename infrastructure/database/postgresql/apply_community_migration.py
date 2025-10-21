@@ -24,7 +24,7 @@ def apply_migration():
     # Check DATABASE_URL
     db_url = os.getenv('DATABASE_URL')
     if not db_url:
-        print("❌ ERROR: DATABASE_URL not set")
+        print(" ERROR: DATABASE_URL not set")
         print()
         print("Please set DATABASE_URL:")
         print("  export DATABASE_URL='postgresql://user:pass@host:5432/db'")
@@ -39,9 +39,9 @@ def apply_migration():
             from dotenv import load_dotenv
             load_dotenv()
             db_url = os.getenv('DATABASE_URL')
-            print("✅ Loaded DATABASE_URL from .env")
+            print(" Loaded DATABASE_URL from .env")
         except ImportError:
-            print("💡 Tip: Install python-dotenv to load from .env")
+            print(" Tip: Install python-dotenv to load from .env")
 
     print(f"Database: {db_url[:30]}...")
     print()
@@ -50,7 +50,7 @@ def apply_migration():
     migration_file = Path(__file__).parent / "migrations_source" / "037_community_intelligence.sql"
 
     if not migration_file.exists():
-        print(f"❌ Migration file not found: {migration_file}")
+        print(f" Migration file not found: {migration_file}")
         return False
 
     print(f"Migration file: {migration_file.name}")
@@ -77,7 +77,7 @@ def apply_migration():
             try:
                 sql = migration_file.read_text()
                 await conn.execute(sql)
-                print("✅ Migration applied successfully!")
+                print(" Migration applied successfully!")
                 return True
             finally:
                 await conn.close()
@@ -95,10 +95,10 @@ def apply_migration():
         )
 
         if result.returncode == 0:
-            print("✅ Migration applied successfully!")
+            print(" Migration applied successfully!")
             success = True
         else:
-            print(f"❌ Migration failed:")
+            print(f" Migration failed:")
             print(result.stderr)
             success = False
 

@@ -27,8 +27,8 @@ async def run_bia_workflow():
         from workflow_intelligence.governance.creative_zones import CreativeZonesManager, BIACreativeZones
         from workflow_intelligence.governance.checkpoint_manager import CheckpointManager, BIACheckpoints
     except ImportError as e:
-        print(f"❌ Import error: {e}")
-        print("\n💡 Make sure you're running from project root:")
+        print(f" Import error: {e}")
+        print("\n Make sure you're running from project root:")
         print("   python intelligent-core/workflow_intelligence/examples/basic_bia_workflow.py")
         return
 
@@ -81,24 +81,24 @@ async def run_bia_workflow():
 
     for process in processes:
         await bia.add_process(process)
-        print(f"   ✅ Added: {process['name']}")
+        print(f"    Added: {process['name']}")
 
     # Validate stage
     print("\n   Validating stage...")
     violations = await rules.validate(bia.get_context(), stage='identify_processes')
     if violations:
-        print(f"   ⚠️  {len(violations)} violations:")
+        print(f"   ️  {len(violations)} violations:")
         for v in violations:
             print(f"      - {v.message} ({v.severity.value})")
     else:
-        print("   ✅ No violations")
+        print("    No violations")
 
     # Try to advance
     if bia.can_advance_to('analyze_dependencies'):
         await bia.transition_to('analyze_dependencies')
         print(f"\n   → Advanced to: {bia.current_stage.value}")
     else:
-        print("   ❌ Cannot advance yet")
+        print("    Cannot advance yet")
 
     # 4. STAGE 2: Analyze Dependencies
     print("\n4️⃣  STAGE 2: Analyze Dependencies")
@@ -129,7 +129,7 @@ async def run_bia_workflow():
 
     for dep in dependencies:
         await bia.add_dependency(dep)
-        print(f"   ✅ Dependency: {dep['from_process']} → {dep['to_process']}")
+        print(f"    Dependency: {dep['from_process']} → {dep['to_process']}")
 
     # Check checkpoint
     print("\n   Checkpoint: Dependencies Mapped")
@@ -140,11 +140,11 @@ async def run_bia_workflow():
     )
 
     if checkpoint_result.passed:
-        print("   ✅ Checkpoint passed")
+        print("    Checkpoint passed")
     else:
-        print(f"   ⚠️  Checkpoint failed: {len(checkpoint_result.violations)} violations")
+        print(f"   ️  Checkpoint failed: {len(checkpoint_result.violations)} violations")
         if checkpoint_result.requires_escalation:
-            print("   ⚠️  ESCALATION REQUIRED")
+            print("   ️  ESCALATION REQUIRED")
 
     # Advance
     if bia.can_advance_to('assess_impact'):
@@ -189,7 +189,7 @@ async def run_bia_workflow():
 
     for impact in impacts:
         await bia.assess_impact(impact)
-        print(f"   ✅ Impact assessed: {impact['process_name']}")
+        print(f"    Impact assessed: {impact['process_name']}")
 
     # Creative Zone check
     zone = zones.get_zone('impact_analysis')
@@ -223,7 +223,7 @@ async def run_bia_workflow():
 
     for rto in rtos:
         await bia.set_recovery_objective(rto)
-        print(f"   ✅ RTO set: {rto['process_name']} - {rto['rto_hours']}h")
+        print(f"    RTO set: {rto['process_name']} - {rto['rto_hours']}h")
 
     # Validate RTO checkpoint
     print("\n   Checkpoint: RTO Determination Valid")
@@ -234,9 +234,9 @@ async def run_bia_workflow():
     )
 
     if checkpoint_result.passed:
-        print("   ✅ Checkpoint passed")
+        print("    Checkpoint passed")
     else:
-        print(f"   ⚠️  Violations: {len(checkpoint_result.violations)}")
+        print(f"   ️  Violations: {len(checkpoint_result.violations)}")
 
     # Advance
     if bia.can_advance_to('review_results'):
@@ -255,14 +255,14 @@ async def run_bia_workflow():
     )
 
     if checkpoint_result.passed:
-        print("   ✅ All validations passed!")
+        print("    All validations passed!")
 
         if bia.can_advance_to('completed'):
             await bia.transition_to('completed')
-            print(f"\n   🎉 BIA COMPLETED!")
+            print(f"\n    BIA COMPLETED!")
             print(f"   Final stage: {bia.current_stage.value}")
     else:
-        print(f"   ⚠️  Final validation failed: {len(checkpoint_result.violations)} issues")
+        print(f"   ️  Final validation failed: {len(checkpoint_result.violations)} issues")
         for v in checkpoint_result.violations:
             print(f"      - {v.message}")
 
@@ -279,7 +279,7 @@ async def run_bia_workflow():
     print(f"\nFinal stage: {bia.current_stage.value}")
 
     print("\n" + "=" * 70)
-    print("✅ Example completed successfully!")
+    print(" Example completed successfully!")
     print("=" * 70)
 
 

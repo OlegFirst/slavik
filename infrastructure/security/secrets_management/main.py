@@ -143,8 +143,8 @@ async def list_secrets(
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    logger.info(f"🔐 Starting Secrets Management Service on {HOST}:{PORT}")
-    logger.info(f"📦 Using Supabase Vault for secure storage")
+    logger.info(f" Starting Secrets Management Service on {HOST}:{PORT}")
+    logger.info(f" Using Supabase Vault for secure storage")
 
     uvicorn.run(
         "main:app",

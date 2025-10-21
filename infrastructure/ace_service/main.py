@@ -130,13 +130,13 @@ class ACEService:
             # Test connection
             async with self.db_pool.acquire() as conn:
                 version = await conn.fetchval('SELECT version()')
-                logger.info(f"✅ Connected to PostgreSQL: {version[:50]}...")
+                logger.info(f" Connected to PostgreSQL: {version[:50]}...")
 
             # Initialize schema (if not exists)
             await self._initialize_schema()
 
             self.initialized = True
-            logger.info("✅ ACE Service initialized successfully")
+            logger.info(" ACE Service initialized successfully")
 
         except Exception as e:
             logger.error(f"Failed to initialize ACE Service: {e}")
@@ -155,7 +155,7 @@ class ACEService:
                 ''')
 
                 if exists:
-                    logger.info("✅ ACE tables already exist")
+                    logger.info(" ACE tables already exist")
                     return
 
                 # Read and execute schema
@@ -169,7 +169,7 @@ class ACEService:
                         schema_sql = f.read()
 
                     await conn.execute(schema_sql)
-                    logger.info("✅ ACE schema created successfully")
+                    logger.info(" ACE schema created successfully")
                 else:
                     logger.warning(f"Schema file not found: {schema_path}")
 
@@ -181,7 +181,7 @@ class ACEService:
         """Shutdown ACE Service"""
         if self.db_pool:
             await self.db_pool.close()
-            logger.info("✅ Database pool closed")
+            logger.info(" Database pool closed")
 
     # ========================================================================
     # 1. GENERATOR - Create enhanced context
@@ -479,7 +479,7 @@ class ACEService:
                     insights
                 )
 
-                logger.info(f"✅ Playbook updated in database: {task_type}")
+                logger.info(f" Playbook updated in database: {task_type}")
 
         except Exception as e:
             logger.error(f"Error updating playbook: {e}")
@@ -520,7 +520,7 @@ class ACEService:
                     trajectory.get('success', False)
                 )
 
-                logger.debug(f"✅ Trajectory logged: {task_type}")
+                logger.debug(f" Trajectory logged: {task_type}")
 
         except Exception as e:
             logger.error(f"Error logging trajectory: {e}")

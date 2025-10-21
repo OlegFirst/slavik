@@ -59,16 +59,16 @@ class DistributedMemory:
         """Initialize all memory layers."""
         try:
             await self.working_memory.initialize()
-            logger.info("✅ Working memory initialized")
+            logger.info(" Working memory initialized")
 
             await self.short_term_memory.initialize()
-            logger.info("✅ Short-term memory initialized")
+            logger.info(" Short-term memory initialized")
 
             await self.long_term_memory.initialize()
-            logger.info("✅ Long-term memory initialized")
+            logger.info(" Long-term memory initialized")
 
             await self.procedural_memory.initialize()
-            logger.info("✅ Procedural memory initialized")
+            logger.info(" Procedural memory initialized")
 
             self.initialized = True
             logger.info("Distributed memory system initialized")

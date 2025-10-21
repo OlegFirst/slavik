@@ -235,45 +235,45 @@ async function startServer() {
     try {
         // Initialize Digital Twin module
         await digitalTwinModule.initialize();
-        console.log('✅ Digital Twin module initialized');
+        console.log(' Digital Twin module initialized');
         
         // Start web server
         app.listen(PORT, () => {
-            console.log(`🌐 NASH Digital Twin Web Interface running on http://localhost:${PORT}`);
-            console.log(`📊 Dashboard: http://localhost:${PORT}/`);
-            console.log(`🔧 API Health: http://localhost:${PORT}/api/health`);
-            console.log(`📈 API Metrics: http://localhost:${PORT}/api/metrics`);
+            console.log(` NASH Digital Twin Web Interface running on http://localhost:${PORT}`);
+            console.log(` Dashboard: http://localhost:${PORT}/`);
+            console.log(` API Health: http://localhost:${PORT}/api/health`);
+            console.log(` API Metrics: http://localhost:${PORT}/api/metrics`);
         });
         
     } catch (error) {
-        console.error('❌ Failed to start server:', error);
+        console.error(' Failed to start server:', error);
         process.exit(1);
     }
 }
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
-    console.log('🔄 Graceful shutdown initiated...');
+    console.log(' Graceful shutdown initiated...');
     
     try {
         await digitalTwinModule.shutdown();
-        console.log('✅ Digital Twin module shut down gracefully');
+        console.log(' Digital Twin module shut down gracefully');
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during shutdown:', error);
+        console.error(' Error during shutdown:', error);
         process.exit(1);
     }
 });
 
 process.on('SIGINT', async () => {
-    console.log('🔄 Interrupt signal received, shutting down...');
+    console.log(' Interrupt signal received, shutting down...');
     
     try {
         await digitalTwinModule.shutdown();
-        console.log('✅ Digital Twin module shut down gracefully');
+        console.log(' Digital Twin module shut down gracefully');
         process.exit(0);
     } catch (error) {
-        console.error('❌ Error during shutdown:', error);
+        console.error(' Error during shutdown:', error);
         process.exit(1);
     }
 });

@@ -170,7 +170,7 @@ class ToolRegistry:
             # 10 AI Organs (Individual tools)
             ToolDefinition(
                 tool_id="governance_brain",
-                name="🧠 Governance Brain",
+                name=" Governance Brain",
                 description="Strategic intelligence and policy guidance",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -190,7 +190,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="emergency_response",
-                name="🚨 Emergency Response",
+                name=" Emergency Response",
                 description="Crisis management and incident response",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -203,7 +203,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="impact_oracle",
-                name="🔮 Impact Oracle",
+                name=" Impact Oracle",
                 description="Predictive business impact analysis",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -216,7 +216,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="scenario_creator",
-                name="📝 Scenario Creator",
+                name=" Scenario Creator",
                 description="AI-powered BCM scenario generation",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -229,7 +229,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="risk_advisor",
-                name="⚡ Risk Advisor",
+                name=" Risk Advisor",
                 description="Risk analysis and mitigation strategies",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -242,7 +242,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="compliance_guardian",
-                name="🛡️ Compliance Guardian",
+                name="️ Compliance Guardian",
                 description="Standards compliance monitoring",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -255,7 +255,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="performance_analyst",
-                name="📊 Performance Analyst",
+                name=" Performance Analyst",
                 description="BCM KPI intelligence and analysis",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -268,7 +268,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="learning_coach",
-                name="🎓 Learning Coach",
+                name=" Learning Coach",
                 description="Training optimization and learning insights",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -281,7 +281,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="plan_generator",
-                name="📋 Plan Generator",
+                name=" Plan Generator",
                 description="BCP/DRP plan creation and optimization",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -294,7 +294,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="lifecycle_monitor",
-                name="💓 Lifecycle Monitor",
+                name=" Lifecycle Monitor",
                 description="BCM program lifecycle health monitoring",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8032",
@@ -308,7 +308,7 @@ class ToolRegistry:
             # Project Intelligence (Standalone Service)
             ToolDefinition(
                 tool_id="project_intelligence",
-                name="🎯 Project Intelligence",
+                name=" Project Intelligence",
                 description="AI-powered project management and health monitoring",
                 category=ToolCategory.INTELLIGENCE,
                 base_url="http://localhost:8025",
@@ -328,7 +328,7 @@ class ToolRegistry:
         colleagues_tools = [
             ToolDefinition(
                 tool_id="compliance_copilot",
-                name="👔 Compliance Copilot",
+                name=" Compliance Copilot",
                 description="ISO 22301 compliance expert with conversational interface",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -353,7 +353,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="project_manager_colleague",
-                name="🎯 Project Manager AI",
+                name=" Project Manager AI",
                 description="BCM project management expert with RAG-powered advice",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -379,7 +379,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="risk_analyst_colleague",
-                name="⚡ Risk Analyst AI",
+                name=" Risk Analyst AI",
                 description="FAIR methodology expert for risk quantification",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -404,7 +404,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="bia_specialist_colleague",
-                name="🔍 BIA Specialist AI",
+                name=" BIA Specialist AI",
                 description="Business Impact Analysis expert",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -429,7 +429,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="plan_generator_colleague",
-                name="📋 Plan Generator AI",
+                name=" Plan Generator AI",
                 description="BCP/DRP plan creation expert with conversational interface",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -454,7 +454,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="incident_advisor_colleague",
-                name="🚨 Incident Advisor AI",
+                name=" Incident Advisor AI",
                 description="Incident response and crisis management expert",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -479,7 +479,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="exercise_designer_colleague",
-                name="🎭 Exercise Designer AI",
+                name=" Exercise Designer AI",
                 description="BCM exercise and training scenario expert",
                 category=ToolCategory.AI_COLLEAGUE,
                 base_url="http://localhost:8032",
@@ -507,7 +507,7 @@ class ToolRegistry:
         platform_tools = [
             ToolDefinition(
                 tool_id="ai_orchestration",
-                name="🎯 AI Orchestration",
+                name=" AI Orchestration",
                 description="Unified orchestration system (8 orchestrators in 1)",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8002",
@@ -526,7 +526,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="eventbus",
-                name="📡 EventBus",
+                name=" EventBus",
                 description="Event pub/sub, history, WebSocket streaming",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8001",
@@ -544,7 +544,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="bpmn_workflow",
-                name="🔄 BPMN Workflow",
+                name=" BPMN Workflow",
                 description="BPMN process engine for complex workflows",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8003",
@@ -563,7 +563,7 @@ class ToolRegistry:
 
             ToolDefinition(
                 tool_id="notification_service",
-                name="📧 Notification Service",
+                name=" Notification Service",
                 description="Multi-channel notifications (Email, SMS, Push, Webhooks)",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8035",
@@ -600,10 +600,10 @@ class ToolRegistry:
                 requires_auth=True,
                 rate_limit=100
             ),
-            # 🔍 Process Mining Service
+            #  Process Mining Service
             ToolDefinition(
                 tool_id="process_mining_service",
-                name="🔍 Process Mining Service",
+                name=" Process Mining Service",
                 description="Advanced process analytics - discover patterns, detect deviations, analyze performance",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8040",
@@ -664,10 +664,10 @@ class ToolRegistry:
                 requires_auth=True,
                 rate_limit=100
             ),
-            # 🔍 Monitoring Service
+            #  Monitoring Service
             ToolDefinition(
                 tool_id="monitoring_service",
-                name="🔍 Monitoring Service",
+                name=" Monitoring Service",
                 description="Centralized monitoring, logging, and alerting - health checks, metrics, real-time dashboard",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8045",
@@ -722,10 +722,10 @@ class ToolRegistry:
                 requires_auth=True,
                 rate_limit=100
             ),
-            # 🚀 Realtime WebSocket Service
+            #  Realtime WebSocket Service
             ToolDefinition(
                 tool_id="realtime_websocket",
-                name="🚀 Realtime WebSocket Service",
+                name=" Realtime WebSocket Service",
                 description="Real-time WebSocket communications - chat, notifications, live updates, collaborative features",
                 category=ToolCategory.PLATFORM,
                 base_url="http://localhost:8050",

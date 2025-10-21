@@ -190,14 +190,14 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         self.coordination_center_url = "http://localhost:8004"
         self.deployment_service_url = "http://localhost:8090"
 
-        logger.info(f"✅ UnifiedOrchestrator initialized (adaptive_metrics={'enabled' if HAS_ADAPTIVE_METRICS else 'disabled'})")
+        logger.info(f" UnifiedOrchestrator initialized (adaptive_metrics={'enabled' if HAS_ADAPTIVE_METRICS else 'disabled'})")
 
     async def discover_services(self) -> List[Dict[str, Any]]:
         """
         Шаг 1: Обнаружение всех сервисов
         Использует: tools/infrastructure/discover_services.py
         """
-        logger.info("🔍 Discovering all services...")
+        logger.info(" Discovering all services...")
 
         if not self.discovery:
             logger.error("ServiceDiscovery not available")
@@ -211,8 +211,8 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         with open(catalog_file, 'w') as f:
             json.dump(services, f, indent=2, default=str)
 
-        logger.info(f"✅ Discovered {len(services)} services")
-        logger.info(f"📁 Catalog saved: {catalog_file}")
+        logger.info(f" Discovered {len(services)} services")
+        logger.info(f" Catalog saved: {catalog_file}")
 
         return services
 
@@ -221,7 +221,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         Шаг 2: Генерация конфигураций
         Использует: docker_compose_generator.py
         """
-        logger.info("🏗️  Generating configurations...")
+        logger.info("️  Generating configurations...")
 
         if not HAS_DOCKER_COMPOSE_GENERATOR:
             logger.error("DockerComposeGenerator not available")
@@ -238,14 +238,14 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
             'full': self.generated_dir / 'docker-compose.full.yml',
         }
 
-        logger.info("✅ Configurations generated")
+        logger.info(" Configurations generated")
         return configs
 
     async def deploy_via_ai_orchestration(self, layer: str, configs: Dict[str, Path]) -> Dict:
         """
         Развёртывание через ai-orchestration (умное управление)
         """
-        logger.info("🧠 Deploying via AI Orchestration...")
+        logger.info(" Deploying via AI Orchestration...")
 
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -255,7 +255,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
                 if not health_response.is_success:
                     raise Exception("ai-orchestration not available")
 
-                logger.info("✅ ai-orchestration is available")
+                logger.info(" ai-orchestration is available")
 
                 # 2. Отправить задачу на развёртывание
                 deployment_task = {
@@ -275,8 +275,8 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
                 #     json=deployment_task
                 # )
 
-                logger.info(f"📤 Deployment task sent to ai-orchestration")
-                logger.info(f"📋 Task: {deployment_task}")
+                logger.info(f" Deployment task sent to ai-orchestration")
+                logger.info(f" Task: {deployment_task}")
 
                 return {
                     "status": "submitted",
@@ -285,7 +285,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
                 }
 
         except Exception as e:
-            logger.warning(f"⚠️  ai-orchestration not available: {e}")
+            logger.warning(f"️  ai-orchestration not available: {e}")
             logger.info("   Falling back to direct deployment...")
             return await self.deploy_direct(layer, configs)
 
@@ -293,7 +293,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         """
         Прямое развёртывание через docker-compose
         """
-        logger.info(f"🐳 Direct deployment: layer={layer}")
+        logger.info(f" Direct deployment: layer={layer}")
 
         compose_file = configs.get(layer)
         if not compose_file or not compose_file.exists():
@@ -303,7 +303,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         start_script = self.generated_dir / 'start_infrastructure.sh'
 
         if start_script.exists():
-            logger.info("📜 Using startup script")
+            logger.info(" Using startup script")
             import subprocess
             result = subprocess.run(
                 [str(start_script), layer],
@@ -325,7 +325,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
                 }
         else:
             # Прямой docker-compose
-            logger.info("🐳 Using docker-compose directly")
+            logger.info(" Using docker-compose directly")
             import subprocess
             result = subprocess.run(
                 ['docker-compose', '-f', str(compose_file), 'up', '-d'],
@@ -350,7 +350,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         """
         Главный метод развёртывания
         """
-        logger.info("🚀 Starting deployment process...")
+        logger.info(" Starting deployment process...")
         logger.info(f"   Layer: {layer}")
         logger.info(f"   Use AI Orchestration: {use_ai}")
 
@@ -358,13 +358,13 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
             # 1. Обнаружить сервисы (если каталог не существует)
             catalog_file = self.generated_dir / 'service-catalog.json'
             if not catalog_file.exists():
-                logger.info("📊 Service catalog not found, discovering...")
+                logger.info(" Service catalog not found, discovering...")
                 await self.discover_services()
 
             # 2. Сгенерировать конфиги (если не существуют)
             compose_file = self.generated_dir / f'docker-compose.{layer}.yml'
             if not compose_file.exists():
-                logger.info("🏗️  Configurations not found, generating...")
+                logger.info("️  Configurations not found, generating...")
                 configs = await self.generate_configs()
             else:
                 configs = {
@@ -377,11 +377,11 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
             else:
                 result = await self.deploy_direct(layer, configs)
 
-            logger.info("✅ Deployment process completed")
+            logger.info(" Deployment process completed")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Deployment failed: {e}", exc_info=True)
+            logger.error(f" Deployment failed: {e}", exc_info=True)
             return {
                 "status": "error",
                 "message": str(e)
@@ -389,7 +389,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
 
     async def status(self) -> Dict:
         """Проверка статуса всей инфраструктуры"""
-        logger.info("📊 Checking infrastructure status...")
+        logger.info(" Checking infrastructure status...")
 
         status = {
             "generated_configs": {},
@@ -466,7 +466,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         action = task.get('action')
         parameters = task.get('parameters', {})
 
-        logger.info(f"🎯 Executing task: type={task_type}, action={action}")
+        logger.info(f" Executing task: type={task_type}, action={action}")
 
         if task_type == 'event':
             return await self._execute_event_task(action, parameters)
@@ -486,7 +486,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
 
     async def _execute_event_task(self, action: str, parameters: Dict) -> Dict:
         """Выполняет event-related задачи"""
-        logger.info(f"🔧 Executing event task: {action}")
+        logger.info(f" Executing event task: {action}")
 
         if not self.event_executor:
             return {'success': False, 'error': 'EventExecutor not available'}
@@ -534,7 +534,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
 
     async def _execute_infrastructure_task(self, action: str, parameters: Dict) -> Dict:
         """Выполняет infrastructure задачи (deploy/restart/stop)"""
-        logger.info(f"🐳 Executing infrastructure task: {action}")
+        logger.info(f" Executing infrastructure task: {action}")
 
         if not self.infrastructure_executor and action != 'deploy':
             return {'success': False, 'error': 'InfrastructureExecutor not available'}
@@ -566,7 +566,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
 
         ВОПРОС: Правильно ли это здесь? Или BCM должен быть отдельно?
         """
-        logger.info(f"🔍 Executing BCM task: {action}")
+        logger.info(f" Executing BCM task: {action}")
 
         if not self.bcm_executor:
             return {
@@ -583,13 +583,13 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
 
     async def _execute_code_task(self, action: str, parameters: Dict) -> Dict:
         """Выполняет code-related задачи"""
-        logger.info(f"💻 Executing code task: {action}")
+        logger.info(f" Executing code task: {action}")
         # TODO: Implement code executor
         return {'success': True, 'message': 'Code tasks not yet implemented'}
 
     async def _execute_database_task(self, action: str, parameters: Dict) -> Dict:
         """Выполняет database задачи"""
-        logger.info(f"🗄️  Executing database task: {action}")
+        logger.info(f"️  Executing database task: {action}")
         # TODO: Implement database executor
         return {'success': True, 'message': 'Database tasks not yet implemented'}
 
@@ -603,7 +603,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
         Returns:
             Summary of results
         """
-        logger.info(f"🔧 Fixing {len(gaps)} event gaps...")
+        logger.info(f" Fixing {len(gaps)} event gaps...")
 
         results = {
             'total': len(gaps),
@@ -631,7 +631,7 @@ class UnifiedOrchestrator(AdaptiveOrchestratorMixin):
                 'result': result
             })
 
-        logger.info(f"✅ Fixed {results['success']}/{results['total']} gaps")
+        logger.info(f" Fixed {results['success']}/{results['total']} gaps")
 
         return results
 
@@ -1036,13 +1036,13 @@ async def cli_main():
 
     elif args.command == 'deploy':
         result = await orch.deploy(layer=args.layer, use_ai=not args.no_ai)
-        print(f"\n✅ Result: {result}")
+        print(f"\n Result: {result}")
 
     elif args.command == 'build-and-deploy':
         await orch.discover_services()
         await orch.generate_configs()
         result = await orch.deploy(layer=args.layer, use_ai=not args.no_ai)
-        print(f"\n✅ Result: {result}")
+        print(f"\n Result: {result}")
 
     elif args.command == 'status':
         status = await orch.status()

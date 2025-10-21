@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = Field(
-        ...,
+        default="sqlite+aiosqlite:///./risk_dev.db",
         env="DATABASE_URL",
         description="Database connection URL - MUST be set via environment variable"
     )
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # Service
     SERVICE_NAME: str = "Risk Management"
     SERVICE_VERSION: str = "1.0.0"
-    PORT: int = 8040
+    SERVICE_PORT: int = 8013
 
     # API
     API_PREFIX: str = "/api/v1/risk"

@@ -28,7 +28,7 @@ try:
     RABBITMQ_AVAILABLE = True
 except ImportError:
     RABBITMQ_AVAILABLE = False
-    print("⚠️  aio_pika not installed. EventBus will run in mock mode.")
+    print("️  aio_pika not installed. EventBus will run in mock mode.")
     print("   Install: pip install aio-pika")
 
 
@@ -61,7 +61,7 @@ class EventBus:
     async def connect(self):
         """Connect to RabbitMQ"""
         if self.mock_mode:
-            print(f"📡 EventBus ({self.service_name}): Running in MOCK mode")
+            print(f" EventBus ({self.service_name}): Running in MOCK mode")
             self.is_connected = True
             return
 
@@ -84,10 +84,10 @@ class EventBus:
             )
 
             self.is_connected = True
-            print(f"✅ EventBus ({self.service_name}): Connected to RabbitMQ")
+            print(f" EventBus ({self.service_name}): Connected to RabbitMQ")
 
         except Exception as e:
-            print(f"⚠️  EventBus ({self.service_name}): Failed to connect - {e}")
+            print(f"️  EventBus ({self.service_name}): Failed to connect - {e}")
             print(f"   Falling back to MOCK mode")
             self.mock_mode = True
             self.is_connected = True
@@ -95,14 +95,14 @@ class EventBus:
     async def disconnect(self):
         """Disconnect from RabbitMQ"""
         if self.mock_mode:
-            print(f"📡 EventBus ({self.service_name}): Mock mode - no disconnect needed")
+            print(f" EventBus ({self.service_name}): Mock mode - no disconnect needed")
             self.is_connected = False
             return
 
         if self.connection:
             await self.connection.close()
             self.is_connected = False
-            print(f"👋 EventBus ({self.service_name}): Disconnected")
+            print(f" EventBus ({self.service_name}): Disconnected")
 
     async def publish(
         self,
@@ -119,7 +119,7 @@ class EventBus:
             routing_key: Routing key (defaults to event_type)
         """
         if not self.is_connected:
-            print(f"⚠️  EventBus not connected. Event not published: {event_type}")
+            print(f"️  EventBus not connected. Event not published: {event_type}")
             return
 
         # Prepare event message
@@ -132,7 +132,7 @@ class EventBus:
 
         if self.mock_mode:
             # Mock mode - just log
-            print(f"📤 EVENT PUBLISHED: {event_type}")
+            print(f" EVENT PUBLISHED: {event_type}")
             print(f"   Data: {json.dumps(data, indent=2)}")
             return
 
@@ -149,10 +149,10 @@ class EventBus:
                 routing_key=routing_key or event_type
             )
 
-            print(f"✅ Event published: {event_type}")
+            print(f" Event published: {event_type}")
 
         except Exception as e:
-            print(f"❌ Failed to publish event {event_type}: {e}")
+            print(f" Failed to publish event {event_type}: {e}")
 
     async def subscribe(
         self,
@@ -169,13 +169,13 @@ class EventBus:
             routing_key: Routing pattern (supports wildcards)
         """
         if not self.is_connected:
-            print(f"⚠️  EventBus not connected. Cannot subscribe: {event_type}")
+            print(f"️  EventBus not connected. Cannot subscribe: {event_type}")
             return
 
         self.handlers[event_type] = handler
 
         if self.mock_mode:
-            print(f"📥 SUBSCRIBED (mock): {event_type}")
+            print(f" SUBSCRIBED (mock): {event_type}")
             return
 
         try:
@@ -185,19 +185,19 @@ class EventBus:
                 routing_key=routing_key or event_type
             )
 
-            print(f"✅ Subscribed to: {event_type}")
+            print(f" Subscribed to: {event_type}")
 
         except Exception as e:
-            print(f"❌ Failed to subscribe to {event_type}: {e}")
+            print(f" Failed to subscribe to {event_type}: {e}")
 
     async def start_consuming(self):
         """Start consuming messages from queue"""
         if self.mock_mode:
-            print(f"📡 EventBus ({self.service_name}): Mock mode - not consuming")
+            print(f" EventBus ({self.service_name}): Mock mode - not consuming")
             return
 
         if not self.queue:
-            print(f"⚠️  Queue not initialized")
+            print(f"️  Queue not initialized")
             return
 
         try:
@@ -207,7 +207,7 @@ class EventBus:
                         await self._process_message(message)
 
         except Exception as e:
-            print(f"❌ Error consuming messages: {e}")
+            print(f" Error consuming messages: {e}")
 
     async def _process_message(self, message):
         """Process incoming message"""
@@ -217,7 +217,7 @@ class EventBus:
             event_type = body.get("event_type")
             data = body.get("data", {})
 
-            print(f"📥 EVENT RECEIVED: {event_type}")
+            print(f" EVENT RECEIVED: {event_type}")
 
             # Find handler
             handler = self.handlers.get(event_type)
@@ -225,12 +225,12 @@ class EventBus:
             if handler:
                 # Execute handler
                 await handler(data)
-                print(f"✅ Event handled: {event_type}")
+                print(f" Event handled: {event_type}")
             else:
-                print(f"⚠️  No handler for event: {event_type}")
+                print(f"️  No handler for event: {event_type}")
 
         except Exception as e:
-            print(f"❌ Error processing message: {e}")
+            print(f" Error processing message: {e}")
 
 
 # ============================================================================

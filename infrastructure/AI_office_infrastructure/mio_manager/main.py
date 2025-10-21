@@ -105,73 +105,73 @@ async def lifespan(app: FastAPI):
     global metrics_coverage_observer, metrics_health_checker, mio_event_handlers  # Phase 2.1 (MIO EYES)
     global scenario_intelligence_client  # Scenario Intelligence
 
-    logger.info("🚀 AI MIO Manager v2.0 starting...")
-    logger.info("   🧠 Enhanced with AI Intelligence Layer")
-    logger.info("   📊 Battle-Ready Monitoring & Automation")
+    logger.info(" AI MIO Manager v2.0 starting...")
+    logger.info("    Enhanced with AI Intelligence Layer")
+    logger.info("    Battle-Ready Monitoring & Automation")
 
     # Initialize database
     init_database()
-    logger.info("   ✅ Database initialized")
+    logger.info("    Database initialized")
 
     # Initialize AI Intelligence Layer
     try:
         ai_coordinator = AICoordinator()
         decision_engine = DecisionEngine()
         learning_tracker = LearningTracker()
-        logger.info("   ✅ AI Intelligence Layer initialized")
+        logger.info("    AI Intelligence Layer initialized")
 
         if ai_coordinator.enabled:
-            logger.info("   🧠 AI-powered decision making enabled")
+            logger.info("    AI-powered decision making enabled")
         else:
-            logger.warning("   ⚠️  AI Foundation not available - using fallback mode")
+            logger.warning("   ️  AI Foundation not available - using fallback mode")
     except Exception as e:
-        logger.error(f"   ❌ AI Intelligence initialization failed: {e}")
-        logger.warning("   ⚠️  Running without AI Intelligence")
+        logger.error(f"    AI Intelligence initialization failed: {e}")
+        logger.warning("   ️  Running without AI Intelligence")
 
     # Initialize Automation Toolkit Manager
     toolkit_manager = AutomationToolkitManager()
-    logger.info("   ✅ Automation Toolkit Manager initialized")
+    logger.info("    Automation Toolkit Manager initialized")
 
     # Initialize Orchestrator Client
     orchestrator_client = OrchestratorClient(
         orchestrator_url=settings.ORCHESTRATOR_URL
     )
-    logger.info("   ✅ Orchestrator Client initialized")
+    logger.info("    Orchestrator Client initialized")
 
     # Initialize Gateway Manager
     gateway_manager = GatewayManager(
         gateway_url=settings.GATEWAY_URL
     )
-    logger.info("   ✅ Gateway Manager initialized")
+    logger.info("    Gateway Manager initialized")
 
     # Initialize v2.0 Integration Clients
-    logger.info("   🔌 Initializing v2.0 integration clients...")
+    logger.info("    Initializing v2.0 integration clients...")
 
     brain_client = WorkflowIntelligenceClient(
         workflow_intelligence_url=settings.WORKFLOW_INTELLIGENCE_URL
     )
-    logger.info("   ✅ Brain Client (workflow_intelligence) initialized")
+    logger.info("    Brain Client (workflow_intelligence) initialized")
 
     predictive_client = PredictiveClient(
         base_url=settings.PREDICTIVE_URL
     )
-    logger.info("   ✅ Predictive Client initialized")
+    logger.info("    Predictive Client initialized")
 
     optimizer_client = WorkflowOptimizerClient(
         optimizer_url=settings.OPTIMIZER_URL
     )
-    logger.info("   ✅ Optimizer Client initialized")
+    logger.info("    Optimizer Client initialized")
 
     coordinator_client = CoordinationCenterClient(
         coordination_url=settings.COORDINATION_CENTER_URL
     )
-    logger.info("   ✅ Coordination Center Client initialized")
+    logger.info("    Coordination Center Client initialized")
 
     # Initialize Compliance Monitoring Client
     compliance_client = ComplianceMonitoringClient(
         base_url=settings.COMPLIANCE_MONITORING_URL
     )
-    logger.info("   ✅ Compliance Monitoring Client initialized")
+    logger.info("    Compliance Monitoring Client initialized")
 
     # Initialize Resource Tracker (Phase 2 - ГЛАЗА)
     try:
@@ -179,38 +179,38 @@ async def lifespan(app: FastAPI):
         if not eventbus_client:
             eventbus_client = EventBusClient()
             await eventbus_client.connect()
-            logger.info("   ✅ EventBus Client initialized for Resource Tracker")
+            logger.info("    EventBus Client initialized for Resource Tracker")
 
         resource_tracker = ResourceTrackerClient(
             eventbus=eventbus_client,
             check_interval=60  # Check every 60 seconds
         )
         await resource_tracker.start()
-        logger.info("   👀 Resource Tracker started (Phase 2 - ГЛАЗА)")
+        logger.info("    Resource Tracker started (Phase 2 - ГЛАЗА)")
     except Exception as e:
-        logger.error(f"   ⚠️  Resource Tracker initialization failed: {e}")
-        logger.warning("   ⚠️  Running without Resource Tracker")
+        logger.error(f"   ️  Resource Tracker initialization failed: {e}")
+        logger.warning("   ️  Running without Resource Tracker")
 
     # Initialize AI Event Manager Client
     ai_event_manager_client = AIEventManagerClient(
         base_url=settings.AI_EVENT_MANAGER_URL
     )
-    logger.info("   ✅ AI Event Manager Client initialized")
+    logger.info("    AI Event Manager Client initialized")
 
     # Initialize DevOps Agent Client
     devops_agent_client = DevOpsAgentClient(
         base_url=settings.DEVOPS_AGENT_URL
     )
-    logger.info("   ✅ DevOps Agent Client initialized")
+    logger.info("    DevOps Agent Client initialized")
 
     # Initialize EventBus Client (v2.0 - критично!)
-    logger.info("   📡 Initializing EventBus Client...")
+    logger.info("    Initializing EventBus Client...")
     eventbus_client = EventBusClient(
         backend='redis',  # or 'memory' for testing
         redis_url=settings.REDIS_URL if hasattr(settings, 'REDIS_URL') else 'redis://localhost:6379'
     )
     await eventbus_client.initialize()
-    logger.info("   ✅ EventBus Client initialized")
+    logger.info("    EventBus Client initialized")
 
     # Setup Event Handlers
     from reaction.escalation_manager import EscalationManager
@@ -233,10 +233,10 @@ async def lifespan(app: FastAPI):
 
     # Start EventBus consumer
     await eventbus_client.start_consumer()
-    logger.info("   ✅ EventBus subscriptions active")
+    logger.info("    EventBus subscriptions active")
 
     # Initialize MIO EYES components (Phase 2.1)
-    logger.info("   👀 Initializing MIO EYES components...")
+    logger.info("    Initializing MIO EYES components...")
 
     # 1. Metrics Coverage Observer
     metrics_coverage_observer = MetricsCoverageObserver(
@@ -244,14 +244,14 @@ async def lifespan(app: FastAPI):
         service_discovery_url=settings.SERVICE_DISCOVERY_URL if hasattr(settings, 'SERVICE_DISCOVERY_URL') else 'http://service-discovery:8500',
         prometheus_url=settings.PROMETHEUS_URL if hasattr(settings, 'PROMETHEUS_URL') else 'http://prometheus:9090'
     )
-    logger.info("   ✅ Metrics Coverage Observer initialized")
+    logger.info("    Metrics Coverage Observer initialized")
 
     # 2. Metrics Health Checker
     metrics_health_checker = MetricsHealthChecker(
         eventbus=eventbus_client,
         prometheus_url=settings.PROMETHEUS_URL if hasattr(settings, 'PROMETHEUS_URL') else 'http://prometheus:9090'
     )
-    logger.info("   ✅ Metrics Health Checker initialized")
+    logger.info("    Metrics Health Checker initialized")
 
     # 3. MIO Event Handlers
     mio_event_handlers = MioEventHandlers(
@@ -259,7 +259,7 @@ async def lifespan(app: FastAPI):
         prometheus_url=settings.PROMETHEUS_URL if hasattr(settings, 'PROMETHEUS_URL') else 'http://prometheus:9090',
         service_discovery_url=settings.SERVICE_DISCOVERY_URL if hasattr(settings, 'SERVICE_DISCOVERY_URL') else 'http://service-discovery:8500'
     )
-    logger.info("   ✅ MIO Event Handlers initialized")
+    logger.info("    MIO Event Handlers initialized")
 
     # Subscribe to Service Discovery events
     await eventbus_client.subscribe(
@@ -274,19 +274,19 @@ async def lifespan(app: FastAPI):
         'platform.monitoring.critical_timeout',
         mio_event_handlers.handle_service_timeout
     )
-    logger.info("   ✅ Subscribed to Service Discovery events")
-    logger.info("   👀 MIO EYES components ready")
+    logger.info("    Subscribed to Service Discovery events")
+    logger.info("    MIO EYES components ready")
 
     # Initialize Scenario Intelligence Client
-    logger.info("   🎬 Initializing Scenario Intelligence Client...")
+    logger.info("    Initializing Scenario Intelligence Client...")
     scenario_intelligence_client = ScenarioIntelligenceClient(
         eventbus_client=eventbus_client
     )
     await scenario_intelligence_client.subscribe_to_events()
-    logger.info("   ✅ Scenario Intelligence Client initialized and subscribed")
+    logger.info("    Scenario Intelligence Client initialized and subscribed")
 
     # Initialize SmartScheduler (v2.0 - критично!)
-    logger.info("   🗓️  Initializing SmartScheduler...")
+    logger.info("   ️  Initializing SmartScheduler...")
     smart_scheduler = SmartScheduler(
         workflow_intelligence_client=brain_client,
         predictive_client=predictive_client,
@@ -301,7 +301,7 @@ async def lifespan(app: FastAPI):
         metrics_health_checker=metrics_health_checker  # NEW: Phase 2.1
     )
     await smart_scheduler.start()
-    logger.info("   ✅ SmartScheduler started with all cycles")
+    logger.info("    SmartScheduler started with all cycles")
 
     # Start legacy automation scheduler (for backward compatibility)
     start_scheduler(
@@ -309,30 +309,30 @@ async def lifespan(app: FastAPI):
         orchestrator_client=orchestrator_client,
         gateway_manager=gateway_manager
     )
-    logger.info("   ✅ Legacy automation scheduler started")
+    logger.info("    Legacy automation scheduler started")
 
     # Initial service discovery
     discovery_result = await toolkit_manager.discover_services()
-    logger.info(f"   📊 Discovered {discovery_result['total_services']} services")
-    logger.info(f"   📈 Coverage: {discovery_result['coverage']['percentage']:.1f}%")
+    logger.info(f"    Discovered {discovery_result['total_services']} services")
+    logger.info(f"    Coverage: {discovery_result['coverage']['percentage']:.1f}%")
 
-    logger.info("✅ AI MIO Manager v2.0 ready on port 8046")
-    logger.info("   🧠 Intelligent, Self-Managing, Conversational")
-    logger.info("   👀 Platform Eyes with Deep Analysis Cycles")
+    logger.info(" AI MIO Manager v2.0 ready on port 8046")
+    logger.info("    Intelligent, Self-Managing, Conversational")
+    logger.info("    Platform Eyes with Deep Analysis Cycles")
 
     yield
 
     # Shutdown
-    logger.info("👋 AI MIO Manager v2.0 shutting down...")
+    logger.info(" AI MIO Manager v2.0 shutting down...")
 
     # Stop SmartScheduler
     if smart_scheduler:
         await smart_scheduler.stop()
-        logger.info("   ✅ SmartScheduler stopped")
+        logger.info("    SmartScheduler stopped")
 
     # Stop legacy scheduler
     stop_scheduler()
-    logger.info("   ✅ Legacy scheduler stopped")
+    logger.info("    Legacy scheduler stopped")
 
     # Close integration clients
     if eventbus_client:
@@ -349,13 +349,13 @@ async def lifespan(app: FastAPI):
         await compliance_client.close()
     if ai_event_manager_client:
         await ai_event_manager_client.close()
-    logger.info("   ✅ Integration clients closed")
+    logger.info("    Integration clients closed")
 
     # Export learning data
     if learning_tracker:
         export_path = Path(__file__).parent / 'learning_data' / 'export.json'
         learning_tracker.export_learning_data(str(export_path))
-        logger.info("   ✅ Learning data exported")
+        logger.info("    Learning data exported")
 
 
 # FastAPI app

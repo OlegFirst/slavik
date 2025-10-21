@@ -46,7 +46,7 @@ class ScenarioEventHandlers:
         exercise_type = payload.get("exercise_type")
 
         logger.info(
-            f"📬 Exercise created: {exercise_id} for scenario {scenario_id} "
+            f" Exercise created: {exercise_id} for scenario {scenario_id} "
             f"(type: {exercise_type})"
         )
 
@@ -72,7 +72,7 @@ class ScenarioEventHandlers:
         metrics = payload.get("metrics", {})
 
         logger.info(
-            f"📬 Simulation completed: {simulation_id} for scenario {scenario_id}, "
+            f" Simulation completed: {simulation_id} for scenario {scenario_id}, "
             f"effectiveness={effectiveness:.2%}"
         )
 
@@ -101,7 +101,7 @@ class ScenarioEventHandlers:
         error = payload.get("error", "Unknown error")
 
         logger.warning(
-            f"⚠️ Simulation failed: {simulation_id} for scenario {scenario_id}, "
+            f"️ Simulation failed: {simulation_id} for scenario {scenario_id}, "
             f"error: {error}"
         )
 
@@ -133,7 +133,7 @@ class ScenarioEventHandlers:
         result = payload.get("result", {})
 
         logger.info(
-            f"📬 AI task completed: {task_id} (type: {task_type})"
+            f" AI task completed: {task_id} (type: {task_type})"
         )
 
         # If it's scenario generation task, store the generated scenario
@@ -166,7 +166,7 @@ class ScenarioEventHandlers:
         risks = payload.get("risks", [])
 
         logger.info(
-            f"📬 Safety check completed for {scenario_id}: "
+            f" Safety check completed for {scenario_id}: "
             f"safe={safe}, risks={len(risks)}"
         )
 
@@ -200,7 +200,7 @@ class ScenarioEventHandlers:
         feedback = payload.get("feedback", [])
 
         logger.info(
-            f"📬 Community validation completed for {scenario_id}: "
+            f" Community validation completed for {scenario_id}: "
             f"approved={approved}, score={score:.2f}"
         )
 
@@ -230,7 +230,7 @@ class ScenarioEventHandlers:
         confidence = payload.get("confidence", 0.0)
 
         logger.info(
-            f"📬 Consensus reached for {scenario_id}: "
+            f" Consensus reached for {scenario_id}: "
             f"{consensus} (confidence={confidence:.2%})"
         )
 
@@ -256,7 +256,7 @@ class ScenarioEventHandlers:
         prediction = payload.get("prediction", {})
 
         logger.info(
-            f"📬 Prediction completed for {scenario_id}: "
+            f" Prediction completed for {scenario_id}: "
             f"type={prediction_type}"
         )
 
@@ -265,7 +265,7 @@ class ScenarioEventHandlers:
             probability = prediction.get("probability", 0.0)
             if probability > 0.5:
                 logger.warning(
-                    f"⚠️ High failure probability ({probability:.2%}) "
+                    f"️ High failure probability ({probability:.2%}) "
                     f"for scenario {scenario_id}"
                 )
                 # TODO: Trigger optimization
@@ -289,7 +289,7 @@ class ScenarioEventHandlers:
         severity = payload.get("severity", "low")
 
         logger.warning(
-            f"⚠️ Anomaly detected in {scenario_id}: "
+            f"️ Anomaly detected in {scenario_id}: "
             f"type={anomaly_type}, severity={severity}"
         )
 
@@ -322,7 +322,7 @@ class ScenarioEventHandlers:
         confidence = payload.get("confidence", 0.0)
 
         logger.info(
-            f"📬 Pattern detected: type={pattern_type}, "
+            f" Pattern detected: type={pattern_type}, "
             f"confidence={confidence:.2%}"
         )
 
@@ -354,7 +354,7 @@ class ScenarioEventHandlers:
         result = payload.get("result", {})
 
         logger.info(
-            f"📬 Workflow completed: {workflow_id} for scenario {scenario_id}"
+            f" Workflow completed: {workflow_id} for scenario {scenario_id}"
         )
 
         # Update scenario workflow status
@@ -382,7 +382,7 @@ class ScenarioEventHandlers:
         improvements = payload.get("improvements", [])
 
         logger.info(
-            f"📬 PDCA cycle completed for {scenario_id}: "
+            f" PDCA cycle completed for {scenario_id}: "
             f"{len(improvements)} improvements"
         )
 
@@ -415,7 +415,7 @@ class ScenarioEventHandlers:
         gaps = payload.get("gaps", [])
 
         logger.info(
-            f"📬 Compliance validation completed for {scenario_id}: "
+            f" Compliance validation completed for {scenario_id}: "
             f"compliant={compliant}, score={score:.2%}"
         )
 
@@ -444,7 +444,7 @@ class ScenarioEventHandlers:
         scenarios_count = payload.get("scenarios_count", 0)
 
         logger.info(
-            f"📬 Framework scenarios loaded: {framework}, "
+            f" Framework scenarios loaded: {framework}, "
             f"count={scenarios_count}"
         )
 
@@ -469,7 +469,7 @@ class ScenarioEventHandlers:
         severity = payload.get("severity", "low")
 
         logger.warning(
-            f"⚠️ System health degraded: service={service}, "
+            f"️ System health degraded: service={service}, "
             f"severity={severity}"
         )
 
@@ -494,7 +494,7 @@ class ScenarioEventHandlers:
         payload = event.get("payload", {})
         service = payload.get("service")
 
-        logger.info(f"✅ System recovered: service={service}")
+        logger.info(f" System recovered: service={service}")
 
         # Resume paused scenarios
         # TODO: Implement resume logic

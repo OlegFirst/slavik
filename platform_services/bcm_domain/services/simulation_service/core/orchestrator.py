@@ -203,7 +203,7 @@ class SimulationOrchestrator:
         Returns:
             Complete cycle results including simulation, results, report, learning
         """
-        logger.info(f"🚀 Starting FULL simulation cycle")
+        logger.info(f" Starting FULL simulation cycle")
         logger.info(f"Input: {user_input[:100]}...")
 
         cycle_results = {
@@ -216,7 +216,7 @@ class SimulationOrchestrator:
             # ================================================================
             # PHASE 1: SPECIFICATION FORMATION
             # ================================================================
-            logger.info("📋 PHASE 1: Specification Formation")
+            logger.info(" PHASE 1: Specification Formation")
 
             specification = await self.scenario_generator.generate_from_natural_language(
                 user_input=user_input,
@@ -235,12 +235,12 @@ class SimulationOrchestrator:
                 "specification_id": spec_orm.id,
                 "goal": specification.goal
             }
-            logger.info(f"✅ Specification created: {spec_orm.id}")
+            logger.info(f" Specification created: {spec_orm.id}")
 
             # ================================================================
             # PHASE 2: TOOL & TEMPLATE SELECTION
             # ================================================================
-            logger.info("🔧 PHASE 2: Tool & Template Selection")
+            logger.info(" PHASE 2: Tool & Template Selection")
 
             # Get tool recommendations
             tool_recommendations = await self.scenario_generator.recommend_tools(
@@ -270,12 +270,12 @@ class SimulationOrchestrator:
                 "engine_selected": selected_engine.value,
                 "tool_recommendations": tool_recommendations
             }
-            logger.info(f"✅ Scenario created: {scenario_orm.id}, Engine: {selected_engine.value}")
+            logger.info(f" Scenario created: {scenario_orm.id}, Engine: {selected_engine.value}")
 
             # ================================================================
             # PHASE 3: VALIDATION
             # ================================================================
-            logger.info("✔️ PHASE 3: Validation")
+            logger.info("️ PHASE 3: Validation")
 
             validation = await self.ai_orchestrator.validate_specification(
                 specification=specification,
@@ -283,7 +283,7 @@ class SimulationOrchestrator:
             )
 
             if not validation.get("is_valid", False):
-                logger.warning(f"⚠️ Validation issues: {validation.get('suggestions')}")
+                logger.warning(f"️ Validation issues: {validation.get('suggestions')}")
 
             cycle_results["phases"]["validation"] = {
                 "status": "completed",
@@ -291,12 +291,12 @@ class SimulationOrchestrator:
                 "confidence": validation.get("confidence"),
                 "suggestions": validation.get("suggestions", [])
             }
-            logger.info(f"✅ Validation completed: valid={validation.get('is_valid')}")
+            logger.info(f" Validation completed: valid={validation.get('is_valid')}")
 
             # ================================================================
             # PHASE 4: SIMULATION EXECUTION
             # ================================================================
-            logger.info("⚙️ PHASE 4: Simulation Execution")
+            logger.info("️ PHASE 4: Simulation Execution")
 
             # Create simulation instance
             simulation = Simulation(
@@ -335,7 +335,7 @@ class SimulationOrchestrator:
 
             # TODO: Execute simulation with selected engine
             # For now, we'll simulate execution with mock results
-            logger.info(f"🔄 Executing simulation with {selected_engine.value} engine...")
+            logger.info(f" Executing simulation with {selected_engine.value} engine...")
 
             # Update status to running
             await self.simulation_repo.update_status(
@@ -395,7 +395,7 @@ class SimulationOrchestrator:
                 "duration_seconds": results.duration_seconds,
                 "success_rate": results.overall_success_rate
             }
-            logger.info(f"✅ Simulation executed: success_rate={results.overall_success_rate}")
+            logger.info(f" Simulation executed: success_rate={results.overall_success_rate}")
 
             # Publish simulation.completed event
             await self.eventbus.publish_simulation_completed(
@@ -405,7 +405,7 @@ class SimulationOrchestrator:
             # ================================================================
             # PHASE 5: ANALYSIS
             # ================================================================
-            logger.info("🔍 PHASE 5: Analysis")
+            logger.info(" PHASE 5: Analysis")
 
             analysis = await self.ai_orchestrator.analyze_results(
                 simulation_id=simulation_orm.id,
@@ -419,12 +419,12 @@ class SimulationOrchestrator:
                 "contribution_worthy": analysis.get("contribution_worthy"),
                 "insights": analysis.get("analysis")
             }
-            logger.info(f"✅ Analysis completed: quality={analysis.get('quality_score')}")
+            logger.info(f" Analysis completed: quality={analysis.get('quality_score')}")
 
             # ================================================================
             # PHASE 6: REPORTING
             # ================================================================
-            logger.info("📊 PHASE 6: Report Generation")
+            logger.info(" PHASE 6: Report Generation")
 
             report = await self.report_generator.generate_full_report(
                 simulation=simulation,
@@ -439,12 +439,12 @@ class SimulationOrchestrator:
                 "report_id": report["report_id"],
                 "report_path": report["file_path"]
             }
-            logger.info(f"✅ Report generated: {report['file_path']}")
+            logger.info(f" Report generated: {report['file_path']}")
 
             # ================================================================
             # PHASE 7: LEARNING & MEMORY INTEGRATION
             # ================================================================
-            logger.info("🧠 PHASE 7: Learning & Memory Integration")
+            logger.info(" PHASE 7: Learning & Memory Integration")
 
             learning_results = {}
 
@@ -514,7 +514,7 @@ class SimulationOrchestrator:
                 "status": "completed",
                 **learning_results
             }
-            logger.info(f"✅ Learning integrated: PDCA={pdca_id}, Case={case_id}, "
+            logger.info(f" Learning integrated: PDCA={pdca_id}, Case={case_id}, "
                        f"ScenarioOrch={orchestrator_learning.get('status')}")
 
             # ================================================================
@@ -523,11 +523,11 @@ class SimulationOrchestrator:
             cycle_results["status"] = "completed"
             cycle_results["completed_at"] = datetime.utcnow().isoformat()
 
-            logger.info("🎉 ✅ FULL SIMULATION CYCLE COMPLETED SUCCESSFULLY!")
+            logger.info("  FULL SIMULATION CYCLE COMPLETED SUCCESSFULLY!")
             return cycle_results
 
         except Exception as e:
-            logger.error(f"❌ Simulation cycle failed: {e}", exc_info=True)
+            logger.error(f" Simulation cycle failed: {e}", exc_info=True)
             cycle_results["status"] = "failed"
             cycle_results["errors"].append(str(e))
             return cycle_results

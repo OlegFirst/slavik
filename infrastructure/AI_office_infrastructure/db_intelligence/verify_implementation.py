@@ -14,57 +14,57 @@ def check_file(file_path: str, min_lines: int = 0) -> bool:
     """Check if file exists and has minimum lines"""
     path = Path(file_path)
     if not path.exists():
-        print(f"❌ Missing: {file_path}")
+        print(f" Missing: {file_path}")
         return False
 
     if min_lines > 0:
         lines = len(path.read_text().splitlines())
         if lines < min_lines:
-            print(f"⚠️  {file_path} has only {lines} lines (expected {min_lines}+)")
+            print(f"️  {file_path} has only {lines} lines (expected {min_lines}+)")
             return False
 
-    print(f"✅ {file_path} ({len(path.read_text().splitlines())} lines)")
+    print(f" {file_path} ({len(path.read_text().splitlines())} lines)")
     return True
 
 
 def check_imports():
     """Check if all modules can be imported"""
-    print("\n🔍 Checking Imports...")
+    print("\n Checking Imports...")
 
     try:
         # Core service
         from db_intelligence_service import DatabaseIntelligenceService, get_db_intelligence
-        print("✅ db_intelligence_service imports successfully")
+        print(" db_intelligence_service imports successfully")
 
         # Security monitor
         from security_monitor import SecurityMonitor
-        print("✅ security_monitor imports successfully")
+        print(" security_monitor imports successfully")
 
         # AI integration
         from ai_integration import AIIntegration, get_ai_integration
-        print("✅ ai_integration imports successfully")
+        print(" ai_integration imports successfully")
 
         # Orchestrator integration
         from orchestrator_integration import OrchestratorClient, get_orchestrator_client
-        print("✅ orchestrator_integration imports successfully")
+        print(" orchestrator_integration imports successfully")
 
         # Command handler
         from command_handler import CommandHandler
-        print("✅ command_handler imports successfully")
+        print(" command_handler imports successfully")
 
         # API
         from api import app
-        print("✅ api imports successfully")
+        print(" api imports successfully")
 
         return True
     except Exception as e:
-        print(f"❌ Import error: {e}")
+        print(f" Import error: {e}")
         return False
 
 
 def check_features():
     """Check if all features are implemented"""
-    print("\n🔍 Checking Features...")
+    print("\n Checking Features...")
 
     from db_intelligence_service import DatabaseIntelligenceService
 
@@ -88,9 +88,9 @@ def check_features():
 
     for attr in attributes:
         if hasattr(service, attr):
-            print(f"✅ Attribute: {attr}")
+            print(f" Attribute: {attr}")
         else:
-            print(f"❌ Missing attribute: {attr}")
+            print(f" Missing attribute: {attr}")
             return False
 
     # Check methods
@@ -114,9 +114,9 @@ def check_features():
 
     for method in methods:
         if hasattr(service, method):
-            print(f"✅ Method: {method}")
+            print(f" Method: {method}")
         else:
-            print(f"❌ Missing method: {method}")
+            print(f" Missing method: {method}")
             return False
 
     return True
@@ -124,7 +124,7 @@ def check_features():
 
 def check_api_endpoints():
     """Check if all API endpoints are defined"""
-    print("\n🔍 Checking API Endpoints...")
+    print("\n Checking API Endpoints...")
 
     from api import app
 
@@ -145,9 +145,9 @@ def check_api_endpoints():
 
     for path in expected_paths:
         if path in routes:
-            print(f"✅ Endpoint: {path}")
+            print(f" Endpoint: {path}")
         else:
-            print(f"❌ Missing endpoint: {path}")
+            print(f" Missing endpoint: {path}")
             return False
 
     return True
@@ -155,7 +155,7 @@ def check_api_endpoints():
 
 def check_orchestrator_client():
     """Check Orchestrator client methods"""
-    print("\n🔍 Checking Orchestrator Client...")
+    print("\n Checking Orchestrator Client...")
 
     from orchestrator_integration import OrchestratorClient
 
@@ -176,9 +176,9 @@ def check_orchestrator_client():
 
     for method in methods:
         if hasattr(client, method):
-            print(f"✅ Method: {method}")
+            print(f" Method: {method}")
         else:
-            print(f"❌ Missing method: {method}")
+            print(f" Missing method: {method}")
             return False
 
     return True
@@ -186,7 +186,7 @@ def check_orchestrator_client():
 
 def check_command_handler():
     """Check Command Handler"""
-    print("\n🔍 Checking Command Handler...")
+    print("\n Checking Command Handler...")
 
     from command_handler import CommandHandler
     from db_intelligence_service import DatabaseIntelligenceService
@@ -208,9 +208,9 @@ def check_command_handler():
     for cmd in commands:
         method_name = f'_handle_{cmd}'
         if hasattr(handler, method_name):
-            print(f"✅ Command handler: {cmd}")
+            print(f" Command handler: {cmd}")
         else:
-            print(f"❌ Missing handler: {cmd}")
+            print(f" Missing handler: {cmd}")
             return False
 
     return True
@@ -229,7 +229,7 @@ def main():
     all_passed = True
 
     # Check files
-    print("\n🔍 Checking Files...")
+    print("\n Checking Files...")
     files = [
         ('db_intelligence_service.py', 600),
         ('security_monitor.py', 300),
@@ -271,9 +271,9 @@ def main():
     # Final result
     print("\n" + "=" * 60)
     if all_passed:
-        print("✅ ALL CHECKS PASSED - READY FOR PRODUCTION")
+        print(" ALL CHECKS PASSED - READY FOR PRODUCTION")
     else:
-        print("❌ SOME CHECKS FAILED - REVIEW ABOVE")
+        print(" SOME CHECKS FAILED - REVIEW ABOVE")
     print("=" * 60)
 
     return 0 if all_passed else 1

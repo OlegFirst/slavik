@@ -61,7 +61,7 @@ def example_manual_tracking():
         duration_seconds=time.time() - step_start,
         result="success"
     )
-    print("   ✓ Data collection step completed")
+    print("    Data collection step completed")
 
     # Track validation errors (if any)
     process_metrics.track_validation_error(
@@ -69,7 +69,7 @@ def example_manual_tracking():
         step_id="collect_data",
         field_name="rto_value"
     )
-    print("   ✓ Validation error tracked")
+    print("    Validation error tracked")
 
     # Step 2: Analysis
     step_start = time.time()
@@ -81,7 +81,7 @@ def example_manual_tracking():
         duration_seconds=time.time() - step_start,
         result="success"
     )
-    print("   ✓ Analysis step completed")
+    print("    Analysis step completed")
 
     # Generate document
     print("3. Generating report...")
@@ -89,7 +89,7 @@ def example_manual_tracking():
         template_id="bia_report",
         format="pdf"
     )
-    print("   ✓ PDF report generated")
+    print("    PDF report generated")
 
     # Complete process
     print("4. Completing process...")
@@ -100,7 +100,7 @@ def example_manual_tracking():
         duration_seconds=total_duration
     )
     process_metrics.decrement_active_instances("bia_process")
-    print(f"   ✓ Process completed in {total_duration:.2f}s")
+    print(f"    Process completed in {total_duration:.2f}s")
 
 
 # ============================================================================
@@ -121,7 +121,7 @@ async def execute_risk_assessment_process():
     # Step 3
     await execute_mitigation_planning()
 
-    print("   ✓ Risk assessment process completed")
+    print("    Risk assessment process completed")
 
 
 @track_step_execution(process_id="risk_assessment", step_id="risk_identification")
@@ -222,7 +222,7 @@ def example_framework_integration():
     process.start_step_id = "submit_request"
     process.end_step_ids = ["complete"]
 
-    print("   ✓ Process definition created")
+    print("    Process definition created")
 
     # Initialize framework
     print("\n2. Starting process instance...")
@@ -239,7 +239,7 @@ def example_framework_integration():
         started_by="user@example.com",
         initial_data={}
     )
-    print(f"   ✓ Process instance started: {instance.id}")
+    print(f"    Process instance started: {instance.id}")
 
     # Execute step 1
     print("\n3. Executing step 1 (submit_request)...")
@@ -265,7 +265,7 @@ def example_framework_integration():
             step_id="submit_request",
             field_name="request_title"
         )
-        print(f"   ✗ Validation failed: {error}")
+        print(f"    Validation failed: {error}")
 
         # Track step with validation_failed result
         process_metrics.track_step_execution(
@@ -297,13 +297,13 @@ def example_framework_integration():
             duration_seconds=step_duration,
             result="success"
         )
-        print(f"   ✓ Step completed successfully")
-        print(f"   ✓ Next step: {next_step}")
+        print(f"    Step completed successfully")
+        print(f"    Next step: {next_step}")
 
     # Track pending approval
     print("\n5. Tracking pending approval...")
     process_metrics.increment_pending_approvals(process.id, "approval")
-    print("   ✓ Pending approval incremented")
+    print("    Pending approval incremented")
 
     # Complete approval
     print("\n6. Completing approval...")
@@ -317,7 +317,7 @@ def example_framework_integration():
         result="success"
     )
     process_metrics.decrement_pending_approvals(process.id, "approval")
-    print("   ✓ Approval completed")
+    print("    Approval completed")
 
     # Complete process
     print("\n7. Completing process...")
@@ -328,7 +328,7 @@ def example_framework_integration():
         duration_seconds=total_duration
     )
     process_metrics.decrement_active_instances(process.id)
-    print("   ✓ Process completed")
+    print("    Process completed")
 
 
 # ============================================================================
@@ -347,19 +347,19 @@ def example_active_monitoring():
     for i in range(3):
         process_metrics.track_process_start("bia_process")
         process_metrics.increment_active_instances("bia_process")
-        print(f"   ✓ Started BIA process instance {i+1}")
+        print(f"    Started BIA process instance {i+1}")
 
     for i in range(2):
         process_metrics.track_process_start("risk_assessment")
         process_metrics.increment_active_instances("risk_assessment")
-        print(f"   ✓ Started Risk Assessment instance {i+1}")
+        print(f"    Started Risk Assessment instance {i+1}")
 
     print("\n2. Adding pending approvals...")
     process_metrics.increment_pending_approvals("bia_process", "manager_approval")
     process_metrics.increment_pending_approvals("bia_process", "manager_approval")
     process_metrics.increment_pending_approvals("risk_assessment", "final_approval")
-    print("   ✓ Added 2 pending approvals for BIA")
-    print("   ✓ Added 1 pending approval for Risk Assessment")
+    print("    Added 2 pending approvals for BIA")
+    print("    Added 1 pending approval for Risk Assessment")
 
     print("\n3. Current state:")
     print("   - Active BIA processes: 3")
@@ -372,12 +372,12 @@ def example_active_monitoring():
     process_metrics.track_process_completion("bia_process", "completed", 120.0)
     process_metrics.decrement_active_instances("bia_process")
     process_metrics.decrement_pending_approvals("bia_process", "manager_approval")
-    print("   ✓ Completed 1 BIA process")
+    print("    Completed 1 BIA process")
 
     process_metrics.track_process_completion("risk_assessment", "completed", 180.0)
     process_metrics.decrement_active_instances("risk_assessment")
     process_metrics.decrement_pending_approvals("risk_assessment", "final_approval")
-    print("   ✓ Completed 1 Risk Assessment")
+    print("    Completed 1 Risk Assessment")
 
     print("\n5. Updated state:")
     print("   - Active BIA processes: 2")

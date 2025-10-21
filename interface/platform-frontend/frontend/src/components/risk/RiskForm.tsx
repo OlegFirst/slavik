@@ -53,13 +53,26 @@ export function RiskForm({
     formState: { errors },
   } = useForm<RiskCreate>({
     resolver: zodResolver(riskCreateSchema),
-    defaultValues: initialData || {
+    defaultValues: initialData ? {
+      risk_title: initialData.risk_title,
+      risk_code: initialData.risk_code,
+      risk_category: initialData.risk_category,
+      description: initialData.description,
+      threat_source: initialData.threat_source,
+      vulnerabilities: initialData.vulnerabilities,
+      likelihood: initialData.likelihood,
+      impact: initialData.impact,
+      treatment_strategy: initialData.treatment_strategy,
+      risk_owner_id: initialData.risk_owner_id,
+      status: initialData.status,
+      related_processes: initialData.related_processes,
+      related_assets: initialData.related_assets,
+    } : {
       organization_id: 'org-123', // TODO: Get from auth
       vulnerabilities: [],
       likelihood: 3,
       impact: 3,
       status: RiskStatus.IDENTIFIED,
-      is_active: true,
     },
   });
 
@@ -83,7 +96,6 @@ export function RiskForm({
     onSubmit({
       ...data,
       vulnerabilities,
-      inherent_risk_score: inherentScore,
     });
   };
 

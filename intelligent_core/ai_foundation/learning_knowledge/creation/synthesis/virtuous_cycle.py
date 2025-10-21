@@ -30,7 +30,7 @@ class VirtuousLearningCycle:
     5. Other users learn from article → Competency improved
     6. More users succeed using pattern → Success rate increases
     7. AI model improves predictions → Platform gets smarter
-    8. → Cycle repeats ♻️
+    8. → Cycle repeats ️
     """
 
     def __init__(
@@ -99,7 +99,7 @@ class VirtuousLearningCycle:
                     result['lesson_created'] = True
                     result['lesson_id'] = lesson_id
                     self.lessons_created += 1
-                    logger.info(f"✅ Lesson created from case: {lesson_id}")
+                    logger.info(f" Lesson created from case: {lesson_id}")
                 else:
                     logger.warning(f"Failed to create lesson from case {workflow_case.get('case_id')}")
 
@@ -162,7 +162,7 @@ class VirtuousLearningCycle:
                     result['article_created'] = True
                     result['article_id'] = article_id
                     self.articles_created += 1
-                    logger.info(f"✅ Article created from pattern: {article_id}")
+                    logger.info(f" Article created from pattern: {article_id}")
                 else:
                     logger.warning(f"Failed to create article from pattern {pattern.get('pattern_name')}")
 
@@ -232,7 +232,7 @@ class VirtuousLearningCycle:
             self.cycles_completed += 1
 
             logger.info(
-                f"✅ Virtuous cycle batch complete: "
+                f" Virtuous cycle batch complete: "
                 f"{cycle_stats['lessons_created']} lessons, "
                 f"{cycle_stats['articles_created']} articles created"
             )

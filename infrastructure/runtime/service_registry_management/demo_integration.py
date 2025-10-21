@@ -49,7 +49,7 @@ def print_header(text: str):
 
 def print_success(text: str):
     """Print success message"""
-    print(f"{Colors.OKGREEN}✅ {text}{Colors.ENDC}")
+    print(f"{Colors.OKGREEN} {text}{Colors.ENDC}")
 
 
 def print_info(text: str):
@@ -59,7 +59,7 @@ def print_info(text: str):
 
 def print_error(text: str):
     """Print error message"""
-    print(f"{Colors.FAIL}❌ {text}{Colors.ENDC}")
+    print(f"{Colors.FAIL} {text}{Colors.ENDC}")
 
 
 def print_json(data: dict, title: str = None):
@@ -313,7 +313,7 @@ async def main():
     discovery_ok = await check_service_health("Service Discovery", SERVICE_DISCOVERY_URL)
 
     if not registry_ok or not discovery_ok:
-        print_error("\n⚠️  Prerequisites not met. Please start required services:")
+        print_error("\n️  Prerequisites not met. Please start required services:")
         if not registry_ok:
             print("  cd /Users/MD/AI-Platform-ISO/infrastructure/runtime/service_registry_management")
             print("  python main.py")
@@ -326,7 +326,7 @@ async def main():
     registration_result = await register_test_service()
 
     if not registration_result:
-        print_error("\n⚠️  Service registration failed. Demo cannot continue.")
+        print_error("\n️  Service registration failed. Demo cannot continue.")
         return
 
     service_name = registration_result.get("service_name")
@@ -363,17 +363,17 @@ async def main():
             print_error(f"{step}")
 
     if all_passed:
-        print(f"\n{Colors.OKGREEN}{Colors.BOLD}🎉 ALL INTEGRATION STEPS PASSED! 🎉{Colors.ENDC}")
+        print(f"\n{Colors.OKGREEN}{Colors.BOLD} ALL INTEGRATION STEPS PASSED! {Colors.ENDC}")
         print(f"\n{Colors.OKCYAN}The Service Registry Management is fully integrated with:{Colors.ENDC}")
-        print(f"  ✅ Catalog system (/catalogs/platform-services/)")
-        print(f"  ✅ Service Discovery (port 8500)")
-        print(f"  ✅ Template generation system")
+        print(f"   Catalog system (/catalogs/platform-services/)")
+        print(f"   Service Discovery (port 8500)")
+        print(f"   Template generation system")
         print(f"\n{Colors.OKCYAN}Next steps:{Colors.ENDC}")
         print(f"  1. Start the generated service: cd {template_location} && python main.py")
         print(f"  2. Check health: curl http://localhost:{port}/health")
         print(f"  3. View metrics: curl http://localhost:{port}/metrics")
     else:
-        print(f"\n{Colors.WARNING}⚠️  Some integration steps failed. Check logs above.{Colors.ENDC}")
+        print(f"\n{Colors.WARNING}️  Some integration steps failed. Check logs above.{Colors.ENDC}")
 
     # Cleanup info
     await cleanup_test_service(service_name, template_location)

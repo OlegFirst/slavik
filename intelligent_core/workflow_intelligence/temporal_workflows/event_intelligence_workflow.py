@@ -52,7 +52,7 @@ class EventAnalysisWorkflow:
     async def run(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Execute event analysis workflow"""
 
-        workflow.logger.info("🧠 Starting Event Analysis Workflow")
+        workflow.logger.info(" Starting Event Analysis Workflow")
 
         results = {
             "workflow": "event_analysis",
@@ -64,7 +64,7 @@ class EventAnalysisWorkflow:
 
         try:
             # Step 1: Scan for events
-            workflow.logger.info("📡 Step 1: Scanning for events...")
+            workflow.logger.info(" Step 1: Scanning for events...")
             events = await workflow.execute_activity(
                 scan_events_activity,
                 config.get("scan_config", {}),
@@ -76,11 +76,11 @@ class EventAnalysisWorkflow:
                 )
             )
 
-            workflow.logger.info(f"✅ Found {len(events)} events")
+            workflow.logger.info(f" Found {len(events)} events")
             results["events_found"] = len(events)
 
             # Step 2: Analyze each event
-            workflow.logger.info("🔍 Step 2: Analyzing events...")
+            workflow.logger.info(" Step 2: Analyzing events...")
             analyses = []
 
             for event in events:
@@ -98,13 +98,13 @@ class EventAnalysisWorkflow:
                     results["events_analyzed"] += 1
 
                 except Exception as e:
-                    workflow.logger.error(f"❌ Event analysis failed: {e}")
+                    workflow.logger.error(f" Event analysis failed: {e}")
                     continue
 
-            workflow.logger.info(f"✅ Analyzed {len(analyses)} events")
+            workflow.logger.info(f" Analyzed {len(analyses)} events")
 
             # Step 3: Store in knowledge base
-            workflow.logger.info("💾 Step 3: Storing knowledge...")
+            workflow.logger.info(" Step 3: Storing knowledge...")
             stored = await workflow.execute_activity(
                 store_knowledge_activity,
                 {"analyses": analyses},
@@ -114,7 +114,7 @@ class EventAnalysisWorkflow:
             results["knowledge_stored"] = stored
 
             # Step 4: Generate recommendations
-            workflow.logger.info("💡 Step 4: Generating recommendations...")
+            workflow.logger.info(" Step 4: Generating recommendations...")
             recommendations = await workflow.execute_activity(
                 generate_recommendations_activity,
                 {"analyses": analyses},
@@ -124,7 +124,7 @@ class EventAnalysisWorkflow:
             results["recommendations"] = recommendations
 
             # Step 5: Send notifications
-            workflow.logger.info("📧 Step 5: Sending notifications...")
+            workflow.logger.info(" Step 5: Sending notifications...")
             if recommendations:
                 await workflow.execute_activity(
                     send_notification_activity,
@@ -141,10 +141,10 @@ class EventAnalysisWorkflow:
                 )
 
             results["status"] = "completed"
-            workflow.logger.info("✅ Event Analysis Workflow completed")
+            workflow.logger.info(" Event Analysis Workflow completed")
 
         except Exception as e:
-            workflow.logger.error(f"❌ Workflow failed: {e}")
+            workflow.logger.error(f" Workflow failed: {e}")
             results["status"] = "failed"
             results["error"] = str(e)
 
@@ -168,7 +168,7 @@ class PatternLearningWorkflow:
     async def run(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Execute pattern learning workflow"""
 
-        workflow.logger.info("🎓 Starting Pattern Learning Workflow")
+        workflow.logger.info(" Starting Pattern Learning Workflow")
 
         results = {
             "workflow": "pattern_learning",
@@ -180,7 +180,7 @@ class PatternLearningWorkflow:
 
         try:
             # Step 1: Collect feedback
-            workflow.logger.info("📊 Step 1: Collecting feedback data...")
+            workflow.logger.info(" Step 1: Collecting feedback data...")
             feedback = await workflow.execute_activity(
                 collect_feedback_activity,
                 config.get("timeframe", "last_30_days"),
@@ -189,10 +189,10 @@ class PatternLearningWorkflow:
             )
 
             results["feedback_processed"] = len(feedback)
-            workflow.logger.info(f"✅ Collected {len(feedback)} feedback entries")
+            workflow.logger.info(f" Collected {len(feedback)} feedback entries")
 
             # Step 2: Analyze patterns
-            workflow.logger.info("🔬 Step 2: Analyzing patterns...")
+            workflow.logger.info(" Step 2: Analyzing patterns...")
             patterns = await workflow.execute_activity(
                 analyze_patterns_activity,
                 {"feedback": feedback},
@@ -203,7 +203,7 @@ class PatternLearningWorkflow:
             results["patterns_found"] = len(patterns)
 
             # Step 3: Update ML models
-            workflow.logger.info("🤖 Step 3: Updating ML models...")
+            workflow.logger.info(" Step 3: Updating ML models...")
             model_update = await workflow.execute_activity(
                 update_ml_models_activity,
                 {"feedback": feedback, "patterns": patterns},
@@ -215,7 +215,7 @@ class PatternLearningWorkflow:
             results["accuracy_improvement"] = model_update.get("accuracy_improvement", 0.0)
 
             # Step 4: Generate learning report
-            workflow.logger.info("📝 Step 4: Generating learning report...")
+            workflow.logger.info(" Step 4: Generating learning report...")
             report = await workflow.execute_activity(
                 generate_learning_report_activity,
                 {
@@ -230,7 +230,7 @@ class PatternLearningWorkflow:
             results["report"] = report
 
             # Step 5: Send notifications
-            workflow.logger.info("📧 Step 5: Sending notifications...")
+            workflow.logger.info(" Step 5: Sending notifications...")
             await workflow.execute_activity(
                 send_notification_activity,
                 {
@@ -246,10 +246,10 @@ class PatternLearningWorkflow:
             )
 
             results["status"] = "completed"
-            workflow.logger.info("✅ Pattern Learning Workflow completed")
+            workflow.logger.info(" Pattern Learning Workflow completed")
 
         except Exception as e:
-            workflow.logger.error(f"❌ Workflow failed: {e}")
+            workflow.logger.error(f" Workflow failed: {e}")
             results["status"] = "failed"
             results["error"] = str(e)
 
@@ -273,7 +273,7 @@ class GapPredictionWorkflow:
     async def run(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Execute gap prediction workflow"""
 
-        workflow.logger.info("🔮 Starting Gap Prediction Workflow")
+        workflow.logger.info(" Starting Gap Prediction Workflow")
 
         results = {
             "workflow": "gap_prediction",
@@ -285,7 +285,7 @@ class GapPredictionWorkflow:
 
         try:
             # Step 1: Scan current architecture
-            workflow.logger.info("📡 Step 1: Scanning event architecture...")
+            workflow.logger.info(" Step 1: Scanning event architecture...")
             current_events = await workflow.execute_activity(
                 scan_current_architecture_activity,
                 {},
@@ -294,7 +294,7 @@ class GapPredictionWorkflow:
             )
 
             # Step 2: Predict gaps
-            workflow.logger.info("🔮 Step 2: Predicting gaps...")
+            workflow.logger.info(" Step 2: Predicting gaps...")
             predictions = await workflow.execute_activity(
                 predict_gaps_activity,
                 {"current_events": current_events},
@@ -306,7 +306,7 @@ class GapPredictionWorkflow:
             results["high_confidence_gaps"] = len([p for p in predictions if p.get("confidence", 0) >= 0.8])
 
             # Step 3: Validate predictions
-            workflow.logger.info("✔️ Step 3: Validating predictions...")
+            workflow.logger.info("️ Step 3: Validating predictions...")
             validated = await workflow.execute_activity(
                 validate_predictions_activity,
                 {"predictions": predictions},
@@ -315,7 +315,7 @@ class GapPredictionWorkflow:
             )
 
             # Step 4: Generate recommendations
-            workflow.logger.info("💡 Step 4: Generating recommendations...")
+            workflow.logger.info(" Step 4: Generating recommendations...")
             recommendations = await workflow.execute_activity(
                 generate_gap_recommendations_activity,
                 {"validated_predictions": validated},
@@ -326,7 +326,7 @@ class GapPredictionWorkflow:
             results["recommendations"] = recommendations
 
             # Step 5: Send notifications
-            workflow.logger.info("📧 Step 5: Sending notifications...")
+            workflow.logger.info(" Step 5: Sending notifications...")
             if results["high_confidence_gaps"] > 0:
                 await workflow.execute_activity(
                     send_notification_activity,
@@ -344,10 +344,10 @@ class GapPredictionWorkflow:
                 )
 
             results["status"] = "completed"
-            workflow.logger.info("✅ Gap Prediction Workflow completed")
+            workflow.logger.info(" Gap Prediction Workflow completed")
 
         except Exception as e:
-            workflow.logger.error(f"❌ Workflow failed: {e}")
+            workflow.logger.error(f" Workflow failed: {e}")
             results["status"] = "failed"
             results["error"] = str(e)
 
@@ -359,7 +359,7 @@ class GapPredictionWorkflow:
 @activity.defn
 async def scan_events_activity(config: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Scan codebase for events"""
-    logger.info("📡 Scanning codebase for events...")
+    logger.info(" Scanning codebase for events...")
 
     # Import event scanner (from tools/event_intelligence)
     try:
@@ -367,14 +367,14 @@ async def scan_events_activity(config: Dict[str, Any]) -> List[Dict[str, Any]]:
         events = scan_codebase_events(config)
         return events
     except Exception as e:
-        logger.error(f"❌ Event scanning failed: {e}")
+        logger.error(f" Event scanning failed: {e}")
         return []
 
 
 @activity.defn
 async def analyze_event_activity(event: Dict[str, Any]) -> Dict[str, Any]:
     """Analyze single event"""
-    logger.info(f"🔍 Analyzing event: {event.get('event_name')}")
+    logger.info(f" Analyzing event: {event.get('event_name')}")
 
     try:
         from intelligent_core.event_intelligence.analyzer import EventAnalyzer
@@ -396,14 +396,14 @@ async def analyze_event_activity(event: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Analysis failed: {e}")
+        logger.error(f" Analysis failed: {e}")
         raise
 
 
 @activity.defn
 async def store_knowledge_activity(data: Dict[str, Any]) -> bool:
     """Store knowledge in knowledge base"""
-    logger.info("💾 Storing knowledge...")
+    logger.info(" Storing knowledge...")
 
     try:
         from intelligent_core.event_intelligence.knowledge_base import EventKnowledgeBase
@@ -419,14 +419,14 @@ async def store_knowledge_activity(data: Dict[str, Any]) -> bool:
         return True
 
     except Exception as e:
-        logger.error(f"❌ Knowledge storage failed: {e}")
+        logger.error(f" Knowledge storage failed: {e}")
         return False
 
 
 @activity.defn
 async def generate_recommendations_activity(data: Dict[str, Any]) -> List[str]:
     """Generate recommendations from analyses"""
-    logger.info("💡 Generating recommendations...")
+    logger.info(" Generating recommendations...")
 
     analyses = data.get("analyses", [])
     recommendations = []
@@ -451,7 +451,7 @@ async def generate_recommendations_activity(data: Dict[str, Any]) -> List[str]:
 @activity.defn
 async def collect_feedback_activity(timeframe: str) -> List[Dict[str, Any]]:
     """Collect feedback data"""
-    logger.info(f"📊 Collecting feedback for: {timeframe}")
+    logger.info(f" Collecting feedback for: {timeframe}")
 
     try:
         from intelligent_core.event_intelligence.learner import EventLearner
@@ -462,14 +462,14 @@ async def collect_feedback_activity(timeframe: str) -> List[Dict[str, Any]]:
         return feedback
 
     except Exception as e:
-        logger.error(f"❌ Feedback collection failed: {e}")
+        logger.error(f" Feedback collection failed: {e}")
         return []
 
 
 @activity.defn
 async def analyze_patterns_activity(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Analyze patterns from feedback"""
-    logger.info("🔬 Analyzing patterns...")
+    logger.info(" Analyzing patterns...")
 
     feedback = data.get("feedback", [])
 
@@ -491,7 +491,7 @@ async def analyze_patterns_activity(data: Dict[str, Any]) -> List[Dict[str, Any]
 @activity.defn
 async def update_ml_models_activity(data: Dict[str, Any]) -> Dict[str, Any]:
     """Update ML models with new data"""
-    logger.info("🤖 Updating ML models...")
+    logger.info(" Updating ML models...")
 
     try:
         from intelligent_core.event_intelligence.predictor import EventPredictor
@@ -510,7 +510,7 @@ async def update_ml_models_activity(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Model update failed: {e}")
+        logger.error(f" Model update failed: {e}")
         return {
             "success": False,
             "error": str(e)
@@ -520,7 +520,7 @@ async def update_ml_models_activity(data: Dict[str, Any]) -> Dict[str, Any]:
 @activity.defn
 async def generate_learning_report_activity(data: Dict[str, Any]) -> Dict[str, Any]:
     """Generate learning report"""
-    logger.info("📝 Generating learning report...")
+    logger.info(" Generating learning report...")
 
     return {
         "summary": f"Processed {len(data.get('feedback', []))} feedback entries",
@@ -533,7 +533,7 @@ async def generate_learning_report_activity(data: Dict[str, Any]) -> Dict[str, A
 @activity.defn
 async def scan_current_architecture_activity(config: Dict[str, Any]) -> Dict[str, Any]:
     """Scan current event architecture"""
-    logger.info("📡 Scanning current architecture...")
+    logger.info(" Scanning current architecture...")
 
     try:
         from tools.event_intelligence import scan_codebase_events
@@ -550,14 +550,14 @@ async def scan_current_architecture_activity(config: Dict[str, Any]) -> Dict[str
         return architecture
 
     except Exception as e:
-        logger.error(f"❌ Architecture scan failed: {e}")
+        logger.error(f" Architecture scan failed: {e}")
         return {}
 
 
 @activity.defn
 async def predict_gaps_activity(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Predict event gaps"""
-    logger.info("🔮 Predicting gaps...")
+    logger.info(" Predicting gaps...")
 
     try:
         from intelligent_core.event_intelligence.predictor import EventPredictor
@@ -571,14 +571,14 @@ async def predict_gaps_activity(data: Dict[str, Any]) -> List[Dict[str, Any]]:
         return predictions
 
     except Exception as e:
-        logger.error(f"❌ Gap prediction failed: {e}")
+        logger.error(f" Gap prediction failed: {e}")
         return []
 
 
 @activity.defn
 async def validate_predictions_activity(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Validate predictions"""
-    logger.info("✔️ Validating predictions...")
+    logger.info("️ Validating predictions...")
 
     predictions = data.get("predictions", [])
 
@@ -591,7 +591,7 @@ async def validate_predictions_activity(data: Dict[str, Any]) -> List[Dict[str, 
 @activity.defn
 async def generate_gap_recommendations_activity(data: Dict[str, Any]) -> List[str]:
     """Generate gap recommendations"""
-    logger.info("💡 Generating gap recommendations...")
+    logger.info(" Generating gap recommendations...")
 
     predictions = data.get("validated_predictions", [])
     recommendations = []
@@ -608,7 +608,7 @@ async def generate_gap_recommendations_activity(data: Dict[str, Any]) -> List[st
 @activity.defn
 async def send_notification_activity(notification: Dict[str, Any]) -> bool:
     """Send notification"""
-    logger.info(f"📧 Sending notification: {notification.get('type')}")
+    logger.info(f" Sending notification: {notification.get('type')}")
 
     try:
         # Integration with notification service
@@ -623,7 +623,7 @@ async def send_notification_activity(notification: Dict[str, Any]) -> bool:
             return response.status_code == 200
 
     except Exception as e:
-        logger.warning(f"⚠️ Notification failed (non-critical): {e}")
+        logger.warning(f"️ Notification failed (non-critical): {e}")
         return False
 
 

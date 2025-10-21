@@ -119,7 +119,7 @@ class CrisisCoordinator:
         )
 
         self.initialized = True
-        logger.info("✅ Crisis Coordinator initialized")
+        logger.info(" Crisis Coordinator initialized")
 
     async def detect_crisis(
         self,
@@ -136,7 +136,7 @@ class CrisisCoordinator:
         Returns:
             Crisis ID if crisis detected, None otherwise
         """
-        logger.info("🔍 Analyzing situation for crisis indicators...")
+        logger.info(" Analyzing situation for crisis indicators...")
 
         # Crisis detection logic
         crisis_level = self._assess_crisis_level(situation)
@@ -145,7 +145,7 @@ class CrisisCoordinator:
             # Crisis detected!
             crisis_id = self._create_crisis_id()
 
-            logger.warning(f"🚨 CRISIS DETECTED: {crisis_level.name} (ID: {crisis_id})")
+            logger.warning(f" CRISIS DETECTED: {crisis_level.name} (ID: {crisis_id})")
 
             # Create crisis record
             self.active_crises[crisis_id] = {
@@ -169,7 +169,7 @@ class CrisisCoordinator:
             return crisis_id
 
         else:
-            logger.info(f"✅ Situation does not constitute crisis (level: {crisis_level.name})")
+            logger.info(f" Situation does not constitute crisis (level: {crisis_level.name})")
             return None
 
     async def activate_crisis_response(
@@ -191,7 +191,7 @@ class CrisisCoordinator:
             return {'success': False, 'error': 'Crisis not found'}
 
         crisis = self.active_crises[crisis_id]
-        logger.warning(f"🚨 Activating crisis response for {crisis_id}")
+        logger.warning(f" Activating crisis response for {crisis_id}")
 
         try:
             # Update status
@@ -205,13 +205,13 @@ class CrisisCoordinator:
                 raise Exception(f"BC plan activation failed: {plan_result.get('error')}")
 
             crisis['activated_plans'].append(plan_result['plan_id'])
-            logger.info(f"✅ BC Plan activated: {plan_result['plan_id']}")
+            logger.info(f" BC Plan activated: {plan_result['plan_id']}")
 
             # Step 2: Coordinate multi-service response
             coordination_result = await self._coordinate_services(crisis)
 
             crisis['coordinated_services'] = coordination_result['services']
-            logger.info(f"✅ {len(coordination_result['services'])} services coordinated")
+            logger.info(f" {len(coordination_result['services'])} services coordinated")
 
             # Step 3: Monitor and track
             crisis['status'] = CrisisStatus.COORDINATING
@@ -229,7 +229,7 @@ class CrisisCoordinator:
             }
 
         except Exception as e:
-            logger.error(f"❌ Crisis response activation failed: {e}", exc_info=True)
+            logger.error(f" Crisis response activation failed: {e}", exc_info=True)
             crisis['status'] = CrisisStatus.FAILED
             crisis['error'] = str(e)
             self.stats['failed_responses'] += 1
@@ -304,7 +304,7 @@ class CrisisCoordinator:
         # Publish resolution event
         await self._publish_crisis_event(crisis_id, 'crisis.resolved')
 
-        logger.info(f"✅ Crisis {crisis_id} resolved in {duration:.1f}s")
+        logger.info(f" Crisis {crisis_id} resolved in {duration:.1f}s")
 
         return {
             'success': True,
@@ -435,7 +435,7 @@ class CrisisCoordinator:
                 ))
 
                 coordinated_services.append(service_name)
-                logger.info(f"✅ Coordinated: {service_name}")
+                logger.info(f" Coordinated: {service_name}")
 
             except Exception as e:
                 logger.error(f"Failed to coordinate {service_name}: {e}")

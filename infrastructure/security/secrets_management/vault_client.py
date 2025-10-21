@@ -32,7 +32,7 @@ class SupabaseVaultClient:
             'sslmode': 'require'  # Fix SASL authentication issue with Supabase pooler
         }
 
-        logger.info("✅ Supabase Vault Client initialized")
+        logger.info(" Supabase Vault Client initialized")
 
     def _get_connection(self):
         """Создать подключение к БД"""
@@ -67,11 +67,11 @@ class SupabaseVaultClient:
             if not result or not result[0]:
                 raise ValueError(f"Secret '{secret_name}' not found in Vault")
 
-            logger.debug(f"✅ Retrieved secret: {secret_name}")
+            logger.debug(f" Retrieved secret: {secret_name}")
             return result[0]
 
         except Exception as e:
-            logger.error(f"❌ Failed to retrieve secret '{secret_name}': {e}")
+            logger.error(f" Failed to retrieve secret '{secret_name}': {e}")
             raise
 
     def rotate_secret(self, secret_name: str, new_value: str) -> bool:
@@ -114,11 +114,11 @@ class SupabaseVaultClient:
             # Очистить кэш
             self.get_secret.cache_clear()
 
-            logger.warning(f"🔄 Secret rotated: {secret_name}")
+            logger.warning(f" Secret rotated: {secret_name}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to rotate secret '{secret_name}': {e}")
+            logger.error(f" Failed to rotate secret '{secret_name}': {e}")
             raise
 
     def list_secrets(self) -> list:
@@ -153,7 +153,7 @@ class SupabaseVaultClient:
             return secrets
 
         except Exception as e:
-            logger.error(f"❌ Failed to list secrets: {e}")
+            logger.error(f" Failed to list secrets: {e}")
             raise
 
 
@@ -191,13 +191,13 @@ if __name__ == "__main__":
 
     # Список секретов
     secrets = vault.list_secrets()
-    print(f"\n📋 Available secrets: {len(secrets)}")
+    print(f"\n Available secrets: {len(secrets)}")
     for secret in secrets:
         print(f"  - {secret['name']}: {secret['description']}")
 
     # Тест чтения
-    print(f"\n🔑 Testing secret retrieval...")
+    print(f"\n Testing secret retrieval...")
     jwt_secret = vault.get_secret('jwt-secret')
     print(f"  JWT Secret length: {len(jwt_secret)} chars")
 
-    print(f"\n✅ Vault client test completed!")
+    print(f"\n Vault client test completed!")

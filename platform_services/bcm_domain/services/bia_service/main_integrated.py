@@ -85,9 +85,9 @@ class BIASelfAwareService(SelfAwareService if SELF_AWARE_AVAILABLE else object):
                     "bia.reporting",
                 ]
             )
-            logger.info("✅ BIA Service initialized as Self-Aware")
+            logger.info(" BIA Service initialized as Self-Aware")
         else:
-            logger.warning("⚠️  BIA Service running in basic mode (Self-Aware not available)")
+            logger.warning("️  BIA Service running in basic mode (Self-Aware not available)")
 
     async def initialize(self):
         """Initialize BIA-specific capabilities"""
@@ -98,7 +98,7 @@ class BIASelfAwareService(SelfAwareService if SELF_AWARE_AVAILABLE else object):
             self.register_handler("bia.*.completed", self.handle_completion_event, priority=EventPriority.NORMAL)
             self.register_handler("bia.analyze", self.handle_analysis_request, priority=EventPriority.NORMAL)
 
-            logger.info("✅ BIA event handlers registered")
+            logger.info(" BIA event handlers registered")
 
     async def handle_process_event(self, event):
         """Handle BIA process events"""
@@ -147,10 +147,10 @@ async def lifespan(app: FastAPI):
 
     # === STARTUP ===
     logger.info("=" * 60)
-    logger.info("🚀 Starting BIA Service (Integrated with Graceful Choreography)")
+    logger.info(" Starting BIA Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f"📍 Port: {settings.SERVICE_PORT}")
-    logger.info(f"📋 ISO 22301 Clause: 8.2.2 - Business Impact Analysis")
+    logger.info(f" Port: {settings.SERVICE_PORT}")
+    logger.info(f" ISO 22301 Clause: 8.2.2 - Business Impact Analysis")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -170,7 +170,7 @@ async def lifespan(app: FastAPI):
         # === 2. Initialize JWT ===
         logger.info("\n2️⃣  Initializing Authentication...")
         init_jwt(settings.JWT_SECRET_KEY)
-        logger.info("   ✅ JWT authentication initialized")
+        logger.info("    JWT authentication initialized")
 
         # === 3. Initialize Database ===
         logger.info("\n3️⃣  Initializing Database...")
@@ -179,12 +179,12 @@ async def lifespan(app: FastAPI):
             pool_size=settings.DB_POOL_SIZE,
             echo=settings.DB_ECHO
         )
-        logger.info(f"   ✅ Database initialized")
+        logger.info(f"    Database initialized")
 
         # === 4. Initialize Cache ===
         logger.info("\n4️⃣  Initializing Cache...")
         await init_cache(getattr(settings, 'REDIS_URL', 'redis://localhost:6379'))
-        logger.info("   ✅ Cache initialized")
+        logger.info("    Cache initialized")
 
         # === 5. Initialize Self-Aware Service ===
         if SELF_AWARE_AVAILABLE:
@@ -194,7 +194,7 @@ async def lifespan(app: FastAPI):
 
             # Subscribe to events via platform EventBus
             if platform.intelligent_router:
-                logger.info("   📡 Registering with Intelligent EventBus...")
+                logger.info("    Registering with Intelligent EventBus...")
                 # Register service capabilities with router
                 await platform.intelligent_router.register_subscriber(
                     subscriber_id="bia_service",
@@ -208,13 +208,13 @@ async def lifespan(app: FastAPI):
                         "semantic_tags": ["bia", "impact", "assessment", "rto", "rpo"]
                     }
                 )
-                logger.info("   ✅ Self-Aware Service registered with Intelligent Router")
+                logger.info("    Self-Aware Service registered with Intelligent Router")
             elif platform.eventbus:
-                logger.info("   📡 Registering with Basic EventBus...")
+                logger.info("    Registering with Basic EventBus...")
                 await platform.eventbus.subscribe("bia.*", bia_self_aware_service.on_event)
-                logger.info("   ✅ Self-Aware Service registered with EventBus")
+                logger.info("    Self-Aware Service registered with EventBus")
         else:
-            logger.warning("\n5️⃣  ⚠️  Self-Aware Services not available (basic mode)")
+            logger.warning("\n5️⃣  ️  Self-Aware Services not available (basic mode)")
 
         # === 6. Initialize Workflow Intelligence ===
         logger.info("\n6️⃣  Initializing Workflow Intelligence...")
@@ -237,7 +237,7 @@ async def lifespan(app: FastAPI):
             jwt_secret=settings.JWT_SECRET_KEY
         )
 
-        logger.info("   ✅ Workflow Intelligence initialized")
+        logger.info("    Workflow Intelligence initialized")
 
         # === 7. Register BIA Sagas (if saga engine available) ===
         if platform.saga_orchestrator:
@@ -253,44 +253,44 @@ async def lifespan(app: FastAPI):
                 platform.saga_orchestrator.register_saga(create_bcm_program_saga())
                 platform.saga_orchestrator.register_saga(create_incident_response_saga())
 
-                logger.info("   ✅ BIA Sagas registered")
+                logger.info("    BIA Sagas registered")
             except ImportError:
-                logger.warning("   ⚠️  Saga definitions not found")
+                logger.warning("   ️  Saga definitions not found")
 
         logger.info("\n" + "=" * 60)
-        logger.info("✅ BIA Service ready (with Graceful Choreography)")
+        logger.info(" BIA Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"   🌐 Docs: http://localhost:{settings.SERVICE_PORT}/docs")
-        logger.info(f"   📊 Metrics: http://localhost:{settings.SERVICE_PORT}/metrics")
-        logger.info(f"   ❤️  Health: http://localhost:{settings.SERVICE_PORT}/health")
+        logger.info(f"    Docs: http://localhost:{settings.SERVICE_PORT}/docs")
+        logger.info(f"    Metrics: http://localhost:{settings.SERVICE_PORT}/metrics")
+        logger.info(f"   ️  Health: http://localhost:{settings.SERVICE_PORT}/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
-        logger.error(f"❌ Failed to start BIA Service: {e}", exc_info=True)
+        logger.error(f" Failed to start BIA Service: {e}", exc_info=True)
         raise
 
     yield  # Application running
 
     # === SHUTDOWN ===
     logger.info("\n" + "=" * 60)
-    logger.info("🛑 Shutting down BIA Service...")
+    logger.info(" Shutting down BIA Service...")
     logger.info("=" * 60)
 
     # Close workflow storage
     if workflow_storage:
         await workflow_storage.close()
-        logger.info("   ✅ Workflow storage closed")
+        logger.info("    Workflow storage closed")
 
     # Close database
     await close_db()
-    logger.info("   ✅ Database closed")
+    logger.info("    Database closed")
 
     # Shutdown platform
     await shutdown_platform()
-    logger.info("   ✅ Platform integration shutdown")
+    logger.info("    Platform integration shutdown")
 
     logger.info("=" * 60)
-    logger.info("✅ BIA Service shutdown complete")
+    logger.info(" BIA Service shutdown complete")
     logger.info("=" * 60)
 
 

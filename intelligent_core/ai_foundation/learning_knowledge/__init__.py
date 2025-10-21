@@ -1,5 +1,5 @@
 """
-🎓 Unified Learning & Knowledge System
+ Unified Learning & Knowledge System
 
 Единая самообучающаяся экосистема платформы, объединяющая:
 - Knowledge Management (стандарты, кейсы)

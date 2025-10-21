@@ -52,7 +52,7 @@ class HealthCheckDaemon:
 
         self.running = True
         self.task = asyncio.create_task(self._run())
-        logger.info(f"✅ Health check daemon started (interval: {self.check_interval}s)")
+        logger.info(f" Health check daemon started (interval: {self.check_interval}s)")
 
     async def stop(self):
         """Stop health check daemon"""
@@ -69,11 +69,11 @@ class HealthCheckDaemon:
             except asyncio.CancelledError:
                 pass
 
-        logger.info("👋 Health check daemon stopped")
+        logger.info(" Health check daemon stopped")
 
     async def _run(self):
         """Main daemon loop"""
-        logger.info(f"🔄 Health check daemon loop started")
+        logger.info(f" Health check daemon loop started")
 
         while self.running:
             try:
@@ -112,10 +112,10 @@ class HealthCheckDaemon:
 
             # Log summary
             if healthy_count == total_count:
-                logger.debug(f"✅ All {total_count} agents healthy")
+                logger.debug(f" All {total_count} agents healthy")
             else:
                 unhealthy = [name for name, h in health_results.items() if not h.get("healthy")]
-                logger.warning(f"⚠️ Health check: {healthy_count}/{total_count} healthy. Unhealthy: {unhealthy}")
+                logger.warning(f"️ Health check: {healthy_count}/{total_count} healthy. Unhealthy: {unhealthy}")
 
             # Auto-recovery: попытка восстановить unhealthy агентов
             for agent_name, health in health_results.items():
@@ -134,7 +134,7 @@ class HealthCheckDaemon:
             agent_name: Name of unhealthy agent
             health: Health check result
         """
-        logger.info(f"🔄 Attempting recovery for {agent_name}...")
+        logger.info(f" Attempting recovery for {agent_name}...")
 
         # Check if circuit breaker is open
         if self.router.circuit_breaker_manager:

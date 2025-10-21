@@ -50,14 +50,14 @@ async def test_l4_generator():
 
     # Check LLM availability
     if generator.llm_router:
-        print("✅ LLM Router initialized")
+        print(" LLM Router initialized")
         provider_info = generator.llm_router.get_provider_info()
         print(f"   Available providers:")
         for provider, info in provider_info.items():
-            status = "✅" if info['available'] else "❌"
+            status = "" if info['available'] else ""
             print(f"   {status} {provider}: {info['available']}")
     else:
-        print("⚠️  LLM Router not available - using fallback generation")
+        print("️  LLM Router not available - using fallback generation")
 
     print()
     print("="*70)
@@ -106,7 +106,7 @@ async def test_l4_generator():
                 success = await registry.register(scenario)
                 if success:
                     scenario_id = scenario['meta']['id']
-                    print(f"  ✅ Generated: {scenario_id}")
+                    print(f"   Generated: {scenario_id}")
 
                     # Show some details
                     print(f"     Level: {scenario['meta']['level']}")
@@ -116,13 +116,13 @@ async def test_l4_generator():
 
                     generated_count += 1
                 else:
-                    print(f"  ❌ Failed to register scenario")
+                    print(f"   Failed to register scenario")
                     failed_count += 1
             else:
-                print(f"  ❌ Failed to generate scenario")
+                print(f"   Failed to generate scenario")
                 failed_count += 1
         except Exception as e:
-            print(f"  ❌ Error: {e}")
+            print(f"   Error: {e}")
             failed_count += 1
 
     print()
@@ -130,8 +130,8 @@ async def test_l4_generator():
     print("TEST RESULTS")
     print("="*70)
     print(f"Total workflows tested: {len(test_workflows)}")
-    print(f"✅ Successfully generated: {generated_count}")
-    print(f"❌ Failed: {failed_count}")
+    print(f" Successfully generated: {generated_count}")
+    print(f" Failed: {failed_count}")
     print(f"Success rate: {generated_count / len(test_workflows) * 100:.1f}%")
 
     # Show registry stats

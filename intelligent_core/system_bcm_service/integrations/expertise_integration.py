@@ -20,7 +20,7 @@ try:
     from domains.bcm.tactical_assistants.risk_analyst import RiskAnalyst
     EXPERTISE_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"⚠️  Expertise Center not available: {e}")
+    logging.warning(f"️  Expertise Center not available: {e}")
     EXPERTISE_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
@@ -52,13 +52,13 @@ class ExpertiseIntegration:
                 self.performance_analyzer = PerformanceAnalyzer()
                 self.compliance_auditor = ComplianceAuditor()
                 self.risk_analyst = RiskAnalyst()
-                logger.info("✅ Expertise integration initialized (14 AI specialists available)")
+                logger.info(" Expertise integration initialized (14 AI specialists available)")
             except Exception as e:
-                logger.error(f"❌ Failed to initialize some specialists: {e}")
+                logger.error(f" Failed to initialize some specialists: {e}")
                 EXPERTISE_AVAILABLE = False
 
         if not EXPERTISE_AVAILABLE:
-            logger.warning("⚠️  Running without Expertise Center (fallback mode)")
+            logger.warning("️  Running without Expertise Center (fallback mode)")
             self.bcm_advisor = None
 
     async def get_strategic_insights(
@@ -91,7 +91,7 @@ class ExpertiseIntegration:
             # КОНСУЛЬТАЦИЯ С BCM ADVISOR
             insights = await self.bcm_advisor.analyze(context)
 
-            logger.info(f"✅ Received strategic insights from BCM Advisor")
+            logger.info(f" Received strategic insights from BCM Advisor")
 
             return {
                 "source": "BCM Advisor (AI)",
@@ -102,7 +102,7 @@ class ExpertiseIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ BCM Advisor consultation failed: {e}")
+            logger.error(f" BCM Advisor consultation failed: {e}")
             return self._fallback_strategic_insights(cycle_results)
 
     async def assess_platform_risks(
@@ -139,7 +139,7 @@ class ExpertiseIntegration:
             else:
                 all_risks = risk_analysis.get("risks", [])
 
-            logger.info(f"✅ Identified {len(all_risks)} platform risks")
+            logger.info(f" Identified {len(all_risks)} platform risks")
 
             return {
                 "source": "Risk Analyzer + Risk Analyst (AI)",
@@ -150,7 +150,7 @@ class ExpertiseIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ Risk assessment failed: {e}")
+            logger.error(f" Risk assessment failed: {e}")
             return self._fallback_risk_assessment(platform_state)
 
     async def analyze_performance(
@@ -174,7 +174,7 @@ class ExpertiseIntegration:
                 "sla_metrics": metrics.get("sla_compliance", {})
             })
 
-            logger.info(f"✅ Performance analysis completed")
+            logger.info(f" Performance analysis completed")
 
             return {
                 "source": "Performance Analyzer (AI)",
@@ -185,7 +185,7 @@ class ExpertiseIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ Performance analysis failed: {e}")
+            logger.error(f" Performance analysis failed: {e}")
             return {"status": "error", "error": str(e)}
 
     async def check_compliance(
@@ -209,7 +209,7 @@ class ExpertiseIntegration:
                 "recovery_procedures": bcm_implementation.get("recovery_procedures", [])
             })
 
-            logger.info(f"✅ ISO 22301 compliance check completed")
+            logger.info(f" ISO 22301 compliance check completed")
 
             return {
                 "source": "Compliance Auditor (AI)",
@@ -220,7 +220,7 @@ class ExpertiseIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ Compliance check failed: {e}")
+            logger.error(f" Compliance check failed: {e}")
             return {"status": "error", "error": str(e)}
 
     async def plan_improvements(
@@ -248,7 +248,7 @@ class ExpertiseIntegration:
                 }
             })
 
-            logger.info(f"✅ Improvement plan created with {len(plan.get('initiatives', []))} initiatives")
+            logger.info(f" Improvement plan created with {len(plan.get('initiatives', []))} initiatives")
 
             return {
                 "source": "Strategic Planner (AI)",
@@ -259,7 +259,7 @@ class ExpertiseIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ Strategic planning failed: {e}")
+            logger.error(f" Strategic planning failed: {e}")
             return {"status": "error", "error": str(e)}
 
     async def get_comprehensive_analysis(
@@ -276,7 +276,7 @@ class ExpertiseIntegration:
         - Compliance Auditor (соответствие)
         - Strategic Planner (план улучшений)
         """
-        logger.info("🧠 Consulting ALL AI specialists for comprehensive analysis...")
+        logger.info(" Consulting ALL AI specialists for comprehensive analysis...")
 
         # Параллельные консультации
         strategic = await self.get_strategic_insights(cycle_results)

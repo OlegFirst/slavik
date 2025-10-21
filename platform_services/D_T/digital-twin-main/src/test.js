@@ -27,7 +27,7 @@ async function runTests() {
         });
         
         await module.initialize();
-        console.log('✓ Module initialized successfully');
+        console.log(' Module initialized successfully');
         
         // Test 2: Create digital twin
         logger.info('Test 2: Creating digital twin');
@@ -84,7 +84,7 @@ async function runTests() {
         };
         
         const twinResult = await module.createDigitalTwin(organizationData, context);
-        console.log('✓ Digital twin created:', {
+        console.log(' Digital twin created:', {
             twinId: twinResult.twinId,
             healthScore: twinResult.healthScore,
             maturityLevel: twinResult.maturityLevel
@@ -103,7 +103,7 @@ async function runTests() {
             context
         );
         
-        console.log('✓ Automation scenario completed:', {
+        console.log(' Automation scenario completed:', {
             roi: automationResult.results.financial_impact.roi_percentage,
             payback: automationResult.results.financial_impact.payback_months,
             efficiency: automationResult.results.operational_impact.efficiency_gain_percentage
@@ -123,7 +123,7 @@ async function runTests() {
             context
         );
         
-        console.log('✓ Crisis scenario completed:', {
+        console.log(' Crisis scenario completed:', {
             survivalMonths: crisisResult.results.survival_analysis.survival_months,
             recoveryPotential: crisisResult.results.recovery_plan.total_recovery_potential
         });
@@ -138,7 +138,7 @@ async function runTests() {
             volatility: 0.2
         });
         
-        console.log('✓ Monte Carlo simulation completed:', {
+        console.log(' Monte Carlo simulation completed:', {
             mean: monteCarloResult.mean,
             confidence: monteCarloResult.confidenceInterval
         });
@@ -152,7 +152,7 @@ async function runTests() {
             discountRate: 0.1
         });
         
-        console.log('✓ ROI analysis completed:', {
+        console.log(' ROI analysis completed:', {
             expectedNPV: roiResult.expectedNPV,
             probabilityOfSuccess: roiResult.probabilityOfSuccess
         });
@@ -160,12 +160,12 @@ async function runTests() {
         // Test 7: Health status
         logger.info('Test 7: Checking health status');
         const health = module.getHealthStatus();
-        console.log('✓ Health status:', health);
+        console.log(' Health status:', health);
         
         // Test 8: Metrics
         logger.info('Test 8: Getting metrics');
         const metrics = module.metrics;
-        console.log('✓ Metrics:', {
+        console.log(' Metrics:', {
             totalTwins: metrics.totalTwins,
             completedScenarios: metrics.completedScenarios,
             averageSimulationTime: metrics.averageSimulationTime

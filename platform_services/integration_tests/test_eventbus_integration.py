@@ -60,7 +60,7 @@ async def test_bia_event_publishing(
 
     # Check for published event (if EventBus supports retrieval)
     # Note: This depends on EventBus implementation
-    print(f"✅ BIA event published (process_id: {process_id})")
+    print(f" BIA event published (process_id: {process_id})")
 
 
 @pytest.mark.integration
@@ -113,7 +113,7 @@ async def test_strategy_approval_event(
     # Wait for event
     await asyncio.sleep(1)
 
-    print(f"✅ Strategy approval event published")
+    print(f" Strategy approval event published")
 
 
 @pytest.mark.integration
@@ -151,7 +151,7 @@ async def test_event_payload_structure(
     )
 
     if not published:
-        print(f"⚠️ EventBus not available or publish failed")
+        print(f"️ EventBus not available or publish failed")
         return
 
     # Verify event structure
@@ -159,7 +159,7 @@ async def test_event_payload_structure(
     assert "resource_id" in event_payload
     assert "data" in event_payload
 
-    print(f"✅ Event payload structure verified")
+    print(f" Event payload structure verified")
 
 
 @pytest.mark.integration
@@ -212,7 +212,7 @@ async def test_event_idempotency(
     await eventbus_helper.publish_event("bia.process.created", event_payload)
 
     # System should handle duplicate gracefully
-    print(f"✅ Event idempotency verified")
+    print(f" Event idempotency verified")
 
 
 @pytest.mark.integration
@@ -275,7 +275,7 @@ async def test_event_ordering(
     assert response.status_code == 200
 
     # Events should be in order: created → updated → approved
-    print(f"✅ Event ordering verified")
+    print(f" Event ordering verified")
 
 
 @pytest.mark.integration
@@ -329,7 +329,7 @@ async def test_cross_service_event_subscription(
 
     # Plans service should have received event
     # (In production, this would trigger auto-plan creation)
-    print(f"✅ Cross-service event subscription verified")
+    print(f" Cross-service event subscription verified")
 
 
 @pytest.mark.integration
@@ -365,7 +365,7 @@ async def test_event_failure_handling(
     # System should handle gracefully
     await asyncio.sleep(1)
 
-    print(f"✅ Event failure handling verified")
+    print(f" Event failure handling verified")
 
 
 @pytest.mark.integration
@@ -421,7 +421,7 @@ async def test_audit_completion_event(
     # Wait for event
     await asyncio.sleep(1)
 
-    print(f"✅ Audit completion event published")
+    print(f" Audit completion event published")
 
 
 @pytest.mark.integration
@@ -490,4 +490,4 @@ async def test_event_tenant_isolation(
         )
 
     # Events should be tenant-isolated
-    print(f"✅ Event tenant isolation verified")
+    print(f" Event tenant isolation verified")

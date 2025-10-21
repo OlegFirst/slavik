@@ -404,7 +404,7 @@ export function ImpactAssessmentForm({
         {patientSafetyImpact !== PatientSafetyImpact.NO_IMPACT && (
           <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-red-800 text-sm font-medium">
-              ⚠️ Patient safety impact detected. This process requires:
+              ️ Patient safety impact detected. This process requires:
             </p>
             <ul className="list-disc list-inside text-red-700 text-sm mt-2">
               <li>Immediate escalation to clinical leadership</li>

@@ -82,7 +82,7 @@ class PerformanceTracker:
 
         self._running = True
         self._monitoring_task = asyncio.create_task(self._monitor_resources())
-        logger.info("✅ Performance tracker started")
+        logger.info(" Performance tracker started")
 
     async def stop(self):
         """Stop background monitoring"""
@@ -93,7 +93,7 @@ class PerformanceTracker:
                 await self._monitoring_task
             except asyncio.CancelledError:
                 pass
-        logger.info("🛑 Performance tracker stopped")
+        logger.info(" Performance tracker stopped")
 
     async def _monitor_resources(self):
         """Background task to monitor system resources"""
@@ -383,7 +383,7 @@ class PerformanceTracker:
         self.queue_history.clear()
         self.sla_violations.clear()
         self.start_time = time.time()
-        logger.info("📊 Statistics reset")
+        logger.info(" Statistics reset")
 
 
 # Global performance tracker instance

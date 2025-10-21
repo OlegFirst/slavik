@@ -48,7 +48,7 @@ class MockBIAService:
         **kwargs
     ) -> Dict[str, Any]:
         """Create BIA assessment"""
-        logger.info(f"📊 Creating BIA assessment for org {organization_id}")
+        logger.info(f" Creating BIA assessment for org {organization_id}")
         await asyncio.sleep(0.5)  # Simulate work
 
         assessment_id = f"bia_{organization_id}_{len(self.assessments)}"
@@ -62,7 +62,7 @@ class MockBIAService:
         }
 
         self.assessments[assessment_id] = assessment
-        logger.info(f"✅ BIA assessment created: {assessment_id}")
+        logger.info(f" BIA assessment created: {assessment_id}")
 
         return assessment
 
@@ -73,12 +73,12 @@ class MockBIAService:
         **kwargs
     ) -> Dict[str, Any]:
         """Delete BIA assessment (compensation)"""
-        logger.info(f"🔄 Deleting BIA assessment: {assessment_id}")
+        logger.info(f" Deleting BIA assessment: {assessment_id}")
         await asyncio.sleep(0.2)
 
         if assessment_id and assessment_id in self.assessments:
             del self.assessments[assessment_id]
-            logger.info(f"✅ BIA assessment deleted: {assessment_id}")
+            logger.info(f" BIA assessment deleted: {assessment_id}")
 
         return {"status": "deleted"}
 
@@ -98,7 +98,7 @@ class MockPlansService:
         **kwargs
     ) -> Dict[str, Any]:
         """Create plan suite"""
-        logger.info(f"📋 Creating plans for org {organization_id}")
+        logger.info(f" Creating plans for org {organization_id}")
         await asyncio.sleep(0.5)
 
         plan_ids = []
@@ -114,7 +114,7 @@ class MockPlansService:
             self.plans[plan_id] = plan
             plan_ids.append(plan_id)
 
-        logger.info(f"✅ Plans created: {plan_ids}")
+        logger.info(f" Plans created: {plan_ids}")
 
         return {
             "plan_suite_id": f"suite_{organization_id}",
@@ -129,7 +129,7 @@ class MockPlansService:
         **kwargs
     ) -> Dict[str, Any]:
         """Delete plan suite (compensation)"""
-        logger.info(f"🔄 Deleting plan suite: {plan_suite_id}")
+        logger.info(f" Deleting plan suite: {plan_suite_id}")
         await asyncio.sleep(0.2)
 
         # Delete all plans for org
@@ -141,7 +141,7 @@ class MockPlansService:
         for plan_id in to_delete:
             del self.plans[plan_id]
 
-        logger.info(f"✅ Plans deleted: {to_delete}")
+        logger.info(f" Plans deleted: {to_delete}")
 
         return {"status": "deleted", "deleted_count": len(to_delete)}
 
@@ -160,7 +160,7 @@ class MockComplianceService:
         **kwargs
     ) -> Dict[str, Any]:
         """Initialize compliance program"""
-        logger.info(f"✅ Initializing {standard} compliance for org {organization_id}")
+        logger.info(f" Initializing {standard} compliance for org {organization_id}")
         await asyncio.sleep(0.5)
 
         program_id = f"comp_{organization_id}_{standard}"
@@ -174,7 +174,7 @@ class MockComplianceService:
         }
 
         self.programs[program_id] = program
-        logger.info(f"✅ Compliance program initialized: {program_id}")
+        logger.info(f" Compliance program initialized: {program_id}")
 
         return program
 
@@ -185,12 +185,12 @@ class MockComplianceService:
         **kwargs
     ) -> Dict[str, Any]:
         """Remove compliance program (compensation)"""
-        logger.info(f"🔄 Removing compliance program: {program_id}")
+        logger.info(f" Removing compliance program: {program_id}")
         await asyncio.sleep(0.2)
 
         if program_id and program_id in self.programs:
             del self.programs[program_id]
-            logger.info(f"✅ Compliance program removed: {program_id}")
+            logger.info(f" Compliance program removed: {program_id}")
 
         return {"status": "removed"}
 
@@ -205,10 +205,10 @@ class MockMonitoringService:
         **kwargs
     ) -> Dict[str, Any]:
         """Setup monitoring"""
-        logger.info(f"📊 Setting up monitoring for org {organization_id}")
+        logger.info(f" Setting up monitoring for org {organization_id}")
         await asyncio.sleep(0.3)
 
-        logger.info(f"✅ Monitoring setup complete: {metrics}")
+        logger.info(f" Monitoring setup complete: {metrics}")
 
         return {
             "monitoring_id": f"mon_{organization_id}",
@@ -218,7 +218,7 @@ class MockMonitoringService:
 
     async def remove_monitoring(self, organization_id: str, **kwargs) -> Dict[str, Any]:
         """Remove monitoring (compensation)"""
-        logger.info(f"🔄 Removing monitoring for org {organization_id}")
+        logger.info(f" Removing monitoring for org {organization_id}")
         return {"status": "removed"}
 
 
@@ -258,7 +258,7 @@ async def service_invoker(action: str, params: Dict[str, Any]) -> Any:
     clean_params = {k: v for k, v in params.items() if not k.startswith('_')}
 
     # Invoke
-    logger.info(f"🔧 Invoking {action}")
+    logger.info(f" Invoking {action}")
     result = await method(**clean_params)
 
     return result
@@ -270,7 +270,7 @@ async def service_invoker(action: str, params: Dict[str, Any]) -> Any:
 
 async def event_publisher(event_type: str, data: Dict[str, Any]) -> None:
     """Publish events (mock)"""
-    logger.info(f"📢 Event: {event_type} - {data.get('saga_id', 'N/A')}")
+    logger.info(f" Event: {event_type} - {data.get('saga_id', 'N/A')}")
 
 
 # ==============================================================================
@@ -509,7 +509,7 @@ async def demo_failed_saga_with_compensation():
     logger.info(f"  Failed Compensations: {report['failed_count']}")
 
     for step in report['compensated_steps']:
-        logger.info(f"  ✅ {step['step_name']} compensated")
+        logger.info(f"   {step['step_name']} compensated")
 
     return execution
 
@@ -542,7 +542,7 @@ async def demo_saga_recovery():
     logger.info(f"\nOriginal execution: {execution.status.value}")
 
     # Simulate crash and recovery
-    logger.info("\n🔄 Simulating system restart...")
+    logger.info("\n Simulating system restart...")
 
     # Create new orchestrator (simulating restart)
     new_orchestrator = SagaOrchestrator(
@@ -555,10 +555,10 @@ async def demo_saga_recovery():
     new_orchestrator.register_saga(saga_def)
 
     # Recover saga
-    logger.info(f"🔄 Recovering saga {execution.saga_id}...")
+    logger.info(f" Recovering saga {execution.saga_id}...")
     recovered = await new_orchestrator.recover_saga(execution.saga_id)
 
-    logger.info(f"\n✅ Saga recovered: {recovered.status.value}")
+    logger.info(f"\n Saga recovered: {recovered.status.value}")
 
     return recovered
 
@@ -567,7 +567,7 @@ async def main():
     """Run all demos"""
 
     logger.info("\n")
-    logger.info("🚀 SAGA PATTERN ENGINE - QUICK START DEMO")
+    logger.info(" SAGA PATTERN ENGINE - QUICK START DEMO")
     logger.info("=" * 80)
 
     try:
@@ -581,11 +581,11 @@ async def main():
         await demo_saga_recovery()
 
         logger.info("\n" + "=" * 80)
-        logger.info("✅ ALL DEMOS COMPLETED SUCCESSFULLY!")
+        logger.info(" ALL DEMOS COMPLETED SUCCESSFULLY!")
         logger.info("=" * 80 + "\n")
 
     except Exception as e:
-        logger.error(f"❌ Demo failed: {e}", exc_info=True)
+        logger.error(f" Demo failed: {e}", exc_info=True)
 
 
 if __name__ == "__main__":

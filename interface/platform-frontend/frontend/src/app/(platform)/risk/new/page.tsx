@@ -24,11 +24,19 @@ export default function NewRiskPage() {
   // TODO: Get from auth context
   const organizationId = 'org-123';
 
-  const handleSubmit = (data: Omit<RiskCreate, 'organization_id'>) => {
-    createRisk.mutate({
-      ...data,
+  const handleSubmit = (data: RiskCreate | import('@/types/risk').RiskUpdate) => {
+    // Convert to RiskCreate and ensure organization_id is set
+    const riskData: RiskCreate = {
       organization_id: organizationId,
-    });
+      risk_title: ('risk_title' in data ? data.risk_title : '') || '',
+      risk_category: ('risk_category' in data ? data.risk_category : 'operational' as any) || 'operational' as any,
+      description: ('description' in data ? data.description : '') || '',
+      vulnerabilities: data.vulnerabilities || [],
+      likelihood: data.likelihood || 3,
+      impact: data.impact || 3,
+      ...data,
+    };
+    createRisk.mutate(riskData);
   };
 
   return (

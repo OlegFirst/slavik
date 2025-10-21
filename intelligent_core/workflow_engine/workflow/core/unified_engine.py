@@ -201,11 +201,11 @@ class UnifiedWorkflowEngine:
                 llm_client=None  # TODO: Add LLM client
             )
 
-            logger.info("✅ Workflow Intelligence enabled (Case Library + AI Advisor)")
+            logger.info(" Workflow Intelligence enabled (Case Library + AI Advisor)")
 
         except ImportError as e:
             logger.warning(
-                f"⚠️ Workflow Intelligence not available: {e}. "
+                f"️ Workflow Intelligence not available: {e}. "
                 "AI recommendations will use rule-based fallback."
             )
             self.workflow_intelligence_enabled = False
@@ -342,7 +342,7 @@ class UnifiedWorkflowEngine:
         # ACE provides enhanced context!
         strategies = context.get('playbook_strategies', [])
         if strategies:
-            logger.info(f"🎯 ACE enhanced recommendations with {len(strategies)} strategies")
+            logger.info(f" ACE enhanced recommendations with {len(strategies)} strategies")
 
         recommendations = []
 
@@ -382,7 +382,7 @@ class UnifiedWorkflowEngine:
                     })
 
                 if recommendations:
-                    logger.info(f"✅ AI Advisor provided {len(recommendations)} recommendations for task {task_id}")
+                    logger.info(f" AI Advisor provided {len(recommendations)} recommendations for task {task_id}")
                     # High effectiveness for AI recommendations
                     avg_confidence = sum(r.get('confidence', 0.7) for r in recommendations) / len(recommendations)
                     return {
@@ -391,7 +391,7 @@ class UnifiedWorkflowEngine:
                     }
 
             except Exception as e:
-                logger.warning(f"⚠️ AI Advisor failed, falling back to rule-based: {e}")
+                logger.warning(f"️ AI Advisor failed, falling back to rule-based: {e}")
 
         # Fallback: Rule-based recommendations
         recommendations = await self._get_rule_based_recommendations(
@@ -506,10 +506,10 @@ class UnifiedWorkflowEngine:
                 final_variables=instance.variables
             )
 
-            logger.info(f"✅ Case collected for learning: {case.id} (module={self.module}, duration={duration_days}d)")
+            logger.info(f" Case collected for learning: {case.id} (module={self.module}, duration={duration_days}d)")
 
         except Exception as e:
-            logger.warning(f"⚠️ Failed to collect case for learning: {e}")
+            logger.warning(f"️ Failed to collect case for learning: {e}")
 
     # ========== UNIFIED API ==========
 
@@ -774,11 +774,11 @@ class UnifiedWorkflowEngine:
                         completion_date = instance.started_at + timedelta(days=ml_predictions["estimated_duration_days"])
                         predictions["estimated_completion_date"] = completion_date.isoformat()
 
-                    logger.info(f"✅ ML Predictor provided predictions for instance {instance.id}")
+                    logger.info(f" ML Predictor provided predictions for instance {instance.id}")
                     return predictions
 
                 except Exception as e:
-                    logger.warning(f"⚠️ ML Predictor failed, using rule-based: {e}")
+                    logger.warning(f"️ ML Predictor failed, using rule-based: {e}")
 
             # Fallback: Rule-based predictions
             predictions.update({

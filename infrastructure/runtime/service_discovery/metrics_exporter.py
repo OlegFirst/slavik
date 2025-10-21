@@ -265,13 +265,13 @@ async def export_catalog_metrics(
         catalog_export_total.inc()
 
         logger.info(
-            f"✅ Successfully exported catalog metrics to Prometheus "
+            f" Successfully exported catalog metrics to Prometheus "
             f"({totals.get('total_services')} services, {duration:.2f}s)"
         )
 
     except Exception as e:
         catalog_export_errors.inc()
-        logger.error(f"❌ Failed to export catalog metrics: {e}", exc_info=True)
+        logger.error(f" Failed to export catalog metrics: {e}", exc_info=True)
         raise
 
 
@@ -386,7 +386,7 @@ if __name__ == "__main__":
         # Export metrics
         await export_catalog_metrics(mock_catalog)
 
-        print("✅ Test metrics export complete")
+        print(" Test metrics export complete")
         print("\nMetrics that would be exposed:")
         print(f"  service_catalog_total_services = 27")
         print(f"  service_catalog_registered_services = 20")

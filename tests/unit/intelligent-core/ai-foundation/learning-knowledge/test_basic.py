@@ -35,7 +35,7 @@ class TestStandardsLoader:
         assert "guides" in data
         assert len(data["guides"]) >= 3  # BSI, NQA, ISO
 
-        print(f"\n✅ Loaded ISO 22301:")
+        print(f"\n Loaded ISO 22301:")
         print(f"   Title: {data['metadata']['title']}")
         print(f"   Version: {data['metadata']['version']}")
         print(f"   Guides: {len(data['guides'])}")
@@ -54,7 +54,7 @@ class TestStandardsLoader:
 
         assert data1 == data2
 
-        print("\n✅ Cache working correctly")
+        print("\n Cache working correctly")
 
     @pytest.mark.asyncio
     async def test_list_available_standards(self):
@@ -67,7 +67,7 @@ class TestStandardsLoader:
         assert "iso" in available
         assert "iso-22301" in available["iso"]
 
-        print(f"\n✅ Available standards: {available}")
+        print(f"\n Available standards: {available}")
 
 
 class TestCaseCollector:
@@ -108,7 +108,7 @@ class TestCaseCollector:
         assert case["module"] == "bia"
         assert case["outcome"] == "success"
 
-        print(f"\n✅ Workflow case collected:")
+        print(f"\n Workflow case collected:")
         print(f"   Case ID: {case['case_id']}")
         print(f"   File: {case['file_path']}")
 
@@ -124,7 +124,7 @@ class TestCaseCollector:
         assert "by_module" in stats
         assert "by_source" in stats
 
-        print(f"\n✅ Case stats: {stats}")
+        print(f"\n Case stats: {stats}")
 
     @pytest.mark.asyncio
     async def test_import_community_case(self):
@@ -152,14 +152,14 @@ class TestCaseCollector:
         assert result["status"] in ["imported", "duplicate"]
 
         if result["status"] == "imported":
-            print(f"\n✅ Community case imported: {result['case_id']}")
+            print(f"\n Community case imported: {result['case_id']}")
         else:
-            print(f"\n⚠️  Duplicate case detected: {result['case_id']}")
+            print(f"\n️  Duplicate case detected: {result['case_id']}")
 
 
 if __name__ == "__main__":
     # Run tests manually
-    print("🧪 Running Knowledge System Tests\n")
+    print(" Running Knowledge System Tests\n")
 
     async def run_tests():
         print("=" * 60)
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         await test_collector.test_get_case_stats()
 
         print("\n" + "=" * 60)
-        print("✅ ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("=" * 60)
 
     asyncio.run(run_tests())

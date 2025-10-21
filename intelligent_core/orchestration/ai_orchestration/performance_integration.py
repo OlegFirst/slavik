@@ -313,7 +313,7 @@ class PerformanceMonitor:
 
                 # Check for critical issues
                 if evaluation['overall_score'] < 0.70:
-                    print(f"  ⚠️ ALERT: Low OPS detected! {evaluation['overall_score']:.3f}")
+                    print(f"  ️ ALERT: Low OPS detected! {evaluation['overall_score']:.3f}")
 
             except Exception as e:
                 print(f"Error in performance monitoring: {e}")
@@ -420,13 +420,13 @@ async def example_real_integration():
 
     print(f"\nCategory Scores (from real data):")
     for category, score in evaluation['category_scores'].items():
-        status = "✅" if score >= 0.8 else "⚠️" if score >= 0.7 else "❌"
+        status = "" if score >= 0.8 else "️" if score >= 0.7 else ""
         print(f"  {status} {category.title()}: {score:.3f}")
 
     print(f"\nSLA Compliance:")
     for sla_type, status in evaluation['sla_compliance'].items():
         if sla_type != 'overall':
-            met = "✅" if status['met'] else "❌"
+            met = "" if status['met'] else ""
             print(f"  {met} {sla_type.title()}: {'PASS' if status['met'] else 'FAIL'}")
 
     print(f"\nRecommendations:")

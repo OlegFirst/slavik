@@ -103,7 +103,7 @@ async def intent_execution(intent_data: Dict[str, Any]) -> ExecutionResult:
     Activity: Calls Coordination Center /execute endpoint
     Idempotent: Safe to retry
     """
-    logger.info(f"🎯 Executing intent: {intent_data.get('action')}")
+    logger.info(f" Executing intent: {intent_data.get('action')}")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -182,7 +182,7 @@ async def task_distribution(tasks: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     Activity: Routes tasks based on entity type and service registry
     """
-    logger.info(f"📋 Distributing {len(tasks)} tasks")
+    logger.info(f" Distributing {len(tasks)} tasks")
 
     from orchestration.coordination_center.core.tool_registry import tool_registry
 
@@ -208,7 +208,7 @@ async def task_distribution(tasks: List[Dict[str, Any]]) -> Dict[str, Any]:
             "params": task.get("params")
         })
 
-    logger.info(f"✅ Distributed to {len(distributed)} services")
+    logger.info(f" Distributed to {len(distributed)} services")
 
     return {
         "distributed_count": len(distributed),
@@ -224,7 +224,7 @@ async def service_coordination(service_calls: List[Dict[str, Any]]) -> Dict[str,
 
     Activity: Orchestrates multi-service operations
     """
-    logger.info(f"🔗 Coordinating {len(service_calls)} service calls")
+    logger.info(f" Coordinating {len(service_calls)} service calls")
 
     results = []
     failed = []
@@ -270,7 +270,7 @@ async def status_aggregation(execution_ids: List[str]) -> Dict[str, Any]:
 
     Activity: Collects and aggregates status from parallel executions
     """
-    logger.info(f"📊 Aggregating status from {len(execution_ids)} executions")
+    logger.info(f" Aggregating status from {len(execution_ids)} executions")
 
     statuses = []
 
@@ -317,7 +317,7 @@ async def conflict_resolution(conflicts: List[Dict[str, Any]]) -> Dict[str, Any]
 
     Activity: Handles resource conflicts, data inconsistencies
     """
-    logger.info(f"⚔️ Resolving {len(conflicts)} conflicts")
+    logger.info(f"️ Resolving {len(conflicts)} conflicts")
 
     resolved = []
     unresolved = []
@@ -385,7 +385,7 @@ async def approval_request(approval_data: Dict[str, Any]) -> Dict[str, Any]:
 
     Activity: Long-running, waits for approval
     """
-    logger.info(f"✋ Requesting approval for: {approval_data.get('action')}")
+    logger.info(f" Requesting approval for: {approval_data.get('action')}")
 
     # Send approval request to Coordination Center
     execution_id = approval_data.get("execution_id")
@@ -501,7 +501,7 @@ class CoordinationWorkflow:
         4. Track progress
         5. Rollback on failure
         """
-        workflow.logger.info(f"🎯 Starting Coordination Workflow: {intent_data.get('action')}")
+        workflow.logger.info(f" Starting Coordination Workflow: {intent_data.get('action')}")
 
         # Retry policy for transient failures
         retry_policy = RetryPolicy(
@@ -528,11 +528,11 @@ class CoordinationWorkflow:
                 retry_policy=retry_policy
             )
 
-            workflow.logger.info(f"✅ Intent executed: {execution_result.execution_id}")
+            workflow.logger.info(f" Intent executed: {execution_result.execution_id}")
 
             # Step 2: Handle approval if required
             if execution_result.status == "requires_approval":
-                workflow.logger.info("✋ Approval required, waiting...")
+                workflow.logger.info(" Approval required, waiting...")
 
                 approval = await workflow.execute_activity(
                     approval_request,
@@ -548,7 +548,7 @@ class CoordinationWorkflow:
                 if not approval.get("approved"):
                     raise ApplicationError("Approval denied", type="APPROVAL_DENIED")
 
-                workflow.logger.info("✅ Approval granted, continuing...")
+                workflow.logger.info(" Approval granted, continuing...")
 
                 # Re-poll execution status after approval
                 execution_result = await workflow.execute_activity(
@@ -573,11 +573,11 @@ class CoordinationWorkflow:
                     type="EXECUTION_FAILED"
                 )
 
-            workflow.logger.info("🎉 Coordination Workflow completed!")
+            workflow.logger.info(" Coordination Workflow completed!")
             return result
 
         except Exception as e:
-            workflow.logger.error(f"❌ Coordination Workflow failed: {str(e)}")
+            workflow.logger.error(f" Coordination Workflow failed: {str(e)}")
 
             # Rollback if execution was started
             if execution_result and execution_result.execution_id:
@@ -632,7 +632,7 @@ class CrossServiceWorkflow:
         4. Aggregate status
         5. Rollback on failure
         """
-        workflow.logger.info(f"🔗 Starting Cross-Service Workflow: {len(tasks)} tasks")
+        workflow.logger.info(f" Starting Cross-Service Workflow: {len(tasks)} tasks")
 
         retry_policy = RetryPolicy(
             initial_interval=timedelta(seconds=1),
@@ -658,7 +658,7 @@ class CrossServiceWorkflow:
             )
 
             workflow.logger.info(
-                f"📋 Distributed {distribution['distributed_count']} tasks"
+                f" Distributed {distribution['distributed_count']} tasks"
             )
 
             # Step 2: Execute tasks (parallel for now, TODO: handle dependencies)
@@ -690,7 +690,7 @@ class CrossServiceWorkflow:
             # Collect execution IDs
             execution_ids = [r.execution_id for r in execution_results]
 
-            workflow.logger.info(f"✅ Executed {len(execution_ids)} tasks")
+            workflow.logger.info(f" Executed {len(execution_ids)} tasks")
 
             # Step 3: Check for conflicts
             conflicts = []
@@ -703,7 +703,7 @@ class CrossServiceWorkflow:
                     })
 
             if conflicts:
-                workflow.logger.warning(f"⚔️ Detected {len(conflicts)} conflicts")
+                workflow.logger.warning(f"️ Detected {len(conflicts)} conflicts")
 
                 conflict_resolution_result = await workflow.execute_activity(
                     conflict_resolution,
@@ -713,7 +713,7 @@ class CrossServiceWorkflow:
                 )
 
                 workflow.logger.info(
-                    f"✅ Resolved {conflict_resolution_result['resolved_count']}/{len(conflicts)} conflicts"
+                    f" Resolved {conflict_resolution_result['resolved_count']}/{len(conflicts)} conflicts"
                 )
 
             # Step 4: Aggregate status
@@ -725,7 +725,7 @@ class CrossServiceWorkflow:
             )
 
             workflow.logger.info(
-                f"📊 Status: {status_agg['completed']}/{status_agg['total']} completed"
+                f" Status: {status_agg['completed']}/{status_agg['total']} completed"
             )
 
             # Step 5: Determine overall status
@@ -742,11 +742,11 @@ class CrossServiceWorkflow:
                 "completed_at": workflow.now().isoformat()
             })
 
-            workflow.logger.info("🎉 Cross-Service Workflow completed!")
+            workflow.logger.info(" Cross-Service Workflow completed!")
             return result
 
         except Exception as e:
-            workflow.logger.error(f"❌ Cross-Service Workflow failed: {str(e)}")
+            workflow.logger.error(f" Cross-Service Workflow failed: {str(e)}")
 
             # Rollback all executions (Saga pattern)
             if execution_ids:
@@ -801,7 +801,7 @@ class ParallelTaskWorkflow:
             tasks: List of independent tasks
             fail_fast: If True, fail on first error; if False, continue
         """
-        workflow.logger.info(f"⚡ Starting Parallel Task Workflow: {len(tasks)} tasks")
+        workflow.logger.info(f" Starting Parallel Task Workflow: {len(tasks)} tasks")
 
         retry_policy = RetryPolicy(
             initial_interval=timedelta(seconds=1),
@@ -845,7 +845,7 @@ class ParallelTaskWorkflow:
         successful = sum(1 for r in results if r.status == "completed")
         failed = sum(1 for r in results if r.status == "failed")
 
-        workflow.logger.info(f"✅ Parallel execution: {successful}/{len(tasks)} successful")
+        workflow.logger.info(f" Parallel execution: {successful}/{len(tasks)} successful")
 
         return {
             "workflow": "ParallelTaskWorkflow",

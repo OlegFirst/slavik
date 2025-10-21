@@ -88,7 +88,7 @@ class MetricsHealthChecker:
         Returns:
             MetricsHealthObservation с полным snapshot здоровья
         """
-        logger.info("👀 МиО checking metrics health...")
+        logger.info(" МиО checking metrics health...")
 
         try:
             # Get all Prometheus targets
@@ -137,19 +137,19 @@ class MetricsHealthChecker:
             self.last_observation = observation
 
             logger.info(
-                f"   ✅ Metrics health observed: "
+                f"    Metrics health observed: "
                 f"{len(healthy)}/{len(service_healths)} healthy, "
                 f"{len(warning)} warnings, "
                 f"{len(critical)} critical"
             )
 
             if critical_issues:
-                logger.warning(f"   ⚠️  {len(critical_issues)} critical issues detected")
+                logger.warning(f"   ️  {len(critical_issues)} critical issues detected")
 
             return observation
 
         except Exception as e:
-            logger.error(f"❌ Failed to check metrics health: {e}")
+            logger.error(f" Failed to check metrics health: {e}")
             # Return minimal observation on error
             return MetricsHealthObservation(
                 timestamp=datetime.utcnow(),
@@ -189,14 +189,14 @@ class MetricsHealthChecker:
                 },
                 priority='normal'
             )
-            logger.info(f"📡 Published metrics health observation: {observation.overall_health}")
+            logger.info(f" Published metrics health observation: {observation.overall_health}")
 
             # If critical health, publish separate issue observation
             if observation.overall_health == 'critical' or observation.critical_services > 0:
                 await self._publish_health_issue(observation)
 
         except Exception as e:
-            logger.error(f"❌ Failed to publish health observation: {e}")
+            logger.error(f" Failed to publish health observation: {e}")
 
     async def _publish_health_issue(self, observation: MetricsHealthObservation):
         """Публикует observation о критичной проблеме со здоровьем метрик"""
@@ -215,7 +215,7 @@ class MetricsHealthChecker:
             },
             priority='high'
         )
-        logger.warning(f"⚠️  Published health issue: {observation.overall_health} (severity: {severity})")
+        logger.warning(f"️  Published health issue: {observation.overall_health} (severity: {severity})")
 
     # ========================================================================
     # Prometheus Integration

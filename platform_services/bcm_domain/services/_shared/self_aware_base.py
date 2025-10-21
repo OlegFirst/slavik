@@ -344,7 +344,7 @@ class SelfAwareService:
         if self._degraded_mode:
             return
 
-        logger.warning(f"⚠️ {self.service_name} entering degraded mode: {reason}")
+        logger.warning(f"️ {self.service_name} entering degraded mode: {reason}")
         self._degraded_mode = True
         self._metrics["degradations"] += 1
 
@@ -374,7 +374,7 @@ class SelfAwareService:
         if not self._degraded_mode:
             return
 
-        logger.info(f"✅ {self.service_name} recovering from degraded mode")
+        logger.info(f" {self.service_name} recovering from degraded mode")
         self._degraded_mode = False
 
         # Re-enable all capabilities

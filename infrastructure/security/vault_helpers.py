@@ -71,10 +71,10 @@ def test_vault_connection() -> bool:
     try:
         vault = get_vault_client()
         secrets = vault.list_secrets()
-        print(f"✅ Vault connection OK: {len(secrets)} secrets available")
+        print(f" Vault connection OK: {len(secrets)} secrets available")
         return True
     except Exception as e:
-        print(f"❌ Vault connection failed: {e}")
+        print(f" Vault connection failed: {e}")
         return False
 
 # Add missing import

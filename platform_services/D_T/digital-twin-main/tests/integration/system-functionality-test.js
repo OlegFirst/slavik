@@ -20,7 +20,7 @@ class SystemFunctionalityTest {
     }
 
     async runFullTest() {
-        console.log('🚀 Запуск полного теста функциональности NASH 4.0 Digital Twin...\n');
+        console.log(' Запуск полного теста функциональности NASH 4.0 Digital Twin...\n');
 
         await this.testSystemHealth();
         await this.testAvailableExperiments();
@@ -34,7 +34,7 @@ class SystemFunctionalityTest {
     }
 
     async testSystemHealth() {
-        console.log('🔍 Проверка здоровья системы...');
+        console.log(' Проверка здоровья системы...');
         
         try {
             const response = await fetch(`${this.baseUrl}/health`);
@@ -57,7 +57,7 @@ class SystemFunctionalityTest {
     }
 
     async testAvailableExperiments() {
-        console.log('📋 Проверка доступных экспериментов...');
+        console.log(' Проверка доступных экспериментов...');
         
         try {
             const response = await fetch(`${this.baseUrl}/api/impact/simulations/experiments`);
@@ -86,7 +86,7 @@ class SystemFunctionalityTest {
     }
 
     async testExternalAdapters() {
-        console.log('🔬 Тестирование внешних SEH адаптеров...');
+        console.log(' Тестирование внешних SEH адаптеров...');
         
         const adapters = [
             {
@@ -123,7 +123,7 @@ class SystemFunctionalityTest {
     }
 
     async testDigitalTwinScenarios() {
-        console.log('🏢 Тестирование Digital Twin сценариев...');
+        console.log(' Тестирование Digital Twin сценариев...');
         
         const scenarios = [
             'automation', 'crisis', 'expansion', 'integration',
@@ -145,7 +145,7 @@ class SystemFunctionalityTest {
     }
 
     async testInternalEngines() {
-        console.log('⚙️ Тестирование внутренних движков...');
+        console.log('️ Тестирование внутренних движков...');
         
         const engines = [
             {
@@ -213,7 +213,7 @@ class SystemFunctionalityTest {
     }
 
     async testSEHEndpoints() {
-        console.log('📊 Тестирование SEH endpoints...');
+        console.log(' Тестирование SEH endpoints...');
         
         try {
             // Тест создания программы
@@ -244,7 +244,7 @@ class SystemFunctionalityTest {
     }
 
     async testImpactValidation() {
-        console.log('🎯 Тестирование Impact Validation...');
+        console.log(' Тестирование Impact Validation...');
         
         try {
             // Тест workflow симуляции и регистрации
@@ -275,10 +275,10 @@ class SystemFunctionalityTest {
         this.results.total++;
         if (passed) {
             this.results.passed++;
-            console.log(`✅ ${testName}: ${message}`);
+            console.log(` ${testName}: ${message}`);
         } else {
             this.results.failed++;
-            console.log(`❌ ${testName}: ${message}`);
+            console.log(` ${testName}: ${message}`);
         }
         
         this.results.tests.push({
@@ -290,21 +290,21 @@ class SystemFunctionalityTest {
     }
 
     printResults() {
-        console.log('\n📊 РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ:');
+        console.log('\n РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ:');
         console.log('=' * 50);
         console.log(`Всего тестов: ${this.results.total}`);
-        console.log(`✅ Прошли: ${this.results.passed}`);
-        console.log(`❌ Не прошли: ${this.results.failed}`);
-        console.log(`📈 Успешность: ${((this.results.passed / this.results.total) * 100).toFixed(1)}%`);
+        console.log(` Прошли: ${this.results.passed}`);
+        console.log(` Не прошли: ${this.results.failed}`);
+        console.log(` Успешность: ${((this.results.passed / this.results.total) * 100).toFixed(1)}%`);
         
         if (this.results.failed > 0) {
-            console.log('\n❌ НЕУСПЕШНЫЕ ТЕСТЫ:');
+            console.log('\n НЕУСПЕШНЫЕ ТЕСТЫ:');
             this.results.tests
                 .filter(t => !t.passed)
                 .forEach(test => console.log(`  - ${test.name}: ${test.message}`));
         }
         
-        console.log('\n🎉 Тест завершен!');
+        console.log('\n Тест завершен!');
     }
 }
 

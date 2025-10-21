@@ -56,13 +56,13 @@ class WorkflowOptimizerClient:
             result = response.json()
 
             logger.info(
-                f"✅ Predicted execution time: {result['predicted_minutes']}min "
+                f" Predicted execution time: {result['predicted_minutes']}min "
                 f"(confidence: {result['confidence']*100:.1f}%)"
             )
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to predict execution time: {e}")
+            logger.error(f" Failed to predict execution time: {e}")
             return {
                 "predicted_minutes": None,
                 "confidence": 0.0,
@@ -99,17 +99,17 @@ class WorkflowOptimizerClient:
 
             if result.get('is_anomaly'):
                 logger.warning(
-                    f"⚠️  Anomaly detected for {process_id}: "
+                    f"️  Anomaly detected for {process_id}: "
                     f"score={result['anomaly_score']:.2f}, "
                     f"risk={result['risk_level']}"
                 )
             else:
-                logger.info(f"✅ No anomalies detected for {process_id}")
+                logger.info(f" No anomalies detected for {process_id}")
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to detect anomalies: {e}")
+            logger.error(f" Failed to detect anomalies: {e}")
             return {
                 "is_anomaly": False,
                 "error": str(e)
@@ -149,15 +149,15 @@ class WorkflowOptimizerClient:
 
             if result.get('bottlenecks'):
                 logger.warning(
-                    f"⚠️  Found {len(result['bottlenecks'])} bottlenecks in {process_id}"
+                    f"️  Found {len(result['bottlenecks'])} bottlenecks in {process_id}"
                 )
             else:
-                logger.info(f"✅ No bottlenecks found in {process_id}")
+                logger.info(f" No bottlenecks found in {process_id}")
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to analyze bottlenecks: {e}")
+            logger.error(f" Failed to analyze bottlenecks: {e}")
             return {
                 "bottlenecks": [],
                 "error": str(e)
@@ -198,13 +198,13 @@ class WorkflowOptimizerClient:
             result = response.json()
 
             logger.info(
-                f"✅ Optimized resources for {process_id}: "
+                f" Optimized resources for {process_id}: "
                 f"time reduction={result['expected_improvement'].get('time_reduction_percent', 0):.1f}%"
             )
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to optimize resources: {e}")
+            logger.error(f" Failed to optimize resources: {e}")
             return {
                 "current_allocation": current_allocation,
                 "recommended_allocation": current_allocation,
@@ -240,11 +240,11 @@ class WorkflowOptimizerClient:
             response.raise_for_status()
             recommendations = response.json()
 
-            logger.info(f"✅ Got {len(recommendations)} optimization recommendations")
+            logger.info(f" Got {len(recommendations)} optimization recommendations")
             return recommendations
 
         except Exception as e:
-            logger.error(f"❌ Failed to get recommendations: {e}")
+            logger.error(f" Failed to get recommendations: {e}")
             return []
 
     async def predict_success_probability(
@@ -276,12 +276,12 @@ class WorkflowOptimizerClient:
             result = response.json()
 
             logger.info(
-                f"✅ Predicted success probability: {result['success_probability']*100:.1f}%"
+                f" Predicted success probability: {result['success_probability']*100:.1f}%"
             )
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to predict success probability: {e}")
+            logger.error(f" Failed to predict success probability: {e}")
             return {
                 "success_probability": 0.5,
                 "confidence": 0.0,
@@ -316,11 +316,11 @@ class WorkflowOptimizerClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Recorded execution for {process_id}")
+            logger.info(f" Recorded execution for {process_id}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to record execution: {e}")
+            logger.error(f" Failed to record execution: {e}")
             return {"error": str(e)}
 
     # ========================================================================
@@ -394,7 +394,7 @@ class WorkflowOptimizerClient:
             result = response.json()
 
             logger.info(
-                f"📊 System Performance Analysis: "
+                f" System Performance Analysis: "
                 f"health_score={result.get('overall_health_score', 0):.2f}, "
                 f"bottlenecks={len(result.get('bottlenecks', []))}"
             )
@@ -402,7 +402,7 @@ class WorkflowOptimizerClient:
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to analyze system performance: {e}")
+            logger.error(f" Failed to analyze system performance: {e}")
             return {
                 'overall_health_score': 0.0,
                 'bottlenecks': [],
@@ -450,12 +450,12 @@ class WorkflowOptimizerClient:
             response.raise_for_status()
             recommendations = response.json()
 
-            logger.info(f"💡 Got {len(recommendations)} optimization recommendations")
+            logger.info(f" Got {len(recommendations)} optimization recommendations")
 
             return recommendations
 
         except Exception as e:
-            logger.error(f"❌ Failed to get recommendations: {e}")
+            logger.error(f" Failed to get recommendations: {e}")
             return []
 
     async def predict_resource_needs(
@@ -504,14 +504,14 @@ class WorkflowOptimizerClient:
             result = response.json()
 
             logger.info(
-                f"📈 Resource needs predicted for {horizon}: "
+                f" Resource needs predicted for {horizon}: "
                 f"{len(result.get('scaling_recommendations', []))} actions suggested"
             )
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to predict resource needs: {e}")
+            logger.error(f" Failed to predict resource needs: {e}")
             return {
                 'horizon': horizon,
                 'predictions': {},
@@ -540,7 +540,7 @@ class WorkflowOptimizerClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Workflow Optimizer health check failed: {e}")
+            logger.error(f" Workflow Optimizer health check failed: {e}")
             return {
                 'status': 'unhealthy',
                 'error': str(e)

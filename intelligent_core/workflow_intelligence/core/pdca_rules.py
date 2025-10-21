@@ -1,5 +1,5 @@
 """
-🔄 PDCA Rules Engine - REAL IMPLEMENTATION
+ PDCA Rules Engine - REAL IMPLEMENTATION
 
 NO MOCKS. NO OPTIONALS. REAL DEPENDENCIES.
 """
@@ -23,10 +23,10 @@ try:
     )
     METRICS_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info("✅ PDCA metrics imported successfully")
+    logger.info(" PDCA metrics imported successfully")
 except ImportError as e:
     logger = logging.getLogger(__name__)
-    logger.warning(f"⚠️ PDCA metrics not available: {e}")
+    logger.warning(f"️ PDCA metrics not available: {e}")
     METRICS_AVAILABLE = False
     # Mock decorator if metrics not available
     def track_pdca_phase(phase):
@@ -118,7 +118,7 @@ class PDCARulesEngine:
         # In-memory cache (for current session only)
         self.active_cycles: Dict[str, PDCACycleData] = {}
 
-        logger.info("✅ PDCA Rules Engine initialized with REAL dependencies")
+        logger.info(" PDCA Rules Engine initialized with REAL dependencies")
 
     # ========================================================================
     # PLAN PHASE
@@ -188,7 +188,7 @@ class PDCARulesEngine:
 
         self.active_cycles[workflow_id] = cycle
 
-        logger.info(f"✅ PLAN complete: {len(recommendations)} recommendations")
+        logger.info(f" PLAN complete: {len(recommendations)} recommendations")
 
         return {
             'recommendations': recommendations,
@@ -278,7 +278,7 @@ class PDCARulesEngine:
         cycle.benchmarks = benchmarks
         cycle.quality_score = score
 
-        logger.info(f"✅ CHECK complete: score={score}, deviations={len(deviations)}")
+        logger.info(f" CHECK complete: score={score}, deviations={len(deviations)}")
 
         return {
             'score': score,
@@ -356,7 +356,7 @@ class PDCARulesEngine:
         cycle_dict = asdict(cycle)
         cycle_id = await self.pdca_repo.save_cycle(cycle_dict)
 
-        logger.info(f"✅ Cycle saved to PostgreSQL: {cycle_id}")
+        logger.info(f" Cycle saved to PostgreSQL: {cycle_id}")
 
         # 5. Save lessons to Knowledge Base (REAL learning)
         if lessons:
@@ -379,20 +379,20 @@ class PDCARulesEngine:
                     saved_to_knowledge_base=True
                 )
 
-                logger.info(f"✅ Lessons saved to Knowledge Base")
+                logger.info(f" Lessons saved to Knowledge Base")
             except Exception as e:
                 logger.error(f"Failed to save lessons: {e}")
 
-        logger.info(f"✅ ACT complete: {len(lessons)} lessons, {len(cycle.patterns_detected)} patterns")
+        logger.info(f" ACT complete: {len(lessons)} lessons, {len(cycle.patterns_detected)} patterns")
 
         # Track metrics if available
         if METRICS_AVAILABLE:
             try:
                 cycle_dict = asdict(cycle)
                 track_pdca_metrics(cycle_dict, cycle.module, self.tenant_id)
-                logger.info("📊 PDCA metrics tracked successfully")
+                logger.info(" PDCA metrics tracked successfully")
             except Exception as e:
-                logger.warning(f"⚠️ Failed to track PDCA metrics: {e}")
+                logger.warning(f"️ Failed to track PDCA metrics: {e}")
 
         return {
             'cycle_id': cycle_id,
@@ -440,7 +440,7 @@ def initialize_pdca_engine(
         pattern_detector=pattern_detector
     )
 
-    logger.info("✅ Global PDCA Engine initialized")
+    logger.info(" Global PDCA Engine initialized")
     return _pdca_rules_engine
 
 
@@ -495,11 +495,11 @@ async def enable_pdca_for_workflow_engine(event_bus, pdca_engine: PDCARulesEngin
             act_result = await pdca_engine.complete_cycle(workflow_id)
 
             logger.info(
-                f"✅ PDCA cycle complete: workflow={workflow_id}, "
+                f" PDCA cycle complete: workflow={workflow_id}, "
                 f"score={check_result.get('score')}, "
                 f"lessons={len(act_result.get('lessons', []))}"
             )
         except Exception as e:
             logger.error(f"PDCA CHECK/ACT failed: {e}", exc_info=True)
 
-    logger.info("✅ PDCA enabled for Workflow Engine (platform EventBus)")
+    logger.info(" PDCA enabled for Workflow Engine (platform EventBus)")

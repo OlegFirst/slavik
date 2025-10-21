@@ -90,9 +90,9 @@ class SimulationServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
                     "simulation.reporting"
                 ]
             )
-            logger.info("✅ Simulation Service initialized as Self-Aware")
+            logger.info(" Simulation Service initialized as Self-Aware")
         else:
-            logger.warning("⚠️  Simulation Service running in basic mode (Self-Aware not available)")
+            logger.warning("️  Simulation Service running in basic mode (Self-Aware not available)")
 
     async def initialize(self):
         """Initialize Simulation Service-specific capabilities"""
@@ -103,7 +103,7 @@ class SimulationServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
             self.register_handler("simulation.what_if.*", self.handle_what_if_event, priority=EventPriority.NORMAL)
             self.register_handler("simulation.reporting.*", self.handle_reporting_event, priority=EventPriority.NORMAL)
 
-            logger.info("✅ Simulation Service event handlers registered")
+            logger.info(" Simulation Service event handlers registered")
 
     async def handle_scenario_event(self, event):
         """Handle simulation.scenario events"""
@@ -155,10 +155,10 @@ async def lifespan(app: FastAPI):
 
     # === STARTUP ===
     logger.info("=" * 60)
-    logger.info("🚀 Starting Simulation Service (Integrated with Graceful Choreography)")
+    logger.info(" Starting Simulation Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f"📍 Port: 8130")
-    logger.info(f"📋 ISO 22301 Clause: 8.5")
+    logger.info(f" Port: 8130")
+    logger.info(f" ISO 22301 Clause: 8.5")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -180,7 +180,7 @@ async def lifespan(app: FastAPI):
         # === 2. Initialize Database ===
         logger.info("\n2️⃣  Initializing Database...")
         await init_db()
-        logger.info(f"   ✅ Database initialized")
+        logger.info(f"    Database initialized")
 
         # === 3. Initialize Self-Aware Service ===
         if SELF_AWARE_AVAILABLE:
@@ -190,7 +190,7 @@ async def lifespan(app: FastAPI):
 
             # Subscribe to events via platform EventBus
             if platform.intelligent_router:
-                logger.info("   📡 Registering with Intelligent EventBus...")
+                logger.info("    Registering with Intelligent EventBus...")
                 # Register service capabilities with router
                 await platform.intelligent_router.register_subscriber(
                     subscriber_id="simulation_service",
@@ -204,13 +204,13 @@ async def lifespan(app: FastAPI):
                         "semantic_tags": ["simulation", "scenario", "monte_carlo", "analysis"]
                     }
                 )
-                logger.info("   ✅ Self-Aware Service registered with Intelligent Router")
+                logger.info("    Self-Aware Service registered with Intelligent Router")
             elif platform.eventbus:
-                logger.info("   📡 Registering with Basic EventBus...")
+                logger.info("    Registering with Basic EventBus...")
                 await platform.eventbus.subscribe("simulation.*", "scenario.*", service_self_aware.on_event)
-                logger.info("   ✅ Self-Aware Service registered with EventBus")
+                logger.info("    Self-Aware Service registered with EventBus")
         else:
-            logger.warning("\n3️⃣  ⚠️  Self-Aware Services not available (basic mode)")
+            logger.warning("\n3️⃣  ️  Self-Aware Services not available (basic mode)")
 
         # === 4. Initialize Workflow Intelligence ===
         logger.info("\n4️⃣  Initializing Workflow Intelligence...")
@@ -240,7 +240,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("   ✅ Workflow Intelligence initialized")
+        logger.info("    Workflow Intelligence initialized")
 
         # === 5. Register Sagas (if saga engine available) ===
         if platform.saga_orchestrator:
@@ -254,41 +254,41 @@ async def lifespan(app: FastAPI):
                 platform.saga_orchestrator.register_saga(create_bcm_program_saga())
                 platform.saga_orchestrator.register_saga(create_incident_response_saga())
 
-                logger.info("   ✅ Sagas registered")
+                logger.info("    Sagas registered")
             except ImportError:
-                logger.warning("   ⚠️  Saga definitions not found")
+                logger.warning("   ️  Saga definitions not found")
 
         logger.info("\n" + "=" * 60)
-        logger.info("✅ Simulation Service ready (with Graceful Choreography)")
+        logger.info(" Simulation Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"   🌐 Docs: http://localhost:8130/docs")
-        logger.info(f"   📊 Metrics: http://localhost:8130/metrics")
-        logger.info(f"   ❤️  Health: http://localhost:8130/health")
+        logger.info(f"    Docs: http://localhost:8130/docs")
+        logger.info(f"    Metrics: http://localhost:8130/metrics")
+        logger.info(f"   ️  Health: http://localhost:8130/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
-        logger.error(f"❌ Failed to start Simulation Service: {e}", exc_info=True)
+        logger.error(f" Failed to start Simulation Service: {e}", exc_info=True)
         raise
 
     yield  # Application running
 
     # === SHUTDOWN ===
     logger.info("\n" + "=" * 60)
-    logger.info("🛑 Shutting down Simulation Service...")
+    logger.info(" Shutting down Simulation Service...")
     logger.info("=" * 60)
 
     if workflow_storage:
         await workflow_storage.close()
-        logger.info("   ✅ Workflow storage closed")
+        logger.info("    Workflow storage closed")
 
     await close_db()
-    logger.info("   ✅ Database closed")
+    logger.info("    Database closed")
 
     await shutdown_platform()
-    logger.info("   ✅ Platform integration shutdown")
+    logger.info("    Platform integration shutdown")
 
     logger.info("=" * 60)
-    logger.info("✅ Simulation Service shutdown complete")
+    logger.info(" Simulation Service shutdown complete")
     logger.info("=" * 60)
 
 

@@ -58,7 +58,7 @@ async def test_approved_strategy_triggers_plan_creation(
     strategy_id = strategy.get("id") or strategy.get("strategy_id")
     cleanup_test_data["strategies"].append(strategy_id)
 
-    print(f"✅ Created strategy: {strategy_id}")
+    print(f" Created strategy: {strategy_id}")
 
     # Step 2: Approve strategy
     approve_data = {
@@ -75,7 +75,7 @@ async def test_approved_strategy_triggers_plan_creation(
     )
 
     assert response.status_code == 200, f"Strategy approval failed: {response.text}"
-    print(f"✅ Strategy approved")
+    print(f" Strategy approved")
 
     # Step 3: Wait for event propagation
     await asyncio.sleep(2)
@@ -92,7 +92,7 @@ async def test_approved_strategy_triggers_plan_creation(
 
     # In a fully event-driven system, plan should be auto-created
     # For now, we verify the API is accessible
-    print(f"✅ Plans service queried successfully")
+    print(f" Plans service queried successfully")
 
 
 @pytest.mark.integration
@@ -160,7 +160,7 @@ async def test_plan_inherits_strategy_recovery_objectives(
     assert plan["target_rto_hours"] == 2
     assert plan["target_rpo_hours"] == 1
 
-    print(f"✅ Plan correctly inherits RTO/RPO from strategy")
+    print(f" Plan correctly inherits RTO/RPO from strategy")
 
 
 @pytest.mark.integration
@@ -246,7 +246,7 @@ async def test_strategy_resources_flow_to_plan_resources(
     # Should succeed or return 404 if endpoint not implemented
     assert response.status_code in [201, 404]
 
-    print(f"✅ Resources flow from strategy to plan")
+    print(f" Resources flow from strategy to plan")
 
 
 @pytest.mark.integration
@@ -332,7 +332,7 @@ async def test_rejected_strategy_blocks_plan_creation(
     # (Business logic depends on implementation)
     assert response.status_code in [201, 400, 422]
 
-    print(f"✅ Rejected strategy handling verified")
+    print(f" Rejected strategy handling verified")
 
 
 @pytest.mark.integration
@@ -410,7 +410,7 @@ async def test_strategy_to_multiple_plans_workflow(
     # Verify all plans created
     assert len(created_plans) == 4
 
-    print(f"✅ Single strategy successfully generated {len(created_plans)} plans")
+    print(f" Single strategy successfully generated {len(created_plans)} plans")
 
 
 @pytest.mark.integration
@@ -479,4 +479,4 @@ async def test_cost_benefit_analysis_influences_plan_detail(
     plan = response.json()
     cleanup_test_data["plans"].append(plan.get("id") or plan.get("plan_id"))
 
-    print(f"✅ Cost considerations flow from strategy to plan")
+    print(f" Cost considerations flow from strategy to plan")

@@ -23,7 +23,7 @@ def generate_daily_predictions(self) -> Dict[str, Any]:
 
     Runs at 6 AM daily
     """
-    logger.info("🔮 Generating daily predictions...")
+    logger.info(" Generating daily predictions...")
 
     try:
         from intelligent_core.predictive.services.prediction_engine import PredictionEngine
@@ -42,7 +42,7 @@ def generate_daily_predictions(self) -> Dict[str, Any]:
             if prediction.get('anomaly_detected'):
                 publish_anomaly_alert(workflow['id'], prediction)
 
-        logger.info(f"✅ Generated {len(predictions)} predictions")
+        logger.info(f" Generated {len(predictions)} predictions")
 
         return {
             'status': 'success',
@@ -51,7 +51,7 @@ def generate_daily_predictions(self) -> Dict[str, Any]:
         }
 
     except Exception as exc:
-        logger.error(f"❌ Prediction generation failed: {exc}")
+        logger.error(f" Prediction generation failed: {exc}")
         raise
 
 
@@ -62,7 +62,7 @@ def run_monte_carlo_simulation(self, scenario_id: str, iterations: int = 10000) 
 
     Heavy computation - runs in background
     """
-    logger.info(f"🎲 Running Monte Carlo simulation: {scenario_id} ({iterations} iterations)")
+    logger.info(f" Running Monte Carlo simulation: {scenario_id} ({iterations} iterations)")
 
     try:
         from intelligent_core.predictive.services.monte_carlo import MonteCarloEngine
@@ -88,7 +88,7 @@ def run_monte_carlo_simulation(self, scenario_id: str, iterations: int = 10000) 
                 }
             )
 
-        logger.info(f"✅ Simulation completed: {scenario_id}")
+        logger.info(f" Simulation completed: {scenario_id}")
 
         return {
             'status': 'success',
@@ -98,7 +98,7 @@ def run_monte_carlo_simulation(self, scenario_id: str, iterations: int = 10000) 
         }
 
     except Exception as exc:
-        logger.error(f"❌ Simulation failed: {exc}")
+        logger.error(f" Simulation failed: {exc}")
         raise self.retry(exc=exc, countdown=300)
 
 
@@ -107,7 +107,7 @@ def forecast_resource_needs(organization_id: str, horizon_days: int = 90) -> Dic
     """
     Forecast resource needs for organization
     """
-    logger.info(f"📈 Forecasting resource needs: {organization_id} ({horizon_days} days)")
+    logger.info(f" Forecasting resource needs: {organization_id} ({horizon_days} days)")
 
     try:
         from intelligent_core.predictive.services.forecasting import ForecastEngine
@@ -128,7 +128,7 @@ def forecast_resource_needs(organization_id: str, horizon_days: int = 90) -> Dic
         }
 
     except Exception as exc:
-        logger.error(f"❌ Forecasting failed: {exc}")
+        logger.error(f" Forecasting failed: {exc}")
         raise
 
 

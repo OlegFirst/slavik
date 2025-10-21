@@ -88,7 +88,7 @@ def parse_catalog(catalog_path: str) -> List[Dict]:
 
         i += 1
 
-    logger.info(f"✅ Parsed {len(scenarios)} scenarios from catalog")
+    logger.info(f" Parsed {len(scenarios)} scenarios from catalog")
     return scenarios
 
 
@@ -97,7 +97,7 @@ def save_scenarios_json(scenarios: List[Dict], output_path: str):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(scenarios, f, ensure_ascii=False, indent=2)
 
-    logger.info(f"✅ Saved {len(scenarios)} scenarios to {output_path}")
+    logger.info(f" Saved {len(scenarios)} scenarios to {output_path}")
 
 
 def generate_statistics(scenarios: List[Dict]) -> Dict:
@@ -133,7 +133,7 @@ def main():
         logger.error(f"Catalog not found: {catalog_path}")
         return
 
-    logger.info(f"📖 Reading catalog from: {catalog_path}")
+    logger.info(f" Reading catalog from: {catalog_path}")
 
     # Parse catalog
     scenarios = parse_catalog(catalog_path)
@@ -144,20 +144,20 @@ def main():
 
     # Generate statistics
     stats = generate_statistics(scenarios)
-    logger.info("\n📊 Statistics:")
+    logger.info("\n Statistics:")
     logger.info(f"  Total scenarios: {stats['total_scenarios']}")
     logger.info(f"  Unique services: {stats['unique_services']}")
     logger.info(f"  Unique categories: {stats['unique_categories']}")
 
-    logger.info("\n🎯 By Service:")
+    logger.info("\n By Service:")
     for service, count in sorted(stats['services'].items(), key=lambda x: x[1], reverse=True):
         logger.info(f"  {service}: {count} scenarios")
 
-    logger.info("\n📁 By Category:")
+    logger.info("\n By Category:")
     for category, count in sorted(stats['categories'].items(), key=lambda x: x[1], reverse=True)[:10]:
         logger.info(f"  {category}: {count} scenarios")
 
-    logger.info(f"\n✅ Done! JSON saved to: {json_path}")
+    logger.info(f"\n Done! JSON saved to: {json_path}")
     logger.info(f"   File size: {os.path.getsize(json_path) / 1024:.1f} KB")
 
     # Create example search function
@@ -174,7 +174,7 @@ def main():
         return results
 
     # Test search
-    logger.info("\n🔍 Testing search:")
+    logger.info("\n Testing search:")
     test_query = "BIA"
     results = search_scenarios(test_query, scenarios)
     logger.info(f"  Query: '{test_query}'")

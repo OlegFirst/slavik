@@ -114,9 +114,9 @@ async def register_with_orchestrator():
             )
 
             if response.status_code == 200:
-                logger.info(f"✅ Registered with orchestrator at {orchestrator_url}")
+                logger.info(f" Registered with orchestrator at {orchestrator_url}")
             else:
-                logger.warning(f"⚠️  Registration failed: {response.status_code}")
+                logger.warning(f"️  Registration failed: {response.status_code}")
 
     except Exception as e:
         logger.error(f"Failed to register with orchestrator: {e}")
@@ -169,7 +169,7 @@ async def startup():
     """Extended startup with orchestrator integration and EventBus"""
     global eventbus_helper
 
-    logger.info("🧠 Database Intelligence Service starting...")
+    logger.info(" Database Intelligence Service starting...")
 
     # Start the intelligence service
     await start_db_intelligence()
@@ -193,10 +193,10 @@ async def startup():
                 service_type="specialist"
             )
             await eventbus_helper.startup()
-            logger.info("   ✅ EventBus integration initialized")
+            logger.info("    EventBus integration initialized")
         except Exception as e:
-            logger.error(f"   ❌ EventBus initialization failed: {e}")
-            logger.warning("   ⚠️  Running without EventBus integration")
+            logger.error(f"    EventBus initialization failed: {e}")
+            logger.warning("   ️  Running without EventBus integration")
 
     # Register with orchestrator
     await register_with_orchestrator()
@@ -204,7 +204,7 @@ async def startup():
     # Start heartbeat task
     asyncio.create_task(send_heartbeat())
 
-    logger.info("✅ Database Intelligence Service ready")
+    logger.info(" Database Intelligence Service ready")
     logger.info(f"   API: http://{os.getenv('DB_INTELLIGENCE_HOST', '0.0.0.0')}:{os.getenv('DB_INTELLIGENCE_PORT', 8051)}")
     logger.info(f"   Docs: http://{os.getenv('DB_INTELLIGENCE_HOST', '0.0.0.0')}:{os.getenv('DB_INTELLIGENCE_PORT', 8051)}/docs")
 
@@ -214,14 +214,14 @@ async def shutdown():
     """Extended shutdown with EventBus cleanup"""
     global eventbus_helper
 
-    logger.info("🛑 Database Intelligence Service shutting down...")
+    logger.info(" Database Intelligence Service shutting down...")
 
     # Shutdown EventBus
     if eventbus_helper:
         await eventbus_helper.shutdown()
 
     await stop_db_intelligence()
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 
 # =============================================================================

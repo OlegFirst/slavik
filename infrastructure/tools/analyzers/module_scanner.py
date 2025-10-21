@@ -55,8 +55,8 @@ class ModuleScanner:
         """Полное сканирование модуля"""
 
         print(f"\n{'='*60}")
-        print(f"📦 СКАНИРОВАНИЕ: {self.module_name}")
-        print(f"📁 Путь: {self.module_path}")
+        print(f" СКАНИРОВАНИЕ: {self.module_name}")
+        print(f" Путь: {self.module_path}")
         print(f"{'='*60}\n")
 
         # 1. Структура файлов
@@ -84,7 +84,7 @@ class ModuleScanner:
 
     def _scan_structure(self):
         """Сканировать структуру файлов"""
-        print("📂 Сканирование структуры...")
+        print(" Сканирование структуры...")
 
         structure = defaultdict(list)
 
@@ -102,12 +102,12 @@ class ModuleScanner:
 
         # Вывод краткой структуры
         total_files = sum(len(files) for files in structure.values())
-        print(f"  ✓ Найдено файлов: {total_files}")
-        print(f"  ✓ Директорий: {len(structure)}")
+        print(f"   Найдено файлов: {total_files}")
+        print(f"   Директорий: {len(structure)}")
 
     def _scan_readme(self):
         """Анализ README файла"""
-        print("📄 Поиск README...")
+        print(" Поиск README...")
 
         readme_variants = ['README.md', 'readme.md', 'README.txt', 'README']
 
@@ -122,14 +122,14 @@ class ModuleScanner:
                         'lines': len(content.split('\n')),
                         'content': content[:1000]  # Первые 1000 символов
                     }
-                print(f"  ✓ Найден: {variant} ({len(content)} символов)")
+                print(f"   Найден: {variant} ({len(content)} символов)")
                 return
 
-        print("  ⚠ README не найден")
+        print("   README не найден")
 
     def _scan_dependencies(self):
         """Сканировать зависимости"""
-        print("🔗 Анализ зависимостей...")
+        print(" Анализ зависимостей...")
 
         dependencies = set()
 
@@ -155,11 +155,11 @@ class ModuleScanner:
                 continue
 
         self.result['dependencies'] = sorted(dependencies)
-        print(f"  ✓ Найдено зависимостей: {len(dependencies)}")
+        print(f"   Найдено зависимостей: {len(dependencies)}")
 
         # Топ-5 зависимостей
         if dependencies:
-            print("  📌 Топ зависимости:")
+            print("   Топ зависимости:")
             for dep in sorted(dependencies)[:5]:
                 print(f"     • {dep}")
 
@@ -196,7 +196,7 @@ class ModuleScanner:
 
     def _scan_endpoints(self):
         """Поиск API endpoints"""
-        print("🌐 Поиск API endpoints...")
+        print(" Поиск API endpoints...")
 
         endpoints = []
 
@@ -235,16 +235,16 @@ class ModuleScanner:
                 continue
 
         self.result['endpoints'] = endpoints
-        print(f"  ✓ Найдено endpoints: {len(endpoints)}")
+        print(f"   Найдено endpoints: {len(endpoints)}")
 
         if endpoints:
-            print("  📌 Примеры:")
+            print("   Примеры:")
             for ep in endpoints[:3]:
                 print(f"     • {ep['method']} {ep['path']}")
 
     def _scan_code(self):
         """Анализ классов и функций"""
-        print("💻 Анализ кода...")
+        print(" Анализ кода...")
 
         classes = []
         functions = []
@@ -280,19 +280,19 @@ class ModuleScanner:
         self.result['classes'] = classes
         self.result['functions'] = functions
 
-        print(f"  ✓ Классов: {len(classes)}")
-        print(f"  ✓ Функций: {len(functions)}")
+        print(f"   Классов: {len(classes)}")
+        print(f"   Функций: {len(functions)}")
 
         # Топ классы
         if classes:
             top_classes = sorted(classes, key=lambda x: x['methods'], reverse=True)[:3]
-            print("  📌 Топ классы:")
+            print("   Топ классы:")
             for cls in top_classes:
                 print(f"     • {cls['name']} ({cls['methods']} методов)")
 
     def _scan_config(self):
         """Поиск конфигурации"""
-        print("⚙️  Поиск конфигурации...")
+        print("️  Поиск конфигурации...")
 
         config_files = [
             'config.yaml', 'config.yml',
@@ -307,16 +307,16 @@ class ModuleScanner:
             config_path = self.module_path / config_file
             if config_path.exists():
                 found_configs[config_file] = str(config_path)
-                print(f"  ✓ Найден: {config_file}")
+                print(f"   Найден: {config_file}")
 
         self.result['config'] = found_configs
 
         if not found_configs:
-            print("  ⚠ Конфигурационные файлы не найдены")
+            print("   Конфигурационные файлы не найдены")
 
     def _calculate_metrics(self):
         """Рассчитать метрики"""
-        print("📊 Расчет метрик...")
+        print(" Расчет метрик...")
 
         # LOC (Lines of Code)
         total_loc = 0
@@ -343,8 +343,8 @@ class ModuleScanner:
             'dependencies': len(self.result['dependencies'])
         }
 
-        print(f"  ✓ LOC: {total_loc}")
-        print(f"  ✓ Python файлов: {py_files}")
+        print(f"   LOC: {total_loc}")
+        print(f"   Python файлов: {py_files}")
 
     def generate_yaml_entry(self) -> str:
         """Сгенерировать YAML запись для SERVICE_CATALOG.yaml"""
@@ -429,7 +429,7 @@ class ModuleScanner:
         with open(yaml_file, 'w') as f:
             f.write(self.generate_yaml_entry())
 
-        print(f"\n💾 Отчеты сохранены:")
+        print(f"\n Отчеты сохранены:")
         print(f"   • {json_file}")
         print(f"   • {md_file}")
         print(f"   • {yaml_file}")
@@ -452,7 +452,7 @@ class ModuleScanner:
 
 ---
 
-## 📊 Метрики
+##  Метрики
 
 | Метрика | Значение |
 |---------|----------|
@@ -465,7 +465,7 @@ class ModuleScanner:
 
 ---
 
-## 🔗 Зависимости ({len(result['dependencies'])})
+##  Зависимости ({len(result['dependencies'])})
 
 """
 
@@ -482,20 +482,20 @@ class ModuleScanner:
 
         # API Endpoints
         if result['endpoints']:
-            report += f"\n---\n\n## 🌐 API Endpoints ({len(result['endpoints'])})\n\n"
+            report += f"\n---\n\n##  API Endpoints ({len(result['endpoints'])})\n\n"
             for ep in result['endpoints'][:10]:
                 report += f"- **{ep['method']}** `{ep['path']}` (файл: `{ep['file']}`)\n"
 
         # Классы
         if result['classes']:
-            report += f"\n---\n\n## 💻 Классы ({len(result['classes'])})\n\n"
+            report += f"\n---\n\n##  Классы ({len(result['classes'])})\n\n"
             top_classes = sorted(result['classes'], key=lambda x: x['methods'], reverse=True)[:10]
             for cls in top_classes:
                 report += f"- **{cls['name']}** ({cls['methods']} методов) - `{cls['file']}`\n"
 
         # README
         if result['readme']:
-            report += f"\n---\n\n## 📄 README\n\n"
+            report += f"\n---\n\n##  README\n\n"
             report += f"**Файл:** `{result['readme']['file']}`\n"
             report += f"**Размер:** {result['readme']['size']} символов ({result['readme']['lines']} строк)\n\n"
             report += "**Превью:**\n```\n"
@@ -504,12 +504,12 @@ class ModuleScanner:
 
         # Конфигурация
         if result['config']:
-            report += f"\n---\n\n## ⚙️ Конфигурация\n\n"
+            report += f"\n---\n\n## ️ Конфигурация\n\n"
             for config_file, path in result['config'].items():
                 report += f"- `{config_file}` → `{path}`\n"
 
         # Структура (кратко)
-        report += f"\n---\n\n## 📂 Структура\n\n"
+        report += f"\n---\n\n##  Структура\n\n"
         total_files = sum(len(files) for files in result['structure'].values())
         report += f"**Всего файлов:** {total_files}\n"
         report += f"**Директорий:** {len(result['structure'])}\n"
@@ -522,14 +522,14 @@ def scan_section(section_path: str):
 
     section = Path(section_path)
     if not section.exists():
-        print(f"❌ Раздел не найден: {section_path}")
+        print(f" Раздел не найден: {section_path}")
         return
 
     # Найти все подпапки (модули)
     modules = [d for d in section.iterdir() if d.is_dir() and not d.name.startswith('.') and d.name not in ['venv', '__pycache__']]
 
     print(f"\n{'='*60}")
-    print(f"🔍 СКАНИРОВАНИЕ РАЗДЕЛА: {section.name}")
+    print(f" СКАНИРОВАНИЕ РАЗДЕЛА: {section.name}")
     print(f"{'='*60}")
     print(f"\nНайдено модулей: {len(modules)}\n")
 
@@ -549,12 +549,12 @@ def scan_section(section_path: str):
                 'files': files
             })
         except Exception as e:
-            print(f"❌ Ошибка: {e}")
+            print(f" Ошибка: {e}")
             continue
 
     # Сводный отчет
     print(f"\n\n{'='*60}")
-    print(f"✅ СКАНИРОВАНИЕ ЗАВЕРШЕНО")
+    print(f" СКАНИРОВАНИЕ ЗАВЕРШЕНО")
     print(f"{'='*60}\n")
     print(f"Всего модулей: {len(modules)}")
     print(f"Успешно: {len(results)}")
@@ -565,7 +565,7 @@ if __name__ == "__main__":
     import sys
 
     if '--interactive' in sys.argv or '-i' in sys.argv:
-        print("🎯 Интерактивный режим сканирования\n")
+        print(" Интерактивный режим сканирования\n")
         print("Выберите раздел:")
         print("1. intelligent-core (AI сервисы)")
         print("2. platform-services (бизнес-логика)")

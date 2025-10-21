@@ -26,11 +26,11 @@ BASE_URL = "http://localhost:8055"
 try:
     response = requests.get(f"{BASE_URL}/health", timeout=5)
     if response.status_code != 200:
-        print("❌ Service not running on port 8055")
+        print(" Service not running on port 8055")
         exit(1)
-    print("✅ Service is running")
+    print(" Service is running")
 except Exception as e:
-    print(f"❌ Cannot connect to service: {e}")
+    print(f" Cannot connect to service: {e}")
     exit(1)
 
 print()
@@ -60,7 +60,7 @@ try:
 
         if elapsed >= TEST_DURATION:
             print()
-            print(f"✅ Test duration reached: {elapsed:.0f} seconds")
+            print(f" Test duration reached: {elapsed:.0f} seconds")
             break
 
         # Status check
@@ -70,10 +70,10 @@ try:
                 checks_completed += 1
             else:
                 errors_encountered += 1
-                print(f"⚠️  Health check returned {health.status_code}")
+                print(f"️  Health check returned {health.status_code}")
         except Exception as e:
             errors_encountered += 1
-            print(f"❌ Health check failed: {e}")
+            print(f" Health check failed: {e}")
 
         # Publish test event every 10 seconds
         if int(elapsed) % EVENT_PUBLISH_INTERVAL == 0 and elapsed > 0:
@@ -93,7 +93,7 @@ try:
                     errors_encountered += 1
             except Exception as e:
                 errors_encountered += 1
-                print(f"❌ Event publish failed: {e}")
+                print(f" Event publish failed: {e}")
 
         # Progress update every 60 seconds
         if int(elapsed) % 60 == 0 and elapsed > 0:
@@ -105,7 +105,7 @@ try:
                       f"Scans: {monitor_stats['stats']['scans_completed']}, "
                       f"Errors: {errors_encountered}")
             except Exception as e:
-                print(f"❌ Status update failed: {e}")
+                print(f" Status update failed: {e}")
 
         time.sleep(1)
 
@@ -151,22 +151,22 @@ try:
 
     print("RELIABILITY ASSESSMENT:")
     print(f"  Uptime: {reliability:.1f}%")
-    print(f"  Monitor Stability: {'✅ STABLE' if monitor_stats['stats']['running'] else '❌ UNSTABLE'}")
+    print(f"  Monitor Stability: {' STABLE' if monitor_stats['stats']['running'] else ' UNSTABLE'}")
 
     if reliability >= 99 and monitor_stats['stats']['running']:
         print()
-        print("🎉 PRODUCTION READY: 100% CONFIDENCE")
+        print(" PRODUCTION READY: 100% CONFIDENCE")
         print("   - Continuous monitoring: STABLE")
         print("   - Event detection: RELIABLE")
         print("   - No resource leaks detected")
         print("   - Service remained healthy throughout test")
     elif reliability >= 95:
         print()
-        print("⚠️  MOSTLY STABLE: Minor issues detected")
+        print("️  MOSTLY STABLE: Minor issues detected")
         print(f"   - {errors_encountered} errors in {time.time() - start_time:.0f} seconds")
     else:
         print()
-        print("❌ NOT STABLE: Significant issues detected")
+        print(" NOT STABLE: Significant issues detected")
 
 except Exception as e:
-    print(f"❌ Failed to get final statistics: {e}")
+    print(f" Failed to get final statistics: {e}")

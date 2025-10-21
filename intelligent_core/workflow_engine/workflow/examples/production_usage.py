@@ -49,9 +49,9 @@ async def main():
         workflow_intelligence_enabled=True
     )
 
-    print(f"✓ Engine initialized for tenant: acme-healthcare")
-    print(f"✓ Module: BIA (Business Impact Analysis)")
-    print(f"✓ Workflow Intelligence: ENABLED")
+    print(f" Engine initialized for tenant: acme-healthcare")
+    print(f" Module: BIA (Business Impact Analysis)")
+    print(f" Workflow Intelligence: ENABLED")
 
     # ========== 2. Deploy BPMN Process ==========
 
@@ -99,8 +99,8 @@ async def main():
         version="1.0"
     )
 
-    print(f"✓ BPMN process deployed and started")
-    print(f"✓ Instance ID: {instance_id}")
+    print(f" BPMN process deployed and started")
+    print(f" Instance ID: {instance_id}")
 
     # ========== 3. Get Visual State (for UI) ==========
 
@@ -108,7 +108,7 @@ async def main():
 
     visual_state = await engine.get_visual_state(instance_id)
 
-    print(f"✓ Visual state retrieved")
+    print(f" Visual state retrieved")
     print(f"  - Type: {visual_state.type}")
     print(f"  - Current activities: {visual_state.current_activities}")
     print(f"  - Active tasks: {len(visual_state.active_tasks)}")
@@ -138,7 +138,7 @@ async def main():
             task_id=first_task_id,
             assignee="john.smith@acme.com"
         )
-        print(f"✓ Task assigned to: john.smith@acme.com")
+        print(f" Task assigned to: john.smith@acme.com")
 
         # Complete task with data
         await engine.complete_task(
@@ -155,7 +155,7 @@ async def main():
             },
             completed_by="john.smith@acme.com"
         )
-        print(f"✓ Task completed")
+        print(f" Task completed")
 
     # ========== 5. Get Updated State ==========
 
@@ -163,12 +163,12 @@ async def main():
 
     updated_state = await engine.get_visual_state(instance_id)
 
-    print(f"✓ Progress: {updated_state.workflow_context.get('progress_percentage', 0):.1f}%")
-    print(f"✓ Active tasks: {len(updated_state.active_tasks)}")
+    print(f" Progress: {updated_state.workflow_context.get('progress_percentage', 0):.1f}%")
+    print(f" Active tasks: {len(updated_state.active_tasks)}")
 
     if updated_state.active_tasks:
         next_task = updated_state.active_tasks[0]
-        print(f"✓ Next task: {next_task['name']}")
+        print(f" Next task: {next_task['name']}")
         print(f"  AI Tip: {next_task.get('ai_tip', 'No tip')}")
 
     # Show predictions
@@ -186,7 +186,7 @@ async def main():
         assignee="john.smith@acme.com"
     )
 
-    print(f"✓ User has {len(user_tasks)} active task(s)")
+    print(f" User has {len(user_tasks)} active task(s)")
     for task in user_tasks:
         print(f"  - {task['name']} (Progress: {task.get('progress_percentage', 0):.1f}%)")
 
@@ -197,14 +197,14 @@ async def main():
     from unified_workflow.bpmn.models import ProcessStatus
 
     instances = await engine.list_instances(status=ProcessStatus.ACTIVE)
-    print(f"✓ Found {len(instances)} active instance(s)")
+    print(f" Found {len(instances)} active instance(s)")
 
     # ========== 8. Get Process Analytics ==========
 
     print("\n[8] Getting process analytics...")
 
     analytics = await engine.get_process_analytics()
-    print(f"✓ Analytics:")
+    print(f" Analytics:")
     print(f"  - Module: {analytics['module']}")
     print(f"  - Total instances: {analytics['total_instances']}")
     print(f"  - Active: {analytics['active_instances']}")
@@ -215,20 +215,20 @@ async def main():
     print("\n[9] Cleaning up...")
 
     await engine.close()
-    print(f"✓ Engine closed")
+    print(f" Engine closed")
 
     print("\n" + "=" * 80)
     print("EXAMPLE COMPLETE")
     print("=" * 80)
     print("\nKey Features Demonstrated:")
-    print("✓ BPMN process deployment with PostgreSQL persistence")
-    print("✓ Instance creation with initial variables")
-    print("✓ Visual state generation (for bpmn-js rendering)")
-    print("✓ AI recommendations injection into tasks")
-    print("✓ Task assignment and completion")
-    print("✓ Progress tracking and predictions")
-    print("✓ User task inbox")
-    print("✓ Event synchronization (BPMN ↔ Workflow Intelligence)")
+    print(" BPMN process deployment with PostgreSQL persistence")
+    print(" Instance creation with initial variables")
+    print(" Visual state generation (for bpmn-js rendering)")
+    print(" AI recommendations injection into tasks")
+    print(" Task assignment and completion")
+    print(" Progress tracking and predictions")
+    print(" User task inbox")
+    print(" Event synchronization (BPMN ↔ Workflow Intelligence)")
     print("\nNext Steps:")
     print("- Connect UI frontend (bpmn-js)")
     print("- Enable full Workflow Intelligence integration")

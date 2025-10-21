@@ -31,7 +31,7 @@ class WorkflowIntelligenceClient:
         Returns:
             Brain's response with decisions
         """
-        logger.info(f"📡 Sending infrastructure analysis to мозг...")
+        logger.info(f" Sending infrastructure analysis to мозг...")
 
         try:
             response = await self.client.post(
@@ -48,11 +48,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Brain response received: {result.get('status')}")
+            logger.info(f" Brain response received: {result.get('status')}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to report to мозг: {e}")
+            logger.error(f" Failed to report to мозг: {e}")
             return {"status": "error", "error": str(e)}
 
     async def request_decision(self, context: Dict) -> Dict:
@@ -65,7 +65,7 @@ class WorkflowIntelligenceClient:
         Returns:
             Brain's decision
         """
-        logger.info(f"🧠 Requesting decision from мозг...")
+        logger.info(f" Requesting decision from мозг...")
 
         try:
             response = await self.client.post(
@@ -79,11 +79,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             decision = response.json()
 
-            logger.info(f"✅ Decision received: {decision.get('action')}")
+            logger.info(f" Decision received: {decision.get('action')}")
             return decision
 
         except Exception as e:
-            logger.error(f"❌ Failed to get decision: {e}")
+            logger.error(f" Failed to get decision: {e}")
             return {"action": "none", "error": str(e)}
 
     async def report_fix_applied(self, fix_details: Dict) -> Dict:
@@ -96,7 +96,7 @@ class WorkflowIntelligenceClient:
         Returns:
             Acknowledgment
         """
-        logger.info(f"🛠️  Reporting fix to мозг...")
+        logger.info(f"️  Reporting fix to мозг...")
 
         try:
             response = await self.client.post(
@@ -112,7 +112,7 @@ class WorkflowIntelligenceClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to report fix: {e}")
+            logger.error(f" Failed to report fix: {e}")
             return {"status": "error", "error": str(e)}
 
     async def get_agent_context(self) -> Optional[Dict]:
@@ -130,7 +130,7 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             context = response.json()
 
-            logger.info(f"✅ Agent context: {context.get('focus_area')}")
+            logger.info(f" Agent context: {context.get('focus_area')}")
             return context
 
         except Exception as e:

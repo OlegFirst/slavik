@@ -33,7 +33,7 @@ def inject_dependencies(toolkit_manager):
     """Inject dependencies (called by Temporal worker)."""
     global _toolkit_manager
     _toolkit_manager = toolkit_manager
-    logger.info("✅ Dependencies injected into Observation workflow")
+    logger.info(" Dependencies injected into Observation workflow")
 
 
 # ============================================================================
@@ -47,7 +47,7 @@ async def observe_all_layers() -> Dict[str, Any]:
 
     Wrapper around AutomationToolkitManager.discover_services()
     """
-    logger.info("📊 Observing all layers")
+    logger.info(" Observing all layers")
 
     try:
         # Real work: AutomationToolkitManager does service discovery
@@ -62,7 +62,7 @@ async def observe_all_layers() -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Observation failed: {e}")
+        logger.error(f" Observation failed: {e}")
         return {"status": "failed", "error": str(e)}
 
 
@@ -73,7 +73,7 @@ async def detect_problems_from_observation(observation: Dict[str, Any]) -> List[
 
     Simple rule-based detection (complex logic in ReactionRulesEngine).
     """
-    logger.info("🔍 Detecting problems")
+    logger.info(" Detecting problems")
 
     problems = []
 
@@ -100,7 +100,7 @@ async def detect_problems_from_observation(observation: Dict[str, Any]) -> List[
         return problems
 
     except Exception as e:
-        logger.error(f"❌ Problem detection failed: {e}")
+        logger.error(f" Problem detection failed: {e}")
         return []
 
 
@@ -111,7 +111,7 @@ async def publish_problems_to_eventbus(problems: List[Dict[str, Any]]) -> int:
 
     Triggers ReactionWorkflow for each problem.
     """
-    logger.info(f"📢 Publishing {len(problems)} problems")
+    logger.info(f" Publishing {len(problems)} problems")
 
     try:
         # Real EventBus integration
@@ -129,11 +129,11 @@ async def publish_problems_to_eventbus(problems: List[Dict[str, Any]]) -> int:
             if success:
                 published += 1
 
-        logger.info(f"✅ Published {published}/{len(problems)} problems to EventBus")
+        logger.info(f" Published {published}/{len(problems)} problems to EventBus")
         return published
 
     except Exception as e:
-        logger.error(f"❌ Publishing failed: {e}")
+        logger.error(f" Publishing failed: {e}")
         return 0
 
 
@@ -163,7 +163,7 @@ class ObservationWorkflow:
         Args:
             config: {'interval_seconds': 30}
         """
-        workflow.logger.info("🚀 Starting Observation Workflow")
+        workflow.logger.info(" Starting Observation Workflow")
 
         interval = config.get('interval_seconds', 30)
 
@@ -178,7 +178,7 @@ class ObservationWorkflow:
         # Infinite loop (long-running workflow)
         while True:
             iteration += 1
-            workflow.logger.info(f"📊 Observation iteration {iteration}")
+            workflow.logger.info(f" Observation iteration {iteration}")
 
             try:
                 # 1. Observe
@@ -209,10 +209,10 @@ class ObservationWorkflow:
                         start_to_close_timeout=timedelta(seconds=10),
                         retry_policy=retry_policy
                     )
-                    workflow.logger.info(f"✅ Published {published} problems")
+                    workflow.logger.info(f" Published {published} problems")
 
             except Exception as e:
-                workflow.logger.error(f"❌ Iteration {iteration} failed: {e}")
+                workflow.logger.error(f" Iteration {iteration} failed: {e}")
 
             # Sleep until next observation
             await workflow.asyncio.sleep(interval)

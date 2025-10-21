@@ -17,7 +17,7 @@ async def setup_qdrant_collections():
     try:
         setup = QdrantCollectionSetup()
         setup.setup_all_collections()
-        logger.info("✓ Qdrant collections ready")
+        logger.info(" Qdrant collections ready")
     except Exception as e:
         logger.warning(f"Qdrant setup skipped: {e}")
 
@@ -71,7 +71,7 @@ async def ingest_sample_knowledge(rag: RAGPipeline):
 
     try:
         doc_ids = await rag.ingest_documents(sample_docs)
-        logger.info(f"✓ Ingested {len(doc_ids)} knowledge chunks")
+        logger.info(f" Ingested {len(doc_ids)} knowledge chunks")
     except Exception as e:
         logger.warning(f"Knowledge ingestion skipped: {e}")
 

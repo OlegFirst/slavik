@@ -59,7 +59,7 @@ class EventAnalyzer:
         Returns:
             EventAnalysis с результатами
         """
-        logger.info(f"🔍 Analyzing event: {event_name}")
+        logger.info(f" Analyzing event: {event_name}")
 
         # Вычисляем importance score
         importance = self._calculate_importance(
@@ -168,29 +168,29 @@ class EventAnalyzer:
         # Если нет publishers
         if not publishers:
             recommendations.append(
-                f"⚠️ Add publisher for '{event_name}' or remove from schema"
+                f"️ Add publisher for '{event_name}' or remove from schema"
             )
 
         # Если нет subscribers но есть publishers
         if publishers and not subscribers:
             if importance > 0.5:
                 recommendations.append(
-                    f"💡 Consider adding subscribers for high-importance event '{event_name}'"
+                    f" Consider adding subscribers for high-importance event '{event_name}'"
                 )
 
         # Если критичное событие
         if pattern == 'critical':
             recommendations.append(
-                f"🔴 Critical event '{event_name}' - ensure proper error handling"
+                f" Critical event '{event_name}' - ensure proper error handling"
             )
             recommendations.append(
-                f"📊 Add monitoring and alerts for '{event_name}'"
+                f" Add monitoring and alerts for '{event_name}'"
             )
 
         # Если не используется
         if pattern == 'unused':
             recommendations.append(
-                f"🗑️ Event '{event_name}' is unused - consider removing"
+                f"️ Event '{event_name}' is unused - consider removing"
             )
 
         return recommendations
@@ -206,20 +206,20 @@ class EventAnalyzer:
         # Простая эвристика (TODO: заменить на LLM)
 
         if importance > 0.8:
-            return f"🤖 AI Analysis: '{event_name}' is a core system event with high business value. Prioritize stability and monitoring."
+            return f" AI Analysis: '{event_name}' is a core system event with high business value. Prioritize stability and monitoring."
 
         if importance > 0.5:
-            return f"🤖 AI Analysis: '{event_name}' has medium importance. Good candidate for reactive processing."
+            return f" AI Analysis: '{event_name}' has medium importance. Good candidate for reactive processing."
 
         if pattern == 'unused':
-            return f"🤖 AI Analysis: '{event_name}' appears to be legacy or over-engineered. Consider deprecation."
+            return f" AI Analysis: '{event_name}' appears to be legacy or over-engineered. Consider deprecation."
 
-        return f"🤖 AI Analysis: '{event_name}' has low importance. Implement only if explicitly needed."
+        return f" AI Analysis: '{event_name}' has low importance. Implement only if explicitly needed."
 
     async def analyze_domain(self, domain: str, events: List[Dict]) -> Dict:
         """Анализирует все события в домене"""
 
-        logger.info(f"🔍 Analyzing domain: {domain}")
+        logger.info(f" Analyzing domain: {domain}")
 
         analyses = []
         for event_data in events:

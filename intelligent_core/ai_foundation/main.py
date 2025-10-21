@@ -29,7 +29,7 @@ HOST = "0.0.0.0"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    logger.info("🚀 Starting AI Foundation Service")
+    logger.info(" Starting AI Foundation Service")
 
     # Initialize EventBus
     try:
@@ -37,9 +37,9 @@ async def lifespan(app: FastAPI):
             service_name="ai-foundation",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     yield
 
@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
     bus = get_event_bus()
     if bus:
         await bus.close()
-    logger.info("👋 AI Foundation Service stopped")
+    logger.info(" AI Foundation Service stopped")
 
 app = FastAPI(
     lifespan=lifespan,

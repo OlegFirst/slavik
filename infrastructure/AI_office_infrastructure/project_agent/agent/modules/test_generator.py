@@ -302,7 +302,7 @@ def generate_tests_for_module(
 
     for file_path in python_files:
         if verbose:
-            print(f"📝 Analyzing: {file_path.relative_to(module_path.parent)}")
+            print(f" Analyzing: {file_path.relative_to(module_path.parent)}")
 
         functions, classes = analyze_file(str(file_path))
 
@@ -335,7 +335,7 @@ def generate_tests_for_module(
             if func.name.startswith("_"):
                 continue
             if verbose:
-                print(f"  🧪 {func.name}")
+                print(f"   {func.name}")
             test_code = template_generator.generate_function_tests(func, module_path.name)
             test_code_parts.append(test_code)
             test_code_parts.append("\n")
@@ -346,7 +346,7 @@ def generate_tests_for_module(
             if cls.name.startswith("_"):
                 continue
             if verbose:
-                print(f"  🧪 {cls.name}")
+                print(f"   {cls.name}")
             test_code = template_generator.generate_class_tests(cls, module_path.name)
             test_code_parts.append(test_code)
             test_code_parts.append("\n")
@@ -357,7 +357,7 @@ def generate_tests_for_module(
             f.write('\n'.join(test_code_parts))
 
         if verbose:
-            print(f"  ✅ Generated: {test_file_path.relative_to(module_path.parent.parent)}")
+            print(f"   Generated: {test_file_path.relative_to(module_path.parent.parent)}")
 
     return results
 

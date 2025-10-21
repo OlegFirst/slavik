@@ -249,7 +249,7 @@ class ImprovedComposeGenerator:
         with open(output_file, 'w') as f:
             yaml.dump(compose, f, default_flow_style=False, sort_keys=False)
 
-        print(f"💾 Improved Docker Compose saved: {output_file}")
+        print(f" Improved Docker Compose saved: {output_file}")
 
         # Также сохраняем README с инструкциями
         self._save_readme(output_file.parent)
@@ -363,7 +363,7 @@ Adjust in docker-compose.improved.yml if needed.
 
         readme_file = output_dir / 'DOCKER_COMPOSE_USAGE.md'
         readme_file.write_text(readme_content)
-        print(f"📖 Usage guide saved: {readme_file}")
+        print(f" Usage guide saved: {readme_file}")
 
 
 def main():
@@ -371,14 +371,14 @@ def main():
     project_root = Path(__file__).parent.parent.parent
 
     print("=" * 60)
-    print("🏗️ Generating Improved Docker Compose")
+    print("️ Generating Improved Docker Compose")
     print("=" * 60)
 
     # Load catalog
     catalog_file = project_root / 'infrastructure' / 'auto-generated' / 'service-catalog.json'
 
     if not catalog_file.exists():
-        print("❌ service-catalog.json not found!")
+        print(" service-catalog.json not found!")
         print("Run: python3 tools/infrastructure/discover_services.py first")
         return
 
@@ -389,7 +389,7 @@ def main():
     generator.save(output_file)
 
     print("\n" + "=" * 60)
-    print("✅ Improved Docker Compose generated!")
+    print(" Improved Docker Compose generated!")
     print("=" * 60)
     print("\nTest it:")
     print(f"  docker-compose -f {output_file} config")

@@ -62,7 +62,7 @@ class CompensationManager:
             True if compensation successful, False otherwise
         """
         self.logger.info(
-            f"🔄 Starting compensation for saga {saga.saga_id} "
+            f" Starting compensation for saga {saga.saga_id} "
             f"(strategy: {definition.compensation_strategy.value})"
         )
 
@@ -85,10 +85,10 @@ class CompensationManager:
             # Update final status
             if success:
                 saga.status = SagaStatus.COMPENSATED
-                self.logger.info(f"✅ Saga {saga.saga_id} compensated successfully")
+                self.logger.info(f" Saga {saga.saga_id} compensated successfully")
             else:
                 saga.status = SagaStatus.COMPENSATION_FAILED
-                self.logger.error(f"❌ Saga {saga.saga_id} compensation failed")
+                self.logger.error(f" Saga {saga.saga_id} compensation failed")
 
             saga.completed_at = datetime.utcnow()
             await self.state_store.save_saga(saga)
@@ -96,7 +96,7 @@ class CompensationManager:
             return success
 
         except Exception as e:
-            self.logger.error(f"❌ Compensation error for saga {saga.saga_id}: {e}", exc_info=True)
+            self.logger.error(f" Compensation error for saga {saga.saga_id}: {e}", exc_info=True)
             saga.status = SagaStatus.COMPENSATION_FAILED
             saga.error = f"Compensation error: {str(e)}"
             saga.completed_at = datetime.utcnow()
@@ -264,7 +264,7 @@ class CompensationManager:
         Returns:
             True if compensation successful
         """
-        self.logger.info(f"🔄 Compensating step: {step_exec.step_name}")
+        self.logger.info(f" Compensating step: {step_exec.step_name}")
 
         # Update status
         step_exec.status = SagaStepStatus.COMPENSATING
@@ -290,7 +290,7 @@ class CompensationManager:
                 step_exec.status = SagaStepStatus.COMPENSATED
                 step_exec.compensation_completed_at = datetime.utcnow()
 
-                self.logger.info(f"✅ Step {step_exec.step_name} compensated successfully")
+                self.logger.info(f" Step {step_exec.step_name} compensated successfully")
                 await self.state_store.save_step(saga.saga_id, step_exec)
                 return True
             else:
@@ -306,7 +306,7 @@ class CompensationManager:
 
         except Exception as e:
             self.logger.error(
-                f"❌ Compensation failed for step {step_exec.step_name}: {e}",
+                f" Compensation failed for step {step_exec.step_name}: {e}",
                 exc_info=True
             )
 
@@ -357,7 +357,7 @@ class CompensationManager:
         This is a simplified version - in production, this would use
         the full SagaOrchestrator execution logic.
         """
-        self.logger.info(f"▶️ Executing step: {step_def.name}")
+        self.logger.info(f"️ Executing step: {step_def.name}")
 
         step_exec.status = SagaStepStatus.EXECUTING
         step_exec.started_at = datetime.utcnow()

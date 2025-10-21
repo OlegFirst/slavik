@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     # Startup
-    logger.info("🚀 Starting AI Workflow Optimizer Service")
+    logger.info(" Starting AI Workflow Optimizer Service")
 
     # Initialize EventBus
     try:
@@ -59,9 +59,9 @@ async def lifespan(app: FastAPI):
             service_name="ai-workflow-optimizer",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     logger.info("Training default ML models...")
     optimizer = MLWorkflowOptimizer(next(get_db()))
@@ -70,15 +70,15 @@ async def lifespan(app: FastAPI):
 
     try:
         platform_client = await get_platform_client()
-        logger.info("✅ Platform Client initialized successfully")
+        logger.info(" Platform Client initialized successfully")
     except Exception as e:
-        logger.warning(f"⚠️ Platform Client initialization failed: {e}")
+        logger.warning(f"️ Platform Client initialization failed: {e}")
         logger.info("Service will run with limited functionality")
     
     logger.info("AI Workflow Optimizer Service started successfully")
     yield
     # Shutdown
-    logger.info("👋 Shutting down AI Workflow Optimizer")
+    logger.info(" Shutting down AI Workflow Optimizer")
     bus = get_event_bus()
     if bus:
         await bus.close()
@@ -459,10 +459,10 @@ class WorkflowOptimizerService:
             self.db.add(ml_model)
             self.db.commit()
 
-            logger.info(f"✅ Model {model_type} saved to database (accuracy: {accuracy:.3f})")
+            logger.info(f" Model {model_type} saved to database (accuracy: {accuracy:.3f})")
 
         except Exception as e:
-            logger.error(f"❌ Error saving model to database: {e}")
+            logger.error(f" Error saving model to database: {e}")
             self.db.rollback()
 
     def predict_performance(self, process_data: Dict[str, Any]) -> Dict[str, Any]:

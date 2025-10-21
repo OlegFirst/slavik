@@ -27,17 +27,17 @@ class ModuleDashboard:
         if ast_file.exists():
             with open(ast_file) as f:
                 self.ast_data = json.load(f)
-            print(f"✅ Loaded AST data: {len(self.ast_data['functions'])} functions")
+            print(f" Loaded AST data: {len(self.ast_data['functions'])} functions")
 
         if deps_file.exists():
             with open(deps_file) as f:
                 self.deps_data = json.load(f)
-            print(f"✅ Loaded dependency data: {len(self.deps_data['dependencies'])} modules")
+            print(f" Loaded dependency data: {len(self.deps_data['dependencies'])} modules")
 
     def create_dashboard(self):
         """Создать интерактивный dashboard"""
         if not self.ast_data or not self.deps_data:
-            print("❌ No data found. Run analyzers first!")
+            print(" No data found. Run analyzers first!")
             return
 
         # Создать subplot фигуру
@@ -119,7 +119,7 @@ class ModuleDashboard:
         # Сохранить HTML
         output_file = self.reports_dir / "dashboard.html"
         fig.write_html(str(output_file))
-        print(f"\n✅ Dashboard saved: {output_file}")
+        print(f"\n Dashboard saved: {output_file}")
         print(f"   Open in browser: file://{output_file.absolute()}")
 
         return fig
@@ -177,7 +177,7 @@ class ModuleDashboard:
 
         output_file = self.reports_dir / "endpoint_map.html"
         fig.write_html(str(output_file))
-        print(f"✅ Endpoint map: {output_file}")
+        print(f" Endpoint map: {output_file}")
 
         return fig
 
@@ -269,19 +269,19 @@ class ModuleDashboard:
 
         output_file = self.reports_dir / "dependency_network.html"
         fig.write_html(str(output_file))
-        print(f"✅ Dependency network: {output_file}")
+        print(f" Dependency network: {output_file}")
 
         return fig
 
     def generate_all(self):
         """Генерировать все визуализации"""
-        print("🎨 Generating interactive visualizations...\n")
+        print(" Generating interactive visualizations...\n")
 
         self.create_dashboard()
         self.create_endpoint_map()
         self.create_dependency_network()
 
-        print("\n🎉 All visualizations created!")
+        print("\n All visualizations created!")
         print(f"\nOpen in browser:")
         print(f"   Dashboard: file://{(self.reports_dir / 'dashboard.html').absolute()}")
         print(f"   Endpoint Map: file://{(self.reports_dir / 'endpoint_map.html').absolute()}")

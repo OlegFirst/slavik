@@ -1,5 +1,5 @@
 """
-📝 Scenario Creator
+ Scenario Creator
 
 AI-powered BCM scenario generation
 """
@@ -24,7 +24,7 @@ class ScenarioCreator(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Scenario Creator",
-            emoji="📝",
+            emoji="",
             llm_router=llm_router
         )
 

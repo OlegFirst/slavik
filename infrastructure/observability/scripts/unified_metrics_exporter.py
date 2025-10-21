@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-📊 Unified Metrics Exporter
+ Unified Metrics Exporter
 ============================
 
 Собирает и экспортирует метрики из всех core модулей:
@@ -40,45 +40,45 @@ metrics_loaded = []
 # 1. Workflow Intelligence Metrics
 try:
     from intelligent_core.workflow_intelligence.monitoring import metrics as wf_metrics
-    metrics_loaded.append("✅ Workflow Intelligence (27 metrics)")
+    metrics_loaded.append(" Workflow Intelligence (27 metrics)")
     logger.info("Loaded Workflow Intelligence metrics")
 except ImportError as e:
-    logger.warning(f"❌ Could not load Workflow Intelligence metrics: {e}")
-    metrics_loaded.append(f"❌ Workflow Intelligence - {e}")
+    logger.warning(f" Could not load Workflow Intelligence metrics: {e}")
+    metrics_loaded.append(f" Workflow Intelligence - {e}")
 
 # 2. Expertise Center Metrics
 try:
     from intelligent_core.expertise_center.monitoring import metrics as ec_metrics
-    metrics_loaded.append("✅ Expertise Center (27 metrics)")
+    metrics_loaded.append(" Expertise Center (27 metrics)")
     logger.info("Loaded Expertise Center metrics")
 except ImportError as e:
-    logger.warning(f"❌ Could not load Expertise Center metrics: {e}")
-    metrics_loaded.append(f"❌ Expertise Center - {e}")
+    logger.warning(f" Could not load Expertise Center metrics: {e}")
+    metrics_loaded.append(f" Expertise Center - {e}")
 
 # 3. AI-Foundation Metrics (multiple files)
 try:
     from intelligent_core.ai_foundation.llm import metrics as llm_metrics
-    metrics_loaded.append("✅ AI-Foundation LLM (20 metrics)")
+    metrics_loaded.append(" AI-Foundation LLM (20 metrics)")
     logger.info("Loaded AI-Foundation LLM metrics")
 except ImportError as e:
-    logger.warning(f"❌ Could not load AI-Foundation LLM metrics: {e}")
-    metrics_loaded.append(f"❌ AI-Foundation LLM - {e}")
+    logger.warning(f" Could not load AI-Foundation LLM metrics: {e}")
+    metrics_loaded.append(f" AI-Foundation LLM - {e}")
 
 try:
     from intelligent_core.ai_foundation.rag import metrics as rag_metrics
-    metrics_loaded.append("✅ AI-Foundation RAG (20 metrics)")
+    metrics_loaded.append(" AI-Foundation RAG (20 metrics)")
     logger.info("Loaded AI-Foundation RAG metrics")
 except ImportError as e:
-    logger.warning(f"❌ Could not load AI-Foundation RAG metrics: {e}")
-    metrics_loaded.append(f"❌ AI-Foundation RAG - {e}")
+    logger.warning(f" Could not load AI-Foundation RAG metrics: {e}")
+    metrics_loaded.append(f" AI-Foundation RAG - {e}")
 
 try:
     from intelligent_core.ai_foundation.learning_knowledge.monitoring import metrics as learning_metrics
-    metrics_loaded.append("✅ AI-Foundation Learning (18 metrics)")
+    metrics_loaded.append(" AI-Foundation Learning (18 metrics)")
     logger.info("Loaded AI-Foundation Learning metrics")
 except ImportError as e:
-    logger.warning(f"❌ Could not load AI-Foundation Learning metrics: {e}")
-    metrics_loaded.append(f"❌ AI-Foundation Learning - {e}")
+    logger.warning(f" Could not load AI-Foundation Learning metrics: {e}")
+    metrics_loaded.append(f" AI-Foundation Learning - {e}")
 
 
 def create_app():
@@ -103,7 +103,7 @@ def create_app():
                 </style>
             </head>
             <body>
-                <h1>📊 Unified Metrics Exporter</h1>
+                <h1> Unified Metrics Exporter</h1>
 
                 <div class="status">
                     <h2>Metrics Endpoint</h2>
@@ -112,7 +112,7 @@ def create_app():
 
                 <h2>Loaded Modules</h2>
                 <div class="metric-groups">
-                    {''.join(f'<div class="metric-group {"error" if "❌" in m else ""}">{m}</div>' for m in metrics_loaded)}
+                    {''.join(f'<div class="metric-group {"error" if "" in m else ""}">{m}</div>' for m in metrics_loaded)}
                 </div>
 
                 <h2>Core Modules Coverage</h2>
@@ -150,10 +150,10 @@ def main():
     args = parser.parse_args()
 
     logger.info("=" * 60)
-    logger.info("🚀 Starting Unified Metrics Exporter")
+    logger.info(" Starting Unified Metrics Exporter")
     logger.info("=" * 60)
-    logger.info(f"📊 Metrics endpoint: http://{args.host}:{args.port}/metrics")
-    logger.info(f"🏠 Landing page: http://{args.host}:{args.port}/")
+    logger.info(f" Metrics endpoint: http://{args.host}:{args.port}/metrics")
+    logger.info(f" Landing page: http://{args.host}:{args.port}/")
     logger.info("")
     logger.info("Loaded modules:")
     for status in metrics_loaded:

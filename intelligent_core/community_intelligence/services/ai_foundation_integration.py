@@ -44,14 +44,14 @@ class CommunityAIFoundation:
         try:
             # Initialize RAG for community knowledge retrieval
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Community Intelligence")
+            logger.info(" RAG Pipeline initialized for Community Intelligence")
 
             # Initialize LLM Router for insight generation
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Community Intelligence")
+            logger.info(" LLM Router initialized for Community Intelligence")
 
         except Exception as e:
-            logger.error(f"❌ AI Foundation initialization failed: {e}")
+            logger.error(f" AI Foundation initialization failed: {e}")
             raise
 
     async def retrieve_similar_case_studies(
@@ -102,7 +102,7 @@ class CommunityAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(similar_cases)} similar case studies from RAG")
+            logger.info(f" Retrieved {len(similar_cases)} similar case studies from RAG")
 
             return similar_cases
 
@@ -149,7 +149,7 @@ class CommunityAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"🔍 Retrieved {len(patterns)} community patterns from RAG")
+            logger.info(f" Retrieved {len(patterns)} community patterns from RAG")
 
             return patterns
 
@@ -197,7 +197,7 @@ class CommunityAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"💡 Retrieved {len(insights)} expert insights from RAG")
+            logger.info(f" Retrieved {len(insights)} expert insights from RAG")
 
             return insights
 
@@ -284,7 +284,7 @@ Format as structured analysis with clear sections."""
             # Calculate confidence
             confidence = self._calculate_insight_confidence(contributions, similar_cases)
 
-            logger.info(f"✅ Generated community insight with {len(insight_data.get('key_themes', []))} themes, confidence: {confidence:.2f}")
+            logger.info(f" Generated community insight with {len(insight_data.get('key_themes', []))} themes, confidence: {confidence:.2f}")
 
             return {
                 'insight': response_text,
@@ -294,7 +294,7 @@ Format as structured analysis with clear sections."""
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM insight generation failed: {e}")
+            logger.error(f" LLM insight generation failed: {e}")
             return {'insight': '', 'key_themes': [], 'confidence': 0.0}
 
     async def generate_best_practice_synthesis(
@@ -363,7 +363,7 @@ Format as practical, actionable guidance."""
             # Calculate confidence
             confidence = self._calculate_synthesis_confidence(case_studies)
 
-            logger.info(f"✅ Generated best practice synthesis with {len(best_practices)} practices, confidence: {confidence:.2f}")
+            logger.info(f" Generated best practice synthesis with {len(best_practices)} practices, confidence: {confidence:.2f}")
 
             return {
                 'synthesis': response_text,
@@ -372,7 +372,7 @@ Format as practical, actionable guidance."""
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM best practice synthesis failed: {e}")
+            logger.error(f" LLM best practice synthesis failed: {e}")
             return {'synthesis': '', 'best_practices': [], 'confidence': 0.0}
 
     async def store_successful_case_study(
@@ -440,7 +440,7 @@ Format as practical, actionable guidance."""
                 source_type="community_case_studies"
             )
 
-            logger.info(f"💾 Stored community case study: {problem_domain}")
+            logger.info(f" Stored community case study: {problem_domain}")
 
         except Exception as e:
             logger.warning(f"Failed to store case study in RAG: {e}")
@@ -503,7 +503,7 @@ Format as practical, actionable guidance."""
                 source_type="community_patterns"
             )
 
-            logger.info(f"💾 Stored community pattern: {pattern_type} ({success_rate:.1%} success)")
+            logger.info(f" Stored community pattern: {pattern_type} ({success_rate:.1%} success)")
 
         except Exception as e:
             logger.warning(f"Failed to store community pattern: {e}")
@@ -563,7 +563,7 @@ Format as practical, actionable guidance."""
                 source_type="expert_insights"
             )
 
-            logger.info(f"💾 Stored expert insight: {expertise_domain} - {topic}")
+            logger.info(f" Stored expert insight: {expertise_domain} - {topic}")
 
         except Exception as e:
             logger.warning(f"Failed to store expert insight: {e}")

@@ -91,9 +91,9 @@ class ComplianceServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
                     "compliance.reporting"
                 ]
             )
-            logger.info("✅ Compliance Service initialized as Self-Aware")
+            logger.info(" Compliance Service initialized as Self-Aware")
         else:
-            logger.warning("⚠️  Compliance Service running in basic mode (Self-Aware not available)")
+            logger.warning("️  Compliance Service running in basic mode (Self-Aware not available)")
 
     async def initialize(self):
         """Initialize Compliance Service-specific capabilities"""
@@ -105,7 +105,7 @@ class ComplianceServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
             self.register_handler("compliance.evidence.*", self.handle_evidence_event, priority=EventPriority.NORMAL)
             self.register_handler("compliance.reporting.*", self.handle_reporting_event, priority=EventPriority.NORMAL)
 
-            logger.info("✅ Compliance Service event handlers registered")
+            logger.info(" Compliance Service event handlers registered")
 
     async def handle_assessment_event(self, event):
         """Handle compliance.assessment events"""
@@ -162,10 +162,10 @@ async def lifespan(app: FastAPI):
 
     # === STARTUP ===
     logger.info("=" * 60)
-    logger.info("🚀 Starting Compliance Service (Integrated with Graceful Choreography)")
+    logger.info(" Starting Compliance Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f"📍 Port: 8030")
-    logger.info(f"📋 ISO 22301 Clause: All Clauses")
+    logger.info(f" Port: 8030")
+    logger.info(f" ISO 22301 Clause: All Clauses")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -187,7 +187,7 @@ async def lifespan(app: FastAPI):
         # === 2. Initialize Database ===
         logger.info("\n2️⃣  Initializing Database...")
         await init_db()
-        logger.info(f"   ✅ Database initialized")
+        logger.info(f"    Database initialized")
 
         # === 3. Initialize Self-Aware Service ===
         if SELF_AWARE_AVAILABLE:
@@ -197,7 +197,7 @@ async def lifespan(app: FastAPI):
 
             # Subscribe to events via platform EventBus
             if platform.intelligent_router:
-                logger.info("   📡 Registering with Intelligent EventBus...")
+                logger.info("    Registering with Intelligent EventBus...")
                 # Register service capabilities with router
                 await platform.intelligent_router.register_subscriber(
                     subscriber_id="compliance_service",
@@ -211,13 +211,13 @@ async def lifespan(app: FastAPI):
                         "semantic_tags": ["compliance", "audit", "assessment", "iso22301", "evidence"]
                     }
                 )
-                logger.info("   ✅ Self-Aware Service registered with Intelligent Router")
+                logger.info("    Self-Aware Service registered with Intelligent Router")
             elif platform.eventbus:
-                logger.info("   📡 Registering with Basic EventBus...")
+                logger.info("    Registering with Basic EventBus...")
                 await platform.eventbus.subscribe("compliance.*", service_self_aware.on_event)
-                logger.info("   ✅ Self-Aware Service registered with EventBus")
+                logger.info("    Self-Aware Service registered with EventBus")
         else:
-            logger.warning("\n3️⃣  ⚠️  Self-Aware Services not available (basic mode)")
+            logger.warning("\n3️⃣  ️  Self-Aware Services not available (basic mode)")
 
         # === 4. Initialize Workflow Intelligence ===
         logger.info("\n4️⃣  Initializing Workflow Intelligence...")
@@ -247,7 +247,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("   ✅ Workflow Intelligence initialized")
+        logger.info("    Workflow Intelligence initialized")
 
         # === 5. Register Sagas (if saga engine available) ===
         if platform.saga_orchestrator:
@@ -261,41 +261,41 @@ async def lifespan(app: FastAPI):
                 platform.saga_orchestrator.register_saga(create_bcm_program_saga())
                 platform.saga_orchestrator.register_saga(create_incident_response_saga())
 
-                logger.info("   ✅ Sagas registered")
+                logger.info("    Sagas registered")
             except ImportError:
-                logger.warning("   ⚠️  Saga definitions not found")
+                logger.warning("   ️  Saga definitions not found")
 
         logger.info("\n" + "=" * 60)
-        logger.info("✅ Compliance Service ready (with Graceful Choreography)")
+        logger.info(" Compliance Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"   🌐 Docs: http://localhost:8030/docs")
-        logger.info(f"   📊 Metrics: http://localhost:8030/metrics")
-        logger.info(f"   ❤️  Health: http://localhost:8030/health")
+        logger.info(f"    Docs: http://localhost:8030/docs")
+        logger.info(f"    Metrics: http://localhost:8030/metrics")
+        logger.info(f"   ️  Health: http://localhost:8030/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
-        logger.error(f"❌ Failed to start Compliance Service: {e}", exc_info=True)
+        logger.error(f" Failed to start Compliance Service: {e}", exc_info=True)
         raise
 
     yield  # Application running
 
     # === SHUTDOWN ===
     logger.info("\n" + "=" * 60)
-    logger.info("🛑 Shutting down Compliance Service...")
+    logger.info(" Shutting down Compliance Service...")
     logger.info("=" * 60)
 
     if workflow_storage:
         await workflow_storage.close()
-        logger.info("   ✅ Workflow storage closed")
+        logger.info("    Workflow storage closed")
 
     await close_db()
-    logger.info("   ✅ Database closed")
+    logger.info("    Database closed")
 
     await shutdown_platform()
-    logger.info("   ✅ Platform integration shutdown")
+    logger.info("    Platform integration shutdown")
 
     logger.info("=" * 60)
-    logger.info("✅ Compliance Service shutdown complete")
+    logger.info(" Compliance Service shutdown complete")
     logger.info("=" * 60)
 
 

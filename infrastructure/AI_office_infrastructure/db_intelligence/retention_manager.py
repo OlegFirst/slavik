@@ -79,7 +79,7 @@ class DataRetentionManager:
     def __init__(self, db_session: AsyncSession):
         self.db = db_session
         self.policies = {f"{p.schema}.{p.table}": p for p in RETENTION_POLICIES}
-        logger.info(f"📋 Data Retention Manager initialized with {len(self.policies)} policies")
+        logger.info(f" Data Retention Manager initialized with {len(self.policies)} policies")
 
     async def check_retention_status(self) -> Dict[str, Any]:
         """
@@ -249,16 +249,16 @@ class DataRetentionManager:
                 report["success"] = True
                 report["message"] = f"Archived {records_count} records"
 
-                logger.info(f"✅ Archived {records_count} records from {policy_key}")
+                logger.info(f" Archived {records_count} records from {policy_key}")
             else:
                 report["success"] = True
                 report["message"] = f"DRY RUN: Would archive {records_count} records"
-                logger.info(f"🔍 DRY RUN: Would archive {records_count} records from {policy_key}")
+                logger.info(f" DRY RUN: Would archive {records_count} records from {policy_key}")
 
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to archive data from {policy_key}: {e}")
+            logger.error(f" Failed to archive data from {policy_key}: {e}")
 
         return report
 
@@ -328,16 +328,16 @@ class DataRetentionManager:
                 report["success"] = True
                 report["message"] = f"Deleted {records_count} records"
 
-                logger.warning(f"🗑️  Deleted {records_count} old records from {policy_key}")
+                logger.warning(f"️  Deleted {records_count} old records from {policy_key}")
             else:
                 report["success"] = True
                 report["message"] = f"DRY RUN: Would delete {records_count} records"
-                logger.info(f"🔍 DRY RUN: Would delete {records_count} records from {policy_key}")
+                logger.info(f" DRY RUN: Would delete {records_count} records from {policy_key}")
 
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to cleanup data from {policy_key}: {e}")
+            logger.error(f" Failed to cleanup data from {policy_key}: {e}")
 
         return report
 
@@ -398,7 +398,7 @@ class DataRetentionManager:
         if enabled is not None:
             policy.enabled = enabled
 
-        logger.info(f"✅ Updated retention policy for {policy_key}")
+        logger.info(f" Updated retention policy for {policy_key}")
 
         return {
             "table": policy_key,

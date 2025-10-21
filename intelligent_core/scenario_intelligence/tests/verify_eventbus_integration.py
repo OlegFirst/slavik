@@ -40,7 +40,7 @@ class EventBusIntegrationVerifier:
 
     def test(self, name: str, passed: bool, message: str = ""):
         """Record test result"""
-        status = "✅ PASS" if passed else "❌ FAIL"
+        status = " PASS" if passed else " FAIL"
         self.results.append({
             "name": name,
             "passed": passed,
@@ -409,8 +409,8 @@ class EventBusIntegrationVerifier:
         pass_rate = (self.passed / total * 100) if total > 0 else 0
 
         logger.info(f"Total Tests: {total}")
-        logger.info(f"✅ Passed: {self.passed}")
-        logger.info(f"❌ Failed: {self.failed}")
+        logger.info(f" Passed: {self.passed}")
+        logger.info(f" Failed: {self.failed}")
         logger.info(f"Pass Rate: {pass_rate:.1f}%")
 
         if self.failed > 0:
@@ -421,9 +421,9 @@ class EventBusIntegrationVerifier:
 
         logger.info("\n" + "="*70)
         if self.failed == 0:
-            logger.info("✅ ALL TESTS PASSED - EventBus integration is working!")
+            logger.info(" ALL TESTS PASSED - EventBus integration is working!")
         else:
-            logger.warning(f"⚠️  {self.failed} test(s) failed - Review errors above")
+            logger.warning(f"️  {self.failed} test(s) failed - Review errors above")
         logger.info("="*70)
 
         return self.failed == 0

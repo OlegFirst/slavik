@@ -40,7 +40,7 @@ async def test_graceful_degradation_cache_failure(
     # Should still work, just slower
     assert response.status_code == 200
 
-    print(f"✅ Cache failure handled gracefully")
+    print(f" Cache failure handled gracefully")
 
 
 @pytest.mark.integration
@@ -65,10 +65,10 @@ async def test_timeout_handling(
                 headers=auth_headers
             )
         except httpx.TimeoutException:
-            print(f"✅ Timeout handled correctly")
+            print(f" Timeout handled correctly")
             return
 
-    print(f"⚠️ Request completed faster than expected")
+    print(f"️ Request completed faster than expected")
 
 
 @pytest.mark.integration
@@ -101,7 +101,7 @@ async def test_retry_logic_on_transient_failures(
     )
 
     assert response.status_code == 200
-    print(f"✅ Retry logic verified")
+    print(f" Retry logic verified")
 
 
 @pytest.mark.integration
@@ -142,7 +142,7 @@ async def test_error_response_format_consistency(
         except:
             pass  # Some services might return HTML
 
-    print(f"✅ Error response format verified")
+    print(f" Error response format verified")
 
 
 @pytest.mark.integration
@@ -178,7 +178,7 @@ async def test_concurrent_request_handling(
 
     assert success_count >= 8  # At least 80% success rate
 
-    print(f"✅ Concurrent requests handled: {success_count}/10")
+    print(f" Concurrent requests handled: {success_count}/10")
 
 
 @pytest.mark.integration
@@ -207,10 +207,10 @@ async def test_rate_limiting_enforcement(
 
         # Stop if rate limited
         if response.status_code == 429:
-            print(f"✅ Rate limiting enforced at request {i+1}")
+            print(f" Rate limiting enforced at request {i+1}")
             return
 
-    print(f"⚠️ No rate limiting detected (might not be configured)")
+    print(f"️ No rate limiting detected (might not be configured)")
 
 
 @pytest.mark.integration
@@ -267,7 +267,7 @@ async def test_database_connection_pool_management(
 
     assert success_count >= 15  # At least 75% success
 
-    print(f"✅ Connection pool handled {success_count}/20 concurrent creates")
+    print(f" Connection pool handled {success_count}/20 concurrent creates")
 
 
 @pytest.mark.integration
@@ -302,7 +302,7 @@ async def test_malformed_request_handling(
 
     assert response.status_code in [400, 422]
 
-    print(f"✅ Malformed requests rejected")
+    print(f" Malformed requests rejected")
 
 
 @pytest.mark.integration
@@ -344,8 +344,8 @@ async def test_large_payload_handling(
         cleanup_test_data["bia_processes"].append(
             process.get("id") or process.get("process_id")
         )
-        print(f"✅ Large payload accepted")
+        print(f" Large payload accepted")
     elif response.status_code in [400, 413]:
-        print(f"✅ Large payload rejected (size limit enforced)")
+        print(f" Large payload rejected (size limit enforced)")
     else:
-        print(f"⚠️ Unexpected response: {response.status_code}")
+        print(f"️ Unexpected response: {response.status_code}")

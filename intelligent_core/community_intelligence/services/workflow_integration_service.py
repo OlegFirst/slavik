@@ -100,7 +100,7 @@ class WorkflowIntegrationService:
             )
 
             logger.info(
-                f"✅ Auto-submitted contribution {contribution_id} for workflow {workflow_id}"
+                f" Auto-submitted contribution {contribution_id} for workflow {workflow_id}"
             )
 
         except Exception as e:

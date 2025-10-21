@@ -80,9 +80,9 @@ async def main():
             temporal_address,
             namespace=temporal_namespace
         )
-        logger.info("✅ Connected to Temporal")
+        logger.info(" Connected to Temporal")
     except Exception as e:
-        logger.error(f"❌ Failed to connect to Temporal: {e}")
+        logger.error(f" Failed to connect to Temporal: {e}")
         logger.error("   Make sure Temporal server is running:")
         logger.error("   > temporal server start-dev")
         return
@@ -94,11 +94,11 @@ async def main():
         async with httpx.AsyncClient(timeout=5.0) as http_client:
             response = await http_client.get(f"{coordination_center_url}/coordination/health")
             if response.status_code == 200:
-                logger.info("✅ Coordination Center is healthy")
+                logger.info(" Coordination Center is healthy")
             else:
-                logger.warning(f"⚠️ Coordination Center returned {response.status_code}")
+                logger.warning(f"️ Coordination Center returned {response.status_code}")
     except Exception as e:
-        logger.error(f"❌ Cannot reach Coordination Center: {e}")
+        logger.error(f" Cannot reach Coordination Center: {e}")
         logger.error("   Make sure Coordination Center is running:")
         logger.error("   > cd intelligent-core/orchestration/coordination-center")
         logger.error("   > python main.py")
@@ -135,7 +135,7 @@ async def main():
     logger.info("  - approval_request")
     logger.info("  - rollback_execution")
     logger.info("="*60)
-    logger.info("🔄 Worker is now polling for tasks...")
+    logger.info(" Worker is now polling for tasks...")
     logger.info("   Press Ctrl+C to stop")
     logger.info("="*60)
 
@@ -145,7 +145,7 @@ async def main():
     except KeyboardInterrupt:
         logger.info("\n⏹️ Worker stopped by user")
     except Exception as e:
-        logger.error(f"❌ Worker error: {e}")
+        logger.error(f" Worker error: {e}")
         raise
 
 
@@ -153,4 +153,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.info("\n👋 Goodbye!")
+        logger.info("\n Goodbye!")

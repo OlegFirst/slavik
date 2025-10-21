@@ -58,7 +58,7 @@ class EventIntelligenceLearning:
         Returns:
             List предсказанных gaps с вероятностью
         """
-        logger.info(f"🔮 Predicting event gaps for next {days_ahead} days...")
+        logger.info(f" Predicting event gaps for next {days_ahead} days...")
 
         if len(self.history) < 7:
             logger.warning("Not enough historical data for prediction")
@@ -130,7 +130,7 @@ class EventIntelligenceLearning:
         - Несбалансированные publisher/subscriber ratios
         - Orphaned events без активности
         """
-        logger.info("🔍 Detecting event anomalies...")
+        logger.info(" Detecting event anomalies...")
 
         if len(self.history) < 14:
             return []
@@ -199,7 +199,7 @@ class EventIntelligenceLearning:
         - Корреляции между событиями
         - Best practices из успешных сервисов
         """
-        logger.info("🤖 Generating ML-based event recommendations...")
+        logger.info(" Generating ML-based event recommendations...")
 
         # Загружаем текущее состояние
         self.eis.load_catalog()

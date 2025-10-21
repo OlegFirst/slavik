@@ -21,7 +21,7 @@ import argparse
 try:
     from faker import Faker
 except ImportError:
-    print("⚠️  faker not installed. Installing...")
+    print("️  faker not installed. Installing...")
     import subprocess
     subprocess.check_call(["pip", "install", "faker"])
     from faker import Faker
@@ -149,7 +149,7 @@ class SeedDataGenerator:
     ) -> Dict[str, Any]:
         """Generate complete seed dataset"""
 
-        print("🌱 Generating seed data...")
+        print(" Generating seed data...")
 
         dataset = {
             'bia_cases': [],
@@ -191,7 +191,7 @@ class SeedDataGenerator:
         print("  Calculating benchmarks...")
         dataset['benchmarks'] = self._calculate_benchmarks(dataset)
 
-        print("✅ Seed data generation complete!")
+        print(" Seed data generation complete!")
         return dataset
 
     def _generate_bia_case(self, index: int) -> Dict[str, Any]:
@@ -649,13 +649,13 @@ class SeedDataGenerator:
                 filename = output_path / f"{key}.json"
                 with open(filename, 'w') as f:
                     json.dump(data, f, indent=2)
-                print(f"  ✅ Saved {filename}")
+                print(f"   Saved {filename}")
 
         # Save metadata
         with open(output_path / "metadata.json", 'w') as f:
             json.dump(dataset['metadata'], f, indent=2)
 
-        print(f"\n📦 All data saved to {output_dir}")
+        print(f"\n All data saved to {output_dir}")
 
 
 def main():
@@ -681,7 +681,7 @@ def main():
 
     generator.save_to_files(dataset, args.output)
 
-    print("\n📊 Dataset Statistics:")
+    print("\n Dataset Statistics:")
     print(f"   BIA Cases: {len(dataset['bia_cases'])}")
     print(f"   Risk Cases: {len(dataset['risk_cases'])}")
     print(f"   Planning Cases: {len(dataset['planning_cases'])}")

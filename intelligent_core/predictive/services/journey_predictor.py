@@ -142,7 +142,7 @@ class JourneyPredictor:
         patterns_learned = context.get('known_patterns', [])
 
         if strategies:
-            logger.info(f"🎯 ACE enhanced: {len(strategies)} strategies, {len(patterns_learned)} patterns")
+            logger.info(f" ACE enhanced: {len(strategies)} strategies, {len(patterns_learned)} patterns")
 
         # Step 1: Find similar organizations
         similar_orgs = await self._find_similar_organizations(org_context)
@@ -226,7 +226,7 @@ class JourneyPredictor:
         # ACE provides enhanced context!
         strategies = context.get('playbook_strategies', [])
         if strategies:
-            logger.info(f"🎯 ACE enhanced certification prediction with {len(strategies)} strategies")
+            logger.info(f" ACE enhanced certification prediction with {len(strategies)} strategies")
 
         # Find similar successful organizations
         similar_orgs = await self._find_similar_organizations(

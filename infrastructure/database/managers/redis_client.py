@@ -52,17 +52,17 @@ class RedisManager:
             # Test connection
             await self.client.ping()
 
-            logger.info(f"✅ Redis connected: {self.host}:{self.port}")
+            logger.info(f" Redis connected: {self.host}:{self.port}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to Redis: {e}")
+            logger.error(f" Failed to connect to Redis: {e}")
             raise
 
     async def disconnect(self):
         """Close Redis connections"""
         if self.client:
             await self.client.close()
-            logger.info("✅ Redis connections closed")
+            logger.info(" Redis connections closed")
 
     async def health_check(self) -> bool:
         """Check Redis health"""

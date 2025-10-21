@@ -60,7 +60,7 @@ class KnowledgeMonitor:
             "Learning", "Governance"
         ]
 
-        logger.info("📊 KnowledgeMonitor инициализирован")
+        logger.info(" KnowledgeMonitor инициализирован")
 
     async def assess(self) -> KnowledgeState:
         """
@@ -71,7 +71,7 @@ class KnowledgeMonitor:
         - ЗАЩИТА: Compliance метрики
         - САМОРЕАЛИЗАЦИЯ: Качество и использование
         """
-        logger.info("🔍 Оценка состояния знаний...")
+        logger.info(" Оценка состояния знаний...")
 
         # 1. Покрытие
         coverage = await self.assess_coverage()
@@ -89,7 +89,7 @@ class KnowledgeMonitor:
             timestamp=datetime.now()
         )
 
-        logger.info(f"✅ Оценка завершена:")
+        logger.info(f" Оценка завершена:")
         logger.info(f"   ISO покрытие: {coverage.iso_coverage:.1%}")
         logger.info(f"   Платформа покрытие: {coverage.platform_coverage:.1%}")
         logger.info(f"   Обнаружено пробелов: {len(gaps)}")
@@ -102,7 +102,7 @@ class KnowledgeMonitor:
 
         ЗНАНИЕ: Измеряем что мы знаем vs что должны знать
         """
-        logger.info("📈 Оценка покрытия...")
+        logger.info(" Оценка покрытия...")
 
         # Загружаем существующие сценарии
         existing_scenarios = await self._load_existing_scenarios()
@@ -145,7 +145,7 @@ class KnowledgeMonitor:
 
         САМОРЕАЛИЗАЦИЯ: Измеряем ценность и актуальность
         """
-        logger.info("⭐ Оценка качества...")
+        logger.info(" Оценка качества...")
 
         scenarios = await self._load_existing_scenarios()
 
@@ -200,7 +200,7 @@ class KnowledgeMonitor:
         - ЗАЩИТА: Какие стандарты не покрыты?
         - САМОРЕАЛИЗАЦИЯ: Какие возможности не документированы?
         """
-        logger.info("🔍 Обнаружение пробелов...")
+        logger.info(" Обнаружение пробелов...")
 
         gaps = []
 
@@ -216,7 +216,7 @@ class KnowledgeMonitor:
         user_gaps = await self._detect_user_gaps()
         gaps.extend(user_gaps)
 
-        logger.info(f"📊 Обнаружено пробелов:")
+        logger.info(f" Обнаружено пробелов:")
         logger.info(f"   Стандарты: {len(standard_gaps)}")
         logger.info(f"   Возможности: {len(capability_gaps)}")
         logger.info(f"   Пользователи: {len(user_gaps)}")
@@ -370,7 +370,7 @@ class KnowledgeMonitor:
         metrics = await self.get_all_metrics()
 
         logger.info("=" * 60)
-        logger.info("📊 KNOWLEDGE QUALITY METRICS")
+        logger.info(" KNOWLEDGE QUALITY METRICS")
         logger.info("=" * 60)
         logger.info(f"ISO Coverage:      {metrics.knowledge_coverage.iso_coverage:.1%}")
         logger.info(f"Platform Coverage: {metrics.knowledge_coverage.platform_coverage:.1%}")
@@ -415,7 +415,7 @@ class KnowledgeMonitor:
             cur.close()
             conn.close()
 
-            logger.info(f"✅ Loaded {len(scenarios)} scenarios from database")
+            logger.info(f" Loaded {len(scenarios)} scenarios from database")
             return scenarios
 
         except Exception as e:

@@ -38,7 +38,7 @@ async def test_dev_mode():
             roles=["bcm_manager", "strategy_editor"],
             is_superadmin=False
         )
-        print("✅ Dev mode user context created!")
+        print(" Dev mode user context created!")
         print(f"   User ID: {user.user_id}")
         print(f"   Tenant ID: {user.tenant_id}")
         print(f"   Email: {user.email}")
@@ -46,7 +46,7 @@ async def test_dev_mode():
         print(f"   Is Superadmin: {user.is_superadmin}")
         print("\n   This simulates X-Dev-User and X-Dev-Tenant headers")
     except Exception as e:
-        print(f"❌ Dev mode simulation failed: {e}")
+        print(f" Dev mode simulation failed: {e}")
 
     print()
 
@@ -73,14 +73,14 @@ async def test_token_extraction():
             roles=token_claims["roles"],
             is_superadmin=token_claims["is_superadmin"]
         )
-        print("✅ Token claims extracted successfully!")
+        print(" Token claims extracted successfully!")
         print(f"   User ID: {user.user_id}")
         print(f"   Tenant ID: {user.tenant_id}")
         print(f"   Email: {user.email}")
         print(f"   Roles: {user.roles}")
         print("\n   This simulates JWT token validation")
     except Exception as e:
-        print(f"❌ Token extraction failed: {e}")
+        print(f" Token extraction failed: {e}")
 
     print()
 
@@ -98,7 +98,7 @@ async def test_user_context_model():
         is_superadmin=False
     )
 
-    print("✅ UserContext model created successfully!")
+    print(" UserContext model created successfully!")
     print(f"   Model: {user}")
     print(f"   JSON: {user.model_dump_json(indent=2)}")
 
@@ -119,13 +119,13 @@ async def main():
     print("Test suite completed!")
     print("=" * 60 + "\n")
 
-    print("📋 How Authentication Works:")
+    print(" How Authentication Works:")
     print("   1. Dev Mode: Use X-Dev-User and X-Dev-Tenant headers")
     print("   2. Production: Use 'Authorization: Bearer <token>' header")
     print("   3. Token must include: sub/user_id, tenant_id, email, roles")
     print("   4. Configure JWT_PUBLIC_KEY in .env for production")
     print()
-    print("📝 To test with running service:")
+    print(" To test with running service:")
     print("   curl -X GET http://localhost:8011/strategies/ \\")
     print("     -H 'X-Dev-User: user-123' \\")
     print("     -H 'X-Dev-Tenant: tenant-456'")

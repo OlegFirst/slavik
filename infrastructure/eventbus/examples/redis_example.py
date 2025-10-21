@@ -23,7 +23,7 @@ async def main():
 
     # Event handler
     async def handle_event(event: Event):
-        print(f"📨 Received: {event.type}")
+        print(f" Received: {event.type}")
         print(f"   Data: {event.data}")
         print()
 
@@ -52,18 +52,18 @@ async def main():
 
     # Stats
     stats = await bus.get_stats()
-    print(f"\n📊 Published: {stats['published']}, Consumed: {stats['consumed']}")
+    print(f"\n Published: {stats['published']}, Consumed: {stats['consumed']}")
 
     # Cleanup
     await bus.close()
-    print("\n✅ Done!")
+    print("\n Done!")
 
 
 if __name__ == '__main__':
     try:
         asyncio.run(main())
     except ImportError:
-        print("❌ Redis not installed. Run: pip install redis")
+        print(" Redis not installed. Run: pip install redis")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         print("   Make sure Redis is running on localhost:6379")

@@ -83,7 +83,7 @@ class ScenarioIntelligenceClient:
             )
 
             self._subscriptions_active = True
-            logger.info("✅ Subscribed to Scenario Intelligence events")
+            logger.info(" Subscribed to Scenario Intelligence events")
 
         except Exception as e:
             logger.error(f"Failed to subscribe to scenario events: {e}", exc_info=True)
@@ -106,7 +106,7 @@ class ScenarioIntelligenceClient:
             trigger = data.get('trigger', 'unknown')
 
             logger.info(
-                f"📊 Scenarios Generated: level={level}, generator={generator}, "
+                f" Scenarios Generated: level={level}, generator={generator}, "
                 f"count={count}, trigger={trigger}"
             )
 
@@ -123,7 +123,7 @@ class ScenarioIntelligenceClient:
             # Alert if many scenarios generated (potential issue)
             if count > 100:
                 logger.warning(
-                    f"⚠️  Large batch of scenarios generated: {count} scenarios "
+                    f"️  Large batch of scenarios generated: {count} scenarios "
                     f"(level={level}, generator={generator})"
                 )
 
@@ -149,7 +149,7 @@ class ScenarioIntelligenceClient:
             error = data.get('error')
 
             logger.info(
-                f"📊 Scenario Executed: id={scenario_id}, status={status}, "
+                f" Scenario Executed: id={scenario_id}, status={status}, "
                 f"duration={duration_ms}ms, steps={steps_executed}/{steps_executed + steps_failed}"
             )
 
@@ -169,7 +169,7 @@ class ScenarioIntelligenceClient:
             # Alert on failures
             if status == 'failed':
                 logger.error(
-                    f"❌ Scenario Execution Failed: id={scenario_id}, "
+                    f" Scenario Execution Failed: id={scenario_id}, "
                     f"execution={execution_id}, error={error}"
                 )
 
@@ -181,7 +181,7 @@ class ScenarioIntelligenceClient:
             # Alert on slow executions
             if duration_ms > 30000:  # > 30 seconds
                 logger.warning(
-                    f"⚠️  Slow Scenario Execution: id={scenario_id}, "
+                    f"️  Slow Scenario Execution: id={scenario_id}, "
                     f"duration={duration_ms}ms ({duration_ms / 1000:.1f}s)"
                 )
 
@@ -204,7 +204,7 @@ class ScenarioIntelligenceClient:
             affected_levels = data.get('affected_levels', [])
 
             logger.info(
-                f"🔄 Regeneration Triggered: id={regeneration_id}, "
+                f" Regeneration Triggered: id={regeneration_id}, "
                 f"trigger={trigger_event}, services={len(affected_services)}, "
                 f"levels={affected_levels}"
             )
@@ -242,7 +242,7 @@ class ScenarioIntelligenceClient:
             errors = data.get('errors', [])
 
             logger.info(
-                f"✅ Regeneration Completed: id={regeneration_id}, status={status}, "
+                f" Regeneration Completed: id={regeneration_id}, status={status}, "
                 f"generated={scenarios_generated}, updated={scenarios_updated}, "
                 f"deprecated={scenarios_deprecated}, duration={duration_ms}ms"
             )
@@ -263,13 +263,13 @@ class ScenarioIntelligenceClient:
             # Alert on failures
             if status == 'failed' or errors:
                 logger.error(
-                    f"❌ Regeneration Failed: id={regeneration_id}, errors={errors}"
+                    f" Regeneration Failed: id={regeneration_id}, errors={errors}"
                 )
 
             # Alert on slow regenerations
             if duration_ms > 60000:  # > 1 minute
                 logger.warning(
-                    f"⚠️  Slow Regeneration: id={regeneration_id}, "
+                    f"️  Slow Regeneration: id={regeneration_id}, "
                     f"duration={duration_ms}ms ({duration_ms / 1000:.1f}s)"
                 )
 
@@ -291,14 +291,14 @@ class ScenarioIntelligenceClient:
             confidence = data.get('confidence', 0.0)
 
             logger.info(
-                f"🔍 Pattern Detected: type={pattern_type}, "
+                f" Pattern Detected: type={pattern_type}, "
                 f"scenarios={len(scenario_ids)}, confidence={confidence:.2f}"
             )
 
             # High confidence patterns are worth investigating
             if confidence > 0.8:
                 logger.info(
-                    f"💡 High-Confidence Pattern: type={pattern_type}, "
+                    f" High-Confidence Pattern: type={pattern_type}, "
                     f"confidence={confidence:.2f} - Consider creating template"
                 )
 
@@ -337,4 +337,4 @@ class ScenarioIntelligenceClient:
     async def close(self):
         """Close client"""
         self._subscriptions_active = False
-        logger.info("✅ ScenarioIntelligenceClient closed")
+        logger.info(" ScenarioIntelligenceClient closed")

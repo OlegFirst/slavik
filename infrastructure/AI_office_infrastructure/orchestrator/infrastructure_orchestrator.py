@@ -78,7 +78,7 @@ class InfrastructureOrchestrator:
         Использует: tools/infrastructure/discover_services.py
         """
         print("\n" + "="*80)
-        print("📡 STEP 1: SERVICE DISCOVERY")
+        print(" STEP 1: SERVICE DISCOVERY")
         print("="*80 + "\n")
 
         discovery = ServiceDiscovery(self.project_root)
@@ -89,8 +89,8 @@ class InfrastructureOrchestrator:
         with open(catalog_file, 'w') as f:
             json.dump(services, f, indent=2, default=str)
 
-        print(f"\n✅ Service catalog saved: {catalog_file}")
-        print(f"📊 Total services discovered: {len(services)}")
+        print(f"\n Service catalog saved: {catalog_file}")
+        print(f" Total services discovered: {len(services)}")
 
         return services
 
@@ -100,7 +100,7 @@ class InfrastructureOrchestrator:
         Использует: tools/infrastructure/docker_compose_generator.py
         """
         print("\n" + "="*80)
-        print("🏗️  STEP 2: CONFIGURATION GENERATION")
+        print("️  STEP 2: CONFIGURATION GENERATION")
         print("="*80 + "\n")
 
         # Если сервисы не переданы, загрузить из каталога
@@ -110,14 +110,14 @@ class InfrastructureOrchestrator:
                 with open(catalog_file) as f:
                     services = json.load(f)
             else:
-                print("⚠️  Service catalog not found. Running discovery first...")
+                print("️  Service catalog not found. Running discovery first...")
                 services = self.discover_services()
 
         # Генерация docker-compose файлов
         generator = DockerComposeGenerator(self.project_root, self.generated_dir)
         generator.generate_all()
 
-        print("\n✅ All configurations generated")
+        print("\n All configurations generated")
 
     def deploy_infrastructure(self, layer: str = 'full', use_orchestrator: bool = True):
         """
@@ -132,7 +132,7 @@ class InfrastructureOrchestrator:
             use_orchestrator: использовать ai-orchestration или нет
         """
         print("\n" + "="*80)
-        print("🚀 STEP 3: INFRASTRUCTURE DEPLOYMENT")
+        print(" STEP 3: INFRASTRUCTURE DEPLOYMENT")
         print("="*80 + "\n")
 
         if use_orchestrator:
@@ -143,7 +143,7 @@ class InfrastructureOrchestrator:
     def _deploy_via_ai_orchestration(self, layer: str):
         """Развёртывание через ai-orchestration (умное управление)"""
 
-        print("🧠 Using AI Orchestration for intelligent deployment")
+        print(" Using AI Orchestration for intelligent deployment")
         print()
 
         # 1. Проверить что ai-orchestration запущен
@@ -155,7 +155,7 @@ class InfrastructureOrchestrator:
             response = requests.get('http://localhost:8002/health', timeout=5)
 
             if response.ok:
-                print("✅ ai-orchestration is running")
+                print(" ai-orchestration is running")
 
                 # Отправить задачу на развёртывание
                 deploy_request = {
@@ -165,25 +165,25 @@ class InfrastructureOrchestrator:
                 }
 
                 # API ai-orchestration может обработать эту задачу
-                print(f"📤 Sending deployment request for layer: {layer}")
+                print(f" Sending deployment request for layer: {layer}")
                 # TODO: интеграция с API ai-orchestration
                 print("   (API integration in progress)")
 
         except Exception as e:
-            print(f"⚠️  ai-orchestration not available: {e}")
+            print(f"️  ai-orchestration not available: {e}")
             print("   Falling back to direct docker-compose deployment")
             self._deploy_via_docker_compose(layer)
 
     def _deploy_via_docker_compose(self, layer: str):
         """Развёртывание напрямую через docker-compose"""
 
-        print(f"🐳 Using docker-compose for layer: {layer}")
+        print(f" Using docker-compose for layer: {layer}")
         print()
 
         compose_file = self.generated_dir / f'docker-compose.{layer}.yml'
 
         if not compose_file.exists():
-            print(f"❌ Compose file not found: {compose_file}")
+            print(f" Compose file not found: {compose_file}")
             print("   Run 'generate' command first")
             return
 
@@ -191,30 +191,30 @@ class InfrastructureOrchestrator:
         start_script = self.generated_dir / 'start_infrastructure.sh'
 
         if start_script.exists():
-            print(f"📜 Using startup script: {start_script.name}")
+            print(f" Using startup script: {start_script.name}")
             try:
                 subprocess.run([str(start_script), layer], check=True)
-                print(f"\n✅ Infrastructure layer '{layer}' started successfully")
+                print(f"\n Infrastructure layer '{layer}' started successfully")
             except subprocess.CalledProcessError as e:
-                print(f"\n❌ Deployment failed: {e}")
+                print(f"\n Deployment failed: {e}")
         else:
             # Прямой запуск через docker-compose
-            print(f"🐳 Running: docker-compose -f {compose_file.name} up -d")
+            print(f" Running: docker-compose -f {compose_file.name} up -d")
             try:
                 subprocess.run(
                     ['docker-compose', '-f', str(compose_file), 'up', '-d'],
                     cwd=self.generated_dir,
                     check=True
                 )
-                print(f"\n✅ Infrastructure layer '{layer}' started successfully")
+                print(f"\n Infrastructure layer '{layer}' started successfully")
             except subprocess.CalledProcessError as e:
-                print(f"\n❌ Deployment failed: {e}")
+                print(f"\n Deployment failed: {e}")
 
     def build_and_deploy(self, layer: str = 'full', use_orchestrator: bool = True):
         """Полный цикл: обнаружение → генерация → развёртывание"""
 
         print("\n" + "="*80)
-        print("🎯 FULL INFRASTRUCTURE BUILD & DEPLOY")
+        print(" FULL INFRASTRUCTURE BUILD & DEPLOY")
         print("="*80)
 
         try:
@@ -228,35 +228,35 @@ class InfrastructureOrchestrator:
             self.deploy_infrastructure(layer, use_orchestrator)
 
             print("\n" + "="*80)
-            print("✅ INFRASTRUCTURE BUILD & DEPLOY COMPLETE!")
+            print(" INFRASTRUCTURE BUILD & DEPLOY COMPLETE!")
             print("="*80)
 
             self._print_status()
 
         except Exception as e:
             logger.error(f"Build and deploy failed: {e}", exc_info=True)
-            print(f"\n❌ Build and deploy failed: {e}")
+            print(f"\n Build and deploy failed: {e}")
             sys.exit(1)
 
     def status(self):
         """Проверка статуса инфраструктуры"""
 
         print("\n" + "="*80)
-        print("📊 INFRASTRUCTURE STATUS")
+        print(" INFRASTRUCTURE STATUS")
         print("="*80 + "\n")
 
         # 1. Проверить наличие конфигов
-        print("📁 Generated Configurations:")
+        print(" Generated Configurations:")
         compose_files = list(self.generated_dir.glob('docker-compose.*.yml'))
         if compose_files:
             for f in compose_files:
-                print(f"   ✅ {f.name}")
+                print(f"    {f.name}")
         else:
-            print("   ❌ No compose files found (run 'generate' first)")
+            print("    No compose files found (run 'generate' first)")
         print()
 
         # 2. Проверить Docker контейнеры
-        print("🐳 Running Containers:")
+        print(" Running Containers:")
         try:
             result = subprocess.run(
                 ['docker-compose', '-f', 'docker-compose.full.yml', 'ps'],
@@ -269,11 +269,11 @@ class InfrastructureOrchestrator:
             else:
                 print("   ℹ️  No containers running")
         except Exception as e:
-            print(f"   ⚠️  Could not check containers: {e}")
+            print(f"   ️  Could not check containers: {e}")
         print()
 
         # 3. Проверить orchestration сервисы
-        print("🧠 Orchestration Services:")
+        print(" Orchestration Services:")
         self._check_service('ai-orchestration', 8002, '/health')
         self._check_service('coordination-center', 8004, '/coordination/health')
         print()
@@ -284,15 +284,15 @@ class InfrastructureOrchestrator:
             import requests
             response = requests.get(f'http://localhost:{port}{health_path}', timeout=3)
             if response.ok:
-                print(f"   ✅ {name} (port {port})")
+                print(f"    {name} (port {port})")
             else:
-                print(f"   ⚠️  {name} (port {port}) - unhealthy")
+                print(f"   ️  {name} (port {port}) - unhealthy")
         except:
-            print(f"   ❌ {name} (port {port}) - not running")
+            print(f"    {name} (port {port}) - not running")
 
     def _print_status(self):
         """Печать итогового статуса"""
-        print("\n📋 Quick Status Check:")
+        print("\n Quick Status Check:")
         print(f"   Generated configs: {self.generated_dir}")
         print(f"   Start script: ./start_infrastructure.sh [layer]")
         print(f"   Stop script: ./stop_infrastructure.sh [layer]")
@@ -305,7 +305,7 @@ class InfrastructureOrchestrator:
         Добавляет команды для управления инфраструктурой в project-agent CLI
         """
         print("\n" + "="*80)
-        print("🔧 INTEGRATING WITH PROJECT-AGENT")
+        print(" INTEGRATING WITH PROJECT-AGENT")
         print("="*80 + "\n")
 
         project_agent_dir = self.tools_dir / 'project-agent' / 'agent'
@@ -351,9 +351,9 @@ def docker_status():
         with open(integration_file, 'w') as f:
             f.write(integration_code)
 
-        print(f"✅ Created: {integration_file}")
+        print(f" Created: {integration_file}")
         print()
-        print("📚 New commands available in project-agent:")
+        print(" New commands available in project-agent:")
         print("   project-agent docker discover")
         print("   project-agent docker generate")
         print("   project-agent docker deploy [layer]")

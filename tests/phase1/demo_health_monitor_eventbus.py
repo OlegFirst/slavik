@@ -41,19 +41,19 @@ async def demo_health_monitor_eventbus():
     # Step 1: Create EventBus
     print("Step 1: Creating EventBus (memory backend)...")
     bus = create_eventbus('memory')
-    print("✅ EventBus created")
+    print(" EventBus created")
     print()
 
     # Step 2: Create Health Monitor
     print("Step 2: Creating Health Monitor...")
     monitor = HealthMonitor()
-    print("✅ Health Monitor created")
+    print(" Health Monitor created")
     print()
 
     # Step 3: Connect EventBus to Health Monitor
     print("Step 3: Connecting EventBus to Health Monitor...")
     await monitor.connect_eventbus(bus)
-    print("✅ EventBus connected to Health Monitor")
+    print(" EventBus connected to Health Monitor")
     print()
 
     # Step 4: Subscribe to health events
@@ -62,14 +62,14 @@ async def demo_health_monitor_eventbus():
 
     async def event_handler(event: Event):
         received_events.append(event)
-        print(f"📥 Received event: {event.type}")  # Use 'type' not 'event_type'
+        print(f" Received event: {event.type}")  # Use 'type' not 'event_type'
         print(f"   Service: {event.data['service_name']}")
         print(f"   Status: {event.data['previous_status']} → {event.data['status']}")
         print(f"   Message: {event.data['message']}")
         print()
 
     await bus.subscribe('infrastructure.health.*', event_handler)
-    print("✅ Subscribed to 'infrastructure.health.*'")
+    print(" Subscribed to 'infrastructure.health.*'")
     print()
 
     # Step 5: Register health checks
@@ -82,7 +82,7 @@ async def demo_health_monitor_eventbus():
         nonlocal check_count
         check_count += 1
         is_healthy = (check_count % 2 == 1)
-        print(f"  🔍 Check #{check_count} for {service_name}: {'HEALTHY' if is_healthy else 'UNHEALTHY'}")
+        print(f"   Check #{check_count} for {service_name}: {'HEALTHY' if is_healthy else 'UNHEALTHY'}")
         return is_healthy
 
     await monitor.register_check(HealthCheck(
@@ -92,7 +92,7 @@ async def demo_health_monitor_eventbus():
         custom_checker=mock_checker
     ))
 
-    print("✅ Registered health check for 'test_api_gateway'")
+    print(" Registered health check for 'test_api_gateway'")
     print()
 
     # Step 6: Start monitoring
@@ -118,7 +118,7 @@ async def demo_health_monitor_eventbus():
     except asyncio.CancelledError:
         pass
 
-    print("✅ Health Monitor stopped")
+    print(" Health Monitor stopped")
     print()
 
     # Step 8: Show results
@@ -137,21 +137,21 @@ async def demo_health_monitor_eventbus():
             print(f"   Previous: {event.data['previous_status']}")
             print()
 
-        print("✅ SUCCESS: Health Monitor successfully publishes events to EventBus!")
+        print(" SUCCESS: Health Monitor successfully publishes events to EventBus!")
         print()
         print("Key Features Demonstrated:")
-        print("  ✅ Health Monitor connects to EventBus")
-        print("  ✅ Status changes are detected")
-        print("  ✅ Events published only when status changes (not every check)")
-        print("  ✅ Events contain full health check details")
-        print("  ✅ Event pattern: 'infrastructure.health.{status}'")
+        print("   Health Monitor connects to EventBus")
+        print("   Status changes are detected")
+        print("   Events published only when status changes (not every check)")
+        print("   Events contain full health check details")
+        print("   Event pattern: 'infrastructure.health.{status}'")
     else:
-        print("❌ FAILED: No events received")
+        print(" FAILED: No events received")
         return False
 
     print()
     print("=" * 70)
-    print("✅ DEMO COMPLETED SUCCESSFULLY")
+    print(" DEMO COMPLETED SUCCESSFULLY")
     print("=" * 70)
 
     return True
@@ -162,7 +162,7 @@ if __name__ == '__main__':
         success = asyncio.run(demo_health_monitor_eventbus())
         sys.exit(0 if success else 1)
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

@@ -39,7 +39,7 @@ class ComplianceEngine:
             Результаты проверки compliance
         """
 
-        logger.info(f"  ✅ Checking compliance...")
+        logger.info(f"   Checking compliance...")
 
         results = {
             'timestamp': datetime.utcnow().isoformat(),
@@ -48,7 +48,7 @@ class ComplianceEngine:
 
         # ISO 22301
         if 'iso_22301' in compliance_config:
-            logger.info(f"    📋 Checking ISO 22301...")
+            logger.info(f"     Checking ISO 22301...")
             iso22301_result = await self._check_iso_22301(
                 compliance_config['iso_22301'],
                 execution_result
@@ -57,7 +57,7 @@ class ComplianceEngine:
 
         # ISO 27001
         if 'iso_27001' in compliance_config:
-            logger.info(f"    🔒 Checking ISO 27001...")
+            logger.info(f"     Checking ISO 27001...")
             iso27001_result = await self._check_iso_27001(
                 compliance_config['iso_27001'],
                 execution_result
@@ -66,7 +66,7 @@ class ComplianceEngine:
 
         # GDPR (если есть)
         if 'gdpr' in compliance_config:
-            logger.info(f"    🇪🇺 Checking GDPR...")
+            logger.info(f"     Checking GDPR...")
             gdpr_result = await self._check_gdpr(
                 compliance_config['gdpr'],
                 execution_result
@@ -169,7 +169,7 @@ class ComplianceEngine:
         requirement = clause.get('requirement', '')
         how_met = clause.get('how_met', '')
 
-        logger.info(f"      📋 Clause {clause_id}: {clause_name}")
+        logger.info(f"       Clause {clause_id}: {clause_name}")
 
         # Проверить выполнение (упрощенно)
         # В production - сложная логика проверки
@@ -198,7 +198,7 @@ class ComplianceEngine:
         status = control.get('status', 'unknown')
         evidence = control.get('evidence', [])
 
-        logger.info(f"      🔒 Control {control_id}: {control_name}")
+        logger.info(f"       Control {control_id}: {control_name}")
 
         # Проверить evidence
         evidence_found = self._check_evidence_exists(evidence, execution_result)
@@ -221,7 +221,7 @@ class ComplianceEngine:
         Проверить article GDPR
         """
 
-        logger.info(f"      🇪🇺 Article: {article}")
+        logger.info(f"       Article: {article}")
 
         return {
             'article': article,
@@ -243,7 +243,7 @@ class ComplianceEngine:
         storage = evidence_config.get('storage')
         retention = evidence_config.get('retention')
 
-        logger.info(f"      📄 Generating evidence: {evidence_type} ({evidence_format})")
+        logger.info(f"       Generating evidence: {evidence_type} ({evidence_format})")
 
         # Извлечь данные для evidence
         evidence_data = self._extract_evidence_data(
@@ -339,7 +339,7 @@ class ComplianceEngine:
         В production - сохранение в S3, database, etc.
         """
 
-        logger.info(f"        💾 Storing evidence: {evidence['type']}")
+        logger.info(f"         Storing evidence: {evidence['type']}")
         # Mock storage
 
     def _check_evidence_exists(

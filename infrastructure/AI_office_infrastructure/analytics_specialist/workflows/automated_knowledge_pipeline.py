@@ -96,7 +96,7 @@ class AutomatedKnowledgePipeline:
     async def run_full_pipeline(self):
         """Запустить полный pipeline"""
         logger.info("="*60)
-        logger.info("🚀 Starting Automated Knowledge Pipeline")
+        logger.info(" Starting Automated Knowledge Pipeline")
         logger.info("="*60)
 
         self.pipeline_state["started_at"] = datetime.now().isoformat()
@@ -126,11 +126,11 @@ class AutomatedKnowledgePipeline:
             await self._generate_summary_report()
 
             logger.info("="*60)
-            logger.info("✅ Pipeline completed successfully!")
+            logger.info(" Pipeline completed successfully!")
             logger.info("="*60)
 
         except Exception as e:
-            logger.error(f"❌ Pipeline failed: {e}")
+            logger.error(f" Pipeline failed: {e}")
             self.pipeline_state["errors"].append(str(e))
             raise
 
@@ -138,12 +138,12 @@ class AutomatedKnowledgePipeline:
         """Stage 1: Analyze system behavior, states, transitions"""
         stage_name = "system_analysis"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 1: System Analysis")
+        logger.info(f" Stage 1: System Analysis")
         logger.info(f"{'='*60}")
 
         try:
             # 1.1: Analyze system states
-            logger.info("🔍 Analyzing system states...")
+            logger.info(" Analyzing system states...")
             state_machine = await self.behavior_analyzer.analyze_system_states()
 
             states_count = len(state_machine.get("states", {}))
@@ -151,7 +151,7 @@ class AutomatedKnowledgePipeline:
             logger.info(f"   Found {states_count} states, {transitions_count} transitions")
 
             # 1.2: Detect edge cases
-            logger.info("🔍 Detecting edge cases...")
+            logger.info(" Detecting edge cases...")
             edge_cases = await self.behavior_analyzer.detect_edge_cases()
             logger.info(f"   Found {len(edge_cases)} edge cases")
 
@@ -168,10 +168,10 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             raise
 
@@ -179,12 +179,12 @@ class AutomatedKnowledgePipeline:
         """Stage 2: Extract behavioral patterns from events/logs"""
         stage_name = "pattern_extraction"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 2: Pattern Extraction")
+        logger.info(f" Stage 2: Pattern Extraction")
         logger.info(f"{'='*60}")
 
         try:
             # 2.1: Extract patterns from events
-            logger.info("🔍 Extracting patterns from Event Bus...")
+            logger.info(" Extracting patterns from Event Bus...")
             patterns = await self.behavior_analyzer.extract_behavioral_patterns(source="events")
             logger.info(f"   Found {len(patterns)} behavioral patterns")
 
@@ -207,10 +207,10 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             raise
 
@@ -218,17 +218,17 @@ class AutomatedKnowledgePipeline:
         """Stage 3: Generate documentation (README, API, scenarios)"""
         stage_name = "documentation_generation"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 3: Documentation Generation")
+        logger.info(f" Stage 3: Documentation Generation")
         logger.info(f"{'='*60}")
 
         try:
             # 3.1: Generate user scenarios from patterns
-            logger.info("📝 Generating user scenarios...")
+            logger.info(" Generating user scenarios...")
             scenarios = await self.behavior_analyzer.generate_user_scenarios()
             logger.info(f"   Generated {len(scenarios)} user scenarios (Gherkin format)")
 
             # 3.2: Call AI documentation generator (existing tool)
-            logger.info("📝 Running AI documentation generator...")
+            logger.info(" Running AI documentation generator...")
             ai_doc_gen_path = self.project_root / "infrastructure" / "tools" / "doc-generators" / "ai_documentation_generator.py"
 
             if ai_doc_gen_path.exists():
@@ -248,10 +248,10 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             # Don't raise - continue with other stages
 
@@ -259,17 +259,17 @@ class AutomatedKnowledgePipeline:
         """Stage 4: Generate executable rules from flows"""
         stage_name = "rules_generation"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 4: Rules Generation")
+        logger.info(f" Stage 4: Rules Generation")
         logger.info(f"{'='*60}")
 
         try:
             # 4.1: Convert flows to Python rules
-            logger.info("🔧 Generating Python business rules...")
+            logger.info(" Generating Python business rules...")
             python_rules = await self.behavior_analyzer.convert_flows_to_rules(output_format="python")
             logger.info(f"   Generated: {python_rules['file']}")
 
             # 4.2: Convert flows to Temporal workflows
-            logger.info("🔧 Generating Temporal workflows...")
+            logger.info(" Generating Temporal workflows...")
             temporal_workflows = await self.behavior_analyzer.convert_flows_to_rules(output_format="temporal")
             logger.info(f"   Generated: {temporal_workflows['file']}")
 
@@ -280,10 +280,10 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             # Don't raise - continue with other stages
 
@@ -291,12 +291,12 @@ class AutomatedKnowledgePipeline:
         """Stage 5: Index documentation into Qdrant for RAG"""
         stage_name = "rag_integration"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 5: RAG Integration")
+        logger.info(f" Stage 5: RAG Integration")
         logger.info(f"{'='*60}")
 
         try:
             # 5.1: Load comprehensive docs into Qdrant
-            logger.info("📚 Loading comprehensive docs into Qdrant...")
+            logger.info(" Loading comprehensive docs into Qdrant...")
 
             comprehensive_docs_path = self.project_root / "doc-project" / "comprehensive-platform-docs"
 
@@ -309,7 +309,7 @@ class AutomatedKnowledgePipeline:
                 docs_indexed = 0
 
             # 5.2: Index generated scenarios
-            logger.info("📚 Indexing generated scenarios...")
+            logger.info(" Indexing generated scenarios...")
             scenarios_file = self.output_dir / "user_scenarios.json"
             if scenarios_file.exists():
                 scenarios_indexed = await self._index_scenarios_to_qdrant(scenarios_file)
@@ -324,10 +324,10 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             # Don't raise - continue with other stages
 
@@ -335,12 +335,12 @@ class AutomatedKnowledgePipeline:
         """Stage 6: Generate event catalog"""
         stage_name = "event_catalog"
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Stage 6: Event Catalog Generation")
+        logger.info(f" Stage 6: Event Catalog Generation")
         logger.info(f"{'='*60}")
 
         try:
             # 6.1: Call event catalog generator (existing tool)
-            logger.info("📋 Generating event catalog...")
+            logger.info(" Generating event catalog...")
 
             event_catalog_gen_path = self.project_root / "infrastructure" / "tools" / "doc-generators" / "event_catalog_generator.py"
 
@@ -357,17 +357,17 @@ class AutomatedKnowledgePipeline:
             }
 
             self.pipeline_state["stages_completed"].append(stage_name)
-            logger.info(f"✅ {stage_name} complete\n")
+            logger.info(f" {stage_name} complete\n")
 
         except Exception as e:
-            logger.error(f"❌ {stage_name} failed: {e}")
+            logger.error(f" {stage_name} failed: {e}")
             self.pipeline_state["errors"].append(f"{stage_name}: {e}")
             # Don't raise - continue with summary
 
     async def _generate_summary_report(self):
         """Generate summary report for the pipeline run"""
         logger.info(f"\n{'='*60}")
-        logger.info(f"📊 Generating Summary Report")
+        logger.info(f" Generating Summary Report")
         logger.info(f"{'='*60}")
 
         report = {
@@ -391,22 +391,22 @@ class AutomatedKnowledgePipeline:
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
 
-        logger.info(f"✅ Summary report: {report_file}")
+        logger.info(f" Summary report: {report_file}")
 
         # Print summary to console
         print("\n" + "="*60)
-        print("📊 PIPELINE SUMMARY")
+        print(" PIPELINE SUMMARY")
         print("="*60)
         print(f"Stages completed: {report['stages']['completed']}/{report['stages']['total']}")
         print(f"Duration: {report['pipeline_run']['duration_seconds']:.2f}s")
-        print(f"Status: {'✅ SUCCESS' if report['pipeline_run']['success'] else '❌ FAILED'}")
+        print(f"Status: {' SUCCESS' if report['pipeline_run']['success'] else ' FAILED'}")
 
         if report['errors']:
-            print(f"\n⚠️  Errors encountered:")
+            print(f"\n️  Errors encountered:")
             for error in report['errors']:
                 print(f"   - {error}")
 
-        print("\n📁 Outputs:")
+        print("\n Outputs:")
         for stage, outputs in report['outputs'].items():
             print(f"   {stage}: {outputs}")
 

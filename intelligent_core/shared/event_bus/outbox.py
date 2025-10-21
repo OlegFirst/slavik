@@ -120,7 +120,7 @@ async def save_to_outbox(
     db.add(outbox_event)
     # Don't commit here - let caller commit as part of their transaction
 
-    logger.debug(f"💾 Saved to outbox: {event_type} (id: {outbox_event.event_id})")
+    logger.debug(f" Saved to outbox: {event_type} (id: {outbox_event.event_id})")
 
     return outbox_event
 
@@ -163,7 +163,7 @@ class OutboxPublisher:
 
         self._running = True
         self._task = asyncio.create_task(self._run())
-        logger.info("✅ OutboxPublisher started")
+        logger.info(" OutboxPublisher started")
 
     async def stop(self):
         """Stop the publisher worker."""
@@ -178,7 +178,7 @@ class OutboxPublisher:
             except asyncio.CancelledError:
                 pass
 
-        logger.info("✅ OutboxPublisher stopped")
+        logger.info(" OutboxPublisher stopped")
 
     async def _run(self):
         """Main worker loop."""
@@ -190,7 +190,7 @@ class OutboxPublisher:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"❌ OutboxPublisher error: {e}")
+                logger.error(f" OutboxPublisher error: {e}")
                 await asyncio.sleep(self.poll_interval)
 
     async def _publish_batch(self):
@@ -219,7 +219,7 @@ class OutboxPublisher:
             if not pending_events:
                 return
 
-            logger.debug(f"📤 Publishing {len(pending_events)} events from outbox")
+            logger.debug(f" Publishing {len(pending_events)} events from outbox")
 
             for outbox_event in pending_events:
                 try:
@@ -242,7 +242,7 @@ class OutboxPublisher:
                     outbox_event.published_at = datetime.utcnow()
                     outbox_event.error = None
 
-                    logger.debug(f"✅ Published: {event.type} (id: {event.id})")
+                    logger.debug(f" Published: {event.type} (id: {event.id})")
 
                 except Exception as e:
                     # Mark as failed with retry
@@ -252,12 +252,12 @@ class OutboxPublisher:
                     if outbox_event.retry_count >= self.max_retries:
                         outbox_event.status = "failed"
                         logger.error(
-                            f"❌ Failed to publish {outbox_event.event_type} "
+                            f" Failed to publish {outbox_event.event_type} "
                             f"after {self.max_retries} retries: {e}"
                         )
                     else:
                         logger.warning(
-                            f"⚠️ Retry {outbox_event.retry_count}/{self.max_retries} "
+                            f"️ Retry {outbox_event.retry_count}/{self.max_retries} "
                             f"for {outbox_event.event_type}: {e}"
                         )
 
@@ -265,7 +265,7 @@ class OutboxPublisher:
             db.commit()
 
         except Exception as e:
-            logger.error(f"❌ Batch publish error: {e}")
+            logger.error(f" Batch publish error: {e}")
             db.rollback()
 
         finally:
@@ -284,4 +284,4 @@ async def publish_outbox_events(db_session_factory, batch_size: int = 100):
     """
     publisher = OutboxPublisher(db_session_factory, batch_size=batch_size)
     await publisher._publish_batch()
-    logger.info("✅ Outbox events published")
+    logger.info(" Outbox events published")

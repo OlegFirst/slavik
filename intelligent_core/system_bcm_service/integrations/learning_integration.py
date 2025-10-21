@@ -39,9 +39,9 @@ class LearningIntegration:
             self.pattern_detector = PatternDetector()
             self.kb_connector = KnowledgeBaseConnector()
             self.practice_learning = PracticeLearningEngine()
-            logger.info("✅ Learning integration initialized (using existing components)")
+            logger.info(" Learning integration initialized (using existing components)")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize learning integration: {e}")
+            logger.error(f" Failed to initialize learning integration: {e}")
             # Fallback to basic mode
             self.pattern_detector = None
             self.kb_connector = None
@@ -55,7 +55,7 @@ class LearningIntegration:
         НЕ: Свою логику pattern detection
         """
         if not self.pattern_detector:
-            logger.warning("⚠️  Pattern detector not available, using fallback")
+            logger.warning("️  Pattern detector not available, using fallback")
             return self._fallback_pattern_detection(bcm_cycles)
 
         try:
@@ -77,7 +77,7 @@ class LearningIntegration:
             # ИСПОЛЬЗОВАТЬ СУЩЕСТВУЮЩИЙ DETECTOR
             patterns = await self.pattern_detector.detect(pattern_data)
 
-            logger.info(f"✅ Detected {len(patterns)} patterns using PatternDetector")
+            logger.info(f" Detected {len(patterns)} patterns using PatternDetector")
 
             # Обогатить паттерны BCM-специфичным контекстом
             enriched_patterns = []
@@ -94,7 +94,7 @@ class LearningIntegration:
             return enriched_patterns
 
         except Exception as e:
-            logger.error(f"❌ Pattern detection failed: {e}")
+            logger.error(f" Pattern detection failed: {e}")
             return self._fallback_pattern_detection(bcm_cycles)
 
     async def save_to_knowledge_base(self, patterns: List[Dict[str, Any]]) -> bool:
@@ -105,7 +105,7 @@ class LearningIntegration:
         НЕ: Свою базу данных
         """
         if not self.kb_connector:
-            logger.warning("⚠️  Knowledge base connector not available")
+            logger.warning("️  Knowledge base connector not available")
             return False
 
         try:
@@ -119,11 +119,11 @@ class LearningIntegration:
                 }
             })
 
-            logger.info(f"✅ Saved {len(patterns)} patterns to knowledge base (Qdrant)")
+            logger.info(f" Saved {len(patterns)} patterns to knowledge base (Qdrant)")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to save to knowledge base: {e}")
+            logger.error(f" Failed to save to knowledge base: {e}")
             return False
 
     async def learn_from_practice(
@@ -138,7 +138,7 @@ class LearningIntegration:
         НЕ: Свою логику practice learning
         """
         if not self.practice_learning:
-            logger.warning("⚠️  Practice learning engine not available")
+            logger.warning("️  Practice learning engine not available")
             return {"status": "skipped"}
 
         try:
@@ -162,12 +162,12 @@ class LearningIntegration:
             # ИСПОЛЬЗОВАТЬ СУЩЕСТВУЮЩИЙ PRACTICE LEARNING
             learning_result = await self.practice_learning.learn_from_case(learning_case)
 
-            logger.info(f"✅ Practice learning completed: {learning_result.get('insights_count', 0)} insights")
+            logger.info(f" Practice learning completed: {learning_result.get('insights_count', 0)} insights")
 
             return learning_result
 
         except Exception as e:
-            logger.error(f"❌ Practice learning failed: {e}")
+            logger.error(f" Practice learning failed: {e}")
             return {"status": "error", "error": str(e)}
 
     async def get_historical_insights(
@@ -195,7 +195,7 @@ class LearningIntegration:
             return insights
 
         except Exception as e:
-            logger.error(f"❌ Failed to get historical insights: {e}")
+            logger.error(f" Failed to get historical insights: {e}")
             return []
 
     def _fallback_pattern_detection(self, bcm_cycles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

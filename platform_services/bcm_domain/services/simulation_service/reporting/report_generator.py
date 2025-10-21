@@ -317,11 +317,11 @@ This report documents simulation exercise conducted in accordance with ISO 22301
 
         # Determine overall assessment
         if results.overall_success_rate >= 0.8:
-            assessment = "✅ **SUCCESSFUL** - Objectives achieved"
+            assessment = " **SUCCESSFUL** - Objectives achieved"
         elif results.overall_success_rate >= 0.6:
-            assessment = "⚠️ **PARTIAL SUCCESS** - Some objectives achieved"
+            assessment = "️ **PARTIAL SUCCESS** - Some objectives achieved"
         else:
-            assessment = "❌ **NEEDS IMPROVEMENT** - Objectives not met"
+            assessment = " **NEEDS IMPROVEMENT** - Objectives not met"
 
         summary = f"""## Executive Summary
 
@@ -692,7 +692,7 @@ This simulation provides actionable insights for improving organizational resili
     def _format_criteria_status(self, results: SimulationResult) -> str:
         """Format success criteria status"""
         criteria = results.success_criteria or []
-        return self._format_list([f"✅ {c}" for c in criteria])
+        return self._format_list([f" {c}" for c in criteria])
 
     def _format_kpis(self, results: SimulationResult) -> str:
         """Format KPIs"""

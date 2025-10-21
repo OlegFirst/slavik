@@ -39,24 +39,24 @@ async def setup_event_subscriptions(eventbus):
 
         # Subscribe to BIA events
         await eventbus.subscribe('bia.assessment.completed', handlers.on_bia_completed)
-        logger.info("📥 Subscribed to: bia.assessment.completed")
+        logger.info(" Subscribed to: bia.assessment.completed")
 
         await eventbus.subscribe('bia.critical.process.identified', handlers.on_critical_process_identified)
-        logger.info("📥 Subscribed to: bia.critical.process.identified")
+        logger.info(" Subscribed to: bia.critical.process.identified")
 
         # Subscribe to Risk events
         await eventbus.subscribe('risk.assessment.completed', handlers.on_risk_assessment_completed)
-        logger.info("📥 Subscribed to: risk.assessment.completed")
+        logger.info(" Subscribed to: risk.assessment.completed")
 
         await eventbus.subscribe('risk.severity.changed', handlers.on_risk_severity_changed)
-        logger.info("📥 Subscribed to: risk.severity.changed")
+        logger.info(" Subscribed to: risk.severity.changed")
 
         await eventbus.subscribe('risk.mitigation.proposed', handlers.on_risk_mitigation_proposed)
-        logger.info("📥 Subscribed to: risk.mitigation.proposed")
+        logger.info(" Subscribed to: risk.mitigation.proposed")
 
-        logger.info("✅ Planning event choreography configured")
-        logger.info("📥 Listening for: BIA & Risk events")
-        logger.info("📤 Ready to publish: plan.created, plan.activated, etc.")
+        logger.info(" Planning event choreography configured")
+        logger.info(" Listening for: BIA & Risk events")
+        logger.info(" Ready to publish: plan.created, plan.activated, etc.")
 
     except Exception as e:
         logger.error(f"Failed to setup event subscriptions: {e}", exc_info=True)

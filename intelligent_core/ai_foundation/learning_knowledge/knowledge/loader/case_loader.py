@@ -88,7 +88,7 @@ class CaseCollector:
             Dict with case_id and storage locations
         """
 
-        logger.info(f"📦 Collecting workflow case: {workflow_id} (module={module})")
+        logger.info(f" Collecting workflow case: {workflow_id} (module={module})")
 
         # Generate case ID
         case_id = self._generate_case_id(workflow_id, module)
@@ -111,25 +111,25 @@ class CaseCollector:
         if self.repository:
             try:
                 await self.repository.save_case(case_data)
-                logger.debug(f"✅ Saved to PostgreSQL")
+                logger.debug(f" Saved to PostgreSQL")
             except Exception as e:
-                logger.error(f"❌ PostgreSQL save failed: {e}")
+                logger.error(f" PostgreSQL save failed: {e}")
 
         # 2. File System
         case_file = self.workflow_cases_path / module / f"{case_id}.json"
         case_file.parent.mkdir(parents=True, exist_ok=True)
         case_file.write_text(json.dumps(case_data, indent=2, default=str))
-        logger.debug(f"✅ Saved to {case_file}")
+        logger.debug(f" Saved to {case_file}")
 
         # 3. Vector DB indexing (if available)
         if self.vector_indexer:
             try:
                 await self.vector_indexer.index_case(case_data)
-                logger.debug(f"✅ Indexed in Vector DB")
+                logger.debug(f" Indexed in Vector DB")
             except Exception as e:
-                logger.error(f"❌ Vector indexing failed: {e}")
+                logger.error(f" Vector indexing failed: {e}")
 
-        logger.info(f"✅ Case collected: {case_id}")
+        logger.info(f" Case collected: {case_id}")
 
         return {
             "case_id": case_id,
@@ -159,7 +159,7 @@ class CaseCollector:
             Dict with import result
         """
 
-        logger.info(f"📥 Importing community case from {source}")
+        logger.info(f" Importing community case from {source}")
 
         case_id = case_data.get("id") or case_data.get("case_id")
         if not case_id:
@@ -175,7 +175,7 @@ class CaseCollector:
 
         # Check for duplicates
         if await self._is_duplicate(case_data):
-            logger.warning(f"⚠️ Duplicate case detected: {case_id}")
+            logger.warning(f"️ Duplicate case detected: {case_id}")
             return {"status": "duplicate", "case_id": case_id}
 
         # Save to file system
@@ -188,9 +188,9 @@ class CaseCollector:
             try:
                 await self.vector_indexer.index_case(case_data)
             except Exception as e:
-                logger.error(f"❌ Vector indexing failed: {e}")
+                logger.error(f" Vector indexing failed: {e}")
 
-        logger.info(f"✅ Community case imported: {case_id}")
+        logger.info(f" Community case imported: {case_id}")
 
         return {
             "status": "imported",
@@ -217,7 +217,7 @@ class CaseCollector:
             Dict with case info
         """
 
-        logger.info(f"🎮 Collecting simulation case: {scenario_id}")
+        logger.info(f" Collecting simulation case: {scenario_id}")
 
         case_id = self._generate_case_id(scenario_id, scenario_type)
 
@@ -235,7 +235,7 @@ class CaseCollector:
         case_file.parent.mkdir(parents=True, exist_ok=True)
         case_file.write_text(json.dumps(case_data, indent=2, default=str))
 
-        logger.info(f"✅ Simulation case collected: {case_id}")
+        logger.info(f" Simulation case collected: {case_id}")
 
         return {
             "case_id": case_id,

@@ -38,7 +38,7 @@ async def daily_health_check() -> Dict[str, Any]:
         ```
     """
     logger.info("=" * 60)
-    logger.info("🏥 DAILY HEALTH CHECK WORKFLOW START")
+    logger.info(" DAILY HEALTH CHECK WORKFLOW START")
     logger.info("=" * 60)
 
     start_time = datetime.now()
@@ -48,28 +48,28 @@ async def daily_health_check() -> Dict[str, Any]:
         core = AnalyticsCore()
         await core.initialize()
 
-        logger.info("📊 Analyzing platform health...")
+        logger.info(" Analyzing platform health...")
 
         # Perform comprehensive analysis
         report = await core.analyze_platform_health()
 
         logger.info(
-            f"✅ Analysis complete: "
+            f" Analysis complete: "
             f"health_score={report.overall_health_score:.1f}/100, "
             f"insights={len(report.insights)}, "
             f"critical={len(report.critical_insights)}"
         )
 
         # Report to MIO Manager
-        logger.info("📤 Reporting insights to MIO Manager...")
+        logger.info(" Reporting insights to MIO Manager...")
         mio_response = await core.report_to_mio(report)
 
-        logger.info(f"✅ MIO Manager response: {mio_response.get('status')}")
+        logger.info(f" MIO Manager response: {mio_response.get('status')}")
 
         # If critical issues → Request task delegation
         if len(report.critical_insights) > 0:
             logger.warning(
-                f"⚠️  Found {len(report.critical_insights)} CRITICAL issues! "
+                f"️  Found {len(report.critical_insights)} CRITICAL issues! "
                 f"Requesting task delegation..."
             )
 
@@ -100,7 +100,7 @@ async def daily_health_check() -> Dict[str, Any]:
             )
 
             delegation_response = await core.mio_client.delegate_task(task)
-            logger.info(f"✅ Task delegated: {delegation_response.get('status')}")
+            logger.info(f" Task delegated: {delegation_response.get('status')}")
 
         # Calculate execution time
         duration = (datetime.now() - start_time).total_seconds()
@@ -121,7 +121,7 @@ async def daily_health_check() -> Dict[str, Any]:
         }
 
         logger.info("=" * 60)
-        logger.info(f"✅ DAILY HEALTH CHECK COMPLETE (duration: {duration:.1f}s)")
+        logger.info(f" DAILY HEALTH CHECK COMPLETE (duration: {duration:.1f}s)")
         logger.info(f"   Health Score: {report.overall_health_score:.1f}/100")
         logger.info(f"   Insights: {len(report.insights)} (Critical: {len(report.critical_insights)})")
         logger.info(f"   Recommendations: {len(report.recommendations)}")
@@ -130,7 +130,7 @@ async def daily_health_check() -> Dict[str, Any]:
         return result
 
     except Exception as e:
-        logger.error(f"❌ Daily health check failed: {e}", exc_info=True)
+        logger.error(f" Daily health check failed: {e}", exc_info=True)
 
         return {
             "status": "error",
@@ -158,7 +158,7 @@ async def continuous_improvement_scan() -> Dict[str, Any]:
             result = await continuous_improvement_scan()
         ```
     """
-    logger.info("🔍 Continuous improvement scan...")
+    logger.info(" Continuous improvement scan...")
 
     try:
         core = AnalyticsCore()

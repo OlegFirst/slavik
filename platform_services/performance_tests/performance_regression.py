@@ -176,7 +176,7 @@ class PerformanceRegression:
 
         # Summary
         summary = comparison['summary']
-        print("📊 Summary:")
+        print(" Summary:")
         print(f"  Total Endpoints Compared: {summary['total_endpoints']}")
         print(f"  Regressions: {summary['regressions_count']}")
         print(f"  Improvements: {summary['improvements_count']}")
@@ -185,7 +185,7 @@ class PerformanceRegression:
 
         # Regressions
         if comparison['regressions']:
-            print("❌ REGRESSIONS DETECTED:")
+            print(" REGRESSIONS DETECTED:")
             print("-" * 80)
             for reg in comparison['regressions']:
                 if 'endpoint' in reg:
@@ -196,12 +196,12 @@ class PerformanceRegression:
                 print(f"  Change: {reg['change_percent']:+.2f}%")
                 print("-" * 80)
         else:
-            print("✅ No regressions detected")
+            print(" No regressions detected")
             print("")
 
         # Improvements
         if comparison['improvements']:
-            print("📈 IMPROVEMENTS:")
+            print(" IMPROVEMENTS:")
             print("-" * 80)
             for imp in comparison['improvements']:
                 if 'endpoint' in imp:
@@ -219,7 +219,7 @@ class PerformanceRegression:
         with open(output_file, 'w') as f:
             json.dump(comparison, f, indent=2)
 
-        print(f"✅ Report saved to: {output_file}")
+        print(f" Report saved to: {output_file}")
 
 
 def main():
@@ -236,14 +236,14 @@ def main():
     # Load current stats
     current_stats = detector.load_stats(args.current)
     if not current_stats:
-        print("❌ Failed to load current stats")
+        print(" Failed to load current stats")
         sys.exit(1)
 
     # Load baseline stats
     if args.baseline:
         baseline_stats = detector.load_stats(args.baseline)
         if not baseline_stats:
-            print("❌ Failed to load baseline stats")
+            print(" Failed to load baseline stats")
             sys.exit(1)
     else:
         # If no baseline provided, compare against target thresholds from config
@@ -262,10 +262,10 @@ def main():
             print(f"  Failure Rate: {failure_rate:.2f}% (target: <2%)")
 
             if p95 > 500 or failure_rate > 2:
-                print("\n❌ Performance does not meet targets!")
+                print("\n Performance does not meet targets!")
                 sys.exit(1)
             else:
-                print("\n✅ Performance meets targets!")
+                print("\n Performance meets targets!")
                 sys.exit(0)
 
     # Compare stats
@@ -279,10 +279,10 @@ def main():
 
     # Exit with error code if regressions detected
     if comparison['summary']['regressions_count'] > 0:
-        print("\n❌ Performance regressions detected!")
+        print("\n Performance regressions detected!")
         sys.exit(1)
     else:
-        print("\n✅ No performance regressions!")
+        print("\n No performance regressions!")
         sys.exit(0)
 
 

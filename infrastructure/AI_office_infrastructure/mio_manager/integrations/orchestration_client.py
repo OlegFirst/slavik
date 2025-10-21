@@ -73,7 +73,7 @@ class OrchestrationClient:
         Returns:
             Execution plan with steps, priorities, resources
         """
-        logger.info(f"🧠 Requesting AI task planning: {task_description.get('type')}")
+        logger.info(f" Requesting AI task planning: {task_description.get('type')}")
 
         try:
             response = await self.client.post(
@@ -83,7 +83,7 @@ class OrchestrationClient:
 
             if response.status_code == 200:
                 plan = response.json()
-                logger.info(f"✅ Task plan created: {len(plan.get('steps', []))} steps")
+                logger.info(f" Task plan created: {len(plan.get('steps', []))} steps")
                 return {
                     'success': True,
                     'plan': plan
@@ -95,7 +95,7 @@ class OrchestrationClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Task planning failed: {e}")
+            logger.error(f" Task planning failed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -117,7 +117,7 @@ class OrchestrationClient:
         Returns:
             Optimized execution schedule
         """
-        logger.info(f"⚡ Requesting resource optimization for {len(tasks)} tasks")
+        logger.info(f" Requesting resource optimization for {len(tasks)} tasks")
 
         try:
             response = await self.client.post(
@@ -127,7 +127,7 @@ class OrchestrationClient:
 
             if response.status_code == 200:
                 schedule = response.json()
-                logger.info(f"✅ Optimized schedule created")
+                logger.info(f" Optimized schedule created")
                 return {
                     'success': True,
                     'schedule': schedule
@@ -139,7 +139,7 @@ class OrchestrationClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Resource optimization failed: {e}")
+            logger.error(f" Resource optimization failed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -162,7 +162,7 @@ class OrchestrationClient:
         Returns:
             Priority assessment with score and reasoning
         """
-        logger.info(f"📊 Requesting priority assessment")
+        logger.info(f" Requesting priority assessment")
 
         try:
             response = await self.client.post(
@@ -175,7 +175,7 @@ class OrchestrationClient:
 
             if response.status_code == 200:
                 assessment = response.json()
-                logger.info(f"✅ Priority: {assessment.get('priority_score')}")
+                logger.info(f" Priority: {assessment.get('priority_score')}")
                 return {
                     'success': True,
                     'assessment': assessment
@@ -187,7 +187,7 @@ class OrchestrationClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Priority assessment failed: {e}")
+            logger.error(f" Priority assessment failed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -216,7 +216,7 @@ class OrchestrationClient:
         Returns:
             Coordination result
         """
-        logger.info(f"🔄 Requesting workflow coordination: {workflow.get('workflow_id')}")
+        logger.info(f" Requesting workflow coordination: {workflow.get('workflow_id')}")
 
         try:
             response = await self.client.post(
@@ -226,7 +226,7 @@ class OrchestrationClient:
 
             if response.status_code == 200:
                 result = response.json()
-                logger.info(f"✅ Workflow coordination started")
+                logger.info(f" Workflow coordination started")
                 return {
                     'success': True,
                     'coordination': result
@@ -238,7 +238,7 @@ class OrchestrationClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Workflow coordination failed: {e}")
+            logger.error(f" Workflow coordination failed: {e}")
             return {
                 'success': False,
                 'error': str(e)

@@ -1,5 +1,5 @@
 """
-🔮 Impact Oracle
+ Impact Oracle
 
 Predictive business impact analysis
 """
@@ -24,7 +24,7 @@ class ImpactOracle(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Impact Oracle",
-            emoji="🔮",
+            emoji="",
             llm_router=llm_router
         )
 

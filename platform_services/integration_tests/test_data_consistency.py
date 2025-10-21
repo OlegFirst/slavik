@@ -92,7 +92,7 @@ async def test_referential_integrity_bia_to_strategy(
     )
 
     # Should fail validation or be accepted (depends on implementation)
-    print(f"✅ Referential integrity verified: {response.status_code}")
+    print(f" Referential integrity verified: {response.status_code}")
 
 
 @pytest.mark.integration
@@ -147,7 +147,7 @@ async def test_data_validation_consistency(
 
     assert response.status_code in [400, 422], "Negative RTO should be rejected"
 
-    print(f"✅ Validation consistency verified")
+    print(f" Validation consistency verified")
 
 
 @pytest.mark.integration
@@ -198,7 +198,7 @@ async def test_status_workflow_consistency(
     )
 
     # Implementation may allow or prevent this
-    print(f"✅ Status workflow tested: {response.status_code}")
+    print(f" Status workflow tested: {response.status_code}")
 
 
 @pytest.mark.integration
@@ -255,7 +255,7 @@ async def test_timestamp_consistency(
         # updated_at should be set
         assert "updated_at" in process2 or "updatedAt" in process2 or response.status_code == 200
 
-    print(f"✅ Timestamp consistency verified")
+    print(f" Timestamp consistency verified")
 
 
 @pytest.mark.integration
@@ -313,9 +313,9 @@ async def test_unique_constraint_enforcement(
     if response.status_code == 201:
         strategy = response.json()
         cleanup_test_data["strategies"].append(strategy.get("id") or strategy.get("strategy_id"))
-        print(f"⚠️ Duplicate name allowed (unique constraint not enforced)")
+        print(f"️ Duplicate name allowed (unique constraint not enforced)")
     else:
-        print(f"✅ Duplicate name rejected (unique constraint enforced)")
+        print(f" Duplicate name rejected (unique constraint enforced)")
 
 
 @pytest.mark.integration
@@ -387,4 +387,4 @@ async def test_cascade_update_propagation(
         assert response.status_code == 200
 
         # Check if strategy needs update (business logic dependent)
-        print(f"✅ Cascade update propagation tested")
+        print(f" Cascade update propagation tested")

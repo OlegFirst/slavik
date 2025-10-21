@@ -34,24 +34,24 @@ def check_var(var_name: str) -> Tuple[bool, str]:
     """Check if environment variable is set and not empty"""
     value = os.getenv(var_name)
     if not value:
-        return False, "❌ NOT SET"
+        return False, " NOT SET"
 
     # Mask sensitive values
     if "KEY" in var_name or "SECRET" in var_name or "PASSWORD" in var_name:
         masked = value[:8] + "..." if len(value) > 8 else "***"
-        return True, f"✅ SET ({masked})"
+        return True, f" SET ({masked})"
 
-    return True, f"✅ SET ({value[:50]}...)" if len(value) > 50 else f"✅ SET ({value})"
+    return True, f" SET ({value[:50]}...)" if len(value) > 50 else f" SET ({value})"
 
 def verify_environment() -> bool:
     """Verify all environment variables"""
-    print("🔍 Environment Verification")
+    print(" Environment Verification")
     print("=" * 60)
 
     all_ok = True
 
     # Check critical vars
-    print("\n📌 CRITICAL (Required for core modules):")
+    print("\n CRITICAL (Required for core modules):")
     for var in REQUIRED_VARS["critical"]:
         ok, status = check_var(var)
         print(f"  {var:30} {status}")
@@ -59,7 +59,7 @@ def verify_environment() -> bool:
             all_ok = False
 
     # Check AI service vars
-    print("\n🤖 AI SERVICES (At least one required):")
+    print("\n AI SERVICES (At least one required):")
     ai_ok = False
     for var in REQUIRED_VARS["ai_services"]:
         ok, status = check_var(var)
@@ -68,11 +68,11 @@ def verify_environment() -> bool:
             ai_ok = True
 
     if not ai_ok:
-        print("  ⚠️  WARNING: No AI service keys configured!")
+        print("  ️  WARNING: No AI service keys configured!")
         all_ok = False
 
     # Check security vars
-    print("\n🔒 SECURITY:")
+    print("\n SECURITY:")
     for var in REQUIRED_VARS["security"]:
         ok, status = check_var(var)
         print(f"  {var:30} {status}")
@@ -80,7 +80,7 @@ def verify_environment() -> bool:
             all_ok = False
 
     # Check optional vars
-    print("\n📝 OPTIONAL (Recommended but not required):")
+    print("\n OPTIONAL (Recommended but not required):")
     for var in REQUIRED_VARS["optional"]:
         ok, status = check_var(var)
         print(f"  {var:30} {status}")
@@ -88,14 +88,14 @@ def verify_environment() -> bool:
     print("\n" + "=" * 60)
 
     if all_ok:
-        print("✅ Environment verification PASSED!")
+        print(" Environment verification PASSED!")
         print("\nℹ️  Next steps:")
         print("  1. Run: ./infrastructure/scripts/test_connections.sh")
         print("  2. Run: ./infrastructure/scripts/start_all.sh")
         return True
     else:
-        print("❌ Environment verification FAILED!")
-        print("\n⚠️  Missing required variables. Please:")
+        print(" Environment verification FAILED!")
+        print("\n️  Missing required variables. Please:")
         print("  1. Copy .env.example to .env")
         print("  2. Fill in all required values")
         print("  3. Run this script again")
@@ -108,7 +108,7 @@ def generate_jwt_secret():
 
 def suggest_fixes():
     """Suggest how to fix missing variables"""
-    print("\n💡 Quick Fixes:")
+    print("\n Quick Fixes:")
 
     if not os.getenv("JWT_SECRET"):
         secret = generate_jwt_secret()

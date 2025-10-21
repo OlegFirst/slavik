@@ -70,14 +70,14 @@ async def test_create_strategy_event():
             created_by="user123"
         )
 
-        print(f"✓ Strategy created: {result.strategy_number}")
-        print(f"✓ Event should be published: planning.strategy.created")
+        print(f" Strategy created: {result.strategy_number}")
+        print(f" Event should be published: planning.strategy.created")
         print(f"  - strategy_id: {result.id}")
         print(f"  - tenant_id: {result.tenant_id}")
         print(f"  - strategy_number: {result.strategy_number}")
 
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def test_approve_strategy_event():
@@ -99,15 +99,15 @@ async def test_approve_strategy_event():
             approval_notes="Approved for implementation Q2 2025"
         )
 
-        print(f"✓ Strategy approved: {result.strategy_number}")
-        print(f"✓ Event should be published: planning.strategy.approved")
+        print(f" Strategy approved: {result.strategy_number}")
+        print(f" Event should be published: planning.strategy.approved")
         print(f"  - strategy_id: {result.id}")
         print(f"  - tenant_id: {result.tenant_id}")
         print(f"  - approved_by: manager123")
         print(f"  - approval_notes: Approved for implementation Q2 2025")
 
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def test_cost_benefit_event():
@@ -158,8 +158,8 @@ async def test_cost_benefit_event():
             cost_benefit_data=cost_benefit_data
         )
 
-        print(f"✓ Cost-benefit analysis completed")
-        print(f"✓ Event should be published: planning.cost_benefit.completed")
+        print(f" Cost-benefit analysis completed")
+        print(f" Event should be published: planning.cost_benefit.completed")
         print(f"  - strategy_id: {result.strategy_id}")
         print(f"  - total_cost: ${result.total_cost:,.2f}")
         print(f"  - total_benefits: ${result.total_benefits:,.2f}")
@@ -168,7 +168,7 @@ async def test_cost_benefit_event():
         print(f"  - recommendation: {result.recommendation}")
 
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
 
 
 async def main():
@@ -184,10 +184,10 @@ async def main():
     print("\n" + "=" * 60)
     print("Test Summary")
     print("=" * 60)
-    print("✓ All methods integrated with EventBus publishing")
-    print("✓ Events include all required fields")
-    print("✓ Error handling implemented (log warning, continue)")
-    print("✓ Logging added for successful publications")
+    print(" All methods integrated with EventBus publishing")
+    print(" Events include all required fields")
+    print(" Error handling implemented (log warning, continue)")
+    print(" Logging added for successful publications")
     print("\nNote: These tests use mock repository.")
     print("To test actual EventBus publishing, ensure EventBus service is running.")
     print("=" * 60)

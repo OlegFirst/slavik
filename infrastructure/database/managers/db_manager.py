@@ -46,16 +46,16 @@ class DatabaseManager:
                 max_conn,
                 self.db_url
             )
-            logger.info(f"✅ {self.name} connection pool initialized ({min_conn}-{max_conn} connections)")
+            logger.info(f" {self.name} connection pool initialized ({min_conn}-{max_conn} connections)")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize {self.name} connection pool: {e}")
+            logger.error(f" Failed to initialize {self.name} connection pool: {e}")
             raise
 
     def disconnect(self):
         """Close all connections in pool"""
         if self.pool:
             self.pool.closeall()
-            logger.info(f"✅ {self.name} connection pool closed")
+            logger.info(f" {self.name} connection pool closed")
 
     @contextmanager
     def get_connection(self):
@@ -256,7 +256,7 @@ class MigrationRunner:
                 (version,)
             )
 
-        logger.info(f"✅ Applied migration: {migration_file}")
+        logger.info(f" Applied migration: {migration_file}")
 
     def run_pending_migrations(self):
         """Apply all pending migrations"""
@@ -278,16 +278,16 @@ class MigrationRunner:
                 pending.append(migration_file)
 
         if not pending:
-            logger.info("✅ No pending migrations")
+            logger.info(" No pending migrations")
             return
 
-        logger.info(f"📄 Applying {len(pending)} pending migrations...")
+        logger.info(f" Applying {len(pending)} pending migrations...")
 
         for migration_file in pending:
             try:
                 self.apply_migration(migration_file)
             except Exception as e:
-                logger.error(f"❌ Failed to apply {migration_file}: {e}")
+                logger.error(f" Failed to apply {migration_file}: {e}")
                 raise
 
 
@@ -302,7 +302,7 @@ async def initialize_all_databases():
     system_db.connect()
     platform_db.connect()
     business_db.connect()
-    logger.info("✅ All database connections initialized")
+    logger.info(" All database connections initialized")
 
 
 async def shutdown_all_databases():
@@ -310,7 +310,7 @@ async def shutdown_all_databases():
     system_db.disconnect()
     platform_db.disconnect()
     business_db.disconnect()
-    logger.info("✅ All database connections closed")
+    logger.info(" All database connections closed")
 
 
 async def health_check_all() -> Dict[str, Any]:

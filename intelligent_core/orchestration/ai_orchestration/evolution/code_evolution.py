@@ -265,7 +265,7 @@ class CodeEvolution:
 
             # TODO: Send notifications (email, Slack, etc.)
             logger.warning(
-                f"🚨 CODE EVOLUTION: {len(pull_requests)} pull requests "
+                f" CODE EVOLUTION: {len(pull_requests)} pull requests "
                 f"awaiting HUMAN REVIEW before deployment"
             )
 

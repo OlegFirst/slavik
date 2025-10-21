@@ -30,8 +30,8 @@ PATTERNS = {
         r'event_bus\.publish',
         r'EventBus\.publish',
         r'await.*\.publish\(',
-        r'publish_event\(',  # ✅ ADD - catches direct publish_event() calls
-        r'await\s+publish_event\('  # ✅ ADD - catches await publish_event()
+        r'publish_event\(',  #  ADD - catches direct publish_event() calls
+        r'await\s+publish_event\('  #  ADD - catches await publish_event()
     ],
     'eventbus_subscribe': [
         r'\.subscribe\(',
@@ -92,17 +92,17 @@ class BusinessLogicMapper:
 
     def scan_project(self, directories: List[str]):
         """Scan project for business logic patterns."""
-        print("🔍 Scanning for business logic patterns...\n")
+        print(" Scanning for business logic patterns...\n")
 
         for directory in directories:
             dir_path = self.root_dir / directory
             if not dir_path.exists():
                 continue
 
-            print(f"📂 Scanning: {directory}")
+            print(f" Scanning: {directory}")
             self._scan_directory(dir_path, directory)
 
-        print(f"\n✅ Scan complete!")
+        print(f"\n Scan complete!")
 
     def _scan_directory(self, path: Path, module_name: str):
         """Recursively scan directory."""
@@ -168,7 +168,7 @@ class BusinessLogicMapper:
                 'logic': dict(self.business_logic)
             }, f, indent=2)
 
-        print(f"✅ JSON report: {json_path}")
+        print(f" JSON report: {json_path}")
 
         # Markdown report
         md_path = output_path / "business_logic.md"
@@ -194,10 +194,10 @@ class BusinessLogicMapper:
                         f.write(f"**{file_info['file']}**\n")
                         f.write(f"- Found {len(file_info['matches'])} matches\n\n")
 
-        print(f"✅ Markdown report: {md_path}")
+        print(f" Markdown report: {md_path}")
 
         # Summary
-        print(f"\n📊 BUSINESS LOGIC SUMMARY:")
+        print(f"\n BUSINESS LOGIC SUMMARY:")
         print(f"   Modules scanned: {len(self.business_logic)}")
         for pattern_type, count in sorted(self.stats.items(), key=lambda x: x[1], reverse=True):
             print(f"   {pattern_type}: {count}")

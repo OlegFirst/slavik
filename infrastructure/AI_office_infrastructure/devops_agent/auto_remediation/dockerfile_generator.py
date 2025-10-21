@@ -39,13 +39,13 @@ class DockerfileGenerator:
         """Initialize AI components"""
         try:
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Dockerfile generation")
+            logger.info(" LLM Router initialized for Dockerfile generation")
 
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Dockerfile patterns")
+            logger.info(" RAG Pipeline initialized for Dockerfile patterns")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize AI components: {e}")
+            logger.error(f" Failed to initialize AI components: {e}")
             raise
 
     async def generate(self, action: Dict) -> Dict:
@@ -62,12 +62,12 @@ class DockerfileGenerator:
         service_metadata = action.get("service_metadata", {})
         service_name = service_metadata.get("name", "unknown_service")
 
-        logger.info(f"🐳 Generating Dockerfile for {service_name}...")
+        logger.info(f" Generating Dockerfile for {service_name}...")
 
         if not self.llm:
             await self.initialize()
 
-        # 🔹 STEP 1: Retrieve similar Dockerfile patterns from RAG
+        #  STEP 1: Retrieve similar Dockerfile patterns from RAG
         similar_patterns = []
 
         if self.rag:
@@ -85,12 +85,12 @@ class DockerfileGenerator:
                     enable_reranking=True
                 )
 
-                logger.info(f"📚 Retrieved {len(similar_patterns)} similar Dockerfile patterns")
+                logger.info(f" Retrieved {len(similar_patterns)} similar Dockerfile patterns")
 
             except Exception as e:
                 logger.warning(f"Failed to retrieve patterns from RAG: {e}")
 
-        # 🔹 STEP 2: Generate Dockerfile using LLM
+        #  STEP 2: Generate Dockerfile using LLM
         if not self.llm:
             return {
                 "success": False,
@@ -139,7 +139,7 @@ class DockerfileGenerator:
                 max_tokens=1500
             )
 
-            # 🔹 STEP 3: Save generated Dockerfile
+            #  STEP 3: Save generated Dockerfile
             service_path = service_metadata.get("path", "")
             if service_path:
                 dockerfile_path = self.project_root / service_path / "Dockerfile"
@@ -150,9 +150,9 @@ class DockerfileGenerator:
                 # Write Dockerfile
                 dockerfile_path.write_text(dockerfile_content)
 
-                logger.info(f"💾 Dockerfile saved: {dockerfile_path}")
+                logger.info(f" Dockerfile saved: {dockerfile_path}")
 
-                # 🔹 STEP 4: Store this pattern in RAG for future use
+                #  STEP 4: Store this pattern in RAG for future use
                 if self.rag:
                     await self._store_dockerfile_pattern(
                         service_metadata=service_metadata,
@@ -173,7 +173,7 @@ class DockerfileGenerator:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Dockerfile generation failed: {e}")
+            logger.error(f" Dockerfile generation failed: {e}")
             return {
                 "success": False,
                 "error": str(e)
@@ -231,7 +231,7 @@ class DockerfileGenerator:
                 source_type="dockerfile_patterns"
             )
 
-            logger.info(f"💾 Dockerfile pattern stored in RAG: {service_metadata.get('language')}/{service_metadata.get('framework')}")
+            logger.info(f" Dockerfile pattern stored in RAG: {service_metadata.get('language')}/{service_metadata.get('framework')}")
 
         except Exception as e:
             logger.warning(f"Failed to store Dockerfile pattern in RAG: {e}")
@@ -294,10 +294,10 @@ if __name__ == "__main__":
         )
 
         if result["success"]:
-            print(f"✅ Dockerfile generated successfully!")
-            print(f"📍 Location: {result['path']}")
+            print(f" Dockerfile generated successfully!")
+            print(f" Location: {result['path']}")
             print(f"\n{result['content']}")
         else:
-            print(f"❌ Failed to generate Dockerfile: {result.get('error')}")
+            print(f" Failed to generate Dockerfile: {result.get('error')}")
 
     asyncio.run(main())

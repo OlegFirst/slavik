@@ -1,5 +1,5 @@
 """
-🧪 ТЕСТЫ - Workflow Engine
+ ТЕСТЫ - Workflow Engine
 
 Полное покрытие всех функций Workflow Engine
 """

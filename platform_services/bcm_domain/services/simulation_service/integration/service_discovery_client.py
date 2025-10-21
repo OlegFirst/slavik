@@ -101,17 +101,17 @@ class ServiceDiscoveryClient:
 
             if success:
                 self._registered = True
-                logger.info(f"✅ Service registered: {self.service_id} on port {self.service_port}")
+                logger.info(f" Service registered: {self.service_id} on port {self.service_port}")
 
                 # Start heartbeat
                 await self._start_heartbeat()
                 return True
             else:
-                logger.error("❌ Failed to register service with Consul")
+                logger.error(" Failed to register service with Consul")
                 return False
 
         except Exception as e:
-            logger.error(f"❌ Error registering service: {e}", exc_info=True)
+            logger.error(f" Error registering service: {e}", exc_info=True)
             return False
 
     async def deregister(self) -> bool:
@@ -130,14 +130,14 @@ class ServiceDiscoveryClient:
 
             if success:
                 self._registered = False
-                logger.info(f"✅ Service deregistered: {self.service_id}")
+                logger.info(f" Service deregistered: {self.service_id}")
                 return True
             else:
-                logger.error("❌ Failed to deregister service from Consul")
+                logger.error(" Failed to deregister service from Consul")
                 return False
 
         except Exception as e:
-            logger.error(f"❌ Error deregistering service: {e}", exc_info=True)
+            logger.error(f" Error deregistering service: {e}", exc_info=True)
             return False
 
     async def update_health(self, status: str, message: str = "") -> bool:

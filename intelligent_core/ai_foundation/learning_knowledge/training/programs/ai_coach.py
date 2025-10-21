@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 
 class CoachingStyle(str, Enum):
     """Coaching style options"""
-    ADAPTIVE = "adaptive"  # 🎯 Personalized Learning
-    INTENSIVE = "intensive"  # 🔥 Accelerated Training
-    SUPPORTIVE = "supportive"  # 🤝 Guided Learning
-    CHALLENGING = "challenging"  # 💪 Advanced Training
+    ADAPTIVE = "adaptive"  #  Personalized Learning
+    INTENSIVE = "intensive"  #  Accelerated Training
+    SUPPORTIVE = "supportive"  #  Guided Learning
+    CHALLENGING = "challenging"  #  Advanced Training
 
 
 class AILearningCoach:
@@ -359,7 +359,7 @@ Provide ADAPTIVE LEARNING INTELLIGENCE with personalized coaching recommendation
 
     def format_learning_plans_html(self, plans: List[Dict[str, Any]]) -> str:
         """Format learning plans as HTML for display"""
-        html_content = "<h3>🎯 Personalized Learning Plans</h3>"
+        html_content = "<h3> Personalized Learning Plans</h3>"
 
         for i, plan in enumerate(plans, 1):
             html_content += f"""

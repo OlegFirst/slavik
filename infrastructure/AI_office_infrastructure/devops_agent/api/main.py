@@ -59,7 +59,7 @@ async def startup():
     global agent
     agent = DevOpsAgent("/Users/MD/AI-Platform-ISO")
     await agent.initialize()
-    logger.info("✅ DevOps Agent API ready")
+    logger.info(" DevOps Agent API ready")
 
 
 @app.get("/")
@@ -93,7 +93,7 @@ async def trigger_scan(request: ScanRequest):
     if not agent:
         raise HTTPException(status_code=503, detail="Agent not initialized")
 
-    logger.info(f"🔍 Triggering {request.scan_type} scan...")
+    logger.info(f" Triggering {request.scan_type} scan...")
 
     result = await agent.run_full_cycle()
 
@@ -161,7 +161,7 @@ async def shutdown():
     """Cleanup on shutdown"""
     if agent and agent.workflow_intelligence:
         await agent.workflow_intelligence.close()
-    logger.info("👋 DevOps Agent API shutdown")
+    logger.info(" DevOps Agent API shutdown")
 
 
 if __name__ == "__main__":

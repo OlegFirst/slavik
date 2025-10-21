@@ -75,7 +75,7 @@ class VaultManager:
         if not self.client.is_authenticated():
             raise VaultError("Failed to authenticate with Vault")
 
-        logger.info(f"✅ Connected to Vault: {self.url}")
+        logger.info(f" Connected to Vault: {self.url}")
 
     # ============================================
     # KV Secrets (Static Secrets)
@@ -107,11 +107,11 @@ class VaultManager:
                 mount_point=mount
             )
 
-            logger.info(f"✅ Secret written to '{mount}/{path}' (version {response['data']['version']})")
+            logger.info(f" Secret written to '{mount}/{path}' (version {response['data']['version']})")
             return response['data']
 
         except Exception as e:
-            logger.error(f"❌ Failed to write secret '{path}': {e}")
+            logger.error(f" Failed to write secret '{path}': {e}")
             raise
 
     def read_secret(
@@ -140,15 +140,15 @@ class VaultManager:
                 mount_point=mount
             )
 
-            logger.debug(f"📖 Secret read from '{mount}/{path}' (version {response['data']['metadata']['version']})")
+            logger.debug(f" Secret read from '{mount}/{path}' (version {response['data']['metadata']['version']})")
             return response['data']['data']
 
         except InvalidPath:
-            logger.warning(f"⚠️  Secret not found: '{path}'")
+            logger.warning(f"️  Secret not found: '{path}'")
             return {}
 
         except Exception as e:
-            logger.error(f"❌ Failed to read secret '{path}': {e}")
+            logger.error(f" Failed to read secret '{path}': {e}")
             raise
 
     def delete_secret(
@@ -180,10 +180,10 @@ class VaultManager:
                     mount_point=mount
                 )
 
-            logger.info(f"🗑️  Secret deleted: '{mount}/{path}' (versions: {versions or 'latest'})")
+            logger.info(f"️  Secret deleted: '{mount}/{path}' (versions: {versions or 'latest'})")
 
         except Exception as e:
-            logger.error(f"❌ Failed to delete secret '{path}': {e}")
+            logger.error(f" Failed to delete secret '{path}': {e}")
             raise
 
     def list_secrets(
@@ -210,14 +210,14 @@ class VaultManager:
             )
 
             secrets = response['data']['keys']
-            logger.debug(f"📂 Listed {len(secrets)} secrets in '{mount}/{path}'")
+            logger.debug(f" Listed {len(secrets)} secrets in '{mount}/{path}'")
             return secrets
 
         except InvalidPath:
             return []
 
         except Exception as e:
-            logger.error(f"❌ Failed to list secrets in '{path}': {e}")
+            logger.error(f" Failed to list secrets in '{path}': {e}")
             raise
 
     # ============================================
@@ -242,10 +242,10 @@ class VaultManager:
                 key_type=key_type
             )
 
-            logger.info(f"🔑 Encryption key created: '{name}' (type: {key_type})")
+            logger.info(f" Encryption key created: '{name}' (type: {key_type})")
 
         except Exception as e:
-            logger.error(f"❌ Failed to create encryption key '{name}': {e}")
+            logger.error(f" Failed to create encryption key '{name}': {e}")
             raise
 
     def encrypt(
@@ -279,11 +279,11 @@ class VaultManager:
             )
 
             ciphertext = response['data']['ciphertext']
-            logger.debug(f"🔒 Data encrypted with key '{key_name}'")
+            logger.debug(f" Data encrypted with key '{key_name}'")
             return ciphertext
 
         except Exception as e:
-            logger.error(f"❌ Encryption failed: {e}")
+            logger.error(f" Encryption failed: {e}")
             raise
 
     def decrypt(
@@ -317,11 +317,11 @@ class VaultManager:
             plaintext_b64 = response['data']['plaintext']
             plaintext = base64.b64decode(plaintext_b64).decode()
 
-            logger.debug(f"🔓 Data decrypted with key '{key_name}'")
+            logger.debug(f" Data decrypted with key '{key_name}'")
             return plaintext
 
         except Exception as e:
-            logger.error(f"❌ Decryption failed: {e}")
+            logger.error(f" Decryption failed: {e}")
             raise
 
     # ============================================
@@ -358,10 +358,10 @@ class VaultManager:
                 password=password
             )
 
-            logger.info(f"💾 Database connection configured: '{name}'")
+            logger.info(f" Database connection configured: '{name}'")
 
         except Exception as e:
-            logger.error(f"❌ Failed to configure database '{name}': {e}")
+            logger.error(f" Failed to configure database '{name}': {e}")
             raise
 
     def create_database_role(
@@ -391,10 +391,10 @@ class VaultManager:
                 max_ttl=max_ttl
             )
 
-            logger.info(f"👤 Database role created: '{name}' (TTL: {default_ttl})")
+            logger.info(f" Database role created: '{name}' (TTL: {default_ttl})")
 
         except Exception as e:
-            logger.error(f"❌ Failed to create database role '{name}': {e}")
+            logger.error(f" Failed to create database role '{name}': {e}")
             raise
 
     def get_database_credentials(
@@ -416,11 +416,11 @@ class VaultManager:
             )
 
             creds = response['data']
-            logger.info(f"🎫 Generated database credentials for role '{role_name}' (lease: {response['lease_duration']}s)")
+            logger.info(f" Generated database credentials for role '{role_name}' (lease: {response['lease_duration']}s)")
             return creds
 
         except Exception as e:
-            logger.error(f"❌ Failed to generate credentials for '{role_name}': {e}")
+            logger.error(f" Failed to generate credentials for '{role_name}': {e}")
             raise
 
     # ============================================
@@ -455,11 +455,11 @@ class VaultManager:
             )
 
             token_info = response['auth']
-            logger.info(f"🎟️  Token created (policies: {policies}, TTL: {ttl})")
+            logger.info(f"️  Token created (policies: {policies}, TTL: {ttl})")
             return token_info
 
         except Exception as e:
-            logger.error(f"❌ Failed to create token: {e}")
+            logger.error(f" Failed to create token: {e}")
             raise
 
     def renew_token(
@@ -488,21 +488,21 @@ class VaultManager:
                     increment=increment
                 )
 
-            logger.info(f"♻️  Token renewed (new TTL: {response['auth']['lease_duration']}s)")
+            logger.info(f"️  Token renewed (new TTL: {response['auth']['lease_duration']}s)")
             return response['auth']
 
         except Exception as e:
-            logger.error(f"❌ Failed to renew token: {e}")
+            logger.error(f" Failed to renew token: {e}")
             raise
 
     def revoke_token(self, token: str):
         """Отозвать token"""
         try:
             self.client.auth.token.revoke(token=token)
-            logger.info(f"🚫 Token revoked")
+            logger.info(f" Token revoked")
 
         except Exception as e:
-            logger.error(f"❌ Failed to revoke token: {e}")
+            logger.error(f" Failed to revoke token: {e}")
             raise
 
     # ============================================
@@ -513,7 +513,7 @@ class VaultManager:
         """Проверка здоровья Vault сервера"""
         try:
             health = self.client.sys.read_health_status()
-            logger.debug(f"✅ Vault health: initialized={health.initialized}, sealed={health.sealed}")
+            logger.debug(f" Vault health: initialized={health.initialized}, sealed={health.sealed}")
             return {
                 "initialized": health.initialized,
                 "sealed": health.sealed,
@@ -521,7 +521,7 @@ class VaultManager:
                 "version": health.version
             }
         except Exception as e:
-            logger.error(f"❌ Health check failed: {e}")
+            logger.error(f" Health check failed: {e}")
             raise
 
     def is_sealed(self) -> bool:

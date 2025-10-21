@@ -1,5 +1,5 @@
 """
-⚡ Risk Advisor
+ Risk Advisor
 
 Risk analysis and mitigation recommendations
 """
@@ -24,7 +24,7 @@ class RiskAdvisor(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Risk Advisor",
-            emoji="⚡",
+            emoji="",
             llm_router=llm_router
         )
 

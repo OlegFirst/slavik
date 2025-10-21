@@ -1,5 +1,5 @@
 """
-🔍 Analytics Specialist AI - Main Service
+ Analytics Specialist AI - Main Service
 ==========================================
 
 The 6th AI Colleague in AI Office - Platform Intelligence Expert.
@@ -168,7 +168,7 @@ async def lifespan(app: FastAPI):
     - Send goodbye to MIO Manager
     """
     logger.info("=" * 70)
-    logger.info("🔍 ANALYTICS SPECIALIST AI STARTING...")
+    logger.info(" ANALYTICS SPECIALIST AI STARTING...")
     logger.info("=" * 70)
     logger.info(f"   Service: Analytics Specialist")
     logger.info(f"   Port: {settings.PORT}")
@@ -200,10 +200,10 @@ async def lifespan(app: FastAPI):
                 service_type="specialist"
             )
             await eventbus_helper.startup()
-            logger.info("✅ EventBus integration initialized")
+            logger.info(" EventBus integration initialized")
         except Exception as e:
-            logger.error(f"❌ EventBus initialization failed: {e}")
-            logger.warning("⚠️  Running without EventBus integration")
+            logger.error(f" EventBus initialization failed: {e}")
+            logger.warning("️  Running without EventBus integration")
 
     # Start background tasks
 
@@ -211,21 +211,21 @@ async def lifespan(app: FastAPI):
     if settings.DAILY_HEALTH_CHECK_ENABLED:
         task1 = asyncio.create_task(schedule_daily_health_check())
         background_tasks.append(task1)
-        logger.info("✅ Daily health check scheduled")
+        logger.info(" Daily health check scheduled")
 
     # Continuous improvement
     if settings.CONTINUOUS_IMPROVEMENT_ENABLED:
         task2 = asyncio.create_task(schedule_continuous_improvement())
         background_tasks.append(task2)
-        logger.info("✅ Continuous improvement scheduled")
+        logger.info(" Continuous improvement scheduled")
 
     # Heartbeat to MIO
     task3 = asyncio.create_task(send_heartbeat_to_mio())
     background_tasks.append(task3)
-    logger.info("✅ Heartbeat to MIO Manager started")
+    logger.info(" Heartbeat to MIO Manager started")
 
     logger.info("=" * 70)
-    logger.info("🚀 ANALYTICS SPECIALIST AI READY!")
+    logger.info(" ANALYTICS SPECIALIST AI READY!")
     logger.info("=" * 70)
 
     # Yield to application
@@ -233,13 +233,13 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     logger.info("=" * 70)
-    logger.info("🛑 ANALYTICS SPECIALIST AI SHUTTING DOWN...")
+    logger.info(" ANALYTICS SPECIALIST AI SHUTTING DOWN...")
     logger.info("=" * 70)
 
     # Shutdown EventBus
     if eventbus_helper:
         await eventbus_helper.shutdown()
-        logger.info("✅ EventBus integration stopped")
+        logger.info(" EventBus integration stopped")
 
     # Cancel background tasks
     for task in background_tasks:
@@ -249,8 +249,8 @@ async def lifespan(app: FastAPI):
         except asyncio.CancelledError:
             pass
 
-    logger.info("✅ Background tasks stopped")
-    logger.info("👋 Goodbye!")
+    logger.info(" Background tasks stopped")
+    logger.info(" Goodbye!")
 
 
 # ============================================================================
@@ -308,7 +308,7 @@ async def root():
             "status": "/api/v1/analytics/status",
             "daily_health_check": "/api/v1/workflows/daily-health-check",
             "investigate": "/api/v1/workflows/investigate-incident",
-            "ui": "/ui",  # 🎨 Web UI for tools management
+            "ui": "/ui",  #  Web UI for tools management
             "docs": "/docs"
         },
         "ai_office": {

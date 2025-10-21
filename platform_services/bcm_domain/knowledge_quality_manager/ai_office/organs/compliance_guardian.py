@@ -1,5 +1,5 @@
 """
-🛡️ Compliance Guardian
+️ Compliance Guardian
 
 Standards compliance monitoring and gap analysis
 """
@@ -23,7 +23,7 @@ class ComplianceGuardian(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Compliance Guardian",
-            emoji="🛡️",
+            emoji="️",
             llm_router=llm_router
         )
 

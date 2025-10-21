@@ -74,7 +74,7 @@ class AutomatedResponseEngine:
         7. Мониторить progress
         8. После успеха → сохранить case
         """
-        logger.info(f"🔒 Handling security incident: {scan_result['high_severity']} HIGH issues")
+        logger.info(f" Handling security incident: {scan_result['high_severity']} HIGH issues")
 
         # Определить severity
         high_count = scan_result['high_severity']
@@ -95,7 +95,7 @@ class AutomatedResponseEngine:
         )
 
         if not workflow.get('workflow_id'):
-            logger.error("❌ Failed to create workflow, using fallback")
+            logger.error(" Failed to create workflow, using fallback")
             return await self._fallback_security_response(scan_result, report_id)
 
         workflow_id = workflow['workflow_id']
@@ -193,7 +193,7 @@ class AutomatedResponseEngine:
             }
         )
 
-        logger.info(f"✅ Security incident workflow created: {workflow_id}")
+        logger.info(f" Security incident workflow created: {workflow_id}")
 
         return {
             "workflow_id": workflow_id,
@@ -218,16 +218,16 @@ class AutomatedResponseEngine:
         - Alert to Orchestrator HIGH priority
         - Create emergency task
         """
-        logger.warning("🚨 CRITICAL security issue - immediate response")
+        logger.warning(" CRITICAL security issue - immediate response")
 
         # Enable circuit breaker
         affected_services = self._extract_affected_services(scan_result)
         for service in affected_services[:3]:  # Top 3 most affected
             try:
                 await self.gateway.enable_circuit_breaker(service)
-                logger.info(f"🛡️  Enabled circuit breaker for {service}")
+                logger.info(f"️  Enabled circuit breaker for {service}")
             except Exception as e:
-                logger.error(f"❌ Failed to enable circuit breaker for {service}: {e}")
+                logger.error(f" Failed to enable circuit breaker for {service}: {e}")
 
         # Create emergency task
         task = await self.orchestrator.delegate_task({
@@ -279,7 +279,7 @@ class AutomatedResponseEngine:
         - Delegate to Orchestrator
         - Monitor progress
         """
-        logger.info("📋 Creating delegated security fix task")
+        logger.info(" Creating delegated security fix task")
 
         # Create task with AI recommendations
         task = await self.orchestrator.delegate_task({
@@ -323,7 +323,7 @@ class AutomatedResponseEngine:
         report_id: str
     ) -> Dict:
         """Fallback если Workflow Intelligence недоступен"""
-        logger.warning("⚠️  Using fallback security response (Workflow Intelligence unavailable)")
+        logger.warning("️  Using fallback security response (Workflow Intelligence unavailable)")
 
         # Simple action without workflow
         action_id = ActionsRepository.create_action(
@@ -373,7 +373,7 @@ class AutomatedResponseEngine:
         4. Если не помогло → делегировать
         5. Enable circuit breaker
         """
-        logger.warning(f"🚨 Service DOWN: {service_name}")
+        logger.warning(f" Service DOWN: {service_name}")
 
         # Create workflow
         workflow = await self.wf_intelligence.create_incident_workflow(

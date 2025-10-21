@@ -975,16 +975,16 @@ window.startDemoMode = function() {
 
 // Mock AI organs data
 const AI_ORGANS = {
-    governance_brain: { name: 'Governance Brain', icon: '🧠', status: 'active' },
-    emergency_response: { name: 'Emergency Response', icon: '🚨', status: 'active' },
-    impact_oracle: { name: 'Impact Oracle', icon: '🔮', status: 'active' },
-    scenario_creator: { name: 'Scenario Creator', icon: '📝', status: 'active' },
-    risk_advisor: { name: 'Risk Advisor', icon: '⚡', status: 'active' },
-    compliance_guardian: { name: 'Compliance Guardian', icon: '🛡️', status: 'active' },
-    performance_analyst: { name: 'Performance Analyst', icon: '📊', status: 'active' },
-    learning_coach: { name: 'Learning Coach', icon: '🎓', status: 'active' },
-    plan_generator: { name: 'Plan Generator', icon: '📋', status: 'active' },
-    lifecycle_monitor: { name: 'Lifecycle Monitor', icon: '💓', status: 'active' }
+    governance_brain: { name: 'Governance Brain', icon: '', status: 'active' },
+    emergency_response: { name: 'Emergency Response', icon: '', status: 'active' },
+    impact_oracle: { name: 'Impact Oracle', icon: '', status: 'active' },
+    scenario_creator: { name: 'Scenario Creator', icon: '', status: 'active' },
+    risk_advisor: { name: 'Risk Advisor', icon: '', status: 'active' },
+    compliance_guardian: { name: 'Compliance Guardian', icon: '️', status: 'active' },
+    performance_analyst: { name: 'Performance Analyst', icon: '', status: 'active' },
+    learning_coach: { name: 'Learning Coach', icon: '', status: 'active' },
+    plan_generator: { name: 'Plan Generator', icon: '', status: 'active' },
+    lifecycle_monitor: { name: 'Lifecycle Monitor', icon: '', status: 'active' }
 };
 
 // AI Organs control functions
@@ -1183,17 +1183,17 @@ window.runFullAIAnalysis = async function() {
             updateAnalysisTimeline();
             showModal('AI Analysis Complete', `
                 <div class="success">
-                    <h3>✅ Full AI Analysis Completed</h3>
+                    <h3> Full AI Analysis Completed</h3>
                     <p>All 10 AI organs have successfully analyzed the organization.</p>
 
                     <div style="margin: 15px 0; padding: 10px; background: #f0f9ff; border-radius: 4px;">
                         <h4>Analysis Summary:</h4>
                         <ul>
-                            <li>🧠 Governance Brain: Strategic alignment recommendations</li>
-                            <li>⚡ Risk Advisor: Supply chain vulnerabilities identified</li>
-                            <li>🛡️ Compliance Guardian: 91% ISO 22301 compliance</li>
-                            <li>📊 Performance Analyst: KPI optimization opportunities</li>
-                            <li>🔮 Impact Oracle: 23% effectiveness improvement predicted</li>
+                            <li> Governance Brain: Strategic alignment recommendations</li>
+                            <li> Risk Advisor: Supply chain vulnerabilities identified</li>
+                            <li>️ Compliance Guardian: 91% ISO 22301 compliance</li>
+                            <li> Performance Analyst: KPI optimization opportunities</li>
+                            <li> Impact Oracle: 23% effectiveness improvement predicted</li>
                             <li>+ 5 more organs completed analysis</li>
                         </ul>
                     </div>
@@ -1217,7 +1217,7 @@ window.runRiskAnalysis = async function() {
         closeModal();
         showModal('Risk Analysis Complete', `
             <div class="risk-results">
-                <h3>⚠️ Risk Assessment Results</h3>
+                <h3>️ Risk Assessment Results</h3>
 
                 <div style="margin: 15px 0; padding: 10px; background: #fff7ed; border-left: 4px solid #f59e0b; border-radius: 4px;">
                     <h4>High Priority Risks:</h4>
@@ -1251,16 +1251,16 @@ window.runComplianceCheck = async function() {
         closeModal();
         showModal('Compliance Check Complete', `
             <div class="compliance-results">
-                <h3>✅ Compliance Assessment</h3>
+                <h3> Compliance Assessment</h3>
 
                 <div style="margin: 15px 0; padding: 10px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
                     <h4>ISO 22301 Compliance: 91%</h4>
                     <ul>
-                        <li>✅ Business Impact Analysis: Complete</li>
-                        <li>✅ Risk Assessment: Up to date</li>
-                        <li>✅ Business Continuity Plans: Current</li>
-                        <li>⚠️ Training Records: Minor gaps identified</li>
-                        <li>✅ Testing & Exercises: On schedule</li>
+                        <li> Business Impact Analysis: Complete</li>
+                        <li> Risk Assessment: Up to date</li>
+                        <li> Business Continuity Plans: Current</li>
+                        <li>️ Training Records: Minor gaps identified</li>
+                        <li> Testing & Exercises: On schedule</li>
                     </ul>
                 </div>
 
@@ -1287,7 +1287,7 @@ window.generatePredictions = async function() {
         closeModal();
         showModal('Predictions Generated', `
             <div class="predictions-results">
-                <h3>🔮 AI Predictions & Forecasting</h3>
+                <h3> AI Predictions & Forecasting</h3>
 
                 <div style="margin: 15px 0; padding: 10px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 4px;">
                     <h4>6-Month Forecast:</h4>
@@ -1461,7 +1461,7 @@ function addMessageToChat(text, type) {
 
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar';
-    avatar.textContent = type === 'user' ? '👤' : '🤖';
+    avatar.textContent = type === 'user' ? '' : '';
 
     const content = document.createElement('div');
     content.className = 'message-content';
@@ -1493,7 +1493,7 @@ function showTypingIndicator() {
     typingDiv.id = 'typingIndicator';
     typingDiv.className = 'ai-message';
     typingDiv.innerHTML = `
-        <div class="message-avatar">🤖</div>
+        <div class="message-avatar"></div>
         <div class="message-content">
             <div class="typing-dots">
                 <span></span>

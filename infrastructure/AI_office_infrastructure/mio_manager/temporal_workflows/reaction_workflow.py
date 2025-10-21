@@ -38,7 +38,7 @@ def inject_dependencies(rules_engine, action_executor, escalation_manager):
     _rules_engine = rules_engine
     _action_executor = action_executor
     _escalation_manager = escalation_manager
-    logger.info("✅ Dependencies injected into Reaction workflow")
+    logger.info(" Dependencies injected into Reaction workflow")
 
 
 # ============================================================================
@@ -52,7 +52,7 @@ async def classify_problem_activity(problem: Dict[str, Any]) -> Dict[str, Any]:
 
     Wrapper around ReactionRulesEngine.classify_problem()
     """
-    logger.info(f"🔍 Classifying problem: {problem.get('type')}")
+    logger.info(f" Classifying problem: {problem.get('type')}")
 
     try:
         # Real work: ReactionRulesEngine does classification
@@ -66,7 +66,7 @@ async def classify_problem_activity(problem: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Classification failed: {e}")
+        logger.error(f" Classification failed: {e}")
         # On error, escalate to brain
         return {
             "status": "failed",
@@ -82,7 +82,7 @@ async def execute_instant_action(problem: Dict[str, Any], action: str) -> Dict[s
 
     Wrapper around ActionExecutor L1 actions.
     """
-    logger.info(f"⚡ Executing L1 instant action: {action}")
+    logger.info(f" Executing L1 instant action: {action}")
 
     try:
         # Real work: ActionExecutor handles execution
@@ -114,7 +114,7 @@ async def execute_instant_action(problem: Dict[str, Any], action: str) -> Dict[s
         }
 
     except Exception as e:
-        logger.error(f"❌ L1 action failed: {e}")
+        logger.error(f" L1 action failed: {e}")
         return {
             "status": "failed",
             "success": False,
@@ -129,7 +129,7 @@ async def execute_quick_action(problem: Dict[str, Any], action: str) -> Dict[str
 
     Wrapper around ActionExecutor L2 actions.
     """
-    logger.info(f"⚡ Executing L2 quick action: {action}")
+    logger.info(f" Executing L2 quick action: {action}")
 
     try:
         context = {
@@ -158,7 +158,7 @@ async def execute_quick_action(problem: Dict[str, Any], action: str) -> Dict[str
         }
 
     except Exception as e:
-        logger.error(f"❌ L2 action failed: {e}")
+        logger.error(f" L2 action failed: {e}")
         return {
             "status": "failed",
             "success": False,
@@ -176,7 +176,7 @@ async def escalate_to_brain_activity(
 
     Wrapper around EscalationManager.escalate_to_brain()
     """
-    logger.info(f"🧠 Escalating to brain: {problem.get('type')}")
+    logger.info(f" Escalating to brain: {problem.get('type')}")
 
     try:
         # Real work: EscalationManager handles escalation
@@ -195,7 +195,7 @@ async def escalate_to_brain_activity(
         }
 
     except Exception as e:
-        logger.error(f"❌ Escalation failed: {e}")
+        logger.error(f" Escalation failed: {e}")
         return {
             "status": "failed",
             "error": str(e)
@@ -225,7 +225,7 @@ async def wait_for_brain_directive_activity(escalation_id: str) -> Dict[str, Any
         }
 
     except Exception as e:
-        logger.error(f"❌ Failed to receive directive: {e}")
+        logger.error(f" Failed to receive directive: {e}")
         return {
             "status": "timeout",
             "error": str(e)
@@ -265,7 +265,7 @@ class ReactionWorkflow:
                 'data': {...}
             }
         """
-        workflow.logger.info(f"🚀 Starting Reaction Workflow for: {problem.get('type')}")
+        workflow.logger.info(f" Starting Reaction Workflow for: {problem.get('type')}")
 
         retry_policy = RetryPolicy(
             initial_interval=timedelta(seconds=1),
@@ -283,7 +283,7 @@ class ReactionWorkflow:
             )
 
             reaction_level = classification.get('reaction_level')
-            workflow.logger.info(f"📊 Classified as: {reaction_level}")
+            workflow.logger.info(f" Classified as: {reaction_level}")
 
             # 2. Act based on level
             if reaction_level == "L1_instant":
@@ -296,7 +296,7 @@ class ReactionWorkflow:
             return result
 
         except Exception as e:
-            workflow.logger.error(f"❌ Reaction workflow failed: {e}")
+            workflow.logger.error(f" Reaction workflow failed: {e}")
             # On error, escalate to brain
             return await self._handle_L3_error(problem, str(e))
 
@@ -306,7 +306,7 @@ class ReactionWorkflow:
         classification: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Handle L1 instant reflex."""
-        workflow.logger.info("⚡ L1 Instant Reflex")
+        workflow.logger.info(" L1 Instant Reflex")
 
         action = classification.get('recommended_action')
         result = await workflow.execute_activity(
@@ -318,10 +318,10 @@ class ReactionWorkflow:
 
         if not result.get('success'):
             # L1 failed, escalate to L3
-            workflow.logger.warning("⚠️ L1 failed, escalating to L3")
+            workflow.logger.warning("️ L1 failed, escalating to L3")
             return await self._handle_L3(problem, classification)
 
-        workflow.logger.info(f"✅ L1 success: {result.get('message')}")
+        workflow.logger.info(f" L1 success: {result.get('message')}")
         return result
 
     async def _handle_L2(
@@ -330,7 +330,7 @@ class ReactionWorkflow:
         classification: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Handle L2 quick response."""
-        workflow.logger.info("⚡ L2 Quick Response")
+        workflow.logger.info(" L2 Quick Response")
 
         action = classification.get('recommended_action')
         result = await workflow.execute_activity(
@@ -342,10 +342,10 @@ class ReactionWorkflow:
 
         if not result.get('success'):
             # L2 failed, escalate to L3
-            workflow.logger.warning("⚠️ L2 failed, escalating to L3")
+            workflow.logger.warning("️ L2 failed, escalating to L3")
             return await self._handle_L3(problem, classification)
 
-        workflow.logger.info(f"✅ L2 success: {result.get('message')}")
+        workflow.logger.info(f" L2 success: {result.get('message')}")
         return result
 
     async def _handle_L3(
@@ -354,7 +354,7 @@ class ReactionWorkflow:
         classification: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Handle L3 escalation to brain."""
-        workflow.logger.info("🧠 L3 Escalating to Brain")
+        workflow.logger.info(" L3 Escalating to Brain")
 
         # Escalate
         escalation = await workflow.execute_activity(
@@ -371,7 +371,7 @@ class ReactionWorkflow:
             heartbeat_timeout=timedelta(seconds=30)
         )
 
-        workflow.logger.info(f"✅ L3 escalated: {escalation.get('escalation_id')}")
+        workflow.logger.info(f" L3 escalated: {escalation.get('escalation_id')}")
 
         return {
             "status": "escalated",
@@ -385,7 +385,7 @@ class ReactionWorkflow:
         error: str
     ) -> Dict[str, Any]:
         """Handle workflow error by escalating."""
-        workflow.logger.error(f"🚨 Escalating workflow error: {error}")
+        workflow.logger.error(f" Escalating workflow error: {error}")
 
         error_classification = {
             "reaction_level": "L3_escalate",

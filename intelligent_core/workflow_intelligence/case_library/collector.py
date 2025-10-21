@@ -1,5 +1,5 @@
 """
-🤖 CASE COLLECTOR - Автоматический сбор успешных workflows
+ CASE COLLECTOR - Автоматический сбор успешных workflows
 
 Слушает события workflow, собирает данные, создаёт cases для обучения.
 

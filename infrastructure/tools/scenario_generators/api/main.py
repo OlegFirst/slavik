@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
     # TODO: Initialize Generation Manager
     # TODO: Initialize EventBus connection (optional)
 
-    logger.info("✅ Scenario Orchestrator API ready")
+    logger.info(" Scenario Orchestrator API ready")
     logger.info("="*70)
 
     yield

@@ -24,10 +24,10 @@ if str(analyzers_path) not in sys.path:
 try:
     from ast_analyzer import ASTAnalyzer as OriginalASTAnalyzer
     TOOL_AVAILABLE = True
-    logger.info("✅ ast_analyzer tool loaded successfully")
+    logger.info(" ast_analyzer tool loaded successfully")
 except ImportError as e:
     TOOL_AVAILABLE = False
-    logger.warning(f"❌ ast_analyzer tool not available: {e}")
+    logger.warning(f" ast_analyzer tool not available: {e}")
     OriginalASTAnalyzer = None
 
 

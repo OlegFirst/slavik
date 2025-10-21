@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { UniversalOrganizationContext } from '../core/organization-context.js';
 import { constructor, initialize, getData, updateData } from '../core/organization-context.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('organization-context', () => {
@@ -116,7 +116,7 @@ describe('organization-context', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in organization-context');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

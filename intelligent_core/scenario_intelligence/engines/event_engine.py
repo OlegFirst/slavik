@@ -27,7 +27,7 @@ class EventBus:
     async def publish(self, event_type: str, event: Dict[str, Any]):
         """Опубликовать событие"""
 
-        logger.debug(f"    📡 Publishing event: {event_type}")
+        logger.debug(f"     Publishing event: {event_type}")
 
         if event_type in self.subscribers:
             callbacks = self.subscribers[event_type]
@@ -45,7 +45,7 @@ class EventBus:
             self.subscribers[event_type] = []
 
         self.subscribers[event_type].append(callback)
-        logger.debug(f"    📨 Subscribed to event: {event_type}")
+        logger.debug(f"     Subscribed to event: {event_type}")
 
     def unsubscribe(self, event_type: str, callback: Callable):
         """Отписаться от события"""
@@ -90,7 +90,7 @@ class EventEngine:
             event_type = event_config.get('event_type')
 
             if not event_type:
-                logger.warning("    ⚠️  Event without event_type, skipping")
+                logger.warning("    ️  Event without event_type, skipping")
                 continue
 
             # Resolve payload
@@ -110,7 +110,7 @@ class EventEngine:
                 'subscribers': event_config.get('subscribers', [])
             }
 
-            logger.info(f"    📡 Emitting event: {event_type}")
+            logger.info(f"     Emitting event: {event_type}")
 
             # Опубликовать в Event Bus
             await self.event_bus.publish(event_type, event)
@@ -141,7 +141,7 @@ class EventEngine:
                     lambda event: self._handle_event(event, scenario_id)
                 )
 
-                logger.info(f"  📨 Scenario {scenario_id} subscribed to {event_type}")
+                logger.info(f"   Scenario {scenario_id} subscribed to {event_type}")
 
     async def _handle_event(
         self,
@@ -156,7 +156,7 @@ class EventEngine:
             scenario_id: ID сценария который нужно запустить
         """
 
-        logger.info(f"  🎯 Event {event['type']} triggered scenario: {scenario_id}")
+        logger.info(f"   Event {event['type']} triggered scenario: {scenario_id}")
 
         try:
             # Загрузить сценарий
@@ -165,7 +165,7 @@ class EventEngine:
             scenario = await registry.get_scenario_by_id(scenario_id)
 
             if not scenario:
-                logger.error(f"    ❌ Scenario {scenario_id} not found")
+                logger.error(f"     Scenario {scenario_id} not found")
                 return
 
             # Запустить сценарий с событием в контексте
@@ -178,7 +178,7 @@ class EventEngine:
             )
 
         except Exception as e:
-            logger.error(f"    ❌ Failed to handle event: {e}", exc_info=True)
+            logger.error(f"     Failed to handle event: {e}", exc_info=True)
 
     def _resolve_payload(
         self,
@@ -256,7 +256,7 @@ async def main():
     # Дать время на обработку
     await asyncio.sleep(1)
 
-    print("\n✅ Event Engine test completed")
+    print("\n Event Engine test completed")
 
 
 if __name__ == "__main__":

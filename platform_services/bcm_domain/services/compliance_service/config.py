@@ -24,7 +24,7 @@ class ComplianceSettings(SharedSettings):
 
     # Development defaults (override in production via env vars)
     DATABASE_URL: str = "sqlite+aiosqlite:///./compliance_dev.db"
-    JWT_SECRET: str = "dev-secret-CHANGE-IN-PRODUCTION-12345"
+    JWT_SECRET_KEY: str = "dev-secret-CHANGE-IN-PRODUCTION-12345"
 
     # Compliance-Specific Settings
     AI_ENABLED: bool = True  # AI-powered compliance scanning

@@ -112,7 +112,7 @@ class UnifiedController:
             )
 
             platform_status = self.platform_integration.get_status()
-            logger.info(f"  ✓ Platform Integration ready: {platform_status}")
+            logger.info(f"   Platform Integration ready: {platform_status}")
 
             # Register orchestration sagas
             await self._register_orchestration_sagas()
@@ -125,7 +125,7 @@ class UnifiedController:
                 self.platform.set_platform_integration(self.platform_integration)
 
             await self.platform.start()
-            logger.info("  ✓ Platform ready")
+            logger.info("   Platform ready")
 
             # Step 2: Start AI & Scenario in parallel
             logger.info("\nStep 2/3: Starting AI & Scenario Orchestrators...")
@@ -145,22 +145,22 @@ class UnifiedController:
             # Check for failures
             ai_status = 'running'
             if isinstance(results[0], Exception):
-                logger.error(f"  ✗ AI Orchestrator failed: {results[0]}")
+                logger.error(f"   AI Orchestrator failed: {results[0]}")
                 ai_status = 'failed'
             else:
-                logger.info("  ✓ AI Orchestrator ready")
+                logger.info("   AI Orchestrator ready")
 
             scenario_status = 'running'
             if isinstance(results[1], Exception):
-                logger.error(f"  ✗ Scenario Orchestrator failed: {results[1]}")
+                logger.error(f"   Scenario Orchestrator failed: {results[1]}")
                 scenario_status = 'failed'
             else:
-                logger.info("  ✓ Scenario Orchestrator ready")
+                logger.info("   Scenario Orchestrator ready")
 
             # Step 3: Post-startup integration
             logger.info("\nStep 3/3: Finalizing integration...")
             await self._post_startup_integration()
-            logger.info("  ✓ Integration complete")
+            logger.info("   Integration complete")
 
             # Mark startup complete
             self.startup_completed = True
@@ -168,13 +168,13 @@ class UnifiedController:
             self.startup_time = elapsed
 
             logger.info("\n" + "=" * 70)
-            logger.info(f"✅ SYSTEM STARTED SUCCESSFULLY in {elapsed:.2f}s")
+            logger.info(f" SYSTEM STARTED SUCCESSFULLY in {elapsed:.2f}s")
             logger.info("=" * 70)
-            logger.info("🎭 Graceful Choreography Active")
-            logger.info(f"   📡 Intelligent EventBus: {self.platform_integration.intelligent_router is not None}")
-            logger.info(f"   🔄 Saga Engine: {self.platform_integration.saga_orchestrator is not None}")
-            logger.info(f"   🧠 Self-Aware: Enabled")
-            logger.info(f"   📊 CQRS: {self.platform_integration.cqrs_command_handler is not None}")
+            logger.info(" Graceful Choreography Active")
+            logger.info(f"    Intelligent EventBus: {self.platform_integration.intelligent_router is not None}")
+            logger.info(f"    Saga Engine: {self.platform_integration.saga_orchestrator is not None}")
+            logger.info(f"    Self-Aware: Enabled")
+            logger.info(f"    CQRS: {self.platform_integration.cqrs_command_handler is not None}")
             logger.info("=" * 70 + "\n")
 
             return {
@@ -190,7 +190,7 @@ class UnifiedController:
             }
 
         except Exception as e:
-            logger.error(f"❌ System startup failed: {e}", exc_info=True)
+            logger.error(f" System startup failed: {e}", exc_info=True)
             self.running = False
             self.startup_completed = False
 
@@ -225,12 +225,12 @@ class UnifiedController:
             # Get registered count
             if hasattr(self.platform_integration.saga_orchestrator, '_sagas'):
                 saga_count = len(self.platform_integration.saga_orchestrator._sagas)
-                logger.info(f"  ✓ Registered {saga_count} orchestration sagas")
+                logger.info(f"   Registered {saga_count} orchestration sagas")
 
         except ImportError as e:
-            logger.warning(f"  ⚠️  Could not import saga definitions: {e}")
+            logger.warning(f"  ️  Could not import saga definitions: {e}")
         except Exception as e:
-            logger.error(f"  ✗ Error registering sagas: {e}")
+            logger.error(f"   Error registering sagas: {e}")
 
     async def _post_startup_integration(self):
         """Post-startup integration tasks"""
@@ -253,9 +253,9 @@ class UnifiedController:
                             "semantic_tags": ["ai", "orchestration", "decision", "automation"]
                         }
                     )
-                    logger.info("    ✓ AI Orchestrator subscribed to decision events")
+                    logger.info("     AI Orchestrator subscribed to decision events")
             except Exception as e:
-                logger.warning(f"    ⚠️  Could not subscribe AI Orchestrator: {e}")
+                logger.warning(f"    ️  Could not subscribe AI Orchestrator: {e}")
 
             # Subscribe Scenario Orchestrator to training events
             try:
@@ -272,9 +272,9 @@ class UnifiedController:
                             "semantic_tags": ["scenario", "training", "simulation", "bcm"]
                         }
                     )
-                    logger.info("    ✓ Scenario Orchestrator subscribed to scenario events")
+                    logger.info("     Scenario Orchestrator subscribed to scenario events")
             except Exception as e:
-                logger.warning(f"    ⚠️  Could not subscribe Scenario Orchestrator: {e}")
+                logger.warning(f"    ️  Could not subscribe Scenario Orchestrator: {e}")
 
     async def stop_all(self) -> Dict[str, Any]:
         """
@@ -308,22 +308,22 @@ class UnifiedController:
                 self.ai.stop(),
                 return_exceptions=True
             )
-            logger.info("  ✓ AI & Scenario stopped")
+            logger.info("   AI & Scenario stopped")
 
             # Step 2: Stop Platform
             logger.info("Step 2/3: Stopping Platform Orchestrator...")
             await self.platform.stop()
-            logger.info("  ✓ Platform stopped")
+            logger.info("   Platform stopped")
 
             # Step 3: Shutdown Platform Integration
             logger.info("Step 3/3: Shutting down Platform Integration...")
             await shutdown_platform()
-            logger.info("  ✓ Platform Integration shutdown")
+            logger.info("   Platform Integration shutdown")
 
             elapsed = (datetime.utcnow() - stop_time).total_seconds()
 
             logger.info("=" * 70)
-            logger.info(f"✅ SYSTEM STOPPED in {elapsed:.2f}s")
+            logger.info(f" SYSTEM STOPPED in {elapsed:.2f}s")
             logger.info("=" * 70)
 
             return {
@@ -405,14 +405,14 @@ class UnifiedController:
         try:
             # Stop
             await orchestrator.stop()
-            logger.info(f"  ✓ {orchestrator_name} stopped")
+            logger.info(f"   {orchestrator_name} stopped")
 
             # Wait
             await asyncio.sleep(1)
 
             # Start
             await orchestrator.start()
-            logger.info(f"  ✓ {orchestrator_name} started")
+            logger.info(f"   {orchestrator_name} started")
 
             return {
                 'status': 'restarted',

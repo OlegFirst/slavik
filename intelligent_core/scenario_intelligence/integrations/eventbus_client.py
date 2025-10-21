@@ -71,7 +71,7 @@ class ScenarioEventBusClient:
         """Initialize EventBus connection"""
         if not self.eventbus:
             self.eventbus = create_eventbus(self.backend)
-            logger.info(f"✅ ScenarioEventBusClient initialized with {self.backend} backend")
+            logger.info(f" ScenarioEventBusClient initialized with {self.backend} backend")
             self._running = True
 
     async def close(self):
@@ -79,7 +79,7 @@ class ScenarioEventBusClient:
         self._running = False
         if self.eventbus:
             # EventBus cleanup if needed
-            logger.info("✅ ScenarioEventBusClient closed")
+            logger.info(" ScenarioEventBusClient closed")
 
     # =========================================================================
     # PUBLISH: Scenario Generation Events
@@ -107,7 +107,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.generated "
+            f" Published: scenario.generated "
             f"(level={event_data.level}, count={event_data.count}, trigger={event_data.trigger})"
         )
 
@@ -133,7 +133,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.updated "
+            f" Published: scenario.updated "
             f"(id={event_data.scenario_id}, reason={event_data.reason})"
         )
 
@@ -162,7 +162,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.executed "
+            f" Published: scenario.executed "
             f"(id={event_data.scenario_id}, status={event_data.status}, "
             f"duration={event_data.duration_ms}ms)"
         )
@@ -189,7 +189,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.regeneration.triggered "
+            f" Published: scenario.regeneration.triggered "
             f"(id={event_data.regeneration_id}, services={len(event_data.affected_services)})"
         )
 
@@ -215,7 +215,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.regeneration.completed "
+            f" Published: scenario.regeneration.completed "
             f"(id={event_data.regeneration_id}, status={event_data.status}, "
             f"generated={event_data.scenarios_generated}, updated={event_data.scenarios_updated})"
         )
@@ -242,7 +242,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.deprecated "
+            f" Published: scenario.deprecated "
             f"(id={event_data.scenario_id}, reason={event_data.reason})"
         )
 
@@ -268,7 +268,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.publish(event)
         logger.info(
-            f"📤 Published: scenario.pattern.detected "
+            f" Published: scenario.pattern.detected "
             f"(type={event_data.pattern_type}, scenarios={len(event_data.scenario_ids)}, "
             f"confidence={event_data.confidence:.2f})"
         )
@@ -307,7 +307,7 @@ class ScenarioEventBusClient:
         for event_type in event_types:
             await self.eventbus.subscribe(event_type, callback)
             self._subscriptions.append(event_type)
-            logger.info(f"🔔 Subscribed to: {event_type}")
+            logger.info(f" Subscribed to: {event_type}")
 
     async def subscribe_to_service_health(
         self,
@@ -325,7 +325,7 @@ class ScenarioEventBusClient:
         event_type = ScenarioEventTypes.SERVICE_HEALTH_CHANGED
         await self.eventbus.subscribe(event_type, callback)
         self._subscriptions.append(event_type)
-        logger.info(f"🔔 Subscribed to: {event_type}")
+        logger.info(f" Subscribed to: {event_type}")
 
     async def subscribe_to_pattern(
         self,
@@ -344,7 +344,7 @@ class ScenarioEventBusClient:
 
         await self.eventbus.subscribe(pattern, callback)
         self._subscriptions.append(pattern)
-        logger.info(f"🔔 Subscribed to pattern: {pattern}")
+        logger.info(f" Subscribed to pattern: {pattern}")
 
     # =========================================================================
     # Utility Methods
@@ -406,5 +406,5 @@ async def initialize_global_eventbus(
         redis_url=redis_url
     )
     await _global_client.initialize()
-    logger.info("✅ Global ScenarioEventBusClient initialized")
+    logger.info(" Global ScenarioEventBusClient initialized")
     return _global_client

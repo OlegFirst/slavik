@@ -38,7 +38,7 @@ class GitHubIntegrationClient:
             response = await self.client.get(f"{self.base_url}/health")
             if response.status_code == 200:
                 self.available = True
-                logger.info("✅ GitHub Integration service available")
+                logger.info(" GitHub Integration service available")
             else:
                 logger.warning(f"GitHub Integration returned {response.status_code}")
         except Exception as e:

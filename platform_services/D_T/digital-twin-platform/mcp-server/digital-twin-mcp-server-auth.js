@@ -60,16 +60,16 @@ export class DigitalTwinMCPServerAuth extends EventEmitter {
             
             // Initialize auth
             await this.organizationAuth.initialize();
-            console.log('✓ Auth system initialized');
+            console.log(' Auth system initialized');
             
             // Initialize database
             await this.supabaseIntegration.initialize();
-            console.log('✓ Database initialized');
+            console.log(' Database initialized');
             
             // Initialize Digital Twin
             this.digitalTwin = new DigitalTwinModule();
             await this.digitalTwin.initialize();
-            console.log('✓ Digital Twin module initialized');
+            console.log(' Digital Twin module initialized');
             
             return true;
         } catch (error) {

@@ -34,10 +34,10 @@ async def verify_health():
     print("1. Testing Import...")
     try:
         from unified_orchestrator import UnifiedOrchestrator
-        print("   ✅ PASS: UnifiedOrchestrator imported successfully")
+        print("    PASS: UnifiedOrchestrator imported successfully")
         passed += 1
     except Exception as e:
-        print(f"   ❌ FAIL: Import failed - {e}")
+        print(f"    FAIL: Import failed - {e}")
         failed += 1
         return False
 
@@ -45,10 +45,10 @@ async def verify_health():
     print("\n2. Testing Initialization...")
     try:
         orchestrator = UnifiedOrchestrator(PROJECT_ROOT)
-        print("   ✅ PASS: Orchestrator initialized")
+        print("    PASS: Orchestrator initialized")
         passed += 1
     except Exception as e:
-        print(f"   ❌ FAIL: Initialization failed - {e}")
+        print(f"    FAIL: Initialization failed - {e}")
         failed += 1
         return False
 
@@ -64,10 +64,10 @@ async def verify_health():
 
     for name, component in components.items():
         if component is not None:
-            print(f"   ✅ PASS: {name} available")
+            print(f"    PASS: {name} available")
             passed += 1
         else:
-            print(f"   ⚠️  WARN: {name} not available (may be optional)")
+            print(f"   ️  WARN: {name} not available (may be optional)")
 
     # Test 4: Core Methods
     print("\n4. Testing Core Methods...")
@@ -82,10 +82,10 @@ async def verify_health():
 
     for method in methods:
         if hasattr(orchestrator, method) and callable(getattr(orchestrator, method)):
-            print(f"   ✅ PASS: {method}() available")
+            print(f"    PASS: {method}() available")
             passed += 1
         else:
-            print(f"   ❌ FAIL: {method}() not available")
+            print(f"    FAIL: {method}() not available")
             failed += 1
 
     # Test 5: Task Execution
@@ -98,13 +98,13 @@ async def verify_health():
         }
         result = await orchestrator.execute_task(test_task)
         if result.get('success') is not None:
-            print("   ✅ PASS: Task execution works")
+            print("    PASS: Task execution works")
             passed += 1
         else:
-            print("   ❌ FAIL: Task execution returned unexpected result")
+            print("    FAIL: Task execution returned unexpected result")
             failed += 1
     except Exception as e:
-        print(f"   ❌ FAIL: Task execution error - {e}")
+        print(f"    FAIL: Task execution error - {e}")
         failed += 1
 
     # Test 6: API Endpoints
@@ -122,13 +122,13 @@ async def verify_health():
 
         for endpoint in required_endpoints:
             if endpoint in routes:
-                print(f"   ✅ PASS: {endpoint} endpoint exists")
+                print(f"    PASS: {endpoint} endpoint exists")
                 passed += 1
             else:
-                print(f"   ❌ FAIL: {endpoint} endpoint missing")
+                print(f"    FAIL: {endpoint} endpoint missing")
                 failed += 1
     except Exception as e:
-        print(f"   ❌ FAIL: API endpoint check failed - {e}")
+        print(f"    FAIL: API endpoint check failed - {e}")
         failed += 1
 
     # Summary
@@ -137,16 +137,16 @@ async def verify_health():
     print("="*80)
     total = passed + failed
     print(f"Total Checks: {total}")
-    print(f"✅ Passed: {passed}")
-    print(f"❌ Failed: {failed}")
+    print(f" Passed: {passed}")
+    print(f" Failed: {failed}")
 
     if failed == 0:
-        print("\n✅ HEALTH CHECK PASSED - Orchestrator is fully functional")
+        print("\n HEALTH CHECK PASSED - Orchestrator is fully functional")
         print("="*80)
         return True
     else:
         success_rate = (passed / total * 100) if total > 0 else 0
-        print(f"\n⚠️  HEALTH CHECK COMPLETED WITH WARNINGS - {success_rate:.1f}% functional")
+        print(f"\n️  HEALTH CHECK COMPLETED WITH WARNINGS - {success_rate:.1f}% functional")
         print("="*80)
         return False
 
@@ -160,7 +160,7 @@ def main():
         print("\n\nHealth check interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n\n❌ FATAL ERROR: {e}")
+        print(f"\n\n FATAL ERROR: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

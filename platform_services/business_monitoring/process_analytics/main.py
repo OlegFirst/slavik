@@ -1,5 +1,5 @@
 """
-🔍 Process Mining Service - Advanced Process Analytics
+ Process Mining Service - Advanced Process Analytics
 Analyzes real process execution logs to discover patterns,
 bottlenecks, deviations, and optimization opportunities.
 """
@@ -42,7 +42,7 @@ try:
     EVENTBUS_AVAILABLE = True
 except ImportError:
     EVENTBUS_AVAILABLE = False
-    logger.warning("⚠️  EventBus not available - running without event integration")
+    logger.warning("️  EventBus not available - running without event integration")
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
@@ -166,7 +166,7 @@ async def lifespan(app: FastAPI):
     """
     global eventbus
 
-    logger.info("🔍 Process Mining Service starting...")
+    logger.info(" Process Mining Service starting...")
 
     # Startup: Initialize EventBus
     if EVENTBUS_AVAILABLE:
@@ -174,7 +174,7 @@ async def lifespan(app: FastAPI):
             logger.info("Connecting to EventBus...")
             eventbus = create_eventbus('redis')
             await eventbus.connect()
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
 
             # Publish service started event
             await eventbus.publish(Event.create(
@@ -192,17 +192,17 @@ async def lifespan(app: FastAPI):
                     ]
                 }
             ))
-            logger.info("✅ Published service started event")
+            logger.info(" Published service started event")
 
         except Exception as e:
             logger.error(f"EventBus initialization failed: {e}")
-            logger.warning("⚠️  Running without EventBus integration")
+            logger.warning("️  Running without EventBus integration")
             eventbus = None
 
     yield
 
     # Shutdown: Cleanup
-    logger.info("🛑 Process Mining Service shutting down...")
+    logger.info(" Process Mining Service shutting down...")
 
     if eventbus:
         try:
@@ -219,11 +219,11 @@ async def lifespan(app: FastAPI):
 
             # Disconnect
             await eventbus.disconnect()
-            logger.info("✅ EventBus disconnected")
+            logger.info(" EventBus disconnected")
         except Exception as e:
             logger.error(f"EventBus shutdown error: {e}")
 
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 app = FastAPI(
     title="Process Mining Service",
@@ -1084,13 +1084,13 @@ class ProcessMiningEngine:
 
         # Success rate insights
         if metrics["success_rate"] < 90:
-            insights.append(f"⚠️ Success rate is {metrics['success_rate']:.1f}% - below optimal threshold of 90%")
+            insights.append(f"️ Success rate is {metrics['success_rate']:.1f}% - below optimal threshold of 90%")
         elif metrics["success_rate"] > 95:
-            insights.append(f"✅ Excellent success rate of {metrics['success_rate']:.1f}%")
+            insights.append(f" Excellent success rate of {metrics['success_rate']:.1f}%")
 
         # Duration insights
         if metrics["duration_std"] > metrics["average_duration"] * 0.5:
-            insights.append("📊 High duration variability detected - process timing is inconsistent")
+            insights.append(" High duration variability detected - process timing is inconsistent")
 
         # Trend insights
         if len(trends) >= 7:
@@ -1098,9 +1098,9 @@ class ProcessMiningEngine:
             early_success = statistics.mean([t["success_rate"] for t in trends[:3]])
 
             if recent_success < early_success - 5:
-                insights.append("📉 Success rate declining in recent executions")
+                insights.append(" Success rate declining in recent executions")
             elif recent_success > early_success + 5:
-                insights.append("📈 Success rate improving in recent executions")
+                insights.append(" Success rate improving in recent executions")
 
         return insights
 
@@ -1111,15 +1111,15 @@ class ProcessMiningEngine:
         # Sequence patterns
         if patterns["sequence_patterns"]:
             top_pattern = patterns["sequence_patterns"][0]
-            insights.append(f"🔄 Most common sequence pattern: {' → '.join(top_pattern['pattern'])} ({top_pattern['confidence']:.1%} of cases)")
+            insights.append(f" Most common sequence pattern: {' → '.join(top_pattern['pattern'])} ({top_pattern['confidence']:.1%} of cases)")
 
         # Parallel patterns
         if patterns["parallel_patterns"]:
-            insights.append(f"⚡ {len(patterns['parallel_patterns'])} parallel execution patterns discovered")
+            insights.append(f" {len(patterns['parallel_patterns'])} parallel execution patterns discovered")
 
         # Loop patterns
         if patterns["loop_patterns"]:
-            insights.append(f"🔁 {len(patterns['loop_patterns'])} loop patterns detected - potential optimization opportunities")
+            insights.append(f" {len(patterns['loop_patterns'])} loop patterns detected - potential optimization opportunities")
 
         # Skip patterns
         high_skip_patterns = [p for p in patterns["skip_patterns"] if p["skip_rate"] > 0.3]
@@ -1133,9 +1133,9 @@ class ProcessMiningEngine:
         insights = []
 
         if deviation_rate > 30:
-            insights.append(f"🚨 High deviation rate ({deviation_rate:.1f}%) - process standardization needed")
+            insights.append(f" High deviation rate ({deviation_rate:.1f}%) - process standardization needed")
         elif deviation_rate < 10:
-            insights.append(f"✅ Low deviation rate ({deviation_rate:.1f}%) - process is well-standardized")
+            insights.append(f" Low deviation rate ({deviation_rate:.1f}%) - process is well-standardized")
 
         # Timing deviations
         timing_devs = deviations["timing_deviations"]
@@ -1147,14 +1147,14 @@ class ProcessMiningEngine:
         # Sequence deviations
         seq_devs = deviations["sequence_deviations"]
         if seq_devs:
-            insights.append(f"🔀 {len(seq_devs)} sequence deviations - process flow inconsistencies detected")
+            insights.append(f" {len(seq_devs)} sequence deviations - process flow inconsistencies detected")
 
         # Quality deviations
         quality_devs = deviations["quality_deviations"]
         if quality_devs:
             failures = [d for d in quality_devs if d["subtype"] == "execution_failure"]
             if failures:
-                insights.append(f"❌ {len(failures)} execution failures require root cause analysis")
+                insights.append(f" {len(failures)} execution failures require root cause analysis")
 
         return insights
 

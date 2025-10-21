@@ -1,5 +1,5 @@
 """
-🧠 Governance Brain
+ Governance Brain
 
 Strategic intelligence and policy guidance
 """
@@ -23,7 +23,7 @@ class GovernanceBrain(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Governance Brain",
-            emoji="🧠",
+            emoji="",
             llm_router=llm_router
         )
 

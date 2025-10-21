@@ -18,7 +18,7 @@ try:
     from services.analytics_client import AnalyticsClient
     COLLECTIVE_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"⚠️  Collective Intelligence not available: {e}")
+    logging.warning(f"️  Collective Intelligence not available: {e}")
     COLLECTIVE_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
@@ -46,13 +46,13 @@ class CollectiveIntegration:
                 self.case_library = CaseLibrary()
                 self.anonymizer = AnonymizerService()
                 self.analytics = AnalyticsClient()
-                logger.info("✅ Collective integration initialized (case library available)")
+                logger.info(" Collective integration initialized (case library available)")
             except Exception as e:
-                logger.error(f"❌ Failed to initialize collective: {e}")
+                logger.error(f" Failed to initialize collective: {e}")
                 COLLECTIVE_AVAILABLE = False
 
         if not COLLECTIVE_AVAILABLE:
-            logger.warning("⚠️  Running without Collective Intelligence (standalone mode)")
+            logger.warning("️  Running without Collective Intelligence (standalone mode)")
             self.case_library = None
 
     async def share_pattern(
@@ -67,7 +67,7 @@ class CollectiveIntegration:
         НЕ: Свою таблицу system_bcm_patterns
         """
         if not self.case_library:
-            logger.warning("⚠️  Pattern not shared - Collective unavailable")
+            logger.warning("️  Pattern not shared - Collective unavailable")
             return False
 
         try:
@@ -103,7 +103,7 @@ class CollectiveIntegration:
                 ]
             })
 
-            logger.info(f"✅ Pattern shared with Collective (case_id: {case_id})")
+            logger.info(f" Pattern shared with Collective (case_id: {case_id})")
 
             # 3. АНАЛИТИКА использования
             if self.analytics:
@@ -116,7 +116,7 @@ class CollectiveIntegration:
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to share pattern: {e}")
+            logger.error(f" Failed to share pattern: {e}")
             return False
 
     async def share_improvement(
@@ -173,12 +173,12 @@ class CollectiveIntegration:
                 ]
             })
 
-            logger.info(f"✅ Improvement shared with Collective (effectiveness: {effectiveness}%)")
+            logger.info(f" Improvement shared with Collective (effectiveness: {effectiveness}%)")
 
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to share improvement: {e}")
+            logger.error(f" Failed to share improvement: {e}")
             return False
 
     async def learn_from_similar_cases(
@@ -208,7 +208,7 @@ class CollectiveIntegration:
                 }
             })
 
-            logger.info(f"✅ Found {len(similar_cases)} similar cases in Collective")
+            logger.info(f" Found {len(similar_cases)} similar cases in Collective")
 
             # Обогатить информацией об эффективности
             enriched_cases = []
@@ -226,7 +226,7 @@ class CollectiveIntegration:
             return enriched_cases
 
         except Exception as e:
-            logger.error(f"❌ Failed to learn from similar cases: {e}")
+            logger.error(f" Failed to learn from similar cases: {e}")
             return []
 
     async def get_best_practices(
@@ -254,12 +254,12 @@ class CollectiveIntegration:
                 }
             })
 
-            logger.info(f"✅ Retrieved {len(best_practices)} best practices for '{category}'")
+            logger.info(f" Retrieved {len(best_practices)} best practices for '{category}'")
 
             return best_practices
 
         except Exception as e:
-            logger.error(f"❌ Failed to get best practices: {e}")
+            logger.error(f" Failed to get best practices: {e}")
             return []
 
     async def contribute_insight(
@@ -305,12 +305,12 @@ class CollectiveIntegration:
                 ]
             })
 
-            logger.info(f"✅ Insight contributed to Collective (case_id: {case_id})")
+            logger.info(f" Insight contributed to Collective (case_id: {case_id})")
 
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to contribute insight: {e}")
+            logger.error(f" Failed to contribute insight: {e}")
             return False
 
     async def get_community_recommendations(
@@ -376,7 +376,7 @@ class CollectiveIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ Failed to get community recommendations: {e}")
+            logger.error(f" Failed to get community recommendations: {e}")
             return {"available": False, "error": str(e)}
 
     async def _get_community_size(self) -> int:

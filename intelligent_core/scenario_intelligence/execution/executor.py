@@ -111,7 +111,7 @@ class ScenarioExecutor:
         meta = scenario.get('meta', {})
         scenario_id = meta.get('id', 'unknown')
 
-        logger.info(f"🎬 Starting execution: {scenario_id}")
+        logger.info(f" Starting execution: {scenario_id}")
 
         try:
             # Get execution steps
@@ -127,7 +127,7 @@ class ScenarioExecutor:
                     steps = first_test.get('steps', [])
 
             if not steps:
-                logger.warning(f"  ⚠️  No execution steps found in scenario")
+                logger.warning(f"  ️  No execution steps found in scenario")
                 steps = []
 
             # Execute all steps
@@ -143,7 +143,7 @@ class ScenarioExecutor:
 
                 # Stop on error if configured
                 if step_result.status == 'failed' and step.get('stop_on_error', True):
-                    logger.error(f"  ❌ Step {step_result.step_id} failed, stopping execution")
+                    logger.error(f"   Step {step_result.step_id} failed, stopping execution")
                     break
 
             # Calculate overall status
@@ -169,7 +169,7 @@ class ScenarioExecutor:
                 'skipped_steps': len([s for s in step_results if s.status == 'skipped'])
             }
 
-            logger.info(f"✅ Execution completed: {scenario_id} ({overall_status})")
+            logger.info(f" Execution completed: {scenario_id} ({overall_status})")
             logger.info(f"   Duration: {duration:.2f}s, Steps: {len(success_steps)}/{len(step_results)} passed")
 
             return ExecutionResult(
@@ -187,7 +187,7 @@ class ScenarioExecutor:
             end_time = datetime.utcnow()
             duration = (end_time - start_time).total_seconds()
 
-            logger.error(f"❌ Execution failed: {scenario_id} - {e}")
+            logger.error(f" Execution failed: {scenario_id} - {e}")
 
             return ExecutionResult(
                 scenario_id=scenario_id,
@@ -217,7 +217,7 @@ class ScenarioExecutor:
 
         start_time = datetime.utcnow()
 
-        logger.info(f"  ▶️  Executing step: {step_id} (action: {action})")
+        logger.info(f"  ️  Executing step: {step_id} (action: {action})")
 
         try:
             # Resolve parameters
@@ -234,7 +234,7 @@ class ScenarioExecutor:
             end_time = datetime.utcnow()
             duration = (end_time - start_time).total_seconds()
 
-            logger.info(f"    ✅ Step completed: {step_id} ({duration:.2f}s)")
+            logger.info(f"     Step completed: {step_id} ({duration:.2f}s)")
 
             return StepResult(
                 step_id=step_id,
@@ -250,7 +250,7 @@ class ScenarioExecutor:
             end_time = datetime.utcnow()
             duration = (end_time - start_time).total_seconds()
 
-            logger.error(f"    ❌ Step failed: {step_id} - {e}")
+            logger.error(f"     Step failed: {step_id} - {e}")
 
             return StepResult(
                 step_id=step_id,

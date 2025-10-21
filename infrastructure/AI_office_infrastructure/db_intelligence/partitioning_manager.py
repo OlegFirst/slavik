@@ -76,7 +76,7 @@ class PartitioningManager:
     def __init__(self, db_session: AsyncSession):
         self.db = db_session
         self.configs = {f"{c.schema}.{c.table}": c for c in PARTITIONING_CONFIGS}
-        logger.info(f"📊 Partitioning Manager initialized with {len(self.configs)} tables")
+        logger.info(f" Partitioning Manager initialized with {len(self.configs)} tables")
 
     async def check_partitioning_status(self) -> Dict[str, Any]:
         """
@@ -269,7 +269,7 @@ class PartitioningManager:
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to convert {config_key} to partitioned: {e}")
+            logger.error(f" Failed to convert {config_key} to partitioned: {e}")
 
         return report
 
@@ -359,7 +359,7 @@ class PartitioningManager:
                     """)
                     await self.db.execute(create_query)
                     report["partitions_created"].append(partition['name'])
-                    logger.info(f"✅ Created partition {schema}.{partition['name']}")
+                    logger.info(f" Created partition {schema}.{partition['name']}")
 
                 await self.db.commit()
                 report["success"] = True
@@ -372,7 +372,7 @@ class PartitioningManager:
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to create partitions for {config_key}: {e}")
+            logger.error(f" Failed to create partitions for {config_key}: {e}")
 
         return report
 
@@ -422,7 +422,7 @@ class PartitioningManager:
                     drop_query = text(f"DROP TABLE IF EXISTS {schema}.{partition_name}")
                     await self.db.execute(drop_query)
                     report["partitions_dropped"].append(partition_name)
-                    logger.warning(f"🗑️  Dropped old partition {schema}.{partition_name}")
+                    logger.warning(f"️  Dropped old partition {schema}.{partition_name}")
 
                 await self.db.commit()
                 report["success"] = True
@@ -435,7 +435,7 @@ class PartitioningManager:
         except Exception as e:
             report["success"] = False
             report["error"] = str(e)
-            logger.error(f"❌ Failed to drop old partitions for {config_key}: {e}")
+            logger.error(f" Failed to drop old partitions for {config_key}: {e}")
 
         return report
 

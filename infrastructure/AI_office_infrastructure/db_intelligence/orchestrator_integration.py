@@ -121,7 +121,7 @@ class OrchestratorClient:
 
                 if response.status_code == 200:
                     self.registered = True
-                    logger.info(f"✅ Registered with Orchestrator at {self.orchestrator_url}")
+                    logger.info(f" Registered with Orchestrator at {self.orchestrator_url}")
                     return True
                 else:
                     logger.error(f"Registration failed: {response.status_code} - {response.text}")
@@ -174,7 +174,7 @@ class OrchestratorClient:
                 )
 
                 if response.status_code == 200:
-                    logger.info("✅ Deregistered from Orchestrator")
+                    logger.info(" Deregistered from Orchestrator")
                     return True
 
         except Exception as e:
@@ -272,7 +272,7 @@ class OrchestratorClient:
                 )
 
                 if response.status_code == 200:
-                    logger.info(f"🚨 Critical alert sent: {alert_type}")
+                    logger.info(f" Critical alert sent: {alert_type}")
                     return True
 
         except Exception as e:

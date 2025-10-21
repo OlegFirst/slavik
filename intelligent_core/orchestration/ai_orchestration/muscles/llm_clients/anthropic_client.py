@@ -178,7 +178,7 @@ Format for board presentation with clear action items and business justification
         """Emergency governance analysis via Anthropic"""
 
         emergency_prompt = f"""
-🚨 EMERGENCY GOVERNANCE SESSION
+ EMERGENCY GOVERNANCE SESSION
 
 You are the AI Governance Brain in EMERGENCY MODE responding to a critical governance issue.
 

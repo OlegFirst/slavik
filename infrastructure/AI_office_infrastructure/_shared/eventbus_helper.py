@@ -94,7 +94,7 @@ class EventBusHelper:
             True if successful, False otherwise
         """
         if not EVENTBUS_AVAILABLE:
-            logger.warning("⚠️  EventBus not available - service discovery disabled")
+            logger.warning("️  EventBus not available - service discovery disabled")
             return False
 
         try:
@@ -102,20 +102,20 @@ class EventBusHelper:
             logger.info("Connecting to EventBus...")
             self.eventbus = create_eventbus('redis')
             await self.eventbus.connect()
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
 
             # Publish service started
             await self._publish_service_started()
 
             # Start heartbeat task
             self.heartbeat_task = asyncio.create_task(self._heartbeat_loop())
-            logger.info("✅ Heartbeat task started")
+            logger.info(" Heartbeat task started")
 
             return True
 
         except Exception as e:
             logger.error(f"EventBus initialization failed: {e}")
-            logger.warning("⚠️  Running without EventBus integration")
+            logger.warning("️  Running without EventBus integration")
             self.eventbus = None
             return False
 
@@ -123,7 +123,7 @@ class EventBusHelper:
         """
         Gracefully shutdown EventBus integration
         """
-        logger.info(f"👋 {self.service_name} shutting down...")
+        logger.info(f" {self.service_name} shutting down...")
 
         # Stop heartbeat
         if self.heartbeat_task:
@@ -144,18 +144,18 @@ class EventBusHelper:
                         'reason': 'graceful_shutdown'
                     }
                 )
-                logger.info("✅ Published service stopped event")
+                logger.info(" Published service stopped event")
             except Exception as e:
                 logger.error(f"Failed to publish shutdown event: {e}")
 
             # Disconnect EventBus
             try:
                 await self.eventbus.disconnect()
-                logger.info("✅ EventBus disconnected")
+                logger.info(" EventBus disconnected")
             except Exception as e:
                 logger.error(f"EventBus disconnect error: {e}")
 
-        logger.info("✅ Shutdown complete")
+        logger.info(" Shutdown complete")
 
     async def publish_health(self, health_status: str = "healthy", metrics: Optional[Dict] = None):
         """
@@ -178,7 +178,7 @@ class EventBusHelper:
                     'metrics': metrics or {}
                 }
             )
-            logger.debug(f"📊 Published health: {health_status}")
+            logger.debug(f" Published health: {health_status}")
         except Exception as e:
             logger.error(f"Failed to publish health: {e}")
 
@@ -209,7 +209,7 @@ class EventBusHelper:
                     'dependencies': self.dependencies
                 }
             )
-            logger.info(f"✅ Published service started event: {self.service_name}")
+            logger.info(f" Published service started event: {self.service_name}")
         except Exception as e:
             logger.error(f"Failed to publish service started event: {e}")
 
@@ -228,7 +228,7 @@ class EventBusHelper:
                         'status': 'active'
                     }
                 )
-                logger.debug(f"💓 Heartbeat sent: {self.service_name}")
+                logger.debug(f" Heartbeat sent: {self.service_name}")
                 await asyncio.sleep(30)  # Every 30 seconds
 
             except asyncio.CancelledError:

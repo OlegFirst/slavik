@@ -1,5 +1,5 @@
 """
-📚 Living Documentation Service
+ Living Documentation Service
 
 Documentation that Lives, Learns, and Evolves!
 
@@ -190,7 +190,7 @@ async def lifespan(app: FastAPI):
     - Stop background jobs
     """
 
-    logger.info("📚 Living Documentation Service starting...")
+    logger.info(" Living Documentation Service starting...")
     logger.info(f"Port: {settings.PORT}")
     logger.info(f"Auto-improvement: ENABLED")
 
@@ -198,20 +198,20 @@ async def lifespan(app: FastAPI):
     try:
         # Initialize services
         # In production: Real initialization
-        logger.info("✅ Services initialized")
+        logger.info(" Services initialized")
 
         # Start continuous improvement loop
         # asyncio.create_task(evolution_engine.run_continuous_improvement())
-        logger.info("🔄 Continuous improvement loop started")
+        logger.info(" Continuous improvement loop started")
 
     except Exception as e:
-        logger.error(f"❌ Startup failed: {e}")
+        logger.error(f" Startup failed: {e}")
         raise
 
     yield
 
     # Shutdown
-    logger.info("🛑 Living Documentation Service shutting down...")
+    logger.info(" Living Documentation Service shutting down...")
 
 # ================================================
 # APPLICATION
@@ -220,36 +220,36 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Living Documentation",
     description="""
-    📚 **Documentation that Lives, Learns, and Evolves**
+     **Documentation that Lives, Learns, and Evolves**
 
     ## What Makes it "Living"?
 
-    ### 🧠 Learns from Users
+    ###  Learns from Users
     - Every interaction teaches the system
     - Unclear content automatically improved
     - Missing topics auto-generated
     - Quality improves over time
 
-    ### 🎯 Personalizes Everything
+    ###  Personalizes Everything
     - Same topic, different experience for each user
     - Industry-specific examples
     - Complexity adjusted to experience level
     - Related content based on your journey
 
-    ### 🎨 Generates Examples On Demand
+    ###  Generates Examples On Demand
     - "Show me BIA for hospital supply chain"
     - AI generates complete example in seconds
     - Based on real anonymized data
     - Fully customizable
 
-    ### 🔄 Evolves Autonomously
+    ###  Evolves Autonomously
     - Detects knowledge gaps
     - Generates missing topics
     - Improves low-quality content
     - A/B tests improvements
     - Deploys winners automatically
 
-    ### 💬 Interactive & Conversational
+    ###  Interactive & Conversational
     - Ask questions in natural language
     - AI answers with context
     - "Try it yourself" tools
@@ -257,13 +257,13 @@ app = FastAPI(
 
     ## Key Features
 
-    ### 📖 Personalized Documentation
+    ###  Personalized Documentation
     ```
     GET /docs/{page_id}?user_id=123&personalize=true
     ```
     Returns documentation customized for YOUR context.
 
-    ### 🎨 AI Example Generator
+    ###  AI Example Generator
     ```
     POST /docs/examples/generate
     {
@@ -273,19 +273,19 @@ app = FastAPI(
     ```
     Generates perfect example in seconds.
 
-    ### 🔍 Smart Search
+    ###  Smart Search
     ```
     GET /docs/search?query=emergency+department+downtime
     ```
     Understands intent, personalizes results.
 
-    ### 🗺️ Personalized Journeys
+    ### ️ Personalized Journeys
     ```
     GET /docs/journey/complete_bia?user_id=123
     ```
     Entire learning path customized for you.
 
-    ### 💡 Continuous Improvement
+    ###  Continuous Improvement
     ```
     GET /docs/gaps  # Knowledge gaps
     GET /docs/improvements  # Improvement queue
@@ -309,7 +309,7 @@ app = FastAPI(
          ↓
     Deploys winner
          ↓
-    Quality improves ✨
+    Quality improves 
          ↓
     LOOP (continuous!)
     ```
@@ -335,7 +335,7 @@ app = FastAPI(
     - AI assistant, examples, expert connection
     - Improves docs for that section
 
-    ## Innovation Level: 🤯🤯🤯🤯🤯
+    ## Innovation Level: 
 
     **Why Revolutionary:**
     - First self-evolving documentation
@@ -380,16 +380,16 @@ async def root():
     """Service info"""
     return {
         "service": "Living Documentation",
-        "tagline": "📚 Documentation that Lives, Learns, and Evolves",
+        "tagline": " Documentation that Lives, Learns, and Evolves",
         "version": "1.0.0",
         "port": settings.PORT,
-        "innovation_level": "🤯🤯🤯🤯🤯",
+        "innovation_level": "",
         "features": [
-            "🧠 Self-Learning - Improves from user interactions",
-            "🎯 Personalized - Custom for each user",
-            "🎨 AI Examples - Generated on demand",
-            "🔄 Auto-Evolution - No manual updates needed",
-            "💬 Interactive - Natural language Q&A"
+            " Self-Learning - Improves from user interactions",
+            " Personalized - Custom for each user",
+            " AI Examples - Generated on demand",
+            " Auto-Evolution - No manual updates needed",
+            " Interactive - Natural language Q&A"
         ],
         "endpoints": {
             "docs": "/docs",
@@ -403,7 +403,7 @@ async def root():
             "4. Auto-generates better content",
             "5. A/B tests changes",
             "6. Deploys winners",
-            "7. Quality improves continuously ✨"
+            "7. Quality improves continuously "
         ]
     }
 

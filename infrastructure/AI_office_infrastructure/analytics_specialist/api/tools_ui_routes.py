@@ -384,7 +384,7 @@ async def tools_dashboard():
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Analytics Specialist - Tools Dashboard</h1>
+            <h1> Analytics Specialist - Tools Dashboard</h1>
             <p>Manage and execute analysis tools for AI Platform ISO</p>
         </div>
 
@@ -555,7 +555,7 @@ async def tools_dashboard():
                 title.textContent = `${toolName} - Results`;
                 body.innerHTML = `
                     <div class="result-section">
-                        <h3>Execution Complete ✅</h3>
+                        <h3>Execution Complete </h3>
                         <pre>${JSON.stringify(result, null, 2)}</pre>
                     </div>
                 `;
@@ -563,7 +563,7 @@ async def tools_dashboard():
                 title.textContent = `${toolName} - Error`;
                 body.innerHTML = `
                     <div class="result-section">
-                        <h3>Execution Failed ❌</h3>
+                        <h3>Execution Failed </h3>
                         <pre>${error.message}</pre>
                     </div>
                 `;

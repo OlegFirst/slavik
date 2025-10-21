@@ -46,7 +46,7 @@ async def get_temporal_client() -> Client:
 
     # Check for mTLS authentication
     if cert_path and key_path:
-        print(f"🔐 Connecting to Temporal with mTLS: {address}")
+        print(f" Connecting to Temporal with mTLS: {address}")
         with open(cert_path, "rb") as f:
             client_cert = f.read()
         with open(key_path, "rb") as f:
@@ -63,7 +63,7 @@ async def get_temporal_client() -> Client:
 
     # Check for API Key authentication (Temporal Cloud)
     elif api_key:
-        print(f"🔐 Connecting to Temporal Cloud with API Key: {address}")
+        print(f" Connecting to Temporal Cloud with API Key: {address}")
         return await Client.connect(
             address,
             namespace=namespace,
@@ -73,7 +73,7 @@ async def get_temporal_client() -> Client:
 
     # Local development (no auth)
     else:
-        print(f"🔧 Connecting to local Temporal: {address}")
+        print(f" Connecting to local Temporal: {address}")
         return await Client.connect(
             address,
             namespace=namespace,

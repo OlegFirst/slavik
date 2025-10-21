@@ -1,5 +1,5 @@
 """
-🔍 Vector Indexer - Semantic Search for Knowledge Base
+ Vector Indexer - Semantic Search for Knowledge Base
 
 Indexes standards and cases into Qdrant vector database for semantic search.
 
@@ -71,7 +71,7 @@ class EmbeddingProvider:
                     self._client = openai.OpenAI(api_key=api_key)
                     self.provider = "openai"
                     self.embedding_dim = 1536  # text-embedding-3-small
-                    logger.info("✅ Using OpenAI embeddings (dim=1536)")
+                    logger.info(" Using OpenAI embeddings (dim=1536)")
                     return
             except ImportError:
                 pass
@@ -83,7 +83,7 @@ class EmbeddingProvider:
                 self._model = SentenceTransformer('all-MiniLM-L6-v2')
                 self.provider = "local"
                 self.embedding_dim = 384
-                logger.info("✅ Using local embeddings: all-MiniLM-L6-v2 (dim=384)")
+                logger.info(" Using local embeddings: all-MiniLM-L6-v2 (dim=384)")
                 return
             except ImportError:
                 pass
@@ -94,7 +94,7 @@ class EmbeddingProvider:
         self._model = TfidfVectorizer(max_features=384)
         self.provider = "tfidf"
         self.embedding_dim = 384
-        logger.warning("⚠️ Using TF-IDF fallback (dim=384). Install sentence-transformers for better results.")
+        logger.warning("️ Using TF-IDF fallback (dim=384). Install sentence-transformers for better results.")
 
     async def embed(self, text: str) -> List[float]:
         """Generate embedding for text"""
@@ -247,7 +247,7 @@ class VectorIndexer:
                     distance=Distance.COSINE
                 )
             )
-            logger.info(f"✅ Created collection: {self.standards_collection}")
+            logger.info(f" Created collection: {self.standards_collection}")
 
         # Cases collection
         try:
@@ -261,7 +261,7 @@ class VectorIndexer:
                     distance=Distance.COSINE
                 )
             )
-            logger.info(f"✅ Created collection: {self.cases_collection}")
+            logger.info(f" Created collection: {self.cases_collection}")
 
     # ========================================================================
     # INDEX STANDARDS
@@ -324,7 +324,7 @@ class VectorIndexer:
             ]
         )
 
-        logger.info(f"✅ Indexed standard: {standard_data['standard']} (id={point_id[:8]}...)")
+        logger.info(f" Indexed standard: {standard_data['standard']} (id={point_id[:8]}...)")
 
         return point_id
 
@@ -399,7 +399,7 @@ class VectorIndexer:
             ]
         )
 
-        logger.info(f"✅ Indexed case: {case_data['case_id']} (module={case_data['module']})")
+        logger.info(f" Indexed case: {case_data['case_id']} (module={case_data['module']})")
 
         return point_id
 
@@ -589,7 +589,7 @@ class VectorIndexer:
                 except Exception as e:
                     logger.error(f"Failed to index {domain}/{standard_name}: {e}")
 
-        logger.info(f"✅ Batch indexing complete: {indexed_count} standards indexed")
+        logger.info(f" Batch indexing complete: {indexed_count} standards indexed")
 
         return indexed_count
 
@@ -615,6 +615,6 @@ class VectorIndexer:
                 except Exception as e:
                     logger.error(f"Failed to index case {case_file}: {e}")
 
-        logger.info(f"✅ Batch indexing complete: {indexed_count} cases indexed")
+        logger.info(f" Batch indexing complete: {indexed_count} cases indexed")
 
         return indexed_count

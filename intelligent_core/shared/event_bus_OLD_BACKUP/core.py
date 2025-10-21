@@ -157,17 +157,17 @@ class EventBus:
                     id="0",
                     mkstream=True
                 )
-                logger.info(f"✅ Created consumer group: {self.consumer_group}")
+                logger.info(f" Created consumer group: {self.consumer_group}")
             except aioredis.ResponseError as e:
                 if "BUSYGROUP" not in str(e):
                     raise
-                logger.info(f"✅ Consumer group already exists: {self.consumer_group}")
+                logger.info(f" Consumer group already exists: {self.consumer_group}")
 
             self._connected = True
-            logger.info(f"✅ EventBus connected to Redis: {self.redis_url}")
+            logger.info(f" EventBus connected to Redis: {self.redis_url}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to Redis: {e}")
+            logger.error(f" Failed to connect to Redis: {e}")
             logger.warning("Running without event bus")
 
     async def publish(self, event: Event) -> None:
@@ -190,11 +190,11 @@ class EventBus:
             )
 
             self._stats["published"] += 1
-            logger.debug(f"📤 Published event: {event.type} (id: {event.id})")
+            logger.debug(f" Published event: {event.type} (id: {event.id})")
 
         except Exception as e:
             self._stats["errors"] += 1
-            logger.error(f"❌ Failed to publish event {event.type}: {e}")
+            logger.error(f" Failed to publish event {event.type}: {e}")
             raise
 
     async def subscribe(
@@ -227,7 +227,7 @@ class EventBus:
             self._consumer_tasks.append(task)
 
         subscription_id = f"{pattern}:{len(self._subscribers[pattern])}"
-        logger.info(f"✅ Subscribed to: {pattern} (id: {subscription_id})")
+        logger.info(f" Subscribed to: {pattern} (id: {subscription_id})")
 
         return subscription_id
 
@@ -243,7 +243,7 @@ class EventBus:
             return
 
         consumer_name = f"{self.service_name}:{os.getpid()}"
-        logger.info(f"🔄 Starting consumer: {consumer_name} for pattern: {pattern}")
+        logger.info(f" Starting consumer: {consumer_name} for pattern: {pattern}")
 
         while self._connected:
             try:
@@ -279,7 +279,7 @@ class EventBus:
                                         await handler(event)
                                         self._stats["consumed"] += 1
                                     except Exception as e:
-                                        logger.error(f"❌ Handler error for {event.type}: {e}")
+                                        logger.error(f" Handler error for {event.type}: {e}")
                                         self._stats["errors"] += 1
 
                             # Acknowledge message
@@ -290,14 +290,14 @@ class EventBus:
                             )
 
                         except Exception as e:
-                            logger.error(f"❌ Error processing message: {e}")
+                            logger.error(f" Error processing message: {e}")
                             self._stats["errors"] += 1
 
             except asyncio.CancelledError:
                 logger.info(f"Consumer task cancelled: {consumer_name}")
                 break
             except Exception as e:
-                logger.error(f"❌ Consumer error: {e}")
+                logger.error(f" Consumer error: {e}")
                 await asyncio.sleep(5)  # Wait before retry
 
     def _matches_pattern(self, event_type: str, pattern: str) -> bool:
@@ -348,7 +348,7 @@ class EventBus:
         if self.client:
             await self.client.close()
 
-        logger.info("✅ EventBus closed")
+        logger.info(" EventBus closed")
 
     def get_stats(self) -> Dict[str, int]:
         """Get bus statistics."""
@@ -403,7 +403,7 @@ async def init_event_bus(
         source=service_name
     )
 
-    logger.info(f"✅ EventBus initialized for service: {service_name}")
+    logger.info(f" EventBus initialized for service: {service_name}")
     return _event_bus
 
 

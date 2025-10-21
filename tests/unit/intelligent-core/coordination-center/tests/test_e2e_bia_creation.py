@@ -87,7 +87,7 @@ async def test_ai_creates_bia():
         for step in steps:
             assert step["status"] == "completed"
 
-        print(f"✅ Test passed! BIA created via Coordination Center")
+        print(f" Test passed! BIA created via Coordination Center")
         print(f"   Execution ID: {execution_id}")
         print(f"   Result: {execution['result']}")
 
@@ -111,7 +111,7 @@ async def test_list_tools():
         assert bia_tool is not None
         assert "create" in bia_tool["supported_actions"]
 
-        print(f"✅ Found {len(tools)} tools")
+        print(f" Found {len(tools)} tools")
         for tool in tools:
             print(f"   - {tool['tool_id']}: {tool['name']}")
 
@@ -129,7 +129,7 @@ async def test_health_check():
         assert health["services"]["command_interpreter"] is True
         assert health["services"]["execution_tracker"] is True
 
-        print("✅ Health check passed")
+        print(" Health check passed")
 
 
 if __name__ == "__main__":
@@ -141,4 +141,4 @@ if __name__ == "__main__":
     asyncio.run(test_list_tools())
     asyncio.run(test_ai_creates_bia())
 
-    print("\n✅ All tests passed!")
+    print("\n All tests passed!")

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 
 # Read README
@@ -9,22 +9,22 @@ with open("README.md", "r", encoding="utf-8") as f:
 with open("requirements.txt", "r", encoding="utf-8") as f:
     requirements = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
-# List all subpackages manually
-packages = [
-    "auth",
-    "audit",
-    "compliance",
-    "governance",
-    "ml",
-    "schemas",
-    "storage",
-    "core",
-    "ai",
-    "case_library",
-    "monitoring",
-    "models",
-    "workflows",
-]
+# Use find_packages to automatically discover all packages
+# Exclude test directories and examples
+packages = find_packages(
+    exclude=[
+        "tests",
+        "tests.*",
+        "test_processes",
+        "test_processes.*",
+        "examples",
+        "examples.*",
+        "docs",
+        "docs.*",
+        "temporal_sample",  # Sample code, not production
+        "temporal_sample.*"
+    ]
+)
 
 setup(
     name="workflow_intelligence",

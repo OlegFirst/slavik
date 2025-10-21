@@ -1,11 +1,11 @@
 """
-🌐 Unified Learning & Knowledge API
+ Unified Learning & Knowledge API
 
 FastAPI application providing access to:
-- 📚 Knowledge Management (ISO/BCI/WHO standards, workflow cases, vector search)
-- 🧠 Learning Engine (pattern detection, ML predictions, self-learning)
-- 🎓 Training Programs (exercises, competency tracking, gamification)
-- ♻️  Cross-Learning (pattern→article, case→lesson, virtuous cycle)
+-  Knowledge Management (ISO/BCI/WHO standards, workflow cases, vector search)
+-  Learning Engine (pattern detection, ML predictions, self-learning)
+-  Training Programs (exercises, competency tracking, gamification)
+- ️  Cross-Learning (pattern→article, case→lesson, virtuous cycle)
 
 Architecture:
 - Multi-tenant support via X-Tenant-ID header
@@ -73,17 +73,17 @@ app = FastAPI(
     Complete Learning & Knowledge Management System
 
     **Features:**
-    - 📚 Knowledge Management (ISO standards, workflow cases, vector search)
-    - 🧠 Learning Engine (pattern detection, ML predictions, self-learning)
-    - 🎓 Training Programs (exercises, competency tracking, gamification)
-    - ♻️  Cross-Learning (pattern→article, case→lesson, virtuous cycle)
+    -  Knowledge Management (ISO standards, workflow cases, vector search)
+    -  Learning Engine (pattern detection, ML predictions, self-learning)
+    -  Training Programs (exercises, competency tracking, gamification)
+    - ️  Cross-Learning (pattern→article, case→lesson, virtuous cycle)
 
     **Virtuous Learning Cycle:**
     1. User completes workflow → Case saved
     2. Pattern detected → Article created
     3. Users learn from article → Performance improves
     4. AI learns from outcomes → Predictions improve
-    5. → Cycle repeats ♻️
+    5. → Cycle repeats ️
     """,
     version="2.0.0",
     docs_url="/api/docs",
@@ -254,10 +254,10 @@ async def root():
         "version": "2.0.0",
         "status": "operational",
         "components": {
-            "knowledge_management": "✅ operational",
-            "learning_engine": "✅ operational" if LEARNING_ROUTERS_AVAILABLE else "⚠️  limited",
-            "training_programs": "✅ operational" if LEARNING_ROUTERS_AVAILABLE else "⚠️  limited",
-            "cross_learning": "✅ operational"
+            "knowledge_management": " operational",
+            "learning_engine": " operational" if LEARNING_ROUTERS_AVAILABLE else "️  limited",
+            "training_programs": " operational" if LEARNING_ROUTERS_AVAILABLE else "️  limited",
+            "cross_learning": " operational"
         },
         "endpoints": {
             "health": "/health",
@@ -625,26 +625,26 @@ def _scan_cases_in_directory(directory: Path, module: str) -> List[CaseMetadata]
 # ============================================================================
 
 if LEARNING_ROUTERS_AVAILABLE:
-    logger.info("📚 Mounting learning routers...")
+    logger.info(" Mounting learning routers...")
 
     # Learning Engine
-    app.include_router(ml_router, prefix="/api/ml", tags=["🧠 ML & Predictions"])
-    app.include_router(pattern_router, prefix="/api/patterns", tags=["🔍 Pattern Detection"])
-    app.include_router(self_learning_router, prefix="/api/self-learning", tags=["🤖 Self-Learning"])
-    app.include_router(recommendation_router, prefix="/api/recommendations", tags=["💡 Recommendations"])
+    app.include_router(ml_router, prefix="/api/ml", tags=[" ML & Predictions"])
+    app.include_router(pattern_router, prefix="/api/patterns", tags=[" Pattern Detection"])
+    app.include_router(self_learning_router, prefix="/api/self-learning", tags=[" Self-Learning"])
+    app.include_router(recommendation_router, prefix="/api/recommendations", tags=[" Recommendations"])
 
     # Training Programs
-    app.include_router(learning_router, prefix="/api/learning", tags=["🎓 Learning & Training"])
-    app.include_router(competency_router, prefix="/api/competency", tags=["📊 Competency Tracking"])
-    app.include_router(gamification_router, prefix="/api/gamification", tags=["🎮 Gamification"])
+    app.include_router(learning_router, prefix="/api/learning", tags=[" Learning & Training"])
+    app.include_router(competency_router, prefix="/api/competency", tags=[" Competency Tracking"])
+    app.include_router(gamification_router, prefix="/api/gamification", tags=[" Gamification"])
 
     # Analytics & Integration
-    app.include_router(analytics_router, prefix="/api/analytics", tags=["📈 Analytics & Dashboards"])
-    app.include_router(platform_integration_router, prefix="/api/platform", tags=["🔗 Platform Integration"])
-    app.include_router(process_gap_router, prefix="/api/process-gaps", tags=["⚠️  Process Gap Analysis"])
-    app.include_router(knowledge_router, prefix="/api/knowledge-search", tags=["🔎 Knowledge Search"])
+    app.include_router(analytics_router, prefix="/api/analytics", tags=[" Analytics & Dashboards"])
+    app.include_router(platform_integration_router, prefix="/api/platform", tags=[" Platform Integration"])
+    app.include_router(process_gap_router, prefix="/api/process-gaps", tags=["️  Process Gap Analysis"])
+    app.include_router(knowledge_router, prefix="/api/knowledge-search", tags=[" Knowledge Search"])
 
-    logger.info("✅ All learning routers mounted")
+    logger.info(" All learning routers mounted")
 
 
 # ============================================================================
@@ -928,11 +928,11 @@ async def list_active_subscribers(tenant_id: str = Depends(get_tenant_id)):
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup"""
-    logger.info("🚀 Unified Learning & Knowledge System starting up...")
-    logger.info("   📚 Knowledge Management: READY")
-    logger.info(f"   🧠 Learning Engine: {'READY' if LEARNING_ROUTERS_AVAILABLE else 'LIMITED'}")
-    logger.info(f"   🎓 Training Programs: {'READY' if LEARNING_ROUTERS_AVAILABLE else 'LIMITED'}")
-    logger.info("   ♻️  Cross-Learning Cycle: READY")
+    logger.info(" Unified Learning & Knowledge System starting up...")
+    logger.info("    Knowledge Management: READY")
+    logger.info(f"    Learning Engine: {'READY' if LEARNING_ROUTERS_AVAILABLE else 'LIMITED'}")
+    logger.info(f"    Training Programs: {'READY' if LEARNING_ROUTERS_AVAILABLE else 'LIMITED'}")
+    logger.info("   ️  Cross-Learning Cycle: READY")
 
     # TODO: Initialize Redis connection
     # TODO: Initialize Prometheus metrics
@@ -942,7 +942,7 @@ async def startup_event():
         rabbitmq_url = os.getenv("RABBITMQ_URL", "amqp://bcm_platform:bcm_secure_2024@localhost:5673/")
         eventbus = init_eventbus(rabbitmq_url)
         await eventbus.connect()
-        logger.info("   ✅ EventBus: CONNECTED")
+        logger.info("    EventBus: CONNECTED")
 
         # Setup reactive learning subscribers
         try:
@@ -956,25 +956,25 @@ async def startup_event():
             subscriber = await setup_event_subscribers(eventbus)
 
             if subscriber:
-                logger.info("   ✅ Reactive Learning: ACTIVE (12 subscribers)")
+                logger.info("    Reactive Learning: ACTIVE (12 subscribers)")
                 # Store subscriber for access
                 app.state.learning_subscriber = subscriber
             else:
-                logger.warning("   ⚠️ Reactive Learning: DISABLED")
+                logger.warning("   ️ Reactive Learning: DISABLED")
 
         except Exception as e:
-            logger.error(f"   ❌ Reactive Learning setup failed: {e}", exc_info=True)
+            logger.error(f"    Reactive Learning setup failed: {e}", exc_info=True)
 
     except Exception as e:
-        logger.error(f"   ❌ EventBus: FAILED - {e}")
+        logger.error(f"    EventBus: FAILED - {e}")
 
-    logger.info("✅ Unified System API ready")
+    logger.info(" Unified System API ready")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Cleanup on shutdown"""
-    logger.info("👋 Unified Learning & Knowledge System shutting down...")
+    logger.info(" Unified Learning & Knowledge System shutting down...")
 
     # TODO: Close Redis connection
 
@@ -982,11 +982,11 @@ async def shutdown_event():
     try:
         eventbus = get_eventbus()
         await eventbus.disconnect()
-        logger.info("   ✅ EventBus: DISCONNECTED")
+        logger.info("    EventBus: DISCONNECTED")
     except Exception as e:
-        logger.error(f"   ❌ EventBus disconnect failed: {e}")
+        logger.error(f"    EventBus disconnect failed: {e}")
 
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 
 if __name__ == "__main__":

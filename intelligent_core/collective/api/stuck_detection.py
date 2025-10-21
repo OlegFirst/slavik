@@ -85,9 +85,9 @@ async def check_if_stuck(
     - Frustration indicators
 
     **Scoring:**
-    - 0-3 points: On track ✅
+    - 0-3 points: On track 
     - 4-6 points: Stuck, need help 🆘
-    - 7+ points: Seriously stuck 🚨
+    - 7+ points: Seriously stuck 
 
     **If stuck:**
     We'll recommend creating a Collective Agent from organizations

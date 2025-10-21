@@ -154,7 +154,7 @@ class ReputationEngine:
             })
 
             logger.info(
-                f"🎉 User {user_id} leveled up: {old_level} → {new_level}"
+                f" User {user_id} leveled up: {old_level} → {new_level}"
             )
 
     async def _get_or_create_reputation(self, user_id: UUID) -> UserReputation:

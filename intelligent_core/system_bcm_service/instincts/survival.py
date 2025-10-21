@@ -165,7 +165,7 @@ class SurvivalInstinct:
             'events_published': 0  # Phase 2
         }
 
-        logger.info(f"🧬 Survival Instinct initialized for {module_name} (EventBus: {'enabled' if eventbus else 'disabled'})")
+        logger.info(f" Survival Instinct initialized for {module_name} (EventBus: {'enabled' if eventbus else 'disabled'})")
 
     def load_my_kpis(self, config_path: Optional[str] = None) -> Dict[str, KPI]:
         """
@@ -256,7 +256,7 @@ class SurvivalInstinct:
 
         self.my_kpis = default_kpis
 
-        logger.info(f"✅ Loaded {len(self.my_kpis)} KPIs for {self.module_name}")
+        logger.info(f" Loaded {len(self.my_kpis)} KPIs for {self.module_name}")
         for kpi_name, kpi in self.my_kpis.items():
             logger.info(
                 f"  - {kpi_name}: target={kpi.target_value}{kpi.unit}, "
@@ -324,7 +324,7 @@ class SurvivalInstinct:
                 self.imbalance_history.append(detection)
 
                 logger.warning(
-                    f"⚠️ Imbalance detected: {kpi_name} = {kpi.current_value:.2f}{kpi.unit} "
+                    f"️ Imbalance detected: {kpi_name} = {kpi.current_value:.2f}{kpi.unit} "
                     f"(target: {kpi.target_value:.2f}{kpi.unit}, "
                     f"deviation: {deviation*100:.1f}%, level: {level.value})"
                 )
@@ -357,7 +357,7 @@ class SurvivalInstinct:
             estimated_impact=self._estimate_action_impact(imbalance, action_type)
         )
 
-        logger.info(f"🔧 Triggering correction: {action.description}")
+        logger.info(f" Triggering correction: {action.description}")
 
         # Выполнить действие
         success = await self._execute_correction(action, imbalance)
@@ -370,9 +370,9 @@ class SurvivalInstinct:
 
         if success:
             self.stats['corrections_successful'] += 1
-            logger.info(f"✅ Correction successful: {action.action_type}")
+            logger.info(f" Correction successful: {action.action_type}")
         else:
-            logger.error(f"❌ Correction failed: {action.action_type}")
+            logger.error(f" Correction failed: {action.action_type}")
 
         # Phase 2: Publish event to EventBus
         if self.eventbus:
@@ -475,7 +475,7 @@ class SurvivalInstinct:
         # TODO: Интеграция с Infrastructure Coordinator
         # В production: await infrastructure_coordinator.execute(action)
 
-        logger.info(f"🔧 Executing: {action.action_type}")
+        logger.info(f" Executing: {action.action_type}")
 
         # Симуляция выполнения
         await asyncio.sleep(0.5)
@@ -525,8 +525,8 @@ class SurvivalInstinct:
         self.is_running = True
         start_time = datetime.utcnow()
 
-        logger.info(f"🧬 {self.module_name} Survival Instinct: STARTED")
-        logger.info(f"📊 Monitoring {len(self.my_kpis)} KPIs every {self.check_interval}s")
+        logger.info(f" {self.module_name} Survival Instinct: STARTED")
+        logger.info(f" Monitoring {len(self.my_kpis)} KPIs every {self.check_interval}s")
 
         while self.is_running:
             try:
@@ -546,7 +546,7 @@ class SurvivalInstinct:
                 # 5. Если есть дисбаланс - корректировать
                 if imbalances:
                     logger.warning(
-                        f"⚠️ {len(imbalances)} imbalance(s) detected! "
+                        f"️ {len(imbalances)} imbalance(s) detected! "
                         f"Triggering corrections..."
                     )
 
@@ -565,19 +565,19 @@ class SurvivalInstinct:
                         # Небольшая задержка между действиями
                         await asyncio.sleep(1)
                 else:
-                    logger.debug(f"✅ All KPIs healthy (check #{self.stats['total_checks']})")
+                    logger.debug(f" All KPIs healthy (check #{self.stats['total_checks']})")
 
                 # 6. Ждать следующей проверки
                 await asyncio.sleep(self.check_interval)
 
             except Exception as e:
-                logger.error(f"❌ Error in survival loop: {e}", exc_info=True)
+                logger.error(f" Error in survival loop: {e}", exc_info=True)
                 await asyncio.sleep(5)  # Короткая задержка при ошибке
 
     def stop(self):
         """Остановить инстинкт"""
         self.is_running = False
-        logger.info(f"🛑 {self.module_name} Survival Instinct: STOPPED")
+        logger.info(f" {self.module_name} Survival Instinct: STOPPED")
 
     def get_my_health_status(self) -> Dict[str, Any]:
         """
@@ -674,7 +674,7 @@ class SurvivalInstinct:
             })
 
             self.stats['events_published'] += 1
-            logger.debug(f"📡 Published imbalance event: {imbalance.kpi_name} ({imbalance.level.value})")
+            logger.debug(f" Published imbalance event: {imbalance.kpi_name} ({imbalance.level.value})")
 
         except Exception as e:
             logger.error(f"Failed to publish imbalance event: {e}")

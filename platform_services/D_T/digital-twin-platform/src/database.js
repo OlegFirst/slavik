@@ -27,7 +27,7 @@ class Database {
             const res = await client.query('SELECT NOW()');
             client.release();
 
-            console.log('✅ PostgreSQL connected successfully at', res.rows[0].now);
+            console.log(' PostgreSQL connected successfully at', res.rows[0].now);
             this.isConnected = true;
 
             // Verify tables exist
@@ -35,8 +35,8 @@ class Database {
 
             return true;
         } catch (error) {
-            console.error('❌ Database connection failed:', error.message);
-            console.log('⚠️ Falling back to in-memory storage');
+            console.error(' Database connection failed:', error.message);
+            console.log('️ Falling back to in-memory storage');
             this.isConnected = false;
             return false;
         }
@@ -50,9 +50,9 @@ class Database {
                 [table]
             );
             if (!result.rows[0].exists) {
-                console.warn(`⚠️ Table ${table} does not exist`);
+                console.warn(`️ Table ${table} does not exist`);
             } else {
-                console.log(`✓ Table ${table} verified`);
+                console.log(` Table ${table} verified`);
             }
         }
     }

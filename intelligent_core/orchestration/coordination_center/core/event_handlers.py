@@ -42,7 +42,7 @@ class CoordinationEventHandlers:
         }
         """
         self.logger.info(
-            f"📥 Received orchestration decision: {event_data.get('decision_id')} "
+            f" Received orchestration decision: {event_data.get('decision_id')} "
             f"for tenant {tenant_id}"
         )
 
@@ -78,7 +78,7 @@ class CoordinationEventHandlers:
         }
         """
         self.logger.info(
-            f"📥 Workflow action required: {event_data.get('action')} "
+            f" Workflow action required: {event_data.get('action')} "
             f"on {event_data.get('entity')} for tenant {tenant_id}"
         )
 
@@ -113,7 +113,7 @@ class CoordinationEventHandlers:
         }
         """
         self.logger.info(
-            f"📥 AI recommendation received: {event_data.get('type')} "
+            f" AI recommendation received: {event_data.get('type')} "
             f"for tenant {tenant_id}"
         )
 
@@ -151,7 +151,7 @@ class CoordinationEventHandlers:
         new_status = event_data.get("new_status")
 
         self.logger.info(
-            f"📥 Execution {execution_id} status: {old_status} → {new_status}"
+            f" Execution {execution_id} status: {old_status} → {new_status}"
         )
 
         # TODO: Trigger downstream actions based on status
@@ -177,7 +177,7 @@ class CoordinationEventHandlers:
         reason = event_data.get("reason", "Security policy requires approval")
 
         self.logger.info(
-            f"📥 Approval required for execution {execution_id}: {action}"
+            f" Approval required for execution {execution_id}: {action}"
         )
 
         # TODO: Send notification to approvers
@@ -201,7 +201,7 @@ async def setup_event_subscriptions(eventbus) -> None:
     """
     handlers = CoordinationEventHandlers()
 
-    logger.info("🔌 Setting up Coordination Center event subscriptions...")
+    logger.info(" Setting up Coordination Center event subscriptions...")
 
     # Subscribe to AI Orchestration decisions
     logger.info("  → orchestration.decision_made")
@@ -218,7 +218,7 @@ async def setup_event_subscriptions(eventbus) -> None:
     logger.info("  → coordination.execution_status_changed")
     logger.info("  → coordination.approval_required")
 
-    logger.info("✅ Event subscriptions configured")
+    logger.info(" Event subscriptions configured")
 
     # Note: Actual subscription requires running async tasks
     # This would be done in background tasks in production

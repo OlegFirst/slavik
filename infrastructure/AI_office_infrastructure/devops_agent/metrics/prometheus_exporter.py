@@ -122,7 +122,7 @@ class PrometheusExporter:
             registry=self.registry
         )
 
-        logger.info(f"✅ Prometheus exporter initialized: {self.pushgateway_url}")
+        logger.info(f" Prometheus exporter initialized: {self.pushgateway_url}")
 
     def export_scan_metrics(self, scan_results: Dict[str, Any]):
         """
@@ -189,10 +189,10 @@ class PrometheusExporter:
                 registry=self.registry
             )
 
-            logger.info(f"📊 Metrics pushed to Prometheus: {self.pushgateway_url}")
+            logger.info(f" Metrics pushed to Prometheus: {self.pushgateway_url}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to export scan metrics: {e}")
+            logger.error(f" Failed to export scan metrics: {e}")
 
     def export_fix_metrics(self, fix_results: Dict[str, Any]):
         """
@@ -223,10 +223,10 @@ class PrometheusExporter:
                 registry=self.registry
             )
 
-            logger.info(f"📊 Fix metrics pushed: {successful} successful, {failed} failed")
+            logger.info(f" Fix metrics pushed: {successful} successful, {failed} failed")
 
         except Exception as e:
-            logger.error(f"❌ Failed to export fix metrics: {e}")
+            logger.error(f" Failed to export fix metrics: {e}")
 
     def export_dockerfile_metrics(self, generation_results: Dict[str, Any]):
         """
@@ -261,10 +261,10 @@ class PrometheusExporter:
                 registry=self.registry
             )
 
-            logger.info(f"📊 Dockerfile metrics pushed: {len(generated)} generated")
+            logger.info(f" Dockerfile metrics pushed: {len(generated)} generated")
 
         except Exception as e:
-            logger.error(f"❌ Failed to export Dockerfile metrics: {e}")
+            logger.error(f" Failed to export Dockerfile metrics: {e}")
 
     def export_agent_statistics(self, statistics: Dict[str, Any]):
         """
@@ -284,10 +284,10 @@ class PrometheusExporter:
                 registry=self.registry
             )
 
-            logger.info("📊 Agent statistics pushed to Prometheus")
+            logger.info(" Agent statistics pushed to Prometheus")
 
         except Exception as e:
-            logger.error(f"❌ Failed to export agent statistics: {e}")
+            logger.error(f" Failed to export agent statistics: {e}")
 
     def delete_metrics(self):
         """Delete all metrics from Pushgateway (cleanup)"""
@@ -296,10 +296,10 @@ class PrometheusExporter:
                 self.pushgateway_url,
                 job=self.job_name
             )
-            logger.info(f"🗑️ Metrics deleted from Pushgateway: {self.job_name}")
+            logger.info(f"️ Metrics deleted from Pushgateway: {self.job_name}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to delete metrics: {e}")
+            logger.error(f" Failed to delete metrics: {e}")
 
 
 # ============================================================================
@@ -422,6 +422,6 @@ if __name__ == "__main__":
         }
 
         exporter.export_scan_metrics(test_scan)
-        print("✅ Test metrics exported!")
+        print(" Test metrics exported!")
 
     asyncio.run(test())

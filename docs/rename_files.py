@@ -44,13 +44,13 @@ for old_name in files_to_rename:
 
         if os.path.exists(old_name):
             shutil.move(old_name, new_name)
-            print(f"✓ {old_name:35} → {new_name}")
+            print(f" {old_name:35} → {new_name}")
             renamed_count += 1
         else:
-            print(f"✗ Файл не найден: {old_name}")
+            print(f" Файл не найден: {old_name}")
             errors.append(f"File not found: {old_name}")
     except Exception as e:
-        print(f"✗ Ошибка: {old_name} - {str(e)}")
+        print(f" Ошибка: {old_name} - {str(e)}")
         errors.append(f"{old_name}: {str(e)}")
 
 print()
@@ -59,11 +59,11 @@ print(f"РЕЗУЛЬТАТ: Переименовано {renamed_count} из {len
 print("="*60)
 
 if errors:
-    print(f"\n❌ Ошибки ({len(errors)}):")
+    print(f"\n Ошибки ({len(errors)}):")
     for err in errors:
         print(f"  - {err}")
 else:
-    print("\n✅ ВСЕ ФАЙЛЫ УСПЕШНО ПЕРЕИМЕНОВАНЫ!")
+    print("\n ВСЕ ФАЙЛЫ УСПЕШНО ПЕРЕИМЕНОВАНЫ!")
     print()
     print("Следующий шаг:")
     print("  python3 update_links.py")

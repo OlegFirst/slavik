@@ -74,7 +74,7 @@ class ScenarioRegistry:
             if scenario_id not in self.index_by_module[module]:
                 self.index_by_module[module].append(scenario_id)
 
-        logger.info(f"✅ Registered scenario: {scenario_id} (level {level}, type {scenario_type})")
+        logger.info(f" Registered scenario: {scenario_id} (level {level}, type {scenario_type})")
 
         return True
 
@@ -220,15 +220,15 @@ async def main():
 
     # Get by ID
     scenario = await registry.get_scenario_by_id('test-vault-store')
-    print(f"\n✅ Found scenario: {scenario['meta']['id']}")
+    print(f"\n Found scenario: {scenario['meta']['id']}")
 
     # Find by filters
     scenarios = await registry.find_scenarios(level=1, type='functional')
-    print(f"✅ Found {len(scenarios)} scenarios by filters")
+    print(f" Found {len(scenarios)} scenarios by filters")
 
     # Statistics
     stats = await registry.get_statistics()
-    print(f"✅ Statistics: {stats}")
+    print(f" Statistics: {stats}")
 
 
 if __name__ == "__main__":

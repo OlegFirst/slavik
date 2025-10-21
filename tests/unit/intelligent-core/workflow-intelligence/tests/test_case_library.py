@@ -1,5 +1,5 @@
 """
-🧪 ТЕСТЫ - Case Library
+ ТЕСТЫ - Case Library
 
 Тестирование сбора cases, поиска и benchmarking
 """

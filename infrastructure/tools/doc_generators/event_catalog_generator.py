@@ -41,7 +41,7 @@ class EventCatalogGenerator:
 
     def scan_codebase(self):
         """Scan entire codebase for event usage."""
-        print("🔍 Scanning codebase for events...")
+        print(" Scanning codebase for events...")
 
         # Directories to scan
         scan_dirs = [
@@ -53,14 +53,14 @@ class EventCatalogGenerator:
         for dir_name in scan_dirs:
             dir_path = self.root_dir / dir_name
             if not dir_path.exists():
-                print(f"⚠️  Directory not found: {dir_name}")
+                print(f"️  Directory not found: {dir_name}")
                 continue
 
-            print(f"📂 Scanning: {dir_name}")
+            print(f" Scanning: {dir_name}")
             self._scan_directory(dir_path, dir_name)
 
         self.stats['total_events'] = len(self.events)
-        print(f"\n✅ Scan complete!")
+        print(f"\n Scan complete!")
         print(f"   Found {self.stats['total_events']} unique events")
         print(f"   Scanned {self.stats['files_scanned']} files")
 
@@ -156,7 +156,7 @@ class EventCatalogGenerator:
 
     def generate_markdown_report(self, output_path: str):
         """Generate Markdown event catalog."""
-        print(f"\n📝 Generating Markdown report...")
+        print(f"\n Generating Markdown report...")
 
         output = []
         output.append("# BCM Platform Event Catalog\n")
@@ -188,7 +188,7 @@ class EventCatalogGenerator:
                         short_path = publisher.split('/')[-2:] if '/' in publisher else publisher
                         output.append(f"- `{'/'.join(short_path)}`\n")
                 else:
-                    output.append(f"\n**Publishers:** ⚠️ None found\n")
+                    output.append(f"\n**Publishers:** ️ None found\n")
 
                 # Subscribers
                 if event_data['subscribers']:
@@ -197,7 +197,7 @@ class EventCatalogGenerator:
                         short_path = subscriber.split('/')[-2:] if '/' in subscriber else subscriber
                         output.append(f"- `{'/'.join(short_path)}`\n")
                 else:
-                    output.append(f"\n**Subscribers:** ⚠️ None found\n")
+                    output.append(f"\n**Subscribers:** ️ None found\n")
 
                 output.append("\n")
 
@@ -206,11 +206,11 @@ class EventCatalogGenerator:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(''.join(output))
 
-        print(f"✅ Markdown report: {report_path}")
+        print(f" Markdown report: {report_path}")
 
     def generate_json_report(self, output_path: str):
         """Generate JSON event catalog."""
-        print(f"\n📊 Generating JSON report...")
+        print(f"\n Generating JSON report...")
 
         # Convert sets to lists for JSON serialization
         events_json = {}
@@ -232,11 +232,11 @@ class EventCatalogGenerator:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report, indent=2))
 
-        print(f"✅ JSON report: {report_path}")
+        print(f" JSON report: {report_path}")
 
     def generate_mermaid_diagram(self, output_path: str):
         """Generate Mermaid event flow diagram."""
-        print(f"\n🎨 Generating Mermaid diagram...")
+        print(f"\n Generating Mermaid diagram...")
 
         output = []
         output.append("```mermaid\n")
@@ -291,11 +291,11 @@ class EventCatalogGenerator:
         diagram_path.parent.mkdir(parents=True, exist_ok=True)
         diagram_path.write_text(''.join(output))
 
-        print(f"✅ Mermaid diagram: {diagram_path}")
+        print(f" Mermaid diagram: {diagram_path}")
 
     def analyze_orphaned_events(self):
         """Find events with no publishers or no subscribers."""
-        print("\n🔍 Analyzing orphaned events...")
+        print("\n Analyzing orphaned events...")
 
         no_publishers = []
         no_subscribers = []
@@ -307,12 +307,12 @@ class EventCatalogGenerator:
                 no_subscribers.append(event_type)
 
         if no_publishers:
-            print(f"\n⚠️  Events with NO PUBLISHERS ({len(no_publishers)}):")
+            print(f"\n️  Events with NO PUBLISHERS ({len(no_publishers)}):")
             for event in sorted(no_publishers)[:10]:  # Show first 10
                 print(f"   - {event}")
 
         if no_subscribers:
-            print(f"\n⚠️  Events with NO SUBSCRIBERS ({len(no_subscribers)}):")
+            print(f"\n️  Events with NO SUBSCRIBERS ({len(no_subscribers)}):")
             for event in sorted(no_subscribers)[:10]:  # Show first 10
                 print(f"   - {event}")
 
@@ -327,7 +327,7 @@ def main():
     root_dir = "/Users/MD/AI-Platform-ISO"
 
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("🎯 BCM Platform Event Catalog Generator")
+    print(" BCM Platform Event Catalog Generator")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
     # Initialize generator
@@ -351,9 +351,9 @@ def main():
     orphaned = generator.analyze_orphaned_events()
 
     print("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("✅ Event Catalog Generation Complete!")
+    print(" Event Catalog Generation Complete!")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print(f"\n📁 Output files:")
+    print(f"\n Output files:")
     print(f"   • {root_dir}/infrastructure/events/EVENTS.md")
     print(f"   • {root_dir}/infrastructure/events/events_catalog.json")
     print(f"   • {root_dir}/infrastructure/events/EVENT_FLOW.md")

@@ -73,7 +73,7 @@ function reportError(
   };
 
   if (isDevelopment) {
-    console.group(`🚨 Error Boundary: ${errorReport.boundaryName}`);
+    console.group(` Error Boundary: ${errorReport.boundaryName}`);
     console.error('Error ID:', errorId);
     console.error('Error:', error);
     console.error('Error Info:', errorInfo);

@@ -50,37 +50,37 @@ request_duration = Histogram(
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
-    print("🚀 Portal Service starting...")
+    print(" Portal Service starting...")
     await init_db()
-    print("✅ Database initialized")
+    print(" Database initialized")
 
     # Initialize EventBus
     eventbus_url = os.getenv("EVENTBUS_URL", "http://localhost:8001")
     await init_eventbus(eventbus_url, service_name="portal-service")
-    print(f"✅ EventBus initialized ({eventbus_url})")
+    print(f" EventBus initialized ({eventbus_url})")
 
     # Register event subscribers
     try:
         from events.subscribers import setup_subscriptions
         await setup_subscriptions()
-        print("✅ Event subscribers registered")
+        print(" Event subscribers registered")
     except Exception as e:
-        print(f"⚠️  Failed to register event subscribers: {e}")
+        print(f"️  Failed to register event subscribers: {e}")
         # Don't fail startup if event subscriptions fail
 
     yield
 
     # Shutdown
-    print("🛑 Portal Service shutting down...")
+    print(" Portal Service shutting down...")
 
     # Close EventBus
     eventbus = get_eventbus()
     if eventbus:
         await eventbus.disconnect()
-    print("✅ EventBus disconnected")
+    print(" EventBus disconnected")
 
     await close_db()
-    print("✅ Database connections closed")
+    print(" Database connections closed")
 
 
 # Create FastAPI app

@@ -42,14 +42,14 @@ class CollectiveAIFoundation:
         try:
             # Initialize RAG for knowledge retrieval
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Collective Intelligence")
+            logger.info(" RAG Pipeline initialized for Collective Intelligence")
 
             # Initialize LLM Router for response generation
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Collective Intelligence")
+            logger.info(" LLM Router initialized for Collective Intelligence")
 
         except Exception as e:
-            logger.error(f"❌ AI Foundation initialization failed: {e}")
+            logger.error(f" AI Foundation initialization failed: {e}")
             raise
 
     async def retrieve_similar_cases(
@@ -101,7 +101,7 @@ class CollectiveAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(similar_cases)} similar cases from RAG")
+            logger.info(f" Retrieved {len(similar_cases)} similar cases from RAG")
 
             return similar_cases
 
@@ -150,7 +150,7 @@ class CollectiveAIFoundation:
                 'model_used': 'none'
             }
 
-        # 🔹 STEP 1: Enrich context with RAG knowledge (optional enhancement)
+        #  STEP 1: Enrich context with RAG knowledge (optional enhancement)
         # This allows the agent to reference similar patterns from knowledge base
 
         enriched_context = system_prompt
@@ -175,7 +175,7 @@ class CollectiveAIFoundation:
             except Exception as e:
                 logger.warning(f"Pattern retrieval failed: {e}")
 
-        # 🔹 STEP 2: Build message history
+        #  STEP 2: Build message history
         messages = []
 
         for msg in conversation_history:
@@ -189,7 +189,7 @@ class CollectiveAIFoundation:
             'content': user_message
         })
 
-        # 🔹 STEP 3: Generate response using LLM Router
+        #  STEP 3: Generate response using LLM Router
         try:
             response_text = await self.llm.query(
                 system_prompt=enriched_context,
@@ -202,7 +202,7 @@ class CollectiveAIFoundation:
             # Calculate confidence
             confidence = self._estimate_confidence(response_text, approaches)
 
-            logger.info(f"✅ Generated collective response: {len(response_text)} chars, confidence: {confidence}")
+            logger.info(f" Generated collective response: {len(response_text)} chars, confidence: {confidence}")
 
             return {
                 'message': response_text,
@@ -211,7 +211,7 @@ class CollectiveAIFoundation:
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM generation failed: {e}")
+            logger.error(f" LLM generation failed: {e}")
             return {
                 'message': "I apologize, but I encountered an error generating a response.",
                 'confidence': 0.0,
@@ -274,7 +274,7 @@ class CollectiveAIFoundation:
                 source_type="collective_patterns"
             )
 
-            logger.info(f"💾 Stored successful collective pattern: {problem_type}")
+            logger.info(f" Stored successful collective pattern: {problem_type}")
 
         except Exception as e:
             logger.warning(f"Failed to store pattern in RAG: {e}")
@@ -313,7 +313,7 @@ class CollectiveAIFoundation:
             return response_text
 
         except Exception as e:
-            logger.error(f"❌ Generation failed: {e}")
+            logger.error(f" Generation failed: {e}")
             return "I apologize, but I encountered an error. Please try again."
 
     # ===== INTERNAL HELPERS =====

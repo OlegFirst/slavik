@@ -130,7 +130,7 @@ class DelegationManager:
         patterns = context.get('known_patterns', [])
 
         if strategies:
-            logger.info(f"🎯 ACE enhanced: {len(strategies)} strategies, {len(patterns)} patterns")
+            logger.info(f" ACE enhanced: {len(strategies)} strategies, {len(patterns)} patterns")
 
         # Reconstruct Decision object from dict
         from ..models import DecisionAction, DecisionPriority
@@ -154,7 +154,7 @@ class DelegationManager:
             # Update stats
             self.delegation_stats[specialist] += 1
 
-            logger.info(f"✅ Delegated to {specialist}")
+            logger.info(f" Delegated to {specialist}")
 
             return {
                 'success': True,
@@ -203,21 +203,21 @@ class DelegationManager:
         bcm_advisor_keywords = ['bcm planning', 'recovery strategy', 'continuity strategy',
                                 'bia design', 'business continuity', 'strategic bcm']
         if any(keyword in situation_str or keyword in strategy_action for keyword in bcm_advisor_keywords):
-            logger.info("🎯 Delegating to AI Expert: BCM Advisor")
+            logger.info(" Delegating to AI Expert: BCM Advisor")
             return self.SPECIALISTS['bcm_advisor']
 
         # Compliance Auditor - for compliance and certification
         compliance_auditor_keywords = ['iso compliance', 'gap analysis', 'certification',
                                        'audit preparation', 'compliance assessment', 'iso 22301']
         if any(keyword in situation_str or keyword in strategy_action for keyword in compliance_auditor_keywords):
-            logger.info("🎯 Delegating to AI Expert: Compliance Auditor")
+            logger.info(" Delegating to AI Expert: Compliance Auditor")
             return self.SPECIALISTS['compliance_auditor']
 
         # Strategic Planner - for strategic planning
         strategic_keywords = ['strategic plan', 'roadmap', 'strategic decision',
                              'long-term planning', 'strategic direction']
         if any(keyword in situation_str or keyword in strategy_action for keyword in strategic_keywords):
-            logger.info("🎯 Delegating to AI Expert: Strategic Planner")
+            logger.info(" Delegating to AI Expert: Strategic Planner")
             return self.SPECIALISTS['strategic_planner']
 
         # DOMAIN SPECIALIST SELECTION (execution)

@@ -19,7 +19,7 @@ async def main():
 
     # Define event handler
     async def handle_workflow_event(event: Event):
-        print(f"📨 Received: {event.type}")
+        print(f" Received: {event.type}")
         print(f"   Data: {event.data}")
         print(f"   Source: {event.source}")
         print(f"   Tenant: {event.tenant_id}")
@@ -67,14 +67,14 @@ async def main():
 
     # Show statistics
     stats = await bus.get_stats()
-    print("\n📊 Statistics:")
+    print("\n Statistics:")
     print(f"   Published: {stats['published']}")
     print(f"   Consumed: {stats['consumed']}")
     print(f"   Errors: {stats['errors']}")
 
     # Cleanup
     await bus.close()
-    print("\n✅ Done!")
+    print("\n Done!")
 
 
 if __name__ == '__main__':

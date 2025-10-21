@@ -75,7 +75,7 @@ class ScenarioAutoGenerator:
             "success_rate": 0.0
         }
 
-        logger.info("✅ Initialized ScenarioAutoGenerator with 8 adapters + ACE learning")
+        logger.info(" Initialized ScenarioAutoGenerator with 8 adapters + ACE learning")
 
     # ==========================================================================
     # LEVEL 1: Module Scenarios (Service-level testing)
@@ -212,7 +212,7 @@ class ScenarioAutoGenerator:
         self.generation_stats["total_generated"] += 1
         self.generation_stats["by_level"]["l1"] += 1
 
-        logger.info(f"✅ L1 scenario generated: {module_name}.{operation}")
+        logger.info(f" L1 scenario generated: {module_name}.{operation}")
 
         return {
             "success": True,
@@ -316,7 +316,7 @@ class ScenarioAutoGenerator:
         self.generation_stats["total_generated"] += 1
         self.generation_stats["by_level"]["l2"] += 1
 
-        logger.info(f"✅ L2 scenario generated: {subsystem_name}")
+        logger.info(f" L2 scenario generated: {subsystem_name}")
 
         return {
             "success": True,
@@ -445,7 +445,7 @@ class ScenarioAutoGenerator:
         self.generation_stats["total_generated"] += 1
         self.generation_stats["by_level"]["l3"] += 1
 
-        logger.info(f"✅ L3 scenario generated: {system_a} ↔ {system_b}")
+        logger.info(f" L3 scenario generated: {system_a} ↔ {system_b}")
 
         return {
             "success": True,
@@ -586,7 +586,7 @@ class ScenarioAutoGenerator:
             max(self.generation_stats["total_generated"], 1)
         )
 
-        logger.info(f"✅ L4 workflow generated: {workflow_name}")
+        logger.info(f" L4 workflow generated: {workflow_name}")
 
         return {
             "success": True,
@@ -639,7 +639,7 @@ class ScenarioAutoGenerator:
 
             results.append(result)
 
-        logger.info(f"✅ Batch generation complete: {len(results)} scenarios")
+        logger.info(f" Batch generation complete: {len(results)} scenarios")
 
         return results
 

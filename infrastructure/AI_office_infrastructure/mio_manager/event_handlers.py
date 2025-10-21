@@ -78,7 +78,7 @@ class MioEventHandlers:
         kpis = event['data'].get('kpis', [])
         orchestrator = event['data'].get('orchestrator', 'unknown')
 
-        logger.info(f"👀 МиО observed service registered: {service_name} (port: {port})")
+        logger.info(f" МиО observed service registered: {service_name} (port: {port})")
 
         self.stats['services_registered'] += 1
         self.stats['last_event_time'] = datetime.utcnow().isoformat()
@@ -102,9 +102,9 @@ class MioEventHandlers:
                 priority='high'
             )
 
-            logger.warning(f"   ⚠️  {service_name} not monitored by Prometheus")
+            logger.warning(f"   ️  {service_name} not monitored by Prometheus")
         else:
-            logger.info(f"   ✅ {service_name} is monitored by Prometheus")
+            logger.info(f"    {service_name} is monitored by Prometheus")
 
         # Check if metrics endpoint is accessible
         metrics_accessible = await self._check_metrics_endpoint(service_name, port)
@@ -124,7 +124,7 @@ class MioEventHandlers:
                 priority='high'
             )
 
-            logger.warning(f"   ⚠️  {service_name} metrics endpoint unreachable")
+            logger.warning(f"   ️  {service_name} metrics endpoint unreachable")
 
     async def handle_service_disconnected(self, event: Dict):
         """
@@ -139,7 +139,7 @@ class MioEventHandlers:
         service_name = event['data']['service_name']
         reason = event['data'].get('reason', 'unknown')
 
-        logger.info(f"👀 МиО observed service disconnected: {service_name} (reason: {reason})")
+        logger.info(f" МиО observed service disconnected: {service_name} (reason: {reason})")
 
         self.stats['services_disconnected'] += 1
         self.stats['last_event_time'] = datetime.utcnow().isoformat()
@@ -160,7 +160,7 @@ class MioEventHandlers:
         last_heartbeat = event['data']['last_heartbeat']
         timeout_seconds = event['data'].get('timeout_seconds', 60)
 
-        logger.error(f"👀 МиО observed CRITICAL TIMEOUT: {service_name}")
+        logger.error(f" МиО observed CRITICAL TIMEOUT: {service_name}")
         logger.error(f"   Last heartbeat: {last_heartbeat}")
         logger.error(f"   Timeout: {timeout_seconds}s")
 
@@ -187,7 +187,7 @@ class MioEventHandlers:
             priority='critical'
         )
 
-        logger.error(f"   📡 Published critical timeout observation")
+        logger.error(f"    Published critical timeout observation")
 
     # ========================================================================
     # Helper Methods - Checks
@@ -292,10 +292,10 @@ class MioEventHandlers:
 
             self.stats['observations_published'] += 1
 
-            logger.info(f"📡 Published observation: {event_type} (priority: {priority})")
+            logger.info(f" Published observation: {event_type} (priority: {priority})")
 
         except Exception as e:
-            logger.error(f"❌ Failed to publish observation {event_type}: {e}")
+            logger.error(f" Failed to publish observation {event_type}: {e}")
 
     # ========================================================================
     # Public API - Statistics
@@ -322,7 +322,7 @@ class MioEventHandlers:
             'observations_published': 0,
             'last_event_time': None
         }
-        logger.info("📊 Event handler statistics reset")
+        logger.info(" Event handler statistics reset")
 
 
 # ========================================================================
@@ -338,7 +338,7 @@ async def handle_problem_detected(event: Dict):
 
     TODO: Refactor to use MioEventHandlers
     """
-    logger.info(f"👀 МиО observed problem: {event.get('data', {}).get('problem_type', 'unknown')}")
+    logger.info(f" МиО observed problem: {event.get('data', {}).get('problem_type', 'unknown')}")
     # Currently handled by EscalationManager
 
 
@@ -348,7 +348,7 @@ async def handle_task_completed(event: Dict):
 
     TODO: Refactor to use MioEventHandlers
     """
-    logger.info(f"👀 МиО observed task completed: {event.get('data', {}).get('task_type', 'unknown')}")
+    logger.info(f" МиО observed task completed: {event.get('data', {}).get('task_type', 'unknown')}")
     # Currently handled by ActionExecutor
 
 
@@ -358,7 +358,7 @@ async def handle_directive_issued(event: Dict):
 
     TODO: Refactor to use MioEventHandlers
     """
-    logger.info(f"👀 МиО observed directive: {event.get('data', {}).get('directive_type', 'unknown')}")
+    logger.info(f" МиО observed directive: {event.get('data', {}).get('directive_type', 'unknown')}")
     # Currently handled by reaction layer
 
 
@@ -368,7 +368,7 @@ async def handle_service_deployed(event: Dict):
 
     TODO: Refactor to use MioEventHandlers
     """
-    logger.info(f"👀 МиО observed deployment: {event.get('data', {}).get('service_name', 'unknown')}")
+    logger.info(f" МиО observed deployment: {event.get('data', {}).get('service_name', 'unknown')}")
     # Currently handled by reaction layer
 
 
@@ -378,5 +378,5 @@ async def handle_alert_triggered(event: Dict):
 
     TODO: Refactor to use MioEventHandlers
     """
-    logger.info(f"👀 МиО observed alert: {event.get('data', {}).get('alert_type', 'unknown')}")
+    logger.info(f" МиО observed alert: {event.get('data', {}).get('alert_type', 'unknown')}")
     # Currently handled by EscalationManager

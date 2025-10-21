@@ -1,5 +1,5 @@
 """
-📚 Living Documentation Database Models
+ Living Documentation Database Models
 
 Tables:
 - documentation_pages - Content storage

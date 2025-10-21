@@ -44,6 +44,6 @@ for filename in FILES:
     with open(filepath, 'w') as f:
         f.write(content)
 
-    print(f"  ✅ Fixed {filename}")
+    print(f"   Fixed {filename}")
 
-print("\n✅ All files fixed")
+print("\n All files fixed")

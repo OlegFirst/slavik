@@ -141,10 +141,10 @@ export function BIACharts({ queueMetrics, recoveryStrategies }: BIAChartsProps) 
             </p>
             <p className="text-sm text-gray-600 mt-1">
               {queueMetrics.server_utilization > 0.9
-                ? '⚠️ Critical - Consider adding servers'
+                ? '️ Critical - Consider adding servers'
                 : queueMetrics.server_utilization > 0.8
-                ? '⚡ High - Monitor closely'
-                : '✅ Healthy utilization'}
+                ? ' High - Monitor closely'
+                : ' Healthy utilization'}
             </p>
           </div>
         </div>
@@ -221,7 +221,7 @@ export function BIACharts({ queueMetrics, recoveryStrategies }: BIAChartsProps) 
           </BarChart>
         </ResponsiveContainer>
         <p className="text-xs text-gray-500 mt-4 text-center">
-          💡 Lower cost + higher risk reduction = better strategy
+           Lower cost + higher risk reduction = better strategy
         </p>
       </div>
     </div>

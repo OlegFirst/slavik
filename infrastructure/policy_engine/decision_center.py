@@ -100,7 +100,7 @@ class InfrastructureDecisionCenter:
         # Initialize Prometheus metrics if enabled
         self._init_metrics()
 
-        logger.info(f"✅ InfrastructureDecisionCenter initialized (AI: {ai_hub is not None}, Metrics: {enable_metrics})")
+        logger.info(f" InfrastructureDecisionCenter initialized (AI: {ai_hub is not None}, Metrics: {enable_metrics})")
 
     async def decide_recovery_action(
         self,
@@ -136,7 +136,7 @@ class InfrastructureDecisionCenter:
             parameters={'attempt': current_attempt}
         )
 
-        logger.info(f"🔍 Deciding recovery action: {service_name} - {action_type} (attempt {current_attempt})")
+        logger.info(f" Deciding recovery action: {service_name} - {action_type} (attempt {current_attempt})")
 
         try:
             # Check business hours
@@ -175,7 +175,7 @@ class InfrastructureDecisionCenter:
                 decision.decided_at = datetime.utcnow()
                 self.stats['rejected_decisions'] += 1
 
-                logger.warning(f"❌ Recovery REJECTED for {service_name}: {decision.reasoning}")
+                logger.warning(f" Recovery REJECTED for {service_name}: {decision.reasoning}")
 
                 # Check if should escalate
                 if compliance_result.get('requires_escalation', False):
@@ -204,7 +204,7 @@ class InfrastructureDecisionCenter:
                 self.stats['approved_decisions'] += 1
                 self.stats['auto_approved'] += 1
 
-                logger.info(f"✅ Recovery APPROVED for {service_name} with escalation: {decision.reasoning}")
+                logger.info(f" Recovery APPROVED for {service_name} with escalation: {decision.reasoning}")
 
                 # Create escalation for monitoring
                 await self._create_escalation(decision, "critical_service_alert")
@@ -217,10 +217,10 @@ class InfrastructureDecisionCenter:
                 self.stats['approved_decisions'] += 1
                 self.stats['auto_approved'] += 1
 
-                logger.info(f"✅ Recovery APPROVED for {service_name}: {decision.reasoning}")
+                logger.info(f" Recovery APPROVED for {service_name}: {decision.reasoning}")
 
         except Exception as e:
-            logger.error(f"❌ Error deciding recovery action: {e}")
+            logger.error(f" Error deciding recovery action: {e}")
             decision.outcome = DecisionOutcome.REJECTED
             decision.reasoning = f"Decision error: {str(e)}"
             decision.decided_at = datetime.utcnow()
@@ -274,7 +274,7 @@ class InfrastructureDecisionCenter:
             parameters=recommendation
         )
 
-        logger.info(f"🔍 Deciding optimization action: {service_name} - {action_type}")
+        logger.info(f" Deciding optimization action: {service_name} - {action_type}")
 
         try:
             # Get optimization policy
@@ -320,10 +320,10 @@ class InfrastructureDecisionCenter:
             decision.decided_at = datetime.utcnow()
             decision.policy_reference = f"optimization/{service_name}/{action_type}"
 
-            logger.info(f"{'✅' if decision.outcome == DecisionOutcome.APPROVED else '❌'} Optimization {decision.outcome.value.upper()} for {service_name}: {decision.reasoning}")
+            logger.info(f"{'' if decision.outcome == DecisionOutcome.APPROVED else ''} Optimization {decision.outcome.value.upper()} for {service_name}: {decision.reasoning}")
 
         except Exception as e:
-            logger.error(f"❌ Error deciding optimization action: {e}")
+            logger.error(f" Error deciding optimization action: {e}")
             decision.outcome = DecisionOutcome.REJECTED
             decision.reasoning = f"Decision error: {str(e)}"
             decision.decided_at = datetime.utcnow()
@@ -386,7 +386,7 @@ class InfrastructureDecisionCenter:
         # Store escalation
         self.active_escalations[escalation.escalation_id] = escalation
 
-        logger.warning(f"🚨 ESCALATION created for {service_name}: {reason} (severity: {severity})")
+        logger.warning(f" ESCALATION created for {service_name}: {reason} (severity: {severity})")
 
         # Audit log
         await self.audit_logger.log_escalation(escalation)
@@ -437,7 +437,7 @@ class InfrastructureDecisionCenter:
             approval.decision_by = approved_by
             approval.decision_comment = comment
 
-            logger.info(f"✅ Approval {approval_id} APPROVED by {approved_by}")
+            logger.info(f" Approval {approval_id} APPROVED by {approved_by}")
 
             # Update related decision
             for decision in self.decision_history:
@@ -459,7 +459,7 @@ class InfrastructureDecisionCenter:
             approval.decision_by = approved_by
             approval.decision_comment = comment
 
-            logger.info(f"❌ Approval {approval_id} REJECTED by {approved_by}")
+            logger.info(f" Approval {approval_id} REJECTED by {approved_by}")
 
             # Update related decision
             for decision in self.decision_history:
@@ -550,7 +550,7 @@ class InfrastructureDecisionCenter:
         # Store approval request
         self.pending_approvals[approval.approval_id] = approval
 
-        logger.info(f"📋 Approval request created: {approval.approval_id} for {decision.service_name}")
+        logger.info(f" Approval request created: {approval.approval_id} for {decision.service_name}")
 
         # Audit log
         await self.audit_logger.log_approval(approval, "approval_requested")
@@ -682,7 +682,7 @@ class InfrastructureDecisionCenter:
                 'Number of pending approvals'
             )
 
-            logger.info("✅ Prometheus metrics initialized")
+            logger.info(" Prometheus metrics initialized")
 
         except ImportError:
             logger.warning("prometheus_client not available - metrics disabled")
@@ -728,7 +728,7 @@ class InfrastructureDecisionCenter:
                 problem += f". Policy issue: {compliance_result['reason']}"
 
             # Consult AI
-            logger.debug(f"🧠 Consulting AI Hub: {service_name} - {action_type}")
+            logger.debug(f" Consulting AI Hub: {service_name} - {action_type}")
 
             ai_response = await self.ai_hub.consult(
                 problem=problem,
@@ -743,7 +743,7 @@ class InfrastructureDecisionCenter:
                 self.metric_ai_consultations.labels(confidence_level=confidence_level).inc()
 
             logger.info(
-                f"🧠 AI recommendation: {ai_response.recommendation} "
+                f" AI recommendation: {ai_response.recommendation} "
                 f"(confidence: {ai_response.confidence:.2f}, model: {ai_response.model_used})"
             )
 

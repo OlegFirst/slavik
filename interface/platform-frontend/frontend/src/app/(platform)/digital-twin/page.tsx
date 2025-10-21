@@ -374,12 +374,12 @@ export default function DigitalTwinPage() {
           {/* Simulation Categories */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[
-              { name: 'Monte Carlo', desc: 'Statistical uncertainty analysis', icon: '🎲' },
+              { name: 'Monte Carlo', desc: 'Statistical uncertainty analysis', icon: '' },
               { name: 'Queue Theory', desc: 'Service capacity modeling', icon: '⏱️' },
-              { name: 'TOC Analysis', desc: 'Theory of Constraints', icon: '🔗' },
-              { name: 'Impact Passport', desc: 'Cascading impact analysis', icon: '🎯' },
-              { name: 'Prediction', desc: 'Trend forecasting', icon: '📈' },
-              { name: 'What-If', desc: 'Scenario exploration', icon: '🤔' },
+              { name: 'TOC Analysis', desc: 'Theory of Constraints', icon: '' },
+              { name: 'Impact Passport', desc: 'Cascading impact analysis', icon: '' },
+              { name: 'Prediction', desc: 'Trend forecasting', icon: '' },
+              { name: 'What-If', desc: 'Scenario exploration', icon: '' },
             ].map((engine) => (
               <div key={engine.name} className="rounded-lg border bg-card p-4 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-3xl mb-2">{engine.icon}</div>

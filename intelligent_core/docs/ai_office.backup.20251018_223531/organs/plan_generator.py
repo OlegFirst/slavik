@@ -1,5 +1,5 @@
 """
-📋 Plan Generator
+ Plan Generator
 
 AI-powered BCM plan creation and updates
 """
@@ -23,7 +23,7 @@ class PlanGenerator(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Plan Generator",
-            emoji="📋",
+            emoji="",
             llm_router=llm_router
         )
 

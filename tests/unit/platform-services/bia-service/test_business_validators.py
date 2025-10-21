@@ -19,7 +19,7 @@ class TestRecoveryObjectivesValidation:
             name="Valid Process",
             criticality=CriticalityLevel.HIGH,
             rto_hours=8,
-            rpo_hours=2,  # RPO < RTO ✓
+            rpo_hours=2,  # RPO < RTO 
             mtpd_hours=24
         )
         assert process.rpo_hours <= process.rto_hours
@@ -32,7 +32,7 @@ class TestRecoveryObjectivesValidation:
                 name="Invalid Process",
                 criticality=CriticalityLevel.HIGH,
                 rto_hours=2,
-                rpo_hours=8,  # RPO > RTO ✗
+                rpo_hours=8,  # RPO > RTO 
                 mtpd_hours=24
             )
         assert "RTO must be greater than or equal to RPO" in str(exc_info.value)
@@ -46,7 +46,7 @@ class TestRecoveryObjectivesValidation:
             criticality=CriticalityLevel.MEDIUM,
             rto_hours=8,
             rpo_hours=2,
-            mtpd_hours=24  # MTPD > RTO ✓
+            mtpd_hours=24  # MTPD > RTO 
         )
         assert process.rto_hours <= process.mtpd_hours
 
@@ -59,7 +59,7 @@ class TestRecoveryObjectivesValidation:
                 criticality=CriticalityLevel.HIGH,
                 rto_hours=24,
                 rpo_hours=4,
-                mtpd_hours=8  # MTPD < RTO ✗
+                mtpd_hours=8  # MTPD < RTO 
             )
         assert "MTPD must be greater than or equal to RTO" in str(exc_info.value)
 
@@ -70,7 +70,7 @@ class TestRecoveryObjectivesValidation:
             tenant_id=tenant_id,
             name="Critical Process",
             criticality=CriticalityLevel.CRITICAL,
-            rto_hours=4,  # <= 8 ✓
+            rto_hours=4,  # <= 8 
             rpo_hours=1,
             mtpd_hours=8,
             recovery_strategies=[{"strategy": "hot_site", "rto": 2}],
@@ -116,7 +116,7 @@ class TestFinancialImpactTimelineValidation:
                 mtpd_hours=8,
                 financial_impact={
                     "1_hour": 100000.0,
-                    "4_hours": 50000.0,  # Decreases! ✗
+                    "4_hours": 50000.0,  # Decreases! 
                     "24_hours": 200000.0
                 }
             )
@@ -137,7 +137,7 @@ class TestNonSelfDependencyValidation:
                 rto_hours=8,
                 rpo_hours=2,
                 mtpd_hours=24,
-                upstream_processes=["100"]  # Self-reference ✗
+                upstream_processes=["100"]  # Self-reference 
             )
         assert "Business rule violation" in str(exc_info.value)
 
@@ -152,7 +152,7 @@ class TestNonSelfDependencyValidation:
                 rto_hours=8,
                 rpo_hours=2,
                 mtpd_hours=24,
-                downstream_processes=["100"]  # Self-reference ✗
+                downstream_processes=["100"]  # Self-reference 
             )
         assert "Business rule violation" in str(exc_info.value)
 
@@ -170,9 +170,9 @@ class TestCriticalProcessRequirementsValidation:
                 rto_hours=2,
                 rpo_hours=0,
                 mtpd_hours=4,
-                recovery_strategies=[],  # Empty! ✗
-                alternative_procedures=[],  # Empty! ✗
-                dependencies=[]  # Empty! ✗
+                recovery_strategies=[],  # Empty! 
+                alternative_procedures=[],  # Empty! 
+                dependencies=[]  # Empty! 
             )
         assert "Business rule violation" in str(exc_info.value)
 
@@ -205,7 +205,7 @@ class TestWorkaroundCapacityValidation:
             rto_hours=8,
             rpo_hours=2,
             mtpd_hours=24,
-            workaround_capacity=75.0  # Valid: 0-100 ✓
+            workaround_capacity=75.0  # Valid: 0-100 
         )
         assert 0 <= process.workaround_capacity <= 100
 
@@ -219,7 +219,7 @@ class TestWorkaroundCapacityValidation:
                 rto_hours=8,
                 rpo_hours=2,
                 mtpd_hours=24,
-                workaround_capacity=150.0  # > 100 ✗
+                workaround_capacity=150.0  # > 100 
             )
 
     def test_should_fail_workaround_capacity_negative(self, tenant_id):
@@ -232,7 +232,7 @@ class TestWorkaroundCapacityValidation:
                 rto_hours=8,
                 rpo_hours=2,
                 mtpd_hours=24,
-                workaround_capacity=-10.0  # Negative ✗
+                workaround_capacity=-10.0  # Negative 
             )
 
 
@@ -310,7 +310,7 @@ class TestDependencyCriticalityValidation:
         dep = Dependency(
             type="technology",
             name="Critical System",
-            criticality=5,  # Max criticality ✓
+            criticality=5,  # Max criticality 
             required=True
         )
         assert 1 <= dep.criticality <= 5
@@ -321,5 +321,5 @@ class TestDependencyCriticalityValidation:
             Dependency(
                 type="technology",
                 name="System",
-                criticality=10  # > 5 ✗
+                criticality=10  # > 5 
             )

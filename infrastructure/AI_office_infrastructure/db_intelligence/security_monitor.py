@@ -130,7 +130,7 @@ class SecurityMonitor:
                     )
                     alerts.append(alert)
                     self.alerts.append(alert)
-                    logger.critical(f"🚨 SECURITY: Suspicious query: {pattern}")
+                    logger.critical(f" SECURITY: Suspicious query: {pattern}")
                     break  # One alert per query
 
         return alerts

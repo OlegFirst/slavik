@@ -87,7 +87,7 @@ class LiteLLMRouter:
             "cheap": "gpt-3.5-turbo",         # Cost-optimized
         }
 
-        logger.info("✅ LiteLLM Router initialized with fallbacks")
+        logger.info(" LiteLLM Router initialized with fallbacks")
 
     def _build_model_configs(self) -> List[Dict]:
         """Build model configurations from environment"""
@@ -208,7 +208,7 @@ class LiteLLMRouter:
         if not model:
             model = self.task_model_mapping.get(task_type, "claude-3-sonnet")
 
-        logger.info(f"🤖 LLM Request: {task_type} → {model}")
+        logger.info(f" LLM Request: {task_type} → {model}")
 
         start_time = datetime.utcnow()
 
@@ -233,7 +233,7 @@ class LiteLLMRouter:
                 usage = response.usage
                 cost = self._calculate_cost(model_used, usage.total_tokens)
 
-                logger.info(f"✅ LLM Response: {model_used} | {latency:.2f}s | ${cost:.4f}")
+                logger.info(f" LLM Response: {model_used} | {latency:.2f}s | ${cost:.4f}")
 
                 return {
                     "content": content,
@@ -250,7 +250,7 @@ class LiteLLMRouter:
                 }
 
         except Exception as e:
-            logger.error(f"❌ LLM Request failed: {e}")
+            logger.error(f" LLM Request failed: {e}")
             raise
 
     async def _complete_streaming(

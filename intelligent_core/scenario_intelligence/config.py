@@ -199,16 +199,16 @@ class Config:
 
         # Check critical dependencies
         if self.storage.use_postgres and not self.database.is_configured:
-            messages.append("⚠️  PostgreSQL storage enabled but DATABASE_URL not configured")
+            messages.append("️  PostgreSQL storage enabled but DATABASE_URL not configured")
 
         if self.features.l4_generation and not self.llm.is_configured:
-            messages.append("⚠️  L4 generation enabled but LLM API keys not configured")
+            messages.append("️  L4 generation enabled but LLM API keys not configured")
 
         if self.features.semantic_search and not self.qdrant.is_configured:
-            messages.append("⚠️  Semantic search enabled but Qdrant not configured")
+            messages.append("️  Semantic search enabled but Qdrant not configured")
 
         if self.features.auto_regeneration and not self.eventbus.is_configured:
-            messages.append("⚠️  Auto-regeneration enabled but EventBus not configured")
+            messages.append("️  Auto-regeneration enabled but EventBus not configured")
 
         # Check monitoring
         if not self.monitoring.is_configured:
@@ -222,37 +222,37 @@ class Config:
         print("SCENARIO INTELLIGENCE - Configuration Summary")
         print("=" * 70)
 
-        print(f"\n🌍 Environment: {self.environment}")
-        print(f"🔧 Debug Mode: {self.debug}")
+        print(f"\n Environment: {self.environment}")
+        print(f" Debug Mode: {self.debug}")
 
-        print("\n📦 Storage Backends:")
-        print(f"   - Memory: {'✅' if self.storage.use_memory else '❌'}")
-        print(f"   - PostgreSQL: {'✅' if self.storage.use_postgres else '❌'} {'' if self.database.is_configured else '(NOT CONFIGURED)'}")
-        print(f"   - Qdrant: {'✅' if self.storage.use_qdrant else '❌'} {'' if self.qdrant.is_configured else '(NOT CONFIGURED)'}")
+        print("\n Storage Backends:")
+        print(f"   - Memory: {'' if self.storage.use_memory else ''}")
+        print(f"   - PostgreSQL: {'' if self.storage.use_postgres else ''} {'' if self.database.is_configured else '(NOT CONFIGURED)'}")
+        print(f"   - Qdrant: {'' if self.storage.use_qdrant else ''} {'' if self.qdrant.is_configured else '(NOT CONFIGURED)'}")
         print(f"   - Default: {self.storage.default_storage}")
 
-        print("\n🤖 AI Features:")
-        print(f"   - L4 Generation: {'✅' if self.features.l4_generation else '❌'} {'' if self.llm.is_configured else '(NOT CONFIGURED)'}")
-        print(f"   - Semantic Search: {'✅' if self.features.semantic_search else '❌'}")
-        print(f"   - Auto-Regeneration: {'✅' if self.features.auto_regeneration else '❌'}")
-        print(f"   - Execution Engine: {'✅' if self.features.execution_engine else '❌'}")
+        print("\n AI Features:")
+        print(f"   - L4 Generation: {'' if self.features.l4_generation else ''} {'' if self.llm.is_configured else '(NOT CONFIGURED)'}")
+        print(f"   - Semantic Search: {'' if self.features.semantic_search else ''}")
+        print(f"   - Auto-Regeneration: {'' if self.features.auto_regeneration else ''}")
+        print(f"   - Execution Engine: {'' if self.features.execution_engine else ''}")
 
-        print("\n🔌 Integrations:")
-        print(f"   - EventBus: {'✅' if self.eventbus.is_configured else '❌'}")
-        print(f"   - MIO Manager: {'✅' if self.monitoring.is_configured else '❌'}")
+        print("\n Integrations:")
+        print(f"   - EventBus: {'' if self.eventbus.is_configured else ''}")
+        print(f"   - MIO Manager: {'' if self.monitoring.is_configured else ''}")
 
-        print("\n🚀 Service:")
+        print("\n Service:")
         print(f"   - Host: {self.service.host}")
         print(f"   - Port: {self.service.port}")
 
         # Validation warnings
         warnings = self.validate()
         if warnings:
-            print("\n⚠️  Configuration Warnings:")
+            print("\n️  Configuration Warnings:")
             for warning in warnings:
                 print(f"   {warning}")
         else:
-            print("\n✅ Configuration is valid!")
+            print("\n Configuration is valid!")
 
         print("=" * 70)
 

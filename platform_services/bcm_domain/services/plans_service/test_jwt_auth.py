@@ -82,10 +82,10 @@ def test_all_endpoints_require_auth():
     # 5. Try each endpoint with invalid signature -> expect 401
     # 6. Try cross-tenant access -> expect 403
 
-    print("✅ All 21 endpoints require JWT authentication")
-    print("✅ Tenant isolation enforced via tenant_id in token")
-    print("✅ User context extracted from token (user_id, tenant_id, email, roles)")
-    print("✅ Development bypass available with X-Dev-User header when JWT_PUBLIC_KEY is empty")
+    print(" All 21 endpoints require JWT authentication")
+    print(" Tenant isolation enforced via tenant_id in token")
+    print(" User context extracted from token (user_id, tenant_id, email, roles)")
+    print(" Development bypass available with X-Dev-User header when JWT_PUBLIC_KEY is empty")
 
 
 def test_dev_mode_bypass():
@@ -98,7 +98,7 @@ def test_dev_mode_bypass():
     - Example: "dev_user:dev_tenant:dev@test.com"
     """
 
-    print("\n📝 Development Mode Bypass:")
+    print("\n Development Mode Bypass:")
     print("- Header: X-Dev-User: user123:tenant456:user@test.com")
     print("- Only works when JWT_PUBLIC_KEY is empty")
     print("- Automatically grants roles: bcm_manager, plan_approver")
@@ -113,7 +113,7 @@ def test_tenant_isolation():
     - Superadmins can access all tenants
     """
 
-    print("\n🔒 Tenant Isolation:")
+    print("\n Tenant Isolation:")
     print("- tenant_id extracted from JWT token")
     print("- User cannot specify tenant_id in request")
     print("- Cross-tenant access returns 403 Forbidden")
@@ -129,7 +129,7 @@ def test_error_responses():
     - 403 Forbidden: Valid token but insufficient permissions (cross-tenant)
     """
 
-    print("\n⚠️ Error Responses:")
+    print("\n️ Error Responses:")
     print("- 401 Unauthorized: Missing/invalid/expired token")
     print("  - Detail: 'Missing authentication token'")
     print("  - Detail: 'Token has expired'")
@@ -149,10 +149,10 @@ if __name__ == "__main__":
     test_error_responses()
 
     print("\n" + "=" * 60)
-    print("✅ JWT Authentication Implementation Complete")
+    print(" JWT Authentication Implementation Complete")
     print("=" * 60)
 
-    print("\n📋 Quick Reference:")
+    print("\n Quick Reference:")
     print("\nProduction Mode (JWT_PUBLIC_KEY set):")
     print("  Authorization: Bearer <JWT_TOKEN>")
     print("\nDevelopment Mode (JWT_PUBLIC_KEY empty):")

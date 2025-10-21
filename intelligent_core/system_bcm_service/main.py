@@ -14,9 +14,9 @@ System BCM Service - INTEGRATED Production Service
 - Реагирует на реальные сбои и автоматически восстанавливается
 - Обучается на реальных данных
 
-✅ ИНТЕГРАЦИЯ: Координатор, не исполнитель!
-✅ ДЕЛЕГИРОВАНИЕ: Использует существующие компоненты платформы
-✅ ЗНАНИЯ: Паттерны попадают в центры знаний и обучения
+ ИНТЕГРАЦИЯ: Координатор, не исполнитель!
+ ДЕЛЕГИРОВАНИЕ: Использует существующие компоненты платформы
+ ЗНАНИЯ: Паттерны попадают в центры знаний и обучения
 """
 
 import asyncio
@@ -99,20 +99,20 @@ state = ServiceState()
 
 async def setup_eventbus():
     """Setup EventBus connection"""
-    logger.info("🔌 Setting up EventBus connection...")
+    logger.info(" Setting up EventBus connection...")
 
     try:
         state.eventbus = create_eventbus('redis')
-        logger.info("✅ EventBus connected (Redis Streams)")
+        logger.info(" EventBus connected (Redis Streams)")
 
         # Subscribe to platform health events
         await subscribe_to_platform_events()
 
         return True
     except Exception as e:
-        logger.error(f"❌ EventBus connection failed: {e}")
+        logger.error(f" EventBus connection failed: {e}")
         state.eventbus = create_eventbus('memory')
-        logger.warning("⚠️  Fallback to memory EventBus")
+        logger.warning("️  Fallback to memory EventBus")
         return False
 
 
@@ -122,28 +122,28 @@ async def subscribe_to_platform_events():
     # Subscribe to health degradation
     @state.eventbus.subscribe("platform.health.degraded")
     async def on_health_degraded(event: Event):
-        logger.warning(f"⚠️  Health degraded: {event.data}")
+        logger.warning(f"️  Health degraded: {event.data}")
         await trigger_recovery_check(event.data)
 
     # Subscribe to service failures
     @state.eventbus.subscribe("platform.service.failed")
     async def on_service_failed(event: Event):
-        logger.error(f"🚨 Service failed: {event.data}")
+        logger.error(f" Service failed: {event.data}")
         await trigger_emergency_recovery(event.data)
 
     # Subscribe to resource contention
     @state.eventbus.subscribe("platform.resources.contention")
     async def on_resource_contention(event: Event):
-        logger.warning(f"⚠️  Resource contention: {event.data}")
+        logger.warning(f"️  Resource contention: {event.data}")
         await apply_resource_priorities(event.data)
 
     # Subscribe to recovery completed
     @state.eventbus.subscribe("platform.recovery.completed")
     async def on_recovery_completed(event: Event):
-        logger.info(f"✅ Recovery completed: {event.data}")
+        logger.info(f" Recovery completed: {event.data}")
         await learn_from_recovery(event.data)
 
-    logger.info("✅ Subscribed to platform events")
+    logger.info(" Subscribed to platform events")
 
 
 async def publish_bcm_event(event_type: str, data: Dict[str, Any]):
@@ -155,7 +155,7 @@ async def publish_bcm_event(event_type: str, data: Dict[str, Any]):
             source="system-bcm-service"
         )
         await state.eventbus.publish(event)
-        logger.debug(f"📤 Published: {event.type}")
+        logger.debug(f" Published: {event.type}")
     except Exception as e:
         logger.error(f"Failed to publish event: {e}")
 
@@ -169,7 +169,7 @@ async def trigger_recovery_check(health_data: Dict[str, Any]):
     service = health_data.get("service")
     severity = health_data.get("severity", "warning")
 
-    logger.info(f"🔍 Checking recovery for {service} (severity: {severity})")
+    logger.info(f" Checking recovery for {service} (severity: {severity})")
 
     if severity in ["critical", "error"]:
         # Trigger appropriate recovery procedure
@@ -181,7 +181,7 @@ async def trigger_emergency_recovery(failure_data: Dict[str, Any]):
     service = failure_data.get("service")
     failure_type = failure_data.get("type", "unknown")
 
-    logger.error(f"🚨 EMERGENCY: {service} failed ({failure_type})")
+    logger.error(f" EMERGENCY: {service} failed ({failure_type})")
 
     # Map to recovery procedure
     recovery_map = {
@@ -208,7 +208,7 @@ async def execute_recovery_procedure(
 ):
     """Execute actual recovery procedure"""
 
-    logger.info(f"🔧 Executing recovery for {service}")
+    logger.info(f" Executing recovery for {service}")
 
     recovery_start = datetime.utcnow()
 
@@ -240,7 +240,7 @@ async def execute_recovery_procedure(
             await restart_service(service)
         else:
             # Execute procedure steps
-            logger.info(f"📋 Executing {procedure['name']}: {len(procedure['steps'])} steps")
+            logger.info(f" Executing {procedure['name']}: {len(procedure['steps'])} steps")
 
             for step in procedure['steps']:
                 step_num = step['step']
@@ -262,7 +262,7 @@ async def execute_recovery_procedure(
         recovery_end = datetime.utcnow()
         recovery_time = (recovery_end - recovery_start).total_seconds()
 
-        logger.info(f"✅ Recovery completed in {recovery_time:.1f}s")
+        logger.info(f" Recovery completed in {recovery_time:.1f}s")
 
         # Publish recovery completed
         await publish_bcm_event("recovery.completed", {
@@ -286,7 +286,7 @@ async def execute_recovery_procedure(
         )
 
     except Exception as e:
-        logger.error(f"❌ Recovery failed: {e}")
+        logger.error(f" Recovery failed: {e}")
         await publish_bcm_event("recovery.failed", {
             "service": service,
             "error": str(e),
@@ -296,11 +296,11 @@ async def execute_recovery_procedure(
 
 async def restart_service(service: str):
     """Restart a service (production would use actual Docker/K8s commands)"""
-    logger.info(f"🔄 Restarting {service}...")
+    logger.info(f" Restarting {service}...")
     # В production:
     # subprocess.run(['docker', 'restart', service])
     await asyncio.sleep(0.5)
-    logger.info(f"✅ {service} restarted")
+    logger.info(f" {service} restarted")
 
 
 async def apply_resource_priorities(contention_data: Dict[str, Any]):
@@ -308,7 +308,7 @@ async def apply_resource_priorities(contention_data: Dict[str, Any]):
     resource_type = contention_data.get("resource_type", "cpu")
     utilization = contention_data.get("utilization", 0)
 
-    logger.warning(f"⚡ Applying priorities: {resource_type} at {utilization}%")
+    logger.warning(f" Applying priorities: {resource_type} at {utilization}%")
 
     # Load priorities
     scenarios_path = Path(__file__).parent.parent / "ai-foundation" / "learning-knowledge" / "scenarios" / "system_scenarios"
@@ -318,7 +318,7 @@ async def apply_resource_priorities(contention_data: Dict[str, Any]):
     # Find contention policy
     for policy in priorities.get("resource_contention_policies", []):
         if resource_type in policy.get("contention_type", ""):
-            logger.info(f"📋 Executing contention policy: {policy['contention_type']}")
+            logger.info(f" Executing contention policy: {policy['contention_type']}")
 
             for response in policy.get("response", []):
                 action = response.get("action")
@@ -345,7 +345,7 @@ async def learn_from_recovery(recovery_data: Dict[str, Any]):
     status = recovery_data.get("status")
 
     if status == "success":
-        logger.info(f"🎓 Learning from successful recovery: {service}")
+        logger.info(f" Learning from successful recovery: {service}")
 
         # Record success
         insight = {
@@ -365,13 +365,13 @@ async def execute_bcm_cycle():
     """
     Execute INTEGRATED BCM cycle
 
-    ✅ USES existing platform components (not duplicates!)
-    ✅ Patterns go to Collective Intelligence + Qdrant + knowledge base
-    ✅ AI specialists consulted from Expertise Center
-    ✅ RAG + LLM analysis for deep insights
+     USES existing platform components (not duplicates!)
+     Patterns go to Collective Intelligence + Qdrant + knowledge base
+     AI specialists consulted from Expertise Center
+     RAG + LLM analysis for deep insights
     """
     logger.info("=" * 80)
-    logger.info("🚀 STARTING INTEGRATED SYSTEM BCM CYCLE")
+    logger.info(" STARTING INTEGRATED SYSTEM BCM CYCLE")
     logger.info("=" * 80)
 
     cycle_start = datetime.utcnow()
@@ -379,11 +379,11 @@ async def execute_bcm_cycle():
 
     try:
         # Execute INTEGRATED BCM cycle using NEW coordinator
-        logger.info("\n🔄 Executing INTEGRATED BCM cycle...")
-        logger.info("   ✅ Using learning-knowledge (PatternDetector)")
-        logger.info("   ✅ Consulting Expertise Center (14 AI specialists)")
-        logger.info("   ✅ Sharing with Collective Intelligence (347+ cases)")
-        logger.info("   ✅ Using RAG + LLM (Qdrant + Claude/GPT)")
+        logger.info("\n Executing INTEGRATED BCM cycle...")
+        logger.info("    Using learning-knowledge (PatternDetector)")
+        logger.info("    Consulting Expertise Center (14 AI specialists)")
+        logger.info("    Sharing with Collective Intelligence (347+ cases)")
+        logger.info("    Using RAG + LLM (Qdrant + Claude/GPT)")
 
         cycle_result = await state.coordinator.run_bcm_cycle()
 
@@ -415,7 +415,7 @@ async def execute_bcm_cycle():
             # Apply top 3 high-confidence recommendations
             for rec in recommendations[:3]:
                 if rec.get("confidence", 0) > 0.7 and rec.get("priority") in ["critical", "high"]:
-                    logger.info(f"   🔧 Applying: {rec.get('action', 'Unknown')}")
+                    logger.info(f"    Applying: {rec.get('action', 'Unknown')}")
                     applied_count += 1
                     # В production здесь реальное применение
 
@@ -458,21 +458,21 @@ async def execute_bcm_cycle():
         })
 
         logger.info("=" * 80)
-        logger.info(f"✅ INTEGRATED CYCLE {state.cycle_count} COMPLETED in {cycle_time:.1f}s")
-        logger.info(f"   📊 Platform Health: {cycle_result.get('metrics', {}).get('platform_health_score', 0)}%")
-        logger.info(f"   🔍 Patterns detected: {patterns_count}")
-        logger.info(f"   🧠 AI specialists consulted: {specialists_consulted}")
-        logger.info(f"   📚 Knowledge shared with community: {knowledge_shared} patterns")
-        logger.info(f"   💡 Insights generated: {insights_count}")
-        logger.info(f"   🔧 Improvements applied: {applied_count}")
-        logger.info(f"   📈 Total improvements to date: {state.total_improvements_applied}")
-        logger.info(f"   🌐 Total patterns shared with community: {state.total_patterns_shared}")
+        logger.info(f" INTEGRATED CYCLE {state.cycle_count} COMPLETED in {cycle_time:.1f}s")
+        logger.info(f"    Platform Health: {cycle_result.get('metrics', {}).get('platform_health_score', 0)}%")
+        logger.info(f"    Patterns detected: {patterns_count}")
+        logger.info(f"    AI specialists consulted: {specialists_consulted}")
+        logger.info(f"    Knowledge shared with community: {knowledge_shared} patterns")
+        logger.info(f"    Insights generated: {insights_count}")
+        logger.info(f"    Improvements applied: {applied_count}")
+        logger.info(f"    Total improvements to date: {state.total_improvements_applied}")
+        logger.info(f"    Total patterns shared with community: {state.total_patterns_shared}")
         logger.info("=" * 80)
 
         return state.last_cycle_result
 
     except Exception as e:
-        logger.error(f"❌ BCM Cycle failed: {e}", exc_info=True)
+        logger.error(f" BCM Cycle failed: {e}", exc_info=True)
 
         await publish_bcm_event("cycle.failed", {
             "cycle_number": state.cycle_count,
@@ -585,7 +585,7 @@ async def get_metrics():
     metrics.append(f"system_bcm_cycles_total {state.cycle_count}")
     metrics.append(f"system_bcm_improvements_total {state.total_improvements_applied}")
 
-    # ✅ NEW: Integration metrics
+    #  NEW: Integration metrics
     metrics.append(f"system_bcm_patterns_shared_total {state.total_patterns_shared}")
     metrics.append(f"system_bcm_specialists_consulted_total {state.total_specialists_consulted}")
 
@@ -602,7 +602,7 @@ async def get_metrics():
         insights = integration_metrics.get("insights_generated", 0)
         metrics.append(f"system_bcm_insights_generated {insights}")
 
-        # ✅ NEW: Platform health from integrated cycle
+        #  NEW: Platform health from integrated cycle
         health_score = integration_metrics.get("platform_health_score", 0)
         metrics.append(f"system_bcm_platform_health_score {health_score}")
 
@@ -612,7 +612,7 @@ async def get_metrics():
         knowledge_shared = integration_metrics.get("knowledge_shared_with_community", 0)
         metrics.append(f"system_bcm_knowledge_shared {knowledge_shared}")
 
-    # ✅ NEW: ResourceTracker metrics
+    #  NEW: ResourceTracker metrics
     if state.resource_tracker:
         stats = state.resource_tracker.get_stats()
         metrics.append(f"system_bcm_resource_snapshots_total {stats.get('total_snapshots', 0)}")
@@ -685,7 +685,7 @@ async def get_resource_status():
 @app.on_event("startup")
 async def startup():
     """Service startup - INTEGRATED version"""
-    logger.info("🚀 System BCM Service Starting (INTEGRATED)...")
+    logger.info(" System BCM Service Starting (INTEGRATED)...")
 
     # Setup EventBus (coordinator needs it, we need it for API events)
     await setup_eventbus()
@@ -700,7 +700,7 @@ async def startup():
         long_term_storage_path=str(memory_storage_path),
         enable_vector_db=False
     )
-    logger.info("✅ Memory System initialized")
+    logger.info(" Memory System initialized")
 
     # Start Survival Instinct with Memory
     config_path = Path(__file__).parent / "config" / "kpis.json"
@@ -710,7 +710,7 @@ async def startup():
         check_interval=60,
         memory_system=state.memory
     )
-    logger.info("✅ Survival Instinct activated (with memory)")
+    logger.info(" Survival Instinct activated (with memory)")
 
     # Start ResourceTracker (NEW!)
     resource_history_path = Path(__file__).parent / "data" / "resource_history.json"
@@ -719,30 +719,30 @@ async def startup():
         history_size=100,
         storage_path=str(resource_history_path)
     )
-    logger.info("✅ Resource Tracker activated (60s snapshots)")
+    logger.info(" Resource Tracker activated (60s snapshots)")
 
     # Initialize INTEGRATED coordinator WITH ResourceTracker (NEW!)
     state.coordinator = SystemBCMCoordinator(resource_tracker=state.resource_tracker)
     await state.coordinator.initialize()
-    logger.info("✅ Integrated coordinator initialized")
-    logger.info("   ✅ Connected to learning-knowledge")
-    logger.info("   ✅ Connected to Expertise Center")
-    logger.info("   ✅ Connected to Collective Intelligence")
-    logger.info("   ✅ Connected to RAG + LLM")
-    logger.info("   ✅ Using ResourceTracker for resource monitoring")
+    logger.info(" Integrated coordinator initialized")
+    logger.info("    Connected to learning-knowledge")
+    logger.info("    Connected to Expertise Center")
+    logger.info("    Connected to Collective Intelligence")
+    logger.info("    Connected to RAG + LLM")
+    logger.info("    Using ResourceTracker for resource monitoring")
 
     # Start scheduler
     state.running = True
     state.scheduler_task = asyncio.create_task(scheduler_loop())
 
     state.health_status = "healthy"
-    logger.info("✅ System BCM Service STARTED (FULLY INTEGRATED)")
+    logger.info(" System BCM Service STARTED (FULLY INTEGRATED)")
 
 
 @app.on_event("shutdown")
 async def shutdown():
     """Service shutdown"""
-    logger.info("🛑 System BCM Service Shutting Down...")
+    logger.info(" System BCM Service Shutting Down...")
 
     state.running = False
     state.health_status = "shutdown"
@@ -771,7 +771,7 @@ async def shutdown():
     if state.coordinator:
         await state.coordinator.shutdown()
 
-    logger.info("✅ System BCM Service STOPPED")
+    logger.info(" System BCM Service STOPPED")
 
 
 # ============================================================================

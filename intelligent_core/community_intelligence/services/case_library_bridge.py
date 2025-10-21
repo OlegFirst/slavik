@@ -67,7 +67,7 @@ class CaseLibraryBridge:
             workflow_case_id = await self._add_to_workflow_library(workflow_case)
 
             logger.info(
-                f"✅ Community case {contribution_id} added to workflow library "
+                f" Community case {contribution_id} added to workflow library "
                 f"as {workflow_case_id}"
             )
 
@@ -308,7 +308,7 @@ class CaseLibraryBridge:
         await self.db.commit()
 
         logger.info(
-            f"✅ Sync complete: {synced_count} synced, {failed_count} failed"
+            f" Sync complete: {synced_count} synced, {failed_count} failed"
         )
 
         return {

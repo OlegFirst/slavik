@@ -301,9 +301,9 @@ class {config["name"].replace(" ", "")}SelfAware(SelfAwareService if SELF_AWARE_
                     {capabilities_str}
                 ]
             )
-            logger.info("✅ {config['name']} initialized as Self-Aware")
+            logger.info(" {config['name']} initialized as Self-Aware")
         else:
-            logger.warning("⚠️  {config['name']} running in basic mode (Self-Aware not available)")
+            logger.warning("️  {config['name']} running in basic mode (Self-Aware not available)")
 
     async def initialize(self):
         """Initialize {config['name']}-specific capabilities"""
@@ -311,7 +311,7 @@ class {config["name"].replace(" ", "")}SelfAware(SelfAwareService if SELF_AWARE_
             # Register event handlers with priorities
 {handler_registrations_str}
 
-            logger.info("✅ {config['name']} event handlers registered")
+            logger.info(" {config['name']} event handlers registered")
 {handlers_str}
 
     async def handle_completion_event(self, event):
@@ -343,10 +343,10 @@ async def lifespan(app: FastAPI):
 
     # === STARTUP ===
     logger.info("=" * 60)
-    logger.info("🚀 Starting {config['name']} (Integrated with Graceful Choreography)")
+    logger.info(" Starting {config['name']} (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f"📍 Port: {config['port']}")
-    logger.info(f"📋 ISO 22301 Clause: {config['iso_clause']}")
+    logger.info(f" Port: {config['port']}")
+    logger.info(f" ISO 22301 Clause: {config['iso_clause']}")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -368,7 +368,7 @@ async def lifespan(app: FastAPI):
         # === 2. Initialize Database ===
         logger.info("\\n2️⃣  Initializing Database...")
         await init_db()
-        logger.info(f"   ✅ Database initialized")
+        logger.info(f"    Database initialized")
 
         # === 3. Initialize Self-Aware Service ===
         if SELF_AWARE_AVAILABLE:
@@ -378,7 +378,7 @@ async def lifespan(app: FastAPI):
 
             # Subscribe to events via platform EventBus
             if platform.intelligent_router:
-                logger.info("   📡 Registering with Intelligent EventBus...")
+                logger.info("    Registering with Intelligent EventBus...")
                 # Register service capabilities with router
                 await platform.intelligent_router.register_subscriber(
                     subscriber_id="{service_key}",
@@ -392,13 +392,13 @@ async def lifespan(app: FastAPI):
                         "semantic_tags": ["{semantic_tags_str}"]
                     }}
                 )
-                logger.info("   ✅ Self-Aware Service registered with Intelligent Router")
+                logger.info("    Self-Aware Service registered with Intelligent Router")
             elif platform.eventbus:
-                logger.info("   📡 Registering with Basic EventBus...")
+                logger.info("    Registering with Basic EventBus...")
                 await platform.eventbus.subscribe("{event_patterns_str}", service_self_aware.on_event)
-                logger.info("   ✅ Self-Aware Service registered with EventBus")
+                logger.info("    Self-Aware Service registered with EventBus")
         else:
-            logger.warning("\\n3️⃣  ⚠️  Self-Aware Services not available (basic mode)")
+            logger.warning("\\n3️⃣  ️  Self-Aware Services not available (basic mode)")
 
         # === 4. Initialize Workflow Intelligence ===
         logger.info("\\n4️⃣  Initializing Workflow Intelligence...")
@@ -428,7 +428,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("   ✅ Workflow Intelligence initialized")
+        logger.info("    Workflow Intelligence initialized")
 
         # === 5. Register Sagas (if saga engine available) ===
         if platform.saga_orchestrator:
@@ -442,41 +442,41 @@ async def lifespan(app: FastAPI):
                 platform.saga_orchestrator.register_saga(create_bcm_program_saga())
                 platform.saga_orchestrator.register_saga(create_incident_response_saga())
 
-                logger.info("   ✅ Sagas registered")
+                logger.info("    Sagas registered")
             except ImportError:
-                logger.warning("   ⚠️  Saga definitions not found")
+                logger.warning("   ️  Saga definitions not found")
 
         logger.info("\\n" + "=" * 60)
-        logger.info("✅ {config['name']} ready (with Graceful Choreography)")
+        logger.info(" {config['name']} ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"   🌐 Docs: http://localhost:{config['port']}/docs")
-        logger.info(f"   📊 Metrics: http://localhost:{config['port']}/metrics")
-        logger.info(f"   ❤️  Health: http://localhost:{config['port']}/health")
+        logger.info(f"    Docs: http://localhost:{config['port']}/docs")
+        logger.info(f"    Metrics: http://localhost:{config['port']}/metrics")
+        logger.info(f"   ️  Health: http://localhost:{config['port']}/health")
         logger.info("=" * 60 + "\\n")
 
     except Exception as e:
-        logger.error(f"❌ Failed to start {config['name']}: {{e}}", exc_info=True)
+        logger.error(f" Failed to start {config['name']}: {{e}}", exc_info=True)
         raise
 
     yield  # Application running
 
     # === SHUTDOWN ===
     logger.info("\\n" + "=" * 60)
-    logger.info("🛑 Shutting down {config['name']}...")
+    logger.info(" Shutting down {config['name']}...")
     logger.info("=" * 60)
 
     if workflow_storage:
         await workflow_storage.close()
-        logger.info("   ✅ Workflow storage closed")
+        logger.info("    Workflow storage closed")
 
     await close_db()
-    logger.info("   ✅ Database closed")
+    logger.info("    Database closed")
 
     await shutdown_platform()
-    logger.info("   ✅ Platform integration shutdown")
+    logger.info("    Platform integration shutdown")
 
     logger.info("=" * 60)
-    logger.info("✅ {config['name']} shutdown complete")
+    logger.info(" {config['name']} shutdown complete")
     logger.info("=" * 60)
 
 
@@ -627,13 +627,13 @@ async def test_platform_integration():
             enable_self_aware=True,
             enable_cqrs=False
         )
-        print("   ✅ Platform initialized successfully")
+        print("    Platform initialized successfully")
 
         status = platform.get_status()
-        print(f"   📊 Platform Status: {{status}}")
+        print(f"    Platform Status: {{status}}")
 
     except Exception as e:
-        print(f"   ❌ Platform initialization failed: {{e}}")
+        print(f"    Platform initialization failed: {{e}}")
         import traceback
         traceback.print_exc()
         return False
@@ -642,24 +642,24 @@ async def test_platform_integration():
     print("\\n2️⃣  Testing Platform Components...")
 
     if platform.eventbus:
-        print("   ✅ EventBus available")
+        print("    EventBus available")
     else:
-        print("   ❌ EventBus not available")
+        print("    EventBus not available")
 
     if platform.intelligent_router:
-        print("   ✅ Intelligent EventRouter available")
+        print("    Intelligent EventRouter available")
         try:
             metrics = platform.intelligent_router.get_metrics()
-            print(f"   📊 Router Metrics: {{metrics}}")
+            print(f"    Router Metrics: {{metrics}}")
         except Exception as e:
-            print(f"   ⚠️  Could not get router metrics: {{e}}")
+            print(f"   ️  Could not get router metrics: {{e}}")
     else:
-        print("   ⚠️  Intelligent EventRouter not available (using basic EventBus)")
+        print("   ️  Intelligent EventRouter not available (using basic EventBus)")
 
     if platform.saga_orchestrator:
-        print("   ✅ Saga Orchestrator available")
+        print("    Saga Orchestrator available")
     else:
-        print("   ❌ Saga Orchestrator not available")
+        print("    Saga Orchestrator not available")
 
     # Test 3: Self-Aware Service
     print("\\n3️⃣  Testing Self-Aware Service...")
@@ -680,11 +680,11 @@ async def test_platform_integration():
 
         test_service.register_handler("{config['module']}.test.*", test_service.handle_test_event, priority=EventPriority.HIGH)
 
-        print("   ✅ Self-Aware Service created successfully")
-        print("   ✅ Event handlers registered successfully")
+        print("    Self-Aware Service created successfully")
+        print("    Event handlers registered successfully")
 
     except Exception as e:
-        print(f"   ❌ Self-Aware Service test failed: {{e}}")
+        print(f"    Self-Aware Service test failed: {{e}}")
         import traceback
         traceback.print_exc()
 
@@ -703,10 +703,10 @@ async def test_platform_integration():
             )
 
             await platform.intelligent_router.route_event(test_event)
-            print("   ✅ Event routed successfully")
+            print("    Event routed successfully")
 
         except Exception as e:
-            print(f"   ⚠️  Event publishing test failed: {{e}}")
+            print(f"   ️  Event publishing test failed: {{e}}")
 
     # Test 5: Saga Engine
     if platform.saga_orchestrator:
@@ -719,25 +719,25 @@ async def test_platform_integration():
             saga_def = create_bcm_program_saga()
             platform.saga_orchestrator.register_saga(saga_def)
 
-            print("   ✅ Saga registered successfully")
+            print("    Saga registered successfully")
             if hasattr(platform.saga_orchestrator, 'sagas'):
-                print(f"   📊 Registered sagas: {{list(platform.saga_orchestrator.sagas.keys())}}")
+                print(f"    Registered sagas: {{list(platform.saga_orchestrator.sagas.keys())}}")
             elif hasattr(platform.saga_orchestrator, '_sagas'):
-                print(f"   📊 Registered sagas: {{list(platform.saga_orchestrator._sagas.keys())}}")
+                print(f"    Registered sagas: {{list(platform.saga_orchestrator._sagas.keys())}}")
 
         except Exception as e:
-            print(f"   ⚠️  Saga engine test failed: {{e}}")
+            print(f"   ️  Saga engine test failed: {{e}}")
 
     # Cleanup
     print("\\n6️⃣  Testing Cleanup...")
     try:
         await shutdown_platform()
-        print("   ✅ Platform shutdown successfully")
+        print("    Platform shutdown successfully")
     except Exception as e:
-        print(f"   ⚠️  Platform shutdown had issues: {{e}}")
+        print(f"   ️  Platform shutdown had issues: {{e}}")
 
     print("\\n" + "=" * 70)
-    print("✅ Integration Test Complete!")
+    print(" Integration Test Complete!")
     print("=" * 70 + "\\n")
 
     return True
@@ -749,19 +749,19 @@ async def main():
         success = await test_platform_integration()
 
         if success:
-            print("🎉 All integration tests passed!")
-            print("\\n📝 Next steps:")
+            print(" All integration tests passed!")
+            print("\\n Next steps:")
             print("   1. Run full service: python main_integrated.py")
             print("   2. Test API endpoints: http://localhost:{config['port']}/docs")
             print("   3. Check health: curl http://localhost:{config['port']}/health")
             print("   4. Check platform status: curl http://localhost:{config['port']}/api/platform/status")
             return 0
         else:
-            print("❌ Some integration tests failed")
+            print(" Some integration tests failed")
             return 1
 
     except Exception as e:
-        print(f"❌ Test failed with exception: {{e}}")
+        print(f" Test failed with exception: {{e}}")
         import traceback
         traceback.print_exc()
         return 1
@@ -809,21 +809,21 @@ async def process_service(service_key: str, config: Dict, base_path: Path) -> Tu
         main_content = generate_main_integrated(service_key, config)
         main_file = service_path / "main_integrated.py"
         main_file.write_text(main_content)
-        print("     ✅ main_integrated.py created")
+        print("      main_integrated.py created")
 
         # 2. Generate test_integration.py
         print("  2️⃣  Generating test_integration.py...")
         test_content = generate_test_integration(service_key, config)
         test_file = service_path / "test_integration.py"
         test_file.write_text(test_content)
-        print("     ✅ test_integration.py created")
+        print("      test_integration.py created")
 
         # 3. Generate .env
         print("  3️⃣  Generating .env file...")
         env_content = generate_env_file(service_key, config)
         env_file = service_path / ".env"
         env_file.write_text(env_content)
-        print("     ✅ .env created")
+        print("      .env created")
 
         # 4. Run tests
         print("  4️⃣  Running integration tests...")
@@ -837,18 +837,18 @@ async def process_service(service_key: str, config: Dict, base_path: Path) -> Tu
         stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=30)
 
         if proc.returncode == 0:
-            print("     ✅ Tests PASSED")
+            print("      Tests PASSED")
             return (service_key, True)
         else:
-            print(f"     ❌ Tests FAILED (exit code: {proc.returncode})")
+            print(f"      Tests FAILED (exit code: {proc.returncode})")
             print(f"     Output:\n{stdout.decode()}")
             return (service_key, False)
 
     except asyncio.TimeoutError:
-        print("     ❌ Tests TIMEOUT")
+        print("      Tests TIMEOUT")
         return (service_key, False)
     except Exception as e:
-        print(f"     ❌ Error: {e}")
+        print(f"      Error: {e}")
         import traceback
         traceback.print_exc()
         return (service_key, False)
@@ -878,12 +878,12 @@ async def main():
     passed = [r for r in results if r[1]]
     failed = [r for r in results if not r[1]]
 
-    print(f"\n✅ Passed: {len(passed)}/{len(results)}")
+    print(f"\n Passed: {len(passed)}/{len(results)}")
     for service_key, _ in passed:
         print(f"   - {SERVICES[service_key]['name']}")
 
     if failed:
-        print(f"\n❌ Failed: {len(failed)}/{len(results)}")
+        print(f"\n Failed: {len(failed)}/{len(results)}")
         for service_key, _ in failed:
             print(f"   - {SERVICES[service_key]['name']}")
 

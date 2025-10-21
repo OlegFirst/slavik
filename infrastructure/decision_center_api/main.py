@@ -44,16 +44,16 @@ async def lifespan(app: FastAPI):
     """Application lifespan - startup and shutdown"""
     global decision_center, eventbus
 
-    logger.info("🚀 Starting Decision Center API...")
+    logger.info(" Starting Decision Center API...")
 
     try:
         # Initialize EventBus (optional)
         try:
             eventbus = create_eventbus('redis')
             await eventbus.connect()
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
         except Exception as e:
-            logger.warning(f"⚠️ EventBus connection failed: {e}")
+            logger.warning(f"️ EventBus connection failed: {e}")
             eventbus = None
 
         # Initialize AI Hub (optional)
@@ -64,9 +64,9 @@ async def lifespan(app: FastAPI):
                 tier3_enabled=True,  # Quick tier for MVP
                 tier4_enabled=False
             )
-            logger.info("✅ AI Hub initialized")
+            logger.info(" AI Hub initialized")
         except Exception as e:
-            logger.warning(f"⚠️ AI Hub initialization failed: {e}")
+            logger.warning(f"️ AI Hub initialization failed: {e}")
             ai_hub = None
 
         # Initialize Decision Center
@@ -76,7 +76,7 @@ async def lifespan(app: FastAPI):
             eventbus=eventbus
         )
 
-        logger.info("✅ Decision Center API started successfully")
+        logger.info(" Decision Center API started successfully")
         logger.info(f"   - AI Hub: {'Enabled' if ai_hub else 'Disabled'}")
         logger.info(f"   - Metrics: Enabled")
         logger.info(f"   - EventBus: {'Connected' if eventbus else 'Disconnected'}")
@@ -85,10 +85,10 @@ async def lifespan(app: FastAPI):
 
     finally:
         # Cleanup
-        logger.info("🛑 Shutting down Decision Center API...")
+        logger.info(" Shutting down Decision Center API...")
         if eventbus:
             await eventbus.close()
-        logger.info("✅ Decision Center API shutdown complete")
+        logger.info(" Decision Center API shutdown complete")
 
 
 # Create FastAPI app
@@ -152,7 +152,7 @@ async def request_decision(request: DecisionRequest):
     Wraps `decide_recovery_action()` from InfrastructureDecisionCenter.
     """
     try:
-        logger.info(f"📥 Decision request: {request.service} - {request.action}")
+        logger.info(f" Decision request: {request.service} - {request.action}")
 
         # Call Decision Center
         decision, can_proceed = await decision_center.decide_recovery_action(
@@ -181,12 +181,12 @@ async def request_decision(request: DecisionRequest):
             decided_at=decision.decided_at
         )
 
-        logger.info(f"📤 Decision response: {decision.outcome.value} (can_proceed: {can_proceed})")
+        logger.info(f" Decision response: {decision.outcome.value} (can_proceed: {can_proceed})")
 
         return response
 
     except Exception as e:
-        logger.error(f"❌ Error processing decision request: {e}")
+        logger.error(f" Error processing decision request: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Decision processing failed: {str(e)}"
@@ -227,7 +227,7 @@ async def get_decision(decision_id: str):
 async def create_escalation(request: EscalationRequest):
     """Create escalation to human operators"""
     try:
-        logger.info(f"🚨 Escalation request: {request.service} - {request.reason}")
+        logger.info(f" Escalation request: {request.service} - {request.reason}")
 
         escalation = await decision_center.escalate(
             service_name=request.service,
@@ -247,12 +247,12 @@ async def create_escalation(request: EscalationRequest):
             created_at=escalation.created_at
         )
 
-        logger.info(f"✅ Escalation created: {escalation.escalation_id}")
+        logger.info(f" Escalation created: {escalation.escalation_id}")
 
         return response
 
     except Exception as e:
-        logger.error(f"❌ Error creating escalation: {e}")
+        logger.error(f" Error creating escalation: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Escalation creation failed: {str(e)}"
@@ -329,7 +329,7 @@ async def respond_to_approval(request: ApprovalRequest):
     """Approve or reject pending approval"""
     try:
         logger.info(
-            f"📋 Approval response: {request.approval_id} - "
+            f" Approval response: {request.approval_id} - "
             f"{'APPROVED' if request.approved else 'REJECTED'} by {request.approved_by}"
         )
 
@@ -357,12 +357,12 @@ async def respond_to_approval(request: ApprovalRequest):
             decided_at=approval.approved_at or approval.rejected_at or datetime.utcnow()
         )
 
-        logger.info(f"✅ Approval processed: {approval.status.value}")
+        logger.info(f" Approval processed: {approval.status.value}")
 
         return response
 
     except Exception as e:
-        logger.error(f"❌ Error processing approval: {e}")
+        logger.error(f" Error processing approval: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Approval processing failed: {str(e)}"

@@ -54,7 +54,7 @@ class KnowledgeInitializer:
         """
 
         logger.info("=" * 70)
-        logger.info("🚀 INITIALIZING INTELLIGENCE LAYER KNOWLEDGE BASE")
+        logger.info(" INITIALIZING INTELLIGENCE LAYER KNOWLEDGE BASE")
         logger.info("=" * 70)
 
         stats = {
@@ -67,19 +67,19 @@ class KnowledgeInitializer:
 
         try:
             # Step 1: Load ISO 22301 clauses
-            logger.info("\n📚 Step 1: Loading ISO 22301:2019 clauses...")
+            logger.info("\n Step 1: Loading ISO 22301:2019 clauses...")
             clauses = self.iso_loader.load_all_clauses()
             stats['iso_clauses_loaded'] = len(clauses)
-            logger.info(f"✅ Loaded {stats['iso_clauses_loaded']} ISO clauses")
+            logger.info(f" Loaded {stats['iso_clauses_loaded']} ISO clauses")
 
             # Step 2: Build Knowledge Graph
-            logger.info("\n🕸️  Step 2: Building Knowledge Graph...")
+            logger.info("\n️  Step 2: Building Knowledge Graph...")
             self.knowledge_graph = self.graph_builder.build_from_iso_clauses(clauses)
             graph_stats = self.knowledge_graph.get_statistics()
             stats['knowledge_graph_nodes'] = graph_stats['total_nodes']
             stats['knowledge_graph_edges'] = graph_stats['total_edges']
             logger.info(
-                f"✅ Knowledge Graph built: "
+                f" Knowledge Graph built: "
                 f"{stats['knowledge_graph_nodes']} nodes, "
                 f"{stats['knowledge_graph_edges']} edges"
             )
@@ -90,10 +90,10 @@ class KnowledgeInitializer:
                 logger.info(f"    - {node_type}: {count}")
 
             # Step 3: Ingest into RAG pipeline
-            logger.info("\n🔍 Step 3: Ingesting knowledge into RAG pipeline...")
+            logger.info("\n Step 3: Ingesting knowledge into RAG pipeline...")
             self.ingestion_stats = await self.ingestion_pipeline.ingest_all_knowledge()
             stats['rag_documents_ingested'] = self.ingestion_stats['total_documents']
-            logger.info(f"✅ Ingested {stats['rag_documents_ingested']} documents into RAG")
+            logger.info(f" Ingested {stats['rag_documents_ingested']} documents into RAG")
 
             # Print ingestion breakdown
             logger.info("\n  Documents by source:")
@@ -103,20 +103,20 @@ class KnowledgeInitializer:
             logger.info(f"    - Healthcare Guides: {self.ingestion_stats['healthcare_guides']}")
 
             # Step 4: Verify knowledge availability
-            logger.info("\n✅ Step 4: Verifying knowledge availability...")
+            logger.info("\n Step 4: Verifying knowledge availability...")
             verification = await self._verify_knowledge()
             stats['verification'] = verification
 
             if verification['all_passed']:
                 stats['status'] = 'success'
-                logger.info("✅ All verification checks passed!")
+                logger.info(" All verification checks passed!")
             else:
                 stats['status'] = 'partial'
-                logger.warning("⚠️  Some verification checks failed")
+                logger.warning("️  Some verification checks failed")
 
             # Summary
             logger.info("\n" + "=" * 70)
-            logger.info("🎉 KNOWLEDGE BASE INITIALIZATION COMPLETE")
+            logger.info(" KNOWLEDGE BASE INITIALIZATION COMPLETE")
             logger.info("=" * 70)
             logger.info(f"\n  Status: {stats['status']}")
             logger.info(f"  ISO Clauses: {stats['iso_clauses_loaded']}")
@@ -127,7 +127,7 @@ class KnowledgeInitializer:
             return stats
 
         except Exception as e:
-            logger.error(f"❌ Knowledge base initialization failed: {e}", exc_info=True)
+            logger.error(f" Knowledge base initialization failed: {e}", exc_info=True)
             stats['status'] = 'failed'
             stats['error'] = str(e)
             return stats
@@ -149,10 +149,10 @@ class KnowledgeInitializer:
         bia_clause = self.knowledge_graph.get_node('iso-8.2.2')
         if bia_clause:
             check1['passed'] = True
-            logger.info("  ✅ ISO Clause 8.2.2 (BIA) found in Knowledge Graph")
+            logger.info("   ISO Clause 8.2.2 (BIA) found in Knowledge Graph")
         else:
             check1['passed'] = False
-            logger.error("  ❌ ISO Clause 8.2.2 (BIA) NOT found in Knowledge Graph")
+            logger.error("   ISO Clause 8.2.2 (BIA) NOT found in Knowledge Graph")
             verification['all_passed'] = False
 
         verification['checks'].append(check1)
@@ -167,10 +167,10 @@ class KnowledgeInitializer:
         if len(evidence) > 0:
             check2['passed'] = True
             check2['count'] = len(evidence)
-            logger.info(f"  ✅ BIA clause has {len(evidence)} evidence requirements")
+            logger.info(f"   BIA clause has {len(evidence)} evidence requirements")
         else:
             check2['passed'] = False
-            logger.error("  ❌ BIA clause has NO evidence requirements")
+            logger.error("   BIA clause has NO evidence requirements")
             verification['all_passed'] = False
 
         verification['checks'].append(check2)
@@ -185,10 +185,10 @@ class KnowledgeInitializer:
         if len(bci_nodes) >= 6:
             check3['passed'] = True
             check3['count'] = len(bci_nodes)
-            logger.info(f"  ✅ {len(bci_nodes)} BCI Professional Practices in graph")
+            logger.info(f"   {len(bci_nodes)} BCI Professional Practices in graph")
         else:
             check3['passed'] = False
-            logger.error(f"  ❌ Only {len(bci_nodes)} BCI practices (expected 6)")
+            logger.error(f"   Only {len(bci_nodes)} BCI practices (expected 6)")
             verification['all_passed'] = False
 
         verification['checks'].append(check3)
@@ -208,15 +208,15 @@ class KnowledgeInitializer:
                 )
                 if len(results) > 0:
                     check4['passed'] = True
-                    logger.info("  ✅ RAG search working (found BIA documents)")
+                    logger.info("   RAG search working (found BIA documents)")
                 else:
                     check4['passed'] = False
-                    logger.error("  ❌ RAG search returned no results")
+                    logger.error("   RAG search returned no results")
                     verification['all_passed'] = False
             except Exception as e:
                 check4['passed'] = False
                 check4['error'] = str(e)
-                logger.error(f"  ❌ RAG search failed: {e}")
+                logger.error(f"   RAG search failed: {e}")
                 verification['all_passed'] = False
 
             verification['checks'].append(check4)
@@ -273,14 +273,14 @@ if __name__ == "__main__":
         kg = initializer.get_knowledge_graph()
 
         # Example: Query BIA evidence
-        print("\n\n🔍 Example: BIA Evidence Requirements")
+        print("\n\n Example: BIA Evidence Requirements")
         evidence = kg.get_iso_clause_evidence('8.2.2')
         for i, ev in enumerate(evidence, 1):
             print(f"  {i}. {ev}")
 
         # Example: Get BCI practice for clause
         practice = kg.get_bci_practice_for_clause('8.2.2')
-        print(f"\n📋 BIA maps to BCI Practice: {practice}")
+        print(f"\n BIA maps to BCI Practice: {practice}")
 
         # Example: Get all operation clauses
         from .knowledge_graph import NodeType
@@ -288,7 +288,7 @@ if __name__ == "__main__":
             node_type=NodeType.ISO_CLAUSE,
             filters={'category': 'operation'}
         )
-        print(f"\n📊 Operation Clauses ({len(operation_clauses)}):")
+        print(f"\n Operation Clauses ({len(operation_clauses)}):")
         for clause in operation_clauses[:3]:
             print(f"  - {clause.properties['clause_number']}: {clause.properties['title']}")
 

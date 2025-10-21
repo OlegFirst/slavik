@@ -69,12 +69,12 @@ class AnalyticsCore:
     platform intelligence.
 
     INTEGRATIONS:
-    - ✅ Process Analytics (process mining)
-    - ✅ MIO Manager (coordination & reporting)
-    - ✅ AI Orchestrator (decision context)
-    - ✅ Predictive Service (ML predictions)
-    - ✅ Collective AI (collective intelligence)
-    - ✅ Community Intelligence (knowledge sharing)
+    -  Process Analytics (process mining)
+    -  MIO Manager (coordination & reporting)
+    -  AI Orchestrator (decision context)
+    -  Predictive Service (ML predictions)
+    -  Collective AI (collective intelligence)
+    -  Community Intelligence (knowledge sharing)
 
     Responsibilities:
     - Orchestrate analysis across multiple tools
@@ -220,14 +220,14 @@ class AnalyticsCore:
         - Platform Client (AI Foundation, Expertise Center, Workflow Intelligence)
         - Analytics-specific clients (Process Analytics, MIO, etc.)
         """
-        logger.info("🔄 Initializing AnalyticsCore with FULL platform integration...")
+        logger.info(" Initializing AnalyticsCore with FULL platform integration...")
 
         health_checks = {}
 
         # ============================================================
         # PLATFORM CLIENT - Check 3 key "brains"
         # ============================================================
-        logger.info("📡 Checking Platform Client integration...")
+        logger.info(" Checking Platform Client integration...")
         try:
             platform_health = await self.platform.health_check()
 
@@ -236,22 +236,22 @@ class AnalyticsCore:
             health_checks['workflow_intelligence'] = platform_health.get('workflow_intelligence', False)
 
             if platform_health.get('ai_foundation'):
-                logger.info("  ✅ AI Foundation (RAG, LLM, Embeddings)")
+                logger.info("   AI Foundation (RAG, LLM, Embeddings)")
             else:
-                logger.warning("  ⚠️  AI Foundation unavailable")
+                logger.warning("  ️  AI Foundation unavailable")
 
             if platform_health.get('expertise_center'):
-                logger.info("  ✅ Expertise Center (12 Tactical Assistants)")
+                logger.info("   Expertise Center (12 Tactical Assistants)")
             else:
-                logger.warning("  ⚠️  Expertise Center unavailable")
+                logger.warning("  ️  Expertise Center unavailable")
 
             if platform_health.get('workflow_intelligence'):
-                logger.info("  ✅ Workflow Intelligence (Case Library)")
+                logger.info("   Workflow Intelligence (Case Library)")
             else:
-                logger.warning("  ⚠️  Workflow Intelligence unavailable")
+                logger.warning("  ️  Workflow Intelligence unavailable")
 
         except Exception as e:
-            logger.error(f"❌ Platform Client check failed: {e}")
+            logger.error(f" Platform Client check failed: {e}")
             health_checks['ai_foundation'] = False
             health_checks['expertise_center'] = False
             health_checks['workflow_intelligence'] = False
@@ -259,63 +259,63 @@ class AnalyticsCore:
         # ============================================================
         # ANALYTICS-SPECIFIC CLIENTS
         # ============================================================
-        logger.info("🔍 Checking Analytics-specific clients...")
+        logger.info(" Checking Analytics-specific clients...")
 
         # Check Process Analytics
         try:
             pa_health = await self.pa_client.health_check()
             health_checks['process_analytics'] = pa_health.get('status') == 'healthy'
-            logger.info(f"  ✅ Process Analytics: {pa_health.get('status')}")
+            logger.info(f"   Process Analytics: {pa_health.get('status')}")
         except Exception as e:
             health_checks['process_analytics'] = False
-            logger.warning(f"  ⚠️  Process Analytics: {e}")
+            logger.warning(f"  ️  Process Analytics: {e}")
 
         # Check MIO Manager
         try:
             mio_health = await self.mio_client.health_check()
             health_checks['mio_manager'] = mio_health.get('status') == 'healthy'
-            logger.info(f"  ✅ MIO Manager: {mio_health.get('status')}")
+            logger.info(f"   MIO Manager: {mio_health.get('status')}")
         except Exception as e:
             health_checks['mio_manager'] = False
-            logger.warning(f"  ⚠️  MIO Manager: {e}")
+            logger.warning(f"  ️  MIO Manager: {e}")
 
         # Check AI Orchestrator
         try:
             orch_health = await self.orchestrator_client.health_check()
             health_checks['ai_orchestrator'] = orch_health.get('status') == 'healthy'
-            logger.info(f"  ✅ AI Orchestrator: {orch_health.get('status')}")
+            logger.info(f"   AI Orchestrator: {orch_health.get('status')}")
         except Exception as e:
             health_checks['ai_orchestrator'] = False
-            logger.warning(f"  ⚠️  AI Orchestrator: {e}")
+            logger.warning(f"  ️  AI Orchestrator: {e}")
 
         # Check Predictive Service (if available)
         if self.predictive_client:
             try:
                 pred_health = await self.predictive_client.health_check()
                 health_checks['predictive'] = pred_health.get('status') == 'healthy'
-                logger.info(f"  ✅ Predictive Service: {pred_health.get('status')}")
+                logger.info(f"   Predictive Service: {pred_health.get('status')}")
             except Exception as e:
                 health_checks['predictive'] = False
-                logger.warning(f"  ⚠️  Predictive Service: {e}")
+                logger.warning(f"  ️  Predictive Service: {e}")
 
         # Check Collective (if available)
         if self.collective_client:
             try:
                 coll_health = await self.collective_client.health_check()
                 health_checks['collective'] = coll_health.get('status') == 'healthy'
-                logger.info(f"  ✅ Collective AI: {coll_health.get('status')}")
+                logger.info(f"   Collective AI: {coll_health.get('status')}")
             except Exception as e:
                 health_checks['collective'] = False
-                logger.warning(f"  ⚠️  Collective AI: {e}")
+                logger.warning(f"  ️  Collective AI: {e}")
 
         # Check Community Intelligence
         try:
             comm_health = await self.community_client.health_check()
             health_checks['community'] = comm_health.get('status') == 'healthy'
-            logger.info(f"  ✅ Community Intelligence: {comm_health.get('status')}")
+            logger.info(f"   Community Intelligence: {comm_health.get('status')}")
         except Exception as e:
             health_checks['community'] = False
-            logger.warning(f"  ⚠️  Community Intelligence: {e}")
+            logger.warning(f"  ️  Community Intelligence: {e}")
 
         # ============================================================
         # SUMMARY
@@ -334,7 +334,7 @@ class AnalyticsCore:
         self.integration_status = health_checks
 
         logger.info("=" * 60)
-        logger.info(f"🎯 AnalyticsCore Initialization Complete:")
+        logger.info(f" AnalyticsCore Initialization Complete:")
         logger.info(f"   Platform Brains: {platform_count}/3 healthy")
         logger.info(f"   Analytics Clients: {healthy_count - platform_count}/{total_count - 3} healthy")
         logger.info(f"   Total: {healthy_count}/{total_count} integrations")
@@ -342,17 +342,17 @@ class AnalyticsCore:
 
         if platform_count < 3:
             logger.warning(
-                "⚠️  Some platform 'brains' unavailable. "
+                "️  Some platform 'brains' unavailable. "
                 "Consider starting AI Foundation, Expertise Center, or Workflow Intelligence."
             )
 
         if healthy_count < total_count:
             logger.warning(
-                f"⚠️  {total_count - healthy_count} integration(s) unavailable. "
+                f"️  {total_count - healthy_count} integration(s) unavailable. "
                 f"Analytics will work with reduced capabilities."
             )
         else:
-            logger.info("✅ ALL integrations healthy - FULL capabilities available!")
+            logger.info(" ALL integrations healthy - FULL capabilities available!")
 
     # ========================================================================
     # PLATFORM HEALTH ANALYSIS
@@ -421,7 +421,7 @@ class AnalyticsCore:
         self.last_analysis = report
 
         logger.info(
-            f"✅ Platform health analysis complete: "
+            f" Platform health analysis complete: "
             f"score={health_score:.1f}/100, "
             f"insights={len(insights)}, "
             f"critical={report.metadata['critical_count']}"
@@ -688,7 +688,7 @@ class AnalyticsCore:
                 }
             )
 
-            logger.info(f"✅ Reported to MIO Manager: {response.get('status')}")
+            logger.info(f" Reported to MIO Manager: {response.get('status')}")
             return response
 
         except Exception as e:

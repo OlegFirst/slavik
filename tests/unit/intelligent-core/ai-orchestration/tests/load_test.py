@@ -133,7 +133,7 @@ class OrchestratorLoadTester:
         Returns:
             LoadTestResult with metrics
         """
-        print(f"\n🔥 Starting load test:")
+        print(f"\n Starting load test:")
         print(f"   Concurrency: {concurrency}")
         print(f"   Duration: {duration_seconds}s")
         print(f"   Ramp-up: {ramp_up_seconds}s")
@@ -173,7 +173,7 @@ class OrchestratorLoadTester:
                 await asyncio.sleep(step_duration)
 
         # Main load test
-        print(f"🚀 Running at {concurrency} concurrent requests...")
+        print(f" Running at {concurrency} concurrent requests...")
 
         while time.time() < end_time:
             # Run batch
@@ -234,20 +234,20 @@ class OrchestratorLoadTester:
     def print_results(self, result: LoadTestResult, test_name: str = "Load Test"):
         """Print load test results"""
         print(f"\n{'='*60}")
-        print(f"📊 {test_name} Results")
+        print(f" {test_name} Results")
         print(f"{'='*60}")
 
-        print(f"\n📈 Throughput:")
+        print(f"\n Throughput:")
         print(f"   Total Requests:  {result.total_requests}")
         print(f"   Duration:        {result.duration_seconds:.2f}s")
         print(f"   Req/sec:         {result.requests_per_second:.2f}")
 
-        print(f"\n✅ Success Rate:")
+        print(f"\n Success Rate:")
         success_rate = (result.successful / result.total_requests * 100) if result.total_requests > 0 else 0
         print(f"   Successful:      {result.successful} ({success_rate:.1f}%)")
         print(f"   Failed:          {result.failed}")
 
-        print(f"\n⚡ Latency (ms):")
+        print(f"\n Latency (ms):")
         print(f"   Min:             {result.min_ms:.2f}ms")
         print(f"   Avg:             {result.avg_ms:.2f}ms")
         print(f"   P50:             {result.p50_ms:.2f}ms")
@@ -256,12 +256,12 @@ class OrchestratorLoadTester:
         print(f"   Max:             {result.max_ms:.2f}ms")
 
         # Check targets
-        print(f"\n🎯 Target Compliance:")
-        print(f"   P95 < 100ms:     {'✅ PASS' if result.p95_ms < 100 else '❌ FAIL'} ({result.p95_ms:.2f}ms)")
-        print(f"   Success > 95%:   {'✅ PASS' if success_rate > 95 else '❌ FAIL'} ({success_rate:.1f}%)")
+        print(f"\n Target Compliance:")
+        print(f"   P95 < 100ms:     {' PASS' if result.p95_ms < 100 else ' FAIL'} ({result.p95_ms:.2f}ms)")
+        print(f"   Success > 95%:   {' PASS' if success_rate > 95 else ' FAIL'} ({success_rate:.1f}%)")
 
         if result.errors:
-            print(f"\n❌ Errors (first 10):")
+            print(f"\n Errors (first 10):")
             for error in result.errors[:10]:
                 print(f"   - {error}")
 
@@ -270,7 +270,7 @@ class OrchestratorLoadTester:
     async def run_test_suite(self):
         """Run complete test suite"""
         print("\n" + "="*60)
-        print("🧪 AI Orchestrator Load Test Suite")
+        print(" AI Orchestrator Load Test Suite")
         print("="*60)
 
         results = {}
@@ -319,7 +319,7 @@ class OrchestratorLoadTester:
     def print_summary(self, results: Dict[str, LoadTestResult]):
         """Print summary comparison"""
         print("\n" + "="*60)
-        print("📊 Load Test Summary Comparison")
+        print(" Load Test Summary Comparison")
         print("="*60)
 
         print(f"\n{'Test':<20} {'Req/sec':<12} {'P95 (ms)':<12} {'Success %':<12}")
@@ -332,16 +332,16 @@ class OrchestratorLoadTester:
         print("\n" + "="*60)
 
         # Overall assessment
-        print("\n🏆 Assessment:")
+        print("\n Assessment:")
         all_pass = all(
             r.p95_ms < 100 and (r.successful / r.total_requests > 0.95)
             for r in results.values()
         )
 
         if all_pass:
-            print("   ✅ All tests PASSED - System ready for production")
+            print("    All tests PASSED - System ready for production")
         else:
-            print("   ⚠️  Some tests FAILED - Optimization needed")
+            print("   ️  Some tests FAILED - Optimization needed")
 
         print()
 
@@ -361,11 +361,11 @@ async def main():
         try:
             async with tester.session.get(f"{args.url}/health") as response:
                 if response.status != 200:
-                    print(f"❌ Orchestrator not healthy at {args.url}")
+                    print(f" Orchestrator not healthy at {args.url}")
                     return
-                print(f"✅ Orchestrator healthy at {args.url}\n")
+                print(f" Orchestrator healthy at {args.url}\n")
         except Exception as e:
-            print(f"❌ Cannot reach orchestrator at {args.url}: {e}")
+            print(f" Cannot reach orchestrator at {args.url}: {e}")
             return
 
         # Run test(s)

@@ -23,7 +23,7 @@ def update_file(filepath: Path):
     # Extract class name
     class_match = re.search(r'class (\w+)\(', content)
     if not class_match:
-        print(f"  ❌ Could not find class")
+        print(f"   Could not find class")
         return
 
     class_name = class_match.group(1)
@@ -51,7 +51,7 @@ from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilde
     class_match = re.search(class_pattern, content, re.DOTALL)
 
     if not class_match:
-        print(f"  ❌ Could not find class definition")
+        print(f"   Could not find class definition")
         return
 
     class_body = class_match.group(1)
@@ -156,11 +156,11 @@ from intelligent_core.ai_foundation import RAGPipeline, LLMRouter, ContextBuilde
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(new_content)
 
-    print(f"  ✅ Updated {filepath.name}")
+    print(f"   Updated {filepath.name}")
 
 def main():
     """Main update function"""
-    print("🚀 Starting specialists update...")
+    print(" Starting specialists update...")
     print(f"Base path: {BASE_PATH}")
     print()
 
@@ -172,12 +172,12 @@ def main():
                 update_file(filepath)
                 updated += 1
             except Exception as e:
-                print(f"  ❌ Error: {e}")
+                print(f"   Error: {e}")
         else:
-            print(f"  ⚠️  Not found: {filename}")
+            print(f"  ️  Not found: {filename}")
 
     print()
-    print(f"✅ Updated {updated}/{len(FILES_TO_UPDATE)} files")
+    print(f" Updated {updated}/{len(FILES_TO_UPDATE)} files")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 """
-🔗 Workflow Intelligence Adapter
+ Workflow Intelligence Adapter
 
 Bridges workflow_intelligence's CaseCollector events with knowledge-system's centralized storage.
 

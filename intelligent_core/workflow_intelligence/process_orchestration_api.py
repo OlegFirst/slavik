@@ -80,7 +80,7 @@ class ProcessOrchestrator:
         Система сама проходит все шаги, используя AI агентов
         для заполнения форм и принятия решений.
         """
-        print(f"\n🤖 Автоматическое выполнение процесса: {process_id}")
+        print(f"\n Автоматическое выполнение процесса: {process_id}")
 
         # Запустить процесс
         instance = self.framework.start_process(
@@ -89,26 +89,26 @@ class ProcessOrchestrator:
             initial_data=initial_data
         )
 
-        print(f"✅ Процесс запущен: {instance.id}")
+        print(f" Процесс запущен: {instance.id}")
 
         # Выполнять шаги пока процесс не завершится
         while instance.status == ProcessStatus.IN_PROGRESS:
             current_step_id = instance.current_step_id
 
-            print(f"\n📋 Текущий шаг: {current_step_id}")
+            print(f"\n Текущий шаг: {current_step_id}")
 
             # Выполнить шаг автоматически
             success = await self._execute_step_automatically(instance)
 
             if not success:
-                print(f"❌ Не удалось выполнить шаг {current_step_id}")
+                print(f" Не удалось выполнить шаг {current_step_id}")
                 instance.status = ProcessStatus.SUSPENDED
                 break
 
             # Обновить instance
             instance = self.framework.instances.get(instance.id)
 
-        print(f"\n✅ Процесс завершен: {instance.status.value}")
+        print(f"\n Процесс завершен: {instance.status.value}")
         return instance
 
     async def _execute_step_automatically(self, instance: ProcessInstance) -> bool:
@@ -147,7 +147,7 @@ class ProcessOrchestrator:
             return await self._auto_validate(instance, current_step)
 
         else:
-            print(f"   ⚠️ Неизвестный тип шага: {current_step.step_type}")
+            print(f"   ️ Неизвестный тип шага: {current_step.step_type}")
             return False
 
     async def _auto_fill_form(self, instance: ProcessInstance, step: ProcessStep) -> bool:
@@ -161,7 +161,7 @@ class ProcessOrchestrator:
 
         И генерирует подходящие значения.
         """
-        print(f"   🤖 AI заполняет форму...")
+        print(f"    AI заполняет форму...")
 
         # Подготовить контекст для AI
         context = {
@@ -203,10 +203,10 @@ class ProcessOrchestrator:
         )
 
         if success:
-            print(f"   ✅ Форма заполнена и отправлена")
+            print(f"    Форма заполнена и отправлена")
             return True
         else:
-            print(f"   ❌ Ошибка: {error}")
+            print(f"    Ошибка: {error}")
             return False
 
     async def _auto_analyze(self, instance: ProcessInstance, step: ProcessStep) -> bool:
@@ -218,7 +218,7 @@ class ProcessOrchestrator:
         - Рассчитывает RTO/RPO
         - Оценивает финансовое воздействие
         """
-        print(f"   📊 AI проводит анализ...")
+        print(f"    AI проводит анализ...")
 
         # Подготовить данные для анализа
         analysis_context = {
@@ -249,10 +249,10 @@ class ProcessOrchestrator:
         )
 
         if success:
-            print(f"   ✅ Анализ завершен")
+            print(f"    Анализ завершен")
             return True
         else:
-            print(f"   ❌ Ошибка анализа: {error}")
+            print(f"    Ошибка анализа: {error}")
             return False
 
     async def _auto_decide(self, instance: ProcessInstance, step: ProcessStep) -> bool:
@@ -262,7 +262,7 @@ class ProcessOrchestrator:
         AI анализирует данные и принимает решение
         (например, выбор стратегии обработки риска)
         """
-        print(f"   🎯 AI принимает решение...")
+        print(f"    AI принимает решение...")
 
         decision_context = {
             "step": step.name,
@@ -288,10 +288,10 @@ class ProcessOrchestrator:
         )
 
         if success:
-            print(f"   ✅ Решение принято: {decision.get('treatment_strategy', 'N/A')}")
+            print(f"    Решение принято: {decision.get('treatment_strategy', 'N/A')}")
             return True
         else:
-            print(f"   ❌ Ошибка решения: {error}")
+            print(f"    Ошибка решения: {error}")
             return False
 
     async def _auto_generate_document(self, instance: ProcessInstance, step: ProcessStep) -> bool:
@@ -300,12 +300,12 @@ class ProcessOrchestrator:
 
         Использует document templates и данные процесса
         """
-        print(f"   📄 AI генерирует документ...")
+        print(f"    AI генерирует документ...")
 
         # Получить шаблон
         template_id = step.document_template
         if not template_id:
-            print(f"   ❌ Шаблон не указан")
+            print(f"    Шаблон не указан")
             return False
 
         # Подготовить переменные для шаблона
@@ -325,7 +325,7 @@ class ProcessOrchestrator:
             doc_path = f"./generated_documents/{instance.id}_{template_id}.md"
             # (сохранение в файл)
 
-            print(f"   ✅ Документ сгенерирован: {len(document_content)} символов")
+            print(f"    Документ сгенерирован: {len(document_content)} символов")
 
             # Выполнить шаг
             form_data = {
@@ -343,7 +343,7 @@ class ProcessOrchestrator:
             return success
 
         except Exception as e:
-            print(f"   ❌ Ошибка генерации: {e}")
+            print(f"    Ошибка генерации: {e}")
             return False
 
     async def _auto_approve(self, instance: ProcessInstance, step: ProcessStep) -> bool:
@@ -353,10 +353,10 @@ class ProcessOrchestrator:
         Если auto_approve=False, то требуется человек.
         В этом случае - отправляем уведомление и ждем.
         """
-        print(f"   ✔️ Проверка утверждения...")
+        print(f"   ️ Проверка утверждения...")
 
         if step.auto_approve:
-            print(f"   🤖 Автоматическое утверждение разрешено")
+            print(f"    Автоматическое утверждение разрешено")
 
             # AI проверяет документ/данные
             approval_check = await self._ai_pre_approval_check(instance)
@@ -376,11 +376,11 @@ class ProcessOrchestrator:
                 )
 
                 if success:
-                    print(f"   ✅ Автоматически утверждено")
+                    print(f"    Автоматически утверждено")
                     return True
 
         # Если не auto_approve - отправить уведомление человеку
-        print(f"   📧 Требуется утверждение человеком")
+        print(f"    Требуется утверждение человеком")
         await self._send_approval_notification(instance, step)
 
         # Временно остановить автоматическое выполнение
@@ -388,17 +388,17 @@ class ProcessOrchestrator:
 
     async def _auto_validate(self, instance: ProcessInstance, step: ProcessStep) -> bool:
         """Автоматическая валидация данных"""
-        print(f"   ✓ Валидация данных...")
+        print(f"    Валидация данных...")
 
         # Валидация через форму
         is_valid, errors = step.validate_input(instance.data)
 
         if is_valid:
-            print(f"   ✅ Валидация пройдена")
+            print(f"    Валидация пройдена")
             # Переход к следующему шагу
             return True
         else:
-            print(f"   ❌ Ошибки валидации: {errors}")
+            print(f"    Ошибки валидации: {errors}")
             return False
 
     async def _call_ai_orchestrator(
@@ -433,11 +433,11 @@ class ProcessOrchestrator:
                     result = response.json()
                     return result.get("result")
                 else:
-                    print(f"   ❌ AI Orchestrator ошибка: {response.status_code}")
+                    print(f"    AI Orchestrator ошибка: {response.status_code}")
                     return None
 
         except Exception as e:
-            print(f"   ❌ Ошибка вызова AI Orchestrator: {e}")
+            print(f"    Ошибка вызова AI Orchestrator: {e}")
             return None
 
     async def _call_ai_agent(
@@ -467,7 +467,7 @@ class ProcessOrchestrator:
                     return None
 
         except Exception as e:
-            print(f"   ❌ Ошибка вызова агента {agent_type}: {e}")
+            print(f"    Ошибка вызова агента {agent_type}: {e}")
             return None
 
     def _convert_analysis_to_form_data(
@@ -609,7 +609,7 @@ class ProcessOrchestrator:
         # Publish to EventBus
         # await eventbus.publish("process.approval_required", notification)
 
-        print(f"   📧 Уведомление отправлено: {notification}")
+        print(f"    Уведомление отправлено: {notification}")
 
 
 # Singleton

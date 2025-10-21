@@ -89,10 +89,10 @@ app.include_router(router)
 @app.on_event("startup")
 async def startup_event():
     """Startup tasks"""
-    logger.info(f"🚀 Starting {config.SERVICE_NAME} v{config.VERSION}")
-    logger.info(f"📍 Port: {config.PORT}")
-    logger.info(f"🔧 AI Foundation: {config.AI_FOUNDATION_URL}")
-    logger.info(f"📚 Knowledge Base: {config.KNOWLEDGE_BASE_URL}")
+    logger.info(f" Starting {config.SERVICE_NAME} v{config.VERSION}")
+    logger.info(f" Port: {config.PORT}")
+    logger.info(f" AI Foundation: {config.AI_FOUNDATION_URL}")
+    logger.info(f" Knowledge Base: {config.KNOWLEDGE_BASE_URL}")
 
     # Initialize EventBus
     try:
@@ -100,21 +100,21 @@ async def startup_event():
             service_name="expertise-center",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     # Log available experts
-    logger.info("👥 Available Tactical Assistants: 12")
-    logger.info("📊 Available Analyzers: 10")
+    logger.info(" Available Tactical Assistants: 12")
+    logger.info(" Available Analyzers: 10")
 
-    logger.info("✅ Expertise Center Service ready!")
+    logger.info(" Expertise Center Service ready!")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Shutdown tasks"""
-    logger.info("👋 Shutting down Expertise Center Service")
+    logger.info(" Shutting down Expertise Center Service")
     bus = get_event_bus()
     if bus:
         await bus.close()

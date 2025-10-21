@@ -38,7 +38,7 @@ class MioManagerIntegration:
             response = await self.client.get(f"{self.base_url}/health")
             if response.status_code == 200:
                 self.available = True
-                logger.info("✅ MIO Manager available")
+                logger.info(" MIO Manager available")
             else:
                 logger.warning(f"MIO Manager returned {response.status_code}")
         except Exception as e:

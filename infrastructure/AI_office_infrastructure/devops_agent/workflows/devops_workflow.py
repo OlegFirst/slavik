@@ -89,7 +89,7 @@ class DevOpsAgentWorkflow:
         Returns:
             Workflow results
         """
-        workflow.logger.info(f"🚀 DevOps Agent Workflow started: {config}")
+        workflow.logger.info(f" DevOps Agent Workflow started: {config}")
 
         # Step 1: Scan infrastructure
         workflow.logger.info("Step 1: Scanning infrastructure...")
@@ -103,7 +103,7 @@ class DevOpsAgentWorkflow:
             )
         )
 
-        workflow.logger.info(f"✅ Scan complete: {scan_results.get('total_issues', 0)} issues")
+        workflow.logger.info(f" Scan complete: {scan_results.get('total_issues', 0)} issues")
 
         # Step 2: AI Analysis
         workflow.logger.info("Step 2: AI analysis...")
@@ -113,7 +113,7 @@ class DevOpsAgentWorkflow:
             start_to_close_timeout=timedelta(minutes=5)
         )
 
-        workflow.logger.info(f"✅ AI analysis: {len(analysis.get('ai_recommendations', []))} recommendations")
+        workflow.logger.info(f" AI analysis: {len(analysis.get('ai_recommendations', []))} recommendations")
 
         # Step 3: Auto-fix (if approved)
         fix_results = {}
@@ -125,7 +125,7 @@ class DevOpsAgentWorkflow:
                 start_to_close_timeout=timedelta(minutes=15)
             )
 
-            workflow.logger.info(f"✅ Fixes: {fix_results.get('fixes_successful', 0)} successful")
+            workflow.logger.info(f" Fixes: {fix_results.get('fixes_successful', 0)} successful")
 
         # Step 4: Report to мозг
         if config.get("report_to_brain", True):
@@ -140,7 +140,7 @@ class DevOpsAgentWorkflow:
                 start_to_close_timeout=timedelta(minutes=2)
             )
 
-            workflow.logger.info("✅ Report sent to Workflow Intelligence")
+            workflow.logger.info(" Report sent to Workflow Intelligence")
 
         # Return final results
         return {
@@ -167,7 +167,7 @@ class DevOpsWeeklyDeepScan:
     @workflow.run
     async def run(self) -> Dict:
         """Weekly deep scan execution"""
-        workflow.logger.info("🗓️  Weekly Deep Scan started (Monday 03:00)")
+        workflow.logger.info("️  Weekly Deep Scan started (Monday 03:00)")
 
         config = {
             "scan_type": "full",
@@ -182,5 +182,5 @@ class DevOpsWeeklyDeepScan:
             id=f"devops-weekly-scan-{workflow.now().isoformat()}"
         )
 
-        workflow.logger.info("✅ Weekly Deep Scan completed")
+        workflow.logger.info(" Weekly Deep Scan completed")
         return result

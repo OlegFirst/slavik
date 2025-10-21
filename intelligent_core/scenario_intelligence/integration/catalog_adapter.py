@@ -40,7 +40,7 @@ class CatalogAdapter:
             with open(self.catalog_path, 'r') as f:
                 self.catalog_data = yaml.safe_load(f)
 
-            logger.info(f"✅ Catalog loaded: {self.catalog_data.get('total_services', 0)} services")
+            logger.info(f" Catalog loaded: {self.catalog_data.get('total_services', 0)} services")
 
             # Parse services
             self._parse_services()
@@ -82,7 +82,7 @@ class CatalogAdapter:
                         service = self._normalize_service(service_name, service_data, section)
                         self.services.append(service)
 
-        logger.info(f"✅ Parsed {len(self.services)} services")
+        logger.info(f" Parsed {len(self.services)} services")
 
     def _normalize_service(self, name: str, data: Dict[str, Any], section: str) -> Dict[str, Any]:
         """Normalize service data to consistent format"""
@@ -118,7 +118,7 @@ class CatalogAdapter:
 
             self.subsystems[section].append(service["name"])
 
-        logger.info(f"✅ Identified {len(self.subsystems)} subsystems")
+        logger.info(f" Identified {len(self.subsystems)} subsystems")
 
     async def load_services(self) -> List[Dict[str, Any]]:
         """

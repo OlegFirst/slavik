@@ -272,7 +272,7 @@ class InfrastructureStateMonitor:
         if len(self.state_history) > self.max_history:
             self.state_history = self.state_history[-self.max_history:]
 
-        # PUBLISH to EventBus ✨
+        # PUBLISH to EventBus 
         await self._publish_state_updated(state)
 
         # Check for critical issues

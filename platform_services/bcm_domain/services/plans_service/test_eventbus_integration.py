@@ -53,7 +53,7 @@ async def test_plan_created_event():
                 )
                 if event_response.status_code == 200:
                     events = event_response.json()
-                    print(f"\n✓ EventBus received {len(events.get('events', []))} event(s)")
+                    print(f"\n EventBus received {len(events.get('events', []))} event(s)")
                     if events.get('events'):
                         latest_event = events['events'][-1]
                         print(f"  Event data: {json.dumps(latest_event.get('data'), indent=2)}")
@@ -110,7 +110,7 @@ async def test_plan_approved_event(plan_id: int):
                 )
                 if event_response.status_code == 200:
                     events = event_response.json()
-                    print(f"\n✓ EventBus received {len(events.get('events', []))} event(s)")
+                    print(f"\n EventBus received {len(events.get('events', []))} event(s)")
                     if events.get('events'):
                         latest_event = events['events'][-1]
                         print(f"  Event data: {json.dumps(latest_event.get('data'), indent=2)}")
@@ -175,7 +175,7 @@ async def test_plan_activated_event(plan_id: int):
                 )
                 if event_response.status_code == 200:
                     events = event_response.json()
-                    print(f"\n✓ EventBus received {len(events.get('events', []))} event(s)")
+                    print(f"\n EventBus received {len(events.get('events', []))} event(s)")
                     if events.get('events'):
                         latest_event = events['events'][-1]
                         print(f"  Event data: {json.dumps(latest_event.get('data'), indent=2)}")
@@ -238,7 +238,7 @@ async def test_review_completed_event(plan_id: int):
                 )
                 if event_response.status_code == 200:
                     events = event_response.json()
-                    print(f"\n✓ EventBus received {len(events.get('events', []))} event(s)")
+                    print(f"\n EventBus received {len(events.get('events', []))} event(s)")
                     if events.get('events'):
                         latest_event = events['events'][-1]
                         print(f"  Event data: {json.dumps(latest_event.get('data'), indent=2)}")
@@ -261,7 +261,7 @@ async def check_services():
         try:
             response = await client.get("http://localhost:8023/health", timeout=5.0)
             if response.status_code == 200:
-                print("✓ Plans Service is running on port 8023")
+                print(" Plans Service is running on port 8023")
             else:
                 print("⨯ Plans Service not responding properly")
                 return False
@@ -273,7 +273,7 @@ async def check_services():
         try:
             response = await client.get("http://localhost:8001/health", timeout=5.0)
             if response.status_code == 200:
-                print("✓ EventBus is running on port 8001")
+                print(" EventBus is running on port 8001")
             else:
                 print("⨯ EventBus not responding properly")
                 return False

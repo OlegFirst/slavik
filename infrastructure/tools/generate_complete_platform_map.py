@@ -122,7 +122,7 @@ class PlatformMapper:
                 "description": "Production BCM self-application service",
                 "capabilities": ["Platform BIA", "Risk assessment", "Auto-recovery (7 procedures)", "Practice learning", "Real-time monitoring"],
                 "dependencies": ["EventBus", "Redis", "Prometheus", "ai-foundation"],
-                "status": "🚀 Production-ready"
+                "status": " Production-ready"
             }
         }
 
@@ -494,7 +494,7 @@ class PlatformMapper:
         """Export map as JSON"""
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(self.platform_map, f, indent=2, ensure_ascii=False)
-        print(f"\n✅ JSON map exported to: {output_path}")
+        print(f"\n JSON map exported to: {output_path}")
 
     def export_markdown(self, output_path: str):
         """Export map as Markdown"""
@@ -531,7 +531,7 @@ class PlatformMapper:
 
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write('\n'.join(md))
-        print(f"✅ Markdown map exported to: {output_path}")
+        print(f" Markdown map exported to: {output_path}")
 
     def export_mermaid(self, output_path: str):
         """Export map as Mermaid diagram"""
@@ -565,7 +565,7 @@ class PlatformMapper:
 
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write('\n'.join(mmd))
-        print(f"✅ Mermaid diagram exported to: {output_path}")
+        print(f" Mermaid diagram exported to: {output_path}")
 
 
 def main():
@@ -599,8 +599,8 @@ def main():
     print(f"Total Infrastructure Components: {len(platform_map['infrastructure'])}")
     print(f"Total Dependencies: {len(platform_map['dependencies'])}")
     print(f"Total Ports Mapped: {len(platform_map['ports'])}")
-    print(f"\n📄 Documentation: {platform_map['statistics']['total_documentation_files']} files")
-    print(f"📋 ISO 22301 Clauses: {platform_map['statistics']['iso_clauses_covered']}")
+    print(f"\n Documentation: {platform_map['statistics']['total_documentation_files']} files")
+    print(f" ISO 22301 Clauses: {platform_map['statistics']['iso_clauses_covered']}")
     print("\n" + "="*60 + "\n")
 
 

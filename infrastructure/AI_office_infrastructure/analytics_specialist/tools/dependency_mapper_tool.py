@@ -24,10 +24,10 @@ if str(analyzers_path) not in sys.path:
 try:
     from dependency_mapper import DependencyMapper as OriginalDependencyMapper
     TOOL_AVAILABLE = True
-    logger.info("✅ dependency_mapper tool loaded successfully")
+    logger.info(" dependency_mapper tool loaded successfully")
 except ImportError as e:
     TOOL_AVAILABLE = False
-    logger.warning(f"❌ dependency_mapper tool not available: {e}")
+    logger.warning(f" dependency_mapper tool not available: {e}")
     OriginalDependencyMapper = None
 
 

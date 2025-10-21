@@ -396,9 +396,9 @@ async def main():
 
     # Print results
     stats = generator.get_statistics()
-    print(f"\n✅ Generated {stats['generated']}/{stats['total']} application scenarios")
-    print(f"📁 Saved to: generated/l1/applications/")
-    print(f"🎯 Scenario IDs: {len(scenario_ids)}")
+    print(f"\n Generated {stats['generated']}/{stats['total']} application scenarios")
+    print(f" Saved to: generated/l1/applications/")
+    print(f" Scenario IDs: {len(scenario_ids)}")
 
 
 if __name__ == "__main__":

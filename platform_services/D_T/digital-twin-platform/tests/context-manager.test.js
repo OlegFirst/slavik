@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { UniversalContextManager } from '../core/context-manager.js';
 import { constructor, initialize, createContext, getContext, updateContext, deleteContext } from '../core/context-manager.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('context-manager', () => {
@@ -146,7 +146,7 @@ describe('context-manager', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in context-manager');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

@@ -202,14 +202,14 @@ def print_report(dash_issues, init_issues, rename_plan, init_plan):
     print("=" * 80)
     print("EXECUTIVE SUMMARY")
     print("=" * 80)
-    print(f"\n🚨 CRITICAL ISSUES FOUND:")
+    print(f"\n CRITICAL ISSUES FOUND:")
     print(f"   • Directories with dashes: {len(dash_issues)}")
     print(f"   • Missing __init__.py files: {len(init_issues)}")
-    print(f"\n📊 IMPACT:")
+    print(f"\n IMPACT:")
     print(f"   • Affected modules cannot be imported")
     print(f"   • Tests will fail")
     print(f"   • Infrastructure coordinator cannot start")
-    print(f"\n⚠️  PRIORITY: HIGH - Blocks Phase 1.2 Verification Testing")
+    print(f"\n️  PRIORITY: HIGH - Blocks Phase 1.2 Verification Testing")
 
     # Dash issues
     print("\n" + "=" * 80)
@@ -303,14 +303,14 @@ def save_json_report(dash_issues, init_issues, rename_plan, init_plan, output_fi
     with open(output_file, 'w') as f:
         json.dump(report, f, indent=2)
 
-    print(f"\n✅ Detailed report saved to: {output_file}")
+    print(f"\n Detailed report saved to: {output_file}")
 
 
 if __name__ == '__main__':
     PROJECT_ROOT = Path('/Users/MD/AI-Platform-ISO')
 
-    print("\n🔍 Starting Python project structure audit...")
-    print(f"📁 Scanning: {PROJECT_ROOT}\n")
+    print("\n Starting Python project structure audit...")
+    print(f" Scanning: {PROJECT_ROOT}\n")
 
     # Run audit
     print("Step 1: Finding directories with dashes...")
@@ -333,8 +333,8 @@ if __name__ == '__main__':
     output_file = PROJECT_ROOT / 'infrastructure/tools/audit_report.json'
     save_json_report(dash_issues, init_issues, rename_plan, init_plan, output_file)
 
-    print("✅ Audit complete!")
-    print("\n📋 Next steps:")
+    print(" Audit complete!")
+    print("\n Next steps:")
     print("   1. Review audit_report.json")
     print("   2. Run fix_dash_directories.sh (CAREFUL - backs up first)")
     print("   3. Run create_init_files.sh")

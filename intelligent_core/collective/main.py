@@ -1,5 +1,5 @@
 """
-🤝 Collective Agent Networks Service
+ Collective Agent Networks Service
 
 **THE BREAKTHROUGH:**
 Organizations help each other through AI without revealing their identities.
@@ -23,7 +23,7 @@ Collective Agent: "Organizations that addressed supply chain
                    suppliers. 5 out of 7 used dependency mapping
                    tools. The common pattern was..."
 
-User: 🤯 "This is AMAZING! But who are these organizations?"
+User:  "This is AMAZING! But who are these organizations?"
 
 Platform: "That information is anonymous to protect privacy.
            But their collective wisdom is now yours."
@@ -79,7 +79,7 @@ async def lifespan(app: FastAPI):
     - Stop background jobs
     """
 
-    logger.info("🤝 Collective Agent Networks Service starting...")
+    logger.info(" Collective Agent Networks Service starting...")
     logger.info(f"Port: {settings.PORT}")
     logger.info(f"K-anonymity: {settings.K_ANONYMITY} (minimum organizations)")
     logger.info(f"Agent expiration: {settings.AGENT_EXPIRATION_DAYS} days")
@@ -90,24 +90,24 @@ async def lifespan(app: FastAPI):
             service_name="collective",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     # Startup
     try:
         # Initialize background jobs
         # In production: Start cron jobs for agent expiration and stuck detection
-        logger.info("✅ Background jobs initialized")
+        logger.info(" Background jobs initialized")
 
     except Exception as e:
-        logger.error(f"❌ Startup failed: {e}")
+        logger.error(f" Startup failed: {e}")
         raise
 
     yield
 
     # Shutdown
-    logger.info("🛑 Collective Agent Networks Service shutting down...")
+    logger.info(" Collective Agent Networks Service shutting down...")
     bus = get_event_bus()
     if bus:
         await bus.close()
@@ -119,13 +119,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Collective Agent Networks",
     description="""
-    🤝 **Anonymous Collaboration Between Organizations**
+     **Anonymous Collaboration Between Organizations**
 
     Organizations help each other through AI without revealing their identities.
 
     ## Key Features
 
-    ### 🤖 Collective Agents
+    ###  Collective Agents
     Temporary AI agents created from multiple organizations' experiences.
     - **Anonymous:** Source organizations never revealed
     - **Collective:** Synthesizes wisdom from 5+ organizations
@@ -138,7 +138,7 @@ app = FastAPI(
     - Low AI confidence
     - Frustration indicators
 
-    ### 🔒 Privacy-Preserving
+    ###  Privacy-Preserving
     Multi-layer anonymization ensures privacy.
     - K-anonymity (minimum 5 orgs)
     - No outlier highlighting
@@ -178,7 +178,7 @@ app = FastAPI(
     - NEVER reveals source organizations
     - Speaks as: "Organizations that..."
 
-    ## Innovation Level: 🤯🤯🤯🤯🤯
+    ## Innovation Level: 
 
     **Why Revolutionary:**
     - Solves privacy paradox (want to share vs. can't share)
@@ -243,10 +243,10 @@ async def root():
     """Root endpoint with service info"""
     return {
         "service": "Collective Agent Networks",
-        "tagline": "🤝 Organizations help each other through AI without revealing their identities",
+        "tagline": " Organizations help each other through AI without revealing their identities",
         "version": "1.0.0",
         "port": settings.PORT,
-        "innovation_level": "🤯🤯🤯🤯🤯",
+        "innovation_level": "",
         "endpoints": {
             "docs": "/docs",
             "health": "/health",
@@ -258,13 +258,13 @@ async def root():
             "2. Platform finds organizations B, C, D that solved it",
             "3. Creates Collective Agent from their anonymized experiences",
             "4. A chats with agent without knowing who B, C, D are",
-            "5. Full privacy + collective wisdom ✨"
+            "5. Full privacy + collective wisdom "
         ],
         "privacy_guarantees": [
-            "✅ Source organizations NEVER revealed",
-            "✅ Minimum 5 organizations required (k-anonymity)",
-            "✅ Multi-layer anonymization",
-            "✅ Agents expire after 7 days"
+            " Source organizations NEVER revealed",
+            " Minimum 5 organizations required (k-anonymity)",
+            " Multi-layer anonymization",
+            " Agents expire after 7 days"
         ]
     }
 

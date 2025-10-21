@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { SimulationRouter } from '../src/simulation-router.js';
 import { constructor, runSimulation, runInternalSimulation, runExternalSimulation, normalizeResult, generateMockResult, getDefaultToCTemplate, getAvailableExperiments } from '../src/simulation-router.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('simulation-router', () => {
@@ -176,7 +176,7 @@ describe('simulation-router', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in simulation-router');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

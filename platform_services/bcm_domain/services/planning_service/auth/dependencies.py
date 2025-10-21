@@ -39,7 +39,7 @@ async def get_current_user(
     if not settings.JWT_PUBLIC_KEY or settings.JWT_PUBLIC_KEY == "PLACEHOLDER_DEV_MODE":
         if x_dev_user and x_dev_tenant:
             logger.warning(
-                "🚨 DEVELOPMENT MODE: Using dev headers for authentication. "
+                " DEVELOPMENT MODE: Using dev headers for authentication. "
                 "Never use in production!"
             )
             return UserContext(
@@ -51,7 +51,7 @@ async def get_current_user(
             )
         else:
             logger.warning(
-                "🚨 DEVELOPMENT MODE: No JWT_PUBLIC_KEY configured and no dev headers provided. "
+                " DEVELOPMENT MODE: No JWT_PUBLIC_KEY configured and no dev headers provided. "
                 "Set X-Dev-User and X-Dev-Tenant headers for development."
             )
 

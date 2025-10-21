@@ -24,10 +24,10 @@ if str(analyzers_path) not in sys.path:
 try:
     from dependency_validator import DependencyValidator as OriginalDependencyValidator
     TOOL_AVAILABLE = True
-    logger.info("✅ dependency_validator tool loaded successfully")
+    logger.info(" dependency_validator tool loaded successfully")
 except ImportError as e:
     TOOL_AVAILABLE = False
-    logger.warning(f"❌ dependency_validator tool not available: {e}")
+    logger.warning(f" dependency_validator tool not available: {e}")
     OriginalDependencyValidator = None
 
 

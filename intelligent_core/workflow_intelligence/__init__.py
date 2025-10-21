@@ -1,5 +1,5 @@
 """
-🧠 WORKFLOW INTELLIGENCE ENGINE
+ WORKFLOW INTELLIGENCE ENGINE
 
 Self-Learning Platform with Managed Autonomy
 
@@ -144,7 +144,7 @@ def quick_start(module: str, existing_state_machine):
     """
     Quick start для интеграции с существующим state machine
 
-    ⚠️ DEPRECATED: Use `initialize()` for production!
+    ️ DEPRECATED: Use `initialize()` for production!
     This uses in-memory storage and demo case library.
 
     Example:

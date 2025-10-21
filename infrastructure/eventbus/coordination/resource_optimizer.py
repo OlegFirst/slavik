@@ -61,7 +61,7 @@ class ResourceOptimizer:
     async def start(self):
         """Start optimization cycle"""
         self.running = True
-        logger.info("✅ ResourceOptimizer started - running every 5 minutes")
+        logger.info(" ResourceOptimizer started - running every 5 minutes")
 
         while self.running:
             try:
@@ -81,7 +81,7 @@ class ResourceOptimizer:
 
     async def _run_optimization_cycle(self):
         """Run single optimization cycle"""
-        logger.info(f"🔄 Running resource optimization cycle #{self.cycles_completed + 1}...")
+        logger.info(f" Running resource optimization cycle #{self.cycles_completed + 1}...")
 
         # 1. Collect metrics
         metrics = await self._collect_metrics()
@@ -115,7 +115,7 @@ class ResourceOptimizer:
             tenant_id='system'
         ))
 
-        logger.info(f"✅ Optimization cycle #{self.cycles_completed + 1} completed")
+        logger.info(f" Optimization cycle #{self.cycles_completed + 1} completed")
         logger.info(f"   Efficiency score: {efficiency_score:.1f}/100")
         logger.info(f"   Recommendations: {len(recommendations)}")
 
@@ -333,7 +333,7 @@ class ResourceOptimizer:
         resource = recommendation['resource']
         utilization = recommendation['current_utilization']
 
-        logger.info(f"🔧 Applying optimization: {action} for {service} ({resource} @ {utilization:.1f}%)")
+        logger.info(f" Applying optimization: {action} for {service} ({resource} @ {utilization:.1f}%)")
 
         # TODO: Implement actual optimization actions
         # Examples:
@@ -343,7 +343,7 @@ class ResourceOptimizer:
         # - Trigger service restarts
 
         await asyncio.sleep(0.1)  # Simulate action
-        logger.info(f"✅ Optimization applied: {action} for {service}")
+        logger.info(f" Optimization applied: {action} for {service}")
 
     async def get_stats(self) -> Dict[str, Any]:
         """

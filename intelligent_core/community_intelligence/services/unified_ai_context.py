@@ -127,7 +127,7 @@ class UnifiedAIContextBuilder:
         # 7. Contextual recommendations
         context['recommendations'] = self._generate_recommendations(context)
 
-        logger.debug(f"✅ Unified context built with {len(context)} components")
+        logger.debug(f" Unified context built with {len(context)} components")
 
         return context
 
@@ -411,12 +411,12 @@ class UnifiedAIContextBuilder:
         user = context.get('user', {})
         if user.get('level') == 'newcomer':
             recommendations.append(
-                "💡 Build your reputation by contributing case studies from completed workflows"
+                " Build your reputation by contributing case studies from completed workflows"
             )
 
         if user.get('contributions_count', 0) == 0:
             recommendations.append(
-                "🌟 Complete a workflow and share your experience to earn your first reputation points"
+                " Complete a workflow and share your experience to earn your first reputation points"
             )
 
         # Workflow-specific recommendations
@@ -424,7 +424,7 @@ class UnifiedAIContextBuilder:
         if workflow:
             if not workflow.get('is_valid'):
                 recommendations.append(
-                    "⚠️ Complete all validation requirements before proceeding to next stage"
+                    "️ Complete all validation requirements before proceeding to next stage"
                 )
 
             time_in_stage = workflow.get('time_in_stage_hours', 0)
@@ -437,7 +437,7 @@ class UnifiedAIContextBuilder:
         similar_cases = context.get('similar_cases', [])
         if len(similar_cases) > 0:
             recommendations.append(
-                f"📚 Found {len(similar_cases)} similar cases from organizations like yours"
+                f" Found {len(similar_cases)} similar cases from organizations like yours"
             )
 
         return recommendations
@@ -458,7 +458,7 @@ class UnifiedAIContextBuilder:
 
         # User context
         user = context.get('user', {})
-        sections.append("\n📊 USER PROFILE:")
+        sections.append("\n USER PROFILE:")
         sections.append(f"  Level: {user.get('level', 'newcomer').upper()}")
         sections.append(f"  Total Points: {user.get('total_points', 0)}")
         if user.get('module_expertise'):
@@ -468,10 +468,10 @@ class UnifiedAIContextBuilder:
         # Workflow context
         workflow = context.get('workflow')
         if workflow:
-            sections.append("\n🔄 CURRENT WORKFLOW:")
+            sections.append("\n CURRENT WORKFLOW:")
             sections.append(f"  State: {workflow.get('current_state', 'unknown')}")
             sections.append(f"  Progress: {workflow.get('progress', 0)}%")
-            sections.append(f"  Valid: {'✅ Yes' if workflow.get('is_valid') else '❌ No'}")
+            sections.append(f"  Valid: {' Yes' if workflow.get('is_valid') else ' No'}")
 
             if not workflow.get('is_valid'):
                 errors = workflow.get('validation_errors', [])
@@ -480,7 +480,7 @@ class UnifiedAIContextBuilder:
         # Organization context
         org = context.get('organization')
         if org:
-            sections.append("\n🏢 ORGANIZATION:")
+            sections.append("\n ORGANIZATION:")
             sections.append(f"  Industry: {org.get('industry', 'N/A')}")
             sections.append(f"  Size: {org.get('size', 'N/A')}")
             sections.append(f"  BCM Maturity: {org.get('bcm_maturity', 'N/A')}")
@@ -488,32 +488,32 @@ class UnifiedAIContextBuilder:
         # Similar cases
         similar = context.get('similar_cases', [])
         if similar:
-            sections.append(f"\n📚 SIMILAR SUCCESS CASES ({len(similar)}):")
+            sections.append(f"\n SIMILAR SUCCESS CASES ({len(similar)}):")
             for i, case in enumerate(similar[:3], 1):  # Top 3
                 sections.append(f"\n  Case {i}:")
                 patterns = case.get('success_patterns', [])
                 for pattern in patterns[:2]:
-                    sections.append(f"    ✓ {pattern}")
+                    sections.append(f"     {pattern}")
 
         # Trending patterns
         community = context.get('community', {})
         trending = community.get('trending_patterns', [])
         if trending:
-            sections.append("\n🔥 TRENDING COMMUNITY PATTERNS:")
+            sections.append("\n TRENDING COMMUNITY PATTERNS:")
             for pattern in trending[:3]:
                 sections.append(f"  • {pattern['pattern']} ({pattern['percentage']}% of cases)")
 
         # Benchmarks
         benchmarks = context.get('benchmarks')
         if benchmarks:
-            sections.append("\n📊 INDUSTRY BENCHMARKS:")
+            sections.append("\n INDUSTRY BENCHMARKS:")
             sections.append(f"  Avg Duration: {benchmarks.get('avg_duration_days', 'N/A')} days")
             sections.append(f"  Success Rate: {benchmarks.get('success_rate', 'N/A')}%")
 
         # Recommendations
         recs = context.get('recommendations', [])
         if recs:
-            sections.append("\n💡 CONTEXTUAL RECOMMENDATIONS:")
+            sections.append("\n CONTEXTUAL RECOMMENDATIONS:")
             for rec in recs:
                 sections.append(f"  {rec}")
 

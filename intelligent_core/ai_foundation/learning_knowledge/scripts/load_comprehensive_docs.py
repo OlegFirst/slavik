@@ -33,7 +33,7 @@ async def main():
     args = parser.parse_args()
 
     # Create loader
-    print("🚀 Starting comprehensive documentation loader...")
+    print(" Starting comprehensive documentation loader...")
     loader = ComprehensiveDocsLoader()
 
     # Load documents
@@ -48,13 +48,13 @@ async def main():
         await loader.test_search(args.test_query)
         print("=" * 60)
 
-    print("\n✅ Done! Documentation loaded into Qdrant.")
-    print("\n💡 You can now query using RAG pipeline:")
+    print("\n Done! Documentation loaded into Qdrant.")
+    print("\n You can now query using RAG pipeline:")
     print("   - Collection: platform_capabilities (AI, orchestration, specialists)")
     print("   - Collection: platform_patterns (infrastructure patterns)")
     print("   - Collection: platform_scenarios (570+ usage scenarios)")
 
-    print("\n💡 Test queries:")
+    print("\n Test queries:")
     print('   python load_comprehensive_docs.py --test-query "How do I start a BIA?"')
     print('   python load_comprehensive_docs.py --test-query "What can AI do?"')
     print('   python load_comprehensive_docs.py --test-query "Show me incident response flow"')

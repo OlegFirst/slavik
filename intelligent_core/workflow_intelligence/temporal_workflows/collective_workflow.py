@@ -123,7 +123,7 @@ async def detect_stuck_organization(config: StuckDetectionConfig) -> StuckDetect
     """
     import httpx
 
-    logger.info(f"🔍 Detecting stuck status for org: {config.org_id}")
+    logger.info(f" Detecting stuck status for org: {config.org_id}")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -152,7 +152,7 @@ async def detect_stuck_organization(config: StuckDetectionConfig) -> StuckDetect
             )
 
     except Exception as e:
-        logger.error(f"❌ Stuck detection failed: {e}")
+        logger.error(f" Stuck detection failed: {e}")
         raise
 
 
@@ -165,7 +165,7 @@ async def scan_all_organizations() -> List[str]:
     """
     import httpx
 
-    logger.info("📊 Scanning all organizations...")
+    logger.info(" Scanning all organizations...")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -179,11 +179,11 @@ async def scan_all_organizations() -> List[str]:
             result = response.json()
             org_ids = result.get("organization_ids", [])
 
-            logger.info(f"✅ Found {len(org_ids)} active organizations")
+            logger.info(f" Found {len(org_ids)} active organizations")
             return org_ids
 
     except Exception as e:
-        logger.error(f"❌ Organization scan failed: {e}")
+        logger.error(f" Organization scan failed: {e}")
         return []
 
 
@@ -205,7 +205,7 @@ async def verify_k_anonymity(config: CollectiveAgentConfig) -> Dict[str, Any]:
     """
     import httpx
 
-    logger.info(f"🔒 Verifying k-anonymity for {config.problem_type}")
+    logger.info(f" Verifying k-anonymity for {config.problem_type}")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -231,7 +231,7 @@ async def verify_k_anonymity(config: CollectiveAgentConfig) -> Dict[str, Any]:
             }
 
     except Exception as e:
-        logger.error(f"❌ K-anonymity verification failed: {e}")
+        logger.error(f" K-anonymity verification failed: {e}")
         raise
 
 
@@ -250,7 +250,7 @@ async def create_collective_agent(config: CollectiveAgentConfig) -> CollectiveAg
     """
     import httpx
 
-    logger.info(f"🤖 Creating Collective Agent for {config.problem_type}")
+    logger.info(f" Creating Collective Agent for {config.problem_type}")
 
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -280,7 +280,7 @@ async def create_collective_agent(config: CollectiveAgentConfig) -> CollectiveAg
             )
 
     except Exception as e:
-        logger.error(f"❌ Agent creation failed: {e}")
+        logger.error(f" Agent creation failed: {e}")
         raise
 
 
@@ -298,7 +298,7 @@ async def anonymize_organization_data(org_data: Dict[str, Any]) -> Dict[str, Any
     """
     import httpx
 
-    logger.info("🔒 Anonymizing organization data...")
+    logger.info(" Anonymizing organization data...")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -322,7 +322,7 @@ async def anonymize_organization_data(org_data: Dict[str, Any]) -> Dict[str, Any
             }
 
     except Exception as e:
-        logger.error(f"❌ Anonymization failed: {e}")
+        logger.error(f" Anonymization failed: {e}")
         raise
 
 
@@ -339,7 +339,7 @@ async def get_agent_response(agent_id: str, question: str) -> Dict[str, Any]:
     """
     import httpx
 
-    logger.info(f"💬 Getting response from agent {agent_id}")
+    logger.info(f" Getting response from agent {agent_id}")
 
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -361,7 +361,7 @@ async def get_agent_response(agent_id: str, question: str) -> Dict[str, Any]:
             }
 
     except Exception as e:
-        logger.error(f"❌ Agent response failed: {e}")
+        logger.error(f" Agent response failed: {e}")
         raise
 
 
@@ -379,7 +379,7 @@ async def synthesize_consensus(responses: List[Dict[str, Any]]) -> Dict[str, Any
     """
     import httpx
 
-    logger.info(f"🤝 Synthesizing consensus from {len(responses)} agents")
+    logger.info(f" Synthesizing consensus from {len(responses)} agents")
 
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
@@ -404,7 +404,7 @@ async def synthesize_consensus(responses: List[Dict[str, Any]]) -> Dict[str, Any
             }
 
     except Exception as e:
-        logger.error(f"❌ Consensus synthesis failed: {e}")
+        logger.error(f" Consensus synthesis failed: {e}")
         raise
 
 
@@ -426,7 +426,7 @@ async def expire_old_agents(config: AgentCleanupConfig) -> Dict[str, Any]:
     """
     import httpx
 
-    logger.info(f"🧹 Cleaning up agents older than {config.max_age_days} days")
+    logger.info(f" Cleaning up agents older than {config.max_age_days} days")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -450,7 +450,7 @@ async def expire_old_agents(config: AgentCleanupConfig) -> Dict[str, Any]:
             }
 
     except Exception as e:
-        logger.error(f"❌ Agent cleanup failed: {e}")
+        logger.error(f" Agent cleanup failed: {e}")
         return {
             "agents_expired": 0,
             "agents_deleted": 0,
@@ -468,7 +468,7 @@ async def notify_organization(notification: Dict[str, Any]) -> None:
     """
     import httpx
 
-    logger.info(f"📧 Sending notification to org: {notification.get('org_id')}")
+    logger.info(f" Sending notification to org: {notification.get('org_id')}")
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
@@ -477,10 +477,10 @@ async def notify_organization(notification: Dict[str, Any]) -> None:
                 json=notification
             )
 
-        logger.info("✅ Notification sent")
+        logger.info(" Notification sent")
 
     except Exception as e:
-        logger.warning(f"⚠️ Notification failed (non-critical): {e}")
+        logger.warning(f"️ Notification failed (non-critical): {e}")
 
 
 @activity.defn
@@ -492,7 +492,7 @@ async def report_to_brain(report_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     import httpx
 
-    logger.info("📡 Reporting to Workflow Intelligence...")
+    logger.info(" Reporting to Workflow Intelligence...")
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -510,11 +510,11 @@ async def report_to_brain(report_data: Dict[str, Any]) -> Dict[str, Any]:
 
             result = response.json()
 
-        logger.info(f"✅ Report sent to brain: {result.get('status')}")
+        logger.info(f" Report sent to brain: {result.get('status')}")
         return result
 
     except Exception as e:
-        logger.error(f"❌ Brain reporting failed: {e}")
+        logger.error(f" Brain reporting failed: {e}")
         raise
 
 
@@ -553,7 +553,7 @@ class CollectiveIntelligenceWorkflow:
         5. Report to brain
         """
 
-        workflow.logger.info(f"🚀 Starting Collective Intelligence Workflow for: {org_id}")
+        workflow.logger.info(f" Starting Collective Intelligence Workflow for: {org_id}")
 
         # Retry policy for activities
         retry_policy = RetryPolicy(
@@ -592,7 +592,7 @@ class CollectiveIntelligenceWorkflow:
             }
 
             workflow.logger.info(
-                f"✅ Stuck detection: score={stuck_result.stuck_score}, stuck={stuck_result.is_stuck}"
+                f" Stuck detection: score={stuck_result.stuck_score}, stuck={stuck_result.is_stuck}"
             )
 
             # Step 2: If stuck, create collective agent
@@ -626,7 +626,7 @@ class CollectiveIntelligenceWorkflow:
                     results["privacy_verification"] = privacy_check
 
                     if privacy_check.get("verified"):
-                        workflow.logger.info("✅ K-anonymity verified")
+                        workflow.logger.info(" K-anonymity verified")
 
                         # Step 2.2: Create collective agent
                         try:
@@ -645,7 +645,7 @@ class CollectiveIntelligenceWorkflow:
                             }
 
                             workflow.logger.info(
-                                f"✅ Collective Agent created: {agent_result.agent_id}"
+                                f" Collective Agent created: {agent_result.agent_id}"
                             )
 
                             # Step 2.3: Notify organization
@@ -664,7 +664,7 @@ class CollectiveIntelligenceWorkflow:
                             )
 
                         except Exception as e:
-                            workflow.logger.error(f"❌ Agent creation failed: {e}")
+                            workflow.logger.error(f" Agent creation failed: {e}")
                             results["collective_agent"] = {
                                 "status": "failed",
                                 "error": str(e)
@@ -672,7 +672,7 @@ class CollectiveIntelligenceWorkflow:
 
                     else:
                         workflow.logger.warning(
-                            f"⚠️ Insufficient data for collective agent: "
+                            f"️ Insufficient data for collective agent: "
                             f"need {agent_config.min_orgs}, found {privacy_check.get('source_count', 0)}"
                         )
                         results["collective_agent"] = {
@@ -681,7 +681,7 @@ class CollectiveIntelligenceWorkflow:
                         }
 
             else:
-                workflow.logger.info("✅ Organization not stuck - no action needed")
+                workflow.logger.info(" Organization not stuck - no action needed")
                 results["action"] = "none_required"
 
             # Step 3: Report to brain
@@ -699,12 +699,12 @@ class CollectiveIntelligenceWorkflow:
             results["status"] = "completed"
             results["completed_at"] = workflow.now().isoformat()
 
-            workflow.logger.info("🎉 Collective Intelligence Workflow completed!")
+            workflow.logger.info(" Collective Intelligence Workflow completed!")
 
             return results
 
         except Exception as e:
-            workflow.logger.error(f"❌ Workflow failed: {e}")
+            workflow.logger.error(f" Workflow failed: {e}")
             results["status"] = "failed"
             results["error"] = str(e)
             results["failed_at"] = workflow.now().isoformat()
@@ -739,7 +739,7 @@ class MultiAgentConsensusWorkflow:
         """
 
         workflow.logger.info(
-            f"🤝 Starting Multi-Agent Consensus: {len(config.agent_ids)} agents"
+            f" Starting Multi-Agent Consensus: {len(config.agent_ids)} agents"
         )
 
         retry_policy = RetryPolicy(
@@ -762,12 +762,12 @@ class MultiAgentConsensusWorkflow:
                 all_responses.append(response)
 
             except Exception as e:
-                workflow.logger.warning(f"⚠️ Agent {agent_id} failed: {e}")
+                workflow.logger.warning(f"️ Agent {agent_id} failed: {e}")
 
         if not all_responses:
             raise ApplicationError("No agent responses received")
 
-        workflow.logger.info(f"✅ Got {len(all_responses)} agent responses")
+        workflow.logger.info(f" Got {len(all_responses)} agent responses")
 
         # Step 2: Synthesize consensus
         consensus = await workflow.execute_activity(
@@ -789,7 +789,7 @@ class MultiAgentConsensusWorkflow:
         )
 
         workflow.logger.info(
-            f"🎉 Consensus {'reached' if consensus_reached else 'not reached'}: "
+            f" Consensus {'reached' if consensus_reached else 'not reached'}: "
             f"confidence={result.confidence:.2f}"
         )
 
@@ -821,7 +821,7 @@ class BatchStuckDetectionWorkflow:
         4. Report aggregated results to brain
         """
 
-        workflow.logger.info("🔍 Starting Batch Stuck Detection")
+        workflow.logger.info(" Starting Batch Stuck Detection")
 
         retry_policy = RetryPolicy(
             maximum_attempts=3,
@@ -835,7 +835,7 @@ class BatchStuckDetectionWorkflow:
             retry_policy=retry_policy
         )
 
-        workflow.logger.info(f"📊 Checking {len(org_ids)} organizations")
+        workflow.logger.info(f" Checking {len(org_ids)} organizations")
 
         results = {
             "total_orgs": len(org_ids),
@@ -866,7 +866,7 @@ class BatchStuckDetectionWorkflow:
                         results["agents_created"] += 1
 
             except Exception as e:
-                workflow.logger.warning(f"⚠️ Org {org_id} check failed: {e}")
+                workflow.logger.warning(f"️ Org {org_id} check failed: {e}")
 
         # Step 3: Report to brain
         await workflow.execute_activity(
@@ -880,7 +880,7 @@ class BatchStuckDetectionWorkflow:
         )
 
         workflow.logger.info(
-            f"🎉 Batch detection complete: {len(results['stuck_orgs'])} stuck, "
+            f" Batch detection complete: {len(results['stuck_orgs'])} stuck, "
             f"{results['agents_created']} agents created"
         )
 
@@ -915,7 +915,7 @@ class AgentLifecycleWorkflow:
         3. Report metrics
         """
 
-        workflow.logger.info(f"🧹 Starting Agent Lifecycle Management (age > {max_age_days} days)")
+        workflow.logger.info(f" Starting Agent Lifecycle Management (age > {max_age_days} days)")
 
         retry_policy = RetryPolicy(
             maximum_attempts=3,
@@ -936,7 +936,7 @@ class AgentLifecycleWorkflow:
         )
 
         workflow.logger.info(
-            f"✅ Cleanup complete: {cleanup_result['agents_expired']} expired, "
+            f" Cleanup complete: {cleanup_result['agents_expired']} expired, "
             f"{cleanup_result['agents_deleted']} deleted, "
             f"{cleanup_result['storage_freed_mb']}MB freed"
         )

@@ -56,13 +56,13 @@ class EventBusIntegration:
                 backend=self.backend,
                 redis_url=self.redis_url
             )
-            logger.info("✅ EventBus connection established")
+            logger.info(" EventBus connection established")
 
             # Subscribe to relevant events
             await self._setup_subscriptions()
 
         except Exception as e:
-            logger.error(f"❌ EventBus initialization failed: {e}")
+            logger.error(f" EventBus initialization failed: {e}")
             raise
 
     async def _setup_subscriptions(self):
@@ -124,7 +124,7 @@ class EventBusIntegration:
             await self.eventbus.publish(event)
             self.events_published += 1
 
-            logger.info(f"📤 Published event: {event_name} (priority: {priority})")
+            logger.info(f" Published event: {event_name} (priority: {priority})")
 
         except Exception as e:
             logger.error(f"Failed to publish event: {e}")
@@ -181,7 +181,7 @@ class EventBusIntegration:
     async def _handle_workflow_event(self, event: Event):
         """Handle workflow events"""
         self.events_received += 1
-        logger.info(f"📥 Received workflow event: {event.event_type}")
+        logger.info(f" Received workflow event: {event.event_type}")
 
         # Process workflow events if needed
         # For now, just log
@@ -189,14 +189,14 @@ class EventBusIntegration:
     async def _handle_devops_event(self, event: Event):
         """Handle DevOps events"""
         self.events_received += 1
-        logger.info(f"📥 Received DevOps event: {event.event_type}")
+        logger.info(f" Received DevOps event: {event.event_type}")
 
         # Could trigger analysis if DevOps agent detects issues
 
     async def _handle_infrastructure_event(self, event: Event):
         """Handle infrastructure events"""
         self.events_received += 1
-        logger.info(f"📥 Received infrastructure event: {event.event_type}")
+        logger.info(f" Received infrastructure event: {event.event_type}")
 
     def get_stats(self) -> Dict:
         """Get EventBus statistics"""

@@ -202,32 +202,32 @@ async def startup():
     """Initialize infrastructure on startup"""
     global eventbus, cache_manager, rate_limiter
 
-    logger.info("🚀 Starting Unified Workflow API...")
+    logger.info(" Starting Unified Workflow API...")
 
     # Initialize EventBus
     try:
         eventbus = create_eventbus('memory')  # or 'redis' if Redis available
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus not available: {e}")
+        logger.warning(f"️ EventBus not available: {e}")
 
     # Initialize Cache Manager
     try:
         cache_manager = CacheManager()
         await cache_manager.connect()
-        logger.info("✅ Cache Manager connected")
+        logger.info(" Cache Manager connected")
     except Exception as e:
-        logger.warning(f"⚠️ Cache not available: {e}")
+        logger.warning(f"️ Cache not available: {e}")
 
     # Initialize Rate Limiter
     try:
         rate_limiter = RateLimiter()
         await rate_limiter.connect()
-        logger.info("✅ Rate Limiter initialized")
+        logger.info(" Rate Limiter initialized")
     except Exception as e:
-        logger.warning(f"⚠️ Rate Limiter not available: {e}")
+        logger.warning(f"️ Rate Limiter not available: {e}")
 
-    logger.info("✅ Unified Workflow API ready!")
+    logger.info(" Unified Workflow API ready!")
 
 
 @app.on_event("shutdown")
@@ -235,7 +235,7 @@ async def shutdown():
     """Cleanup on shutdown"""
     global cache_manager, rate_limiter
 
-    logger.info("🛑 Shutting down Unified Workflow API...")
+    logger.info(" Shutting down Unified Workflow API...")
 
     if cache_manager:
         await cache_manager.disconnect()
@@ -243,7 +243,7 @@ async def shutdown():
     if rate_limiter:
         await rate_limiter.disconnect()
 
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 
 # ============================================

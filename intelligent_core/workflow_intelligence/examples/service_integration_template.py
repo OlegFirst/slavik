@@ -252,11 +252,11 @@ LIFESPAN_INIT = '''
             # Initialize Audit Logger
             audit_logger = AuditLogger(storage_adapter=workflow_storage)
             await audit_logger.ensure_schema()
-            logger.info("✅ Audit logging initialized")
+            logger.info(" Audit logging initialized")
 
             # Initialize ISO Compliance Checker
             iso_checker = ISO22301Checker()
-            logger.info("✅ ISO 22301 compliance checker initialized")
+            logger.info(" ISO 22301 compliance checker initialized")
 
             # Initialize Security Middleware
             jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -265,9 +265,9 @@ LIFESPAN_INIT = '''
                 iso_checker=iso_checker,
                 jwt_secret=jwt_secret
             )
-            logger.info("✅ Security middleware initialized")
+            logger.info(" Security middleware initialized")
 
-            logger.info("✅ Workflow Intelligence initialized ({MODULE_NAME} module)")
+            logger.info(" Workflow Intelligence initialized ({MODULE_NAME} module)")
         except Exception as e:
             logger.warning(f"Workflow Intelligence initialization failed: {{e}}")
 '''

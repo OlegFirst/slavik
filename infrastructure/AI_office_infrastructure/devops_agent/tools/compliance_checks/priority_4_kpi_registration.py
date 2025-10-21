@@ -14,7 +14,7 @@
 - Priority 3: Database Connections (БД должна быть доступна)
 
 Created: 2025-10-09
-Status: ✅ Implemented
+Status:  Implemented
 """
 
 import sys
@@ -304,12 +304,12 @@ class KPIRegistrationChecker:
                     logger.debug(f"Failed to parse metric value: {e}")
 
             kpi.severity = KPISeverity.INFO
-            kpi.message = f"✅ KPI зарегистрирован и обновляется (значение: {kpi.current_value})"
+            kpi.message = f" KPI зарегистрирован и обновляется (значение: {kpi.current_value})"
         else:
             kpi.registered = False
             kpi.has_data = False
             kpi.severity = KPISeverity.WARNING
-            kpi.message = f"⚠️ KPI не найден в Prometheus"
+            kpi.message = f"️ KPI не найден в Prometheus"
 
         return kpi
 
@@ -319,7 +319,7 @@ class KPIRegistrationChecker:
 
         # Check Prometheus availability
         if not self.check_prometheus_available():
-            logger.error("❌ Prometheus недоступен - невозможно проверить KPI")
+            logger.error(" Prometheus недоступен - невозможно проверить KPI")
             return {}
 
         # Get all metrics from Prometheus
@@ -392,32 +392,32 @@ class KPIRegistrationChecker:
             total = len(kpis)
 
             if registered == total:
-                status_icon = "✅"
+                status_icon = ""
             elif registered > 0:
-                status_icon = "⚠️"
+                status_icon = "️"
             else:
-                status_icon = "❌"
+                status_icon = ""
 
             print(f"{status_icon} {service_name}: {registered}/{total} KPI зарегистрировано")
 
             for kpi in kpis:
                 if kpi.registered:
                     value_str = f" (значение: {kpi.current_value})" if kpi.current_value is not None else ""
-                    print(f"   ✅ {kpi.kpi_name}{value_str}")
+                    print(f"    {kpi.kpi_name}{value_str}")
                 else:
-                    print(f"   ❌ {kpi.kpi_name} - не найден")
+                    print(f"    {kpi.kpi_name} - не найден")
             print()
 
         # Final status
         print("="*80)
         if summary['kpi_coverage_percent'] >= 80:
-            print("✅ ПРИОРИТЕТ 4 PASSED: KPI регистрация в порядке")
+            print(" ПРИОРИТЕТ 4 PASSED: KPI регистрация в порядке")
             passed = True
         elif summary['kpi_coverage_percent'] >= 50:
-            print("⚠️ ПРИОРИТЕТ 4 WARNING: Неполная регистрация KPI")
+            print("️ ПРИОРИТЕТ 4 WARNING: Неполная регистрация KPI")
             passed = False
         else:
-            print("❌ ПРИОРИТЕТ 4 FAILED: Недостаточно KPI зарегистрировано")
+            print(" ПРИОРИТЕТ 4 FAILED: Недостаточно KPI зарегистрировано")
             passed = False
         print("="*80 + "\n")
 

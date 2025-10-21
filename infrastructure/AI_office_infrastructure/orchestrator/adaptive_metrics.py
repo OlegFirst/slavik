@@ -529,7 +529,7 @@ class AdaptiveOrchestratorMixin:
 
         self._running = True
         self._monitoring_task = asyncio.create_task(self._monitor_loop())
-        logger.info("✅ Adaptive monitoring started")
+        logger.info(" Adaptive monitoring started")
 
     async def stop_adaptive_monitoring(self):
         """Остановить фоновый мониторинг"""
@@ -540,7 +540,7 @@ class AdaptiveOrchestratorMixin:
                 await self._monitoring_task
             except asyncio.CancelledError:
                 pass
-        logger.info("🛑 Adaptive monitoring stopped")
+        logger.info(" Adaptive monitoring stopped")
 
     async def _monitor_loop(self):
         """Цикл мониторинга (каждые 10 секунд)"""

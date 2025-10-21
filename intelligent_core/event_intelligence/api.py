@@ -72,14 +72,14 @@ async def initialize_event_intelligence():
     """Initialize Event Intelligence components"""
     global analyzer, learner, predictor, knowledge_base, ai_foundation
 
-    logger.info("🧠 Initializing Event Intelligence...")
+    logger.info(" Initializing Event Intelligence...")
 
     # Initialize AI Foundation (RAG + LLM)
     try:
         ai_foundation = await get_event_ai_foundation()
-        logger.info("✅ AI Foundation (RAG + LLM) initialized for Event Intelligence")
+        logger.info(" AI Foundation (RAG + LLM) initialized for Event Intelligence")
     except Exception as e:
-        logger.error(f"❌ AI Foundation initialization failed: {e}")
+        logger.error(f" AI Foundation initialization failed: {e}")
         ai_foundation = None
 
     analyzer = EventAnalyzer()
@@ -87,7 +87,7 @@ async def initialize_event_intelligence():
     predictor = EventPredictor()
     knowledge_base = EventKnowledgeBase()
 
-    logger.info("✅ Event Intelligence initialized successfully")
+    logger.info(" Event Intelligence initialized successfully")
 
 
 # Endpoints
@@ -149,7 +149,7 @@ async def analyze_event(request: AnalyzeEventRequest):
         )
 
     except Exception as e:
-        logger.error(f"❌ Event analysis failed: {e}")
+        logger.error(f" Event analysis failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -168,7 +168,7 @@ async def analyze_domain(domain: str, events: List[Dict[str, Any]]):
         return result
 
     except Exception as e:
-        logger.error(f"❌ Domain analysis failed: {e}")
+        logger.error(f" Domain analysis failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -196,7 +196,7 @@ async def record_suggestion(request: RecordSuggestionRequest):
         }
 
     except Exception as e:
-        logger.error(f"❌ Recording suggestion failed: {e}")
+        logger.error(f" Recording suggestion failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -224,7 +224,7 @@ async def record_feedback(request: RecordFeedbackRequest):
         }
 
     except Exception as e:
-        logger.error(f"❌ Recording feedback failed: {e}")
+        logger.error(f" Recording feedback failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -239,7 +239,7 @@ async def get_learning_stats():
         return stats
 
     except Exception as e:
-        logger.error(f"❌ Getting stats failed: {e}")
+        logger.error(f" Getting stats failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -254,7 +254,7 @@ async def get_learning_report():
         return report
 
     except Exception as e:
-        logger.error(f"❌ Generating report failed: {e}")
+        logger.error(f" Generating report failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -281,7 +281,7 @@ async def predict_gaps(request: PredictGapsRequest):
         )
 
     except Exception as e:
-        logger.error(f"❌ Gap prediction failed: {e}")
+        logger.error(f" Gap prediction failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -300,7 +300,7 @@ async def get_similar_events(event_name: str, limit: int = 5):
         }
 
     except Exception as e:
-        logger.error(f"❌ Similar events search failed: {e}")
+        logger.error(f" Similar events search failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -319,7 +319,7 @@ async def get_relevant_patterns(event_name: str, limit: int = 3):
         }
 
     except Exception as e:
-        logger.error(f"❌ Pattern search failed: {e}")
+        logger.error(f" Pattern search failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -334,7 +334,7 @@ async def get_knowledge_stats():
         return stats
 
     except Exception as e:
-        logger.error(f"❌ Getting knowledge stats failed: {e}")
+        logger.error(f" Getting knowledge stats failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

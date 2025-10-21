@@ -79,7 +79,7 @@ class ExecutionValidator:
         """
         from datetime import datetime
 
-        logger.info(f"🔍 Validating execution: {result.scenario_id}")
+        logger.info(f" Validating execution: {result.scenario_id}")
 
         # Handle both formats
         if 'scenario' in scenario:
@@ -139,7 +139,7 @@ class ExecutionValidator:
             'duration_seconds': result.duration_seconds
         }
 
-        logger.info(f"  {'✅' if is_valid else '❌'} Validation: {validation_status} "
+        logger.info(f"  {'' if is_valid else ''} Validation: {validation_status} "
                    f"({len(errors)} errors, {len(warnings)} warnings)")
 
         return ValidationReport(

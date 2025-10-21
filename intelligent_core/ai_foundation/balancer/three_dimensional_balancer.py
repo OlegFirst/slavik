@@ -161,7 +161,7 @@ class ThreeDimensionalBalancer:
         }
 
         logger.info(
-            f"⚖️  Three-Dimensional Balancer initialized "
+            f"️  Three-Dimensional Balancer initialized "
             f"(weights: R={self.current_weights.rational_weight:.2f}, "
             f"I={self.current_weights.intuitive_weight:.2f}, "
             f"P={self.current_weights.pragmatic_weight:.2f})"
@@ -247,7 +247,7 @@ class ThreeDimensionalBalancer:
         self._update_avg_balance()
 
         logger.info(
-            f"⚖️  3D Decision for {module_name}: "
+            f"️  3D Decision for {module_name}: "
             f"Balance={balance_score:.2f}, "
             f"Weights(R/I/P)={adapted_weights.rational_weight:.2f}/"
             f"{adapted_weights.intuitive_weight:.2f}/"

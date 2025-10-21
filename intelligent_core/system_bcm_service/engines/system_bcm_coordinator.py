@@ -87,32 +87,32 @@ class SystemBCMCoordinator:
             {"name": "community-service", "port": 8016, "tier": "optional"}
         ]
 
-        logger.info("🎯 System BCM Coordinator initialized (INTEGRATED version)")
+        logger.info(" System BCM Coordinator initialized (INTEGRATED version)")
 
     async def initialize(self):
         """Инициализация"""
         try:
             # Setup EventBus
             self.eventbus = create_eventbus('redis')
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
 
             # Initialize Service Recovery Handler (NEW!)
             self.recovery_handler = ServiceRecoveryHandler(
                 decision_center_url=self.decision_center_url,
                 eventbus=self.eventbus
             )
-            logger.info("✅ Service Recovery Handler initialized with Decision Center governance")
+            logger.info(" Service Recovery Handler initialized with Decision Center governance")
 
             # Subscribe to platform events
             await self._subscribe_to_events()
 
             self.running = True
-            logger.info("✅ System BCM Coordinator ready")
+            logger.info(" System BCM Coordinator ready")
 
         except Exception as e:
-            logger.error(f"❌ Initialization failed: {e}")
+            logger.error(f" Initialization failed: {e}")
             self.eventbus = create_eventbus('memory')
-            logger.warning("⚠️  Using memory EventBus (fallback)")
+            logger.warning("️  Using memory EventBus (fallback)")
 
     async def run_bcm_cycle(self) -> Dict[str, Any]:
         """
@@ -131,7 +131,7 @@ class SystemBCMCoordinator:
         self.current_cycle_id = f"cycle-{datetime.utcnow().strftime('%Y%m%d-%H%M%S')}"
         start_time = datetime.utcnow()
 
-        logger.info(f"🔄 Starting BCM cycle: {self.current_cycle_id}")
+        logger.info(f" Starting BCM cycle: {self.current_cycle_id}")
 
         try:
             # Publish start event
@@ -141,21 +141,21 @@ class SystemBCMCoordinator:
             })
 
             # PHASE 1: BIA - Собрать метрики (делаем сами) + ResourceTracker
-            logger.info("📊 Phase 1: BIA - Collecting platform metrics...")
+            logger.info(" Phase 1: BIA - Collecting platform metrics...")
             bia_results = await self._execute_bia_phase(self.resource_tracker)
 
             # PHASE 2: Risk Assessment - Консультация с Expertise Center
-            logger.info("⚠️  Phase 2: Risk Assessment - Consulting AI experts...")
+            logger.info("️  Phase 2: Risk Assessment - Consulting AI experts...")
             risk_results = await self.expertise.assess_platform_risks(bia_results)
 
             # PHASE 3: Pattern Detection - через learning-knowledge
-            logger.info("🔍 Phase 3: Pattern Detection - Using learning-knowledge...")
+            logger.info(" Phase 3: Pattern Detection - Using learning-knowledge...")
             # Собрать историю циклов для pattern detection
             cycle_history = await self._get_cycle_history()
             patterns = await self.learning.detect_patterns(cycle_history)
 
             # PHASE 4: AI Analysis - RAG + LLM + Expertise
-            logger.info("🧠 Phase 4: AI Analysis - RAG + LLM + Experts...")
+            logger.info(" Phase 4: AI Analysis - RAG + LLM + Experts...")
 
             # 4.1: Поиск похожих решений через RAG
             issue_description = self._describe_current_state(bia_results, risk_results, patterns)
@@ -183,7 +183,7 @@ class SystemBCMCoordinator:
             )
 
             # PHASE 5: Generate Comprehensive Insights
-            logger.info("💡 Phase 5: Generating insights...")
+            logger.info(" Phase 5: Generating insights...")
             comprehensive_insights = await self.ai.generate_comprehensive_insights(
                 cycle_results=bia_results,
                 patterns=patterns,
@@ -191,7 +191,7 @@ class SystemBCMCoordinator:
             )
 
             # PHASE 6: Learning - Сохранить в Collective + Knowledge Base
-            logger.info("📚 Phase 6: Sharing knowledge with community...")
+            logger.info(" Phase 6: Sharing knowledge with community...")
 
             # 6.1: Сохранить паттерны в Collective Intelligence
             for pattern in patterns:
@@ -250,11 +250,11 @@ class SystemBCMCoordinator:
                     "learning": learning_result
                 },
                 "integration_status": {
-                    "learning_knowledge": "✅ Used PatternDetector",
-                    "expertise_center": f"✅ Consulted {len(expert_analysis.get('consulted_specialists', []))} specialists",
-                    "collective_intelligence": f"✅ Shared {len(patterns)} patterns",
-                    "rag_llm": f"✅ Found {len(similar_solutions)} similar cases",
-                    "knowledge_base": "✅ Patterns indexed in Qdrant"
+                    "learning_knowledge": " Used PatternDetector",
+                    "expertise_center": f" Consulted {len(expert_analysis.get('consulted_specialists', []))} specialists",
+                    "collective_intelligence": f" Shared {len(patterns)} patterns",
+                    "rag_llm": f" Found {len(similar_solutions)} similar cases",
+                    "knowledge_base": " Patterns indexed in Qdrant"
                 },
                 "metrics": {
                     "platform_health_score": bia_results.get("health_score", 0),
@@ -269,17 +269,17 @@ class SystemBCMCoordinator:
             # Publish completion event
             await self._publish_event("cycle.completed", cycle_result)
 
-            logger.info(f"✅ BCM cycle completed in {duration:.2f}s - FULLY INTEGRATED!")
-            logger.info(f"   📊 Platform health: {bia_results.get('health_score', 0)}%")
-            logger.info(f"   🔍 Patterns detected: {len(patterns)}")
-            logger.info(f"   🧠 AI specialists consulted: {len(expert_analysis.get('consulted_specialists', []))}")
-            logger.info(f"   📚 Knowledge shared with community: {len(patterns)} patterns")
-            logger.info(f"   💡 Insights generated: {len(comprehensive_insights.get('final_recommendations', []))}")
+            logger.info(f" BCM cycle completed in {duration:.2f}s - FULLY INTEGRATED!")
+            logger.info(f"    Platform health: {bia_results.get('health_score', 0)}%")
+            logger.info(f"    Patterns detected: {len(patterns)}")
+            logger.info(f"    AI specialists consulted: {len(expert_analysis.get('consulted_specialists', []))}")
+            logger.info(f"    Knowledge shared with community: {len(patterns)} patterns")
+            logger.info(f"    Insights generated: {len(comprehensive_insights.get('final_recommendations', []))}")
 
             return cycle_result
 
         except Exception as e:
-            logger.error(f"❌ BCM cycle failed: {e}")
+            logger.error(f" BCM cycle failed: {e}")
             await self._publish_event("cycle.failed", {
                 "cycle_id": self.current_cycle_id,
                 "error": str(e)
@@ -340,7 +340,7 @@ class SystemBCMCoordinator:
 
             # Publish event if deficit detected
             if resource_state == "deficit":
-                logger.warning(f"⚠️  Resource deficit detected!")
+                logger.warning(f"️  Resource deficit detected!")
                 await self._publish_event("resources.contention", {
                     "type": "predicted_shortage",
                     "available": available,
@@ -373,7 +373,7 @@ class SystemBCMCoordinator:
             result["recovery_statistics"] = recovery_stats
 
             logger.info(
-                f"   🔧 Recovery stats: {recovery_stats['total_attempts']} attempts, "
+                f"    Recovery stats: {recovery_stats['total_attempts']} attempts, "
                 f"{recovery_stats['successful_recoveries']} successful "
                 f"(success rate: {recovery_stats['success_rate']:.1%})"
             )
@@ -467,12 +467,12 @@ class SystemBCMCoordinator:
 
         @self.eventbus.subscribe("platform.health.degraded")
         async def on_health_degraded(event: Event):
-            logger.warning(f"⚠️  Platform health degraded: {event.data}")
+            logger.warning(f"️  Platform health degraded: {event.data}")
             # Можно запустить внеплановый цикл
 
         @self.eventbus.subscribe("platform.service.failed")
         async def on_service_failed(event: Event):
-            logger.error(f"🚨 Service failed: {event.data}")
+            logger.error(f" Service failed: {event.data}")
 
             # Trigger automatic recovery with Decision Center governance (NEW!)
             if self.recovery_handler:
@@ -483,7 +483,7 @@ class SystemBCMCoordinator:
                     tier = event.data.get("tier", "standard")
 
                     logger.info(
-                        f"🔧 Initiating recovery for {service_name} with Decision Center governance..."
+                        f" Initiating recovery for {service_name} with Decision Center governance..."
                     )
 
                     recovery_result = await self.recovery_handler.handle_service_failure(
@@ -499,9 +499,9 @@ class SystemBCMCoordinator:
                     )
 
                 except Exception as e:
-                    logger.error(f"❌ Recovery handling failed: {e}", exc_info=True)
+                    logger.error(f" Recovery handling failed: {e}", exc_info=True)
 
-        logger.info("✅ Subscribed to platform events")
+        logger.info(" Subscribed to platform events")
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
         """Опубликовать событие"""
@@ -526,14 +526,14 @@ class SystemBCMCoordinator:
             try:
                 await self.run_bcm_cycle()
             except Exception as e:
-                logger.error(f"❌ Scheduled cycle failed: {e}")
+                logger.error(f" Scheduled cycle failed: {e}")
 
             # Ждать до следующего цикла
             await asyncio.sleep(interval_hours * 3600)
 
     async def shutdown(self):
         """Выключение"""
-        logger.info("🛑 Shutting down System BCM Coordinator...")
+        logger.info(" Shutting down System BCM Coordinator...")
         self.running = False
 
         # Close recovery handler (NEW!)

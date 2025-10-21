@@ -38,7 +38,7 @@ class MioIntegration:
             }
         """
         try:
-            logger.info(f"📤 Reporting event insights to МиО Manager...")
+            logger.info(f" Reporting event insights to МиО Manager...")
 
             # Формируем отчёт
             report = {
@@ -56,14 +56,14 @@ class MioIntegration:
             )
 
             if response.status_code == 200:
-                logger.info("✅ Insights delivered to МиО Manager")
+                logger.info(" Insights delivered to МиО Manager")
                 return True
             else:
-                logger.warning(f"⚠️ МиО Manager response: {response.status_code}")
+                logger.warning(f"️ МиО Manager response: {response.status_code}")
                 return False
 
         except Exception as e:
-            logger.error(f"❌ Error reporting to МиО: {e}")
+            logger.error(f" Error reporting to МиО: {e}")
             return False
 
     async def request_task_execution(self, task: Dict) -> Optional[str]:
@@ -79,7 +79,7 @@ class MioIntegration:
             task_id или None
         """
         try:
-            logger.info(f"📋 Requesting task execution: {task.get('title')}")
+            logger.info(f" Requesting task execution: {task.get('title')}")
 
             response = await self.client.post(
                 f"{self.mio_url}/api/tasks/delegate",
@@ -93,11 +93,11 @@ class MioIntegration:
             if response.status_code == 200:
                 result = response.json()
                 task_id = result.get("task_id")
-                logger.info(f"✅ Task delegated: {task_id}")
+                logger.info(f" Task delegated: {task_id}")
                 return task_id
 
         except Exception as e:
-            logger.error(f"❌ Error delegating task: {e}")
+            logger.error(f" Error delegating task: {e}")
 
         return None
 
@@ -121,7 +121,7 @@ class MioIntegration:
                 return response.json()
 
         except Exception as e:
-            logger.warning(f"⚠️ Could not get context from МиО: {e}")
+            logger.warning(f"️ Could not get context from МиО: {e}")
 
         return {"active_tasks": [], "system_health": "unknown", "priorities": []}
 

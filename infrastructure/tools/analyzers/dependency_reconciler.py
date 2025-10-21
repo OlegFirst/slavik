@@ -205,10 +205,10 @@ class DependencyReconciler:
             with open(self.catalog_path, 'w') as f:
                 yaml.dump(fixed_catalog, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
 
-            print(f"✅ Backup saved: {backup_path}")
-            print(f"✅ Updated: {self.catalog_path}")
+            print(f" Backup saved: {backup_path}")
+            print(f" Updated: {self.catalog_path}")
         else:
-            print("🔍 DRY RUN - No changes made")
+            print(" DRY RUN - No changes made")
 
         return {
             'gaps': gaps,
@@ -224,7 +224,7 @@ class DependencyReconciler:
 
         report = []
         report.append("="*60)
-        report.append("📊 DEPENDENCY RECONCILIATION REPORT")
+        report.append(" DEPENDENCY RECONCILIATION REPORT")
         report.append("="*60)
 
         # Недостающие сервисы
@@ -236,7 +236,7 @@ class DependencyReconciler:
 
         # Недокументированные зависимости
         if gaps['missing_dependencies']:
-            report.append(f"\n📌 MISSING DEPENDENCIES ({len(gaps['missing_dependencies'])} services):")
+            report.append(f"\n MISSING DEPENDENCIES ({len(gaps['missing_dependencies'])} services):")
             for service, deps in list(gaps['missing_dependencies'].items())[:10]:
                 report.append(f"  • {service}: {', '.join(deps[:5])}")
             if len(gaps['missing_dependencies']) > 10:
@@ -244,13 +244,13 @@ class DependencyReconciler:
 
         # Устаревшие зависимости
         if gaps['obsolete_dependencies']:
-            report.append(f"\n⚠️  OBSOLETE DEPENDENCIES ({len(gaps['obsolete_dependencies'])} services):")
+            report.append(f"\n️  OBSOLETE DEPENDENCIES ({len(gaps['obsolete_dependencies'])} services):")
             for service, deps in list(gaps['obsolete_dependencies'].items())[:5]:
                 report.append(f"  • {service}: {', '.join(deps)}")
 
         # Изменения
         if changes:
-            report.append("\n✅ CHANGES APPLIED:")
+            report.append("\n CHANGES APPLIED:")
             if changes.get('added_services'):
                 report.append(f"  • Added {len(changes['added_services'])} services")
             if changes.get('updated_dependencies'):
@@ -267,7 +267,7 @@ if __name__ == "__main__":
     dry_run = '--dry-run' in sys.argv
     auto_fix = '--auto-fix' in sys.argv or not dry_run
 
-    print("🔧 Dependency Reconciler")
+    print(" Dependency Reconciler")
     print(f"Mode: {'DRY RUN' if dry_run else 'AUTO FIX'}\n")
 
     reconciler = DependencyReconciler()
@@ -282,4 +282,4 @@ if __name__ == "__main__":
     with open(report_path, 'w') as f:
         f.write(report)
 
-    print(f"\n💾 Report saved: {report_path}")
+    print(f"\n Report saved: {report_path}")

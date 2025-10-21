@@ -22,7 +22,7 @@ try:
     KNOWLEDGE_BASE_AVAILABLE = True
 except ImportError:
     KNOWLEDGE_BASE_AVAILABLE = False
-    logging.warning("⚠️ ai-foundation/learning-knowledge not available, using stub")
+    logging.warning("️ ai-foundation/learning-knowledge not available, using stub")
 
 logger = logging.getLogger(__name__)
 
@@ -49,12 +49,12 @@ class EventKnowledgeBase:
             self.integrator = EnhancedKnowledgeIntegrator(kb_base_url)
             self.kb_client = self.integrator.kb_client
             self.auto_creator = self.integrator.auto_creator
-            logger.info("✅ Event Knowledge Base initialized with ai-foundation integration")
+            logger.info(" Event Knowledge Base initialized with ai-foundation integration")
         else:
             self.integrator = None
             self.kb_client = None
             self.auto_creator = None
-            logger.warning("⚠️ Event Knowledge Base running in stub mode")
+            logger.warning("️ Event Knowledge Base running in stub mode")
 
         # Local fallback storage
         self.local_knowledge = {
@@ -107,10 +107,10 @@ class EventKnowledgeBase:
 
         try:
             article_id = await self.kb_client.create_article(article_data)
-            logger.info(f"✅ Stored analysis for '{event_name}' in KB: {article_id}")
+            logger.info(f" Stored analysis for '{event_name}' in KB: {article_id}")
             return article_id
         except Exception as e:
-            logger.error(f"❌ Failed to store analysis: {e}")
+            logger.error(f" Failed to store analysis: {e}")
             # Fallback to local storage
             self.local_knowledge['events'][event_name] = analysis
             return f"local_{event_name}"
@@ -156,10 +156,10 @@ class EventKnowledgeBase:
 
         try:
             article_id = await self.kb_client.create_article(article_data)
-            logger.info(f"✅ Stored pattern '{pattern_id}' in KB: {article_id}")
+            logger.info(f" Stored pattern '{pattern_id}' in KB: {article_id}")
             return article_id
         except Exception as e:
-            logger.error(f"❌ Failed to store pattern: {e}")
+            logger.error(f" Failed to store pattern: {e}")
             self.local_knowledge['patterns'][pattern_id] = pattern_data
             return f"local_pattern_{pattern_id}"
 
@@ -192,7 +192,7 @@ class EventKnowledgeBase:
             logger.info(f"Found {len(results)} similar events for '{event_name}'")
             return results
         except Exception as e:
-            logger.error(f"❌ Search failed: {e}")
+            logger.error(f" Search failed: {e}")
             return []
 
     async def get_relevant_patterns(
@@ -221,7 +221,7 @@ class EventKnowledgeBase:
             )
             return results
         except Exception as e:
-            logger.error(f"❌ Pattern search failed: {e}")
+            logger.error(f" Pattern search failed: {e}")
             return []
 
     async def get_learning_stats(self) -> Dict[str, Any]:
@@ -262,17 +262,17 @@ class EventKnowledgeBase:
 
         content = f"""# Event Analysis: {event_name}
 
-## 📊 Важность События
+##  Важность События
 
 **Importance Score:** {importance:.2f}/1.00
 
 **Usage Pattern:** {pattern.upper()}
 
-## 🤖 AI Insights
+##  AI Insights
 
 {insights}
 
-## 💡 Рекомендации
+##  Рекомендации
 
 """
         for idx, rec in enumerate(recommendations, 1):
@@ -280,7 +280,7 @@ class EventKnowledgeBase:
 
         content += f"""
 
-## 📈 История Анализа
+##  История Анализа
 
 Этот анализ был выполнен системой Event Intelligence для оценки важности и паттернов использования события.
 
@@ -302,17 +302,17 @@ class EventKnowledgeBase:
 
         content = f"""# Event Pattern: {description}
 
-## 🔍 Тип Паттерна
+##  Тип Паттерна
 
 **Type:** {pattern_type.upper()}
 
 **Confidence Level:** {confidence:.0%}
 
-## 📝 Описание
+##  Описание
 
 {description}
 
-## 📊 Примеры
+##  Примеры
 
 """
         for idx, example in enumerate(examples, 1):
@@ -320,7 +320,7 @@ class EventKnowledgeBase:
 
         content += f"""
 
-## 💡 Применение
+##  Применение
 
 Этот паттерн был обнаружен при анализе событий и может быть использован для:
 - Предсказания поведения похожих событий
@@ -342,7 +342,7 @@ class StubKnowledgeBase(EventKnowledgeBase):
 
     def __init__(self, kb_base_url: str = "http://localhost:8040"):
         super().__init__(kb_base_url)
-        logger.info("🔶 Using Stub Knowledge Base (ai-foundation not available)")
+        logger.info(" Using Stub Knowledge Base (ai-foundation not available)")
 
 
 # Export main class

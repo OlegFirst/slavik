@@ -27,13 +27,13 @@ async def apply_migrations():
     # Get database URL
     database_url = os.getenv('DATABASE_URL')
     if not database_url:
-        print('❌ DATABASE_URL not found in .env')
+        print(' DATABASE_URL not found in .env')
         sys.exit(1)
     
     # Convert to async URL
     async_db_url = database_url.replace('postgresql://', 'postgresql+asyncpg://')
     
-    print(f'📊 Connecting to Supabase...')
+    print(f' Connecting to Supabase...')
     engine = create_async_engine(async_db_url, echo=False)
     
     try:
@@ -46,14 +46,14 @@ async def apply_migrations():
                     applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
                 )
             '''))
-            print('✅ Migrations table ready')
+            print(' Migrations table ready')
             
             # Get already applied migrations
             result = await conn.execute(text(
                 'SELECT migration_name FROM schema_migrations'
             ))
             applied = {row[0] for row in result}
-            print(f'📋 Found {len(applied)} applied migrations')
+            print(f' Found {len(applied)} applied migrations')
             
             # Apply each migration
             migrations_dir = Path(__file__).parent / 'migrations_source'
@@ -66,10 +66,10 @@ async def apply_migrations():
                 migration_path = migrations_dir / migration_file
                 
                 if not migration_path.exists():
-                    print(f'⚠️  Migration file not found: {migration_file}')
+                    print(f'️  Migration file not found: {migration_file}')
                     continue
                 
-                print(f'🚀 Applying {migration_file}...')
+                print(f' Applying {migration_file}...')
                 
                 # Read migration SQL
                 with open(migration_path, 'r') as f:
@@ -85,14 +85,14 @@ async def apply_migrations():
                         {'name': migration_file}
                     )
                     
-                    print(f'   ✅ {migration_file} applied successfully')
+                    print(f'    {migration_file} applied successfully')
                     
                 except Exception as e:
-                    print(f'   ❌ Failed to apply {migration_file}')
+                    print(f'    Failed to apply {migration_file}')
                     print(f'   Error: {str(e)}')
                     raise
             
-            print('\n✨ All community intelligence migrations applied!')
+            print('\n All community intelligence migrations applied!')
             
             # Show created tables
             result = await conn.execute(text('''
@@ -114,7 +114,7 @@ async def apply_migrations():
             '''))
             
             tables = [row[0] for row in result]
-            print(f'\n📊 Community Intelligence tables ({len(tables)}):')
+            print(f'\n Community Intelligence tables ({len(tables)}):')
             for table in tables:
                 print(f'   • {table}')
             

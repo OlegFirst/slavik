@@ -281,7 +281,7 @@ class ProactiveRecommendationsEngine:
         email = f"""
 Subject: Your BCM Journey - This Week's Guidance
 
-Good morning! 👋
+Good morning! 
 
 Here's your personalized guidance based on your BCM journey progress:
 
@@ -291,21 +291,21 @@ Here's your personalized guidance based on your BCM journey progress:
         high_priority = [r for r in recommendations if r.priority == 'high']
 
         if high_priority:
-            email += "🔥 ACTION NEEDED THIS WEEK:\n\n"
+            email += " ACTION NEEDED THIS WEEK:\n\n"
 
             for rec in high_priority:
                 days_text = "TODAY" if rec.days_until == 0 else f"in {rec.days_until} days"
-                email += f"📌 {rec.milestone.upper()} ({days_text})\n"
+                email += f" {rec.milestone.upper()} ({days_text})\n"
                 email += f"   Confidence: {int(rec.confidence * 100)}%\n\n"
 
                 for action in rec.actions[:3]:
-                    email += f"   ✓ {action}\n"
+                    email += f"    {action}\n"
 
                 email += "\n"
 
                 # Resources
                 if rec.resources:
-                    email += "   📚 Resources:\n"
+                    email += "    Resources:\n"
                     for resource in rec.resources[:2]:
                         email += f"      - {resource['name']}\n"
 
@@ -315,7 +315,7 @@ Here's your personalized guidance based on your BCM journey progress:
         medium_priority = [r for r in recommendations if r.priority == 'medium']
 
         if medium_priority:
-            email += "📅 UPCOMING MILESTONES:\n\n"
+            email += " UPCOMING MILESTONES:\n\n"
 
             for rec in medium_priority:
                 email += f"   {rec.milestone}: ~{rec.days_until} days\n"
@@ -323,7 +323,7 @@ Here's your personalized guidance based on your BCM journey progress:
         # Certification tracker
         if cert_prediction:
             email += f"""
-🎯 CERTIFICATION TRACKER:
+ CERTIFICATION TRACKER:
    Predicted: {cert_prediction.predicted_certification_date.strftime('%B %Y')}
    Success Probability: {int(cert_prediction.success_probability * 100)}%
 

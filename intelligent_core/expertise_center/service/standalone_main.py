@@ -32,14 +32,14 @@ HOST = "0.0.0.0"
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     # Startup
-    logger.info("🚀 Starting Expertise Center Service")
-    logger.info(f"📍 Port: {PORT}")
-    logger.info("👥 12 Tactical Assistants available")
-    logger.info("📊 10 Analyzers available")
-    logger.info("✅ Service ready!")
+    logger.info(" Starting Expertise Center Service")
+    logger.info(f" Port: {PORT}")
+    logger.info(" 12 Tactical Assistants available")
+    logger.info(" 10 Analyzers available")
+    logger.info(" Service ready!")
     yield
     # Shutdown
-    logger.info("👋 Shutting down Expertise Center Service")
+    logger.info(" Shutting down Expertise Center Service")
 
 # Create FastAPI app
 app = FastAPI(

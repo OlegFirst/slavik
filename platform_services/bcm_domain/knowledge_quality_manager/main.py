@@ -41,23 +41,23 @@ async def lifespan(app: FastAPI):
     """Application lifespan"""
     global scenario_generator, knowledge_monitor, compliance_controller, orchestrator_task
 
-    logger.info("🚀 Starting Knowledge Quality Manager...")
+    logger.info(" Starting Knowledge Quality Manager...")
 
     # Initialize components
     scenario_generator = ScenarioGenerator()
     knowledge_monitor = KnowledgeMonitor()
     compliance_controller = ComplianceController()
 
-    logger.info("✅ Components initialized")
+    logger.info(" Components initialized")
 
     # Start orchestration cycle (background task)
     orchestrator_task = asyncio.create_task(run_orchestration_cycle())
-    logger.info("🔄 Orchestration cycle started")
+    logger.info(" Orchestration cycle started")
 
     yield
 
     # Shutdown
-    logger.info("🛑 Shutting down Knowledge Quality Manager...")
+    logger.info(" Shutting down Knowledge Quality Manager...")
     if orchestrator_task:
         orchestrator_task.cancel()
 
@@ -65,11 +65,11 @@ async def lifespan(app: FastAPI):
 async def run_orchestration_cycle():
     """Main 24-hour orchestration cycle"""
 
-    logger.info("🔄 Orchestration cycle: Starting...")
+    logger.info(" Orchestration cycle: Starting...")
 
     while True:
         try:
-            logger.info("📊 Cycle: Assessing knowledge state...")
+            logger.info(" Cycle: Assessing knowledge state...")
 
             # 1. MONITOR current state
             knowledge_state = await knowledge_monitor.assess()
@@ -86,12 +86,12 @@ async def run_orchestration_cycle():
 
             # 4. GENERATE scenarios
             if priorities:
-                logger.info("🤖 Generating scenarios...")
+                logger.info(" Generating scenarios...")
                 new_scenarios = await scenario_generator.generate(priorities)
                 logger.info(f"   Generated: {len(new_scenarios)} scenarios")
 
                 # 5. VALIDATE
-                logger.info("✅ Validating scenarios...")
+                logger.info(" Validating scenarios...")
                 validated = await compliance_controller.validate(new_scenarios)
                 approved = [s for s in validated if s.status == 'approved']
                 logger.info(f"   Approved: {len(approved)}/{len(validated)}")
@@ -102,7 +102,7 @@ async def run_orchestration_cycle():
             # 7. REPORT metrics
             await knowledge_monitor.report_metrics()
 
-            logger.info("✅ Cycle complete. Sleeping 24 hours...")
+            logger.info(" Cycle complete. Sleeping 24 hours...")
             await asyncio.sleep(86400)  # 24 hours
 
         except asyncio.CancelledError:
@@ -120,11 +120,11 @@ app = FastAPI(
     **Intelligent Knowledge Management Service**
 
     Manages platform knowledge through:
-    - 🤖 Auto-scenario generation
-    - 📊 Knowledge monitoring
-    - ✅ Compliance validation
-    - 🔍 Gap detection
-    - 📈 Quality assurance
+    -  Auto-scenario generation
+    -  Knowledge monitoring
+    -  Compliance validation
+    -  Gap detection
+    -  Quality assurance
 
     ## Features
     - **Scenario Generator**: Auto-creates scenarios from standards, capabilities, user needs
@@ -357,7 +357,7 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
-    logger.info(f"🚀 Starting Knowledge Quality Manager on port {settings.SERVICE_PORT}")
+    logger.info(f" Starting Knowledge Quality Manager on port {settings.SERVICE_PORT}")
 
     uvicorn.run(
         "main:app",

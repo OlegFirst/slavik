@@ -61,7 +61,7 @@ class ScenarioLearner:
         # Обновить статистику
         await self._update_statistics(scenario_id, result)
 
-        logger.info(f"  📊 Recorded execution: {scenario_id} ({result.get('status')})")
+        logger.info(f"   Recorded execution: {scenario_id} ({result.get('status')})")
 
         # TODO: В production
         # - Сохранить в PostgreSQL
@@ -100,7 +100,7 @@ class ScenarioLearner:
         stats['avg_duration'] = stats['total_duration'] / stats['total_executions']
         stats['last_executed_at'] = datetime.utcnow().isoformat()
 
-        logger.debug(f"    📈 Stats updated: {scenario_id} - {stats['total_executions']} executions")
+        logger.debug(f"     Stats updated: {scenario_id} - {stats['total_executions']} executions")
 
     async def get_statistics(self, scenario_id: str) -> Dict[str, Any]:
         """

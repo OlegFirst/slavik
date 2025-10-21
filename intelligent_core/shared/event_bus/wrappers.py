@@ -76,18 +76,18 @@ async def init_event_bus(
     if hasattr(_event_bus, 'connect'):
         try:
             await _event_bus.connect()
-            logger.info(f"✅ EventBus connected ({backend})")
+            logger.info(f" EventBus connected ({backend})")
         except Exception as e:
-            logger.error(f"❌ Failed to connect EventBus: {e}")
+            logger.error(f" Failed to connect EventBus: {e}")
             raise
 
     # Register all @subscribe_to handlers
     for pattern, handler in _event_handlers:
         try:
             await _event_bus.subscribe(pattern, handler)
-            logger.info(f"✅ Registered handler for pattern: {pattern}")
+            logger.info(f" Registered handler for pattern: {pattern}")
         except Exception as e:
-            logger.error(f"❌ Failed to register handler for {pattern}: {e}")
+            logger.error(f" Failed to register handler for {pattern}: {e}")
 
     # Auto-register service with Event Intelligence
     try:
@@ -102,11 +102,11 @@ async def init_event_bus(
             },
             source=service_name
         )
-        logger.info(f"✅ Service registered with Event Intelligence: {service_name}")
+        logger.info(f" Service registered with Event Intelligence: {service_name}")
     except Exception as e:
-        logger.warning(f"⚠️ Failed to register with Event Intelligence: {e}")
+        logger.warning(f"️ Failed to register with Event Intelligence: {e}")
 
-    logger.info(f"✅ EventBus initialized for service: {service_name}")
+    logger.info(f" EventBus initialized for service: {service_name}")
     return _event_bus
 
 
@@ -168,9 +168,9 @@ async def publish_event(
 
     try:
         await bus.publish(event)
-        logger.debug(f"📤 Published: {event_type} from {source}")
+        logger.debug(f" Published: {event_type} from {source}")
     except Exception as e:
-        logger.error(f"❌ Failed to publish {event_type}: {e}")
+        logger.error(f" Failed to publish {event_type}: {e}")
         raise
 
 
@@ -249,7 +249,7 @@ async def shutdown_event_bus():
         # Close bus
         try:
             await bus.close()
-            logger.info("✅ EventBus closed")
+            logger.info(" EventBus closed")
         except Exception as e:
             logger.error(f"Error closing EventBus: {e}")
 

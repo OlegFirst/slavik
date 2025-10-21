@@ -65,7 +65,7 @@ class QdrantScenarioStorage:
         self.encoder = SentenceTransformer(embedding_model)
         self.vector_size = self.encoder.get_sentence_embedding_dimension()
 
-        logger.info(f"✅ Qdrant client initialized (collection: {collection_name}, vector_size: {self.vector_size})")
+        logger.info(f" Qdrant client initialized (collection: {collection_name}, vector_size: {self.vector_size})")
 
     async def initialize(self):
         """Создать коллекцию если не существует"""
@@ -83,12 +83,12 @@ class QdrantScenarioStorage:
                         distance=Distance.COSINE
                     )
                 )
-                logger.info(f"✅ Created Qdrant collection: {self.collection_name}")
+                logger.info(f" Created Qdrant collection: {self.collection_name}")
             else:
-                logger.info(f"✅ Qdrant collection exists: {self.collection_name}")
+                logger.info(f" Qdrant collection exists: {self.collection_name}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize Qdrant collection: {e}")
+            logger.error(f" Failed to initialize Qdrant collection: {e}")
             raise
 
     def _generate_embedding(self, text: str) -> List[float]:
@@ -244,11 +244,11 @@ class QdrantScenarioStorage:
                 points=[point]
             )
 
-            logger.info(f"✅ Qdrant: indexed scenario {scenario_id} (point_id: {point_id})")
+            logger.info(f" Qdrant: indexed scenario {scenario_id} (point_id: {point_id})")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to index scenario {scenario_id} in Qdrant: {e}")
+            logger.error(f" Failed to index scenario {scenario_id} in Qdrant: {e}")
             return False
 
     async def search(
@@ -315,11 +315,11 @@ class QdrantScenarioStorage:
                     full_scenario['_search_score'] = result.score
                     scenarios.append(full_scenario)
 
-            logger.info(f"✅ Qdrant search: found {len(scenarios)} scenarios for query '{query}'")
+            logger.info(f" Qdrant search: found {len(scenarios)} scenarios for query '{query}'")
             return scenarios
 
         except Exception as e:
-            logger.error(f"❌ Failed to search in Qdrant: {e}")
+            logger.error(f" Failed to search in Qdrant: {e}")
             return []
 
     async def get_scenario_by_id(self, scenario_id: str) -> Optional[Dict[str, Any]]:
@@ -348,7 +348,7 @@ class QdrantScenarioStorage:
                 return None
 
         except Exception as e:
-            logger.error(f"❌ Failed to get scenario {scenario_id} from Qdrant: {e}")
+            logger.error(f" Failed to get scenario {scenario_id} from Qdrant: {e}")
             return None
 
     async def delete_scenario(self, scenario_id: str) -> bool:
@@ -369,11 +369,11 @@ class QdrantScenarioStorage:
                 points_selector=[point_id]
             )
 
-            logger.info(f"✅ Deleted scenario {scenario_id} from Qdrant")
+            logger.info(f" Deleted scenario {scenario_id} from Qdrant")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to delete scenario {scenario_id} from Qdrant: {e}")
+            logger.error(f" Failed to delete scenario {scenario_id} from Qdrant: {e}")
             return False
 
     async def bulk_register(self, scenarios: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -423,7 +423,7 @@ class QdrantScenarioStorage:
                 success_count += 1
 
             except Exception as e:
-                logger.error(f"❌ Failed to prepare scenario for Qdrant: {e}")
+                logger.error(f" Failed to prepare scenario for Qdrant: {e}")
                 failed_count += 1
 
         # Batch upsert
@@ -433,9 +433,9 @@ class QdrantScenarioStorage:
                     collection_name=self.collection_name,
                     points=points
                 )
-                logger.info(f"✅ Qdrant bulk register: {success_count} scenarios indexed")
+                logger.info(f" Qdrant bulk register: {success_count} scenarios indexed")
             except Exception as e:
-                logger.error(f"❌ Failed bulk upsert to Qdrant: {e}")
+                logger.error(f" Failed bulk upsert to Qdrant: {e}")
                 return {'success': 0, 'failed': len(scenarios)}
 
         return {
@@ -460,7 +460,7 @@ class QdrantScenarioStorage:
             }
 
         except Exception as e:
-            logger.error(f"❌ Failed to get Qdrant statistics: {e}")
+            logger.error(f" Failed to get Qdrant statistics: {e}")
             return {}
 
 
@@ -513,35 +513,35 @@ async def main():
 
         # Bulk register
         result = await storage.bulk_register(test_scenarios)
-        print(f"\n✅ Bulk register: {result}")
+        print(f"\n Bulk register: {result}")
 
         # Semantic search
         scenarios = await storage.search("how to store secrets securely?", limit=5)
-        print(f"\n✅ Semantic search (secrets): {len(scenarios)} scenarios found")
+        print(f"\n Semantic search (secrets): {len(scenarios)} scenarios found")
         for s in scenarios:
             print(f"  - {s['meta']['id']}: {s['description']['title']} (score: {s.get('_search_score', 0):.4f})")
 
         # Search with filters
         scenarios = await storage.search("business process", level=1, limit=5)
-        print(f"\n✅ Semantic search (business + level=1): {len(scenarios)} scenarios found")
+        print(f"\n Semantic search (business + level=1): {len(scenarios)} scenarios found")
         for s in scenarios:
             print(f"  - {s['meta']['id']}: {s['description']['title']} (score: {s.get('_search_score', 0):.4f})")
 
         # Get by ID
         scenario = await storage.get_scenario_by_id('test-vault-store-qdrant')
         if scenario:
-            print(f"\n✅ Get by ID: {scenario['meta']['id']}")
+            print(f"\n Get by ID: {scenario['meta']['id']}")
 
         # Statistics
         stats = await storage.get_statistics()
-        print(f"\n✅ Statistics: {stats}")
+        print(f"\n Statistics: {stats}")
 
         # Clean up
         # await storage.delete_scenario('test-vault-store-qdrant')
         # await storage.delete_scenario('test-bia-creation-qdrant')
 
     except Exception as e:
-        logger.error(f"❌ Test failed: {e}")
+        logger.error(f" Test failed: {e}")
         raise
 
 

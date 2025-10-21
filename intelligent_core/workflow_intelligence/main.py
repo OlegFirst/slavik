@@ -98,7 +98,7 @@ async def system_self_monitoring():
 
             if decision.decision_type in ['block', 'warn']:
                 logger.warning(
-                    f"🔴 SELF-MONITORING ALERT: {decision.rationale}"
+                    f" SELF-MONITORING ALERT: {decision.rationale}"
                 )
 
                 # Publish system health event
@@ -112,7 +112,7 @@ async def system_self_monitoring():
                     }
                 )
             else:
-                logger.debug("✅ System self-check passed")
+                logger.debug(" System self-check passed")
 
         except Exception as e:
             logger.error(f"System self-monitoring error: {e}")
@@ -125,8 +125,8 @@ async def lifespan(app: FastAPI):
     global governance, pdca_engine, self_monitoring_task
 
     # Startup
-    logger.info("🚀 Starting Workflow Intelligence Service v2.0")
-    logger.info(f"📍 Port: {PORT}")
+    logger.info(" Starting Workflow Intelligence Service v2.0")
+    logger.info(f" Port: {PORT}")
 
     # Initialize EventBus
     try:
@@ -134,14 +134,14 @@ async def lifespan(app: FastAPI):
             service_name="workflow-intelligence",
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379")
         )
-        logger.info("✅ EventBus initialized")
+        logger.info(" EventBus initialized")
     except Exception as e:
-        logger.warning(f"⚠️ EventBus init failed: {e}")
+        logger.warning(f"️ EventBus init failed: {e}")
 
     # Initialize Governance Orchestrator
     try:
         governance = create_governance_orchestrator(str(GOVERNANCE_CONFIG_PATH))
-        logger.info("✅ Governance Orchestrator initialized")
+        logger.info(" Governance Orchestrator initialized")
         logger.info(f"   - Goals: {len(governance.goals_engine.goals)}")
         logger.info(f"   - Rules: {len(governance.rules_engine.rules)}")
 
@@ -150,7 +150,7 @@ async def lifespan(app: FastAPI):
         logger.info(f"   - Governance Maturity: {summary['governance_maturity_score']}/100")
 
     except Exception as e:
-        logger.error(f"❌ Governance init failed: {e}")
+        logger.error(f" Governance init failed: {e}")
         governance = None
 
     # Initialize PDCA Rules Engine (NEW!)
@@ -163,25 +163,25 @@ async def lifespan(app: FastAPI):
                 event_bus=event_bus,
                 tenant_id=os.getenv("TENANT_ID", "default-tenant")
             )
-            logger.info("✅ PDCA Rules Engine activated")
+            logger.info(" PDCA Rules Engine activated")
             logger.info("   - All workflows will go through PDCA cycles")
             logger.info("   - PLAN → DO → CHECK → ACT")
         else:
-            logger.warning("⚠️ EventBus not available, skipping PDCA activation")
+            logger.warning("️ EventBus not available, skipping PDCA activation")
     except Exception as e:
-        logger.error(f"❌ PDCA initialization failed: {e}", exc_info=True)
+        logger.error(f" PDCA initialization failed: {e}", exc_info=True)
         pdca_engine = None
 
     # Start system self-monitoring background task
     if governance:
         self_monitoring_task = asyncio.create_task(system_self_monitoring())
-        logger.info("✅ System self-monitoring started (60s interval)")
+        logger.info(" System self-monitoring started (60s interval)")
 
-    logger.info("✅ Service ready!")
+    logger.info(" Service ready!")
     yield
 
     # Shutdown
-    logger.info("👋 Shutting down Workflow Intelligence Service")
+    logger.info(" Shutting down Workflow Intelligence Service")
 
     # Cancel self-monitoring
     if self_monitoring_task:
@@ -311,7 +311,7 @@ async def add_case(request: CaseAddRequest):
         case_id = str(uuid.uuid4())
 
         logger.info(
-            f"📚 Case added to library: {case_id} "
+            f" Case added to library: {case_id} "
             f"(module: {request.module}, source: {request.source})"
         )
 
@@ -388,7 +388,7 @@ async def analyze_workflow(request: WorkflowAnalysisRequest):
         # TODO: Full ML implementation
         # For now, return simple analysis
 
-        logger.info(f"🔍 Analyzing workflow: {request.workflow_id}")
+        logger.info(f" Analyzing workflow: {request.workflow_id}")
 
         return WorkflowAnalysisResponse(
             workflow_id=request.workflow_id,
@@ -488,7 +488,7 @@ async def validate_workflow_governance(request: GovernanceValidateRequest):
         )
 
     try:
-        logger.info(f"🔍 Validating workflow {request.workflow_id} against governance")
+        logger.info(f" Validating workflow {request.workflow_id} against governance")
 
         # Validate with governance orchestrator
         decision = governance.validate_user_workflow(

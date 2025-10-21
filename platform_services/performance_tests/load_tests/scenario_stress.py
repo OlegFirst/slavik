@@ -325,7 +325,7 @@ def on_test_stop(environment, **kwargs):
     print("=" * 80)
 
     stats = environment.stats
-    print(f"\n📊 Overall Statistics:")
+    print(f"\n Overall Statistics:")
     print(f"  Total Requests: {stats.total.num_requests:,}")
     print(f"  Total Failures: {stats.total.num_failures:,}")
     print(f"  Average Response Time: {stats.total.avg_response_time:.2f}ms")
@@ -339,41 +339,41 @@ def on_test_stop(environment, **kwargs):
         failure_rate = (stats.total.num_failures / stats.total.num_requests) * 100
         print(f"  Failure Rate: {failure_rate:.2f}%")
 
-        print(f"\n🎯 Performance Analysis:")
+        print(f"\n Performance Analysis:")
 
         # Breaking point analysis
         if failure_rate > 10:
-            print(f"  ❌ BREAKING POINT REACHED: {failure_rate:.1f}% failure rate")
+            print(f"   BREAKING POINT REACHED: {failure_rate:.1f}% failure rate")
         elif failure_rate > 5:
-            print(f"  ⚠️  DEGRADATION DETECTED: {failure_rate:.1f}% failure rate")
+            print(f"  ️  DEGRADATION DETECTED: {failure_rate:.1f}% failure rate")
         elif failure_rate > 1:
-            print(f"  ⚠️  MINOR ISSUES: {failure_rate:.1f}% failure rate")
+            print(f"  ️  MINOR ISSUES: {failure_rate:.1f}% failure rate")
         else:
-            print(f"  ✅ STABLE PERFORMANCE: {failure_rate:.1f}% failure rate")
+            print(f"   STABLE PERFORMANCE: {failure_rate:.1f}% failure rate")
 
         # Response time analysis
         p95 = stats.total.get_response_time_percentile(0.95)
         p99 = stats.total.get_response_time_percentile(0.99)
 
         if p95 > 2000:
-            print(f"  ❌ SEVERE LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
+            print(f"   SEVERE LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
         elif p95 > 1000:
-            print(f"  ⚠️  HIGH LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
+            print(f"  ️  HIGH LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
         elif p95 > 500:
-            print(f"  ⚠️  MODERATE LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
+            print(f"  ️  MODERATE LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
         else:
-            print(f"  ✅ GOOD LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
+            print(f"   GOOD LATENCY: P95 = {p95:.0f}ms (target: <500ms)")
 
         # Throughput analysis
         if stats.total.total_rps < 10:
-            print(f"  ❌ LOW THROUGHPUT: {stats.total.total_rps:.1f} req/s")
+            print(f"   LOW THROUGHPUT: {stats.total.total_rps:.1f} req/s")
         elif stats.total.total_rps < 50:
-            print(f"  ⚠️  MODERATE THROUGHPUT: {stats.total.total_rps:.1f} req/s")
+            print(f"  ️  MODERATE THROUGHPUT: {stats.total.total_rps:.1f} req/s")
         else:
-            print(f"  ✅ GOOD THROUGHPUT: {stats.total.total_rps:.1f} req/s")
+            print(f"   GOOD THROUGHPUT: {stats.total.total_rps:.1f} req/s")
 
     print("\n" + "=" * 80)
-    print("📝 Recommendations:")
+    print(" Recommendations:")
     print("  1. Review logs for errors during peak load")
     print("  2. Check database connection pool utilization")
     print("  3. Verify cache hit ratio during stress test")

@@ -316,7 +316,7 @@ class PeerReviewService:
     ):
         """Approve contribution and add to Case Library"""
 
-        logger.info(f"✅ Approving contribution {contribution.id}")
+        logger.info(f" Approving contribution {contribution.id}")
 
         contribution.status = ContributionStatus.APPROVED
         contribution.approved_at = datetime.utcnow()
@@ -347,7 +347,7 @@ class PeerReviewService:
         })
 
         logger.info(
-            f"✅ Contribution {contribution.id} approved! "
+            f" Contribution {contribution.id} approved! "
             f"Contributor earned {points} reputation points"
         )
 
@@ -358,7 +358,7 @@ class PeerReviewService:
     ):
         """Reject contribution"""
 
-        logger.info(f"❌ Rejecting contribution {contribution.id}")
+        logger.info(f" Rejecting contribution {contribution.id}")
 
         contribution.status = ContributionStatus.REJECTED
         await self.db.commit()
@@ -378,7 +378,7 @@ class PeerReviewService:
             ]
         })
 
-        logger.info(f"❌ Contribution {contribution.id} rejected")
+        logger.info(f" Contribution {contribution.id} rejected")
 
     async def get_pending_reviews(self, user_id: UUID) -> List[CaseContribution]:
         """Get contributions pending review by user"""

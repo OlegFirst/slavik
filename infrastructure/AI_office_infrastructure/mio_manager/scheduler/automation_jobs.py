@@ -24,14 +24,14 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
     async def auto_discover_services():
         """Auto-discovery новых сервисов"""
         try:
-            logger.info("🔍 Running auto-discovery...")
+            logger.info(" Running auto-discovery...")
             result = await toolkit_manager.discover_services()
 
             # Если есть unmonitored сервисы - регистрируем в Gateway
             if result['coverage']['percentage'] < 100:
                 for service in result['services']:
                     if not (service['has_health'] and service['has_metrics']):
-                        logger.warning(f"⚠️  Service {service['name']} not fully monitored")
+                        logger.warning(f"️  Service {service['name']} not fully monitored")
 
                         # Register in Gateway
                         await gateway_manager.register_service({
@@ -39,10 +39,10 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
                             'endpoints': service['endpoints']
                         })
 
-            logger.info(f"✅ Discovery complete: {result['coverage']['percentage']:.1f}% coverage")
+            logger.info(f" Discovery complete: {result['coverage']['percentage']:.1f}% coverage")
 
         except Exception as e:
-            logger.error(f"❌ Auto-discovery failed: {e}")
+            logger.error(f" Auto-discovery failed: {e}")
 
     # ============================================================================
     # JOB 2: Security Scan (каждый час)
@@ -51,12 +51,12 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
     async def hourly_security_scan():
         """Hourly security scan"""
         try:
-            logger.info("🔒 Running security scan...")
+            logger.info(" Running security scan...")
             result = await toolkit_manager.run_security_scan()
 
             # Если найдены HIGH severity issues - создать задачу
             if result['high_severity'] > 0:
-                logger.warning(f"⚠️  Found {result['high_severity']} HIGH security issues")
+                logger.warning(f"️  Found {result['high_severity']} HIGH security issues")
 
                 task = await toolkit_manager.create_improvement_task(
                     issue_type='security',
@@ -69,13 +69,13 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
 
                 # Delegate to Orchestrator
                 await orchestrator_client.delegate_task(task)
-                logger.info(f"✅ Security task created: {task['task_id']}")
+                logger.info(f" Security task created: {task['task_id']}")
 
             else:
-                logger.info("✅ No high-severity issues found")
+                logger.info(" No high-severity issues found")
 
         except Exception as e:
-            logger.error(f"❌ Security scan failed: {e}")
+            logger.error(f" Security scan failed: {e}")
 
     # ============================================================================
     # JOB 3: Dependency Analysis (каждые 15 минут)
@@ -84,12 +84,12 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
     async def dependency_analysis():
         """Analyze service dependencies"""
         try:
-            logger.info("🔗 Analyzing dependencies...")
+            logger.info(" Analyzing dependencies...")
             result = await toolkit_manager.analyze_dependencies()
 
             # Если найдены циклические зависимости - создать задачу
             if result.get('circular_dependencies'):
-                logger.warning(f"⚠️  Found {len(result['circular_dependencies'])} circular dependencies")
+                logger.warning(f"️  Found {len(result['circular_dependencies'])} circular dependencies")
 
                 task = await toolkit_manager.create_improvement_task(
                     issue_type='circular_dependency',
@@ -100,10 +100,10 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
 
                 await orchestrator_client.delegate_task(task)
 
-            logger.info(f"✅ Dependency analysis complete: {result['graph_nodes']} nodes")
+            logger.info(f" Dependency analysis complete: {result['graph_nodes']} nodes")
 
         except Exception as e:
-            logger.error(f"❌ Dependency analysis failed: {e}")
+            logger.error(f" Dependency analysis failed: {e}")
 
     # ============================================================================
     # JOB 4: Code Complexity Analysis (ежедневно в 2:00)
@@ -112,7 +112,7 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
     async def daily_complexity_analysis():
         """Daily code complexity analysis"""
         try:
-            logger.info("📊 Running daily complexity analysis...")
+            logger.info(" Running daily complexity analysis...")
 
             services = ['validation', 'documents', 'governance', 'incident']
 
@@ -122,7 +122,7 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
                 # Если max complexity > 20 - создать задачу на рефакторинг
                 if result['max_complexity'] > 20:
                     logger.warning(
-                        f"⚠️  {service}: max complexity {result['max_complexity']} "
+                        f"️  {service}: max complexity {result['max_complexity']} "
                         f"(avg: {result['avg_complexity']:.1f})"
                     )
 
@@ -137,10 +137,10 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
 
                     await orchestrator_client.delegate_task(task)
 
-            logger.info("✅ Complexity analysis complete")
+            logger.info(" Complexity analysis complete")
 
         except Exception as e:
-            logger.error(f"❌ Complexity analysis failed: {e}")
+            logger.error(f" Complexity analysis failed: {e}")
 
     # ============================================================================
     # JOB 5: Synthetic Test Generation (еженедельно в воскресенье 3:00)
@@ -149,13 +149,13 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
     async def weekly_test_generation():
         """Weekly synthetic test generation"""
         try:
-            logger.info("🧪 Generating weekly synthetic tests...")
+            logger.info(" Generating weekly synthetic tests...")
             result = await toolkit_manager.generate_synthetic_tests()
 
-            logger.info(f"✅ Generated {result['total_tests']} synthetic tests")
+            logger.info(f" Generated {result['total_tests']} synthetic tests")
 
         except Exception as e:
-            logger.error(f"❌ Test generation failed: {e}")
+            logger.error(f" Test generation failed: {e}")
 
     # ============================================================================
     # JOB 6: Health Check All Services (каждые 2 минуты)
@@ -172,7 +172,7 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
                     health = await gateway_manager.get_service_health(service['name'])
 
                     if health['status'] != 'healthy':
-                        logger.warning(f"⚠️  Service {service['name']} is {health['status']}")
+                        logger.warning(f"️  Service {service['name']} is {health['status']}")
 
                         # Create restart task
                         task = {
@@ -184,14 +184,14 @@ def start_scheduler(toolkit_manager, orchestrator_client, gateway_manager):
                         await orchestrator_client.request_service_restart(service['name'])
 
         except Exception as e:
-            logger.error(f"❌ Health check failed: {e}")
+            logger.error(f" Health check failed: {e}")
 
     # Start scheduler
     scheduler.start()
-    logger.info("✅ Automation scheduler started with 6 jobs")
+    logger.info(" Automation scheduler started with 6 jobs")
 
 
 def stop_scheduler():
     """Stop scheduler"""
     scheduler.shutdown()
-    logger.info("✅ Automation scheduler stopped")
+    logger.info(" Automation scheduler stopped")

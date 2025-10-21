@@ -156,7 +156,7 @@ async def publish_service_started():
                 'dependencies': ['eventbus']
             }
         )
-        logger.info("✅ Published service started event to EventBus")
+        logger.info(" Published service started event to EventBus")
     except Exception as e:
         logger.error(f"Failed to publish service started event: {e}")
 
@@ -179,7 +179,7 @@ async def publish_service_heartbeat():
                     }
                 }
             )
-            logger.debug("💓 Heartbeat sent to EventBus")
+            logger.debug(" Heartbeat sent to EventBus")
             await asyncio.sleep(30)  # Every 30 seconds
         except asyncio.CancelledError:
             break
@@ -213,7 +213,7 @@ async def startup_event():
     """Application startup - initialize EventBus"""
     global eventbus, heartbeat_task
 
-    logger.info("🚀 AI Office Orchestrator starting...")
+    logger.info(" AI Office Orchestrator starting...")
 
     if EVENTBUS_AVAILABLE:
         try:
@@ -221,30 +221,30 @@ async def startup_event():
             logger.info("Connecting to EventBus...")
             eventbus = create_eventbus('redis')
             await eventbus.connect()
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
 
             # Publish service started
             await publish_service_started()
 
             # Start heartbeat task
             heartbeat_task = asyncio.create_task(publish_service_heartbeat())
-            logger.info("✅ Heartbeat task started")
+            logger.info(" Heartbeat task started")
 
         except Exception as e:
             logger.error(f"EventBus initialization failed: {e}")
-            logger.warning("⚠️  Running without EventBus integration")
+            logger.warning("️  Running without EventBus integration")
             eventbus = None
     else:
-        logger.warning("⚠️  EventBus not available - service discovery disabled")
+        logger.warning("️  EventBus not available - service discovery disabled")
 
-    logger.info(f"✅ AI Office Orchestrator ready on port {PORT}")
+    logger.info(f" AI Office Orchestrator ready on port {PORT}")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Application shutdown - cleanup EventBus"""
     global eventbus, heartbeat_task
 
-    logger.info("👋 AI Office Orchestrator shutting down...")
+    logger.info(" AI Office Orchestrator shutting down...")
 
     # Stop heartbeat
     if heartbeat_task:
@@ -265,18 +265,18 @@ async def shutdown_event():
                     'reason': 'graceful_shutdown'
                 }
             )
-            logger.info("✅ Published service stopped event")
+            logger.info(" Published service stopped event")
         except Exception as e:
             logger.error(f"Failed to publish shutdown event: {e}")
 
         # Disconnect EventBus
         try:
             await eventbus.disconnect()
-            logger.info("✅ EventBus disconnected")
+            logger.info(" EventBus disconnected")
         except Exception as e:
             logger.error(f"EventBus disconnect error: {e}")
 
-    logger.info("✅ Shutdown complete")
+    logger.info(" Shutdown complete")
 
 if __name__ == "__main__":
     logger.info(f"Starting AI Office Orchestrator on {HOST}:{PORT}")

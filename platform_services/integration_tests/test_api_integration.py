@@ -85,7 +85,7 @@ async def test_create_bia_reference_in_audit(
     fetched_audit = response.json()
 
     # Verify reference (if implemented)
-    print(f"✅ BIA process successfully referenced in audit")
+    print(f" BIA process successfully referenced in audit")
 
 
 @pytest.mark.integration
@@ -175,7 +175,7 @@ async def test_strategy_approval_plan_creation_api_flow(
     assert response.status_code == 200
     plans = response.json()
 
-    print(f"✅ Strategy approval → Plan creation API flow verified")
+    print(f" Strategy approval → Plan creation API flow verified")
 
 
 @pytest.mark.integration
@@ -237,7 +237,7 @@ async def test_nonconformity_capa_improvement_api_chain(
     )
 
     if response.status_code == 404:
-        print(f"⚠️ CAPA endpoint not implemented")
+        print(f"️ CAPA endpoint not implemented")
         return
 
     assert response.status_code == 201
@@ -275,12 +275,12 @@ async def test_nonconformity_capa_improvement_api_chain(
     )
 
     if response.status_code == 404:
-        print(f"⚠️ Improvements endpoint not implemented")
+        print(f"️ Improvements endpoint not implemented")
         return
 
     assert response.status_code == 201
 
-    print(f"✅ NC → CAPA → Improvement API chain verified")
+    print(f" NC → CAPA → Improvement API chain verified")
 
 
 @pytest.mark.integration
@@ -339,7 +339,7 @@ async def test_bulk_bia_creation_and_retrieval(
     items = processes.get("items", processes) if isinstance(processes, dict) else processes
     assert len(items) >= 5
 
-    print(f"✅ Bulk BIA creation and retrieval verified")
+    print(f" Bulk BIA creation and retrieval verified")
 
 
 @pytest.mark.integration
@@ -379,7 +379,7 @@ async def test_pagination_across_services(
         # (Implementation may vary: {"items": [], "total": N} or just [])
         assert isinstance(data, (list, dict))
 
-        print(f"✅ Pagination verified for {endpoint}")
+        print(f" Pagination verified for {endpoint}")
 
 
 @pytest.mark.integration
@@ -430,7 +430,7 @@ async def test_filtering_and_search_apis(
     processes = response.json()
 
     # Verify filtering works (if implemented)
-    print(f"✅ Filtering API verified")
+    print(f" Filtering API verified")
 
 
 @pytest.mark.integration
@@ -472,7 +472,7 @@ async def test_error_handling_across_services(
 
         assert response.status_code in [400, 422]
 
-        print(f"✅ Error handling verified for {endpoint}")
+        print(f" Error handling verified for {endpoint}")
 
 
 @pytest.mark.integration
@@ -505,7 +505,7 @@ async def test_health_endpoints_all_services(
         assert "status" in health
         assert health["status"] == "healthy"
 
-        print(f"✅ {service_name} health check verified")
+        print(f" {service_name} health check verified")
 
 
 @pytest.mark.integration
@@ -580,7 +580,7 @@ async def test_cascade_delete_behavior(
     )
 
     # Plan might be deleted or orphaned depending on implementation
-    print(f"✅ Cascade delete behavior verified")
+    print(f" Cascade delete behavior verified")
 
     # Cleanup
     if response.status_code == 200:

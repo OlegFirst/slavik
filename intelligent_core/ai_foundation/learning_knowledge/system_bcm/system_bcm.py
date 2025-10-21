@@ -84,7 +84,7 @@ class SystemBCM:
         Returns:
             BIA results with identified critical processes, RTOs, RPOs, dependencies
         """
-        logger.info("🎯 Executing Self-BIA: Analyzing platform's own critical processes")
+        logger.info(" Executing Self-BIA: Analyzing platform's own critical processes")
 
         if not self.bia_data:
             await self.load_scenarios()
@@ -113,7 +113,7 @@ class SystemBCM:
             results["critical_processes"].append(process_analysis)
 
             logger.info(
-                f"  ✓ {process['name']}: "
+                f"   {process['name']}: "
                 f"Tier {process['criticality']}, "
                 f"RTO={process['rto']}, "
                 f"RPO={process['rpo']}, "
@@ -146,7 +146,7 @@ class SystemBCM:
             results["recovery_targets_set"].append(tier_info)
 
             logger.info(
-                f"  ⚙️  {tier_priority['tier']}: "
+                f"  ️  {tier_priority['tier']}: "
                 f"{len(tier_priority['processes'])} processes"
             )
 
@@ -159,7 +159,7 @@ class SystemBCM:
             "resource_tiers_established"
         ]
 
-        logger.info(f"✅ Self-BIA Complete: {len(results['critical_processes'])} critical processes identified")
+        logger.info(f" Self-BIA Complete: {len(results['critical_processes'])} critical processes identified")
 
         return results
 
@@ -170,7 +170,7 @@ class SystemBCM:
         Returns:
             Risk assessment results with identified risks and mitigation strategies
         """
-        logger.info("🎯 Assessing Own Risks: Identifying platform's vulnerabilities")
+        logger.info(" Assessing Own Risks: Identifying platform's vulnerabilities")
 
         if not self.risks_data:
             await self.load_scenarios()
@@ -208,7 +208,7 @@ class SystemBCM:
                 if risk["risk_score"] >= 7:
                     results["high_priority_risks"].append(risk_analysis)
                     logger.warning(
-                        f"  ⚠️  HIGH RISK: {risk['name']} "
+                        f"  ️  HIGH RISK: {risk['name']} "
                         f"(score={risk['risk_score']}, "
                         f"probability={risk['probability']}, "
                         f"impact={risk['impact']})"
@@ -240,7 +240,7 @@ class SystemBCM:
         ]
 
         logger.info(
-            f"✅ Risk Assessment Complete: "
+            f" Risk Assessment Complete: "
             f"{total_risks} risks identified, "
             f"{high_risks} high-priority"
         )
@@ -254,7 +254,7 @@ class SystemBCM:
         Returns:
             Recovery setup results with configured procedures
         """
-        logger.info("🎯 Setting Up Recovery: Configuring platform auto-recovery")
+        logger.info(" Setting Up Recovery: Configuring platform auto-recovery")
 
         if not self.recovery_data:
             await self.load_scenarios()
@@ -283,7 +283,7 @@ class SystemBCM:
             results["procedures_configured"].append(procedure_config)
 
             logger.info(
-                f"  ✓ {procedure['name']}: "
+                f"   {procedure['name']}: "
                 f"Detection<{procedure['detection_time_target']}, "
                 f"Recovery<{procedure['recovery_time_target']}, "
                 f"{len(procedure['steps'])} steps"
@@ -304,7 +304,7 @@ class SystemBCM:
         ]
 
         logger.info(
-            f"✅ Recovery Setup Complete: "
+            f" Recovery Setup Complete: "
             f"{len(results['procedures_configured'])} procedures configured, "
             f"{len(results['auto_recovery_enabled'])} automated"
         )
@@ -334,7 +334,7 @@ class SystemBCM:
         Returns:
             Priority application results
         """
-        logger.info("🎯 Applying Resource Priorities: Protecting critical services")
+        logger.info(" Applying Resource Priorities: Protecting critical services")
 
         if not self.priorities_data:
             await self.load_scenarios()
@@ -360,7 +360,7 @@ class SystemBCM:
             results["tiers_configured"].append(tier_info)
 
             logger.info(
-                f"  📊 {tier_config['tier']}: "
+                f"   {tier_config['tier']}: "
                 f"{len(tier_config['services'])} services, "
                 f"CPU={tier_config['total_resource_reservation']['cpu']}, "
                 f"Memory={tier_config['total_resource_reservation']['memory']}"
@@ -401,7 +401,7 @@ class SystemBCM:
             results["contention_policies_set"].append(policy_config)
 
             logger.info(
-                f"  ⚙️  Contention Policy: {policy['contention_type']} → "
+                f"  ️  Contention Policy: {policy['contention_type']} → "
                 f"{len(policy['response'])} response actions"
             )
 
@@ -413,7 +413,7 @@ class SystemBCM:
         ]
 
         logger.info(
-            f"✅ Resource Priorities Applied: "
+            f" Resource Priorities Applied: "
             f"{len(results['tiers_configured'])} tiers, "
             f"{len(results['services_prioritized'])} services prioritized"
         )
@@ -449,7 +449,7 @@ class SystemBCM:
         Returns:
             Complete cycle results
         """
-        logger.info("🚀 Starting Full System BCM Cycle")
+        logger.info(" Starting Full System BCM Cycle")
         logger.info("=" * 60)
 
         cycle_results = {
@@ -461,7 +461,7 @@ class SystemBCM:
 
         try:
             # Phase 1: BIA
-            logger.info("\n📋 PHASE 1: Business Impact Analysis")
+            logger.info("\n PHASE 1: Business Impact Analysis")
             logger.info("-" * 60)
             bia_results = await self.execute_self_bia()
             cycle_results["phases"]["bia"] = {
@@ -470,7 +470,7 @@ class SystemBCM:
             }
 
             # Phase 2: Risk Assessment
-            logger.info("\n⚠️  PHASE 2: Risk Assessment")
+            logger.info("\n️  PHASE 2: Risk Assessment")
             logger.info("-" * 60)
             risk_results = await self.assess_own_risks()
             cycle_results["phases"]["risk_assessment"] = {
@@ -479,7 +479,7 @@ class SystemBCM:
             }
 
             # Phase 3: Recovery Setup
-            logger.info("\n🔧 PHASE 3: Recovery Setup")
+            logger.info("\n PHASE 3: Recovery Setup")
             logger.info("-" * 60)
             recovery_results = await self.setup_recovery()
             cycle_results["phases"]["recovery_setup"] = {
@@ -488,7 +488,7 @@ class SystemBCM:
             }
 
             # Phase 4: Priority Application
-            logger.info("\n📊 PHASE 4: Resource Priorities")
+            logger.info("\n PHASE 4: Resource Priorities")
             logger.info("-" * 60)
             priority_results = await self.apply_priorities()
             cycle_results["phases"]["priority_application"] = {
@@ -500,17 +500,17 @@ class SystemBCM:
             cycle_results["status"] = "success"
 
             logger.info("\n" + "=" * 60)
-            logger.info("✅ Full System BCM Cycle COMPLETED Successfully")
+            logger.info(" Full System BCM Cycle COMPLETED Successfully")
             logger.info("=" * 60)
-            logger.info("\n🎓 Platform has applied BCM to ITSELF!")
+            logger.info("\n Platform has applied BCM to ITSELF!")
             logger.info("   → Critical processes identified and prioritized")
             logger.info("   → Risks assessed and mitigations prepared")
             logger.info("   → Auto-recovery procedures configured")
             logger.info("   → Resource priorities enforced")
-            logger.info("\n🔄 Platform is now LIVING BCM through practice!")
+            logger.info("\n Platform is now LIVING BCM through practice!")
 
         except Exception as e:
-            logger.error(f"❌ System BCM Cycle failed: {e}")
+            logger.error(f" System BCM Cycle failed: {e}")
             cycle_results["status"] = "failed"
             cycle_results["error"] = str(e)
             raise

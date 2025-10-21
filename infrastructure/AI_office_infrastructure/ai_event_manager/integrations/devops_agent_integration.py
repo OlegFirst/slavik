@@ -40,7 +40,7 @@ class DevOpsAgentIntegration:
             response = await self.client.get(f"{self.base_url}/health")
             if response.status_code == 200:
                 self.available = True
-                logger.info("✅ DevOps Agent available")
+                logger.info(" DevOps Agent available")
             else:
                 logger.warning(f"DevOps Agent returned {response.status_code}")
         except Exception as e:

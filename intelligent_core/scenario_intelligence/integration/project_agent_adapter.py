@@ -59,7 +59,7 @@ class ProjectAgentAdapter:
 
                 if response.status_code in [200, 201]:
                     result = response.json()
-                    logger.info(f"✅ Generation task created: {result.get('task_id')}")
+                    logger.info(f" Generation task created: {result.get('task_id')}")
                     return result
                 else:
                     logger.error(f"Failed to trigger generation: {response.status_code}")
@@ -107,7 +107,7 @@ class ProjectAgentAdapter:
                 if task:
                     created_tasks.append(task)
 
-            logger.info(f"✅ Created {len(created_tasks)} tasks")
+            logger.info(f" Created {len(created_tasks)} tasks")
             return created_tasks
 
         except Exception as e:
@@ -209,7 +209,7 @@ class ProjectAgentAdapter:
                 else:
                     failed += 1
 
-            logger.info(f"✅ Updated {updated} priorities, {failed} failed")
+            logger.info(f" Updated {updated} priorities, {failed} failed")
 
             return {"updated": updated, "failed": failed}
 
@@ -350,7 +350,7 @@ class ProjectAgentAdapter:
                 success = response.status_code in [200, 201]
 
                 if success:
-                    logger.info("✅ Generation completion reported")
+                    logger.info(" Generation completion reported")
                 else:
                     logger.warning(f"Failed to report completion: {response.status_code}")
 

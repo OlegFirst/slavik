@@ -16,7 +16,7 @@ from qdrant_client import QdrantClient
 def test_connection():
     """Test Qdrant Cloud connection"""
 
-    print("🔌 Testing Qdrant Cloud connection...")
+    print(" Testing Qdrant Cloud connection...")
 
     # Qdrant Cloud credentials
     url = "https://fa9f6acd-aef9-4ebe-a3f5-f89c62bce378.eu-west-1-0.aws.cloud.qdrant.io"
@@ -32,13 +32,13 @@ def test_connection():
         # Get collections
         collections = client.get_collections()
 
-        print(f"✅ Connected successfully!")
-        print(f"\n📊 Cluster Info:")
+        print(f" Connected successfully!")
+        print(f"\n Cluster Info:")
         print(f"   • URL: {url}")
         print(f"   • Version: v1.15.5")
         print(f"   • Region: eu-west-1 (AWS)")
 
-        print(f"\n📦 Collections ({len(collections.collections)}):")
+        print(f"\n Collections ({len(collections.collections)}):")
         if collections.collections:
             for collection in collections.collections:
                 print(f"   • {collection.name}")
@@ -48,7 +48,7 @@ def test_connection():
         return True
 
     except Exception as e:
-        print(f"❌ Connection failed: {e}")
+        print(f" Connection failed: {e}")
         return False
 
 

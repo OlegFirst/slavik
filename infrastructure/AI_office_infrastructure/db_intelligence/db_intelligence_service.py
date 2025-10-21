@@ -135,7 +135,7 @@ class DatabaseIntelligenceService:
             logger.warning("Database Intelligence Service already running")
             return
 
-        logger.info("🧠 Starting Database Intelligence Service...")
+        logger.info(" Starting Database Intelligence Service...")
         self.is_running = True
 
         # Initialize integrations
@@ -152,7 +152,7 @@ class DatabaseIntelligenceService:
         # Subscribe to AI events (EventBus)
         try:
             await self.ai_integration.subscribe_to_ai_events()
-            logger.info("✅ Subscribed to AI events")
+            logger.info(" Subscribed to AI events")
         except Exception as e:
             logger.warning(f"Could not subscribe to AI events: {e}")
 
@@ -160,9 +160,9 @@ class DatabaseIntelligenceService:
         try:
             success = await self.orchestrator_client.register()
             if success:
-                logger.info("✅ Registered with AI Orchestrator")
+                logger.info(" Registered with AI Orchestrator")
             else:
-                logger.warning("⚠️  Could not register with Orchestrator (will retry)")
+                logger.warning("️  Could not register with Orchestrator (will retry)")
         except Exception as e:
             logger.warning(f"Orchestrator registration failed: {e}")
 
@@ -171,7 +171,7 @@ class DatabaseIntelligenceService:
         self.command_polling_task = asyncio.create_task(self._command_polling_loop())
         self.heartbeat_task = asyncio.create_task(self._heartbeat_loop())
 
-        logger.info("✅ Database Intelligence Service started")
+        logger.info(" Database Intelligence Service started")
 
     async def stop(self):
         """Stop the intelligence service"""
@@ -182,7 +182,7 @@ class DatabaseIntelligenceService:
         if self.orchestrator_client:
             try:
                 await self.orchestrator_client.deregister()
-                logger.info("✅ Deregistered from Orchestrator")
+                logger.info(" Deregistered from Orchestrator")
             except Exception as e:
                 logger.warning(f"Deregistration failed: {e}")
 
@@ -201,7 +201,7 @@ class DatabaseIntelligenceService:
                 except asyncio.CancelledError:
                     pass
 
-        logger.info("✅ Database Intelligence Service stopped")
+        logger.info(" Database Intelligence Service stopped")
 
     # =========================================================================
     # MONITORING
@@ -644,7 +644,7 @@ class DatabaseIntelligenceService:
 
                 # Execute each command
                 for command in commands:
-                    logger.info(f"📥 Received command from Orchestrator: {command.command_type}")
+                    logger.info(f" Received command from Orchestrator: {command.command_type}")
 
                     # Execute command
                     result = await self.command_handler.handle_command(command)
@@ -652,7 +652,7 @@ class DatabaseIntelligenceService:
                     # Report result back
                     await self.orchestrator_client.report_command_result(result)
 
-                    logger.info(f"✅ Command {command.command_id} completed: {result.status}")
+                    logger.info(f" Command {command.command_id} completed: {result.status}")
 
                 # Poll every 30 seconds
                 await asyncio.sleep(30)

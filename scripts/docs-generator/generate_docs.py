@@ -35,7 +35,7 @@ class DocsGenerator:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f) or {}
         except Exception as e:
-            print(f"⚠️  Error loading {file_path}: {e}")
+            print(f"️  Error loading {file_path}: {e}")
             return {}
 
     def load_json(self, file_path: Path) -> Dict:
@@ -44,7 +44,7 @@ class DocsGenerator:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"⚠️  Error loading {file_path}: {e}")
+            print(f"️  Error loading {file_path}: {e}")
             return {}
 
     def parse_service_catalog(self) -> Dict[str, Any]:
@@ -52,10 +52,10 @@ class DocsGenerator:
         catalog_path = CATALOGS_DIR / "platform-services" / "SERVICE_CATALOG_DETAILED.yaml"
 
         if not catalog_path.exists():
-            print(f"❌ Service catalog not found: {catalog_path}")
+            print(f" Service catalog not found: {catalog_path}")
             return {}
 
-        print(f"📖 Reading service catalog: {catalog_path}")
+        print(f" Reading service catalog: {catalog_path}")
         catalog = self.load_yaml(catalog_path)
 
         # Count services
@@ -89,10 +89,10 @@ class DocsGenerator:
         catalog_path = CATALOGS_DIR / "subsystems" / "SUBSYSTEMS_CATALOG.yaml"
 
         if not catalog_path.exists():
-            print(f"❌ Subsystems catalog not found: {catalog_path}")
+            print(f" Subsystems catalog not found: {catalog_path}")
             return {}
 
-        print(f"📖 Reading subsystems catalog: {catalog_path}")
+        print(f" Reading subsystems catalog: {catalog_path}")
         catalog = self.load_yaml(catalog_path)
 
         subsystems = catalog.get('subsystems', [])
@@ -109,10 +109,10 @@ class DocsGenerator:
         catalog_path = CATALOGS_DIR / "systems" / "SYSTEMS_CATALOG.yaml"
 
         if not catalog_path.exists():
-            print(f"❌ Systems catalog not found: {catalog_path}")
+            print(f" Systems catalog not found: {catalog_path}")
             return {}
 
-        print(f"📖 Reading systems catalog: {catalog_path}")
+        print(f" Reading systems catalog: {catalog_path}")
         catalog = self.load_yaml(catalog_path)
 
         # Try both 'functional_systems' and 'systems' keys
@@ -130,10 +130,10 @@ class DocsGenerator:
         catalog_path = CATALOGS_DIR / "business-services" / "USER_APPLICATIONS_CATALOG.yaml"
 
         if not catalog_path.exists():
-            print(f"⚠️  User applications catalog not found: {catalog_path}")
+            print(f"️  User applications catalog not found: {catalog_path}")
             return {}
 
-        print(f"📖 Reading user applications catalog: {catalog_path}")
+        print(f" Reading user applications catalog: {catalog_path}")
         catalog = self.load_yaml(catalog_path)
 
         return catalog
@@ -176,7 +176,7 @@ class DocsGenerator:
         with open(stats_file, 'w', encoding='utf-8') as f:
             json.dump(stats, f, indent=2, ensure_ascii=False)
 
-        print(f"✅ Generated: {stats_file}")
+        print(f" Generated: {stats_file}")
 
     def extract_ports(self, catalog: Dict) -> Dict[str, int]:
         """Extract port numbers from service catalog"""
@@ -229,7 +229,7 @@ class DocsGenerator:
         index_file = DOCS_DIR / "index.html"
 
         if not index_file.exists():
-            print(f"⚠️  index.html not found: {index_file}")
+            print(f"️  index.html not found: {index_file}")
             return
 
         # Read current content
@@ -260,17 +260,17 @@ class DocsGenerator:
 
         # Write back
         index_file.write_text(content, encoding='utf-8')
-        print(f"✅ Updated: {index_file}")
+        print(f" Updated: {index_file}")
 
     def generate_all(self) -> None:
         """Generate all documentation"""
         print("=" * 70)
-        print("📚 DOCUMENTATION GENERATOR")
+        print(" DOCUMENTATION GENERATOR")
         print("=" * 70)
         print()
 
         # Parse all catalogs
-        print("📖 Parsing catalogs...")
+        print(" Parsing catalogs...")
         services = self.parse_service_catalog()
         subsystems = self.parse_subsystems_catalog()
         systems = self.parse_systems_catalog()
@@ -284,20 +284,20 @@ class DocsGenerator:
         }
 
         print()
-        print("📊 Statistics:")
+        print(" Statistics:")
         print(f"  • Services: {services['total_services']}")
         print(f"  • Subsystems: {subsystems['total']}")
         print(f"  • Systems: {systems['total']}")
         print()
 
         # Generate outputs
-        print("🔨 Generating documentation...")
+        print(" Generating documentation...")
         self.generate_stats_json(data)
         self.update_index_stats(data)
 
         print()
         print("=" * 70)
-        print("✅ DOCUMENTATION GENERATION COMPLETE!")
+        print(" DOCUMENTATION GENERATION COMPLETE!")
         print("=" * 70)
         print()
         print("Generated files:")
@@ -316,7 +316,7 @@ def main():
         generator.generate_all()
         return 0
     except Exception as e:
-        print(f"❌ Error: {e}", file=sys.stderr)
+        print(f" Error: {e}", file=sys.stderr)
         import traceback
         traceback.print_exc()
         return 1

@@ -37,7 +37,7 @@ async def test_health_check():
         assert data["status"] == "healthy"
         assert "ai_hub" in data["components"]
 
-        print("✅ Health check PASSED")
+        print(" Health check PASSED")
 
 
 async def test_ai_status():
@@ -60,17 +60,17 @@ async def test_ai_status():
         assert "api_available" in data
 
         if os.getenv('ANTHROPIC_API_KEY'):
-            print("✅ AI Hub status - API key detected")
+            print(" AI Hub status - API key detected")
             print(f"   API Available: {data['api_available']}")
             if data['api_available']:
                 print(f"   Tier 2 enabled: {data['tier2_operational']['enabled']}")
                 print(f"   Tier 3 enabled: {data['tier3_quick']['enabled']}")
         else:
-            print("⚠️  AI Hub status - No API key, fallback mode")
+            print("️  AI Hub status - No API key, fallback mode")
             print(f"   API Available: {data['api_available']}")
             print(f"   Fallback mode: {data.get('fallback_mode')}")
 
-        print("✅ AI status PASSED")
+        print(" AI status PASSED")
 
 
 async def test_simple_decision():
@@ -109,7 +109,7 @@ async def test_simple_decision():
         assert data["decision_type"] == "auto_approved"
         assert "Auto-approved" in data["justification"]
 
-        print("✅ Simple decision PASSED")
+        print(" Simple decision PASSED")
         print(f"   Decision ID: {data['decision_id']}")
         print(f"   Outcome: {data['outcome']}")
         print(f"   Decided by: {data['decided_by']}")
@@ -155,15 +155,15 @@ async def test_ai_consultation_decision():
         assert data["outcome"] in ["approved", "escalated", "pending"]
 
         if data["decided_by"] == "ai":
-            print("✅ AI consultation TRIGGERED")
+            print(" AI consultation TRIGGERED")
             print(f"   Model: {data['metadata'].get('ai_model')}")
             print(f"   Confidence: {data['metadata'].get('confidence')}")
             print(f"   Decision type: {data['decision_type']}")
         else:
-            print("⚠️  AI consultation NOT triggered (fallback mode)")
+            print("️  AI consultation NOT triggered (fallback mode)")
             print(f"   Decision type: {data['decision_type']}")
 
-        print("✅ AI consultation test PASSED")
+        print(" AI consultation test PASSED")
 
 
 async def test_escalation_decision():
@@ -203,11 +203,11 @@ async def test_escalation_decision():
         assert data["outcome"] in ["escalated", "rejected"]
 
         if data["outcome"] == "escalated":
-            print("✅ Escalation TRIGGERED")
+            print(" Escalation TRIGGERED")
         else:
-            print("⚠️  Escalation → Rejected (no escalation manager in MVP)")
+            print("️  Escalation → Rejected (no escalation manager in MVP)")
 
-        print("✅ Escalation test PASSED")
+        print(" Escalation test PASSED")
 
 
 async def test_get_policies():
@@ -228,7 +228,7 @@ async def test_get_policies():
         assert response.status_code == 200
         assert "max_auto_attempts" in data or "default" in data
 
-        print("✅ Get policies PASSED")
+        print(" Get policies PASSED")
 
 
 async def run_all_tests():
@@ -242,9 +242,9 @@ async def run_all_tests():
 
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if api_key:
-        print(f"API Key: ✅ Detected (will test real AI)")
+        print(f"API Key:  Detected (will test real AI)")
     else:
-        print(f"API Key: ⚠️  Not set (will test fallback only)")
+        print(f"API Key: ️  Not set (will test fallback only)")
 
     print("=" * 80)
 
@@ -259,7 +259,7 @@ async def run_all_tests():
 
         # Summary
         print("\n" + "=" * 80)
-        print("ALL TESTS PASSED! ✅")
+        print("ALL TESTS PASSED! ")
         print("=" * 80)
 
     except Exception as e:

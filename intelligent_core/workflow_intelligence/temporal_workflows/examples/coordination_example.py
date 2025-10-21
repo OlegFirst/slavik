@@ -61,7 +61,7 @@ async def example_single_intent():
         "require_approval": False
     }
 
-    print(f"\n📤 Submitting intent: {intent['action']} {intent['entity']}")
+    print(f"\n Submitting intent: {intent['action']} {intent['entity']}")
 
     # Execute workflow
     try:
@@ -73,7 +73,7 @@ async def example_single_intent():
             execution_timeout=timedelta(minutes=15)
         )
 
-        print(f"\n✅ Workflow completed!")
+        print(f"\n Workflow completed!")
         print(f"   Status: {result['status']}")
         print(f"   Execution ID: {result['execution_id']}")
         print(f"   Steps: {len(result['steps'])}")
@@ -82,7 +82,7 @@ async def example_single_intent():
             print(f"   Result: {result['result']}")
 
     except Exception as e:
-        print(f"\n❌ Workflow failed: {str(e)}")
+        print(f"\n Workflow failed: {str(e)}")
 
 
 async def example_multi_service():
@@ -144,7 +144,7 @@ async def example_multi_service():
         }
     ]
 
-    print(f"\n📤 Submitting {len(tasks)} tasks for parallel execution")
+    print(f"\n Submitting {len(tasks)} tasks for parallel execution")
 
     try:
         result = await client.execute_workflow(
@@ -155,7 +155,7 @@ async def example_multi_service():
             execution_timeout=timedelta(minutes=30)
         )
 
-        print(f"\n✅ Multi-service workflow completed!")
+        print(f"\n Multi-service workflow completed!")
         print(f"   Status: {result['status']}")
         print(f"   Total tasks: {result['total_tasks']}")
 
@@ -165,7 +165,7 @@ async def example_multi_service():
         print(f"   Execution IDs: {result.get('execution_ids', [])}")
 
     except Exception as e:
-        print(f"\n❌ Multi-service workflow failed: {str(e)}")
+        print(f"\n Multi-service workflow failed: {str(e)}")
 
 
 async def example_parallel_bulk():
@@ -201,7 +201,7 @@ async def example_parallel_bulk():
         for process in processes
     ]
 
-    print(f"\n📤 Creating {len(tasks)} BIA processes in parallel")
+    print(f"\n Creating {len(tasks)} BIA processes in parallel")
 
     try:
         result = await client.execute_workflow(
@@ -213,7 +213,7 @@ async def example_parallel_bulk():
             execution_timeout=timedelta(minutes=20)
         )
 
-        print(f"\n✅ Parallel workflow completed!")
+        print(f"\n Parallel workflow completed!")
         print(f"   Status: {result['status']}")
         print(f"   Total tasks: {result['total_tasks']}")
         print(f"   Successful: {result['successful']}")
@@ -221,11 +221,11 @@ async def example_parallel_bulk():
 
         print(f"\n   Results:")
         for i, r in enumerate(result.get('results', []), 1):
-            status_icon = "✅" if r['status'] == 'completed' else "❌"
+            status_icon = "" if r['status'] == 'completed' else ""
             print(f"   {i}. {status_icon} {r['execution_id']} - {r['status']}")
 
     except Exception as e:
-        print(f"\n❌ Parallel workflow failed: {str(e)}")
+        print(f"\n Parallel workflow failed: {str(e)}")
 
 
 async def example_with_approval():
@@ -256,7 +256,7 @@ async def example_with_approval():
         "require_approval": True  # Requires human approval
     }
 
-    print(f"\n📤 Submitting critical intent (requires approval)")
+    print(f"\n Submitting critical intent (requires approval)")
     print(f"   Action: {intent['action']} {intent['entity']}")
 
     try:
@@ -270,12 +270,12 @@ async def example_with_approval():
             execution_timeout=timedelta(hours=24)  # Long timeout for approval
         )
 
-        print(f"\n✅ Workflow completed after approval!")
+        print(f"\n Workflow completed after approval!")
         print(f"   Status: {result['status']}")
         print(f"   Execution ID: {result['execution_id']}")
 
     except Exception as e:
-        print(f"\n❌ Workflow failed: {str(e)}")
+        print(f"\n Workflow failed: {str(e)}")
 
 
 async def example_query_status():
@@ -292,7 +292,7 @@ async def example_query_status():
 
     workflow_id = "coordination-single-12345"  # Replace with actual ID
 
-    print(f"\n🔍 Querying workflow status: {workflow_id}")
+    print(f"\n Querying workflow status: {workflow_id}")
 
     try:
         handle = client.get_workflow_handle(workflow_id)
@@ -305,7 +305,7 @@ async def example_query_status():
         print(f"   Task queue: {description.task_queue}")
 
     except Exception as e:
-        print(f"\n❌ Query failed: {str(e)}")
+        print(f"\n Query failed: {str(e)}")
 
 
 async def main():

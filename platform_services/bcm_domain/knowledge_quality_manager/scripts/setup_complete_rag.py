@@ -18,7 +18,7 @@ try:
     from qdrant_client.models import Distance, VectorParams, PointStruct
     from sentence_transformers import SentenceTransformer
 except ImportError:
-    print("📦 Installing required packages...")
+    print(" Installing required packages...")
     os.system("pip3 install -q qdrant-client sentence-transformers")
     from qdrant_client import QdrantClient
     from qdrant_client.models import Distance, VectorParams, PointStruct
@@ -32,11 +32,11 @@ password = quote_plus('K@x3ta9V8GK5rnW')
 db_url = f'postgresql://postgres.tpdkhddtbhpoqzzgxfni:{password}@aws-1-eu-north-1.pooler.supabase.com:5432/postgres'
 
 print("=" * 60)
-print("🚀 KQM RAG SETUP - COMPLETE")
+print(" KQM RAG SETUP - COMPLETE")
 print("=" * 60)
 
 # 1. Load scenarios from PostgreSQL
-print("\n📊 Step 1: Loading scenarios from PostgreSQL...")
+print("\n Step 1: Loading scenarios from PostgreSQL...")
 conn = psycopg2.connect(db_url)
 cur = conn.cursor()
 
@@ -66,10 +66,10 @@ for row in cur.fetchall():
 cur.close()
 conn.close()
 
-print(f"✅ Loaded {len(scenarios)} scenarios from database")
+print(f" Loaded {len(scenarios)} scenarios from database")
 
 # 2. Setup Qdrant
-print("\n🔧 Step 2: Setting up Qdrant...")
+print("\n Step 2: Setting up Qdrant...")
 
 # Local mode (no server needed)
 client = QdrantClient(path="./qdrant_local")
@@ -82,7 +82,7 @@ collection_name = "business_scenarios"
 try:
     collections = client.get_collections().collections
     if any(c.name == collection_name for c in collections):
-        print(f"⚠️  Collection {collection_name} exists - deleting...")
+        print(f"️  Collection {collection_name} exists - deleting...")
         client.delete_collection(collection_name)
 except:
     pass
@@ -96,7 +96,7 @@ client.create_collection(
     )
 )
 
-print(f"✅ Created collection: {collection_name}")
+print(f" Created collection: {collection_name}")
 
 # Create indexes
 client.create_payload_index(
@@ -111,10 +111,10 @@ client.create_payload_index(
     field_schema="keyword"
 )
 
-print("✅ Created indexes")
+print(" Created indexes")
 
 # 3. Generate embeddings and upload
-print("\n🤖 Step 3: Generating embeddings...")
+print("\n Step 3: Generating embeddings...")
 
 points = []
 for idx, scenario in enumerate(scenarios):
@@ -157,10 +157,10 @@ for idx, scenario in enumerate(scenarios):
     if (idx + 1) % 50 == 0:
         print(f"   Generated embeddings: {idx + 1}/{len(scenarios)}")
 
-print(f"✅ Generated {len(points)} embeddings")
+print(f" Generated {len(points)} embeddings")
 
 # 4. Upload to Qdrant
-print("\n💾 Step 4: Uploading to Qdrant...")
+print("\n Step 4: Uploading to Qdrant...")
 
 batch_size = 100
 for i in range(0, len(points), batch_size):
@@ -171,17 +171,17 @@ for i in range(0, len(points), batch_size):
     )
     print(f"   Uploaded batch {i//batch_size + 1}/{(len(points)-1)//batch_size + 1}")
 
-print(f"✅ Uploaded all scenarios to Qdrant")
+print(f" Uploaded all scenarios to Qdrant")
 
 # 5. Verify
-print("\n✅ Step 5: Verification...")
+print("\n Step 5: Verification...")
 collection_info = client.get_collection(collection_name)
 print(f"   Collection: {collection_name}")
 print(f"   Points: {collection_info.points_count}")
 print(f"   Vector size: {collection_info.config.params.vectors.size}")
 
 # 6. Test search
-print("\n🔍 Step 6: Testing search...")
+print("\n Step 6: Testing search...")
 
 test_queries = [
     "How to conduct BIA?",
@@ -203,7 +203,7 @@ for query in test_queries:
         print(f"      Service: {result.payload['service']}")
 
 # 7. Save connection info
-print("\n📝 Step 7: Saving configuration...")
+print("\n Step 7: Saving configuration...")
 
 config = {
     "qdrant_path": "./qdrant_local",
@@ -217,14 +217,14 @@ config = {
 with open("qdrant_config.json", "w") as f:
     json.dump(config, f, indent=2)
 
-print("✅ Saved qdrant_config.json")
+print(" Saved qdrant_config.json")
 
 print("\n" + "=" * 60)
-print("✅ RAG SETUP COMPLETE!")
+print(" RAG SETUP COMPLETE!")
 print("=" * 60)
-print(f"\n📊 Summary:")
+print(f"\n Summary:")
 print(f"   Database: {len(scenarios)} scenarios loaded")
 print(f"   Qdrant: {collection_info.points_count} points")
 print(f"   Model: all-MiniLM-L6-v2 (384-dim)")
 print(f"   Location: ./qdrant_local")
-print(f"\n🎯 Next: Update KQM settings to use RAG")
+print(f"\n Next: Update KQM settings to use RAG")

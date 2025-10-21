@@ -1,5 +1,5 @@
 """
-🎯 Documentation Personalization Service
+ Documentation Personalization Service
 
 Makes documentation personal for EVERY user.
 
@@ -53,7 +53,7 @@ class PersonalizationService:
         self.analytics = analytics_service
         self.collective = collective_intelligence
 
-        logger.info("🎯 Personalization Service initialized")
+        logger.info(" Personalization Service initialized")
 
     async def personalize(
         self,
@@ -214,7 +214,7 @@ PERSONALIZED VERSION:
             max_tokens=2500
         )
 
-        logger.info(f"✨ Content personalized for {profile['user_type']} in {profile['industry']}")
+        logger.info(f" Content personalized for {profile['user_type']} in {profile['industry']}")
 
         return personalized
 

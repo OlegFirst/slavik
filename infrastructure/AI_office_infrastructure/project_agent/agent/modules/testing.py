@@ -248,7 +248,7 @@ def _save_testing_report(results: Dict) -> None:
         if results["coverage"]:
             f.write("## Coverage by Language\n\n")
             for lang, data in results["coverage"].items():
-                status = "✅" if data.get("available") else "❌"
+                status = "" if data.get("available") else ""
                 cov = data.get("coverage", 0)
                 note = data.get("note", "")
                 f.write(f"- {status} **{lang.title()}**: {cov}% {f'({note})' if note else ''}\n")

@@ -112,7 +112,7 @@ async def test_ai_consultation_triggered_on_complex_issue(decision_engine_with_a
     # Should be approved or escalated based on AI confidence
     assert decision.outcome in [DecisionOutcome.APPROVED, DecisionOutcome.ESCALATED]
 
-    print(f"✅ AI Consultation Test:")
+    print(f" AI Consultation Test:")
     print(f"   Model: {decision.metadata.get('ai_model')}")
     print(f"   Confidence: {decision.metadata.get('confidence')}")
     print(f"   Outcome: {decision.outcome.value}")
@@ -140,7 +140,7 @@ async def test_ai_hub_tier_selection(ai_hub_with_api):
     tier_attempts = ai_hub_with_api._select_tier("low", {"recovery_attempts": 5})
     assert tier_attempts == AITier.TIER2_OPERATIONAL
 
-    print(f"✅ Tier Selection Test:")
+    print(f" Tier Selection Test:")
     print(f"   High complexity: {tier_high.value}")
     print(f"   Medium complexity: {tier_medium.value}")
     print(f"   Low complexity: {tier_low.value}")
@@ -186,7 +186,7 @@ async def test_ai_consultation_with_real_api(ai_hub_with_api):
     assert response.latency_ms > 0
     assert response.cost_usd > 0
 
-    print(f"✅ Real API Test:")
+    print(f" Real API Test:")
     print(f"   Model: {response.model_used}")
     print(f"   Tier: {response.tier.value}")
     print(f"   Recommendation: {response.recommendation}")
@@ -217,7 +217,7 @@ async def test_fallback_when_no_api_key(ai_hub_fallback_only):
     assert response.cost_usd == 0.0
     assert response.latency_ms < 50  # Very fast
 
-    print(f"✅ Fallback Test:")
+    print(f" Fallback Test:")
     print(f"   Model: {response.model_used}")
     print(f"   Recommendation: {response.recommendation}")
     print(f"   Confidence: {response.confidence}")
@@ -242,7 +242,7 @@ async def test_heuristic_escalation_logic(ai_hub_fallback_only):
     assert response.recommendation == "escalate"
     assert "Repeated failures" in response.reasoning or "attempts" in response.reasoning
 
-    print(f"✅ Heuristic Escalation Test:")
+    print(f" Heuristic Escalation Test:")
     print(f"   Recommendation: {response.recommendation}")
     print(f"   Reasoning: {response.reasoning}")
 
@@ -278,7 +278,7 @@ async def test_ai_hub_cost_tracking(ai_hub_with_api):
     assert updated_stats["total_requests"] == initial_requests + 1
     assert updated_stats["total_cost_usd"] > initial_cost
 
-    print(f"✅ Cost Tracking Test:")
+    print(f" Cost Tracking Test:")
     print(f"   Requests: {initial_requests} → {updated_stats['total_requests']}")
     print(f"   Cost: ${initial_cost:.4f} → ${updated_stats['total_cost_usd']:.4f}")
     print(f"   Avg cost/request: ${updated_stats['average_cost_per_request']:.4f}")
@@ -313,7 +313,7 @@ async def test_tier_status_endpoint(ai_hub_with_api):
         assert status["api_available"] is False
         assert status.get("fallback_mode") == "heuristics"
 
-    print(f"✅ Tier Status Test:")
+    print(f" Tier Status Test:")
     print(f"   API Available: {status['api_available']}")
     print(f"   Tier 1: {status['tier1_strategic']['enabled']}")
     print(f"   Tier 2: {status['tier2_operational']['enabled']}")
@@ -367,11 +367,11 @@ async def test_e2e_recovery_flow_with_ai(decision_engine_with_ai):
     if decision.decision_type == DecisionType.AI_CONSULTED:
         assert "ai_model" in decision.metadata
         assert "confidence" in decision.metadata
-        print(f"   ✅ AI consultation used: {decision.metadata['ai_model']}")
+        print(f"    AI consultation used: {decision.metadata['ai_model']}")
     else:
-        print(f"   ✅ Auto-approved without AI")
+        print(f"    Auto-approved without AI")
 
-    print(f"✅ E2E Recovery Flow Test:")
+    print(f" E2E Recovery Flow Test:")
     print(f"   Decision ID: {decision.decision_id}")
     print(f"   Decision Type: {decision.decision_type.value}")
     print(f"   Outcome: {decision.outcome.value}")
@@ -398,7 +398,7 @@ async def test_e2e_recovery_flow_fallback(decision_engine_fallback):
     assert decision.outcome is not None
     assert decision.justification is not None
 
-    print(f"✅ E2E Fallback Flow Test:")
+    print(f" E2E Fallback Flow Test:")
     print(f"   Outcome: {decision.outcome.value}")
     print(f"   Justification: {decision.justification[:100]}...")
 
@@ -426,9 +426,9 @@ if __name__ == "__main__":
 
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if api_key:
-        print(f"✅ ANTHROPIC_API_KEY detected - will test real AI")
+        print(f" ANTHROPIC_API_KEY detected - will test real AI")
     else:
-        print(f"⚠️  ANTHROPIC_API_KEY not set - will test fallback only")
+        print(f"️  ANTHROPIC_API_KEY not set - will test fallback only")
 
     print("=" * 80)
 

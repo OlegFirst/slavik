@@ -209,7 +209,7 @@ class OrganismCoordinator:
         self.coordination_history.append(decision)
 
         logger.info(
-            f"✅ Collective decision made: {len(expert_inputs)} experts, "
+            f" Collective decision made: {len(expert_inputs)} experts, "
             f"confidence: {decision.collective_confidence:.2f}"
         )
 
@@ -466,7 +466,7 @@ class OrganismCoordinator:
         evolution_threshold = 0.9
 
         if self.consciousness_level >= evolution_threshold:
-            logger.info("🌟 Organism evolution triggered!")
+            logger.info(" Organism evolution triggered!")
 
             # Trigger evolution
             new_capabilities = await self._evolve_organism()

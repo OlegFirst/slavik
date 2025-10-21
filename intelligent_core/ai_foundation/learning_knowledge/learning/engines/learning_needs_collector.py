@@ -82,30 +82,30 @@ class LearningNeedsCollector:
         if exercise_results:
             exercise_needs = self.collect_needs_from_exercises(exercise_results)
             all_needs.extend(exercise_needs)
-            logger.info(f"✅ Collected {len(exercise_needs)} needs from exercises")
+            logger.info(f" Collected {len(exercise_needs)} needs from exercises")
 
         # Source 2: Competencies
         if user_competencies:
             competency_needs = self.collect_needs_from_competencies(user_competencies)
             all_needs.extend(competency_needs)
-            logger.info(f"✅ Collected {len(competency_needs)} needs from competencies")
+            logger.info(f" Collected {len(competency_needs)} needs from competencies")
 
         # Source 3: ISO requirements
         iso_needs = self.collect_needs_from_regulations(user_competencies or [])
         all_needs.extend(iso_needs)
-        logger.info(f"✅ Collected {len(iso_needs)} needs from ISO requirements")
+        logger.info(f" Collected {len(iso_needs)} needs from ISO requirements")
 
         # Source 4: User requests
         if user_requests:
             request_needs = self.collect_needs_from_user_requests(user_requests)
             all_needs.extend(request_needs)
-            logger.info(f"✅ Collected {len(request_needs)} needs from user requests")
+            logger.info(f" Collected {len(request_needs)} needs from user requests")
 
         # Source 5: Industry benchmarks
         if industry_benchmarks:
             benchmark_needs = self.collect_needs_from_benchmarks(industry_benchmarks)
             all_needs.extend(benchmark_needs)
-            logger.info(f"✅ Collected {len(benchmark_needs)} needs from benchmarks")
+            logger.info(f" Collected {len(benchmark_needs)} needs from benchmarks")
 
         # Prioritize
         prioritized = self.prioritize_needs(all_needs)

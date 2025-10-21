@@ -61,7 +61,7 @@ async def test_simple_scenario():
     engine = ExecutionEngine(storage=None, save_to_db=False)
     report = await engine.execute_scenario_direct(test_scenario)
 
-    print(f"\n✅ Test 1 Results:")
+    print(f"\n Test 1 Results:")
     print(f"   Status: {report.summary['overall_status']}")
     print(f"   Executions: {report.summary['total_executions']}")
     print(f"   Success Rate: {report.summary['success_rate']:.1%}")
@@ -72,7 +72,7 @@ async def test_simple_scenario():
         print(f"   Validation: {val['validation_status']} ({val['summary']['total_issues']} issues)")
 
     assert report.summary['overall_status'] == 'success', "Test 1 failed"
-    print("✅ Test 1 PASSED")
+    print(" Test 1 PASSED")
 
 
 async def test_http_scenario():
@@ -120,13 +120,13 @@ async def test_http_scenario():
     engine = ExecutionEngine(storage=None, save_to_db=False)
     report = await engine.execute_scenario_direct(test_scenario)
 
-    print(f"\n✅ Test 2 Results:")
+    print(f"\n Test 2 Results:")
     print(f"   Status: {report.summary['overall_status']}")
     print(f"   Success Rate: {report.summary['success_rate']:.1%}")
     print(f"   Steps: {report.summary['steps']['successful']}/{report.summary['steps']['total']} passed")
 
     assert report.summary['successful'] >= 1, "Test 2 failed"
-    print("✅ Test 2 PASSED")
+    print(" Test 2 PASSED")
 
 
 async def test_scenario_from_database():
@@ -137,7 +137,7 @@ async def test_scenario_from_database():
 
     DATABASE_URL = os.getenv("DATABASE_URL")
     if not DATABASE_URL:
-        print("⚠️  Skipping Test 3: DATABASE_URL not set")
+        print("️  Skipping Test 3: DATABASE_URL not set")
         return
 
     # Initialize storage
@@ -171,7 +171,7 @@ async def test_scenario_from_database():
 
         # Save to database
         await storage.register(test_scenario)
-        print("   ✅ Test scenario saved to database")
+        print("    Test scenario saved to database")
 
         # Create engine with storage
         engine = ExecutionEngine(storage=storage, save_to_db=True)
@@ -179,7 +179,7 @@ async def test_scenario_from_database():
         # Execute by ID
         report = await engine.execute_scenario('test-db-execution')
 
-        print(f"\n✅ Test 3 Results:")
+        print(f"\n Test 3 Results:")
         print(f"   Status: {report.summary['overall_status']}")
         print(f"   Success Rate: {report.summary['success_rate']:.1%}")
 
@@ -193,7 +193,7 @@ async def test_scenario_from_database():
 
         assert report.summary['overall_status'] == 'success', "Test 3 failed"
         assert len(history) >= 1, "Execution history not saved"
-        print("✅ Test 3 PASSED")
+        print(" Test 3 PASSED")
 
     finally:
         await storage.close()
@@ -207,7 +207,7 @@ async def test_batch_execution():
 
     DATABASE_URL = os.getenv("DATABASE_URL")
     if not DATABASE_URL:
-        print("⚠️  Skipping Test 4: DATABASE_URL not set")
+        print("️  Skipping Test 4: DATABASE_URL not set")
         return
 
     storage = PostgresScenarioStorage(connection_string=DATABASE_URL)
@@ -240,13 +240,13 @@ async def test_batch_execution():
             await storage.register(scenario)
             scenarios.append(f'test-batch-{i}')
 
-        print(f"   ✅ Created {len(scenarios)} test scenarios")
+        print(f"    Created {len(scenarios)} test scenarios")
 
         # Execute batch
         engine = ExecutionEngine(storage=storage, save_to_db=True)
         report = await engine.execute_batch(scenarios)
 
-        print(f"\n✅ Test 4 Results:")
+        print(f"\n Test 4 Results:")
         print(f"   Status: {report.summary['overall_status']}")
         print(f"   Total Executions: {report.summary['total_executions']}")
         print(f"   Successful: {report.summary['successful']}")
@@ -254,7 +254,7 @@ async def test_batch_execution():
         print(f"   Success Rate: {report.summary['success_rate']:.1%}")
 
         assert report.summary['total_executions'] == 3, "Not all scenarios executed"
-        print("✅ Test 4 PASSED")
+        print(" Test 4 PASSED")
 
     finally:
         await storage.close()
@@ -268,7 +268,7 @@ async def test_real_l1_scenario():
 
     DATABASE_URL = os.getenv("DATABASE_URL")
     if not DATABASE_URL:
-        print("⚠️  Skipping Test 5: DATABASE_URL not set")
+        print("️  Skipping Test 5: DATABASE_URL not set")
         return
 
     storage = PostgresScenarioStorage(connection_string=DATABASE_URL)
@@ -279,7 +279,7 @@ async def test_real_l1_scenario():
         scenarios = await storage.find_scenarios(level=1, limit=1)
 
         if not scenarios:
-            print("⚠️  No L1 scenarios found in database")
+            print("️  No L1 scenarios found in database")
             print("   Tip: Run generators first to create scenarios")
             return
 
@@ -291,7 +291,7 @@ async def test_real_l1_scenario():
         engine = ExecutionEngine(storage=storage, save_to_db=True, validate_results=True)
         report = await engine.execute_scenario(scenario_id)
 
-        print(f"\n✅ Test 5 Results:")
+        print(f"\n Test 5 Results:")
         print(f"   Scenario: {scenario_id}")
         print(f"   Status: {report.summary['overall_status']}")
         print(f"   Duration: {report.summary['timing']['avg_duration']:.2f}s")
@@ -302,7 +302,7 @@ async def test_real_l1_scenario():
             print(f"   Validation: {val['validation_status']}")
             print(f"   Issues: {val['summary']['total_issues']}")
 
-        print("✅ Test 5 PASSED")
+        print(" Test 5 PASSED")
 
     finally:
         await storage.close()
@@ -334,11 +334,11 @@ async def test_report_export():
 
     # Test JSON export
     json_output = reporter.export_to_json(report)
-    print(f"   ✅ JSON export: {len(json_output)} characters")
+    print(f"    JSON export: {len(json_output)} characters")
 
     # Test HTML export
     html_output = reporter.export_to_html(report)
-    print(f"   ✅ HTML export: {len(html_output)} characters")
+    print(f"    HTML export: {len(html_output)} characters")
 
     # Save to files
     import tempfile
@@ -350,12 +350,12 @@ async def test_report_export():
     reporter.save_report(report, json_path, format='json')
     reporter.save_report(report, html_path, format='html')
 
-    print(f"   ✅ Saved to: {json_path}")
-    print(f"   ✅ Saved to: {html_path}")
+    print(f"    Saved to: {json_path}")
+    print(f"    Saved to: {html_path}")
 
     assert len(json_output) > 100, "JSON export too short"
     assert len(html_output) > 500, "HTML export too short"
-    print("✅ Test 6 PASSED")
+    print(" Test 6 PASSED")
 
 
 async def main():
@@ -382,13 +382,13 @@ async def main():
             await test_func()
             passed += 1
         except AssertionError as e:
-            print(f"❌ {test_name} FAILED: {e}")
+            print(f" {test_name} FAILED: {e}")
             failed += 1
         except Exception as e:
-            if "Skipping" in str(e) or "⚠️" in str(e):
+            if "Skipping" in str(e) or "️" in str(e):
                 skipped += 1
             else:
-                print(f"❌ {test_name} ERROR: {e}")
+                print(f" {test_name} ERROR: {e}")
                 failed += 1
 
     # Summary
@@ -396,14 +396,14 @@ async def main():
     print("TEST SUMMARY")
     print("="*80)
     print(f"Total Tests: {len(tests)}")
-    print(f"Passed: {passed} ✅")
-    print(f"Failed: {failed} ❌")
-    print(f"Skipped: {skipped} ⚠️")
+    print(f"Passed: {passed} ")
+    print(f"Failed: {failed} ")
+    print(f"Skipped: {skipped} ️")
 
     if failed == 0:
-        print("\n🎉 ALL TESTS PASSED!")
+        print("\n ALL TESTS PASSED!")
     else:
-        print(f"\n⚠️  {failed} TEST(S) FAILED")
+        print(f"\n️  {failed} TEST(S) FAILED")
 
     return failed == 0
 

@@ -24,10 +24,10 @@ if str(analyzers_path) not in sys.path:
 try:
     from module_scanner import ModuleScanner as OriginalModuleScanner
     TOOL_AVAILABLE = True
-    logger.info("✅ module_scanner tool loaded successfully")
+    logger.info(" module_scanner tool loaded successfully")
 except ImportError as e:
     TOOL_AVAILABLE = False
-    logger.warning(f"❌ module_scanner tool not available: {e}")
+    logger.warning(f" module_scanner tool not available: {e}")
     OriginalModuleScanner = None
 
 

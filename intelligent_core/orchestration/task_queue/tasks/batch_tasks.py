@@ -23,7 +23,7 @@ def analyze_document(self, doc_id: str, analyzer_type: str) -> Dict[str, Any]:
 
     Used in batch processing via group/chord
     """
-    logger.info(f"📄 Analyzing document {doc_id} with {analyzer_type}")
+    logger.info(f" Analyzing document {doc_id} with {analyzer_type}")
 
     try:
         from intelligent_core.expertise_center.domains.bcm.analyzers import get_analyzer
@@ -44,7 +44,7 @@ def analyze_document(self, doc_id: str, analyzer_type: str) -> Dict[str, Any]:
         }
 
     except Exception as exc:
-        logger.error(f"❌ Document analysis failed: {exc}")
+        logger.error(f" Document analysis failed: {exc}")
         return {
             'doc_id': doc_id,
             'status': 'failed',
@@ -59,7 +59,7 @@ def aggregate_analysis_results(results: List[Dict]) -> Dict[str, Any]:
 
     Used as callback in chord
     """
-    logger.info(f"📊 Aggregating {len(results)} analysis results...")
+    logger.info(f" Aggregating {len(results)} analysis results...")
 
     successful = [r for r in results if r['status'] == 'success']
     failed = [r for r in results if r['status'] == 'failed']
@@ -99,7 +99,7 @@ def cleanup_old_results():
 
     Runs every 6 hours
     """
-    logger.info("🧹 Cleaning up old task results...")
+    logger.info(" Cleaning up old task results...")
 
     from celery.result import AsyncResult
     from datetime import datetime, timedelta

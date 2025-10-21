@@ -41,7 +41,7 @@ def generate_infrastructure_readme(component_name: str, section: str) -> str:
     scan_file = Path(f"/Users/MD/AI-Platform-ISO/infrastructure/AI-office-infrastructure/devops-agent/reports-generated/modules/{component_name}_scan.json")
 
     if not scan_file.exists():
-        print(f"⚠️  Scan file not found: {scan_file}")
+        print(f"️  Scan file not found: {scan_file}")
         print(f"   Using minimal template for {component_name}")
         metrics = {"loc": 0, "python_files": 0, "classes": 0, "functions": 0, "endpoints": 0, "dependencies": 0}
     else:
@@ -153,7 +153,7 @@ def main():
     with open(output_path, 'w') as f:
         f.write(readme_content)
 
-    print(f"✅ Generated: {output_path}")
+    print(f" Generated: {output_path}")
     print(f"   Size: {len(readme_content)} characters")
 
 if __name__ == "__main__":

@@ -47,7 +47,7 @@ class LearningTracker:
         # Load existing learning data
         self._load_learning_data()
 
-        logger.info(f"✅ Learning Tracker initialized (storage: {self.storage_dir})")
+        logger.info(f" Learning Tracker initialized (storage: {self.storage_dir})")
 
     async def record_decision_outcome(
         self,
@@ -88,12 +88,12 @@ class LearningTracker:
             # Save to disk
             self._save_learning_example(example)
 
-            logger.info(f"📚 Recorded learning example: {example['id']}")
+            logger.info(f" Recorded learning example: {example['id']}")
 
             return example['id']
 
         except Exception as e:
-            logger.error(f"❌ Failed to record learning example: {e}")
+            logger.error(f" Failed to record learning example: {e}")
             return ""
 
     async def get_insights(
@@ -168,7 +168,7 @@ class LearningTracker:
             }
 
         except Exception as e:
-            logger.error(f"❌ Failed to generate insights: {e}")
+            logger.error(f" Failed to generate insights: {e}")
             return {'insights': [], 'error': str(e)}
 
     async def get_recommendations(
@@ -221,7 +221,7 @@ class LearningTracker:
             return recommendations
 
         except Exception as e:
-            logger.error(f"❌ Failed to generate recommendations: {e}")
+            logger.error(f" Failed to generate recommendations: {e}")
             return []
 
     def get_learning_stats(self) -> Dict[str, Any]:
@@ -385,7 +385,7 @@ class LearningTracker:
                 json.dump(example, f, indent=2)
 
         except Exception as e:
-            logger.error(f"❌ Failed to save learning example: {e}")
+            logger.error(f" Failed to save learning example: {e}")
 
     def _load_learning_data(self):
         """Load existing learning data"""
@@ -398,10 +398,10 @@ class LearningTracker:
                     example = json.load(f)
                     self.learning_examples.append(example)
 
-            logger.info(f"📚 Loaded {len(self.learning_examples)} learning examples")
+            logger.info(f" Loaded {len(self.learning_examples)} learning examples")
 
         except Exception as e:
-            logger.error(f"❌ Failed to load learning data: {e}")
+            logger.error(f" Failed to load learning data: {e}")
 
     def export_learning_data(self, output_path: str) -> bool:
         """Export all learning data to file"""
@@ -413,9 +413,9 @@ class LearningTracker:
                     'exported_at': datetime.utcnow().isoformat()
                 }, f, indent=2)
 
-            logger.info(f"📤 Exported learning data to {output_path}")
+            logger.info(f" Exported learning data to {output_path}")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to export learning data: {e}")
+            logger.error(f" Failed to export learning data: {e}")
             return False

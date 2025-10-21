@@ -1,5 +1,5 @@
 """
-🧠 CONTEXT-AWARE AI ADVISOR
+ CONTEXT-AWARE AI ADVISOR
 
 AI который ПОНИМАЕТ где пользователь в workflow и даёт контекстные советы.
 

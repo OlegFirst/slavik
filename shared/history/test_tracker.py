@@ -36,7 +36,7 @@ def test_detect_changes_simple():
     assert len(changes) == 2
     assert any(c.field == "name" for c in changes)
     assert any(c.field == "rto_hours" for c in changes)
-    print("✓ Simple changes detected correctly\n")
+    print(" Simple changes detected correctly\n")
 
 
 def test_detect_changes_nested():
@@ -69,7 +69,7 @@ def test_detect_changes_nested():
 
     assert len(changes) == 1
     assert "financial_impact" in changes[0].field
-    print("✓ Nested changes detected correctly\n")
+    print(" Nested changes detected correctly\n")
 
 
 def test_detect_changes_with_additions():
@@ -98,7 +98,7 @@ def test_detect_changes_with_additions():
     assert len(changes) == 1
     assert changes[0].old_value is None
     assert changes[0].new_value == 12
-    print("✓ Field additions detected correctly\n")
+    print(" Field additions detected correctly\n")
 
 
 def test_detect_changes_with_removals():
@@ -127,7 +127,7 @@ def test_detect_changes_with_removals():
     assert len(changes) == 1
     assert changes[0].old_value == 12
     assert changes[0].new_value is None
-    print("✓ Field removals detected correctly\n")
+    print(" Field removals detected correctly\n")
 
 
 def test_ignore_fields():
@@ -154,7 +154,7 @@ def test_ignore_fields():
     print(f"  Changes detected: {len(changes)}")
 
     assert len(changes) == 0
-    print("✓ Ignored fields work correctly\n")
+    print(" Ignored fields work correctly\n")
 
 
 def test_serialization():
@@ -182,7 +182,7 @@ def test_serialization():
     print(f"Enum serialization: {status} -> {serialized}")
     assert serialized == "active"
 
-    print("✓ Serialization works correctly\n")
+    print(" Serialization works correctly\n")
 
 
 if __name__ == "__main__":
@@ -198,5 +198,5 @@ if __name__ == "__main__":
     test_serialization()
 
     print("=" * 60)
-    print("All tests passed! ✓")
+    print("All tests passed! ")
     print("=" * 60)

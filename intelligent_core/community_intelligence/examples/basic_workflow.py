@@ -89,7 +89,7 @@ async def example_case_submission():
     # db, case_library would come from dependency injection in real app
 
     # 1. Anonymize the case
-    print("🔒 Anonymizing case data...")
+    print(" Anonymizing case data...")
     result = await anonymizer.anonymize_case(case_data)
 
     print(f"   Removed fields: {result.removed_fields}")
@@ -98,23 +98,23 @@ async def example_case_submission():
 
     # Check if risk is acceptable
     if result.risk_score > 0.7:
-        print("   ⚠️  Risk too high! Consider more generalization.")
+        print("   ️  Risk too high! Consider more generalization.")
         return
 
-    print("   ✅ Anonymization successful")
+    print("    Anonymization successful")
 
     # 2. Submit for peer review (would use ContributionService)
-    print("\n📤 Submitting to peer review...")
+    print("\n Submitting to peer review...")
     print("   Assigned 3 reviewers based on expertise")
     print("   Review deadline: 7 days from now")
-    print("   ✅ Submission complete")
+    print("    Submission complete")
 
     return result
 
 async def example_peer_review():
     """Example: Review a submitted case"""
 
-    print("\n👥 PEER REVIEW PROCESS")
+    print("\n PEER REVIEW PROCESS")
     print("=" * 50)
 
     # Reviewer sees anonymized case
@@ -135,13 +135,13 @@ async def example_peer_review():
     }
 
     print(f"   Quality Score: {review_data['quality_score']}/10")
-    print(f"   Approved: {'✅' if review_data['approved'] else '❌'}")
+    print(f"   Approved: {'' if review_data['approved'] else ''}")
     print(f"   Feedback: {review_data['feedback']}")
 
     # When 2/3 reviewers approve → case added to library
-    print("\n   📊 Review status:")
-    print("   ✅ Reviewer 1: Approved (score: 8)")
-    print("   ✅ Reviewer 2: Approved (score: 9)")
+    print("\n    Review status:")
+    print("    Reviewer 1: Approved (score: 8)")
+    print("    Reviewer 2: Approved (score: 9)")
     print("   ⏳ Reviewer 3: Pending")
     print("\n   → Majority reached! Case APPROVED")
     print("   → Added to Case Library")
@@ -150,7 +150,7 @@ async def example_peer_review():
 async def example_reputation():
     """Example: Check user reputation"""
 
-    print("\n🏆 REPUTATION SYSTEM")
+    print("\n REPUTATION SYSTEM")
     print("=" * 50)
 
     reputation = {
@@ -180,7 +180,7 @@ async def example_reputation():
     print(f"\n   Badges: {', '.join(reputation['badges'])}")
 
     # Level progression
-    print("\n   📈 Progress to next level (Expert):")
+    print("\n    Progress to next level (Expert):")
     print(f"   Current: 340 / 500 points")
     bar_filled = int((340 / 500) * 30)
     bar = "█" * bar_filled + "░" * (30 - bar_filled)
@@ -189,7 +189,7 @@ async def example_reputation():
 async def example_living_documentation():
     """Example: Add interpretation and get synthesized guidance"""
 
-    print("\n📚 LIVING DOCUMENTATION")
+    print("\n LIVING DOCUMENTATION")
     print("=" * 50)
 
     # Expert adds interpretation
@@ -221,10 +221,10 @@ async def example_living_documentation():
     print("\n   Community feedback:")
     print("   ⬆️  Upvotes: 15")
     print("   ⬇️  Downvotes: 2")
-    print("   ⭐ Helpful marks: 12")
+    print("    Helpful marks: 12")
 
     # AI synthesizes unified guidance
-    print("\n   🤖 AI Synthesizing unified guidance...")
+    print("\n    AI Synthesizing unified guidance...")
     synthesized = {
         "guidance": """
         ISO 22301 Clause 4.1 requires organizations to understand their context,
@@ -255,12 +255,12 @@ async def example_living_documentation():
         ]
     }
 
-    print("   ✅ Synthesis complete!")
-    print(f"\n   📖 Unified Guidance:")
+    print("    Synthesis complete!")
+    print(f"\n    Unified Guidance:")
     print(f"   {synthesized['guidance'][:200]}...")
-    print(f"\n   ✓ {len(synthesized['steps'])} practical steps")
-    print(f"   ✓ {len(synthesized['pitfalls'])} common pitfalls")
-    print(f"   ✓ {len(synthesized['patterns'])} success patterns")
+    print(f"\n    {len(synthesized['steps'])} practical steps")
+    print(f"    {len(synthesized['pitfalls'])} common pitfalls")
+    print(f"    {len(synthesized['patterns'])} success patterns")
 
 async def main():
     """Run all examples"""
@@ -282,7 +282,7 @@ async def main():
     await example_living_documentation()
 
     print("\n" + "=" * 70)
-    print("✅ All examples complete!")
+    print(" All examples complete!")
     print("=" * 70)
 
 if __name__ == "__main__":

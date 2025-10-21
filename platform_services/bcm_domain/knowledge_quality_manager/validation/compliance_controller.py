@@ -77,7 +77,7 @@ class ComplianceController:
         # Минимальный порог качества
         self.min_quality_score = settings.MIN_CONFIDENCE
 
-        logger.info("✅ ComplianceController инициализирован")
+        logger.info(" ComplianceController инициализирован")
 
     async def validate(self, scenarios: List[Scenario]) -> List[ValidatedScenario]:
         """
@@ -92,7 +92,7 @@ class ComplianceController:
 
         for scenario in scenarios:
             try:
-                logger.info(f"🔍 Валидация: {scenario.title[:50]}...")
+                logger.info(f" Валидация: {scenario.title[:50]}...")
 
                 # 1. Техническая валидация
                 tech_valid = await self._technical_validation(scenario)
@@ -136,7 +136,7 @@ class ComplianceController:
                 continue
 
         approved_count = len([v for v in validated_scenarios if v.status == ValidationStatus.APPROVED])
-        logger.info(f"✅ Валидация завершена: {approved_count}/{len(scenarios)} одобрено")
+        logger.info(f" Валидация завершена: {approved_count}/{len(scenarios)} одобрено")
 
         return validated_scenarios
 
@@ -256,7 +256,7 @@ class ComplianceController:
             # Простой парсинг ответа
             is_compliant = response.upper().startswith("ДА") or "YES" in response.upper()
 
-            logger.info(f"   ISO {clause} compliance: {'✅' if is_compliant else '❌'}")
+            logger.info(f"   ISO {clause} compliance: {'' if is_compliant else ''}")
 
             return is_compliant
 
@@ -424,16 +424,16 @@ class ComplianceController:
         notes = []
 
         if not tech_valid:
-            notes.append("⚠️ Техническая валидация не пройдена")
+            notes.append("️ Техническая валидация не пройдена")
 
         if not iso_compliant:
-            notes.append("⚠️ Не соответствует ISO 22301")
+            notes.append("️ Не соответствует ISO 22301")
 
         if not expert_approved:
-            notes.append("⚠️ Не одобрено экспертом")
+            notes.append("️ Не одобрено экспертом")
 
         if tech_valid and iso_compliant and expert_approved:
-            notes.append("✅ Все проверки пройдены")
+            notes.append(" Все проверки пройдены")
 
         return "; ".join(notes) if notes else "Валидация пройдена"
 
@@ -443,7 +443,7 @@ class ComplianceController:
 
         ЗАЩИТА: Оцениваем уровень защиты системы через compliance
         """
-        logger.info("📊 Оценка общего compliance статуса...")
+        logger.info(" Оценка общего compliance статуса...")
 
         # Загружаем все сценарии
         try:
@@ -474,7 +474,7 @@ class ComplianceController:
                 critical_gaps=critical_gaps
             )
 
-            logger.info(f"✅ Overall compliance: {overall_compliance:.1%}")
+            logger.info(f" Overall compliance: {overall_compliance:.1%}")
             logger.info(f"   Critical gaps: {len(critical_gaps)}")
 
             return status

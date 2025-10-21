@@ -1,5 +1,5 @@
 """
-🔍 System Behavior Analyzer Tool
+ System Behavior Analyzer Tool
 =================================
 
 Analyzes system behavior patterns and generates behavioral scenarios.
@@ -1349,7 +1349,7 @@ async def main():
     print(f"Generated Python rules code ({len(rules['code'])} chars)")
 
     print("\n" + "=" * 60)
-    print("✅ SYSTEM BEHAVIOR ANALYSIS COMPLETE")
+    print(" SYSTEM BEHAVIOR ANALYSIS COMPLETE")
     print("=" * 60)
     print(f"Output directory: {analyzer.output_dir}")
 

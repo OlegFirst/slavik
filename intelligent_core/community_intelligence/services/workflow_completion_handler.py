@@ -80,7 +80,7 @@ class WorkflowCompletionHandler:
             'workflow.*.completed'
         ], self.on_workflow_completed)
 
-        logger.info("✅ Subscribed to workflow completion events")
+        logger.info(" Subscribed to workflow completion events")
 
     async def on_workflow_completed(self, event: Dict[str, Any]):
         """
@@ -109,7 +109,7 @@ class WorkflowCompletionHandler:
         completed_successfully = event.get('completed_successfully', False)
 
         logger.info(
-            f"📥 Workflow completed: {workflow_id} (module: {module}, "
+            f" Workflow completed: {workflow_id} (module: {module}, "
             f"user: {user_id}, success: {completed_successfully})"
         )
 
@@ -207,7 +207,7 @@ class WorkflowCompletionHandler:
         4. Notify user
         """
 
-        logger.info(f"🚀 Auto-submitting contribution for user {user_id}")
+        logger.info(f" Auto-submitting contribution for user {user_id}")
 
         try:
             # Anonymize case data
@@ -221,7 +221,7 @@ class WorkflowCompletionHandler:
             )
 
             logger.info(
-                f"✅ Auto-submitted contribution {contribution_id} for workflow "
+                f" Auto-submitted contribution {contribution_id} for workflow "
                 f"{workflow_case.get('case_id')} by user {user_id}"
             )
 
@@ -260,7 +260,7 @@ class WorkflowCompletionHandler:
         Creates a notification for the user
         """
 
-        logger.info(f"📨 Sending contribution offer to user {user_id}")
+        logger.info(f" Sending contribution offer to user {user_id}")
 
         # Publish offer event (notification service will handle)
         await self.eventbus.publish('contribution.offer_sent', {
@@ -272,7 +272,7 @@ class WorkflowCompletionHandler:
                 datetime.utcnow() + timedelta(days=30)
             ).isoformat(),
             'message': (
-                f"🎉 Congratulations on completing your {module.upper()} workflow! "
+                f" Congratulations on completing your {module.upper()} workflow! "
                 f"\n\nWould you like to share your success story with the community? "
                 f"Your contribution will help other organizations learn from your experience. "
                 f"\n\nYour data will be anonymized before sharing."
@@ -296,7 +296,7 @@ class WorkflowCompletionHandler:
             ]
         })
 
-        logger.info(f"✅ Contribution offer sent to user {user_id}")
+        logger.info(f" Contribution offer sent to user {user_id}")
 
     async def manually_submit_from_workflow(
         self,
@@ -320,7 +320,7 @@ class WorkflowCompletionHandler:
         """
 
         logger.info(
-            f"📝 Manual contribution submission: workflow {workflow_id} by user {user_id}"
+            f" Manual contribution submission: workflow {workflow_id} by user {user_id}"
         )
 
         # Fetch workflow case
@@ -345,7 +345,7 @@ class WorkflowCompletionHandler:
         )
 
         logger.info(
-            f"✅ User {user_id} manually submitted contribution {contribution_id} "
+            f" User {user_id} manually submitted contribution {contribution_id} "
             f"from workflow {workflow_id}"
         )
 

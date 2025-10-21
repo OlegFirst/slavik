@@ -36,10 +36,10 @@ def get_secret_safe(secret_name: str, env_var: str = None, default: str = None) 
     try:
         from vault_client import get_secret
         value = get_secret(secret_name)
-        logger.info(f"✅ Loaded {secret_name} from Vault")
+        logger.info(f" Loaded {secret_name} from Vault")
         return value
     except ImportError:
-        logger.warning("⚠️  VaultClient not available, using env vars")
+        logger.warning("️  VaultClient not available, using env vars")
     except Exception as e:
         logger.debug(f"Vault lookup failed for {secret_name}: {e}")
 
@@ -47,12 +47,12 @@ def get_secret_safe(secret_name: str, env_var: str = None, default: str = None) 
     if env_var:
         value = os.getenv(env_var)
         if value:
-            logger.warning(f"⚠️  Using {env_var} from .env (migrate to Vault)")
+            logger.warning(f"️  Using {env_var} from .env (migrate to Vault)")
             return value
 
     # Use default if provided
     if default is not None:
-        logger.warning(f"⚠️  Using default value for {secret_name}")
+        logger.warning(f"️  Using default value for {secret_name}")
         return default
 
     # Nothing found
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     import logging
     logging.basicConfig(level=logging.INFO)
 
-    print("\n🔐 Testing Vault Helper\n")
+    print("\n Testing Vault Helper\n")
 
     secrets_to_test = [
         ("anthropic-api-key", "ANTHROPIC_API_KEY"),
@@ -99,8 +99,8 @@ if __name__ == "__main__":
     for secret_name, env_var in secrets_to_test:
         try:
             value = get_secret_safe(secret_name, env_var=env_var)
-            print(f"✅ {secret_name}: {len(value)} chars")
+            print(f" {secret_name}: {len(value)} chars")
         except Exception as e:
-            print(f"❌ {secret_name}: {e}")
+            print(f" {secret_name}: {e}")
 
-    print("\n✅ Test completed!")
+    print("\n Test completed!")

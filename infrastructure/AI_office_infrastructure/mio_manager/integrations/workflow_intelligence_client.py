@@ -67,11 +67,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Created {incident_type} workflow: {result['workflow_id']}")
+            logger.info(f" Created {incident_type} workflow: {result['workflow_id']}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to create incident workflow: {e}")
+            logger.error(f" Failed to create incident workflow: {e}")
             return {
                 "workflow_id": None,
                 "error": str(e),
@@ -102,11 +102,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Workflow {workflow_id}: {result['previous_state']} → {to_state}")
+            logger.info(f" Workflow {workflow_id}: {result['previous_state']} → {to_state}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to transition workflow {workflow_id}: {e}")
+            logger.error(f" Failed to transition workflow {workflow_id}: {e}")
             return {"error": str(e)}
 
     async def get_ai_recommendations(
@@ -133,11 +133,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             recommendations = response.json()
 
-            logger.info(f"✅ Got {len(recommendations)} AI recommendations for {workflow_id}")
+            logger.info(f" Got {len(recommendations)} AI recommendations for {workflow_id}")
             return recommendations
 
         except Exception as e:
-            logger.error(f"❌ Failed to get AI recommendations: {e}")
+            logger.error(f" Failed to get AI recommendations: {e}")
             return []
 
     async def save_successful_case(
@@ -169,11 +169,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Saved successful case: {result['case_id']}")
+            logger.info(f" Saved successful case: {result['case_id']}")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to save case: {e}")
+            logger.error(f" Failed to save case: {e}")
             return {"error": str(e)}
 
     async def find_similar_cases(
@@ -201,11 +201,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             cases = response.json()
 
-            logger.info(f"✅ Found {len(cases)} similar cases")
+            logger.info(f" Found {len(cases)} similar cases")
             return cases
 
         except Exception as e:
-            logger.error(f"❌ Failed to find similar cases: {e}")
+            logger.error(f" Failed to find similar cases: {e}")
             return []
 
     async def get_workflow_status(self, workflow_id: str) -> Dict:
@@ -218,7 +218,7 @@ class WorkflowIntelligenceClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to get workflow status: {e}")
+            logger.error(f" Failed to get workflow status: {e}")
             return {"error": str(e)}
 
     async def predict_resolution_time(
@@ -242,11 +242,11 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
             prediction = response.json()
 
-            logger.info(f"✅ Predicted resolution time: {prediction['estimated_minutes']} min")
+            logger.info(f" Predicted resolution time: {prediction['estimated_minutes']} min")
             return prediction
 
         except Exception as e:
-            logger.error(f"❌ Failed to predict resolution time: {e}")
+            logger.error(f" Failed to predict resolution time: {e}")
             return {
                 "estimated_minutes": None,
                 "confidence": 0.0,
@@ -281,7 +281,7 @@ class WorkflowIntelligenceClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ Failed to check governance rules: {e}")
+            logger.error(f" Failed to check governance rules: {e}")
             return {
                 "allowed": False,
                 "error": str(e)
@@ -335,14 +335,14 @@ class WorkflowIntelligenceClient:
             result = response.json()
 
             logger.info(
-                f"🧠 Escalated to brain: {result.get('escalation_id')} "
+                f" Escalated to brain: {result.get('escalation_id')} "
                 f"(severity={severity})"
             )
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to escalate problem: {e}")
+            logger.error(f" Failed to escalate problem: {e}")
             return {
                 "escalation_id": None,
                 "status": "failed",
@@ -390,7 +390,7 @@ class WorkflowIntelligenceClient:
 
             if directive and directive.get('directive_id'):
                 logger.info(
-                    f"📋 Received directive {directive['directive_id']} "
+                    f" Received directive {directive['directive_id']} "
                     f"for escalation {escalation_id}"
                 )
                 return directive
@@ -403,7 +403,7 @@ class WorkflowIntelligenceClient:
             return None
 
         except Exception as e:
-            logger.error(f"❌ Failed to get directive: {e}")
+            logger.error(f" Failed to get directive: {e}")
             return None
 
     async def publish_report(
@@ -446,14 +446,14 @@ class WorkflowIntelligenceClient:
             result = response.json()
 
             logger.info(
-                f"📊 Published {report_type} report to brain: "
+                f" Published {report_type} report to brain: "
                 f"{result.get('report_id')}"
             )
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to publish report: {e}")
+            logger.error(f" Failed to publish report: {e}")
             return {
                 "report_id": None,
                 "status": "failed",
@@ -496,14 +496,14 @@ class WorkflowIntelligenceClient:
             response.raise_for_status()
 
             logger.debug(
-                f"✅ Reported progress for {task_id}: "
+                f" Reported progress for {task_id}: "
                 f"{progress*100:.0f}% ({status})"
             )
 
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to report task progress: {e}")
+            logger.error(f" Failed to report task progress: {e}")
             return False
 
     async def subscribe_to_directives(
@@ -545,13 +545,13 @@ class WorkflowIntelligenceClient:
             result = response.json()
 
             logger.info(
-                f"📡 Subscribed to directives: {result.get('subscription_id')}"
+                f" Subscribed to directives: {result.get('subscription_id')}"
             )
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to subscribe to directives: {e}")
+            logger.error(f" Failed to subscribe to directives: {e}")
             return {
                 "subscription_id": None,
                 "status": "failed",
@@ -578,7 +578,7 @@ class WorkflowIntelligenceClient:
             return response.json()
 
         except Exception as e:
-            logger.error(f"❌ workflow_intelligence health check failed: {e}")
+            logger.error(f" workflow_intelligence health check failed: {e}")
             return {
                 "status": "unhealthy",
                 "error": str(e)

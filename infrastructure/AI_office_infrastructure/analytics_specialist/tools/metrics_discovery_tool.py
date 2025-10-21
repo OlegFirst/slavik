@@ -24,10 +24,10 @@ if str(analyzers_path) not in sys.path:
 try:
     from metrics_discovery import MetricsDiscovery as OriginalMetricsDiscovery
     TOOL_AVAILABLE = True
-    logger.info("✅ metrics_discovery tool loaded successfully")
+    logger.info(" metrics_discovery tool loaded successfully")
 except ImportError as e:
     TOOL_AVAILABLE = False
-    logger.warning(f"❌ metrics_discovery tool not available: {e}")
+    logger.warning(f" metrics_discovery tool not available: {e}")
     OriginalMetricsDiscovery = None
 
 

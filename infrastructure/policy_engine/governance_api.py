@@ -138,7 +138,7 @@ eventbus = None
 async def startup():
     global decision_center, eventbus
 
-    logger.info("🚀 Starting Governance API...")
+    logger.info(" Starting Governance API...")
 
     # Initialize EventBus
     eventbus = create_eventbus(backend='redis')
@@ -156,11 +156,11 @@ async def startup():
         eventbus=eventbus
     )
 
-    logger.info("✅ Governance API ready")
+    logger.info(" Governance API ready")
 
 @app.on_event("shutdown")
 async def shutdown():
-    logger.info("🛑 Shutting down Governance API")
+    logger.info(" Shutting down Governance API")
     if eventbus:
         await eventbus.close()
 

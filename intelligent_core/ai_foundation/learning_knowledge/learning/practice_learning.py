@@ -77,7 +77,7 @@ class PracticeLearningEngine:
         Returns:
             Learning results with insights and improvements
         """
-        logger.info("🎓 Learning from Self_Application: Analyzing practice results")
+        logger.info(" Learning from Self_Application: Analyzing practice results")
 
         learning_results = {
             "learning_timestamp": datetime.utcnow().isoformat(),
@@ -137,7 +137,7 @@ class PracticeLearningEngine:
         }
 
         logger.info(
-            f"✅ Learning Complete: "
+            f" Learning Complete: "
             f"{learning_results['metrics_analyzed']} phases analyzed, "
             f"{len(learning_results['insights_generated'])} insights, "
             f"{len(improvements)} improvements identified"
@@ -163,7 +163,7 @@ class PracticeLearningEngine:
                 "confidence": 0.9,
                 "evidence": critical_without_auto_recovery
             })
-            logger.info(f"  💡 Insight: {len(critical_without_auto_recovery)} processes need auto-recovery")
+            logger.info(f"   Insight: {len(critical_without_auto_recovery)} processes need auto-recovery")
 
         # Check for circular dependencies
         dependencies = bia_results.get("dependencies_identified", [])
@@ -226,7 +226,7 @@ class PracticeLearningEngine:
                         "confidence": 0.85,
                         "evidence": risk
                     })
-                    logger.warning(f"  ⚠️  Unmitigated high risk: {risk['name']}")
+                    logger.warning(f"  ️  Unmitigated high risk: {risk['name']}")
 
         # Check mitigation coverage
         mitigations = risk_results.get("mitigations_to_implement", [])
@@ -277,7 +277,7 @@ class PracticeLearningEngine:
                         "manual": manual_required
                     }
                 })
-                logger.info(f"  💡 Automation gap: {automation_ratio:.1%} coverage")
+                logger.info(f"   Automation gap: {automation_ratio:.1%} coverage")
 
         return insights
 
@@ -340,7 +340,7 @@ class PracticeLearningEngine:
                 improvements.append(improvement)
 
                 logger.info(
-                    f"  🔧 Improvement: {improvement['description']} "
+                    f"   Improvement: {improvement['description']} "
                     f"(priority={improvement['priority']}, impact={improvement['estimated_impact']})"
                 )
 
@@ -406,7 +406,7 @@ class PracticeLearningEngine:
         Returns:
             PracticeMetrics with measurement results
         """
-        logger.info(f"📊 Measuring {metric_type}: target={target_value}, actual={actual_value}")
+        logger.info(f" Measuring {metric_type}: target={target_value}, actual={actual_value}")
 
         # Calculate deviation
         try:
@@ -432,7 +432,7 @@ class PracticeLearningEngine:
 
         self.practice_metrics.append(metrics)
 
-        status = "✅" if success else "❌"
+        status = "" if success else ""
         logger.info(
             f"  {status} {metric_type}: "
             f"{'SUCCESS' if success else 'DEVIATION'} "
@@ -456,7 +456,7 @@ class PracticeLearningEngine:
         Returns:
             Improvement application results
         """
-        logger.info(f"🔧 Applying {len(improvements)} improvements based on practice")
+        logger.info(f" Applying {len(improvements)} improvements based on practice")
 
         results = {
             "timestamp": datetime.utcnow().isoformat(),
@@ -475,11 +475,11 @@ class PracticeLearningEngine:
                     # Apply immediately
                     await self._apply_improvement(improvement)
                     results["applied"].append(improvement_id)
-                    logger.info(f"  ✅ Applied: {improvement['description']}")
+                    logger.info(f"   Applied: {improvement['description']}")
                 else:
                     # Queue for review
                     results["queued"].append(improvement_id)
-                    logger.info(f"  📋 Queued: {improvement['description']}")
+                    logger.info(f"   Queued: {improvement['description']}")
 
                 # Record in history
                 self.improvement_history.append({
@@ -489,14 +489,14 @@ class PracticeLearningEngine:
                 })
 
             except Exception as e:
-                logger.error(f"  ❌ Failed to apply {improvement_id}: {e}")
+                logger.error(f"   Failed to apply {improvement_id}: {e}")
                 results["failed"].append({
                     "improvement_id": improvement_id,
                     "error": str(e)
                 })
 
         logger.info(
-            f"✅ Improvements processed: "
+            f" Improvements processed: "
             f"{len(results['applied'])} applied, "
             f"{len(results['queued'])} queued, "
             f"{len(results['failed'])} failed"

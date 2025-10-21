@@ -91,11 +91,11 @@ class AIColleaguesAdapter:
 
                 if success:
                     notified.append(colleague_name)
-                    logger.info(f"✅ {colleague_name} notified")
+                    logger.info(f" {colleague_name} notified")
                 else:
-                    logger.warning(f"❌ {colleague_name} failed")
+                    logger.warning(f" {colleague_name} failed")
 
-            logger.info(f"✅ Notified {len(notified)}/{len(colleagues_to_notify)} colleagues")
+            logger.info(f" Notified {len(notified)}/{len(colleagues_to_notify)} colleagues")
 
             return notified
 

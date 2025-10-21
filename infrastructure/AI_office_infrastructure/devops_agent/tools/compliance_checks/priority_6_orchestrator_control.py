@@ -17,7 +17,7 @@
 - Priority 5: EventBus Events
 
 Created: 2025-10-09
-Status: ✅ Implemented
+Status:  Implemented
 """
 
 import sys
@@ -251,31 +251,31 @@ class OrchestratorControlChecker:
 
         if not status.registered_in_registry and not status.managed_by_orchestrator:
             status.severity = OrchestratorSeverity.CRITICAL if is_critical else OrchestratorSeverity.ERROR
-            status.message = "🚨 Не зарегистрирован И не управляется оркестратором!"
+            status.message = " Не зарегистрирован И не управляется оркестратором!"
         elif not status.registered_in_registry:
             status.severity = OrchestratorSeverity.WARNING
-            status.message = "⚠️ Не зарегистрирован в Service Registry"
+            status.message = "️ Не зарегистрирован в Service Registry"
         elif not status.managed_by_orchestrator:
             status.severity = OrchestratorSeverity.WARNING
-            status.message = "⚠️ Не управляется оркестратором"
+            status.message = "️ Не управляется оркестратором"
         elif not status.has_health_check:
             status.severity = OrchestratorSeverity.WARNING
-            status.message = "⚠️ Нет health check"
+            status.message = "️ Нет health check"
         elif not status.has_restart_policy:
             status.severity = OrchestratorSeverity.WARNING
-            status.message = "⚠️ Нет restart policy"
+            status.message = "️ Нет restart policy"
         elif status.container_status != 'running':
             status.severity = OrchestratorSeverity.ERROR
-            status.message = f"❌ Контейнер не running (статус: {status.container_status})"
+            status.message = f" Контейнер не running (статус: {status.container_status})"
         elif status.health_check_status == 'unhealthy':
             status.severity = OrchestratorSeverity.ERROR
-            status.message = "❌ Health check: unhealthy"
+            status.message = " Health check: unhealthy"
         elif status.restart_count > 10:
             status.severity = OrchestratorSeverity.WARNING
-            status.message = f"⚠️ Много перезапусков ({status.restart_count})"
+            status.message = f"️ Много перезапусков ({status.restart_count})"
         else:
             status.severity = OrchestratorSeverity.INFO
-            status.message = "✅ Полный контроль оркестратором"
+            status.message = " Полный контроль оркестратором"
 
         return status
 
@@ -340,30 +340,30 @@ class OrchestratorControlChecker:
 
         # КРИТИЧНЫЕ ПРОБЛЕМЫ
         if summary['critical_count'] > 0:
-            print("🚨 КРИТИЧНЫЕ ПРОБЛЕМЫ 🚨")
+            print(" КРИТИЧНЫЕ ПРОБЛЕМЫ ")
             print(f"Найдено {summary['critical_count']} критичных сервисов без контроля:")
             for service_name in summary['critical_issues']:
-                print(f"  🚨 {service_name}")
+                print(f"   {service_name}")
             print()
 
         # Detailed results
         for service_name, status in sorted(results.items()):
-            icon = "✅" if status.severity == OrchestratorSeverity.INFO else \
-                   "⚠️" if status.severity == OrchestratorSeverity.WARNING else \
-                   "❌" if status.severity == OrchestratorSeverity.ERROR else "🚨"
+            icon = "" if status.severity == OrchestratorSeverity.INFO else \
+                   "️" if status.severity == OrchestratorSeverity.WARNING else \
+                   "" if status.severity == OrchestratorSeverity.ERROR else ""
 
             print(f"{icon} {service_name}")
-            print(f"   Зарегистрирован в Registry: {'✅' if status.registered_in_registry else '❌'}")
-            print(f"   Управляется оркестратором: {'✅' if status.managed_by_orchestrator else '❌'}")
+            print(f"   Зарегистрирован в Registry: {'' if status.registered_in_registry else ''}")
+            print(f"   Управляется оркестратором: {'' if status.managed_by_orchestrator else ''}")
 
             if status.managed_by_orchestrator:
                 print(f"   Тип: {status.orchestrator_type}")
                 print(f"   Container ID: {status.container_id}")
                 print(f"   Статус: {status.container_status}")
-                print(f"   Health check: {'✅' if status.has_health_check else '❌'}")
+                print(f"   Health check: {'' if status.has_health_check else ''}")
                 if status.has_health_check:
                     print(f"   Health status: {status.health_check_status}")
-                print(f"   Restart policy: {'✅' if status.has_restart_policy else '❌'}")
+                print(f"   Restart policy: {'' if status.has_restart_policy else ''}")
                 if status.has_restart_policy:
                     print(f"   Policy: {status.restart_policy}")
                 print(f"   Restart count: {status.restart_count}")
@@ -375,16 +375,16 @@ class OrchestratorControlChecker:
         # Final status
         print("="*80)
         if summary['critical_count'] > 0:
-            print("🚨 ПРИОРИТЕТ 6 CRITICAL: Критичные сервисы без контроля оркестратором!")
+            print(" ПРИОРИТЕТ 6 CRITICAL: Критичные сервисы без контроля оркестратором!")
             passed = False
         elif summary['control_rate'] >= 80:
-            print("✅ ПРИОРИТЕТ 6 PASSED: Контроль оркестратором в порядке")
+            print(" ПРИОРИТЕТ 6 PASSED: Контроль оркестратором в порядке")
             passed = True
         elif summary['control_rate'] >= 50:
-            print("⚠️ ПРИОРИТЕТ 6 WARNING: Неполный контроль оркестратором")
+            print("️ ПРИОРИТЕТ 6 WARNING: Неполный контроль оркестратором")
             passed = False
         else:
-            print("❌ ПРИОРИТЕТ 6 FAILED: Недостаточный контроль оркестратором")
+            print(" ПРИОРИТЕТ 6 FAILED: Недостаточный контроль оркестратором")
             passed = False
         print("="*80 + "\n")
 

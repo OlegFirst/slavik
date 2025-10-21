@@ -25,7 +25,7 @@ load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    print("❌ DATABASE_URL not found in environment!")
+    print(" DATABASE_URL not found in environment!")
     print("Please set DATABASE_URL in .env file")
     sys.exit(1)
 
@@ -35,19 +35,19 @@ async def apply_migration(migration_file: str):
     migration_path = Path(__file__).parent / migration_file
 
     if not migration_path.exists():
-        print(f"❌ Migration file not found: {migration_path}")
+        print(f" Migration file not found: {migration_path}")
         return False
 
-    print(f"📝 Reading migration: {migration_file}")
+    print(f" Reading migration: {migration_file}")
     sql = migration_path.read_text()
 
-    print(f"🔗 Connecting to database...")
+    print(f" Connecting to database...")
     # Extract connection params from URL for asyncpg
     # postgresql://user:pass@host:port/db
     import re
     match = re.match(r'postgresql://([^:]+):([^@]+)@([^:]+):(\d+)/(.+)', DATABASE_URL)
     if not match:
-        print(f"❌ Invalid DATABASE_URL format")
+        print(f" Invalid DATABASE_URL format")
         return False
 
     user, password, host, port, database = match.groups()
@@ -61,13 +61,13 @@ async def apply_migration(migration_file: str):
             port=int(port)
         )
 
-        print(f"✅ Connected to {database}@{host}")
+        print(f" Connected to {database}@{host}")
 
         # Execute migration
-        print(f"🚀 Applying migration...")
+        print(f" Applying migration...")
         await conn.execute(sql)
 
-        print(f"✅ Migration applied successfully!")
+        print(f" Migration applied successfully!")
 
         # Verify schemas created
         schemas = await conn.fetch("""
@@ -76,9 +76,9 @@ async def apply_migration(migration_file: str):
             WHERE schema_name IN ('portal', 'marketplace')
         """)
 
-        print(f"\n📊 Schemas:")
+        print(f"\n Schemas:")
         for schema in schemas:
-            print(f"  ✅ {schema['schema_name']}")
+            print(f"   {schema['schema_name']}")
 
             # Count tables in schema
             tables = await conn.fetch(f"""
@@ -95,7 +95,7 @@ async def apply_migration(migration_file: str):
         return True
 
     except Exception as e:
-        print(f"❌ Migration failed: {e}")
+        print(f" Migration failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -107,7 +107,7 @@ async def apply_all_migrations():
     migration_files = sorted(migrations_dir.glob("*.sql"))
 
     if not migration_files:
-        print("❌ No migration files found")
+        print(" No migration files found")
         return False
 
     print(f"Found {len(migration_files)} migrations:")
@@ -119,11 +119,11 @@ async def apply_all_migrations():
     for migration_file in migration_files:
         success = await apply_migration(migration_file.name)
         if not success:
-            print(f"\n❌ Migration sequence failed at {migration_file.name}")
+            print(f"\n Migration sequence failed at {migration_file.name}")
             return False
         print()
 
-    print("✅ All migrations applied successfully!")
+    print(" All migrations applied successfully!")
     return True
 
 

@@ -86,7 +86,7 @@ class CrossServiceStats(BaseModel):
 @router.get("/benchmarks/all")
 async def get_all_benchmarks(industry: Optional[str] = None):
     """
-    📊 Get benchmarks from ALL services
+     Get benchmarks from ALL services
 
     Aggregates benchmarks across:
     - Planning (ISO 8.3)
@@ -156,7 +156,7 @@ async def search_cases_across_services(
     limit: int = 10
 ):
     """
-    🔍 Search similar cases across ALL services
+     Search similar cases across ALL services
 
     Cross-service learning: find relevant cases regardless of module
     """
@@ -218,7 +218,7 @@ async def search_cases_across_services(
 @router.get("/analytics/platform")
 async def get_platform_analytics(days: int = 30):
     """
-    📈 Platform-wide workflow intelligence analytics
+     Platform-wide workflow intelligence analytics
 
     Aggregates:
     - Total workflows across all services
@@ -256,7 +256,7 @@ async def get_platform_analytics(days: int = 30):
 @router.get("/analytics/cross-service-learning")
 async def get_cross_service_learning_stats():
     """
-    🔄 Cross-service learning statistics
+     Cross-service learning statistics
 
     Shows how modules learn from each other:
     - Planning → BIA insights
@@ -283,7 +283,7 @@ async def get_cross_service_learning_stats():
 @router.get("/health")
 async def check_all_services_health():
     """
-    🏥 Health check for ALL services with workflow intelligence
+     Health check for ALL services with workflow intelligence
 
     Returns status of each service and their WI integration
     """
@@ -346,7 +346,7 @@ async def check_all_services_health():
 @router.get("/status")
 async def get_platform_status():
     """
-    📊 Detailed platform status
+     Detailed platform status
 
     Includes:
     - Service health
@@ -387,7 +387,7 @@ async def get_platform_status():
 @router.post("/admin/sync-benchmarks")
 async def trigger_benchmark_sync():
     """
-    🔄 Trigger benchmark recalculation across all services
+     Trigger benchmark recalculation across all services
 
     Admin operation to force refresh of all benchmarks
     """
@@ -403,7 +403,7 @@ async def trigger_benchmark_sync():
 @router.post("/admin/clear-cache")
 async def clear_all_caches():
     """
-    🗑️ Clear all workflow intelligence caches
+    ️ Clear all workflow intelligence caches
 
     Admin operation for cache invalidation
     """
@@ -417,7 +417,7 @@ async def clear_all_caches():
 @router.get("/admin/stats")
 async def get_admin_stats():
     """
-    📊 Admin statistics dashboard
+     Admin statistics dashboard
 
     Detailed stats for platform administrators
     """

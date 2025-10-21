@@ -48,7 +48,7 @@ async def lifespan(app: FastAPI):
     global eventbus_helper
 
     logger.info("=" * 70)
-    logger.info("🚀 DEVOPS AGENT STARTING...")
+    logger.info(" DEVOPS AGENT STARTING...")
     logger.info("=" * 70)
     logger.info(f"   Service: DevOps Agent")
     logger.info(f"   Port: {PORT}")
@@ -72,28 +72,28 @@ async def lifespan(app: FastAPI):
                 service_type="specialist"
             )
             await eventbus_helper.startup()
-            logger.info("✅ EventBus integration initialized")
+            logger.info(" EventBus integration initialized")
         except Exception as e:
-            logger.error(f"❌ EventBus initialization failed: {e}")
-            logger.warning("⚠️  Running without EventBus integration")
+            logger.error(f" EventBus initialization failed: {e}")
+            logger.warning("️  Running without EventBus integration")
 
     logger.info("=" * 70)
-    logger.info("✅ DEVOPS AGENT READY!")
+    logger.info(" DEVOPS AGENT READY!")
     logger.info("=" * 70)
 
     yield
 
     # Shutdown
     logger.info("=" * 70)
-    logger.info("🛑 DEVOPS AGENT SHUTTING DOWN...")
+    logger.info(" DEVOPS AGENT SHUTTING DOWN...")
     logger.info("=" * 70)
 
     # Shutdown EventBus
     if eventbus_helper:
         await eventbus_helper.shutdown()
-        logger.info("✅ EventBus integration stopped")
+        logger.info(" EventBus integration stopped")
 
-    logger.info("👋 Goodbye!")
+    logger.info(" Goodbye!")
 
 
 app = FastAPI(

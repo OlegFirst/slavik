@@ -59,24 +59,24 @@ async def main():
     qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
     qdrant_api_key = os.getenv("QDRANT_API_KEY")
 
-    logger.info(f"🔗 Connecting to Qdrant: {qdrant_url}")
+    logger.info(f" Connecting to Qdrant: {qdrant_url}")
 
     if not qdrant_api_key:
-        logger.warning("⚠️  QDRANT_API_KEY not set - using local Qdrant without auth")
+        logger.warning("️  QDRANT_API_KEY not set - using local Qdrant without auth")
 
     # Initialize loader
-    logger.info("📚 Initializing Business Flows Loader...")
+    logger.info(" Initializing Business Flows Loader...")
     loader = BusinessFlowsLoader()
 
     # Check if knowledge files exist
     knowledge_path = loader.knowledge_path
     if not knowledge_path.exists():
-        logger.error(f"❌ Knowledge path not found: {knowledge_path}")
+        logger.error(f" Knowledge path not found: {knowledge_path}")
         logger.error("Make sure business flows are in:")
         logger.error("  intelligent-core/ai-foundation/learning-knowledge/knowledge/business_flows/")
         sys.exit(1)
 
-    logger.info(f"✅ Knowledge path found: {knowledge_path}")
+    logger.info(f" Knowledge path found: {knowledge_path}")
 
     # List available sources
     available_sources = []
@@ -85,23 +85,23 @@ async def main():
         if file_path.exists():
             file_size = file_path.stat().st_size / 1024  # KB
             available_sources.append(f"{source_config['file']} ({file_size:.1f} KB)")
-            logger.info(f"  ✅ {source_config['file']} ({file_size:.1f} KB)")
+            logger.info(f"   {source_config['file']} ({file_size:.1f} KB)")
         else:
-            logger.warning(f"  ⚠️  {source_config['file']} - NOT FOUND")
+            logger.warning(f"  ️  {source_config['file']} - NOT FOUND")
 
     if not available_sources:
-        logger.error("❌ No source files found!")
+        logger.error(" No source files found!")
         sys.exit(1)
 
     # Load all flows
-    logger.info("\n📖 Loading flows from all sources...")
+    logger.info("\n Loading flows from all sources...")
     flows = await loader.load_all_flows()
 
     if not flows:
-        logger.error("❌ No flows loaded!")
+        logger.error(" No flows loaded!")
         sys.exit(1)
 
-    logger.info(f"✅ Loaded {len(flows)} total flow documents")
+    logger.info(f" Loaded {len(flows)} total flow documents")
 
     # Show breakdown by source
     source_counts = {}
@@ -109,12 +109,12 @@ async def main():
         source = flow.get("source", "unknown")
         source_counts[source] = source_counts.get(source, 0) + 1
 
-    logger.info("\n📊 Flows by source:")
+    logger.info("\n Flows by source:")
     for source, count in sorted(source_counts.items()):
         logger.info(f"  {source}: {count} flows")
 
     # Initialize vector indexer
-    logger.info("\n🔍 Initializing Vector Indexer...")
+    logger.info("\n Initializing Vector Indexer...")
 
     try:
         indexer = VectorIndexer(
@@ -124,33 +124,33 @@ async def main():
             qdrant_api_key=qdrant_api_key
         )
 
-        logger.info(f"✅ Using {indexer.embedding_provider.provider} embeddings")
-        logger.info(f"✅ Embedding dimension: {indexer.embedding_provider.embedding_dim}")
+        logger.info(f" Using {indexer.embedding_provider.provider} embeddings")
+        logger.info(f" Embedding dimension: {indexer.embedding_provider.embedding_dim}")
 
     except Exception as e:
-        logger.error(f"❌ Failed to initialize indexer: {e}")
+        logger.error(f" Failed to initialize indexer: {e}")
         logger.error("Make sure Qdrant is running: docker-compose up qdrant")
         sys.exit(1)
 
     # Create collection
-    logger.info("\n📦 Creating Qdrant collection...")
+    logger.info("\n Creating Qdrant collection...")
     try:
         await indexer.create_collection_if_not_exists()
-        logger.info("✅ Collection ready: bcm_business_flows")
+        logger.info(" Collection ready: bcm_business_flows")
     except Exception as e:
-        logger.error(f"❌ Failed to create collection: {e}")
+        logger.error(f" Failed to create collection: {e}")
         sys.exit(1)
 
     # Index flows
-    logger.info("\n💾 Indexing flows into Qdrant...")
+    logger.info("\n Indexing flows into Qdrant...")
     logger.info("This may take a few minutes depending on embedding provider...")
 
     try:
         indexed_count = await loader.index_flows(flows, indexer)
-        logger.info(f"✅ Successfully indexed {indexed_count}/{len(flows)} flows")
+        logger.info(f" Successfully indexed {indexed_count}/{len(flows)} flows")
 
     except Exception as e:
-        logger.error(f"❌ Indexing failed: {e}")
+        logger.error(f" Indexing failed: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
@@ -158,7 +158,7 @@ async def main():
     # Show summary
     print(f"""
     ╔══════════════════════════════════════════════════════════╗
-    ║  ✅ Business Flows Loading Complete!                     ║
+    ║   Business Flows Loading Complete!                     ║
     ╠══════════════════════════════════════════════════════════╣
     ║  Flows Loaded:     {len(flows):>4}                                   ║
     ║  Flows Indexed:    {indexed_count:>4}                                   ║
@@ -166,7 +166,7 @@ async def main():
     ║  Embedding:        {indexer.embedding_provider.provider:<15}                 ║
     ╚══════════════════════════════════════════════════════════╝
 
-    🚀 Now you can query flows with RAG:
+     Now you can query flows with RAG:
 
     from intelligent_core.ai_foundation.rag.pipeline import RAGPipeline
 
@@ -180,7 +180,7 @@ async def main():
     indexer = VectorIndexer(collection_name="bcm_business_flows")
     results = await indexer.search("healthcare BIA", top_k=5)
 
-    ✅ Ready for production use!
+     Ready for production use!
     """)
 
 
@@ -188,10 +188,10 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n\n⚠️  Loading interrupted by user")
+        print("\n\n️  Loading interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n\n❌ Fatal error: {e}")
+        print(f"\n\n Fatal error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

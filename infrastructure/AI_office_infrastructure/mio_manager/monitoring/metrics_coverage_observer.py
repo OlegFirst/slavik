@@ -86,7 +86,7 @@ class MetricsCoverageObserver:
         Returns:
             MetricsCoverageObservation с полным snapshot состояния
         """
-        logger.info("👀 МиО observing metrics coverage...")
+        logger.info(" МиО observing metrics coverage...")
 
         try:
             # Get all registered services from Service Discovery v2
@@ -134,16 +134,16 @@ class MetricsCoverageObserver:
 
             self.last_observation = observation
 
-            logger.info(f"   ✅ Coverage observed: {coverage_pct:.1f}% ({len(monitored)}/{len(registered_services)})")
+            logger.info(f"    Coverage observed: {coverage_pct:.1f}% ({len(monitored)}/{len(registered_services)})")
             if missing:
-                logger.warning(f"   ⚠️  Missing {len(missing)} services: {', '.join(missing[:5])}")
+                logger.warning(f"   ️  Missing {len(missing)} services: {', '.join(missing[:5])}")
             if unhealthy_targets:
-                logger.warning(f"   ⚠️  {len(unhealthy_targets)} unhealthy targets: {', '.join(unhealthy_targets[:5])}")
+                logger.warning(f"   ️  {len(unhealthy_targets)} unhealthy targets: {', '.join(unhealthy_targets[:5])}")
 
             return observation
 
         except Exception as e:
-            logger.error(f"❌ Failed to observe metrics coverage: {e}")
+            logger.error(f" Failed to observe metrics coverage: {e}")
             # Return minimal observation on error
             return MetricsCoverageObservation(
                 timestamp=datetime.utcnow(),
@@ -184,14 +184,14 @@ class MetricsCoverageObserver:
                 },
                 priority='normal'
             )
-            logger.info(f"📡 Published metrics coverage observation: {observation.coverage_percentage:.1f}% coverage")
+            logger.info(f" Published metrics coverage observation: {observation.coverage_percentage:.1f}% coverage")
 
             # If coverage is low, publish issue observation
             if observation.coverage_percentage < 90:
                 await self._publish_coverage_issue(observation)
 
         except Exception as e:
-            logger.error(f"❌ Failed to publish observation: {e}")
+            logger.error(f" Failed to publish observation: {e}")
 
     async def _publish_coverage_issue(self, observation: MetricsCoverageObservation):
         """Публикует observation о проблеме с coverage (для Brain/DevOps)"""
@@ -211,7 +211,7 @@ class MetricsCoverageObserver:
             },
             priority='high'
         )
-        logger.warning(f"⚠️  Published coverage issue: {observation.coverage_percentage:.1f}% (severity: {severity})")
+        logger.warning(f"️  Published coverage issue: {observation.coverage_percentage:.1f}% (severity: {severity})")
 
     # ========================================================================
     # Service Discovery v2 Integration

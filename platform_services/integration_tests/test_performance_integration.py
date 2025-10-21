@@ -61,7 +61,7 @@ async def test_api_response_time_benchmarks(
         p95 = response_times[int(len(response_times) * 0.95)]
         avg = sum(response_times) / len(response_times)
 
-        print(f"✅ {endpoint}: avg={avg:.1f}ms, p95={p95:.1f}ms")
+        print(f" {endpoint}: avg={avg:.1f}ms, p95={p95:.1f}ms")
 
         # Assert p95 < 500ms (relaxed for integration tests)
         assert p95 < 500, f"P95 response time {p95}ms exceeds 500ms threshold"
@@ -113,7 +113,7 @@ async def test_bulk_operation_performance(
 
     elapsed = time.time() - start
 
-    print(f"✅ Created {len(created_ids)}/100 items in {elapsed:.1f}s")
+    print(f" Created {len(created_ids)}/100 items in {elapsed:.1f}s")
     print(f"   Rate: {len(created_ids)/elapsed:.1f} items/sec")
 
     # Assert reasonable throughput
@@ -157,7 +157,7 @@ async def test_concurrent_user_simulation(
     success_count = sum(results)
     success_rate = success_count / len(results) * 100
 
-    print(f"✅ Concurrent users: {success_count}/50 successful ({success_rate:.1f}%)")
+    print(f" Concurrent users: {success_count}/50 successful ({success_rate:.1f}%)")
     print(f"   Total time: {elapsed:.1f}s")
 
     assert success_rate >= 90, f"Success rate {success_rate}% below 90%"
@@ -199,9 +199,9 @@ async def test_cache_hit_rate(
         if response.status_code == 200:
             metrics = response.json()
             hit_rate = metrics.get("hit_rate", 0)
-            print(f"✅ Cache hit rate: {hit_rate}%")
+            print(f" Cache hit rate: {hit_rate}%")
     except:
-        print(f"⚠️ Cache metrics endpoint not available")
+        print(f"️ Cache metrics endpoint not available")
 
 
 @pytest.mark.integration
@@ -265,7 +265,7 @@ async def test_database_query_performance(
         assert response.status_code == 200
         assert elapsed < 500, f"Query took {elapsed}ms, exceeds 500ms"
 
-        print(f"✅ Query {params} completed in {elapsed:.1f}ms")
+        print(f" Query {params} completed in {elapsed:.1f}ms")
 
 
 @pytest.mark.integration
@@ -301,7 +301,7 @@ async def test_dashboard_load_performance(
         if not isinstance(r, Exception) and r.status_code == 200
     )
 
-    print(f"✅ Dashboard loaded in {elapsed:.1f}ms ({success_count}/4 services)")
+    print(f" Dashboard loaded in {elapsed:.1f}ms ({success_count}/4 services)")
 
     assert success_count >= 4
     assert elapsed < 2000, f"Dashboard load took {elapsed}ms, exceeds 2000ms"
@@ -365,7 +365,7 @@ async def test_memory_efficient_pagination(
 
     avg_page_time = sum(page_times) / len(page_times)
 
-    print(f"✅ Paginated 100 records in {len(page_times)} pages")
+    print(f" Paginated 100 records in {len(page_times)} pages")
     print(f"   Average page load: {avg_page_time:.1f}ms")
 
     assert avg_page_time < 500, f"Average page time {avg_page_time}ms exceeds 500ms"

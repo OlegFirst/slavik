@@ -66,11 +66,11 @@ def main():
         total_count += 1
         if fix_imports_in_file(py_file):
             fixed_count += 1
-            print(f"✅ Fixed: {py_file.relative_to(ai_orchestration_dir)}")
+            print(f" Fixed: {py_file.relative_to(ai_orchestration_dir)}")
         else:
             print(f"⏭️  Skipped: {py_file.relative_to(ai_orchestration_dir)}")
 
-    print(f"\n📊 Summary: {fixed_count}/{total_count} files fixed")
+    print(f"\n Summary: {fixed_count}/{total_count} files fixed")
 
 if __name__ == "__main__":
     main()

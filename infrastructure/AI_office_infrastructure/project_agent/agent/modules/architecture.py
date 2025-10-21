@@ -39,19 +39,19 @@ def run_architecture_analysis(config: Dict, target_module: Optional[str] = None)
     }
 
     # 1. Module scanning
-    print("📦 Scanning modules...")
+    print(" Scanning modules...")
     results["modules"] = _scan_modules(repo_path, target_module)
 
     # 2. Dependency analysis
-    print("🔗 Analyzing dependencies...")
+    print(" Analyzing dependencies...")
     results["dependencies"] = _analyze_dependencies(repo_path, target_module)
 
     # 3. API mapping
-    print("🌐 Mapping API endpoints...")
+    print(" Mapping API endpoints...")
     results["api_map"] = _map_api_endpoints(repo_path, target_module)
 
     # 4. Business logic extraction
-    print("💼 Extracting business logic...")
+    print(" Extracting business logic...")
     results["business_logic"] = _extract_business_logic(repo_path, target_module)
 
     # 5. Detect issues
@@ -352,10 +352,10 @@ def _save_architecture_report(results: Dict) -> None:
         # Business Logic
         if results["business_logic"] and not results["business_logic"].get("error"):
             f.write("## Business Logic\n\n")
-            f.write(f"- Extracted: ✅\n")
+            f.write(f"- Extracted: \n")
             if isinstance(results["business_logic"], dict):
                 logic_count = len(results["business_logic"])
                 f.write(f"- Components: {logic_count}\n")
             f.write("\n")
 
-    print(f"\n📊 Architecture report saved to {md_path}")
+    print(f"\n Architecture report saved to {md_path}")

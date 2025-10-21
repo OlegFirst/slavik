@@ -30,10 +30,10 @@ async def apply_migration(engine, migration_file: str, migrations_dir: Path):
     migration_path = migrations_dir / migration_file
 
     if not migration_path.exists():
-        print(f"❌ Migration file not found: {migration_file}")
+        print(f" Migration file not found: {migration_file}")
         return False
 
-    print(f"\n📝 Applying migration: {migration_file}")
+    print(f"\n Applying migration: {migration_file}")
 
     try:
         # Read migration SQL
@@ -52,40 +52,40 @@ async def apply_migration(engine, migration_file: str, migrations_dir: Path):
 
                 try:
                     await conn.execute(text(statement))
-                    print(f"  ✅ Statement {i}/{len(statements)} executed")
+                    print(f"   Statement {i}/{len(statements)} executed")
                 except Exception as e:
                     # Continue on policy not found errors (they may have been already dropped)
                     if "does not exist" in str(e).lower():
-                        print(f"  ⚠️  Statement {i}: {str(e)[:100]}")
+                        print(f"  ️  Statement {i}: {str(e)[:100]}")
                         continue
                     else:
                         raise
 
-        print(f"✅ Migration {migration_file} applied successfully!")
+        print(f" Migration {migration_file} applied successfully!")
         return True
 
     except Exception as e:
-        print(f"❌ Error applying migration {migration_file}:")
+        print(f" Error applying migration {migration_file}:")
         print(f"   {str(e)}")
         return False
 
 async def main():
     print("=" * 70)
-    print("🔧 Applying Supabase Security & Performance Fixes")
+    print(" Applying Supabase Security & Performance Fixes")
     print("=" * 70)
 
     # Get database URL
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
-        print("❌ DATABASE_URL not found in environment variables")
+        print(" DATABASE_URL not found in environment variables")
         sys.exit(1)
 
     # Convert to async URL
     async_db_url = database_url.replace("postgresql://", "postgresql+asyncpg://")
 
-    print(f"\n📊 Database: {database_url.split('@')[1].split('/')[0]}")
-    print(f"📂 Migrations directory: infrastructure/database/migrations_source/")
-    print(f"📝 Migrations to apply: {len(MIGRATIONS)}")
+    print(f"\n Database: {database_url.split('@')[1].split('/')[0]}")
+    print(f" Migrations directory: infrastructure/database/migrations_source/")
+    print(f" Migrations to apply: {len(MIGRATIONS)}")
 
     # Create engine
     engine = create_async_engine(
@@ -95,15 +95,15 @@ async def main():
     )
 
     # Test connection
-    print("\n🔌 Testing database connection...")
+    print("\n Testing database connection...")
     try:
         async with engine.begin() as conn:
             result = await conn.execute(text("SELECT version()"))
             version = result.scalar()
-            print(f"✅ Connected to PostgreSQL")
+            print(f" Connected to PostgreSQL")
             print(f"   Version: {version.split(',')[0]}")
     except Exception as e:
-        print(f"❌ Failed to connect to database:")
+        print(f" Failed to connect to database:")
         print(f"   {str(e)}")
         await engine.dispose()
         sys.exit(1)
@@ -113,7 +113,7 @@ async def main():
 
     # Apply migrations
     print("\n" + "=" * 70)
-    print("🚀 Applying Migrations")
+    print(" Applying Migrations")
     print("=" * 70)
 
     success_count = 0
@@ -128,19 +128,19 @@ async def main():
 
     # Summary
     print("\n" + "=" * 70)
-    print("📊 Migration Summary")
+    print(" Migration Summary")
     print("=" * 70)
-    print(f"✅ Successful: {success_count}/{len(MIGRATIONS)}")
-    print(f"❌ Failed: {failed_count}/{len(MIGRATIONS)}")
+    print(f" Successful: {success_count}/{len(MIGRATIONS)}")
+    print(f" Failed: {failed_count}/{len(MIGRATIONS)}")
 
     if failed_count == 0:
-        print("\n🎉 All migrations applied successfully!")
-        print("\n📋 Next Steps:")
+        print("\n All migrations applied successfully!")
+        print("\n Next Steps:")
         print("   1. Check Supabase Dashboard > Database > Linter")
         print("   2. Configure Auth settings (leaked password protection, MFA)")
         print("   3. Run performance tests to verify improvements")
     else:
-        print("\n⚠️  Some migrations failed. Please check the errors above.")
+        print("\n️  Some migrations failed. Please check the errors above.")
 
     # Cleanup
     await engine.dispose()

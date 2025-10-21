@@ -80,7 +80,7 @@ class ScenarioLoader:
                 field_schema="keyword"
             )
 
-            logger.info(f"✅ Created collection: {collection_name}")
+            logger.info(f" Created collection: {collection_name}")
 
         except Exception as e:
             logger.error(f"Failed to create collection: {e}")
@@ -154,7 +154,7 @@ class ScenarioLoader:
 
             i += 1
 
-        logger.info(f"✅ Parsed {len(scenarios)} scenarios from catalog")
+        logger.info(f" Parsed {len(scenarios)} scenarios from catalog")
         return scenarios
 
     def load_scenarios_to_qdrant(self, scenarios: List[Dict]):
@@ -206,7 +206,7 @@ class ScenarioLoader:
             )
             logger.info(f"Uploaded batch {i//batch_size + 1}/{(len(points)-1)//batch_size + 1}")
 
-        logger.info(f"✅ Loaded {len(scenarios)} scenarios to Qdrant")
+        logger.info(f" Loaded {len(scenarios)} scenarios to Qdrant")
 
     def load_catalog(self, catalog_path: str):
         """
@@ -228,7 +228,7 @@ class ScenarioLoader:
 
         # 4. Verify
         collection_info = self.client.get_collection("business_scenarios")
-        logger.info(f"✅ Collection now has {collection_info.points_count} points")
+        logger.info(f" Collection now has {collection_info.points_count} points")
 
     def search_scenarios(self, query: str, top_k: int = 5) -> List[Dict]:
         """
@@ -280,7 +280,7 @@ def main():
     loader.load_catalog(catalog_path)
 
     # Test search
-    logger.info("\n🔍 Testing search...")
+    logger.info("\n Testing search...")
     results = loader.search_scenarios("How to conduct BIA interview?", top_k=3)
 
     for i, result in enumerate(results, 1):

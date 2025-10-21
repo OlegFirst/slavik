@@ -315,7 +315,7 @@ class EscalationManager:
         self.escalations[escalation.id] = escalation
         self.service_escalations[service_name].append(escalation.id)
 
-        logger.warning(f"🚨 ESCALATION CREATED: {service_name} - {reason.value}")
+        logger.warning(f" ESCALATION CREATED: {service_name} - {reason.value}")
 
         # Publish escalation.created event
         await self._publish_event('infrastructure.escalation.created', escalation)
@@ -348,7 +348,7 @@ class EscalationManager:
             return False
 
         # Build notification message
-        title = f"🚨 ESCALATION: {escalation.service_name} - {escalation.reason.value}"
+        title = f" ESCALATION: {escalation.service_name} - {escalation.reason.value}"
 
         message = f"""
 Service: {escalation.service_name}
@@ -440,7 +440,7 @@ Created: {escalation.created_at.isoformat()}
         # Publish recovery.stopped event
         await self._publish_event('infrastructure.recovery.stopped', escalation)
 
-        logger.warning(f"🛑 Auto-recovery STOPPED for {service_name} (escalation: {escalation_id})")
+        logger.warning(f" Auto-recovery STOPPED for {service_name} (escalation: {escalation_id})")
 
     def is_recovery_allowed(self, service_name: str) -> bool:
         """

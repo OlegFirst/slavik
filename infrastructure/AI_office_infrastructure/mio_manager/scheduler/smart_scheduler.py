@@ -117,7 +117,7 @@ class SmartScheduler:
             logger.warning("SmartScheduler already running")
             return
 
-        logger.info("🚀 Starting SmartScheduler...")
+        logger.info(" Starting SmartScheduler...")
 
         # Регистрация всех циклов
         self._register_health_checks()
@@ -131,7 +131,7 @@ class SmartScheduler:
         self.scheduler.start()
         self._is_running = True
 
-        logger.info("✅ SmartScheduler started with all cycles")
+        logger.info(" SmartScheduler started with all cycles")
 
         # Показать следующие запланированные задачи
         await self._print_schedule()
@@ -164,7 +164,7 @@ class SmartScheduler:
             max_instances=1,
             coalesce=True
         )
-        logger.info("✅ Registered: Health Check (every 60s)")
+        logger.info(" Registered: Health Check (every 60s)")
 
     async def _health_check_all(self):
         """
@@ -179,7 +179,7 @@ class SmartScheduler:
 
         Если критичный сервис down → эскалировать к мозгу.
         """
-        logger.debug("🏥 Running health checks...")
+        logger.debug(" Running health checks...")
 
         self.stats['health_checks'] += 1
         self.stats['last_health_check'] = datetime.utcnow().isoformat()
@@ -202,25 +202,25 @@ class SmartScheduler:
             predictive_health = await self.predictive.health_check()
             health_results['predictive'] = predictive_health
             if predictive_health.get('status') != 'healthy':
-                logger.warning("⚠️  Predictive Service unhealthy")
+                logger.warning("️  Predictive Service unhealthy")
 
             # 3. optimizer
             optimizer_health = await self.optimizer.health_check()
             health_results['optimizer'] = optimizer_health
             if optimizer_health.get('status') != 'healthy':
-                logger.warning("⚠️  Optimizer Service unhealthy")
+                logger.warning("️  Optimizer Service unhealthy")
 
             # 4. coordination_center
             coordinator_health = await self.coordinator.health_check()
             health_results['coordination_center'] = coordinator_health
             if coordinator_health.get('status') != 'healthy':
-                logger.warning("⚠️  Coordination Center unhealthy")
+                logger.warning("️  Coordination Center unhealthy")
 
             # 5. compliance_monitoring (КРИТИЧНО для специалиста!)
             compliance_health = await self.compliance.health_check()
             health_results['compliance_monitoring'] = compliance_health
             if compliance_health.get('status') != 'healthy':
-                logger.warning("⚠️  Compliance Monitoring unhealthy")
+                logger.warning("️  Compliance Monitoring unhealthy")
                 # Compliance - критичный для специалиста, но не блокирует систему
                 critical_failures.append({
                     'service': 'compliance_monitoring',
@@ -236,7 +236,7 @@ class SmartScheduler:
                 'status': 'healthy' if ai_event_health else 'unhealthy'
             }
             if not ai_event_health:
-                logger.warning("⚠️  AI Event Manager unhealthy")
+                logger.warning("️  AI Event Manager unhealthy")
 
             # 7. devops_agent (Infrastructure)
             devops_health = await self.devops_agent.health_check()
@@ -244,7 +244,7 @@ class SmartScheduler:
                 'status': 'healthy' if devops_health else 'unhealthy'
             }
             if not devops_health:
-                logger.warning("⚠️  DevOps Agent unhealthy")
+                logger.warning("️  DevOps Agent unhealthy")
 
             # 8. collective_intelligence (Privacy-preserving collaboration)
             if self.collective:
@@ -252,9 +252,9 @@ class SmartScheduler:
                     collective_health = await self.collective.health_check()
                     health_results['collective_intelligence'] = collective_health
                     if collective_health.get('status') != 'healthy':
-                        logger.warning("⚠️  Collective Intelligence unhealthy")
+                        logger.warning("️  Collective Intelligence unhealthy")
                 except Exception as e:
-                    logger.warning(f"⚠️  Collective Intelligence health check failed: {e}")
+                    logger.warning(f"️  Collective Intelligence health check failed: {e}")
                     health_results['collective_intelligence'] = {
                         'status': 'unknown',
                         'error': str(e)
@@ -265,7 +265,7 @@ class SmartScheduler:
                 await self._escalate_critical_failure(critical_failures, health_results)
 
         except Exception as e:
-            logger.error(f"❌ Health check failed: {e}")
+            logger.error(f" Health check failed: {e}")
 
     async def _escalate_critical_failure(
         self,
@@ -279,13 +279,13 @@ class SmartScheduler:
         Парадокс: если мозг down, мы не можем эскалировать к мозгу :)
         Решение: логируем локально, пытаемся переподключиться.
         """
-        logger.error(f"🚨 CRITICAL FAILURE DETECTED: {critical_failures}")
+        logger.error(f" CRITICAL FAILURE DETECTED: {critical_failures}")
 
         # Если мозг down - не можем эскалировать
         brain_down = any(f['service'] == 'workflow_intelligence' for f in critical_failures)
 
         if brain_down:
-            logger.error("⚠️  BRAIN IS DOWN - Cannot escalate. Logging locally.")
+            logger.error("️  BRAIN IS DOWN - Cannot escalate. Logging locally.")
             # TODO: Implement local fallback (save to DB, retry later)
             return
 
@@ -309,12 +309,12 @@ class SmartScheduler:
                     },
                     priority='critical'
                 )
-                logger.info("✅ Critical failure observation published to EventBus")
+                logger.info(" Critical failure observation published to EventBus")
             else:
                 logger.warning("EventBus not available - cannot publish critical failure observation")
 
         except Exception as e:
-            logger.error(f"❌ Failed to publish critical failure observation: {e}")
+            logger.error(f" Failed to publish critical failure observation: {e}")
 
     # ========================================================================
     # ЦИКЛ: METRICS OBSERVATION (Phase 2.1 - MIO EYES)
@@ -331,7 +331,7 @@ class SmartScheduler:
                 max_instances=1,
                 coalesce=True
             )
-            logger.info("✅ Registered: Metrics Coverage Observer (every 5 min)")
+            logger.info(" Registered: Metrics Coverage Observer (every 5 min)")
 
         if self.metrics_health_checker:
             self.scheduler.add_job(
@@ -342,7 +342,7 @@ class SmartScheduler:
                 max_instances=1,
                 coalesce=True
             )
-            logger.info("✅ Registered: Metrics Health Checker (every 1 min)")
+            logger.info(" Registered: Metrics Health Checker (every 1 min)")
 
     async def _observe_metrics_coverage(self):
         """
@@ -353,7 +353,7 @@ class SmartScheduler:
         - Публикует observations в EventBus
         - НЕ принимает решений, НЕ командует!
         """
-        logger.debug("👀 МиО observing metrics coverage...")
+        logger.debug(" МиО observing metrics coverage...")
 
         try:
             # Observe coverage
@@ -363,13 +363,13 @@ class SmartScheduler:
             await self.metrics_coverage_observer.publish_observation(observation)
 
             logger.debug(
-                f"✅ Metrics coverage observation published: "
+                f" Metrics coverage observation published: "
                 f"{observation.coverage_percentage:.1f}% coverage, "
                 f"{len(observation.missing_services)} missing"
             )
 
         except Exception as e:
-            logger.error(f"❌ Metrics coverage observation failed: {e}")
+            logger.error(f" Metrics coverage observation failed: {e}")
 
     async def _check_metrics_health(self):
         """
@@ -381,7 +381,7 @@ class SmartScheduler:
         - Публикует observations в EventBus
         - НЕ принимает решений, НЕ командует!
         """
-        logger.debug("👀 МиО checking metrics health...")
+        logger.debug(" МиО checking metrics health...")
 
         try:
             # Check health
@@ -391,12 +391,12 @@ class SmartScheduler:
             await self.metrics_health_checker.publish_health_observation(health)
 
             logger.debug(
-                f"✅ Metrics health observation published: "
+                f" Metrics health observation published: "
                 f"{health.healthy_count}/{health.total_services} healthy"
             )
 
         except Exception as e:
-            logger.error(f"❌ Metrics health check failed: {e}")
+            logger.error(f" Metrics health check failed: {e}")
 
     # ========================================================================
     # ЦИКЛ: DAILY DEEP ANALYSIS (03:00 AM)
@@ -446,7 +446,7 @@ class SmartScheduler:
             )
 
         coord_msg = ", 09:00 AM coordination" if self.coordinator else ""
-        logger.info(f"✅ Registered: Daily cycles (03:00 AM analysis, 06:00 AM report, 08:00 AM predictive{coord_msg})")
+        logger.info(f" Registered: Daily cycles (03:00 AM analysis, 06:00 AM report, 08:00 AM predictive{coord_msg})")
 
     async def _daily_deep_analysis(self):
         """
@@ -461,40 +461,40 @@ class SmartScheduler:
         4. Генерация инсайтов
         5. Сохранение результатов для отчета (06:00 AM)
         """
-        logger.info("🔍 Starting DAILY DEEP ANALYSIS (03:00 AM)")
+        logger.info(" Starting DAILY DEEP ANALYSIS (03:00 AM)")
 
         self.stats['daily_analyses'] += 1
         self.stats['last_daily_analysis'] = datetime.utcnow().isoformat()
 
         try:
             # 1. Собрать метрики за 24ч
-            logger.info("📊 Collecting 24h metrics...")
+            logger.info(" Collecting 24h metrics...")
             system_metrics = await self._collect_system_metrics(timeframe='24h')
 
             # 2. Глубокий анализ через optimizer
-            logger.info("🔬 Running optimizer analysis...")
+            logger.info(" Running optimizer analysis...")
             optimizer_analysis = await self.optimizer.analyze_system_performance(
                 system_metrics=system_metrics,
                 timeframe='24h'
             )
 
             # 3. Проактивные рекомендации через predictive
-            logger.info("🔮 Getting proactive recommendations...")
+            logger.info(" Getting proactive recommendations...")
             predictive_recommendations = await self.predictive.get_proactive_recommendations(
                 system_metrics=system_metrics,
                 timeframe='1h'  # Предсказания на ближайший час
             )
 
             # 4. Собрать compliance статус (КРИТИЧНО для специалиста!)
-            logger.info("📋 Collecting compliance status...")
+            logger.info(" Collecting compliance status...")
             compliance_status = await self.compliance.get_compliance_status()
 
             # 5. АВТОМАТИЗАЦИЯ НАСТРОЙКИ МиО (ПРЯМАЯ ОБЯЗАННОСТЬ!)
-            logger.info("🔧 Setting up monitoring automation...")
+            logger.info(" Setting up monitoring automation...")
             monitoring_setup = await self.toolkit.setup_monitoring()
-            logger.info(f"   ✅ Prometheus config: {monitoring_setup.get('prometheus_config')}")
-            logger.info(f"   ✅ Grafana dashboard: {monitoring_setup.get('grafana_dashboard')}")
-            logger.info(f"   📊 Coverage: {monitoring_setup.get('coverage_percentage', 0):.1f}%")
+            logger.info(f"    Prometheus config: {monitoring_setup.get('prometheus_config')}")
+            logger.info(f"    Grafana dashboard: {monitoring_setup.get('grafana_dashboard')}")
+            logger.info(f"    Coverage: {monitoring_setup.get('coverage_percentage', 0):.1f}%")
 
             # 6. Генерация инсайтов
             insights = self._generate_daily_insights(
@@ -515,13 +515,13 @@ class SmartScheduler:
             }
 
             logger.info(
-                f"✅ Daily deep analysis completed: "
+                f" Daily deep analysis completed: "
                 f"health_score={optimizer_analysis.get('overall_health_score', 0):.2f}, "
                 f"insights={len(insights)}"
             )
 
         except Exception as e:
-            logger.error(f"❌ Daily deep analysis failed: {e}")
+            logger.error(f" Daily deep analysis failed: {e}")
             self._daily_analysis_cache = {
                 'analysis_date': datetime.utcnow().isoformat(),
                 'error': str(e)
@@ -533,7 +533,7 @@ class SmartScheduler:
 
         Отправляет результаты анализа из 03:00 AM.
         """
-        logger.info("📊 Sending DAILY REPORT to brain (06:00 AM)")
+        logger.info(" Sending DAILY REPORT to brain (06:00 AM)")
 
         try:
             # Проверить, есть ли результаты анализа
@@ -579,11 +579,11 @@ class SmartScheduler:
             )
 
             logger.info(
-                f"✅ Daily report published to brain: {result.get('report_id')}"
+                f" Daily report published to brain: {result.get('report_id')}"
             )
 
         except Exception as e:
-            logger.error(f"❌ Failed to send daily report: {e}")
+            logger.error(f" Failed to send daily report: {e}")
 
     async def _daily_predictive_recommendations(self):
         """
@@ -595,7 +595,7 @@ class SmartScheduler:
         - Resource preparation suggestions
         - Expert booking recommendations
         """
-        logger.info("🔮 Generating DAILY PREDICTIVE RECOMMENDATIONS (08:00 AM)")
+        logger.info(" Generating DAILY PREDICTIVE RECOMMENDATIONS (08:00 AM)")
 
         try:
             # Trigger Predictive Service daily recommendations
@@ -604,7 +604,7 @@ class SmartScheduler:
             )
 
             logger.info(
-                f"✅ Predictive recommendations: {recommendations.get('organizations_processed', 0)} orgs, "
+                f" Predictive recommendations: {recommendations.get('organizations_processed', 0)} orgs, "
                 f"{recommendations.get('total_recommendations', 0)} recommendations, "
                 f"{recommendations.get('high_priority_count', 0)} high priority"
             )
@@ -622,7 +622,7 @@ class SmartScheduler:
             }
 
         except Exception as e:
-            logger.error(f"❌ Daily predictive recommendations failed: {e}")
+            logger.error(f" Daily predictive recommendations failed: {e}")
             self._daily_predictive_cache = {
                 'generated_at': datetime.utcnow().isoformat(),
                 'error': str(e)
@@ -644,7 +644,7 @@ class SmartScheduler:
             coalesce=True
         )
 
-        logger.info("✅ Registered: Hourly DevOps Continuous Monitoring")
+        logger.info(" Registered: Hourly DevOps Continuous Monitoring")
 
     def _register_weekly_cycles(self):
         """Регистрация еженедельных циклов."""
@@ -730,7 +730,7 @@ class SmartScheduler:
         )
 
         collective_msg = ", 05:00 AM collective" if self.collective else ""
-        logger.info(f"✅ Registered: Weekly cycles (Monday 02:00-08:00 AM: analysis, events{collective_msg}, community, expertise, report; Sunday 02:00 AM: model retraining)")
+        logger.info(f" Registered: Weekly cycles (Monday 02:00-08:00 AM: analysis, events{collective_msg}, community, expertise, report; Sunday 02:00 AM: model retraining)")
 
     async def _weekly_focus_analysis(self):
         """
@@ -747,7 +747,7 @@ class SmartScheduler:
         - collective (коллектив)
         - community_intelligence (сообщество)
         """
-        logger.info("🔍 Starting WEEKLY FOCUS ANALYSIS (Monday 02:00 AM)")
+        logger.info(" Starting WEEKLY FOCUS ANALYSIS (Monday 02:00 AM)")
 
         self.stats['weekly_analyses'] += 1
         self.stats['last_weekly_analysis'] = datetime.utcnow().isoformat()
@@ -766,7 +766,7 @@ class SmartScheduler:
 
         try:
             for component in components_to_analyze:
-                logger.info(f"📊 Analyzing component: {component}")
+                logger.info(f" Analyzing component: {component}")
 
                 # Собрать метрики конкретного компонента за неделю
                 component_metrics = await self._collect_component_metrics(
@@ -794,7 +794,7 @@ class SmartScheduler:
                 }
 
                 logger.info(
-                    f"✅ {component}: "
+                    f" {component}: "
                     f"recommendations={len(analysis)}, "
                     f"risk={incident_prediction.get('risk_level', 'unknown')}"
                 )
@@ -806,10 +806,10 @@ class SmartScheduler:
                 'overall_insights': self._generate_weekly_insights(component_analyses)
             }
 
-            logger.info(f"✅ Weekly focus analysis completed for {len(component_analyses)} components")
+            logger.info(f" Weekly focus analysis completed for {len(component_analyses)} components")
 
         except Exception as e:
-            logger.error(f"❌ Weekly focus analysis failed: {e}")
+            logger.error(f" Weekly focus analysis failed: {e}")
             self._weekly_analysis_cache = {
                 'analysis_date': datetime.utcnow().isoformat(),
                 'error': str(e)
@@ -830,13 +830,13 @@ class SmartScheduler:
         - Export metrics to Prometheus
         - Alert on critical issues
         """
-        logger.info("🔍 HOURLY DEVOPS MONITORING")
+        logger.info(" HOURLY DEVOPS MONITORING")
 
         try:
             # Quick scan (events only for performance)
             scan_result = await self.devops_agent.trigger_scan(scan_type="events")
 
-            logger.info(f"✅ DevOps hourly scan: {scan_result.get('status')}")
+            logger.info(f" DevOps hourly scan: {scan_result.get('status')}")
 
             # Get event metrics
             event_data = scan_result.get('result', {}).get('scan_results', {}).get('events', {})
@@ -845,11 +845,11 @@ class SmartScheduler:
             total_gaps = event_data.get('gaps_found', 0)
 
             # Export metrics to Prometheus (placeholder - будет реализовано в следующем шаге)
-            logger.info(f"📊 Metrics: {total_gaps} gaps ({critical_gaps} critical)")
+            logger.info(f" Metrics: {total_gaps} gaps ({critical_gaps} critical)")
 
             # Alert on critical issues
             if critical_gaps > 0:
-                logger.warning(f"⚠️ Critical event gaps detected: {critical_gaps}")
+                logger.warning(f"️ Critical event gaps detected: {critical_gaps}")
 
                 # Publish observation to EventBus (choreography!)
                 if self.eventbus:
@@ -866,10 +866,10 @@ class SmartScheduler:
                         },
                         priority='high'
                     )
-                    logger.info("📡 Observation published to EventBus")
+                    logger.info(" Observation published to EventBus")
 
         except Exception as e:
-            logger.error(f"❌ Hourly DevOps monitoring failed: {e}")
+            logger.error(f" Hourly DevOps monitoring failed: {e}")
 
     # ========================================================================
     # ЦИКЛ: WEEKLY DEVOPS DEEP SCAN (Monday 03:00 AM)
@@ -886,13 +886,13 @@ class SmartScheduler:
         - Port conflicts
         - Infrastructure drift
         """
-        logger.info("🤖 WEEKLY DEVOPS DEEP SCAN (Monday 03:00 AM)")
+        logger.info(" WEEKLY DEVOPS DEEP SCAN (Monday 03:00 AM)")
 
         try:
             # 1. Триггерим полное сканирование
             scan_result = await self.devops_agent.trigger_scan(scan_type="full")
 
-            logger.info(f"✅ DevOps scan completed: {scan_result.get('status')}")
+            logger.info(f" DevOps scan completed: {scan_result.get('status')}")
 
             # 2. Получаем последний отчёт
             latest_report = await self.devops_agent.get_latest_report()
@@ -908,10 +908,10 @@ class SmartScheduler:
                 }
             )
 
-            logger.info("✅ DevOps report sent to мозг")
+            logger.info(" DevOps report sent to мозг")
 
         except Exception as e:
-            logger.error(f"❌ DevOps Deep Scan failed: {e}")
+            logger.error(f" DevOps Deep Scan failed: {e}")
 
     async def _weekly_event_intelligence_analysis(self):
         """
@@ -919,21 +919,21 @@ class SmartScheduler:
 
         Получает рекомендации и статистику обучения от AI Event Manager.
         """
-        logger.info("🔍 WEEKLY EVENT INTELLIGENCE ANALYSIS (Monday 04:00 AM)")
+        logger.info(" WEEKLY EVENT INTELLIGENCE ANALYSIS (Monday 04:00 AM)")
 
         try:
             # 1. Получить рекомендации по событиям
-            logger.info("📡 Getting event recommendations...")
+            logger.info(" Getting event recommendations...")
             recommendations = await self.ai_event_manager.get_recommendations(
                 scope='all'
             )
 
             # 2. Получить статистику обучения
-            logger.info("📊 Getting learning stats...")
+            logger.info(" Getting learning stats...")
             learning_stats = await self.ai_event_manager.get_learning_stats()
 
             # 3. Получить architecture insights
-            logger.info("🏗️  Getting architecture insights...")
+            logger.info("️  Getting architecture insights...")
             architecture_insights = await self.ai_event_manager.get_architecture_insights(
                 timeframe='7d'
             )
@@ -961,13 +961,13 @@ class SmartScheduler:
                 )
 
             logger.info(
-                f"✅ Event intelligence analysis completed: "
+                f" Event intelligence analysis completed: "
                 f"recommendations={len(event_intelligence_data['recommendations'])}, "
                 f"patterns_learned={event_intelligence_data['learning_stats'].get('patterns_learned', 0)}"
             )
 
         except Exception as e:
-            logger.error(f"❌ Event intelligence analysis failed: {e}")
+            logger.error(f" Event intelligence analysis failed: {e}")
             if not hasattr(self, '_weekly_analysis_cache'):
                 self._weekly_analysis_cache = {}
             self._weekly_analysis_cache['event_intelligence'] = {
@@ -1052,7 +1052,7 @@ class SmartScheduler:
         - Если accuracy улучшилась → deploy new model
         - Если accuracy ухудшилась → rollback to previous version
         """
-        logger.info("🤖 WEEKLY ML MODEL RETRAINING (Sunday 02:00 AM)")
+        logger.info(" WEEKLY ML MODEL RETRAINING (Sunday 02:00 AM)")
 
         try:
             # Trigger model retraining through Predictive Service
@@ -1064,7 +1064,7 @@ class SmartScheduler:
             samples_trained = retraining_result.get('samples_trained', 0)
 
             logger.info(
-                f"✅ Model retraining completed: "
+                f" Model retraining completed: "
                 f"accuracy {accuracy_before:.2%} → {accuracy_after:.2%} "
                 f"(improvement: {improvement:.2%}), {samples_trained} samples"
             )
@@ -1086,7 +1086,7 @@ class SmartScheduler:
             # Publish observation if accuracy degraded
             if improvement < 0:
                 logger.warning(
-                    f"⚠️ Model accuracy degraded by {abs(improvement):.2%}, "
+                    f"️ Model accuracy degraded by {abs(improvement):.2%}, "
                     "rolled back to previous version"
                 )
 
@@ -1107,7 +1107,7 @@ class SmartScheduler:
                     )
 
         except Exception as e:
-            logger.error(f"❌ Weekly model retraining failed: {e}")
+            logger.error(f" Weekly model retraining failed: {e}")
             self._weekly_model_training_cache = {
                 'trained_at': datetime.utcnow().isoformat(),
                 'error': str(e)
@@ -1115,7 +1115,7 @@ class SmartScheduler:
 
     async def _weekly_report_to_brain(self):
         """Отправить недельный отчет к мозгу (Monday 08:00 AM)."""
-        logger.info("📊 Sending WEEKLY REPORT to brain (Monday 08:00 AM)")
+        logger.info(" Sending WEEKLY REPORT to brain (Monday 08:00 AM)")
 
         try:
             if not hasattr(self, '_weekly_analysis_cache'):
@@ -1139,10 +1139,10 @@ class SmartScheduler:
                 insights=analysis.get('overall_insights', [])
             )
 
-            logger.info(f"✅ Weekly report published to brain: {result.get('report_id')}")
+            logger.info(f" Weekly report published to brain: {result.get('report_id')}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to send weekly report: {e}")
+            logger.error(f" Failed to send weekly report: {e}")
 
     # ========================================================================
     # ЦИКЛ: MONTHLY REPORT (1st day 09:00 AM)
@@ -1159,7 +1159,7 @@ class SmartScheduler:
             coalesce=True
         )
 
-        logger.info("✅ Registered: Monthly report (1st day 09:00 AM)")
+        logger.info(" Registered: Monthly report (1st day 09:00 AM)")
 
     async def _monthly_report_to_brain(self):
         """
@@ -1167,7 +1167,7 @@ class SmartScheduler:
 
         Aggregated insights за месяц.
         """
-        logger.info("📊 Sending MONTHLY REPORT to brain (1st day 09:00 AM)")
+        logger.info(" Sending MONTHLY REPORT to brain (1st day 09:00 AM)")
 
         self.stats['monthly_reports'] += 1
 
@@ -1195,10 +1195,10 @@ class SmartScheduler:
                 insights=monthly_trends.get('insights', [])
             )
 
-            logger.info(f"✅ Monthly report published to brain: {result.get('report_id')}")
+            logger.info(f" Monthly report published to brain: {result.get('report_id')}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to send monthly report: {e}")
+            logger.error(f" Failed to send monthly report: {e}")
 
     # ========================================================================
     # HELPER METHODS - Data Collection
@@ -1414,7 +1414,7 @@ class SmartScheduler:
 
         Identifies organizations that may need help and creates collective agents
         """
-        logger.info("🔍 WEEKLY COLLECTIVE INTELLIGENCE STUCK DETECTION")
+        logger.info(" WEEKLY COLLECTIVE INTELLIGENCE STUCK DETECTION")
 
         try:
             if not self.collective:
@@ -1427,7 +1427,7 @@ class SmartScheduler:
                 workflow_input={"scan_type": "weekly_full"}
             )
 
-            logger.info(f"✅ Collective stuck detection complete: {result.get('stuck_orgs_found', 0)} stuck organizations")
+            logger.info(f" Collective stuck detection complete: {result.get('stuck_orgs_found', 0)} stuck organizations")
 
             # Publish observation if organizations need help
             stuck_count = result.get('stuck_orgs_found', 0)
@@ -1446,7 +1446,7 @@ class SmartScheduler:
                     )
 
         except Exception as e:
-            logger.error(f"❌ Collective stuck detection failed: {e}")
+            logger.error(f" Collective stuck detection failed: {e}")
 
     async def _daily_coordination_health(self):
         """
@@ -1454,7 +1454,7 @@ class SmartScheduler:
 
         Monitors multi-service coordination and conflict resolution
         """
-        logger.info("🏥 DAILY COORDINATION CENTER HEALTH CHECK")
+        logger.info(" DAILY COORDINATION CENTER HEALTH CHECK")
 
         try:
             if not self.coordinator:
@@ -1467,7 +1467,7 @@ class SmartScheduler:
             pending_conflicts = health.get('pending_conflicts', 0)
             coordination_failures = health.get('coordination_failures_24h', 0)
 
-            logger.info(f"✅ Coordination health: {pending_conflicts} pending conflicts, {coordination_failures} failures")
+            logger.info(f" Coordination health: {pending_conflicts} pending conflicts, {coordination_failures} failures")
 
             # Publish observation on high conflict rate
             if pending_conflicts > 10:
@@ -1486,7 +1486,7 @@ class SmartScheduler:
                     )
 
         except Exception as e:
-            logger.error(f"❌ Coordination health check failed: {e}")
+            logger.error(f" Coordination health check failed: {e}")
 
     async def _weekly_community_insights(self):
         """
@@ -1494,7 +1494,7 @@ class SmartScheduler:
 
         Analyzes community contributions and generates insights
         """
-        logger.info("💡 WEEKLY COMMUNITY INTELLIGENCE INSIGHTS")
+        logger.info(" WEEKLY COMMUNITY INTELLIGENCE INSIGHTS")
 
         try:
             # Trigger community insights workflow
@@ -1506,10 +1506,10 @@ class SmartScheduler:
             insights_count = result.get('insights_generated', 0)
             top_contributors = result.get('top_contributors', [])
 
-            logger.info(f"✅ Community insights: {insights_count} insights, {len(top_contributors)} top contributors")
+            logger.info(f" Community insights: {insights_count} insights, {len(top_contributors)} top contributors")
 
         except Exception as e:
-            logger.error(f"❌ Community insights generation failed: {e}")
+            logger.error(f" Community insights generation failed: {e}")
 
     async def _weekly_expertise_analysis(self):
         """
@@ -1517,7 +1517,7 @@ class SmartScheduler:
 
         Reviews tactical assistant performance and recommendations quality
         """
-        logger.info("🎓 WEEKLY EXPERTISE CENTER ANALYSIS")
+        logger.info(" WEEKLY EXPERTISE CENTER ANALYSIS")
 
         try:
             # Trigger expertise analysis workflow
@@ -1529,7 +1529,7 @@ class SmartScheduler:
             assistants_count = result.get('assistants_analyzed', 0)
             recommendations_quality = result.get('avg_quality_score', 0)
 
-            logger.info(f"✅ Expertise analysis: {assistants_count} assistants, quality: {recommendations_quality:.2f}")
+            logger.info(f" Expertise analysis: {assistants_count} assistants, quality: {recommendations_quality:.2f}")
 
             # Publish observation on low quality
             if recommendations_quality < 0.7:
@@ -1548,7 +1548,7 @@ class SmartScheduler:
                     )
 
         except Exception as e:
-            logger.error(f"❌ Expertise analysis failed: {e}")
+            logger.error(f" Expertise analysis failed: {e}")
 
     # ========================================================================
     # UTILITY METHODS
@@ -1557,7 +1557,7 @@ class SmartScheduler:
     async def _print_schedule(self):
         """Показать расписание всех задач."""
         jobs = self.scheduler.get_jobs()
-        logger.info(f"📅 Scheduled {len(jobs)} jobs:")
+        logger.info(f" Scheduled {len(jobs)} jobs:")
         for job in jobs:
             logger.info(f"  - {job.name} (next run: {job.next_run_time})")
 

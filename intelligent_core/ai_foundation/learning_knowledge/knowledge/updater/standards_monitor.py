@@ -1,5 +1,5 @@
 """
-🔄 Standards Monitor - Auto-update Standards from External Sources
+ Standards Monitor - Auto-update Standards from External Sources
 
 Monitors external sources for updates to standards:
 - ISO RSS feeds
@@ -252,7 +252,7 @@ class StandardsMonitor:
         Returns:
             Summary of updates found
         """
-        logger.info("🔄 Starting standards update check cycle...")
+        logger.info(" Starting standards update check cycle...")
 
         all_updates = []
         summary = {
@@ -272,7 +272,7 @@ class StandardsMonitor:
                 summary["sources_checked"] += 1
                 summary["by_source"][source_name] = len(updates)
 
-                logger.info(f"✅ {source_name}: {len(updates)} updates found")
+                logger.info(f" {source_name}: {len(updates)} updates found")
 
             except Exception as e:
                 logger.error(f"Failed to check {source_name}: {e}", exc_info=True)
@@ -288,7 +288,7 @@ class StandardsMonitor:
         await self._log_check_results(summary)
 
         logger.info(
-            f"✅ Check cycle complete: {summary['updates_found']} updates "
+            f" Check cycle complete: {summary['updates_found']} updates "
             f"from {summary['sources_checked']} sources"
         )
 
@@ -411,7 +411,7 @@ async def schedule_standards_monitoring(monitor: StandardsMonitor):
     but can also run as a simple async loop for development.
     """
 
-    logger.info("📅 Starting scheduled standards monitoring...")
+    logger.info(" Starting scheduled standards monitoring...")
 
     # TODO: Integrate with Temporal
     # For now: simple loop

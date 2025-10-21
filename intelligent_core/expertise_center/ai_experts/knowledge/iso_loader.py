@@ -118,7 +118,7 @@ class ISO22301Loader:
         # Parse Clause 10
         clauses.extend(self._parse_clause_10(content))
 
-        logger.info(f"✅ Loaded {len(clauses)} ISO 22301 clauses")
+        logger.info(f" Loaded {len(clauses)} ISO 22301 clauses")
 
         return clauses
 

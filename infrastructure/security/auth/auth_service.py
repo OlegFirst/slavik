@@ -89,19 +89,19 @@ class UserInfo(BaseModel):
 async def lifespan(app: FastAPI):
     """Application lifecycle"""
     # Startup
-    logger.info("🚀 Starting Authentication Service...")
+    logger.info(" Starting Authentication Service...")
 
     # Initialize connections
     business_db.connect()
     await redis_manager.connect()
     await supabase_manager.connect()
 
-    logger.info("✅ All connections initialized")
+    logger.info(" All connections initialized")
 
     # Check database
     result = business_db.execute("SELECT COUNT(*) FROM public.organizations", commit=False)
     org_count = result[0][0] if result else 0
-    logger.info(f"📊 Organizations in database: {org_count}")
+    logger.info(f" Organizations in database: {org_count}")
 
     yield
 

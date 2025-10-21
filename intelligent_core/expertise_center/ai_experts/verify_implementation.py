@@ -8,7 +8,7 @@ Verifies that all components are properly implemented and importable.
 import sys
 from pathlib import Path
 
-def print_status(message, status="✅"):
+def print_status(message, status=""):
     """Print status message"""
     print(f"{status} {message}")
 
@@ -26,7 +26,7 @@ def verify_imports():
         print_status("Base: ExpertAgent")
     except ImportError as e:
         errors.append(f"ExpertAgent: {e}")
-        print_status(f"Base: ExpertAgent - {e}", "❌")
+        print_status(f"Base: ExpertAgent - {e}", "")
 
     # Specialists
     try:
@@ -34,21 +34,21 @@ def verify_imports():
         print_status("Specialists: BCMAdvisor")
     except ImportError as e:
         errors.append(f"BCMAdvisor: {e}")
-        print_status(f"Specialists: BCMAdvisor - {e}", "❌")
+        print_status(f"Specialists: BCMAdvisor - {e}", "")
 
     try:
         from ai_experts.specialists.compliance_auditor import ComplianceAuditor
         print_status("Specialists: ComplianceAuditor")
     except ImportError as e:
         errors.append(f"ComplianceAuditor: {e}")
-        print_status(f"Specialists: ComplianceAuditor - {e}", "❌")
+        print_status(f"Specialists: ComplianceAuditor - {e}", "")
 
     try:
         from ai_experts.specialists.strategic_planner import StrategicPlanner
         print_status("Specialists: StrategicPlanner")
     except ImportError as e:
         errors.append(f"StrategicPlanner: {e}")
-        print_status(f"Specialists: StrategicPlanner - {e}", "❌")
+        print_status(f"Specialists: StrategicPlanner - {e}", "")
 
     # Tools
     try:
@@ -61,7 +61,7 @@ def verify_imports():
         print_status("Tools: All 11 tools imported")
     except ImportError as e:
         errors.append(f"Tools: {e}")
-        print_status(f"Tools: {e}", "❌")
+        print_status(f"Tools: {e}", "")
 
     # RAG
     try:
@@ -71,7 +71,7 @@ def verify_imports():
         print_status("RAG: All 4 modules imported")
     except ImportError as e:
         errors.append(f"RAG: {e}")
-        print_status(f"RAG: {e}", "❌")
+        print_status(f"RAG: {e}", "")
 
     # ML
     try:
@@ -81,7 +81,7 @@ def verify_imports():
         print_status("ML: All 3 modules imported")
     except ImportError as e:
         errors.append(f"ML: {e}")
-        print_status(f"ML: {e}", "❌")
+        print_status(f"ML: {e}", "")
 
     # Learning
     try:
@@ -91,7 +91,7 @@ def verify_imports():
         print_status("Learning: All 3 modules imported")
     except ImportError as e:
         errors.append(f"Learning: {e}")
-        print_status(f"Learning: {e}", "❌")
+        print_status(f"Learning: {e}", "")
 
     # API
     try:
@@ -99,7 +99,7 @@ def verify_imports():
         print_status("API: Routes imported")
     except ImportError as e:
         errors.append(f"API: {e}")
-        print_status(f"API: {e}", "❌")
+        print_status(f"API: {e}", "")
 
     return errors
 
@@ -150,7 +150,7 @@ def verify_file_structure():
             print_status(f"{file_path}")
         else:
             missing.append(file_path)
-            print_status(f"{file_path} - NOT FOUND", "❌")
+            print_status(f"{file_path} - NOT FOUND", "")
 
     return missing
 
@@ -234,19 +234,19 @@ def main():
     print("="*60 + "\n")
 
     if not missing_files and not import_errors:
-        print("✅ ALL CHECKS PASSED!")
-        print("✅ Implementation is 100% complete")
-        print("✅ All files present")
-        print("✅ All imports working")
+        print(" ALL CHECKS PASSED!")
+        print(" Implementation is 100% complete")
+        print(" All files present")
+        print(" All imports working")
         return 0
     else:
         if missing_files:
-            print(f"❌ Missing {len(missing_files)} files:")
+            print(f" Missing {len(missing_files)} files:")
             for f in missing_files:
                 print(f"   - {f}")
 
         if import_errors:
-            print(f"❌ {len(import_errors)} import errors:")
+            print(f" {len(import_errors)} import errors:")
             for e in import_errors:
                 print(f"   - {e}")
 

@@ -64,10 +64,10 @@ class DeploymentManager:
 
                 if success:
                     deployed.append(service_name)
-                    logger.info(f"✓ {service_name} deployed successfully")
+                    logger.info(f" {service_name} deployed successfully")
                 else:
                     failed.append(service_name)
-                    logger.error(f"✗ {service_name} deployment failed")
+                    logger.error(f" {service_name} deployment failed")
 
             except Exception as e:
                 logger.error(f"Error deploying {service_name}: {e}")

@@ -75,7 +75,7 @@ async def test_health_monitor_publishes_events():
     assert first_event.source == 'health_monitor'
     assert first_event.tenant_id == 'system'
 
-    print("✅ Test PASSED: Health Monitor successfully publishes events to EventBus")
+    print(" Test PASSED: Health Monitor successfully publishes events to EventBus")
 
 
 @pytest.mark.asyncio
@@ -141,7 +141,7 @@ async def test_health_monitor_status_change_detection():
     assert received_events[1].data['status'] == 'unhealthy'
     assert received_events[2].data['status'] == 'healthy'
 
-    print("✅ Test PASSED: Health Monitor only publishes events on status changes")
+    print(" Test PASSED: Health Monitor only publishes events on status changes")
 
 
 @pytest.mark.asyncio
@@ -179,7 +179,7 @@ async def test_health_monitor_without_eventbus():
     assert 'test_service_3' in results
     assert results['test_service_3'].status == HealthStatus.HEALTHY
 
-    print("✅ Test PASSED: Health Monitor works without EventBus (backward compatible)")
+    print(" Test PASSED: Health Monitor works without EventBus (backward compatible)")
 
 
 if __name__ == '__main__':
@@ -193,4 +193,4 @@ if __name__ == '__main__':
     asyncio.run(test_health_monitor_without_eventbus())
     print()
     print("=" * 60)
-    print("✅ All tests PASSED!")
+    print(" All tests PASSED!")

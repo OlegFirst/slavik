@@ -151,9 +151,9 @@ async def lifespan(app: FastAPI):
     try:
         db_manager = init_database(
             database_url=settings.DATABASE_URL,
-            pool_size=20,           # ✅ 20 connections
-            max_overflow=10,        # ✅ +10 overflow
-            pool_recycle=3600       # ✅ Recycle every hour
+            pool_size=20,           #  20 connections
+            max_overflow=10,        #  +10 overflow
+            pool_recycle=3600       #  Recycle every hour
         )
         logger.info("Database connection pool initialized (pool_size=20)")
 
@@ -177,11 +177,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -190,7 +190,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -200,7 +200,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("✅ Workflow Intelligence initialized (validation module)")
+        logger.info(" Workflow Intelligence initialized (validation module)")
     except Exception as e:
         logger.warning(f"Workflow Intelligence initialization failed: {e}")
 

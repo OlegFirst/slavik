@@ -99,7 +99,7 @@ class CodeChangeHandler(FileSystemEventHandler):
 
         # Add to pending changes with timestamp
         self.pending_changes[event.src_path] = time.time()
-        logger.info(f"📝 Detected change: {event.src_path}")
+        logger.info(f" Detected change: {event.src_path}")
 
     def on_created(self, event: FileSystemEvent):
         """Handle file creation events"""
@@ -110,7 +110,7 @@ class CodeChangeHandler(FileSystemEventHandler):
             return
 
         self.pending_changes[event.src_path] = time.time()
-        logger.info(f"✨ New file created: {event.src_path}")
+        logger.info(f" New file created: {event.src_path}")
 
     def process_pending_changes(self):
         """Process pending changes after debounce period"""
@@ -123,14 +123,14 @@ class CodeChangeHandler(FileSystemEventHandler):
                 del self.pending_changes[file_path]
 
         if files_to_process:
-            logger.info(f"🔄 Processing {len(files_to_process)} changed files...")
+            logger.info(f" Processing {len(files_to_process)} changed files...")
 
             for file_path in files_to_process:
                 self.analyze_file(file_path)
 
     def analyze_file(self, file_path: str):
         """Run analysis on a single file"""
-        logger.info(f"🔍 Analyzing: {file_path}")
+        logger.info(f" Analyzing: {file_path}")
 
         results = {
             'file': file_path,
@@ -144,7 +144,7 @@ class CodeChangeHandler(FileSystemEventHandler):
         # Generate tests
         if self.auto_generate_tests:
             try:
-                logger.info(f"🧪 Generating tests for: {file_path}")
+                logger.info(f" Generating tests for: {file_path}")
                 result = subprocess.run(
                     ['python', '-m', 'agent.test_generator', '--file', file_path],
                     cwd=self.project_root / 'infrastructure/tools/project-agent',
@@ -154,22 +154,22 @@ class CodeChangeHandler(FileSystemEventHandler):
                 )
 
                 if result.returncode == 0:
-                    logger.info(f"✅ Tests generated successfully")
+                    logger.info(f" Tests generated successfully")
                     results['tests_generated'] = True
                 else:
-                    logger.warning(f"⚠️  Test generation failed: {result.stderr}")
+                    logger.warning(f"️  Test generation failed: {result.stderr}")
                     results['errors'].append(f"Test generation: {result.stderr}")
             except subprocess.TimeoutExpired:
-                logger.error(f"❌ Test generation timeout for: {file_path}")
+                logger.error(f" Test generation timeout for: {file_path}")
                 results['errors'].append("Test generation timeout")
             except Exception as e:
-                logger.error(f"❌ Test generation error: {e}")
+                logger.error(f" Test generation error: {e}")
                 results['errors'].append(f"Test generation error: {e}")
 
         # Run security check
         if self.auto_run_security:
             try:
-                logger.info(f"🔒 Running security check for: {file_path}")
+                logger.info(f" Running security check for: {file_path}")
                 result = subprocess.run(
                     ['python', '-m', 'agent.security', '--file', file_path],
                     cwd=self.project_root / 'infrastructure/tools/project-agent',
@@ -179,19 +179,19 @@ class CodeChangeHandler(FileSystemEventHandler):
                 )
 
                 if result.returncode == 0:
-                    logger.info(f"✅ Security check passed")
+                    logger.info(f" Security check passed")
                     results['security_checked'] = True
                 else:
-                    logger.warning(f"⚠️  Security issues found: {result.stderr}")
+                    logger.warning(f"️  Security issues found: {result.stderr}")
                     results['errors'].append(f"Security: {result.stderr}")
             except Exception as e:
-                logger.error(f"❌ Security check error: {e}")
+                logger.error(f" Security check error: {e}")
                 results['errors'].append(f"Security error: {e}")
 
         # Run quality check
         if self.auto_run_quality:
             try:
-                logger.info(f"📊 Running quality check for: {file_path}")
+                logger.info(f" Running quality check for: {file_path}")
                 result = subprocess.run(
                     ['python', '-m', 'agent.quality', '--file', file_path],
                     cwd=self.project_root / 'infrastructure/tools/project-agent',
@@ -201,13 +201,13 @@ class CodeChangeHandler(FileSystemEventHandler):
                 )
 
                 if result.returncode == 0:
-                    logger.info(f"✅ Quality check passed")
+                    logger.info(f" Quality check passed")
                     results['quality_checked'] = True
                 else:
-                    logger.warning(f"⚠️  Quality issues found: {result.stderr}")
+                    logger.warning(f"️  Quality issues found: {result.stderr}")
                     results['errors'].append(f"Quality: {result.stderr}")
             except Exception as e:
-                logger.error(f"❌ Quality check error: {e}")
+                logger.error(f" Quality check error: {e}")
                 results['errors'].append(f"Quality error: {e}")
 
         # Log summary
@@ -216,11 +216,11 @@ class CodeChangeHandler(FileSystemEventHandler):
     def log_analysis_summary(self, results: Dict[str, Any]):
         """Log analysis summary"""
         logger.info("="*60)
-        logger.info(f"📋 Analysis Summary for: {results['file']}")
+        logger.info(f" Analysis Summary for: {results['file']}")
         logger.info(f"   Timestamp: {results['timestamp']}")
-        logger.info(f"   Tests Generated: {'✅' if results['tests_generated'] else '❌'}")
-        logger.info(f"   Security Checked: {'✅' if results['security_checked'] else '❌'}")
-        logger.info(f"   Quality Checked: {'✅' if results['quality_checked'] else '❌'}")
+        logger.info(f"   Tests Generated: {'' if results['tests_generated'] else ''}")
+        logger.info(f"   Security Checked: {'' if results['security_checked'] else ''}")
+        logger.info(f"   Quality Checked: {'' if results['quality_checked'] else ''}")
 
         if results['errors']:
             logger.warning(f"   Errors: {len(results['errors'])}")
@@ -272,12 +272,12 @@ class CodeWatcher:
     def start(self):
         """Start watching for code changes"""
         logger.info("="*60)
-        logger.info("🚀 Project Agent Code Watcher Starting...")
-        logger.info(f"📁 Project Root: {self.project_root}")
+        logger.info(" Project Agent Code Watcher Starting...")
+        logger.info(f" Project Root: {self.project_root}")
         logger.info(f"⏱️  Debounce: {self.config.get('debounce_seconds')}s")
-        logger.info(f"🧪 Auto Generate Tests: {self.config.get('auto_generate_tests')}")
-        logger.info(f"🔒 Auto Security Check: {self.config.get('auto_run_security')}")
-        logger.info(f"📊 Auto Quality Check: {self.config.get('auto_run_quality')}")
+        logger.info(f" Auto Generate Tests: {self.config.get('auto_generate_tests')}")
+        logger.info(f" Auto Security Check: {self.config.get('auto_run_security')}")
+        logger.info(f" Auto Quality Check: {self.config.get('auto_run_quality')}")
         logger.info("="*60)
 
         # Setup observers for watched directories
@@ -285,12 +285,12 @@ class CodeWatcher:
             dir_path = self.project_root / watch_dir
             if dir_path.exists():
                 self.observer.schedule(self.handler, str(dir_path), recursive=True)
-                logger.info(f"👁️  Watching: {dir_path}")
+                logger.info(f"️  Watching: {dir_path}")
             else:
-                logger.warning(f"⚠️  Directory not found: {dir_path}")
+                logger.warning(f"️  Directory not found: {dir_path}")
 
         self.observer.start()
-        logger.info("✅ Code watcher is running. Press Ctrl+C to stop.")
+        logger.info(" Code watcher is running. Press Ctrl+C to stop.")
 
         try:
             while True:
@@ -301,10 +301,10 @@ class CodeWatcher:
 
     def stop(self):
         """Stop watching"""
-        logger.info("🛑 Stopping code watcher...")
+        logger.info(" Stopping code watcher...")
         self.observer.stop()
         self.observer.join()
-        logger.info("✅ Code watcher stopped")
+        logger.info(" Code watcher stopped")
 
 
 def main():

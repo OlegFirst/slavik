@@ -112,9 +112,9 @@ class InfrastructureCoordinator:
             )
             if os.path.exists(policy_path):
                 initialize_policy_engine(policy_path)
-                logger.info(f"✅ Policy Engine initialized from {policy_path}")
+                logger.info(f" Policy Engine initialized from {policy_path}")
             else:
-                logger.warning(f"⚠️  Policy file not found: {policy_path} - using defaults")
+                logger.warning(f"️  Policy file not found: {policy_path} - using defaults")
                 initialize_policy_engine()  # Use defaults
 
             # Create Decision Center (central governance)
@@ -170,10 +170,10 @@ class InfrastructureCoordinator:
         # Step 0: Initialize Governance Layer (Phase 1.1)
         if self.enable_governance:
             logger.info("\nStep 0: Initializing Governance Layer (Phase 1.1)...")
-            logger.info("  ✅ Decision Center initialized")
-            logger.info("  ✅ Escalation Manager initialized")
-            logger.info("  ✅ Notification Service initialized")
-            logger.info("  ✅ Policy Engine loaded from YAML")
+            logger.info("   Decision Center initialized")
+            logger.info("   Escalation Manager initialized")
+            logger.info("   Notification Service initialized")
+            logger.info("   Policy Engine loaded from YAML")
 
             # Print policy summary
             from infrastructure.policy_engine import get_policy_engine
@@ -181,30 +181,30 @@ class InfrastructureCoordinator:
             if engine and hasattr(engine, 'policies') and engine.policies:
                 recovery_policies = engine.policies.get('recovery', {})
                 critical_services = recovery_policies.get('critical_services', {})
-                logger.info(f"  📋 Policies loaded for {len(critical_services)} critical services")
+                logger.info(f"   Policies loaded for {len(critical_services)} critical services")
             else:
-                logger.info("  📋 Using default policies")
+                logger.info("   Using default policies")
 
         # Step 1: Connect Health Monitor to EventBus
         logger.info("\nStep 1: Connecting Health Monitor to EventBus...")
         await self.health_monitor.connect_eventbus(self.eventbus)
-        logger.info("✅ Health Monitor connected to EventBus")
+        logger.info(" Health Monitor connected to EventBus")
 
         # Step 2: Register critical services for health monitoring
         logger.info("\nStep 2: Registering critical services...")
         await self._register_critical_services()
-        logger.info(f"✅ Registered {len(self.health_monitor.checks)} health checks")
+        logger.info(f" Registered {len(self.health_monitor.checks)} health checks")
 
         # Step 3: Register recovery strategies
         logger.info("\nStep 3: Registering recovery strategies...")
         await self._register_recovery_strategies()
-        logger.info(f"✅ Registered {len(self.auto_recovery.strategies)} recovery strategies")
+        logger.info(f" Registered {len(self.auto_recovery.strategies)} recovery strategies")
 
         # Step 3.1: Register escalation policies (Phase 1.1)
         if self.enable_governance:
             logger.info("\nStep 3.1: Registering escalation policies (Phase 1.1)...")
             await self._register_escalation_policies()
-            logger.info(f"✅ Registered {len(self.escalation_manager.policies)} escalation policies")
+            logger.info(f" Registered {len(self.escalation_manager.policies)} escalation policies")
 
         # Step 4: Start services
         logger.info("\nStep 4: Starting coordination services...")
@@ -219,16 +219,16 @@ class InfrastructureCoordinator:
         asyncio.create_task(self.resource_optimizer.start())
 
         logger.info("=" * 70)
-        logger.info("✅ Infrastructure Coordinator STARTED")
+        logger.info(" Infrastructure Coordinator STARTED")
         logger.info("=" * 70)
         logger.info("Services running:")
-        logger.info("  🏥 Health Monitor: Running (30 sec intervals)")
-        logger.info("  🔧 Auto-Recovery: Listening for health events (with Decision Center)")
-        logger.info("  📊 Resource Optimizer: Running (5 min intervals, with Decision Center)")
+        logger.info("   Health Monitor: Running (30 sec intervals)")
+        logger.info("   Auto-Recovery: Listening for health events (with Decision Center)")
+        logger.info("   Resource Optimizer: Running (5 min intervals, with Decision Center)")
         if self.enable_governance:
-            logger.info("  🎯 Decision Center: Active (Phase 1.1)")
-            logger.info("  🚨 Escalation Manager: Ready (Phase 1.1)")
-            logger.info("  📧 Notification Service: Ready (Phase 1.1)")
+            logger.info("   Decision Center: Active (Phase 1.1)")
+            logger.info("   Escalation Manager: Ready (Phase 1.1)")
+            logger.info("   Notification Service: Ready (Phase 1.1)")
         logger.info("=" * 70)
 
     async def _register_critical_services(self):
@@ -284,7 +284,7 @@ class InfrastructureCoordinator:
                 custom_checker=service.get('checker')
             )
             await self.health_monitor.register_check(check)
-            logger.info(f"  ✅ {service['name']} (interval: {service['interval']}s)")
+            logger.info(f"   {service['name']} (interval: {service['interval']}s)")
 
     async def _check_database(self, service_name: str, config: dict):
         """Custom database health check"""
@@ -352,7 +352,7 @@ class InfrastructureCoordinator:
 
         for strategy in strategies:
             await self.auto_recovery.register_strategy(strategy)
-            logger.info(f"  ✅ {strategy.service_name}: {strategy.strategy_type} "
+            logger.info(f"   {strategy.service_name}: {strategy.strategy_type} "
                        f"(max {strategy.max_attempts} attempts)")
 
     async def _register_escalation_policies(self):
@@ -426,7 +426,7 @@ class InfrastructureCoordinator:
 
         for policy in policies:
             self.escalation_manager.register_policy(policy)
-            logger.info(f"  ✅ {policy.service_name}: critical={policy.is_critical}, "
+            logger.info(f"   {policy.service_name}: critical={policy.is_critical}, "
                        f"max_attempts={policy.max_attempts}, "
                        f"timeout={policy.escalation_timeout_seconds}s")
 
@@ -439,7 +439,7 @@ class InfrastructureCoordinator:
         await self.resource_optimizer.stop()
         await self.eventbus.close()
 
-        logger.info("✅ Infrastructure Coordinator stopped")
+        logger.info(" Infrastructure Coordinator stopped")
 
     async def get_status(self):
         """Get status of all infrastructure services"""
@@ -483,7 +483,7 @@ async def main():
         await asyncio.sleep(300)
 
         # Show final status
-        logger.info("\n📊 Final Status:")
+        logger.info("\n Final Status:")
         status = await coordinator.get_status()
         logger.info(f"Health Monitor: {status['health_monitor']['checks_registered']} checks")
         logger.info(f"Auto-Recovery: {status['auto_recovery']['total_recoveries']} total recoveries")
@@ -493,7 +493,7 @@ async def main():
         logger.info("\n⏹️  Stopping (Ctrl+C pressed)...")
     finally:
         await coordinator.stop()
-        logger.info("\n✅ Infrastructure Coordinator demo completed\n")
+        logger.info("\n Infrastructure Coordinator demo completed\n")
 
 
 if __name__ == '__main__':

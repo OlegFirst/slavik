@@ -152,7 +152,7 @@ async def create_collective_agent(
             source_org_count=agent.source_org_count,
             problem_type=agent.problem_type,
             expires_at=agent.expires_at,
-            message=f"🤝 Collective Agent created from {agent.source_org_count} organizations' experiences"
+            message=f" Collective Agent created from {agent.source_org_count} organizations' experiences"
         )
 
     except InsufficientDataError as e:

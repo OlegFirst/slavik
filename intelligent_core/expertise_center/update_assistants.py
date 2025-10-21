@@ -114,7 +114,7 @@ def process_file(filepath: Path):
     # Extract class name
     class_match = re.search(r'class (\w+)\(', content)
     if not class_match:
-        print(f"  ❌ Could not find class in {filepath.name}")
+        print(f"   Could not find class in {filepath.name}")
         return
 
     class_name = class_match.group(1)
@@ -129,11 +129,11 @@ def process_file(filepath: Path):
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    print(f"  ✅ Updated {filepath.name}")
+    print(f"   Updated {filepath.name}")
 
 def main():
     """Main update function"""
-    print("🚀 Starting tactical assistants update...")
+    print(" Starting tactical assistants update...")
     print(f"Base path: {BASE_PATH}")
     print()
 
@@ -145,12 +145,12 @@ def main():
                 process_file(filepath)
                 updated += 1
             except Exception as e:
-                print(f"  ❌ Error processing {filename}: {e}")
+                print(f"   Error processing {filename}: {e}")
         else:
-            print(f"  ⚠️  File not found: {filename}")
+            print(f"  ️  File not found: {filename}")
 
     print()
-    print(f"✅ Updated {updated}/{len(FILES_TO_UPDATE)} files")
+    print(f" Updated {updated}/{len(FILES_TO_UPDATE)} files")
 
 if __name__ == "__main__":
     main()

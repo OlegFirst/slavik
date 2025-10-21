@@ -36,7 +36,7 @@ def generate_readme(module_name: str, section: str) -> str:
     scan_file = Path(f"/Users/MD/AI-Platform-ISO/infrastructure/AI-office-infrastructure/devops-agent/reports-generated/modules/{module_name}_scan.json")
 
     if not scan_file.exists():
-        print(f"❌ Scan file not found: {scan_file}")
+        print(f" Scan file not found: {scan_file}")
         sys.exit(1)
 
     with open(scan_file) as f:
@@ -145,7 +145,7 @@ def main():
     with open(output_path, 'w') as f:
         f.write(readme_content)
 
-    print(f"✅ Generated: {output_path}")
+    print(f" Generated: {output_path}")
     print(f"   Size: {len(readme_content)} characters")
 
 if __name__ == "__main__":

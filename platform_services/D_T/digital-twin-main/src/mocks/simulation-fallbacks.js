@@ -1,7 +1,7 @@
 /**
  * Simulation Fallback Mock Functions
  * 
- * ⚠️ ТОЛЬКО ДЛЯ FALLBACK РЕЖИМА!
+ * ️ ТОЛЬКО ДЛЯ FALLBACK РЕЖИМА!
  * Используется когда внешние simulation адаптеры недоступны
  */
 
@@ -17,7 +17,7 @@ const logger = createLogger('SimulationFallbacks');
  * @returns {Object} Mock результат в формате стандартного ответа
  */
 export function generateFallbackResult(experiment, params) {
-    logger.warn(`🔄 FALLBACK MODE: Generating mock result for ${experiment}`);
+    logger.warn(` FALLBACK MODE: Generating mock result for ${experiment}`);
     
     const fallbackResults = {
         simpy_queue: {
@@ -34,7 +34,7 @@ export function generateFallbackResult(experiment, params) {
                 { capacity: 8, sla: 0.88, cost: 12800 },
                 { capacity: 10, sla: 0.92, cost: 16000 }
             ],
-            explain: "⚠️ FALLBACK: Реальные адаптеры недоступны - используются приблизительные данные"
+            explain: "️ FALLBACK: Реальные адаптеры недоступны - используются приблизительные данные"
         },
         
         mesa_abm: {
@@ -48,7 +48,7 @@ export function generateFallbackResult(experiment, params) {
                 { policy: 'baseline', coverage: 0.55 },
                 { policy: 'enhanced', coverage: 0.65 + Math.random() * 0.15 }
             ],
-            explain: "⚠️ FALLBACK: ABM адаптер недоступен - используется упрощенная модель"
+            explain: "️ FALLBACK: ABM адаптер недоступен - используется упрощенная модель"
         },
         
         routing_vrp: {
@@ -60,7 +60,7 @@ export function generateFallbackResult(experiment, params) {
                 vehicles_used: Math.ceil(Math.random() * 3 + 2)
             },
             frontier: [],
-            explain: "⚠️ FALLBACK: VRP адаптер недоступен - случайные результаты"
+            explain: "️ FALLBACK: VRP адаптер недоступен - случайные результаты"
         }
     };
     
@@ -73,7 +73,7 @@ export function generateFallbackResult(experiment, params) {
             warning: 'Внешний адаптер недоступен'
         },
         frontier: [],
-        explain: `⚠️ FALLBACK: Адаптер для ${experiment} недоступен`
+        explain: `️ FALLBACK: Адаптер для ${experiment} недоступен`
     };
 }
 

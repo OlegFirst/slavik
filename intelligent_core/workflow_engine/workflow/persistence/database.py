@@ -68,10 +68,10 @@ class DatabaseManager:
             async with self.engine.begin() as conn:
                 await conn.execute(text("SELECT 1"))
 
-            logger.info("✅ Database connected successfully")
+            logger.info(" Database connected successfully")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to database: {e}")
+            logger.error(f" Failed to connect to database: {e}")
             raise
 
     async def disconnect(self):

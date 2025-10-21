@@ -124,9 +124,9 @@ class SetupWizard {
                 name: 'mode',
                 message: 'Select setup mode / Выберите режим:',
                 choices: [
-                    { name: '🚀 Quick Setup (Demo Mode)', value: 'demo' },
-                    { name: '🏢 Organization Setup', value: 'org' },
-                    { name: '🔧 Custom Configuration', value: 'custom' }
+                    { name: ' Quick Setup (Demo Mode)', value: 'demo' },
+                    { name: ' Organization Setup', value: 'org' },
+                    { name: ' Custom Configuration', value: 'custom' }
                 ]
             },
             {
@@ -313,7 +313,7 @@ class SetupWizard {
     }
 
     showSuccess(answers) {
-        console.log(chalk.green.bold('\n✅ Setup Complete!\n'));
+        console.log(chalk.green.bold('\n Setup Complete!\n'));
 
         if (answers.mode === 'demo') {
             console.log(chalk.cyan('Demo Mode Instructions:'));
@@ -333,12 +333,12 @@ class SetupWizard {
             console.log('MCP connector configured in Claude Desktop');
         }
 
-        console.log(chalk.yellow('\n📚 Documentation:'));
+        console.log(chalk.yellow('\n Documentation:'));
         console.log('• Quick Start: https://nash4.digital-twin.org/quickstart');
         console.log('• All Experiments: https://nash4.digital-twin.org/experiments');
         console.log('• Support: support@nash4.org');
 
-        console.log(chalk.magenta('\n🎯 Example Commands for Claude:'));
+        console.log(chalk.magenta('\n Example Commands for Claude:'));
         console.log('• "Analyze my organization efficiency"');
         console.log('• "Run budget optimization simulation"');
         console.log('• "Predict donor behavior for next quarter"');
@@ -346,7 +346,7 @@ class SetupWizard {
         console.log('• "Run all 30 experiments showcase"');
 
         if (answers.localSetup && answers.mode !== 'custom') {
-            console.log(chalk.blue('\n💡 Local Server:'));
+            console.log(chalk.blue('\n Local Server:'));
             console.log('Start with: cd digital-twin-standalone && npm start');
         }
     }

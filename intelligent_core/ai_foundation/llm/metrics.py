@@ -1,5 +1,5 @@
 """
-📊 Prometheus Metrics for LLM Router
+ Prometheus Metrics for LLM Router
 
 Tracks:
 - LLM requests (count, latency, status)
@@ -430,7 +430,7 @@ def init_llm_metrics():
         llm_health_status.labels(provider=provider).set(0)
         llm_provider_availability.labels(provider=provider).set(0)
 
-    logger.info("✅ LLM Prometheus metrics initialized")
+    logger.info(" LLM Prometheus metrics initialized")
 
 
 # Initialize on module import

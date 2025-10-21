@@ -101,7 +101,7 @@ async def scan_infrastructure(config: ScanConfig) -> ScanResult:
 
     from agent import DevOpsAgent
 
-    logger.info(f"🔍 Scanning infrastructure: {config.scan_type}")
+    logger.info(f" Scanning infrastructure: {config.scan_type}")
 
     agent = DevOpsAgent(config.project_root)
     await agent.initialize()
@@ -134,7 +134,7 @@ async def analyze_with_ai(scan_result: ScanResult) -> AIAnalysisResult:
 
     from agent import DevOpsAgent
 
-    logger.info("🧠 Running AI analysis with RAG + LLM...")
+    logger.info(" Running AI analysis with RAG + LLM...")
 
     agent = DevOpsAgent(project_root)
     await agent.initialize()
@@ -174,7 +174,7 @@ async def request_brain_approval(approval_req: ApprovalRequest) -> Dict[str, Any
 
     from integrations.workflow_intelligence import WorkflowIntelligenceClient
 
-    logger.info("🧠 Requesting approval from brain...")
+    logger.info(" Requesting approval from brain...")
 
     brain = WorkflowIntelligenceClient()
 
@@ -187,7 +187,7 @@ async def request_brain_approval(approval_req: ApprovalRequest) -> Dict[str, Any
 
     approved_actions = decision.get("approved_actions", [])
 
-    logger.info(f"✅ Brain approved {len(approved_actions)} actions")
+    logger.info(f" Brain approved {len(approved_actions)} actions")
 
     return {
         "approved": True,
@@ -212,7 +212,7 @@ async def apply_fixes(approved_actions: List[Dict[str, Any]]) -> FixResult:
 
     from agent import DevOpsAgent
 
-    logger.info(f"🛠️ Applying {len(approved_actions)} approved fixes...")
+    logger.info(f"️ Applying {len(approved_actions)} approved fixes...")
 
     agent = DevOpsAgent(project_root)
     await agent.initialize()
@@ -254,7 +254,7 @@ async def rollback_fixes(applied_fixes: List[Dict[str, Any]]) -> Dict[str, Any]:
                 rollback_count += 1
 
         except Exception as e:
-            logger.error(f"❌ Rollback failed for {fix.get('id')}: {e}")
+            logger.error(f" Rollback failed for {fix.get('id')}: {e}")
 
     return {
         "rollback_successful": rollback_count,
@@ -278,7 +278,7 @@ async def generate_dockerfiles(missing_services: List[Dict[str, Any]]) -> Dict[s
 
     from auto_remediation.dockerfile_generator import DockerfileGenerator
 
-    logger.info(f"🐳 Generating Dockerfiles for {len(missing_services)} services...")
+    logger.info(f" Generating Dockerfiles for {len(missing_services)} services...")
 
     generator = DockerfileGenerator(project_root)
     await generator.initialize()
@@ -294,7 +294,7 @@ async def generate_dockerfiles(missing_services: List[Dict[str, Any]]) -> Dict[s
             else:
                 failed.append(service.get("name"))
         except Exception as e:
-            logger.error(f"❌ Dockerfile generation failed for {service.get('name')}: {e}")
+            logger.error(f" Dockerfile generation failed for {service.get('name')}: {e}")
             failed.append(service.get("name"))
 
     return {
@@ -320,7 +320,7 @@ async def report_to_brain(report_data: Dict[str, Any]) -> Dict[str, Any]:
 
     from integrations.workflow_intelligence import WorkflowIntelligenceClient
 
-    logger.info("📡 Reporting to Workflow Intelligence...")
+    logger.info(" Reporting to Workflow Intelligence...")
 
     brain = WorkflowIntelligenceClient()
 
@@ -331,7 +331,7 @@ async def report_to_brain(report_data: Dict[str, Any]) -> Dict[str, Any]:
         "data": report_data
     })
 
-    logger.info(f"✅ Report sent to brain: {response.get('status')}")
+    logger.info(f" Report sent to brain: {response.get('status')}")
 
     return response
 
@@ -343,12 +343,12 @@ async def export_prometheus_metrics(metrics_data: Dict[str, Any]) -> None:
 
     Activity: Metrics export
     """
-    logger.info("📊 Exporting metrics to Prometheus...")
+    logger.info(" Exporting metrics to Prometheus...")
 
     # TODO: Implement Prometheus push
     # from prometheus_client import push_to_gateway
 
-    logger.info("✅ Metrics exported (placeholder)")
+    logger.info(" Metrics exported (placeholder)")
 
 
 # ============================================================================
@@ -381,7 +381,7 @@ class DevOpsInfrastructureWorkflow:
         1. Scan → 2. Analyze → 3. Approve → 4. Fix → 5. Report
         """
 
-        workflow.logger.info(f"🚀 Starting DevOps Infrastructure Workflow: {config.scan_type}")
+        workflow.logger.info(f" Starting DevOps Infrastructure Workflow: {config.scan_type}")
 
         # Step 1: Scan Infrastructure (with retry)
         scan_result = await workflow.execute_activity(
@@ -396,7 +396,7 @@ class DevOpsInfrastructureWorkflow:
             )
         )
 
-        workflow.logger.info(f"✅ Scan completed: {scan_result.total_issues} issues found")
+        workflow.logger.info(f" Scan completed: {scan_result.total_issues} issues found")
 
         # Step 2: AI Analysis (with retry)
         ai_analysis = await workflow.execute_activity(
@@ -409,7 +409,7 @@ class DevOpsInfrastructureWorkflow:
             )
         )
 
-        workflow.logger.info(f"✅ AI analysis: {len(ai_analysis.recommendations)} recommendations")
+        workflow.logger.info(f" AI analysis: {len(ai_analysis.recommendations)} recommendations")
 
         fix_result = None
 
@@ -445,12 +445,12 @@ class DevOpsInfrastructureWorkflow:
                     )
 
                     workflow.logger.info(
-                        f"✅ Fixes applied: {fix_result.fixes_successful}/{fix_result.fixes_attempted}"
+                        f" Fixes applied: {fix_result.fixes_successful}/{fix_result.fixes_attempted}"
                     )
 
                     # Compensating action on failure
                     if fix_result.fixes_failed > 0 and fix_result.applied_fixes:
-                        workflow.logger.warning("⚠️ Some fixes failed, rolling back...")
+                        workflow.logger.warning("️ Some fixes failed, rolling back...")
 
                         await workflow.execute_activity(
                             rollback_fixes,
@@ -459,7 +459,7 @@ class DevOpsInfrastructureWorkflow:
                         )
 
                 except Exception as e:
-                    workflow.logger.error(f"❌ Fix application failed: {e}")
+                    workflow.logger.error(f" Fix application failed: {e}")
                     # Saga compensation - rollback
                     if fix_result and fix_result.applied_fixes:
                         await workflow.execute_activity(
@@ -505,7 +505,7 @@ class DevOpsInfrastructureWorkflow:
             start_to_close_timeout=timedelta(minutes=1)
         )
 
-        workflow.logger.info("🎉 DevOps Infrastructure Workflow completed!")
+        workflow.logger.info(" DevOps Infrastructure Workflow completed!")
 
         return {
             "status": "completed",
@@ -534,7 +534,7 @@ class ContinuousMonitoringWorkflow:
     async def run(self) -> None:
         """Run continuous monitoring loop"""
 
-        workflow.logger.info("🔄 Starting Continuous Monitoring Workflow")
+        workflow.logger.info(" Starting Continuous Monitoring Workflow")
 
         while True:
             # Hourly quick scan (events only)
@@ -565,13 +565,13 @@ class ContinuousMonitoringWorkflow:
                 # Alert on critical issues
                 critical_count = scan_result.events.get("critical_gaps", 0)
                 if critical_count > 0:
-                    workflow.logger.warning(f"⚠️ Critical issues detected: {critical_count}")
+                    workflow.logger.warning(f"️ Critical issues detected: {critical_count}")
                     # TODO: Send alert to brain
 
-                workflow.logger.info("✅ Hourly monitoring cycle completed")
+                workflow.logger.info(" Hourly monitoring cycle completed")
 
             except Exception as e:
-                workflow.logger.error(f"❌ Monitoring cycle failed: {e}")
+                workflow.logger.error(f" Monitoring cycle failed: {e}")
 
             # Wait 1 hour
             await asyncio.sleep(3600)
@@ -593,7 +593,7 @@ class DockerfileGenerationWorkflow:
     async def run(self, missing_services: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Generate Dockerfiles for missing services"""
 
-        workflow.logger.info(f"🐳 Generating Dockerfiles for {len(missing_services)} services")
+        workflow.logger.info(f" Generating Dockerfiles for {len(missing_services)} services")
 
         result = await workflow.execute_activity(
             generate_dockerfiles,
@@ -603,7 +603,7 @@ class DockerfileGenerationWorkflow:
         )
 
         workflow.logger.info(
-            f"✅ Dockerfile generation: {len(result['generated'])} success, {len(result['failed'])} failed"
+            f" Dockerfile generation: {len(result['generated'])} success, {len(result['failed'])} failed"
         )
 
         return result

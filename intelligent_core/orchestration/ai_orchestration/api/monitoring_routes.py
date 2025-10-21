@@ -26,7 +26,7 @@ router = APIRouter(prefix="/api/v1/monitoring", tags=["Monitoring"])
 @router.get("/metrics")
 async def prometheus_metrics():
     """
-    📊 Prometheus metrics endpoint
+     Prometheus metrics endpoint
 
     Returns all workflow intelligence metrics in Prometheus format:
     - workflow_intelligence_actions_total
@@ -48,7 +48,7 @@ async def prometheus_metrics():
 @router.get("/health")
 async def health_check(storage_adapter=None, cache_client=None):
     """
-    🏥 Health check endpoint
+     Health check endpoint
 
     Returns:
     - Overall health status
@@ -77,7 +77,7 @@ async def health_check(storage_adapter=None, cache_client=None):
 @router.get("/health/live")
 async def liveness_probe():
     """
-    💚 Kubernetes liveness probe
+     Kubernetes liveness probe
 
     Simple check that service is running
     """
@@ -87,7 +87,7 @@ async def liveness_probe():
 @router.get("/health/ready")
 async def readiness_probe(storage_adapter=None):
     """
-    ✅ Kubernetes readiness probe
+     Kubernetes readiness probe
 
     Checks that service is ready to accept traffic
     """
@@ -110,7 +110,7 @@ async def readiness_probe(storage_adapter=None):
 @router.get("/dashboard/performance")
 async def get_performance_metrics():
     """
-    ⚡ Performance metrics for dashboard
+     Performance metrics for dashboard
 
     Returns:
     - Average action duration
@@ -151,7 +151,7 @@ async def get_performance_metrics():
 @router.get("/dashboard/quality")
 async def get_quality_metrics():
     """
-    ✨ Quality metrics for dashboard
+     Quality metrics for dashboard
 
     Returns:
     - AI advice acceptance rate
@@ -190,7 +190,7 @@ async def get_quality_metrics():
 @router.get("/dashboard/business")
 async def get_business_metrics():
     """
-    💼 Business metrics for dashboard
+     Business metrics for dashboard
 
     Returns:
     - Cases collected
@@ -233,7 +233,7 @@ async def get_business_metrics():
 @router.get("/dashboard/errors")
 async def get_error_metrics():
     """
-    ⚠️ Error tracking for dashboard
+    ️ Error tracking for dashboard
 
     Returns:
     - Total errors
@@ -275,7 +275,7 @@ async def get_error_metrics():
 @router.get("/alerts/active")
 async def get_active_alerts():
     """
-    🚨 Get active alerts
+     Get active alerts
 
     Returns currently firing alerts based on thresholds
     """
@@ -302,7 +302,7 @@ async def get_active_alerts():
 @router.get("/alerts/history")
 async def get_alert_history(days: int = 7):
     """
-    📜 Alert history
+     Alert history
 
     Returns recent alert history for analysis
     """
@@ -327,7 +327,7 @@ async def get_alert_history(days: int = 7):
 @router.get("/storage/size")
 async def get_storage_size(storage_adapter=None):
     """
-    💾 Storage size metrics
+     Storage size metrics
 
     Returns:
     - Total records per table
@@ -362,7 +362,7 @@ async def get_storage_size(storage_adapter=None):
 @router.get("/storage/capacity")
 async def get_capacity_metrics():
     """
-    📈 Capacity planning metrics
+     Capacity planning metrics
 
     Projections for storage growth and capacity planning
     """
@@ -382,7 +382,7 @@ async def get_capacity_metrics():
 @router.get("/performance/slow-queries")
 async def get_slow_queries(limit: int = 10):
     """
-    🐌 Slow query analysis
+     Slow query analysis
 
     Returns slowest database queries for optimization
     """
@@ -397,7 +397,7 @@ async def get_slow_queries(limit: int = 10):
 @router.get("/performance/bottlenecks")
 async def get_performance_bottlenecks():
     """
-    🚧 Performance bottleneck analysis
+     Performance bottleneck analysis
 
     Identifies performance bottlenecks in the system
     """
@@ -422,7 +422,7 @@ async def get_performance_bottlenecks():
 @router.get("/trends/usage")
 async def get_usage_trends(days: int = 30):
     """
-    📊 Usage trends over time
+     Usage trends over time
 
     Returns historical usage patterns
     """
@@ -443,7 +443,7 @@ async def get_usage_trends(days: int = 30):
 @router.get("/trends/learning")
 async def get_learning_trends(days: int = 30):
     """
-    🎓 Learning growth trends
+     Learning growth trends
 
     Shows how platform knowledge grows over time
     """

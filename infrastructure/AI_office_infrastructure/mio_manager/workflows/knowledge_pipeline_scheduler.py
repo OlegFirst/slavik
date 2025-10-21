@@ -65,7 +65,7 @@ class KnowledgePipelineScheduler:
         - RAG integration
         - Event catalog
         """
-        logger.info("🚀 Starting daily full pipeline")
+        logger.info(" Starting daily full pipeline")
 
         try:
             # Trigger pipeline
@@ -81,7 +81,7 @@ class KnowledgePipelineScheduler:
                 result = response.json()
                 run_id = result["run_id"]
 
-                logger.info(f"✅ Pipeline triggered: {run_id}")
+                logger.info(f" Pipeline triggered: {run_id}")
 
                 # Monitor execution
                 await self._monitor_pipeline_execution(run_id)
@@ -89,7 +89,7 @@ class KnowledgePipelineScheduler:
                 # Send success notification
                 await self._send_notification(
                     level="info",
-                    title="✅ Daily Knowledge Pipeline Complete",
+                    title=" Daily Knowledge Pipeline Complete",
                     message=f"Full pipeline completed successfully. Run ID: {run_id}"
                 )
 
@@ -100,12 +100,12 @@ class KnowledgePipelineScheduler:
                 raise Exception(f"Pipeline trigger failed: {response.status_code} {response.text}")
 
         except Exception as e:
-            logger.error(f"❌ Daily pipeline failed: {e}")
+            logger.error(f" Daily pipeline failed: {e}")
 
             # Send failure notification
             await self._send_notification(
                 level="error",
-                title="🚨 Daily Knowledge Pipeline Failed",
+                title=" Daily Knowledge Pipeline Failed",
                 message=f"Error: {str(e)}"
             )
 
@@ -120,7 +120,7 @@ class KnowledgePipelineScheduler:
         - System analysis
         - Pattern extraction
         """
-        logger.info("🔍 Starting hourly analysis")
+        logger.info(" Starting hourly analysis")
 
         try:
             # Trigger analysis
@@ -136,7 +136,7 @@ class KnowledgePipelineScheduler:
                 result = response.json()
                 run_id = result["run_id"]
 
-                logger.info(f"✅ Analysis triggered: {run_id}")
+                logger.info(f" Analysis triggered: {run_id}")
 
                 # Monitor execution (but don't block)
                 asyncio.create_task(self._monitor_pipeline_execution(run_id))
@@ -148,7 +148,7 @@ class KnowledgePipelineScheduler:
                 raise Exception(f"Analysis trigger failed: {response.status_code}")
 
         except Exception as e:
-            logger.error(f"❌ Hourly analysis failed: {e}")
+            logger.error(f" Hourly analysis failed: {e}")
             await self._record_metrics("pipeline.hourly.failure", 1)
 
     async def trigger_on_demand(
@@ -166,7 +166,7 @@ class KnowledgePipelineScheduler:
         **Returns:**
         - Pipeline run details
         """
-        logger.info(f"🎯 On-demand pipeline trigger: mode={mode}, reason={reason}")
+        logger.info(f" On-demand pipeline trigger: mode={mode}, reason={reason}")
 
         try:
             response = await self.client.post(
@@ -179,7 +179,7 @@ class KnowledgePipelineScheduler:
 
             if response.status_code == 200:
                 result = response.json()
-                logger.info(f"✅ On-demand pipeline complete: {result['run_id']}")
+                logger.info(f" On-demand pipeline complete: {result['run_id']}")
 
                 # Record metrics
                 await self._record_metrics(f"pipeline.on_demand.{mode}", 1)
@@ -190,7 +190,7 @@ class KnowledgePipelineScheduler:
                 raise Exception(f"Pipeline failed: {response.status_code}")
 
         except Exception as e:
-            logger.error(f"❌ On-demand pipeline failed: {e}")
+            logger.error(f" On-demand pipeline failed: {e}")
             await self._record_metrics(f"pipeline.on_demand.{mode}.failure", 1)
             raise
 
@@ -217,7 +217,7 @@ class KnowledgePipelineScheduler:
 
     async def _monitor_pipeline_execution(self, run_id: str, poll_interval: int = 30):
         """Monitor pipeline execution until complete"""
-        logger.info(f"👀 Monitoring pipeline: {run_id}")
+        logger.info(f" Monitoring pipeline: {run_id}")
 
         max_attempts = 60  # 30 min max
         attempts = 0
@@ -233,13 +233,13 @@ class KnowledgePipelineScheduler:
                     status = response.json()
 
                     if status["status"] == "completed":
-                        logger.info(f"✅ Pipeline {run_id} completed")
+                        logger.info(f" Pipeline {run_id} completed")
                         logger.info(f"   Stages: {len(status['stages_completed'])}")
                         logger.info(f"   Duration: {status['duration_seconds']:.2f}s")
                         return status
 
                     elif status["status"] == "failed":
-                        logger.error(f"❌ Pipeline {run_id} failed")
+                        logger.error(f" Pipeline {run_id} failed")
                         logger.error(f"   Errors: {status['errors']}")
                         return status
 
@@ -255,7 +255,7 @@ class KnowledgePipelineScheduler:
                 await asyncio.sleep(poll_interval)
                 attempts += 1
 
-        logger.warning(f"⚠️  Pipeline {run_id} monitoring timeout after {max_attempts * poll_interval}s")
+        logger.warning(f"️  Pipeline {run_id} monitoring timeout after {max_attempts * poll_interval}s")
 
     async def _send_notification(
         self,
@@ -275,7 +275,7 @@ class KnowledgePipelineScheduler:
                     "source": "knowledge_pipeline_scheduler"
                 }
             )
-            logger.info(f"📧 Notification sent: {title}")
+            logger.info(f" Notification sent: {title}")
 
         except Exception as e:
             logger.error(f"Failed to send notification: {e}")
@@ -337,7 +337,7 @@ async def setup_pipeline_schedules():
     )
 
     scheduler.start()
-    logger.info("✅ Knowledge Pipeline schedules configured")
+    logger.info(" Knowledge Pipeline schedules configured")
 
     return scheduler, pipeline_scheduler
 

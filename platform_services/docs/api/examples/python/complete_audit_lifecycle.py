@@ -43,12 +43,12 @@ def create_internal_audit(audit_data: Dict[str, Any]) -> Optional[Dict[str, Any]
         response = requests.post(url, json=audit_data, headers=headers)
         response.raise_for_status()
         audit = response.json()
-        print(f"✅ Audit created: {audit.get('title')}")
+        print(f" Audit created: {audit.get('title')}")
         print(f"   ID: {audit.get('id')}")
         print(f"   Audit Date: {audit.get('audit_date')}")
         return audit
     except Exception as e:
-        print(f"❌ Error creating audit: {e}")
+        print(f" Error creating audit: {e}")
         return None
 
 
@@ -61,10 +61,10 @@ def add_audit_finding(audit_id: str, finding_data: Dict[str, Any]) -> Optional[D
         response = requests.post(url, json=finding_data, headers=headers)
         response.raise_for_status()
         finding = response.json()
-        print(f"   ✅ Finding added: {finding.get('finding_number')}")
+        print(f"    Finding added: {finding.get('finding_number')}")
         return finding
     except Exception as e:
-        print(f"   ❌ Error adding finding: {e}")
+        print(f"    Error adding finding: {e}")
         return None
 
 
@@ -77,12 +77,12 @@ def create_nonconformity(nc_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         response = requests.post(url, json=nc_data, headers=headers)
         response.raise_for_status()
         nc = response.json()
-        print(f"   ✅ Nonconformity created: {nc.get('nc_number')}")
+        print(f"    Nonconformity created: {nc.get('nc_number')}")
         print(f"      ID: {nc.get('id')}")
         print(f"      Type: {nc.get('nc_type')}")
         return nc
     except Exception as e:
-        print(f"   ❌ Error creating NC: {e}")
+        print(f"    Error creating NC: {e}")
         return None
 
 
@@ -100,10 +100,10 @@ def start_rca(nc_id: str, method: str = "5_whys") -> Optional[Dict[str, Any]]:
         response = requests.post(url, params=params, headers=headers)
         response.raise_for_status()
         rca = response.json()
-        print(f"   ✅ RCA started using {method} method")
+        print(f"    RCA started using {method} method")
         return rca
     except Exception as e:
-        print(f"   ❌ Error starting RCA: {e}")
+        print(f"    Error starting RCA: {e}")
         return None
 
 
@@ -125,11 +125,11 @@ def complete_rca(nc_id: str, rca_template: Dict[str, Any]) -> Optional[Dict[str,
         response = requests.post(url, json=payload, params=params, headers=headers)
         response.raise_for_status()
         result = response.json()
-        print(f"   ✅ RCA completed")
+        print(f"    RCA completed")
         print(f"      Root causes identified: {len(result.get('data', {}).get('root_causes', []))}")
         return result
     except Exception as e:
-        print(f"   ❌ Error completing RCA: {e}")
+        print(f"    Error completing RCA: {e}")
         return None
 
 
@@ -142,7 +142,7 @@ def main():
     print()
 
     # Step 1: Create Internal Audit
-    print("📋 Step 1: Create Internal Audit (ISO 9.2)")
+    print(" Step 1: Create Internal Audit (ISO 9.2)")
     print("-" * 80)
 
     audit_date = datetime.now().isoformat()
@@ -167,7 +167,7 @@ def main():
     print()
 
     # Step 2: Add Audit Findings
-    print("🔍 Step 2: Add Audit Findings")
+    print(" Step 2: Add Audit Findings")
     print("-" * 80)
 
     findings = [
@@ -198,7 +198,7 @@ def main():
     print()
 
     # Step 3: Create Nonconformity from Major Finding
-    print("⚠️  Step 3: Create Nonconformity from Major Finding (ISO 10.1)")
+    print("️  Step 3: Create Nonconformity from Major Finding (ISO 10.1)")
     print("-" * 80)
 
     nc_data = {
@@ -224,7 +224,7 @@ def main():
     print()
 
     # Step 4: Perform Root Cause Analysis (5 Whys)
-    print("🎯 Step 4: Root Cause Analysis - 5 Whys Method (ISO 10.1)")
+    print(" Step 4: Root Cause Analysis - 5 Whys Method (ISO 10.1)")
     print("-" * 80)
 
     rca_started = start_rca(nc_id, "5_whys")
@@ -245,12 +245,12 @@ def main():
 
     rca_result = complete_rca(nc_id, rca_template)
     if rca_result:
-        print(f"   📌 Root Cause: {rca_template['root_cause']}")
+        print(f"    Root Cause: {rca_template['root_cause']}")
 
     print()
 
     # Step 5: Create Corrective Actions (CAPA)
-    print("🔧 Step 5: Corrective Actions (CAPA)")
+    print(" Step 5: Corrective Actions (CAPA)")
     print("-" * 80)
 
     corrective_actions = [
@@ -278,13 +278,13 @@ def main():
     ]
 
     for action in corrective_actions:
-        print(f"   📋 {action['action_number']}: {action['description']}")
+        print(f"    {action['action_number']}: {action['description']}")
         print(f"      Responsible: {action['responsible']}")
         print(f"      Due: {action['target_date'][:10]}")
         print()
 
     # Step 6: Track to Closure
-    print("✅ Step 6: Verification and Closure")
+    print(" Step 6: Verification and Closure")
     print("-" * 80)
     print("   After corrective actions are implemented:")
     print("   1. Verify template updated with dependency section")
@@ -296,7 +296,7 @@ def main():
 
     # Summary
     print("=" * 80)
-    print("📊 Audit Lifecycle Summary")
+    print(" Audit Lifecycle Summary")
     print("=" * 80)
     print(f"Audit ID: {audit_id}")
     print(f"Findings: {len(created_findings)} ({sum(1 for f in findings if f['finding_type'] == 'MAJOR')} Major, {sum(1 for f in findings if f['finding_type'] == 'MINOR')} Minor)")
@@ -305,7 +305,7 @@ def main():
     print(f"Corrective Actions: {len(corrective_actions)}")
     print(f"Expected Closure: 30 days")
     print()
-    print("✅ Complete audit lifecycle demonstrated successfully!")
+    print(" Complete audit lifecycle demonstrated successfully!")
     print("=" * 80)
 
 

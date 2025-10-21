@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { TenantManager } from '../core/tenant-manager.js';
 import { constructor, createTenant, getTenant, updateTenant, deleteTenant } from '../core/tenant-manager.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('tenant-manager', () => {
@@ -131,7 +131,7 @@ describe('tenant-manager', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in tenant-manager');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

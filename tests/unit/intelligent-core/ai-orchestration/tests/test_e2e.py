@@ -102,7 +102,7 @@ class TestE2EWorkflowOrchestration:
         if 'gap_analysis' in str(compliance_situation).lower():
             assert comp_decision.action == ActionType.DELEGATE
 
-        print(f"✅ E2E Flow complete: BIA → Risk → Plans → Compliance")
+        print(f" E2E Flow complete: BIA → Risk → Plans → Compliance")
 
 
 class TestE2ECrisisCoordination:
@@ -168,7 +168,7 @@ class TestE2ECrisisCoordination:
                 resolution = await orchestrator.crisis_coordinator.resolve_crisis(crisis_id)
                 assert resolution['success'] is True
 
-                print(f"✅ Crisis flow complete: Detected → Activated → Resolved")
+                print(f" Crisis flow complete: Detected → Activated → Resolved")
 
 
 class TestE2EPDCACycle:
@@ -231,7 +231,7 @@ class TestE2EPDCACycle:
         assert 'improvements' in act_result
 
         print(f"ACT: {len(act_result['lessons'])} lessons learned")
-        print(f"✅ PDCA cycle complete: PLAN → DO → CHECK → ACT")
+        print(f" PDCA cycle complete: PLAN → DO → CHECK → ACT")
 
 
 class TestE2EAIExpertsDelegation:
@@ -260,7 +260,7 @@ class TestE2EAIExpertsDelegation:
         # Check delegation event was published
         assert result['success'] is True or 'specialist' in result
 
-        print(f"✅ BCM Advisor delegation test passed")
+        print(f" BCM Advisor delegation test passed")
 
     @pytest.mark.asyncio
     async def test_compliance_auditor_delegation(self, orchestrator: PolicyAwareOrchestrator):
@@ -283,7 +283,7 @@ class TestE2EAIExpertsDelegation:
         result = await orchestrator.execute(decision)
         assert result['success'] is True or 'specialist' in result
 
-        print(f"✅ Compliance Auditor delegation test passed")
+        print(f" Compliance Auditor delegation test passed")
 
     @pytest.mark.asyncio
     async def test_strategic_planner_delegation(self, orchestrator: PolicyAwareOrchestrator):
@@ -306,7 +306,7 @@ class TestE2EAIExpertsDelegation:
         result = await orchestrator.execute(decision)
         assert result['success'] is True or 'specialist' in result
 
-        print(f"✅ Strategic Planner delegation test passed")
+        print(f" Strategic Planner delegation test passed")
 
 
 class TestE2EPolicyCompliance:
@@ -333,7 +333,7 @@ class TestE2EPolicyCompliance:
         # Should pass policy validation
         assert result.get('policy_validated', True)
 
-        print(f"✅ Policy-compliant action executed")
+        print(f" Policy-compliant action executed")
 
     @pytest.mark.asyncio
     async def test_policy_violation_escalation(self, orchestrator: PolicyAwareOrchestrator):
@@ -361,7 +361,7 @@ class TestE2EPolicyCompliance:
             if not result.get('policy_approved'):
                 assert decision.action == ActionType.ESCALATE_HUMAN or result.get('escalated')
 
-        print(f"✅ Policy violation handling tested")
+        print(f" Policy violation handling tested")
 
 
 # ============================================================================
@@ -419,7 +419,7 @@ async def test_decision_latency_benchmark(orchestrator: PolicyAwareOrchestrator)
     p95 = latencies[94]
     p99 = latencies[98]
 
-    print(f"\n📊 Decision Latency Benchmark:")
+    print(f"\n Decision Latency Benchmark:")
     print(f"   P50: {p50:.2f}ms")
     print(f"   P95: {p95:.2f}ms")
     print(f"   P99: {p99:.2f}ms")
@@ -427,7 +427,7 @@ async def test_decision_latency_benchmark(orchestrator: PolicyAwareOrchestrator)
     # Assert targets
     assert p95 < 100, f"P95 latency {p95:.2f}ms exceeds target of 100ms"
 
-    print(f"✅ Latency benchmark passed (P95: {p95:.2f}ms < 100ms)")
+    print(f" Latency benchmark passed (P95: {p95:.2f}ms < 100ms)")
 
 
 if __name__ == "__main__":

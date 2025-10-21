@@ -80,12 +80,12 @@ class AgentRouterClient:
             )
 
             self.initialized = True
-            logger.info("✅ Agent Router Client initialized successfully")
+            logger.info(" Agent Router Client initialized successfully")
 
             # Initial health check
             health = await self.router.health_check_all_agents()
             healthy_count = sum(1 for h in health.values() if h.get("healthy"))
-            logger.info(f"📊 Agent health: {healthy_count}/{len(health)} agents healthy")
+            logger.info(f" Agent health: {healthy_count}/{len(health)} agents healthy")
 
         except Exception as e:
             logger.error(f"Failed to initialize Agent Router Client: {e}")
@@ -132,17 +132,17 @@ class AgentRouterClient:
             raise ValueError(f"Unknown capability: {capability}. Available: {list(capability_map.keys())}")
 
         try:
-            logger.info(f"🔄 Routing {capability} request to AI agent...")
+            logger.info(f" Routing {capability} request to AI agent...")
             result = await self.router.route_request(
                 capability=capability_enum,
                 request_data=request_data,
                 context=context or {}
             )
-            logger.info(f"✅ {capability} request completed successfully")
+            logger.info(f" {capability} request completed successfully")
             return result
 
         except Exception as e:
-            logger.error(f"❌ Failed to route {capability} request: {e}")
+            logger.error(f" Failed to route {capability} request: {e}")
             raise
 
     async def health_check(self) -> Dict[str, Any]:

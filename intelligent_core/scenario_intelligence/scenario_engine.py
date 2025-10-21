@@ -68,10 +68,10 @@ class ScenarioEngine:
         try:
             with open(scenario_path, 'r') as f:
                 scenario = yaml.safe_load(f)
-                logger.info(f"✅ Loaded scenario: {scenario.get('scenario', {}).get('id')}")
+                logger.info(f" Loaded scenario: {scenario.get('scenario', {}).get('id')}")
                 return scenario
         except Exception as e:
-            logger.error(f"❌ Failed to load scenario from {scenario_path}: {e}")
+            logger.error(f" Failed to load scenario from {scenario_path}: {e}")
             raise
 
     async def execute_scenario(self, scenario: dict, context: dict = None) -> dict:
@@ -86,7 +86,7 @@ class ScenarioEngine:
         scenario_id = scenario['id']
         scenario_type = scenario['type']
 
-        logger.info(f"🎬 Executing scenario: {scenario_id} (type: {scenario_type})")
+        logger.info(f" Executing scenario: {scenario_id} (type: {scenario_type})")
 
         active_scenarios.inc()
 
@@ -141,7 +141,7 @@ class ScenarioEngine:
                     result="error"
                 ).inc()
 
-                logger.error(f"❌ Scenario {scenario_id} failed: {e}")
+                logger.error(f" Scenario {scenario_id} failed: {e}")
 
                 return {
                     "scenario_id": scenario_id,
@@ -155,21 +155,21 @@ class ScenarioEngine:
 
         results = []
 
-        logger.info(f"🔧 Executing system test: {scenario['id']}")
+        logger.info(f" Executing system test: {scenario['id']}")
 
         # Inject chaos if specified
         if 'chaos_injection' in scenario:
-            logger.warning("💥 Injecting chaos...")
+            logger.warning(" Injecting chaos...")
             await self._inject_chaos(scenario['chaos_injection'])
 
         # Execute attack vectors if security test
         if 'attack_vectors' in scenario:
-            logger.warning("🔒 Executing security attack vectors...")
+            logger.warning(" Executing security attack vectors...")
             context['attack_vectors'] = scenario['attack_vectors']
 
         # Execute steps
         for step in scenario['steps']:
-            logger.info(f"  ▶️  Step: {step['id']}")
+            logger.info(f"  ️  Step: {step['id']}")
             step_result = await self._execute_step(step, context)
             results.append({
                 "step_id": step['id'],
@@ -181,7 +181,7 @@ class ScenarioEngine:
 
         # Restore chaos if needed
         if 'chaos_injection' in scenario:
-            logger.info("🔄 Restoring chaos...")
+            logger.info(" Restoring chaos...")
             await self._restore_chaos(scenario['chaos_injection'])
 
         return {"steps": results}
@@ -191,18 +191,18 @@ class ScenarioEngine:
 
         results = []
 
-        logger.info(f"👤 Executing user workflow: {scenario['id']}")
+        logger.info(f" Executing user workflow: {scenario['id']}")
 
         # Set user context
         if 'context' in scenario:
             context.update(scenario['context'])
 
         for step in scenario['steps']:
-            logger.info(f"  ▶️  Step: {step['id']}")
+            logger.info(f"  ️  Step: {step['id']}")
 
             # Check for AI assistance
             if 'ai_assist' in step:
-                logger.info("    🤖 Providing AI assistance...")
+                logger.info("     Providing AI assistance...")
                 ai_result = await self._provide_ai_assistance(step['ai_assist'], context)
                 context['ai_assistance'] = ai_result
 
@@ -236,7 +236,7 @@ class ScenarioEngine:
         if service:
             service_url = self.service_registry.get(service)
             if not service_url:
-                logger.warning(f"⚠️  Service {service} not in registry, simulating...")
+                logger.warning(f"️  Service {service} not in registry, simulating...")
                 return self._simulate_response(step)
 
             try:
@@ -244,7 +244,7 @@ class ScenarioEngine:
                 endpoint = self._map_action_to_endpoint(service, action)
                 url = f"{service_url}{endpoint}"
 
-                logger.info(f"    📡 Calling: {url}")
+                logger.info(f"     Calling: {url}")
 
                 # Make HTTP request
                 response = await self.http_client.post(url, json=params)
@@ -262,7 +262,7 @@ class ScenarioEngine:
                 return result
 
             except Exception as e:
-                logger.error(f"    ❌ Service call failed: {e}")
+                logger.error(f"     Service call failed: {e}")
                 # Return simulated response for testing
                 return self._simulate_response(step)
         else:
@@ -377,13 +377,13 @@ class ScenarioEngine:
         if 'status' in expected:
             expected_status = expected['status']
             if result['status'] != expected_status:
-                logger.warning(f"    ⚠️  Expected status {expected_status}, got {result['status']}")
+                logger.warning(f"    ️  Expected status {expected_status}, got {result['status']}")
 
         # Check response contains fields
         if 'response_contains' in expected and result.get('data'):
             for field in expected['response_contains']:
                 if field not in result['data']:
-                    logger.warning(f"    ⚠️  Expected field '{field}' not in response")
+                    logger.warning(f"    ️  Expected field '{field}' not in response")
 
     async def _provide_ai_assistance(self, ai_config: dict, context: dict) -> dict:
         """Provide AI assistance for a step"""
@@ -400,9 +400,9 @@ class ScenarioEngine:
                     scenario_type=ai_config.get('scenario_type')
                 )
                 assistance['rag_recommendations'] = rag_results
-                logger.info(f"    🔍 RAG found {len(rag_results)} similar scenarios")
+                logger.info(f"     RAG found {len(rag_results)} similar scenarios")
             except Exception as e:
-                logger.warning(f"    ⚠️  RAG query failed: {e}")
+                logger.warning(f"    ️  RAG query failed: {e}")
                 assistance['rag_recommendations'] = []
 
         # Knowledge base query
@@ -413,9 +413,9 @@ class ScenarioEngine:
                     "query": ai_config['query'],
                     "results": ["Mock knowledge result 1", "Mock knowledge result 2"]
                 }
-                logger.info(f"    📚 Knowledge base queried")
+                logger.info(f"     Knowledge base queried")
             except Exception as e:
-                logger.warning(f"    ⚠️  Knowledge base query failed: {e}")
+                logger.warning(f"    ️  Knowledge base query failed: {e}")
 
         # Expertise query
         if ai_config.get('use_expertise'):
@@ -425,9 +425,9 @@ class ScenarioEngine:
                     "expertise": ai_config['expertise'],
                     "guidance": f"Expert guidance for {ai_config['expertise']}"
                 }
-                logger.info(f"    👨‍⚕️ Expert guidance provided")
+                logger.info(f"    ‍️ Expert guidance provided")
             except Exception as e:
-                logger.warning(f"    ⚠️  Expertise query failed: {e}")
+                logger.warning(f"    ️  Expertise query failed: {e}")
 
         return assistance
 
@@ -467,12 +467,12 @@ class ScenarioEngine:
 
                 if not assertion_result['passed']:
                     passed = False
-                    logger.warning(f"    ⚠️  Assertion failed: {assertion_type} - {assertion_result.get('message')}")
+                    logger.warning(f"    ️  Assertion failed: {assertion_type} - {assertion_result.get('message')}")
                 else:
-                    logger.info(f"    ✅ Assertion passed: {assertion_type}")
+                    logger.info(f"     Assertion passed: {assertion_type}")
 
             except Exception as e:
-                logger.error(f"    ❌ Assertion error: {assertion_type} - {e}")
+                logger.error(f"     Assertion error: {assertion_type} - {e}")
                 details.append({
                     "type": assertion_type,
                     "passed": False,
@@ -607,7 +607,7 @@ class ScenarioEngine:
             action = chaos['action']
             target = chaos.get('target')
 
-            logger.warning(f"💥 Chaos: {action} on {target}")
+            logger.warning(f" Chaos: {action} on {target}")
 
             # Implement actual chaos injection
             # For now, just log
@@ -616,20 +616,20 @@ class ScenarioEngine:
     async def _inject_chaos_action(self, step: dict, params: dict) -> dict:
         """Execute chaos injection step"""
         target = params.get('target')
-        logger.warning(f"💥 Injecting chaos on {target}")
+        logger.warning(f" Injecting chaos on {target}")
         await asyncio.sleep(2)
         return {"status": 200, "chaos_injected": True, "target": target}
 
     async def _restore_service_action(self, step: dict, params: dict) -> dict:
         """Restore service after chaos"""
         target = params.get('target')
-        logger.info(f"🔄 Restoring service {target}")
+        logger.info(f" Restoring service {target}")
         await asyncio.sleep(2)
         return {"status": 200, "service_restored": True, "target": target}
 
     async def _restore_chaos(self, chaos_config: list):
         """Restore system after chaos"""
-        logger.info("🔄 Restoring system after chaos...")
+        logger.info(" Restoring system after chaos...")
         await asyncio.sleep(1)
 
     async def _handle_triggers(self, triggers: list, result: dict):
@@ -638,7 +638,7 @@ class ScenarioEngine:
             event = trigger.get('event')
             action = trigger.get('action')
 
-            logger.info(f"🎯 Trigger: {event} → {action}")
+            logger.info(f" Trigger: {event} → {action}")
 
             # Implement trigger handling
             # For now, just log
@@ -650,7 +650,7 @@ class ScenarioEngine:
         for gen_config in config:
             scenario_type = gen_config['scenario_type']
 
-            logger.info(f"🤖 Auto-generating {scenario_type} scenario...")
+            logger.info(f" Auto-generating {scenario_type} scenario...")
 
             # Would use LLM to generate scenarios
             # For now, just log

@@ -54,29 +54,29 @@ class EventBusCeleryBridge:
         self.eventbus = init_eventbus(rabbitmq_url)
         await self.eventbus.connect()
 
-        logger.info("🌉 EventBus ← → Celery Bridge started")
+        logger.info(" EventBus ← → Celery Bridge started")
 
         # Subscribe to all events
         for event_type, handler in self.event_handlers.items():
             asyncio.create_task(
                 self.eventbus.subscribe(event_type, self._create_wrapper(handler))
             )
-            logger.info(f"  📥 Subscribed: {event_type} → {handler.__name__}")
+            logger.info(f"   Subscribed: {event_type} → {handler.__name__}")
 
     def _create_wrapper(self, celery_task):
         """Wrap Celery task for EventBus"""
 
         async def wrapper(event):
-            logger.info(f"🎯 Event received: {event.type} → triggering {celery_task.name}")
+            logger.info(f" Event received: {event.type} → triggering {celery_task.name}")
 
             try:
                 # Trigger Celery task
                 result = celery_task.delay(**event.data)
 
-                logger.info(f"✅ Task queued: {result.id}")
+                logger.info(f" Task queued: {result.id}")
 
             except Exception as e:
-                logger.error(f"❌ Failed to queue task: {e}")
+                logger.error(f" Failed to queue task: {e}")
 
         return wrapper
 
@@ -86,12 +86,12 @@ class EventBusCeleryBridge:
         doc_ids = event.data.get('doc_ids', [])
         analyzer_type = event.data.get('analyzer_type', 'compliance')
 
-        logger.info(f"📄 Batch analysis requested: {len(doc_ids)} documents")
+        logger.info(f" Batch analysis requested: {len(doc_ids)} documents")
 
         # Trigger parallel batch processing
         result = batch_tasks.batch_analyze_documents(doc_ids, analyzer_type)
 
-        logger.info(f"✅ Batch job queued: {result.id}")
+        logger.info(f" Batch job queued: {result.id}")
 
 
 async def main():
@@ -104,7 +104,7 @@ async def main():
         while True:
             await asyncio.sleep(1)
     except KeyboardInterrupt:
-        logger.info("🛑 Shutting down bridge...")
+        logger.info(" Shutting down bridge...")
 
 
 if __name__ == '__main__':

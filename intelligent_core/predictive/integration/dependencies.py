@@ -155,7 +155,7 @@ class NotificationClient:
         # Build HTML email
         html_body = self._build_digest_html(recommendations)
 
-        subject = f"📅 Your BCM Journey Update - {len(recommendations)} recommendations"
+        subject = f" Your BCM Journey Update - {len(recommendations)} recommendations"
 
         body = f"""
 You have {len(recommendations)} proactive recommendations for your BCM journey:
@@ -238,14 +238,14 @@ You have {len(recommendations)} proactive recommendations for your BCM journey:
     </style>
 </head>
 <body>
-    <h1>📅 Your BCM Journey Update</h1>
+    <h1> Your BCM Journey Update</h1>
     <p>Here are {len(recommendations)} proactive recommendations to keep your BCM journey on track:</p>
 
     {recs_html}
 
     <div class="footer">
         <p>
-            🔮 These recommendations are AI-powered predictions based on similar organizations' successful journeys.
+             These recommendations are AI-powered predictions based on similar organizations' successful journeys.
         </p>
         <p>
             <a href="#">View in Dashboard</a> | <a href="#">Update Preferences</a>

@@ -275,6 +275,6 @@ if __name__ == "__main__":
         # Test health
         await client.report_health('healthy', {'version': '1.0.0'})
 
-        print("✅ MIO Manager integration test complete")
+        print(" MIO Manager integration test complete")
 
     asyncio.run(test())

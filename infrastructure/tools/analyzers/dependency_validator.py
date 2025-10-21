@@ -24,7 +24,7 @@ class DependencyValidator:
 
     def validate(self) -> Dict:
         """Полная валидация: реальные зависимости vs документированные"""
-        print("🔍 Validating dependencies...")
+        print(" Validating dependencies...")
 
         # 1. Извлечь реальные зависимости из кода
         self._scan_real_dependencies()
@@ -51,7 +51,7 @@ class DependencyValidator:
 
     def _scan_real_dependencies(self):
         """Сканировать реальный код и найти зависимости"""
-        print("📂 Scanning real code dependencies...")
+        print(" Scanning real code dependencies...")
 
         # Сканировать intelligent-core
         self._scan_directory(Path("intelligent-core"), "ai_foundation")
@@ -223,7 +223,7 @@ class DependencyValidator:
 
     def _extract_documented_dependencies(self):
         """Извлечь зависимости из SERVICE_CATALOG.yaml"""
-        print("📖 Extracting documented dependencies...")
+        print(" Extracting documented dependencies...")
 
         # AI Foundation
         if 'ai_foundation' in self.catalog:
@@ -269,7 +269,7 @@ class DependencyValidator:
 
     def _compare_dependencies(self):
         """Сравнить реальные и документированные зависимости"""
-        print("⚖️  Comparing dependencies...")
+        print("️  Comparing dependencies...")
 
         all_services = set(self.real_dependencies.keys()) | set(self.documented_dependencies.keys())
 
@@ -301,7 +301,7 @@ class DependencyValidator:
 
     def _validate_ports(self):
         """Проверить что порты в коде соответствуют catalog"""
-        print("🔌 Validating ports...")
+        print(" Validating ports...")
 
         # Извлечь порты из catalog
         documented_ports = {}
@@ -359,7 +359,7 @@ class DependencyValidator:
 
     def _validate_service_existence(self):
         """Проверить что все сервисы из catalog реально существуют"""
-        print("📁 Validating service existence...")
+        print(" Validating service existence...")
 
         for layer in ['ai_foundation', 'ai_services', 'platform_services']:
             if layer not in self.catalog:
@@ -414,32 +414,32 @@ class DependencyValidator:
 
         # Вывести в консоль
         print("\n" + "="*60)
-        print("📊 DEPENDENCY VALIDATION REPORT")
+        print(" DEPENDENCY VALIDATION REPORT")
         print("="*60)
 
         stats = result['stats']
-        print(f"\n✅ Services documented: {stats['total_services_documented']}")
-        print(f"✅ Services in code: {stats['total_services_in_code']}")
-        print(f"📊 Documentation accuracy: {stats['accuracy']:.1f}%")
-        print(f"\n❌ Critical errors: {stats['critical_errors']}")
-        print(f"❌ High errors: {stats['high_errors']}")
-        print(f"⚠️  Total warnings: {stats['total_warnings']}")
+        print(f"\n Services documented: {stats['total_services_documented']}")
+        print(f" Services in code: {stats['total_services_in_code']}")
+        print(f" Documentation accuracy: {stats['accuracy']:.1f}%")
+        print(f"\n Critical errors: {stats['critical_errors']}")
+        print(f" High errors: {stats['high_errors']}")
+        print(f"️  Total warnings: {stats['total_warnings']}")
 
         if result['errors']:
-            print(f"\n🔴 ERRORS ({len(result['errors'])}):")
+            print(f"\n ERRORS ({len(result['errors'])}):")
             for error in result['errors'][:10]:  # Показать первые 10
                 print(f"  • [{error['severity']}] {error['message']}")
             if len(result['errors']) > 10:
                 print(f"  ... and {len(result['errors']) - 10} more")
 
         if result['warnings']:
-            print(f"\n⚠️  WARNINGS ({len(result['warnings'])}):")
+            print(f"\n️  WARNINGS ({len(result['warnings'])}):")
             for warning in result['warnings'][:5]:  # Показать первые 5
                 print(f"  • [{warning['severity']}] {warning['message']}")
             if len(result['warnings']) > 5:
                 print(f"  ... and {len(result['warnings']) - 5} more")
 
-        print(f"\n💾 Full report saved to: {output_file}")
+        print(f"\n Full report saved to: {output_file}")
         print("="*60 + "\n")
 
         return result

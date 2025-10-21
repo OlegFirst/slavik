@@ -35,12 +35,12 @@ class DailyDigestScheduler:
         3. Save to database
         4. Send email to users
         """
-        logger.info("🔮 Starting daily proactive recommendations job...")
+        logger.info(" Starting daily proactive recommendations job...")
 
         try:
             # Get active organizations
             active_orgs = await self._get_active_organizations()
-            logger.info(f"📊 Found {len(active_orgs)} active organizations")
+            logger.info(f" Found {len(active_orgs)} active organizations")
 
             # Process each organization
             recommendations_sent = 0
@@ -69,7 +69,7 @@ class DailyDigestScheduler:
                     logger.error(f"   Error processing org {org['id']}: {e}")
                     continue
 
-            logger.info(f"✅ Daily digest job complete: {recommendations_sent} emails sent")
+            logger.info(f" Daily digest job complete: {recommendations_sent} emails sent")
 
             return {
                 "status": "success",
@@ -79,7 +79,7 @@ class DailyDigestScheduler:
             }
 
         except Exception as e:
-            logger.error(f"❌ Daily digest job failed: {e}")
+            logger.error(f" Daily digest job failed: {e}")
             return {
                 "status": "error",
                 "error": str(e),
@@ -272,7 +272,7 @@ class DailyDigestScheduler:
     ):
         """Send digest email to user"""
         try:
-            logger.info(f"   📧 Sending digest to {user['email']}")
+            logger.info(f"    Sending digest to {user['email']}")
 
             # Send via Notification Service
             result = await self.notification_client.send_proactive_digest(
@@ -289,12 +289,12 @@ class DailyDigestScheduler:
                         notification_ids=[result.get('notification_id')]
                     )
 
-                logger.info(f"   ✅ Digest sent successfully")
+                logger.info(f"    Digest sent successfully")
             else:
-                logger.error(f"   ❌ Failed to send digest: {result.get('message')}")
+                logger.error(f"    Failed to send digest: {result.get('message')}")
 
         except Exception as e:
-            logger.error(f"   ❌ Error sending digest email: {e}")
+            logger.error(f"    Error sending digest email: {e}")
 
 
 # =====================================================

@@ -33,22 +33,22 @@ function showDemoWelcome() {
             
             <div class="demo-features">
                 <div class="feature-item">
-                    <span class="feature-icon">📊</span>
+                    <span class="feature-icon"></span>
                     <h4>Capacity Planning</h4>
                     <p>Optimize staff allocation and service levels</p>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">🔥</span>
+                    <span class="feature-icon"></span>
                     <h4>BCM Scenarios</h4>
                     <p>Test business continuity and resilience</p>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">💰</span>
+                    <span class="feature-icon"></span>
                     <h4>Grant Optimization</h4>
                     <p>Align funding with impact KPIs</p>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">📈</span>
+                    <span class="feature-icon"></span>
                     <h4>Demand Management</h4>
                     <p>Handle service surges effectively</p>
                 </div>

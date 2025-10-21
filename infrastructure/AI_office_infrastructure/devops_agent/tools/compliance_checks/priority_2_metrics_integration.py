@@ -199,12 +199,12 @@ class MetricsIntegrationChecker:
         prom_available = self.check_prometheus_available()
         grafana_available = self.check_grafana_available()
 
-        logger.info(f"Prometheus: {'✅ доступен' if prom_available else '❌ недоступен'}")
-        logger.info(f"Grafana: {'✅ доступен' if grafana_available else '❌ недоступен'}")
+        logger.info(f"Prometheus: {' доступен' if prom_available else ' недоступен'}")
+        logger.info(f"Grafana: {' доступен' if grafana_available else ' недоступен'}")
         logger.info("")
 
         if not prom_available:
-            logger.warning("⚠️  Prometheus недоступен - невозможно проверить scraping")
+            logger.warning("️  Prometheus недоступен - невозможно проверить scraping")
 
         # Получаем targets из Prometheus
         prometheus_targets = self.get_prometheus_targets() if prom_available else {}
@@ -256,11 +256,11 @@ class MetricsIntegrationChecker:
             self.integrations[service_name] = integration
 
             # Логирование результата
-            status_icon = "✅" if has_metrics and prometheus_scraping else "❌"
+            status_icon = "" if has_metrics and prometheus_scraping else ""
             logger.info(f"{status_icon} {service_name}:")
-            logger.info(f"   Metrics endpoint: {'✅' if has_metrics else '❌'} (http://localhost:{port}{endpoint})")
-            logger.info(f"   Prometheus зарегистрирован: {'✅' if prometheus_registered else '❌'}")
-            logger.info(f"   Prometheus собирает: {'✅' if prometheus_scraping else '❌'}")
+            logger.info(f"   Metrics endpoint: {'' if has_metrics else ''} (http://localhost:{port}{endpoint})")
+            logger.info(f"   Prometheus зарегистрирован: {'' if prometheus_registered else ''}")
+            logger.info(f"   Prometheus собирает: {'' if prometheus_scraping else ''}")
 
             if last_scrape:
                 logger.info(f"   Последний сбор: {last_scrape}")
@@ -310,8 +310,8 @@ class MetricsIntegrationChecker:
         report.append("")
 
         report.append("Инфраструктура метрик:")
-        report.append(f"  Prometheus: {'✅ доступен' if self.prometheus_available else '❌ недоступен'}")
-        report.append(f"  Grafana: {'✅ доступен' if self.grafana_available else '❌ недоступен'}")
+        report.append(f"  Prometheus: {' доступен' if self.prometheus_available else ' недоступен'}")
+        report.append(f"  Grafana: {' доступен' if self.grafana_available else ' недоступен'}")
         report.append("")
 
         # Статистика
@@ -334,7 +334,7 @@ class MetricsIntegrationChecker:
         ]
 
         if problems:
-            report.append(f"❌ Сервисы БЕЗ метрик ({len(problems)}):")
+            report.append(f" Сервисы БЕЗ метрик ({len(problems)}):")
             for integration in problems:
                 report.append(f"  - {integration.service_name} (порт {integration.port})")
 
@@ -345,7 +345,7 @@ class MetricsIntegrationChecker:
 
             report.append("")
         else:
-            report.append("✅ Все сервисы интегрированы с метриками")
+            report.append(" Все сервисы интегрированы с метриками")
             report.append("")
 
         report.append("=" * 80)
@@ -367,7 +367,7 @@ def check_metrics_integration() -> bool:
 
     # Проверяем, что хотя бы Prometheus доступен
     if not checker.prometheus_available:
-        logger.error("❌ Prometheus недоступен - система метрик не работает")
+        logger.error(" Prometheus недоступен - система метрик не работает")
         return False
 
     # Проверяем, что большинство сервисов интегрированы
@@ -376,7 +376,7 @@ def check_metrics_integration() -> bool:
 
     if fully_integrated / total < 0.5:  # Менее 50% интегрированы
         logger.error(
-            f"❌ Недостаточно сервисов интегрированы: "
+            f" Недостаточно сервисов интегрированы: "
             f"{fully_integrated}/{total} ({fully_integrated / total * 100:.0f}%)"
         )
         return False

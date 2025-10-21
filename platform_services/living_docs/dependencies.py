@@ -54,7 +54,7 @@ async def get_ai_client():
             client = AsyncAnthropic(api_key=api_key)
 
             # Test connection
-            logger.info("✅ Anthropic Claude client initialized")
+            logger.info(" Anthropic Claude client initialized")
             return client
 
         except Exception as e:
@@ -121,7 +121,7 @@ async def get_collective_intelligence_client():
 
         client = httpx.AsyncClient(base_url=base_url, timeout=30.0)
 
-        logger.info(f"✅ Collective Intelligence client initialized: {base_url}")
+        logger.info(f" Collective Intelligence client initialized: {base_url}")
         return client
 
     except Exception as e:
@@ -163,7 +163,7 @@ async def get_evolution_engine(
         collective_intelligence=collective_client
     )
 
-    logger.info("✅ Documentation Evolution Engine initialized")
+    logger.info(" Documentation Evolution Engine initialized")
     return engine
 
 
@@ -189,7 +189,7 @@ async def get_personalization_service(
 
     service = PersonalizationService(db=db)
 
-    logger.info("✅ Personalization Service initialized")
+    logger.info(" Personalization Service initialized")
     return service
 
 
@@ -227,7 +227,7 @@ async def get_example_generator(
         collective_intelligence=collective_client
     )
 
-    logger.info("✅ AI Example Generator initialized")
+    logger.info(" AI Example Generator initialized")
     return generator
 
 
@@ -279,7 +279,7 @@ async def validate_dependencies() -> dict:
     # Log results
     logger.info("Dependency Validation:")
     for service, healthy in status.items():
-        symbol = "✅" if healthy else "❌"
+        symbol = "" if healthy else ""
         logger.info(f"  {symbol} {service}: {healthy}")
 
     return status

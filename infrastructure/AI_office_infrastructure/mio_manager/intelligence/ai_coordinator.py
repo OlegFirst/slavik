@@ -64,10 +64,10 @@ class AICoordinator:
             self.predictor = PredictiveModel()
             self.anomaly_detector = AnomalyDetector()
 
-            logger.info("✅ AI Coordinator initialized with full capabilities")
+            logger.info(" AI Coordinator initialized with full capabilities")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize AI components: {e}")
+            logger.error(f" Failed to initialize AI components: {e}")
             self.enabled = False
 
     async def analyze_platform_state(
@@ -152,7 +152,7 @@ class AICoordinator:
             }
 
         except Exception as e:
-            logger.error(f"❌ AI analysis failed: {e}")
+            logger.error(f" AI analysis failed: {e}")
             return self._fallback_analysis(metrics)
 
     async def generate_conversational_response(
@@ -215,7 +215,7 @@ class AICoordinator:
             }
 
         except Exception as e:
-            logger.error(f"❌ Conversational response generation failed: {e}")
+            logger.error(f" Conversational response generation failed: {e}")
             return {
                 'response': f"Sorry, I encountered an error: {str(e)}",
                 'actions': [],
@@ -291,7 +291,7 @@ class AICoordinator:
             }
 
         except Exception as e:
-            logger.error(f"❌ Decision making failed: {e}")
+            logger.error(f" Decision making failed: {e}")
             return self._fallback_decision(available_actions)
 
     async def learn_from_outcome(
@@ -326,7 +326,7 @@ class AICoordinator:
             # TODO: Store in database for pattern extraction
             # await self.learning_tracker.record(learning_example)
 
-            logger.info(f"📚 Learned from outcome: {outcome.get('success', False)}")
+            logger.info(f" Learned from outcome: {outcome.get('success', False)}")
 
             return {
                 'learned': True,
@@ -335,7 +335,7 @@ class AICoordinator:
             }
 
         except Exception as e:
-            logger.error(f"❌ Learning failed: {e}")
+            logger.error(f" Learning failed: {e}")
             return {'learned': False, 'error': str(e)}
 
     # ========================================================================

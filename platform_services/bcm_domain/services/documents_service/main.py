@@ -91,12 +91,12 @@ async def lifespan(app: FastAPI):
     """
     global db_manager, workflow_storage, workflow_engine, ai_advisor, case_collector
 
-    print(f"🚀 Documents Service starting...")
+    print(f" Documents Service starting...")
 
     # Create storage directories
     storage_path = Path(settings.STORAGE_PATH)
     storage_path.mkdir(parents=True, exist_ok=True)
-    print(f"   ✅ Storage directory: {storage_path}")
+    print(f"    Storage directory: {storage_path}")
 
     # Initialize database with connection pooling
     try:
@@ -105,17 +105,17 @@ async def lifespan(app: FastAPI):
             pool_size=20,
             max_overflow=10
         )
-        print(f"   ✅ Database connection pool initialized (pool_size=20)")
+        print(f"    Database connection pool initialized (pool_size=20)")
 
         # Create database schema
         from sqlalchemy.ext.asyncio import create_async_engine
         engine = create_async_engine(settings.DATABASE_URL)
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-        print(f"   ✅ Database schema initialized")
+        print(f"    Database schema initialized")
         await engine.dispose()
     except Exception as e:
-        print(f"   ⚠️  Database initialization warning: {e}")
+        print(f"   ️  Database initialization warning: {e}")
 
     # Initialize Workflow Intelligence
     try:
@@ -131,11 +131,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -144,7 +144,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -154,23 +154,23 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        print(f"   ✅ Workflow Intelligence initialized (Documents module)")
+        print(f"    Workflow Intelligence initialized (Documents module)")
     except Exception as e:
-        print(f"   ⚠️  Workflow Intelligence initialization warning: {e}")
+        print(f"   ️  Workflow Intelligence initialization warning: {e}")
 
     # Initialize EventBus
     try:
-        print(f"📡 Connecting to EventBus: {settings.EVENTBUS_URL}")
+        print(f" Connecting to EventBus: {settings.EVENTBUS_URL}")
         eventbus = initialize_eventbus(rabbitmq_url=settings.EVENTBUS_URL)
         await eventbus.connect()
 
         # Subscribe to events from other modules
         for event_type, handler in EVENT_HANDLERS.items():
             await eventbus.subscribe(event_type, handler)
-            print(f"   ✅ Subscribed: {event_type}")
+            print(f"    Subscribed: {event_type}")
 
     except Exception as e:
-        print(f"   ⚠️  EventBus connection warning: {e}")
+        print(f"   ️  EventBus connection warning: {e}")
         print(f"   ℹ️  Service will continue without EventBus")
 
     # Register with Orchestrator
@@ -195,32 +195,32 @@ async def lifespan(app: FastAPI):
                     timeout=5.0
                 )
                 if response.status_code == 200:
-                    print(f"   ✅ Registered with Orchestrator")
+                    print(f"    Registered with Orchestrator")
         except Exception as e:
-            print(f"   ⚠️  Orchestrator registration warning: {e}")
+            print(f"   ️  Orchestrator registration warning: {e}")
 
-    print(f"✅ Documents Service ready on port {settings.SERVICE_PORT}")
-    print(f"📚 API Documentation: http://localhost:{settings.SERVICE_PORT}/docs")
+    print(f" Documents Service ready on port {settings.SERVICE_PORT}")
+    print(f" API Documentation: http://localhost:{settings.SERVICE_PORT}/docs")
 
     yield
 
     # Shutdown
-    print("👋 Documents Service shutting down...")
+    print(" Documents Service shutting down...")
 
     # Close Workflow Intelligence
     if workflow_storage:
         try:
             await workflow_storage.close()
-            print("   ✅ Workflow Intelligence connection closed")
+            print("    Workflow Intelligence connection closed")
         except Exception as e:
-            print(f"   ⚠️  Error closing Workflow Intelligence: {e}")
+            print(f"   ️  Error closing Workflow Intelligence: {e}")
 
     # Disconnect EventBus
     try:
         eventbus = get_eventbus()
         if eventbus and eventbus.is_connected:
             await eventbus.disconnect()
-            print("   ✅ EventBus disconnected")
+            print("    EventBus disconnected")
     except:
         pass
 
@@ -234,15 +234,15 @@ async def lifespan(app: FastAPI):
                     json={"service_name": settings.SERVICE_NAME},
                     timeout=5.0
                 )
-                print("   ✅ Unregistered from Orchestrator")
+                print("    Unregistered from Orchestrator")
         except:
             pass
 
     # Close database connections
     await close_db()
-    print("   ✅ Database connections closed")
+    print("    Database connections closed")
 
-    print("✅ Shutdown complete")
+    print(" Shutdown complete")
 
 
 # ============================================================================

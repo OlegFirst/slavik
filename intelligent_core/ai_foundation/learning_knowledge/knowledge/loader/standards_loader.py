@@ -79,10 +79,10 @@ class StandardsLoader:
             cache_key = self._get_cache_key(standard_path)
             cached = await self._get_from_cache(cache_key)
             if cached:
-                logger.info(f"✅ Loaded {standard} from cache")
+                logger.info(f" Loaded {standard} from cache")
                 return cached
 
-        logger.info(f"📖 Loading {standard} from source files...")
+        logger.info(f" Loading {standard} from source files...")
 
         # Load metadata
         metadata = await self._load_metadata(standard_path)
@@ -110,7 +110,7 @@ class StandardsLoader:
         if self.cache_enabled:
             await self._save_to_cache(cache_key, data)
 
-        logger.info(f"✅ Loaded {standard} successfully")
+        logger.info(f" Loaded {standard} successfully")
 
         return data
 

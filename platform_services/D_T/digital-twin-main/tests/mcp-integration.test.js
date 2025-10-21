@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { DigitalTwinMCPIntegration } from '../src/mcp-integration.js';
 import { constructor, initialize, defineTools, registerWithMCPInfrastructure, startHealthMonitoring, performHealthCheck, handleCreateDigitalTwin, handleGetDigitalTwin, handleListDigitalTwins, handleRunAutomationScenario, handleRunCrisisScenario, handleRunExpansionScenario, handleRunIntegrationScenario, handleGetTwinAnalytics, handleGetHealthStatus, getToolDefinitions, executeTool, shutdown, getMetadata, createDigitalTwinMCPIntegration } from '../src/mcp-integration.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('mcp-integration', () => {
@@ -356,7 +356,7 @@ describe('mcp-integration', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in mcp-integration');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

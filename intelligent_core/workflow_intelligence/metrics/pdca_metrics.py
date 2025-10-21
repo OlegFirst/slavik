@@ -225,4 +225,4 @@ def initialize_pdca_metrics(tenant_id: str, version: str):
         'engine': 'PDCARulesEngine'
     })
 
-    logger.info(f"✅ PDCA metrics initialized (tenant={tenant_id}, version={version})")
+    logger.info(f" PDCA metrics initialized (tenant={tenant_id}, version={version})")

@@ -45,7 +45,7 @@ async def on_training_completed(event_data: Dict[str, Any]):
         program_name = event_data.get("program_name")
         tenant_id = event_data.get("tenant_id")
 
-        logger.info(f"🎓 Training completed: {person_id} finished '{program_name}'")
+        logger.info(f" Training completed: {person_id} finished '{program_name}'")
 
         # PHASE 5: Award forum badge and update reputation
         async for db in get_db():
@@ -79,7 +79,7 @@ async def on_training_completed(event_data: Dict[str, Any]):
                         badge_name='Knowledgeable',
                         badge_type='achievement',
                         description='Completed a training program',
-                        icon='🎓'
+                        icon=''
                     )
                     db.add(badge)
                     await db.flush()
@@ -101,7 +101,7 @@ async def on_training_completed(event_data: Dict[str, Any]):
                     reputation.badges_earned += 1
 
                 await db.commit()
-                logger.info(f"✅ Awarded 'Knowledgeable' badge to {person_id}")
+                logger.info(f" Awarded 'Knowledgeable' badge to {person_id}")
 
             except Exception as db_error:
                 logger.error(f"Database error in training.completed handler: {db_error}")
@@ -109,10 +109,10 @@ async def on_training_completed(event_data: Dict[str, Any]):
             finally:
                 break
 
-        logger.info(f"✅ Processed training.completed event for {person_id}")
+        logger.info(f" Processed training.completed event for {person_id}")
 
     except Exception as e:
-        logger.error(f"❌ Error processing training.completed: {e}")
+        logger.error(f" Error processing training.completed: {e}")
 
 
 async def on_certification_issued(event_data: Dict[str, Any]):
@@ -138,7 +138,7 @@ async def on_certification_issued(event_data: Dict[str, Any]):
         cert_number = event_data.get("certification_number")
         cert_name = event_data.get("certification_name", "Professional Certification")
 
-        logger.info(f"🏆 Certification issued: {person_id} earned '{cert_name}' ({cert_number})")
+        logger.info(f" Certification issued: {person_id} earned '{cert_name}' ({cert_number})")
 
         # PHASE 5: Award "Verified Expert" badge and increase reputation
         async for db in get_db():
@@ -172,7 +172,7 @@ async def on_certification_issued(event_data: Dict[str, Any]):
                         badge_name='Verified Expert',
                         badge_type='certification',
                         description='Earned a professional certification',
-                        icon='🏆'
+                        icon=''
                     )
                     db.add(badge)
                     await db.flush()
@@ -191,7 +191,7 @@ async def on_certification_issued(event_data: Dict[str, Any]):
                 reputation.last_certification_date = event_data.get('issued_date')
 
                 await db.commit()
-                logger.info(f"✅ Awarded 'Verified Expert' badge and 200 points to {person_id}")
+                logger.info(f" Awarded 'Verified Expert' badge and 200 points to {person_id}")
 
             except Exception as db_error:
                 logger.error(f"Database error in certification.issued handler: {db_error}")
@@ -199,10 +199,10 @@ async def on_certification_issued(event_data: Dict[str, Any]):
             finally:
                 break
 
-        logger.info(f"✅ Processed certification.issued event for {person_id}")
+        logger.info(f" Processed certification.issued event for {person_id}")
 
     except Exception as e:
-        logger.error(f"❌ Error processing certification.issued: {e}")
+        logger.error(f" Error processing certification.issued: {e}")
 
 
 async def on_program_published(event_data: Dict[str, Any]):
@@ -225,14 +225,14 @@ async def on_program_published(event_data: Dict[str, Any]):
         program_id = event_data.get("program_id")
         program_name = event_data.get("program_name")
 
-        logger.info(f"📚 Training program published: '{program_name}' (ID: {program_id})")
+        logger.info(f" Training program published: '{program_name}' (ID: {program_id})")
 
         # TODO Phase 5: Auto-create knowledge article about program
 
-        logger.info(f"✅ Processed program.published event")
+        logger.info(f" Processed program.published event")
 
     except Exception as e:
-        logger.error(f"❌ Error processing program.published: {e}")
+        logger.error(f" Error processing program.published: {e}")
 
 
 # ============================================================================
@@ -264,15 +264,15 @@ async def on_policy_created(event_data: Dict[str, Any]):
         policy_type = event_data.get("policy_type")
         iso_clause = event_data.get("iso_clause")
 
-        logger.info(f"📋 Policy created: '{title}' (Type: {policy_type}, ISO: {iso_clause})")
+        logger.info(f" Policy created: '{title}' (Type: {policy_type}, ISO: {iso_clause})")
 
         # TODO Phase 5: Create forum category for policy discussion
         # TODO Phase 5: Suggest knowledge articles
 
-        logger.info(f"✅ Processed policy.created event")
+        logger.info(f" Processed policy.created event")
 
     except Exception as e:
-        logger.error(f"❌ Error processing policy.created: {e}")
+        logger.error(f" Error processing policy.created: {e}")
 
 
 async def on_policy_published(event_data: Dict[str, Any]):
@@ -297,15 +297,15 @@ async def on_policy_published(event_data: Dict[str, Any]):
         title = event_data.get("title")
         effective_date = event_data.get("effective_date")
 
-        logger.info(f"📢 Policy published: '{title}' (Effective: {effective_date})")
+        logger.info(f" Policy published: '{title}' (Effective: {effective_date})")
 
         # TODO Phase 5: Create forum announcement
         # TODO Phase 5: Update article references
 
-        logger.info(f"✅ Processed policy.published event")
+        logger.info(f" Processed policy.published event")
 
     except Exception as e:
-        logger.error(f"❌ Error processing policy.published: {e}")
+        logger.error(f" Error processing policy.published: {e}")
 
 
 async def on_role_assigned(event_data: Dict[str, Any]):
@@ -330,15 +330,15 @@ async def on_role_assigned(event_data: Dict[str, Any]):
         role_name = event_data.get("role_name")
         role_code = event_data.get("role_code")
 
-        logger.info(f"👤 Role assigned: {person_id} → {role_name} ({role_code})")
+        logger.info(f" Role assigned: {person_id} → {role_name} ({role_code})")
 
         # TODO Phase 5: Update forum permissions
         # TODO Phase 5: Add role badge to profile
 
-        logger.info(f"✅ Processed role.assigned event")
+        logger.info(f" Processed role.assigned event")
 
     except Exception as e:
-        logger.error(f"❌ Error processing role.assigned: {e}")
+        logger.error(f" Error processing role.assigned: {e}")
 
 
 # ============================================================================
@@ -364,7 +364,7 @@ async def setup_subscriptions():
         eventbus.subscribe("governance.policy.published", on_policy_published)
         eventbus.subscribe("governance.role.assigned", on_role_assigned)
 
-        logger.info("✅ Portal event subscribers registered:")
+        logger.info(" Portal event subscribers registered:")
         logger.info("   - learning.training.completed")
         logger.info("   - learning.certification.issued")
         logger.info("   - learning.program.published")
@@ -373,5 +373,5 @@ async def setup_subscriptions():
         logger.info("   - governance.role.assigned")
 
     except Exception as e:
-        logger.error(f"❌ Failed to setup event subscriptions: {e}")
+        logger.error(f" Failed to setup event subscriptions: {e}")
         raise

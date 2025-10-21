@@ -44,7 +44,7 @@ class OrchestratorClient:
         Returns:
             Deployment result
         """
-        logger.info(f"🚀 Requesting deploy: layer={layer}, use_ai={use_ai}")
+        logger.info(f" Requesting deploy: layer={layer}, use_ai={use_ai}")
 
         try:
             response = await self.client.post(
@@ -65,7 +65,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Deploy request failed: {e}")
+            logger.error(f" Deploy request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def request_service_restart(self, service_name: str) -> Dict:
@@ -78,7 +78,7 @@ class OrchestratorClient:
         Returns:
             Restart result
         """
-        logger.info(f"🔄 Requesting restart: {service_name}")
+        logger.info(f" Requesting restart: {service_name}")
 
         task = {
             'task_type': 'infrastructure',
@@ -119,7 +119,7 @@ class OrchestratorClient:
         Returns:
             Fix result
         """
-        logger.info(f"🔧 Requesting event gap fix: {gap.get('event_name')}")
+        logger.info(f" Requesting event gap fix: {gap.get('event_name')}")
 
         try:
             response = await self.client.post(
@@ -136,7 +136,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Fix gap request failed: {e}")
+            logger.error(f" Fix gap request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def fix_multiple_event_gaps(self, gaps: List[Dict]) -> Dict:
@@ -149,7 +149,7 @@ class OrchestratorClient:
         Returns:
             Summary result
         """
-        logger.info(f"🔧 Requesting fix for {len(gaps)} event gaps")
+        logger.info(f" Requesting fix for {len(gaps)} event gaps")
 
         try:
             response = await self.client.post(
@@ -167,7 +167,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Fix gaps request failed: {e}")
+            logger.error(f" Fix gaps request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def add_publisher(
@@ -191,7 +191,7 @@ class OrchestratorClient:
         Returns:
             Add result
         """
-        logger.info(f"➕ Requesting add publisher: {event} in {service}/{method_name}")
+        logger.info(f" Requesting add publisher: {event} in {service}/{method_name}")
 
         try:
             response = await self.client.post(
@@ -214,7 +214,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Add publisher request failed: {e}")
+            logger.error(f" Add publisher request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def add_subscriber(
@@ -236,7 +236,7 @@ class OrchestratorClient:
         Returns:
             Add result
         """
-        logger.info(f"➕ Requesting add subscriber: {event} in {service}")
+        logger.info(f" Requesting add subscriber: {event} in {service}")
 
         try:
             response = await self.client.post(
@@ -258,7 +258,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Add subscriber request failed: {e}")
+            logger.error(f" Add subscriber request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def create_event_pr(self, branch_name: Optional[str] = None) -> Dict:
@@ -271,7 +271,7 @@ class OrchestratorClient:
         Returns:
             PR result
         """
-        logger.info("📤 Requesting create PR with event changes")
+        logger.info(" Requesting create PR with event changes")
 
         try:
             params = {'branch_name': branch_name} if branch_name else {}
@@ -289,7 +289,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Create PR request failed: {e}")
+            logger.error(f" Create PR request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     async def rollback_event_changes(self) -> Dict:
@@ -299,7 +299,7 @@ class OrchestratorClient:
         Returns:
             Rollback result
         """
-        logger.info("🔄 Requesting rollback event changes")
+        logger.info(" Requesting rollback event changes")
 
         try:
             response = await self.client.post(
@@ -315,7 +315,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Rollback request failed: {e}")
+            logger.error(f" Rollback request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     # ========================================================================
@@ -338,7 +338,7 @@ class OrchestratorClient:
         Returns:
             Execution result
         """
-        logger.info(f"🎯 Requesting task execution: {task.get('task_type')} - {task.get('action')}")
+        logger.info(f" Requesting task execution: {task.get('task_type')} - {task.get('action')}")
 
         try:
             response = await self.client.post(
@@ -355,7 +355,7 @@ class OrchestratorClient:
                 }
 
         except Exception as e:
-            logger.error(f"❌ Task execution request failed: {e}")
+            logger.error(f" Task execution request failed: {e}")
             return {'status': 'error', 'message': str(e)}
 
     # ========================================================================

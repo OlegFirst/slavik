@@ -118,7 +118,7 @@ class AutoRegenerationHandler:
             self.handle_catalog_event
         )
 
-        logger.info("✅ AutoRegenerationHandler subscribed to catalog events")
+        logger.info(" AutoRegenerationHandler subscribed to catalog events")
 
     async def handle_catalog_event(self, event: Any):
         """
@@ -131,7 +131,7 @@ class AutoRegenerationHandler:
             event_type = event.type
             data = event.data
 
-            logger.info(f"📥 Received catalog event: {event_type}")
+            logger.info(f" Received catalog event: {event_type}")
 
             # Add to pending changes
             self._pending_changes.append({
@@ -169,7 +169,7 @@ class AutoRegenerationHandler:
         start_time = datetime.utcnow()
 
         try:
-            logger.info(f"🔄 Processing batch of {len(changes)} changes (id={regeneration_id})")
+            logger.info(f" Processing batch of {len(changes)} changes (id={regeneration_id})")
 
             # Analyze changes
             affected_services = self._extract_affected_services(changes)
@@ -204,7 +204,7 @@ class AutoRegenerationHandler:
                 )
                 await self.eventbus_client.publish_regeneration_completed(completion_event)
 
-            logger.info(f"✅ Batch regeneration completed (id={regeneration_id})")
+            logger.info(f" Batch regeneration completed (id={regeneration_id})")
 
         except Exception as e:
             logger.error(f"Batch regeneration failed: {e}", exc_info=True)
@@ -260,7 +260,7 @@ class AutoRegenerationHandler:
         Returns:
             Result dict with stats
         """
-        logger.info(f"🔄 Regenerating scenarios for levels: {levels}")
+        logger.info(f" Regenerating scenarios for levels: {levels}")
 
         result = {
             "status": "success",
@@ -280,7 +280,7 @@ class AutoRegenerationHandler:
             result["errors"] = report.get("errors", [])
 
             logger.info(
-                f"✅ Regeneration complete: "
+                f" Regeneration complete: "
                 f"{result['generated']} scenarios generated"
             )
 
@@ -309,7 +309,7 @@ class AutoRegenerationHandler:
 
         try:
             result = await self._regenerate_for_levels([level], regeneration_id)
-            logger.info(f"✅ Generated scenarios for new service: {service_name}")
+            logger.info(f" Generated scenarios for new service: {service_name}")
             return result
 
         except Exception as e:
@@ -328,7 +328,7 @@ class AutoRegenerationHandler:
             service_name: Name of the service
             changes: What changed
         """
-        logger.info(f"🔄 Service updated: {service_name}")
+        logger.info(f" Service updated: {service_name}")
 
         # Determine affected scenarios
         level = self.get_level_for_service(service_name)
@@ -338,7 +338,7 @@ class AutoRegenerationHandler:
 
         try:
             result = await self._regenerate_for_levels([level], regeneration_id)
-            logger.info(f"✅ Updated scenarios for: {service_name}")
+            logger.info(f" Updated scenarios for: {service_name}")
             return result
 
         except Exception as e:
@@ -352,7 +352,7 @@ class AutoRegenerationHandler:
         Args:
             service_name: Name of the service
         """
-        logger.info(f"🗑️  Service removed: {service_name}")
+        logger.info(f"️  Service removed: {service_name}")
 
         # Find scenarios for this service
         # Mark them as deprecated
@@ -383,7 +383,7 @@ class AutoRegenerationHandler:
         if self.eventbus_client:
             await self.eventbus_client.close()
 
-        logger.info("✅ AutoRegenerationHandler closed")
+        logger.info(" AutoRegenerationHandler closed")
 
 
 # =========================================================================
@@ -401,7 +401,7 @@ async def main():
     handler = AutoRegenerationHandler(manager)
     await handler.initialize()
 
-    logger.info("✅ Auto-regeneration handler running")
+    logger.info(" Auto-regeneration handler running")
     logger.info("   Listening for service catalog changes...")
 
     # Keep running

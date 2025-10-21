@@ -105,7 +105,7 @@ class LearningEventSubscriber:
             'prediction_made': 0
         }
 
-        logger.info("✅ LearningEventSubscriber initialized")
+        logger.info(" LearningEventSubscriber initialized")
 
     # ========================================================================
     # COMMUNITY INTELLIGENCE EVENTS
@@ -126,7 +126,7 @@ class LearningEventSubscriber:
             case_data = event_data.get('case_data', {})
             module = case_data.get('module', 'unknown')
 
-            logger.info(f"📚 Learning from approved case: {case_id} (module={module})")
+            logger.info(f" Learning from approved case: {case_id} (module={module})")
 
             # 1. Add to ML training dataset (positive example)
             features = self._extract_case_features(case_data)
@@ -146,9 +146,9 @@ class LearningEventSubscriber:
             if self.vector_indexer and self.case_collector:
                 try:
                     await self.vector_indexer.index_case(case_data)
-                    logger.info(f"  ✅ Indexed case {case_id} into vector DB")
+                    logger.info(f"   Indexed case {case_id} into vector DB")
                 except Exception as e:
-                    logger.warning(f"  ⚠️ Failed to index case: {e}")
+                    logger.warning(f"  ️ Failed to index case: {e}")
 
             # 3. Update competency models from successful case
             if 'competencies_demonstrated' in case_data:
@@ -165,10 +165,10 @@ class LearningEventSubscriber:
                     )
 
             self.events_processed['case_approved'] += 1
-            logger.info(f"  ✅ Learned from approved case {case_id}")
+            logger.info(f"   Learned from approved case {case_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling case.approved: {e}", exc_info=True)
+            logger.error(f" Error handling case.approved: {e}", exc_info=True)
 
     async def handle_case_rejected(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -184,7 +184,7 @@ class LearningEventSubscriber:
             rejection_reasons = event_data.get('rejection_reasons', [])
             case_data = event_data.get('case_data', {})
 
-            logger.info(f"🔍 Analyzing rejected case: {case_id}")
+            logger.info(f" Analyzing rejected case: {case_id}")
 
             # Add rejection pattern to analysis
             rejection_pattern = {
@@ -206,14 +206,14 @@ class LearningEventSubscriber:
             if len(self.rejection_patterns) >= 10:
                 patterns = await self._detect_rejection_patterns()
                 if patterns:
-                    logger.info(f"  🔍 Detected {len(patterns)} rejection patterns")
+                    logger.info(f"   Detected {len(patterns)} rejection patterns")
                     # TODO: Update quality filters, notify experts
 
             self.events_processed['case_rejected'] += 1
-            logger.info(f"  ✅ Analyzed rejection for case {case_id}")
+            logger.info(f"   Analyzed rejection for case {case_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling case.rejected: {e}", exc_info=True)
+            logger.error(f" Error handling case.rejected: {e}", exc_info=True)
 
     async def handle_review_submitted(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -230,7 +230,7 @@ class LearningEventSubscriber:
             rating = event_data.get('rating', 0)
             feedback = event_data.get('feedback', '')
 
-            logger.info(f"💬 Learning from peer review: {review_id} (rating={rating})")
+            logger.info(f" Learning from peer review: {review_id} (rating={rating})")
 
             # Use review as quality signal for ML
             # High ratings = good training examples
@@ -253,14 +253,14 @@ class LearningEventSubscriber:
             # Update case quality scores
             # Cases with high peer ratings get boosted in recommendations
             if rating >= 4:  # High rating (assuming 1-5 scale)
-                logger.info(f"  ⭐ High-quality case detected: {case_id}")
+                logger.info(f"   High-quality case detected: {case_id}")
                 # TODO: Boost in recommendation system
 
             self.events_processed['review_submitted'] += 1
-            logger.info(f"  ✅ Learned from review {review_id}")
+            logger.info(f"   Learned from review {review_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling review.submitted: {e}", exc_info=True)
+            logger.error(f" Error handling review.submitted: {e}", exc_info=True)
 
     # ========================================================================
     # WORKFLOW INTELLIGENCE EVENTS
@@ -282,7 +282,7 @@ class LearningEventSubscriber:
             context = event_data.get('context', {})
             metrics = context.get('metrics', {})
 
-            logger.info(f"✅ Learning from completed workflow: {workflow_id} (module={module})")
+            logger.info(f" Learning from completed workflow: {workflow_id} (module={module})")
 
             # Build workflow result for pattern detection
             workflow_result = {
@@ -307,7 +307,7 @@ class LearningEventSubscriber:
                 patterns = self.pattern_detector.detect_patterns(self.workflow_results)
 
                 if patterns:
-                    logger.info(f"  🔍 Detected {len(patterns)} workflow patterns")
+                    logger.info(f"   Detected {len(patterns)} workflow patterns")
 
                     # TODO: Create knowledge articles from patterns
                     # TODO: Update best practice library
@@ -326,10 +326,10 @@ class LearningEventSubscriber:
                 })
 
             self.events_processed['workflow_completed'] += 1
-            logger.info(f"  ✅ Learned from workflow {workflow_id}")
+            logger.info(f"   Learned from workflow {workflow_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling workflow.completed: {e}", exc_info=True)
+            logger.error(f" Error handling workflow.completed: {e}", exc_info=True)
 
     async def handle_workflow_failed(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -345,7 +345,7 @@ class LearningEventSubscriber:
             error_type = event_data.get('error_type', 'unknown')
             error_details = event_data.get('error_details', {})
 
-            logger.info(f"⚠️ Analyzing failed workflow: {workflow_id} (error={error_type})")
+            logger.info(f"️ Analyzing failed workflow: {workflow_id} (error={error_type})")
 
             # Record failure for pattern analysis
             failure = {
@@ -365,10 +365,10 @@ class LearningEventSubscriber:
                 await self._detect_failure_patterns()
 
             self.events_processed['workflow_failed'] += 1
-            logger.info(f"  ✅ Analyzed failure for workflow {workflow_id}")
+            logger.info(f"   Analyzed failure for workflow {workflow_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling workflow.failed: {e}", exc_info=True)
+            logger.error(f" Error handling workflow.failed: {e}", exc_info=True)
 
     async def handle_workflow_milestone_reached(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -384,7 +384,7 @@ class LearningEventSubscriber:
             milestone = event_data.get('milestone')
             user_id = event_data.get('user_id', 'unknown')
 
-            logger.info(f"🎯 Milestone reached: {milestone} (workflow={workflow_id})")
+            logger.info(f" Milestone reached: {milestone} (workflow={workflow_id})")
 
             # Map milestones to competencies
             milestone_competencies = {
@@ -407,12 +407,12 @@ class LearningEventSubscriber:
                     evidence_id=f"{workflow_id}_{milestone}"
                 )
 
-                logger.info(f"  ✅ Updated competency '{competency}' for user {user_id}")
+                logger.info(f"   Updated competency '{competency}' for user {user_id}")
 
             self.events_processed['workflow_milestone'] += 1
 
         except Exception as e:
-            logger.error(f"❌ Error handling workflow.milestone_reached: {e}", exc_info=True)
+            logger.error(f" Error handling workflow.milestone_reached: {e}", exc_info=True)
 
     # ========================================================================
     # BIA EVENTS
@@ -432,7 +432,7 @@ class LearningEventSubscriber:
             organization = event_data.get('organization', {})
             results = event_data.get('results', {})
 
-            logger.info(f"📊 Learning from BIA completion: {bia_id}")
+            logger.info(f" Learning from BIA completion: {bia_id}")
 
             # Extract knowledge from BIA
             bia_knowledge = {
@@ -455,10 +455,10 @@ class LearningEventSubscriber:
             # TODO: Index BIA patterns for recommendations
 
             self.events_processed['bia_completed'] += 1
-            logger.info(f"  ✅ Extracted knowledge from BIA {bia_id}")
+            logger.info(f"   Extracted knowledge from BIA {bia_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling bia.completed: {e}", exc_info=True)
+            logger.error(f" Error handling bia.completed: {e}", exc_info=True)
 
     async def handle_bia_validated(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -474,18 +474,18 @@ class LearningEventSubscriber:
             validation_score = event_data.get('validation_score', 0)
             validator = event_data.get('validator')
 
-            logger.info(f"✅ BIA validated: {bia_id} (score={validation_score})")
+            logger.info(f" BIA validated: {bia_id} (score={validation_score})")
 
             # High-quality validated BIAs are excellent training data
             if validation_score >= 80:
-                logger.info(f"  ⭐ High-quality BIA detected: {bia_id}")
+                logger.info(f"   High-quality BIA detected: {bia_id}")
                 # TODO: Add to gold-standard training set
                 # TODO: Extract as best practice example
 
             self.events_processed['bia_validated'] += 1
 
         except Exception as e:
-            logger.error(f"❌ Error handling bia.validated: {e}", exc_info=True)
+            logger.error(f" Error handling bia.validated: {e}", exc_info=True)
 
     # ========================================================================
     # INCIDENT EVENTS
@@ -505,7 +505,7 @@ class LearningEventSubscriber:
             incident_type = event_data.get('incident_type')
             resolution = event_data.get('resolution', {})
 
-            logger.info(f"🚨 Learning from incident resolution: {incident_id} (type={incident_type})")
+            logger.info(f" Learning from incident resolution: {incident_id} (type={incident_type})")
 
             # Extract lessons learned
             lesson = {
@@ -526,10 +526,10 @@ class LearningEventSubscriber:
             # TODO: Update incident response playbooks
 
             self.events_processed['incident_resolved'] += 1
-            logger.info(f"  ✅ Learned from incident {incident_id}")
+            logger.info(f"   Learned from incident {incident_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling incident.resolved: {e}", exc_info=True)
+            logger.error(f" Error handling incident.resolved: {e}", exc_info=True)
 
     async def handle_incident_pattern_detected(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -545,7 +545,7 @@ class LearningEventSubscriber:
             pattern_type = event_data.get('pattern_type')
             incidents = event_data.get('incidents', [])
 
-            logger.info(f"🔍 Incident pattern detected: {pattern_id} (type={pattern_type})")
+            logger.info(f" Incident pattern detected: {pattern_id} (type={pattern_type})")
 
             # Record pattern for library
             pattern = {
@@ -565,10 +565,10 @@ class LearningEventSubscriber:
             # TODO: Generate preventive recommendations
 
             self.events_processed['incident_pattern'] += 1
-            logger.info(f"  ✅ Recorded incident pattern {pattern_id}")
+            logger.info(f"   Recorded incident pattern {pattern_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error handling incident.pattern_detected: {e}", exc_info=True)
+            logger.error(f" Error handling incident.pattern_detected: {e}", exc_info=True)
 
     # ========================================================================
     # TRAINING/EXERCISE EVENTS (Bonus subscribers)
@@ -588,7 +588,7 @@ class LearningEventSubscriber:
             results = event_data.get('results', {})
             score = results.get('overall_score', 0)
 
-            logger.info(f"🎓 Learning from exercise: {exercise_id} (score={score})")
+            logger.info(f" Learning from exercise: {exercise_id} (score={score})")
 
             # Add to pattern detection
             exercise_result = {
@@ -608,12 +608,12 @@ class LearningEventSubscriber:
             if len(self.exercise_results) >= 10:
                 patterns = self.pattern_detector.detect_patterns(self.exercise_results)
                 if patterns:
-                    logger.info(f"  🔍 Detected {len(patterns)} exercise patterns")
+                    logger.info(f"   Detected {len(patterns)} exercise patterns")
 
             self.events_processed['exercise_completed'] += 1
 
         except Exception as e:
-            logger.error(f"❌ Error handling exercise.completed: {e}", exc_info=True)
+            logger.error(f" Error handling exercise.completed: {e}", exc_info=True)
 
     async def handle_prediction_made(self, event_data: Dict[str, Any], tenant_id: str):
         """
@@ -627,7 +627,7 @@ class LearningEventSubscriber:
             prediction_id = event_data.get('prediction_id')
             predicted_value = event_data.get('predicted_value')
 
-            logger.info(f"🔮 Recording prediction: {prediction_id}")
+            logger.info(f" Recording prediction: {prediction_id}")
 
             # Record prediction in self-learning engine
             self.self_learning.record_prediction(
@@ -638,7 +638,7 @@ class LearningEventSubscriber:
             self.events_processed['prediction_made'] += 1
 
         except Exception as e:
-            logger.error(f"❌ Error handling prediction.made: {e}", exc_info=True)
+            logger.error(f" Error handling prediction.made: {e}", exc_info=True)
 
     # ========================================================================
     # HELPER METHODS
@@ -775,10 +775,10 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
     """
 
     if not EVENTBUS_AVAILABLE:
-        logger.warning("⚠️ EventBus not available - reactive learning disabled")
+        logger.warning("️ EventBus not available - reactive learning disabled")
         return None
 
-    logger.info("🚀 Setting up reactive learning event subscribers...")
+    logger.info(" Setting up reactive learning event subscribers...")
 
     # Initialize learning engines
     self_learning_engine = SelfLearningEngine()
@@ -801,18 +801,18 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
     try:
         from knowledge.indexer.vector_indexer import VectorIndexer
         vector_indexer = VectorIndexer()
-        logger.info("  ✅ Vector indexer initialized")
+        logger.info("   Vector indexer initialized")
     except Exception as e:
-        logger.warning(f"  ⚠️ Vector indexer not available: {e}")
+        logger.warning(f"  ️ Vector indexer not available: {e}")
 
     # Initialize case collector (optional)
     case_collector = None
     try:
         from knowledge.loader.case_loader import CaseCollector
         case_collector = CaseCollector()
-        logger.info("  ✅ Case collector initialized")
+        logger.info("   Case collector initialized")
     except Exception as e:
-        logger.warning(f"  ⚠️ Case collector not available: {e}")
+        logger.warning(f"  ️ Case collector not available: {e}")
 
     # Create subscriber
     subscriber = LearningEventSubscriber(
@@ -825,7 +825,7 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
     )
 
     # Register event handlers
-    logger.info("📡 Registering event handlers...")
+    logger.info(" Registering event handlers...")
 
     # Community Intelligence events
     await eventbus.subscribe(
@@ -833,21 +833,21 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
         subscriber.handle_case_approved,
         queue_name='ai_foundation_case_approved'
     )
-    logger.info("  ✅ Subscribed to: case.approved")
+    logger.info("   Subscribed to: case.approved")
 
     await eventbus.subscribe(
         'case.rejected',
         subscriber.handle_case_rejected,
         queue_name='ai_foundation_case_rejected'
     )
-    logger.info("  ✅ Subscribed to: case.rejected")
+    logger.info("   Subscribed to: case.rejected")
 
     await eventbus.subscribe(
         'review.submitted',
         subscriber.handle_review_submitted,
         queue_name='ai_foundation_review_submitted'
     )
-    logger.info("  ✅ Subscribed to: review.submitted")
+    logger.info("   Subscribed to: review.submitted")
 
     # Workflow Intelligence events
     await eventbus.subscribe(
@@ -855,21 +855,21 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
         subscriber.handle_workflow_completed,
         queue_name='ai_foundation_workflow_completed'
     )
-    logger.info("  ✅ Subscribed to: workflow.completed")
+    logger.info("   Subscribed to: workflow.completed")
 
     await eventbus.subscribe(
         'workflow.failed',
         subscriber.handle_workflow_failed,
         queue_name='ai_foundation_workflow_failed'
     )
-    logger.info("  ✅ Subscribed to: workflow.failed")
+    logger.info("   Subscribed to: workflow.failed")
 
     await eventbus.subscribe(
         'workflow.milestone_reached',
         subscriber.handle_workflow_milestone_reached,
         queue_name='ai_foundation_workflow_milestone'
     )
-    logger.info("  ✅ Subscribed to: workflow.milestone_reached")
+    logger.info("   Subscribed to: workflow.milestone_reached")
 
     # BIA events
     await eventbus.subscribe(
@@ -877,14 +877,14 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
         subscriber.handle_bia_completed,
         queue_name='ai_foundation_bia_completed'
     )
-    logger.info("  ✅ Subscribed to: bia.completed")
+    logger.info("   Subscribed to: bia.completed")
 
     await eventbus.subscribe(
         'bia.validated',
         subscriber.handle_bia_validated,
         queue_name='ai_foundation_bia_validated'
     )
-    logger.info("  ✅ Subscribed to: bia.validated")
+    logger.info("   Subscribed to: bia.validated")
 
     # Incident events
     await eventbus.subscribe(
@@ -892,14 +892,14 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
         subscriber.handle_incident_resolved,
         queue_name='ai_foundation_incident_resolved'
     )
-    logger.info("  ✅ Subscribed to: incident.resolved")
+    logger.info("   Subscribed to: incident.resolved")
 
     await eventbus.subscribe(
         'incident.pattern_detected',
         subscriber.handle_incident_pattern_detected,
         queue_name='ai_foundation_incident_pattern'
     )
-    logger.info("  ✅ Subscribed to: incident.pattern_detected")
+    logger.info("   Subscribed to: incident.pattern_detected")
 
     # Exercise/Training events (bonus)
     await eventbus.subscribe(
@@ -907,18 +907,18 @@ async def setup_event_subscribers(eventbus: EventBusClient) -> LearningEventSubs
         subscriber.handle_exercise_completed,
         queue_name='ai_foundation_exercise_completed'
     )
-    logger.info("  ✅ Subscribed to: exercise.completed")
+    logger.info("   Subscribed to: exercise.completed")
 
     await eventbus.subscribe(
         'prediction.made',
         subscriber.handle_prediction_made,
         queue_name='ai_foundation_prediction_made'
     )
-    logger.info("  ✅ Subscribed to: prediction.made")
+    logger.info("   Subscribed to: prediction.made")
 
-    logger.info("✅ Reactive learning subscribers ready!")
-    logger.info(f"   📊 Total subscribers: 12")
-    logger.info(f"   🎯 Event sources: Community Intelligence, Workflow Intelligence, BIA, Incidents, Training")
-    logger.info(f"   🧠 Learning actions: ML updates, Pattern detection, Knowledge indexing, Competency tracking")
+    logger.info(" Reactive learning subscribers ready!")
+    logger.info(f"    Total subscribers: 12")
+    logger.info(f"    Event sources: Community Intelligence, Workflow Intelligence, BIA, Incidents, Training")
+    logger.info(f"    Learning actions: ML updates, Pattern detection, Knowledge indexing, Competency tracking")
 
     return subscriber

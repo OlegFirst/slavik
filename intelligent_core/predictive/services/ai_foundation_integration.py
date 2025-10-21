@@ -43,14 +43,14 @@ class PredictiveAIFoundation:
         try:
             # Initialize RAG for historical pattern retrieval
             self.rag = RAGPipeline()
-            logger.info("✅ RAG Pipeline initialized for Predictive Service")
+            logger.info(" RAG Pipeline initialized for Predictive Service")
 
             # Initialize LLM Router for recommendation generation
             self.llm = LLMRouter()
-            logger.info("✅ LLM Router initialized for Predictive Service")
+            logger.info(" LLM Router initialized for Predictive Service")
 
         except Exception as e:
-            logger.error(f"❌ AI Foundation initialization failed: {e}")
+            logger.error(f" AI Foundation initialization failed: {e}")
             raise
 
     async def retrieve_similar_journeys(
@@ -101,7 +101,7 @@ class PredictiveAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📚 Retrieved {len(similar_journeys)} similar journeys from RAG")
+            logger.info(f" Retrieved {len(similar_journeys)} similar journeys from RAG")
 
             return similar_journeys
 
@@ -149,7 +149,7 @@ class PredictiveAIFoundation:
                 enable_reranking=True
             )
 
-            logger.info(f"📊 Retrieved {len(patterns)} demand patterns from RAG")
+            logger.info(f" Retrieved {len(patterns)} demand patterns from RAG")
 
             return patterns
 
@@ -236,7 +236,7 @@ Format as structured JSON."""
             # Calculate confidence
             confidence = self._calculate_confidence(similar_journeys, upcoming_milestones)
 
-            logger.info(f"✅ Generated {len(recommendations)} proactive recommendations, confidence: {confidence:.2f}")
+            logger.info(f" Generated {len(recommendations)} proactive recommendations, confidence: {confidence:.2f}")
 
             return {
                 'recommendations': recommendations,
@@ -245,7 +245,7 @@ Format as structured JSON."""
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM recommendation generation failed: {e}")
+            logger.error(f" LLM recommendation generation failed: {e}")
             return {'recommendations': [], 'confidence': 0.0}
 
     async def store_successful_prediction(
@@ -307,7 +307,7 @@ Format as structured JSON."""
                 source_type="journey_patterns"
             )
 
-            logger.info(f"💾 Stored successful prediction pattern: {predicted_milestone} ({accuracy:.2%})")
+            logger.info(f" Stored successful prediction pattern: {predicted_milestone} ({accuracy:.2%})")
 
         except Exception as e:
             logger.warning(f"Failed to store pattern in RAG: {e}")
@@ -358,7 +358,7 @@ Format as structured JSON."""
                 source_type="demand_patterns"
             )
 
-            logger.info(f"💾 Stored demand pattern: {expertise_domain}")
+            logger.info(f" Stored demand pattern: {expertise_domain}")
 
         except Exception as e:
             logger.warning(f"Failed to store demand pattern: {e}")

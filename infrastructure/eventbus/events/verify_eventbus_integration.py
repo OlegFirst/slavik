@@ -37,7 +37,7 @@ def check_eventbus_integration():
             has_publish = bool(re.search(r'\.publish\(|eventbus\.publish', content))
             has_subscribe = bool(re.search(r'\.subscribe\(|eventbus\.subscribe', content))
 
-            integration_status = "✅" if (has_import or has_init) else "❌"
+            integration_status = "" if (has_import or has_init) else ""
 
             results.append({
                 "service": service_name,
@@ -51,7 +51,7 @@ def check_eventbus_integration():
         else:
             results.append({
                 "service": service_name,
-                "status": "⚠️",
+                "status": "️",
                 "has_import": False,
                 "has_init": False,
                 "has_publish": False,
@@ -66,14 +66,14 @@ def check_eventbus_integration():
 
     for result in results:
         print(f"\n{result['status']} {result['service']}")
-        print(f"   Import:    {'✓' if result['has_import'] else '✗'}")
-        print(f"   Init:      {'✓' if result['has_init'] else '✗'}")
-        print(f"   Publish:   {'✓' if result['has_publish'] else '✗'}")
-        print(f"   Subscribe: {'✓' if result['has_subscribe'] else '✗'}")
+        print(f"   Import:    {'' if result['has_import'] else ''}")
+        print(f"   Init:      {'' if result['has_init'] else ''}")
+        print(f"   Publish:   {'' if result['has_publish'] else ''}")
+        print(f"   Subscribe: {'' if result['has_subscribe'] else ''}")
         print(f"   Main: {result['main_py']}")
 
     # Summary
-    integrated = sum(1 for r in results if r['status'] == "✅")
+    integrated = sum(1 for r in results if r['status'] == "")
     total = len(results)
 
     print("\n" + "="*80)
@@ -91,25 +91,25 @@ def check_eventbus_integration():
         if "RABBITMQ_URL" in env_content:
             rabbitmq_url = [line for line in env_content.split('\n') if 'RABBITMQ_URL=' in line and not line.startswith('#')]
             if rabbitmq_url:
-                print(f"✅ RABBITMQ_URL configured: {rabbitmq_url[0]}")
+                print(f" RABBITMQ_URL configured: {rabbitmq_url[0]}")
             else:
-                print("❌ RABBITMQ_URL not configured in .env")
+                print(" RABBITMQ_URL not configured in .env")
         else:
-            print("❌ RABBITMQ_URL not found in .env")
+            print(" RABBITMQ_URL not found in .env")
     else:
-        print("❌ .env file not found")
+        print(" .env file not found")
 
     # Check docker-compose
     docker_compose = services_dir / "docker-compose.yml"
     if docker_compose.exists():
         compose_content = docker_compose.read_text()
         if "rabbitmq:" in compose_content and not re.search(r'#.*rabbitmq:', compose_content):
-            print("✅ RabbitMQ configured in docker-compose.yml")
+            print(" RabbitMQ configured in docker-compose.yml")
         else:
-            print("❌ RabbitMQ not configured in docker-compose.yml")
+            print(" RabbitMQ not configured in docker-compose.yml")
 
     return integrated, total
 
 if __name__ == "__main__":
     integrated, total = check_eventbus_integration()
-    print(f"\n{'🎉 PASS' if integrated == total else '⚠️  INCOMPLETE'}: {integrated}/{total} services integrated")
+    print(f"\n{' PASS' if integrated == total else '️  INCOMPLETE'}: {integrated}/{total} services integrated")

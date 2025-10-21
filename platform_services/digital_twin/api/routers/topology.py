@@ -322,7 +322,7 @@ async def analyze_failure_impact(
         recommendations = []
 
         if impact_level in ["critical", "high"]:
-            recommendations.append(f"⚠️  {service_name} is CRITICAL - implement redundancy")
+            recommendations.append(f"️  {service_name} is CRITICAL - implement redundancy")
             recommendations.append("Consider hot standby or active-active deployment")
             recommendations.append("Implement circuit breakers in dependent services")
 

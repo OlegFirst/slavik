@@ -33,24 +33,24 @@ async def apply_migration():
     database_url = os.getenv("DATABASE_URL")
 
     if not all([supabase_url, supabase_key, database_url]):
-        print("\n❌ Error: Missing Supabase credentials!")
+        print("\n Error: Missing Supabase credentials!")
         print("\nPlease set in .env:")
         print("  SUPABASE_URL=https://your-project.supabase.co")
         print("  SUPABASE_SERVICE_ROLE_KEY=your-service-role-key")
         print("  DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/postgres")
         return False
 
-    print(f"\n🔗 Connecting to Supabase...")
+    print(f"\n Connecting to Supabase...")
     print(f"   URL: {supabase_url}")
 
     # Read migration file
     migration_file = Path(__file__).parent / "migrations_source" / "036_unified_workflow.sql"
 
     if not migration_file.exists():
-        print(f"\n❌ Migration file not found: {migration_file}")
+        print(f"\n Migration file not found: {migration_file}")
         return False
 
-    print(f"\n📄 Reading migration: {migration_file.name}")
+    print(f"\n Reading migration: {migration_file.name}")
 
     with open(migration_file, 'r') as f:
         migration_sql = f.read()
@@ -59,21 +59,21 @@ async def apply_migration():
 
     # Connect to PostgreSQL directly (more reliable than Supabase client for DDL)
     try:
-        print(f"\n🔌 Connecting to PostgreSQL...")
+        print(f"\n Connecting to PostgreSQL...")
 
         conn = await asyncpg.connect(database_url)
 
-        print(f"✅ Connected successfully")
+        print(f" Connected successfully")
 
         # Execute migration
-        print(f"\n⚙️  Executing migration...")
+        print(f"\n️  Executing migration...")
 
         await conn.execute(migration_sql)
 
-        print(f"✅ Migration executed successfully!")
+        print(f" Migration executed successfully!")
 
         # Verify tables created
-        print(f"\n🔍 Verifying tables...")
+        print(f"\n Verifying tables...")
 
         tables = await conn.fetch("""
             SELECT table_name
@@ -82,9 +82,9 @@ async def apply_migration():
             ORDER BY table_name
         """)
 
-        print(f"\n📊 Created tables in 'workflow' schema:")
+        print(f"\n Created tables in 'workflow' schema:")
         for table in tables:
-            print(f"   ✓ {table['table_name']}")
+            print(f"    {table['table_name']}")
 
         # Check migration record
         migration_record = await conn.fetchrow("""
@@ -93,20 +93,20 @@ async def apply_migration():
         """)
 
         if migration_record:
-            print(f"\n✅ Migration record inserted:")
+            print(f"\n Migration record inserted:")
             print(f"   Version: {migration_record['version']}")
             print(f"   Applied at: {migration_record.get('applied_at') or migration_record.get('inserted_at')}")
 
         await conn.close()
 
         print("\n" + "="*60)
-        print("✅ Migration 036 applied successfully!")
+        print(" Migration 036 applied successfully!")
         print("="*60)
 
         return True
 
     except Exception as e:
-        print(f"\n❌ Error applying migration: {e}")
+        print(f"\n Error applying migration: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -122,7 +122,7 @@ async def rollback_migration():
     database_url = os.getenv("DATABASE_URL")
 
     if not database_url:
-        print("❌ DATABASE_URL not set")
+        print(" DATABASE_URL not set")
         return False
 
     rollback_sql = """
@@ -146,17 +146,17 @@ async def rollback_migration():
     try:
         conn = await asyncpg.connect(database_url)
 
-        print("\n⚙️  Executing rollback...")
+        print("\n️  Executing rollback...")
         await conn.execute(rollback_sql)
 
-        print("✅ Rollback completed")
+        print(" Rollback completed")
 
         await conn.close()
 
         return True
 
     except Exception as e:
-        print(f"❌ Error during rollback: {e}")
+        print(f" Error during rollback: {e}")
         return False
 
 
@@ -222,10 +222,10 @@ async def main():
     if args.status:
         status = await check_migration_status()
         if status:
-            print("\n📊 Migration 036 Status:")
-            print(f"   Migration record: {'✓' if status['migration_record'] else '✗'}")
-            print(f"   Schema exists: {'✓' if status['schema_exists'] else '✗'}")
-            print(f"   Applied: {'✅ Yes' if status['applied'] else '❌ No'}\n")
+            print("\n Migration 036 Status:")
+            print(f"   Migration record: {'' if status['migration_record'] else ''}")
+            print(f"   Schema exists: {'' if status['schema_exists'] else ''}")
+            print(f"   Applied: {' Yes' if status['applied'] else ' No'}\n")
         return
 
     if args.rollback:
@@ -234,7 +234,7 @@ async def main():
         # Check if already applied
         status = await check_migration_status()
         if status and status['applied']:
-            print("\n⚠️  Migration 036 is already applied!")
+            print("\n️  Migration 036 is already applied!")
             print("   Use --rollback to rollback first, or --status to check\n")
             return
 

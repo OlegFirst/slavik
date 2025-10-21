@@ -627,7 +627,7 @@ export function BIAWorkflowWizard({
                 {/* Personnel */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    👥 Personnel Requirements
+                     Personnel Requirements
                   </label>
                   <textarea
                     value={resourceNotes.personnel}
@@ -641,7 +641,7 @@ export function BIAWorkflowWizard({
                 {/* Facilities */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    🏢 Facility Requirements
+                     Facility Requirements
                   </label>
                   <textarea
                     value={resourceNotes.facilities}
@@ -655,7 +655,7 @@ export function BIAWorkflowWizard({
                 {/* Technology */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    💻 Technology Requirements
+                     Technology Requirements
                   </label>
                   <textarea
                     value={resourceNotes.technology}
@@ -669,7 +669,7 @@ export function BIAWorkflowWizard({
                 {/* Information */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    📄 Information Requirements
+                     Information Requirements
                   </label>
                   <textarea
                     value={resourceNotes.information}
@@ -683,7 +683,7 @@ export function BIAWorkflowWizard({
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-blue-800 text-sm">
-                  💡 <strong>Tip:</strong> Resource identification is optional but recommended for comprehensive BIA documentation.
+                   <strong>Tip:</strong> Resource identification is optional but recommended for comprehensive BIA documentation.
                 </p>
               </div>
             </div>

@@ -141,7 +141,7 @@ class ServiceMirror:
                 mirror_data.data_models = models
 
             mirror_data.status = MirrorStatus.SYNCHRONIZED
-            logger.info(f"✅ Mirror created for {self.service_name}: {len(endpoints)} endpoints")
+            logger.info(f" Mirror created for {self.service_name}: {len(endpoints)} endpoints")
 
         except Exception as error:
             logger.error(f"Failed to create mirror for {self.service_name}: {error}")

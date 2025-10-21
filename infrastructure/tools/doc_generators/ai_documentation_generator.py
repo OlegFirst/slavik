@@ -71,8 +71,8 @@ class AIDocumentationGenerator:
         self.use_ai = use_ai
 
         if not self.reports_dir.exists():
-            print(f"❌ Директория с отчётами не найдена: {self.reports_dir}")
-            print("💡 Запустите: python3 tools/analyzers/module_scanner.py --section intelligent-core")
+            print(f" Директория с отчётами не найдена: {self.reports_dir}")
+            print(" Запустите: python3 tools/analyzers/module_scanner.py --section intelligent-core")
             sys.exit(1)
 
         # Инициализация AI (если включено)
@@ -86,16 +86,16 @@ class AIDocumentationGenerator:
             api_key = os.getenv('ANTHROPIC_API_KEY')
 
             if not api_key:
-                print("⚠️  ANTHROPIC_API_KEY не найден. AI-генерация отключена.")
-                print("💡 Установите: export ANTHROPIC_API_KEY='your-key'")
+                print("️  ANTHROPIC_API_KEY не найден. AI-генерация отключена.")
+                print(" Установите: export ANTHROPIC_API_KEY='your-key'")
                 self.use_ai = False
                 return
 
             self.ai_client = anthropic.Anthropic(api_key=api_key)
-            print("✅ AI клиент инициализирован (Claude)")
+            print(" AI клиент инициализирован (Claude)")
 
         except ImportError:
-            print("⚠️  anthropic не установлен. Установите: pip install anthropic")
+            print("️  anthropic не установлен. Установите: pip install anthropic")
             self.use_ai = False
 
     def classify_module(self, scan_data: Dict) -> Dict[str, any]:
@@ -234,7 +234,7 @@ API endpoints: {context['metrics'].get('endpoints', 0)}
             return response.content[0].text.strip()
 
         except Exception as e:
-            print(f"⚠️  AI генерация не удалась: {e}")
+            print(f"️  AI генерация не удалась: {e}")
             return self._generate_template_description(module_name, classification)
 
     def _generate_template_description(
@@ -325,7 +325,7 @@ API endpoints: {context['metrics'].get('endpoints', 0)}
             return code
 
         except Exception as e:
-            print(f"⚠️  AI генерация примеров не удалась: {e}")
+            print(f"️  AI генерация примеров не удалась: {e}")
             return self._generate_template_examples(module_name, classification, scan_data)
 
     def _generate_template_examples(
@@ -377,22 +377,22 @@ async with httpx.AsyncClient() as client:
 
         # Иконка по типу модуля
         type_icons = {
-            'ai_module': '🤖',
-            'orchestration': '🎯',
-            'api_service': '🌐',
-            'data_service': '💾',
-            'integration': '🔗',
-            'foundation': '🏗️',
-            'utility': '🔧'
+            'ai_module': '',
+            'orchestration': '',
+            'api_service': '',
+            'data_service': '',
+            'integration': '',
+            'foundation': '️',
+            'utility': ''
         }
 
-        icon = type_icons.get(classification['primary_type'], '📦')
+        icon = type_icons.get(classification['primary_type'], '')
 
         readme = f"""# {icon} {name}
 
 > {description}
 
-## 📊 Обзор
+##  Обзор
 
 | Метрика | Значение |
 |---------|----------|
@@ -413,7 +413,7 @@ async with httpx.AsyncClient() as client:
         # API секция
         endpoints = scan_data.get('endpoints', [])
         if endpoints:
-            readme += "## 🌐 API\n\n"
+            readme += "##  API\n\n"
             by_method = defaultdict(list)
             for ep in endpoints:
                 by_method[ep['method']].append(ep)
@@ -432,14 +432,14 @@ async with httpx.AsyncClient() as client:
         classes = scan_data.get('classes', [])
         if classes:
             top_classes = sorted(classes, key=lambda x: x.get('methods', 0), reverse=True)[:5]
-            readme += "## 🏗️ Архитектура\n\n"
+            readme += "## ️ Архитектура\n\n"
             readme += "### Ключевые компоненты\n\n"
             for cls in top_classes:
                 readme += f"- **{cls['name']}** ({cls.get('methods', 0)} методов) - `{cls['file']}`\n"
             readme += "\n---\n\n"
 
         # Использование
-        readme += "## 💻 Использование\n\n"
+        readme += "##  Использование\n\n"
         readme += "```python\n"
         readme += usage_example
         readme += "\n```\n\n---\n\n"
@@ -447,7 +447,7 @@ async with httpx.AsyncClient() as client:
         # Зависимости (топ-10)
         deps = scan_data.get('dependencies', [])
         if deps:
-            readme += "## 🔗 Зависимости\n\n"
+            readme += "##  Зависимости\n\n"
             internal = [d for d in deps if any(x in d for x in ['ai_foundation', 'shared'])][:10]
             if internal:
                 readme += "### Внутренние\n"
@@ -457,15 +457,15 @@ async with httpx.AsyncClient() as client:
             readme += "---\n\n"
 
         # Footer
-        readme += f"""## 📚 Дополнительно
+        readme += f"""##  Дополнительно
 
 - [Архитектура платформы](../../docs/ARCHITECTURE.md)
-- [API Reference](./API.md) {'✅' if endpoints else '⚠️'}
-- [Тесты](./tests/) {'✅' if (module_path / 'tests').exists() else '⚠️'}
+- [API Reference](./API.md) {'' if endpoints else '️'}
+- [Тесты](./tests/) {'' if (module_path / 'tests').exists() else '️'}
 
 ---
 
-<sub>Сгенерировано: {datetime.now().strftime('%Y-%m-%d %H:%M')} | {'🤖 AI-powered' if ai_generated else '📝 Template-based'}</sub>
+<sub>Сгенерировано: {datetime.now().strftime('%Y-%m-%d %H:%M')} | {' AI-powered' if ai_generated else ' Template-based'}</sub>
 """
 
         return readme
@@ -476,7 +476,7 @@ async with httpx.AsyncClient() as client:
         json_file = self.reports_dir / f"{module_name}_scan.json"
 
         if not json_file.exists():
-            print(f"❌ Отчёт не найден: {module_name}")
+            print(f" Отчёт не найден: {module_name}")
             return
 
         with open(json_file) as f:
@@ -485,18 +485,18 @@ async with httpx.AsyncClient() as client:
         module_path = self.project_root / scan_data['path']
 
         print(f"\n{'='*60}")
-        print(f"📝 {module_name}")
+        print(f" {module_name}")
         print(f"{'='*60}\n")
 
         # Классификация
         classification = self.classify_module(scan_data)
-        print(f"🏷️  Тип: {classification['primary_type']}")
-        print(f"💡 Концепции: {', '.join(classification['key_concepts'][:3])}")
+        print(f"️  Тип: {classification['primary_type']}")
+        print(f" Концепции: {', '.join(classification['key_concepts'][:3])}")
 
         # AI генерация (если включено)
         ai_content = None
         if self.use_ai:
-            print(f"🤖 AI-генерация...")
+            print(f" AI-генерация...")
             description = await self.generate_ai_description(
                 module_name, classification, scan_data
             )
@@ -507,7 +507,7 @@ async with httpx.AsyncClient() as client:
                 'description': description,
                 'usage_example': usage_example
             }
-            print(f"✅ AI контент готов")
+            print(f" AI контент готов")
 
         # Генерация README
         readme_content = self.generate_readme(scan_data, module_path, ai_content)
@@ -516,7 +516,7 @@ async with httpx.AsyncClient() as client:
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(readme_content)
 
-        print(f"✅ README -> {readme_path.relative_to(self.project_root)}")
+        print(f" README -> {readme_path.relative_to(self.project_root)}")
         print()
 
 

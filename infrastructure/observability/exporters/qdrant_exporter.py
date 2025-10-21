@@ -94,9 +94,9 @@ class QdrantExporter:
                 api_key=QDRANT_API_KEY,
                 timeout=10
             )
-            logger.info(f"✅ Connected to Qdrant: {QDRANT_URL}")
+            logger.info(f" Connected to Qdrant: {QDRANT_URL}")
         except Exception as e:
-            logger.error(f"❌ Failed to connect to Qdrant: {e}")
+            logger.error(f" Failed to connect to Qdrant: {e}")
             raise
 
     def collect_metrics(self):
@@ -119,7 +119,7 @@ class QdrantExporter:
             collections = collections_response.collections
             qdrant_collections_total.set(len(collections))
 
-            logger.info(f"📊 Found {len(collections)} collections")
+            logger.info(f" Found {len(collections)} collections")
 
             # Collection-level metrics
             for collection in collections:
@@ -154,11 +154,11 @@ class QdrantExporter:
                     )
 
                 except Exception as e:
-                    logger.warning(f"⚠️  Failed to get info for {collection_name}: {e}")
+                    logger.warning(f"️  Failed to get info for {collection_name}: {e}")
                     qdrant_scrape_errors.inc()
 
         except Exception as e:
-            logger.error(f"❌ Scrape failed: {e}")
+            logger.error(f" Scrape failed: {e}")
             qdrant_up.set(0)
             qdrant_scrape_errors.inc()
 
@@ -171,9 +171,9 @@ class QdrantExporter:
 
 def main():
     """Main exporter loop"""
-    logger.info("🚀 Starting Qdrant Prometheus Exporter")
-    logger.info(f"📡 Listening on port {EXPORTER_PORT}")
-    logger.info(f"🔄 Scrape interval: {SCRAPE_INTERVAL}s")
+    logger.info(" Starting Qdrant Prometheus Exporter")
+    logger.info(f" Listening on port {EXPORTER_PORT}")
+    logger.info(f" Scrape interval: {SCRAPE_INTERVAL}s")
 
     # Initialize exporter
     try:
@@ -184,7 +184,7 @@ def main():
 
     # Start HTTP server for Prometheus
     start_http_server(EXPORTER_PORT)
-    logger.info(f"✅ Metrics endpoint: http://localhost:{EXPORTER_PORT}/metrics")
+    logger.info(f" Metrics endpoint: http://localhost:{EXPORTER_PORT}/metrics")
 
     # Continuous collection loop
     while True:

@@ -200,7 +200,7 @@ def recreate_collections(client: QdrantClient):
             exists = any(c.name == collection_name for c in existing.collections)
 
             if exists:
-                logger.info(f"📦 Collection '{collection_name}' already exists, recreating...")
+                logger.info(f" Collection '{collection_name}' already exists, recreating...")
                 client.delete_collection(collection_name)
 
             # Create collection
@@ -211,16 +211,16 @@ def recreate_collections(client: QdrantClient):
                     distance=config["distance"]
                 )
             )
-            logger.info(f"✅ Created collection: {collection_name}")
+            logger.info(f" Created collection: {collection_name}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to create {collection_name}: {e}")
+            logger.error(f" Failed to create {collection_name}: {e}")
             raise
 
 
 def load_bcm_knowledge(client: QdrantClient):
     """Load BCM knowledge vectors"""
-    logger.info("📚 Loading BCM knowledge data...")
+    logger.info(" Loading BCM knowledge data...")
 
     points = []
     for sample in BCM_KNOWLEDGE_SAMPLES:
@@ -241,12 +241,12 @@ def load_bcm_knowledge(client: QdrantClient):
         collection_name="bcm_knowledge",
         points=points
     )
-    logger.info(f"✅ Loaded {len(points)} BCM knowledge vectors")
+    logger.info(f" Loaded {len(points)} BCM knowledge vectors")
 
 
 def load_workflow_cases(client: QdrantClient):
     """Load workflow case vectors"""
-    logger.info("📋 Loading workflow cases data...")
+    logger.info(" Loading workflow cases data...")
 
     points = []
     for sample in WORKFLOW_CASES:
@@ -267,12 +267,12 @@ def load_workflow_cases(client: QdrantClient):
         collection_name="workflow_cases",
         points=points
     )
-    logger.info(f"✅ Loaded {len(points)} workflow case vectors")
+    logger.info(f" Loaded {len(points)} workflow case vectors")
 
 
 def load_ai_memory(client: QdrantClient):
     """Load AI memory vectors"""
-    logger.info("🧠 Loading AI memory data...")
+    logger.info(" Loading AI memory data...")
 
     points = []
     for sample in AI_MEMORY_SAMPLES:
@@ -293,12 +293,12 @@ def load_ai_memory(client: QdrantClient):
         collection_name="ai_memory",
         points=points
     )
-    logger.info(f"✅ Loaded {len(points)} AI memory vectors")
+    logger.info(f" Loaded {len(points)} AI memory vectors")
 
 
 def verify_data(client: QdrantClient):
     """Verify loaded data"""
-    logger.info("\n📊 Verification:")
+    logger.info("\n Verification:")
 
     collections = client.get_collections()
     for collection in collections.collections:
@@ -324,17 +324,17 @@ def verify_data(client: QdrantClient):
 
 def main():
     """Main execution"""
-    logger.info("🚀 Starting Qdrant test data loader")
+    logger.info(" Starting Qdrant test data loader")
 
     try:
         # Connect to Qdrant
-        logger.info(f"📡 Connecting to Qdrant: {QDRANT_URL}")
+        logger.info(f" Connecting to Qdrant: {QDRANT_URL}")
         client = QdrantClient(
             url=QDRANT_URL,
             api_key=QDRANT_API_KEY,
             timeout=30
         )
-        logger.info("✅ Connected to Qdrant")
+        logger.info(" Connected to Qdrant")
 
         # Recreate collections
         recreate_collections(client)
@@ -347,11 +347,11 @@ def main():
         # Verify
         verify_data(client)
 
-        logger.info("\n🎉 Test data loaded successfully!")
+        logger.info("\n Test data loaded successfully!")
         return 0
 
     except Exception as e:
-        logger.error(f"❌ Failed to load test data: {e}")
+        logger.error(f" Failed to load test data: {e}")
         return 1
 
 

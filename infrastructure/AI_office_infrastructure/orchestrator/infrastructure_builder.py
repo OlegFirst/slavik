@@ -67,42 +67,42 @@ class InfrastructureBuilder:
         """Полная сборка инфраструктуры"""
 
         print("\n" + "="*80)
-        print("🏗️  AI PLATFORM INFRASTRUCTURE BUILDER")
+        print("️  AI PLATFORM INFRASTRUCTURE BUILDER")
         print("="*80 + "\n")
 
         try:
             # Step 1: Service Discovery
-            print("📡 Step 1: Service Discovery")
+            print(" Step 1: Service Discovery")
             print("-" * 80)
             self.services = self._discover_services()
-            print(f"✅ Discovered {len(self.services)} services\n")
+            print(f" Discovered {len(self.services)} services\n")
 
             # Step 2: Generate Dockerfiles
-            print("🐳 Step 2: Dockerfile Generation")
+            print(" Step 2: Dockerfile Generation")
             print("-" * 80)
             self._generate_dockerfiles()
-            print("✅ Dockerfiles generated\n")
+            print(" Dockerfiles generated\n")
 
             # Step 3: Generate Docker Compose
-            print("📦 Step 3: Docker Compose Generation")
+            print(" Step 3: Docker Compose Generation")
             print("-" * 80)
             self._generate_docker_compose()
-            print("✅ Docker Compose files generated\n")
+            print(" Docker Compose files generated\n")
 
             # Step 4: Generate documentation
-            print("📚 Step 4: Documentation Generation")
+            print(" Step 4: Documentation Generation")
             print("-" * 80)
             self._generate_documentation()
-            print("✅ Documentation generated\n")
+            print(" Documentation generated\n")
 
             # Step 5: Validate configurations
-            print("✅ Step 5: Configuration Validation")
+            print(" Step 5: Configuration Validation")
             print("-" * 80)
             self._validate_configurations()
-            print("✅ All configurations validated\n")
+            print(" All configurations validated\n")
 
             print("="*80)
-            print("✅ INFRASTRUCTURE BUILD COMPLETE!")
+            print(" INFRASTRUCTURE BUILD COMPLETE!")
             print("="*80 + "\n")
 
             self._print_next_steps(auto_start)
@@ -113,7 +113,7 @@ class InfrastructureBuilder:
 
         except Exception as e:
             logger.error(f"Build failed: {e}", exc_info=True)
-            print(f"\n❌ Build failed: {e}")
+            print(f"\n Build failed: {e}")
             sys.exit(1)
 
     def _discover_services(self) -> List[Dict[str, Any]]:
@@ -123,7 +123,7 @@ class InfrastructureBuilder:
         services = discovery.discover_all()
 
         # Print summary
-        print(f"\n📋 Services by category:")
+        print(f"\n Services by category:")
         categories = {}
         for service in services:
             cat = service.get('category', 'unknown')
@@ -149,13 +149,13 @@ class InfrastructureBuilder:
 
             if not dockerfile.exists():
                 missing_dockerfiles.append(service)
-                print(f"  📝 Creating Dockerfile for {service['name']}")
+                print(f"   Creating Dockerfile for {service['name']}")
                 self._create_dockerfile(service_path, service)
 
         if not missing_dockerfiles:
-            print("  ✅ All services already have Dockerfiles")
+            print("   All services already have Dockerfiles")
         else:
-            print(f"  ✅ Created {len(missing_dockerfiles)} Dockerfiles")
+            print(f"   Created {len(missing_dockerfiles)} Dockerfiles")
 
     def _create_dockerfile(self, service_path: Path, service: Dict):
         """Создаёт Dockerfile для сервиса"""
@@ -426,7 +426,7 @@ docker-compose -f docker-compose.full.yml up -d --build [service-name]
         with open(readme_path, 'w') as f:
             f.write(readme_content)
 
-        print(f"  ✅ Generated README.md")
+        print(f"   Generated README.md")
 
     def _validate_configurations(self):
         """Шаг 5: Валидация конфигураций"""
@@ -453,15 +453,15 @@ docker-compose -f docker-compose.full.yml up -d --build [service-name]
         # Print results
         for name, is_valid, message in validations:
             if is_valid:
-                print(f"  ✅ {name}: {message}")
+                print(f"   {name}: {message}")
             else:
-                print(f"  ❌ {name}: {message}")
+                print(f"   {name}: {message}")
 
     def _print_next_steps(self, auto_start: bool):
         """Печатает следующие шаги"""
 
         if not auto_start:
-            print("📋 Next Steps:")
+            print(" Next Steps:")
             print()
             print("1. Configure environment:")
             print(f"   cd {self.generated_dir}")
@@ -478,17 +478,17 @@ docker-compose -f docker-compose.full.yml up -d --build [service-name]
     def _start_infrastructure(self):
         """Автоматический запуск инфраструктуры"""
 
-        print("\n🚀 Starting infrastructure...")
+        print("\n Starting infrastructure...")
 
         script = self.generated_dir / 'start_infrastructure.sh'
         if script.exists():
             try:
                 subprocess.run([str(script), 'full'], check=True)
-                print("✅ Infrastructure started successfully!")
+                print(" Infrastructure started successfully!")
             except subprocess.CalledProcessError as e:
-                print(f"❌ Failed to start infrastructure: {e}")
+                print(f" Failed to start infrastructure: {e}")
         else:
-            print("❌ Startup script not found")
+            print(" Startup script not found")
 
 
 def main():
@@ -513,9 +513,9 @@ def main():
     builder = InfrastructureBuilder(PROJECT_ROOT)
 
     if args.discover_only:
-        print("🔍 Service Discovery Only Mode\n")
+        print(" Service Discovery Only Mode\n")
         services = builder._discover_services()
-        print(f"\n✅ Discovered {len(services)} services")
+        print(f"\n Discovered {len(services)} services")
     else:
         builder.build_all(auto_start=args.build_and_start)
 

@@ -121,7 +121,7 @@ class EventLearner:
         self.learning_database.append(example)
         self._save_learning_database()
 
-        logger.info(f"📝 Recorded suggestion for '{event_name}': {suggested_action}")
+        logger.info(f" Recorded suggestion for '{event_name}': {suggested_action}")
 
         return example.timestamp  # Используем timestamp как ID
 
@@ -147,7 +147,7 @@ class EventLearner:
                     example.outcome = outcome
 
                 self._save_learning_database()
-                logger.info(f"✅ Feedback recorded for '{example.event_name}'")
+                logger.info(f" Feedback recorded for '{example.event_name}'")
 
                 # Запускаем обучение
                 await self._learn_from_feedback(example)
@@ -158,11 +158,11 @@ class EventLearner:
 
         # Проверяем, была ли рекомендация правильной
         if example.developer_decision == 'approved' and example.suggested_action == 'implement':
-            logger.info(f"✅ Correct prediction for '{example.event_name}'")
+            logger.info(f" Correct prediction for '{example.event_name}'")
             # TODO: Увеличить confidence для похожих событий
 
         elif example.developer_decision == 'rejected' and example.suggested_action == 'implement':
-            logger.warning(f"❌ Incorrect prediction for '{example.event_name}'")
+            logger.warning(f" Incorrect prediction for '{example.event_name}'")
             # TODO: Анализ, почему ошиблись
 
         # Обновляем паттерны
@@ -221,7 +221,7 @@ class EventLearner:
         self.patterns.extend(new_patterns)
         self._save_patterns()
 
-        logger.info(f"🧠 Learned {len(new_patterns)} new patterns")
+        logger.info(f" Learned {len(new_patterns)} new patterns")
 
     async def get_learned_confidence(self, event_name: str, suggested_action: str) -> float:
         """
@@ -256,7 +256,7 @@ class EventLearner:
         # ACE provides enhanced context!
         strategies = context.get('playbook_strategies', [])
         if strategies:
-            logger.info(f"🎯 ACE enhanced confidence with {len(strategies)} strategies")
+            logger.info(f" ACE enhanced confidence with {len(strategies)} strategies")
 
         base_confidence = 0.5
 
@@ -278,7 +278,7 @@ class EventLearner:
         approved = sum(1 for ex in similar_examples if ex.developer_decision == 'approved')
         learned_confidence = approved / len(similar_examples)
 
-        logger.info(f"🎯 Learned confidence for '{event_name}': {learned_confidence:.2f} (based on {len(similar_examples)} examples)")
+        logger.info(f" Learned confidence for '{event_name}': {learned_confidence:.2f} (based on {len(similar_examples)} examples)")
 
         # Effectiveness = learned_confidence (ACE will learn to improve!)
         return {

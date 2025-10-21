@@ -127,7 +127,7 @@ class JaamSimEngine:
             # Set output file path
             self.output_file = sim_working_dir / f"{simulation_id}_output.dat"
 
-            logger.info("✅ JaamSim engine initialized successfully")
+            logger.info(" JaamSim engine initialized successfully")
             return True
 
         except Exception as e:

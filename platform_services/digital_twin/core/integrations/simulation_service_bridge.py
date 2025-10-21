@@ -106,7 +106,7 @@ class SimulationServiceBridge:
             if response.status_code == 200:
                 health_data = response.json()
                 logger.info(
-                    f"✅ Connected to simulation_service v{health_data.get('version', 'unknown')}"
+                    f" Connected to simulation_service v{health_data.get('version', 'unknown')}"
                 )
                 self.is_connected = True
                 return True
@@ -181,7 +181,7 @@ class SimulationServiceBridge:
             response.raise_for_status()
             simulation = response.json()
 
-            logger.info(f"✅ Created simulation: {simulation['id']}")
+            logger.info(f" Created simulation: {simulation['id']}")
             return simulation
 
         except Exception as error:
@@ -212,7 +212,7 @@ class SimulationServiceBridge:
             response.raise_for_status()
             execution = response.json()
 
-            logger.info(f"✅ Started execution: {execution['id']}")
+            logger.info(f" Started execution: {execution['id']}")
             return execution
 
         except Exception as error:
@@ -405,7 +405,7 @@ class SimulationServiceBridge:
             response.raise_for_status()
             scenario = response.json()
 
-            logger.info(f"✅ Generated scenario: {scenario['id']}")
+            logger.info(f" Generated scenario: {scenario['id']}")
             return scenario
 
         except Exception as error:

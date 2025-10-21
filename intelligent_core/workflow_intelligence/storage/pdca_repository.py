@@ -93,7 +93,7 @@ class PDCACycleRepository:
         cycle_id = result.scalar()
         await self.db.commit()
 
-        logger.info(f"✅ PDCA cycle saved: {cycle_id} (workflow={cycle_data['workflow_id']}, module={cycle_data['module']})")
+        logger.info(f" PDCA cycle saved: {cycle_id} (workflow={cycle_data['workflow_id']}, module={cycle_data['module']})")
 
         return str(cycle_id)
 
@@ -546,4 +546,4 @@ class PDCACycleRepository:
         await self.db.execute(query, params)
         await self.db.commit()
 
-        logger.info(f"✅ Updated metadata for workflow {workflow_id}")
+        logger.info(f" Updated metadata for workflow {workflow_id}")

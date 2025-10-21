@@ -675,8 +675,8 @@ def register_all_bcm_processes(framework):
     for process in processes:
         success = framework.register_process(process)
         if success:
-            print(f"✅ Процесс {process.name} зарегистрирован")
+            print(f" Процесс {process.name} зарегистрирован")
         else:
-            print(f"❌ Ошибка регистрации процесса {process.name}")
+            print(f" Ошибка регистрации процесса {process.name}")
 
     return len(processes)

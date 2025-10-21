@@ -168,7 +168,7 @@ async def publish_to_case_library(bia_state: Dict[str, Any]):
     # from case_library.collector import collect_case
     # await collect_case(bia_state)
 
-    print(f"📚 Published BIA {bia_state['bia_id']} to Case Library")
+    print(f" Published BIA {bia_state['bia_id']} to Case Library")
     return {"published": True}
 
 
@@ -181,7 +181,7 @@ async def publish_event(event_name: str, data: Dict[str, Any]):
     # from shared.eventbus import publish
     # await publish(event_name, data)
 
-    print(f"📢 Event published: {event_name}")
+    print(f" Event published: {event_name}")
     return {"published": True}
 
 
@@ -394,10 +394,10 @@ class BIAWorkflow:
 # ИТОГО:
 # ═══════════════════════════════════════════════════════════════
 #
-# ✅ Существующий код (BIAWorkflowEngine) - БЕЗ ИЗМЕНЕНИЙ!
-# ✅ Temporal обертка - ~300 строк (orchestration only)
-# ✅ Переиспользуем ВСЮ логику через activities
-# ✅ Если Temporal не понравится - просто удалим эту обертку
-# ✅ Основной код остается рабочим!
+#  Существующий код (BIAWorkflowEngine) - БЕЗ ИЗМЕНЕНИЙ!
+#  Temporal обертка - ~300 строк (orchestration only)
+#  Переиспользуем ВСЮ логику через activities
+#  Если Temporal не понравится - просто удалим эту обертку
+#  Основной код остается рабочим!
 #
 # ═══════════════════════════════════════════════════════════════

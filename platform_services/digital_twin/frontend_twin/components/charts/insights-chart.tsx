@@ -175,10 +175,10 @@ export function InsightsChart({ summary }: InsightsChartProps) {
             {riskScore.toFixed(1)}%
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            {riskScore > 70 ? '🔴 High Risk' :
-             riskScore > 40 ? '🟠 Moderate Risk' :
-             riskScore > 20 ? '🟡 Low Risk' :
-             '🟢 Minimal Risk'}
+            {riskScore > 70 ? ' High Risk' :
+             riskScore > 40 ? ' Moderate Risk' :
+             riskScore > 20 ? ' Low Risk' :
+             ' Minimal Risk'}
           </p>
         </div>
       </div>

@@ -39,7 +39,7 @@ class ScenarioEventPublisher:
         """Initialize EventBus connection"""
         if not self.eventbus:
             self.eventbus = create_eventbus(self.backend)
-            logger.info(f"✅ ScenarioEventPublisher initialized with {self.backend} backend")
+            logger.info(f" ScenarioEventPublisher initialized with {self.backend} backend")
 
     async def publish_execution_started(
         self,
@@ -71,7 +71,7 @@ class ScenarioEventPublisher:
         )
 
         await self.eventbus.publish(event)
-        logger.debug(f"📤 Published: scenario.execution.started ({scenario_id})")
+        logger.debug(f" Published: scenario.execution.started ({scenario_id})")
 
     async def publish_execution_completed(
         self,
@@ -107,7 +107,7 @@ class ScenarioEventPublisher:
         )
 
         await self.eventbus.publish(event)
-        logger.info(f"✅ Published: scenario.execution.completed ({scenario_id}) - {result.get('status')}")
+        logger.info(f" Published: scenario.execution.completed ({scenario_id}) - {result.get('status')}")
 
     async def publish_execution_failed(
         self,
@@ -138,7 +138,7 @@ class ScenarioEventPublisher:
         )
 
         await self.eventbus.publish(event)
-        logger.error(f"❌ Published: scenario.execution.failed ({scenario_id})")
+        logger.error(f" Published: scenario.execution.failed ({scenario_id})")
 
     async def publish_pattern_detected(
         self,
@@ -169,7 +169,7 @@ class ScenarioEventPublisher:
         )
 
         await self.eventbus.publish(event)
-        logger.info(f"🔍 Published: scenario.pattern.detected ({pattern_type})")
+        logger.info(f" Published: scenario.pattern.detected ({pattern_type})")
 
     async def publish_learning_updated(
         self,
@@ -197,7 +197,7 @@ class ScenarioEventPublisher:
         )
 
         await self.eventbus.publish(event)
-        logger.debug(f"📊 Published: scenario.learning.updated ({scenario_id})")
+        logger.debug(f" Published: scenario.learning.updated ({scenario_id})")
 
 
 # Global instance
@@ -218,4 +218,4 @@ async def initialize_eventbus(backend: str = 'memory'):
     global scenario_event_publisher
     scenario_event_publisher = ScenarioEventPublisher(backend)
     await scenario_event_publisher.initialize()
-    logger.info("✅ Scenario EventBus integration initialized")
+    logger.info(" Scenario EventBus integration initialized")

@@ -64,7 +64,7 @@ class CaseCollectorSubscriber(BaseSubscriber):
         }
 
         self.transitions.append(transition)
-        print(f"📝 Case Collector: Recorded transition {transition['from_state']} → {transition['to_state']}")
+        print(f" Case Collector: Recorded transition {transition['from_state']} → {transition['to_state']}")
 
     async def handle_action(self, event: Event):
         """Record action taken."""
@@ -75,12 +75,12 @@ class CaseCollectorSubscriber(BaseSubscriber):
         }
 
         self.actions.append(action)
-        print(f"📝 Case Collector: Recorded action {event.type}")
+        print(f" Case Collector: Recorded action {event.type}")
 
     async def handle_completed(self, event: Event):
         """Finalize case."""
         workflow_id = event.data['workflow_id']
-        print(f"✅ Case Collector: Workflow {workflow_id} completed")
+        print(f" Case Collector: Workflow {workflow_id} completed")
         print(f"   - {len(self.transitions)} transitions")
         print(f"   - {len(self.actions)} actions")
 
@@ -115,23 +115,23 @@ class AIAdvisorSubscriber(BaseSubscriber):
     async def handle_state_changed(self, event: Event):
         """Prepare AI context for new state."""
         to_state = event.data['to_state']
-        print(f"🤖 AI Advisor: Preparing context for state '{to_state}'")
+        print(f" AI Advisor: Preparing context for state '{to_state}'")
 
         # Simulate context preparation
         await asyncio.sleep(0.1)
-        print(f"🤖 AI Advisor: Context ready for '{to_state}'")
+        print(f" AI Advisor: Context ready for '{to_state}'")
 
     async def handle_validation_failed(self, event: Event):
         """Suggest fixes for validation errors."""
         errors = event.data.get('errors', [])
-        print(f"💡 AI Advisor: Analyzing {len(errors)} validation errors")
+        print(f" AI Advisor: Analyzing {len(errors)} validation errors")
 
         # Simulate generating suggestions
         await asyncio.sleep(0.1)
 
         # Publish suggestions back to EventBus
         # (In real implementation, would use eventbus from closure or DI)
-        print(f"💡 AI Advisor: Generated fix suggestions")
+        print(f" AI Advisor: Generated fix suggestions")
 
 
 # ============================================================================
@@ -164,7 +164,7 @@ class AnalyticsSubscriber(BaseSubscriber):
         metric_key = f"workflow.events.{event.type}"
         self.metrics[metric_key] = self.metrics.get(metric_key, 0) + 1
 
-        print(f"📊 Analytics: {event.type} (total: {self.metrics[metric_key]})")
+        print(f" Analytics: {event.type} (total: {self.metrics[metric_key]})")
 
 
 # ============================================================================
@@ -197,12 +197,12 @@ class NotificationSubscriber(BaseSubscriber):
     async def handle_milestone(self, event: Event):
         """Celebrate milestone."""
         milestone = event.data['milestone']
-        print(f"🔔 Notification: 🎉 Milestone reached - {milestone}")
+        print(f" Notification:  Milestone reached - {milestone}")
 
     async def handle_validation_failed(self, event: Event):
         """Alert about validation errors."""
         error_count = len(event.data.get('errors', []))
-        print(f"🔔 Notification: ⚠️  {error_count} validation errors")
+        print(f" Notification: ️  {error_count} validation errors")
 
 
 # ============================================================================
@@ -272,11 +272,11 @@ async def main():
     await notifications.setup_subscriptions(bus)
     await audit.setup_subscriptions(bus)
 
-    print(f"✅ {case_collector.get_subscription_count()} subscriptions for CaseCollector")
-    print(f"✅ {ai_advisor.get_subscription_count()} subscriptions for AIAdvisor")
-    print(f"✅ {analytics.get_subscription_count()} subscriptions for Analytics")
-    print(f"✅ {notifications.get_subscription_count()} subscriptions for Notifications")
-    print(f"✅ {audit.get_subscription_count()} subscriptions for Audit")
+    print(f" {case_collector.get_subscription_count()} subscriptions for CaseCollector")
+    print(f" {ai_advisor.get_subscription_count()} subscriptions for AIAdvisor")
+    print(f" {analytics.get_subscription_count()} subscriptions for Analytics")
+    print(f" {notifications.get_subscription_count()} subscriptions for Notifications")
+    print(f" {audit.get_subscription_count()} subscriptions for Audit")
     print()
 
     # 4. Simulate workflow events
@@ -368,14 +368,14 @@ async def main():
     print()
 
     bus_stats = await bus.get_stats()
-    print(f"📊 EventBus:")
+    print(f" EventBus:")
     print(f"   Published: {bus_stats['published']}")
     print(f"   Consumed: {bus_stats['consumed']}")
     print(f"   Errors: {bus_stats['errors']}")
     print()
 
-    print(f"📊 Analytics metrics: {analytics.metrics}")
-    print(f"📊 Audit log entries: {len(audit.audit_log)}")
+    print(f" Analytics metrics: {analytics.metrics}")
+    print(f" Audit log entries: {len(audit.audit_log)}")
     print()
 
     # 6. Cleanup
@@ -387,7 +387,7 @@ async def main():
     await audit.cleanup(bus)
     await bus.close()
 
-    print("✅ Done!")
+    print(" Done!")
 
 
 if __name__ == '__main__':

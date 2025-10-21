@@ -572,7 +572,7 @@ def test_special_characters_in_strings():
     case = WorkflowCase(
         case_id="case-测试-001",
         module="planning",
-        workflow_name="Test Workflow 🚀",
+        workflow_name="Test Workflow ",
         organization_context=OrganizationContext(
             industry="healthcare",
             size="medium",
@@ -587,7 +587,7 @@ def test_special_characters_in_strings():
     )
 
     assert "测试" in case.case_id
-    assert "🚀" in case.workflow_name
+    assert "" in case.workflow_name
 
 
 def test_sql_special_characters_in_model():

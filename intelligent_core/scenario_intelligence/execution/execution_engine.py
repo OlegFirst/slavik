@@ -91,9 +91,9 @@ class ExecutionEngine:
         self.validator = ExecutionValidator()
         self.reporter = ExecutionReporter()
 
-        logger.info("🚀 Execution Engine initialized")
-        logger.info(f"   Storage: {'✅' if self.storage else '❌'}")
-        logger.info(f"   Temporal: {'✅' if self.temporal_client else '❌'}")
+        logger.info(" Execution Engine initialized")
+        logger.info(f"   Storage: {'' if self.storage else ''}")
+        logger.info(f"   Temporal: {'' if self.temporal_client else ''}")
 
     async def execute_scenario(
         self,
@@ -110,7 +110,7 @@ class ExecutionEngine:
         Returns:
             ExecutionReport
         """
-        logger.info(f"🎯 Executing scenario: {scenario_id}")
+        logger.info(f" Executing scenario: {scenario_id}")
 
         # Load scenario from storage
         if not self.storage:
@@ -179,7 +179,7 @@ class ExecutionEngine:
                 steps_failed=steps_failed
             )
 
-            logger.info(f"📊 Execution metrics recorded: {result.scenario_id} ({result.status})")
+            logger.info(f" Execution metrics recorded: {result.scenario_id} ({result.status})")
 
             return report
 
@@ -198,7 +198,7 @@ class ExecutionEngine:
         Returns:
             ExecutionReport with all results
         """
-        logger.info(f"📦 Executing batch: {len(scenario_ids)} scenarios")
+        logger.info(f" Executing batch: {len(scenario_ids)} scenarios")
 
         if not self.storage:
             raise Exception("Storage not configured - cannot load scenarios")
@@ -211,7 +211,7 @@ class ExecutionEngine:
                 # Load scenario
                 scenario = await self.storage.get_scenario_by_id(scenario_id)
                 if not scenario:
-                    logger.error(f"  ❌ Scenario not found: {scenario_id}")
+                    logger.error(f"   Scenario not found: {scenario_id}")
                     continue
 
                 # Execute
@@ -229,7 +229,7 @@ class ExecutionEngine:
                     await self._save_execution_history(result, validation if self.validate_results else None)
 
             except Exception as e:
-                logger.error(f"  ❌ Failed to execute {scenario_id}: {e}")
+                logger.error(f"   Failed to execute {scenario_id}: {e}")
 
         # Generate combined report
         report = self.reporter.generate_report(
@@ -256,7 +256,7 @@ class ExecutionEngine:
         Returns:
             ExecutionReport
         """
-        logger.info(f"🔄 Executing workflow: {workflow_scenario.get('meta', {}).get('id', 'unknown')}")
+        logger.info(f" Executing workflow: {workflow_scenario.get('meta', {}).get('id', 'unknown')}")
 
         # Handle both formats
         if 'scenario' in workflow_scenario:
@@ -267,7 +267,7 @@ class ExecutionEngine:
         sub_scenarios = workflow_config.get('scenarios', [])
 
         if not sub_scenarios:
-            logger.warning("  ⚠️  No sub-scenarios defined in workflow")
+            logger.warning("  ️  No sub-scenarios defined in workflow")
             sub_scenarios = []
 
         results = []
@@ -278,21 +278,21 @@ class ExecutionEngine:
         for i, sub_scenario_ref in enumerate(sub_scenarios):
             sub_scenario_id = sub_scenario_ref.get('scenario_id')
             if not sub_scenario_id:
-                logger.warning(f"  ⚠️  Sub-scenario {i} has no ID")
+                logger.warning(f"  ️  Sub-scenario {i} has no ID")
                 continue
 
-            logger.info(f"  📍 Executing sub-scenario {i+1}/{len(sub_scenarios)}: {sub_scenario_id}")
+            logger.info(f"   Executing sub-scenario {i+1}/{len(sub_scenarios)}: {sub_scenario_id}")
 
             try:
                 # Load sub-scenario
                 if self.storage:
                     sub_scenario = await self.storage.get_scenario_by_id(sub_scenario_id)
                 else:
-                    logger.warning(f"    ⚠️  Storage not available, skipping {sub_scenario_id}")
+                    logger.warning(f"    ️  Storage not available, skipping {sub_scenario_id}")
                     continue
 
                 if not sub_scenario:
-                    logger.error(f"    ❌ Sub-scenario not found: {sub_scenario_id}")
+                    logger.error(f"     Sub-scenario not found: {sub_scenario_id}")
                     continue
 
                 # Execute with shared context
@@ -311,11 +311,11 @@ class ExecutionEngine:
                 # Check if we should stop on failure
                 stop_on_failure = sub_scenario_ref.get('stop_on_failure', True)
                 if result.status == 'failed' and stop_on_failure:
-                    logger.error(f"    ❌ Sub-scenario failed, stopping workflow")
+                    logger.error(f"     Sub-scenario failed, stopping workflow")
                     break
 
             except Exception as e:
-                logger.error(f"    ❌ Failed to execute sub-scenario {sub_scenario_id}: {e}")
+                logger.error(f"     Failed to execute sub-scenario {sub_scenario_id}: {e}")
                 if sub_scenario_ref.get('stop_on_failure', True):
                     break
 
@@ -346,7 +346,7 @@ class ExecutionEngine:
             # Get connection pool from storage
             pool = self.storage.pool
             if not pool:
-                logger.warning("  ⚠️  Database pool not available")
+                logger.warning("  ️  Database pool not available")
                 return
 
             async with pool.acquire() as conn:
@@ -390,10 +390,10 @@ class ExecutionEngine:
                     result.error
                 )
 
-                logger.info(f"  💾 Saved execution history: {execution_id}")
+                logger.info(f"   Saved execution history: {execution_id}")
 
         except Exception as e:
-            logger.error(f"  ❌ Failed to save execution history: {e}")
+            logger.error(f"   Failed to save execution history: {e}")
 
     async def get_execution_history(
         self,
@@ -545,12 +545,12 @@ async def main():
         # Execute by ID
         report2 = await engine_with_db.execute_scenario('test-execution-engine')
 
-        print(f"✅ Executed scenario from database")
+        print(f" Executed scenario from database")
         print(f"   Status: {report2.summary['overall_status']}")
 
         # Get history
         history = await engine_with_db.get_execution_history('test-execution-engine')
-        print(f"✅ Retrieved {len(history)} execution history records")
+        print(f" Retrieved {len(history)} execution history records")
 
         await storage.close()
 

@@ -61,7 +61,7 @@ class CallEngine:
 
         # Выполнить параллельные вызовы
         if parallel_calls:
-            logger.info(f"    📞 Executing {len(parallel_calls)} calls in parallel...")
+            logger.info(f"     Executing {len(parallel_calls)} calls in parallel...")
 
             parallel_results = await asyncio.gather(*[
                 self._execute_single_call(call, context)
@@ -71,7 +71,7 @@ class CallEngine:
             # Обработать исключения
             for i, result in enumerate(parallel_results):
                 if isinstance(result, Exception):
-                    logger.error(f"    ❌ Parallel call {i} failed: {result}")
+                    logger.error(f"     Parallel call {i} failed: {result}")
                     results.append({
                         'status': 'error',
                         'error': str(result),
@@ -82,7 +82,7 @@ class CallEngine:
 
         # Выполнить последовательные вызовы
         if sequential_calls:
-            logger.info(f"    📞 Executing {len(sequential_calls)} calls sequentially...")
+            logger.info(f"     Executing {len(sequential_calls)} calls sequentially...")
 
             for call in sequential_calls:
                 call_result = await self._execute_single_call(call, context)
@@ -109,7 +109,7 @@ class CallEngine:
         timeout = call.get('timeout', 30)
         wait_for = call.get('wait_for', 'completion')
 
-        logger.info(f"      🔗 Calling scenario: {scenario_id} (level {level})")
+        logger.info(f"       Calling scenario: {scenario_id} (level {level})")
 
         # Загрузить вызываемый сценарий
         try:
@@ -123,7 +123,7 @@ class CallEngine:
                 }
 
         except Exception as e:
-            logger.error(f"      ❌ Failed to load scenario {scenario_id}: {e}")
+            logger.error(f"       Failed to load scenario {scenario_id}: {e}")
             return {
                 'scenario_id': scenario_id,
                 'status': 'error',
@@ -169,7 +169,7 @@ class CallEngine:
             }
 
         except Exception as e:
-            logger.error(f"      ❌ Execution failed: {e}")
+            logger.error(f"       Execution failed: {e}")
             return {
                 'scenario_id': scenario_id,
                 'status': 'error',

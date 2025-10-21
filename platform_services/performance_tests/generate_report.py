@@ -153,22 +153,22 @@ HTML_TEMPLATE = """
 </head>
 <body>
     <div class="container">
-        <h1>🚀 BCM Platform Performance Report</h1>
+        <h1> BCM Platform Performance Report</h1>
         <p><strong>Generated:</strong> {report_date}</p>
         <p><strong>Test Period:</strong> {test_period}</p>
 
-        <h2>📊 Executive Summary</h2>
+        <h2> Executive Summary</h2>
         <div class="summary-grid">
             {summary_cards}
         </div>
 
-        <h2>🎯 Performance Metrics</h2>
+        <h2> Performance Metrics</h2>
         {performance_metrics}
 
-        <h2>📈 Load Test Results</h2>
+        <h2> Load Test Results</h2>
         {load_test_results}
 
-        <h2>💡 Recommendations</h2>
+        <h2> Recommendations</h2>
         <div class="recommendations">
             <h3>Performance Optimization Suggestions</h3>
             <ul>
@@ -199,36 +199,36 @@ class ReportGenerator:
             with open(stats_file, 'r') as f:
                 reader = csv.DictReader(f)
                 self.data['locust_stats'] = list(reader)
-            print(f"✅ Loaded Locust stats: {stats_file}")
+            print(f" Loaded Locust stats: {stats_file}")
         except Exception as e:
-            print(f"⚠️  Could not load Locust stats: {e}")
+            print(f"️  Could not load Locust stats: {e}")
 
     def load_benchmark_results(self, benchmark_file):
         """Load pytest-benchmark results from JSON"""
         try:
             with open(benchmark_file, 'r') as f:
                 self.data['benchmarks'] = json.load(f)
-            print(f"✅ Loaded benchmark results: {benchmark_file}")
+            print(f" Loaded benchmark results: {benchmark_file}")
         except Exception as e:
-            print(f"⚠️  Could not load benchmarks: {e}")
+            print(f"️  Could not load benchmarks: {e}")
 
     def load_metrics(self, metrics_file):
         """Load collected metrics from JSON"""
         try:
             with open(metrics_file, 'r') as f:
                 self.data['metrics'] = json.load(f)
-            print(f"✅ Loaded metrics: {metrics_file}")
+            print(f" Loaded metrics: {metrics_file}")
         except Exception as e:
-            print(f"⚠️  Could not load metrics: {e}")
+            print(f"️  Could not load metrics: {e}")
 
     def load_targets(self, targets_file='performance_targets.yaml'):
         """Load performance targets"""
         try:
             with open(targets_file, 'r') as f:
                 self.data['targets'] = yaml.safe_load(f)
-            print(f"✅ Loaded performance targets: {targets_file}")
+            print(f" Loaded performance targets: {targets_file}")
         except Exception as e:
-            print(f"⚠️  Could not load targets: {e}")
+            print(f"️  Could not load targets: {e}")
 
     def analyze_performance(self):
         """Analyze performance against targets"""
@@ -409,7 +409,7 @@ class ReportGenerator:
         with open(output_file, 'w') as f:
             f.write(html_content)
 
-        print(f"✅ HTML report generated: {output_file}")
+        print(f" HTML report generated: {output_file}")
         return output_file
 
 
@@ -440,7 +440,7 @@ def main():
 
     # Generate report
     output_file = generator.generate_html_report(args.output)
-    print(f"\n🎉 Report available at: {output_file}")
+    print(f"\n Report available at: {output_file}")
 
 
 if __name__ == '__main__':

@@ -50,13 +50,13 @@ async def test_1_load_base_templates():
                 'scenarios': scenario_count,
                 'level': template.get('meta', {}).get('level')
             }
-            print(f"✅ {template_name}: {scenario_count} scenarios, level {results[template_name]['level']}")
+            print(f" {template_name}: {scenario_count} scenarios, level {results[template_name]['level']}")
         except Exception as e:
             results[template_name] = {'status': 'FAILED', 'error': str(e)}
-            print(f"❌ {template_name}: {e}")
+            print(f" {template_name}: {e}")
 
     success_count = sum(1 for r in results.values() if r['status'] == 'OK')
-    print(f"\n📊 Result: {success_count}/{len(base_templates)} templates loaded successfully")
+    print(f"\n Result: {success_count}/{len(base_templates)} templates loaded successfully")
 
     return success_count == len(base_templates)
 
@@ -94,13 +94,13 @@ async def test_2_load_specialized_templates():
                 'scenarios': scenario_count,
                 'category': template.get('meta', {}).get('category')
             }
-            print(f"✅ {category}: {scenario_count} scenarios")
+            print(f" {category}: {scenario_count} scenarios")
         except Exception as e:
             results[category] = {'status': 'FAILED', 'error': str(e)}
-            print(f"❌ {category}: {e}")
+            print(f" {category}: {e}")
 
     success_count = sum(1 for r in results.values() if r['status'] == 'OK')
-    print(f"\n📊 Result: {success_count}/{len(categories)} specialized templates loaded")
+    print(f"\n Result: {success_count}/{len(categories)} specialized templates loaded")
 
     return success_count == len(categories)
 
@@ -140,11 +140,11 @@ async def test_3_template_placeholder_replacement():
     }
 
     for check_name, result in checks.items():
-        status = "✅" if result else "❌"
+        status = "" if result else ""
         print(f"{status} {check_name}: {result}")
 
     all_passed = all(checks.values())
-    print(f"\n📊 Result: {'PASS' if all_passed else 'FAIL'}")
+    print(f"\n Result: {'PASS' if all_passed else 'FAIL'}")
 
     return all_passed
 
@@ -179,20 +179,20 @@ async def test_4_registry_integration():
     success = await registry.register(scenario)
 
     if not success:
-        print("❌ Failed to register scenario")
+        print(" Failed to register scenario")
         return False
 
-    print(f"✅ Scenario registered successfully")
+    print(f" Scenario registered successfully")
 
     # Retrieve from registry
     scenario_id = scenario.get('meta', {}).get('id')
     retrieved = await registry.get_scenario_by_id(scenario_id)
 
     if retrieved is None:
-        print("❌ Failed to retrieve scenario")
+        print(" Failed to retrieve scenario")
         return False
 
-    print(f"✅ Scenario retrieved: {scenario_id}")
+    print(f" Scenario retrieved: {scenario_id}")
 
     # Verify data
     checks = {
@@ -203,11 +203,11 @@ async def test_4_registry_integration():
     }
 
     for check_name, result in checks.items():
-        status = "✅" if result else "❌"
+        status = "" if result else ""
         print(f"{status} {check_name}: {result}")
 
     all_passed = all(checks.values())
-    print(f"\n📊 Result: {'PASS' if all_passed else 'FAIL'}")
+    print(f"\n Result: {'PASS' if all_passed else 'FAIL'}")
 
     return all_passed
 
@@ -249,19 +249,19 @@ async def test_5_bulk_registration():
         success = await registry.register(scenario)
         if success:
             registered_count += 1
-            print(f"✅ Registered: {service['name']}")
+            print(f" Registered: {service['name']}")
         else:
-            print(f"❌ Failed: {service['name']}")
+            print(f" Failed: {service['name']}")
 
     # Get statistics
     stats = await registry.get_statistics()
 
-    print(f"\n📊 Registry Statistics:")
+    print(f"\n Registry Statistics:")
     print(f"   Total scenarios: {stats['total_scenarios']}")
     print(f"   By level: {stats['by_level']}")
 
     success = registered_count == len(services_catalog)
-    print(f"\n📊 Result: {registered_count}/{len(services_catalog)} registered {'PASS' if success else 'FAIL'}")
+    print(f"\n Result: {registered_count}/{len(services_catalog)} registered {'PASS' if success else 'FAIL'}")
 
     return success
 
@@ -299,12 +299,12 @@ async def test_6_specialized_category_selection():
             passed = expected in meta_category
             result_msg = f"Category: {meta_category}"
 
-        status = "✅" if passed else "❌"
+        status = "" if passed else ""
         print(f"{status} {category}: {result_msg}")
         results.append(passed)
 
     all_passed = all(results)
-    print(f"\n📊 Result: {sum(results)}/{len(test_cases)} category selections correct {'PASS' if all_passed else 'FAIL'}")
+    print(f"\n Result: {sum(results)}/{len(test_cases)} category selections correct {'PASS' if all_passed else 'FAIL'}")
 
     return all_passed
 
@@ -322,15 +322,15 @@ async def test_7_template_validation():
 
     # Test valid template
     is_valid = loader.validate_template(valid_template)
-    print(f"{'✅' if is_valid else '❌'} Valid template validation: {is_valid}")
+    print(f"{'' if is_valid else ''} Valid template validation: {is_valid}")
 
     # Test invalid template (missing required keys)
     invalid_template = {"meta": {"level": 1}}
     is_invalid = not loader.validate_template(invalid_template)
-    print(f"{'✅' if is_invalid else '❌'} Invalid template rejected: {is_invalid}")
+    print(f"{'' if is_invalid else ''} Invalid template rejected: {is_invalid}")
 
     passed = is_valid and is_invalid
-    print(f"\n📊 Result: {'PASS' if passed else 'FAIL'}")
+    print(f"\n Result: {'PASS' if passed else 'FAIL'}")
 
     return passed
 
@@ -367,19 +367,19 @@ async def run_all_tests():
     print("="*70)
 
     for test_name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = " PASS" if result else " FAIL"
         print(f"{status}: {test_name}")
 
     passed = sum(1 for r in results.values() if r)
     total = len(results)
 
-    print(f"\n📊 Overall: {passed}/{total} tests passed")
+    print(f"\n Overall: {passed}/{total} tests passed")
 
     if passed == total:
-        print("🎉 ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         return True
     else:
-        print(f"⚠️  {total - passed} test(s) failed")
+        print(f"️  {total - passed} test(s) failed")
         return False
 
 

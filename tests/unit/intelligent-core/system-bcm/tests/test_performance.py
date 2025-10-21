@@ -47,7 +47,7 @@ class TestPerformanceMetrics:
 
         # Check average response time
         avg_response = statistics.mean(response_times)
-        print(f"\n✅ Average API response time: {avg_response:.3f}s")
+        print(f"\n Average API response time: {avg_response:.3f}s")
         print(f"   Fastest: {min(response_times):.3f}s")
         print(f"   Slowest: {max(response_times):.3f}s")
 
@@ -68,7 +68,7 @@ class TestPerformanceMetrics:
             assert duration < performance_thresholds["cycle_duration_max"], \
                 f"Cycle took {duration}s (max: {performance_thresholds['cycle_duration_max']}s)"
 
-            print(f"\n✅ BCM Cycle Performance:")
+            print(f"\n BCM Cycle Performance:")
             print(f"   Duration: {duration:.2f}s")
             print(f"   Target: <{performance_thresholds['cycle_duration_max']}s")
             print(f"   Performance: {((performance_thresholds['cycle_duration_max'] - duration) / performance_thresholds['cycle_duration_max'] * 100):.1f}% better than target")
@@ -95,7 +95,7 @@ class TestPerformanceMetrics:
         max_cpu = max(cpu_samples)
         max_memory = max(memory_samples)
 
-        print(f"\n✅ Resource Usage:")
+        print(f"\n Resource Usage:")
         print(f"   CPU Average: {avg_cpu:.1f}% (max allowed: {performance_thresholds['cpu_usage_max']}%)")
         print(f"   CPU Peak: {max_cpu:.1f}%")
         print(f"   Memory Average: {avg_memory:.1f}% (max allowed: {performance_thresholds['memory_usage_max']}%)")
@@ -130,7 +130,7 @@ class TestPerformanceMetrics:
             success_rate = sum(1 for code in status_codes if code == 200) / num_requests
             avg_duration = statistics.mean(durations)
 
-            print(f"\n✅ Concurrent Requests Performance:")
+            print(f"\n Concurrent Requests Performance:")
             print(f"   Total Requests: {num_requests}")
             print(f"   Success Rate: {success_rate * 100:.1f}%")
             print(f"   Average Duration: {avg_duration:.3f}s")
@@ -157,7 +157,7 @@ class TestPerformanceMetrics:
 
             avg_time = statistics.mean(collection_times)
 
-            print(f"\n✅ Metrics Collection Performance:")
+            print(f"\n Metrics Collection Performance:")
             print(f"   Average Collection Time: {avg_time:.3f}s")
             print(f"   Total Metrics: {len(response.text.split('\\n'))}")
 
@@ -206,7 +206,7 @@ class TestRTOCompliance:
                         "rto_met": rto_met
                     })
 
-                    print(f"\n{'✅' if rto_met else '❌'} {proc['name']}:")
+                    print(f"\n{'' if rto_met else ''} {proc['name']}:")
                     print(f"   Duration: {duration:.1f}s")
                     print(f"   Expected RTO: {proc['expected_rto']}s")
                     print(f"   RTO Met: {'Yes' if rto_met else 'No'}")
@@ -217,7 +217,7 @@ class TestRTOCompliance:
 
         if results:
             rto_compliance = sum(1 for r in results if r["rto_met"]) / len(results)
-            print(f"\n✅ Overall RTO Compliance: {rto_compliance * 100:.1f}%")
+            print(f"\n Overall RTO Compliance: {rto_compliance * 100:.1f}%")
             assert rto_compliance >= 0.8, f"RTO compliance {rto_compliance * 100}% below 80%"
 
 
@@ -273,7 +273,7 @@ class TestLoadTests:
             avg_response = statistics.mean(request_times) if request_times else 0
             p95_response = sorted(request_times)[int(len(request_times) * 0.95)] if request_times else 0
 
-            print(f"\n✅ Load Test Results:")
+            print(f"\n Load Test Results:")
             print(f"   Duration: {total_duration:.1f}s")
             print(f"   Total Requests: {total_requests}")
             print(f"   Success Rate: {success_rate * 100:.1f}%")
@@ -313,7 +313,7 @@ class TestScalability:
         memory_growth = final_memory - initial_memory
         growth_percent = (memory_growth / initial_memory) * 100
 
-        print(f"\n✅ Memory Growth Test:")
+        print(f"\n Memory Growth Test:")
         print(f"   Initial Memory: {initial_memory:.1f} MB")
         print(f"   Final Memory: {final_memory:.1f} MB")
         print(f"   Growth: {memory_growth:.1f} MB ({growth_percent:.1f}%)")

@@ -56,7 +56,7 @@ def create_bia_process(process_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
         response.raise_for_status()
 
         bia_process = response.json()
-        print(f"✅ BIA Process created successfully!")
+        print(f" BIA Process created successfully!")
         print(f"   ID: {bia_process.get('id')}")
         print(f"   Name: {bia_process.get('name')}")
         print(f"   Criticality: {bia_process.get('criticality')}")
@@ -65,14 +65,14 @@ def create_bia_process(process_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
         return bia_process
 
     except requests.exceptions.HTTPError as e:
-        print(f"❌ HTTP Error: {e}")
+        print(f" HTTP Error: {e}")
         if e.response is not None:
             print(f"   Status Code: {e.response.status_code}")
             print(f"   Response: {e.response.text}")
     except requests.exceptions.RequestException as e:
-        print(f"❌ Request Error: {e}")
+        print(f" Request Error: {e}")
     except Exception as e:
-        print(f"❌ Unexpected Error: {e}")
+        print(f" Unexpected Error: {e}")
 
     return None
 
@@ -88,7 +88,7 @@ def get_bia_process(process_id: int) -> Optional[Dict[str, Any]]:
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as e:
-        print(f"❌ Error fetching process: {e}")
+        print(f" Error fetching process: {e}")
         return None
 
 
@@ -225,7 +225,7 @@ def main():
 
     if process:
         print()
-        print("📊 Process Details:")
+        print(" Process Details:")
         print(f"   Tenant: {process.get('tenant_id')}")
         print(f"   Industry: {process.get('industry')}")
         print(f"   Dependencies: {len(process.get('dependencies', []))}")
@@ -235,7 +235,7 @@ def main():
         print("Verifying created process...")
         fetched = get_bia_process(process.get('id'))
         if fetched:
-            print("✅ Process verified successfully!")
+            print(" Process verified successfully!")
 
     print()
     print("=" * 60)

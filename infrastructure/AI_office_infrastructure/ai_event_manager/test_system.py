@@ -43,10 +43,10 @@ try:
         ContinuousMonitor
     )
     test_results['imports'] = {'status': 'PASS', 'details': 'All integrations imported successfully'}
-    print("✅ All integrations imported successfully")
+    print(" All integrations imported successfully")
 except Exception as e:
     test_results['imports'] = {'status': 'FAIL', 'details': str(e)}
-    print(f"❌ Import failed: {e}")
+    print(f" Import failed: {e}")
     sys.exit(1)
 
 print()
@@ -87,7 +87,7 @@ async def test_eventbus():
         return {'status': 'FAIL', 'details': str(e)}
 
 test_results['eventbus'] = asyncio.run(test_eventbus())
-print(f"{'✅' if test_results['eventbus']['status'] == 'PASS' else '❌'} {test_results['eventbus']['details']}")
+print(f"{'' if test_results['eventbus']['status'] == 'PASS' else ''} {test_results['eventbus']['details']}")
 print()
 
 # ============================================================================
@@ -128,7 +128,7 @@ async def test_integration_manager():
         return {'status': 'FAIL', 'details': str(e)}
 
 test_results['integration_manager'] = asyncio.run(test_integration_manager())
-print(f"{'✅' if test_results['integration_manager']['status'] == 'PASS' else '❌'} {test_results['integration_manager']['details']}")
+print(f"{'' if test_results['integration_manager']['status'] == 'PASS' else ''} {test_results['integration_manager']['details']}")
 print()
 
 # ============================================================================
@@ -178,7 +178,7 @@ async def test_event_detection_reliability():
         return {'status': 'FAIL', 'details': str(e)}
 
 test_results['event_detection'] = asyncio.run(test_event_detection_reliability())
-print(f"{'✅' if test_results['event_detection']['status'] == 'PASS' else '❌'} {test_results['event_detection']['details']}")
+print(f"{'' if test_results['event_detection']['status'] == 'PASS' else ''} {test_results['event_detection']['details']}")
 if 'throughput' in test_results['event_detection']:
     print(f"   Duration: {test_results['event_detection']['duration']}, Throughput: {test_results['event_detection']['throughput']}")
 print()
@@ -231,7 +231,7 @@ async def test_stress():
         return {'status': 'FAIL', 'details': str(e)}
 
 test_results['stress_test'] = asyncio.run(test_stress())
-print(f"{'✅' if test_results['stress_test']['status'] == 'PASS' else '❌'} {test_results['stress_test']['details']}")
+print(f"{'' if test_results['stress_test']['status'] == 'PASS' else ''} {test_results['stress_test']['details']}")
 if 'throughput' in test_results['stress_test']:
     print(f"   Throughput: {test_results['stress_test']['throughput']}")
 print()
@@ -271,7 +271,7 @@ async def test_monitor():
         return {'status': 'FAIL', 'details': str(e)}
 
 test_results['monitor'] = asyncio.run(test_monitor())
-print(f"{'✅' if test_results['monitor']['status'] == 'PASS' else '❌'} {test_results['monitor']['details']}")
+print(f"{'' if test_results['monitor']['status'] == 'PASS' else ''} {test_results['monitor']['details']}")
 print()
 
 # ============================================================================
@@ -285,7 +285,7 @@ total_tests = len(test_results)
 passed_tests = sum(1 for r in test_results.values() if r['status'] == 'PASS')
 
 for test_name, result in test_results.items():
-    status_icon = '✅' if result['status'] == 'PASS' else '❌'
+    status_icon = '' if result['status'] == 'PASS' else ''
     print(f"{status_icon} {test_name.upper()}: {result['status']} - {result['details']}")
 
 print()
@@ -294,18 +294,18 @@ print()
 
 # Production readiness assessment
 if passed_tests == total_tests:
-    print("🎉 PRODUCTION READY: ALL TESTS PASSED")
+    print(" PRODUCTION READY: ALL TESTS PASSED")
     print("   - Event detection: 100% reliable")
     print("   - Integrations: Operational")
     print("   - Stress tested: Passed")
     print("   - Continuous monitoring: Stable")
     sys.exit(0)
 elif passed_tests >= total_tests * 0.8:
-    print("⚠️  PARTIALLY READY: Some integrations unavailable")
+    print("️  PARTIALLY READY: Some integrations unavailable")
     print("   - Core functionality works")
     print("   - External services may be offline")
     print("   - Safe to run in limited mode")
     sys.exit(0)
 else:
-    print("❌ NOT READY: Critical failures detected")
+    print(" NOT READY: Critical failures detected")
     sys.exit(1)

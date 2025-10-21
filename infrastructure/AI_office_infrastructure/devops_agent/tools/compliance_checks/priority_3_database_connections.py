@@ -325,8 +325,8 @@ class DatabaseConnectionChecker:
         postgres_ok = self.check_postgres_available()
         redis_ok = self.check_redis_available()
 
-        logger.info(f"PostgreSQL: {'✅ доступен' if postgres_ok else '❌ недоступен'}")
-        logger.info(f"Redis: {'✅ доступен' if redis_ok else '❌ недоступен'}")
+        logger.info(f"PostgreSQL: {' доступен' if postgres_ok else ' недоступен'}")
+        logger.info(f"Redis: {' доступен' if redis_ok else ' недоступен'}")
         logger.info("")
 
         connections = []
@@ -388,12 +388,12 @@ class DatabaseConnectionChecker:
             self.connections[service_name] = connection
 
             # Логирование
-            status = "✅" if is_connected and schema_exists else "❌"
+            status = "" if is_connected and schema_exists else ""
             logger.info(f"{status} {service_name}:")
             logger.info(f"   Тип БД: {db_type}")
             logger.info(f"   БД: {db_name}")
-            logger.info(f"   Подключено: {'✅' if is_connected else '❌'}")
-            logger.info(f"   Схема существует: {'✅' if schema_exists else '❌'}")
+            logger.info(f"   Подключено: {'' if is_connected else ''}")
+            logger.info(f"   Схема существует: {'' if schema_exists else ''}")
 
             if error_msg:
                 logger.info(f"   Ошибка: {error_msg}")
@@ -436,8 +436,8 @@ class DatabaseConnectionChecker:
         report.append("")
 
         report.append("Доступность БД:")
-        report.append(f"  PostgreSQL: {'✅ доступен' if self.postgres_available else '❌ недоступен'}")
-        report.append(f"  Redis: {'✅ доступен' if self.redis_available else '❌ недоступен'}")
+        report.append(f"  PostgreSQL: {' доступен' if self.postgres_available else ' недоступен'}")
+        report.append(f"  Redis: {' доступен' if self.redis_available else ' недоступен'}")
         report.append("")
 
         # Статистика
@@ -459,7 +459,7 @@ class DatabaseConnectionChecker:
         ]
 
         if problems:
-            report.append(f"❌ Сервисы с проблемами БД ({len(problems)}):")
+            report.append(f" Сервисы с проблемами БД ({len(problems)}):")
             for conn in problems:
                 report.append(f"  - {conn.service_name}:")
                 report.append(f"    БД: {conn.database_type}/{conn.database_name}")
@@ -469,7 +469,7 @@ class DatabaseConnectionChecker:
 
             report.append("")
         else:
-            report.append("✅ Все сервисы корректно подключены к БД")
+            report.append(" Все сервисы корректно подключены к БД")
             report.append("")
 
         report.append("=" * 80)
@@ -491,11 +491,11 @@ def check_database_connections() -> bool:
 
     # Проверяем критичные БД
     if not checker.postgres_available:
-        logger.error("❌ PostgreSQL недоступен - критичная проблема")
+        logger.error(" PostgreSQL недоступен - критичная проблема")
         return False
 
     if not checker.redis_available:
-        logger.warning("⚠️  Redis недоступен - некоторые функции могут не работать")
+        logger.warning("️  Redis недоступен - некоторые функции могут не работать")
 
     # Проверяем процент подключенных сервисов
     connected = sum(1 for c in connections if c.is_connected and c.schema_exists)
@@ -503,7 +503,7 @@ def check_database_connections() -> bool:
 
     if connected / total < 0.7:  # Менее 70% подключены
         logger.error(
-            f"❌ Недостаточно сервисов подключены к БД: "
+            f" Недостаточно сервисов подключены к БД: "
             f"{connected}/{total} ({connected / total * 100:.0f}%)"
         )
         return False

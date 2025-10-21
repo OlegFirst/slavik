@@ -100,33 +100,33 @@ class AnalyticsIntegrationLoader:
         if state_machine_file.exists():
             sm_knowledge = await self._load_state_machine(state_machine_file)
             knowledge["state_machine"] = sm_knowledge
-            logger.info(f"  ✅ Loaded state machine ({len(sm_knowledge.data['states'])} states)")
+            logger.info(f"   Loaded state machine ({len(sm_knowledge.data['states'])} states)")
 
         # 2. Load Behavioral Patterns
         patterns_file = self.analytics_dir / "behavioral_patterns.json"
         if patterns_file.exists():
             patterns_knowledge = await self._load_behavioral_patterns(patterns_file)
             knowledge["behavioral_patterns"] = patterns_knowledge
-            logger.info(f"  ✅ Loaded behavioral patterns ({len(patterns_knowledge.data['patterns'])} patterns)")
+            logger.info(f"   Loaded behavioral patterns ({len(patterns_knowledge.data['patterns'])} patterns)")
 
         # 3. Load Edge Cases
         edge_cases_file = self.analytics_dir / "edge_cases.json"
         if edge_cases_file.exists():
             edge_knowledge = await self._load_edge_cases(edge_cases_file)
             knowledge["edge_cases"] = edge_knowledge
-            logger.info(f"  ✅ Loaded edge cases ({len(edge_knowledge.data['cases'])} cases)")
+            logger.info(f"   Loaded edge cases ({len(edge_knowledge.data['cases'])} cases)")
 
         # 4. Load Module Analyses
         module_analysis_dir = self.analytics_dir / "module_analysis"
         if module_analysis_dir.exists():
             modules_knowledge = await self._load_module_analyses(module_analysis_dir)
             knowledge["module_analyses"] = modules_knowledge
-            logger.info(f"  ✅ Loaded module analyses ({len(modules_knowledge.data['modules'])} modules)")
+            logger.info(f"   Loaded module analyses ({len(modules_knowledge.data['modules'])} modules)")
 
         # 5. Save to knowledge base
         await self._save_to_knowledge_base(knowledge)
 
-        logger.info(f"✅ Latest analysis loaded: {len(knowledge)} knowledge types")
+        logger.info(f" Latest analysis loaded: {len(knowledge)} knowledge types")
         return knowledge
 
     async def load_all_analyses(self) -> List[Dict[str, AnalyticsKnowledge]]:
@@ -165,9 +165,9 @@ class AnalyticsIntegrationLoader:
                 })
 
             except Exception as e:
-                logger.error(f"  ❌ Failed to load {report_file.name}: {e}")
+                logger.error(f"   Failed to load {report_file.name}: {e}")
 
-        logger.info(f"✅ Loaded {len(all_knowledge)} historical analyses")
+        logger.info(f" Loaded {len(all_knowledge)} historical analyses")
         return all_knowledge
 
     # === Loading Methods ===
@@ -430,7 +430,7 @@ class AnalyticsIntegrationLoader:
         with open(json_file, 'w') as f:
             json.dump(json_data, f, indent=2)
 
-        logger.info(f"  💾 Saved to: {json_file}")
+        logger.info(f"   Saved to: {json_file}")
 
         # 2. Save as Markdown (human-readable)
         md_file = self.knowledge_dir / f"analytics_knowledge_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
@@ -440,7 +440,7 @@ class AnalyticsIntegrationLoader:
         with open(md_file, 'w') as f:
             f.write(md_content)
 
-        logger.info(f"  💾 Saved to: {md_file}")
+        logger.info(f"   Saved to: {md_file}")
 
         # 3. Update knowledge index
         await self._update_knowledge_index(knowledge)
@@ -508,7 +508,7 @@ class AnalyticsIntegrationLoader:
         with open(index_file, 'w') as f:
             json.dump(index, f, indent=2)
 
-        logger.info(f"  📋 Updated knowledge index")
+        logger.info(f"   Updated knowledge index")
 
     # === Query Methods ===
 
@@ -554,13 +554,13 @@ async def main():
     # Load latest
     knowledge = await loader.load_latest_analysis()
 
-    print("\n✅ Loaded knowledge:")
+    print("\n Loaded knowledge:")
     for source, know in knowledge.items():
         print(f"  - {source}: {len(know.data)} items")
 
     # Query example
     # results = await loader.query_knowledge("edge_cases", "critical")
-    # print(f"\n🔍 Query results: {len(results)}")
+    # print(f"\n Query results: {len(results)}")
 
 
 if __name__ == "__main__":

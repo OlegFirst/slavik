@@ -21,9 +21,9 @@ def test_imports():
     # Test main module
     try:
         from . import AIOrchestrator
-        print("✅ Main module: AIOrchestrator")
+        print(" Main module: AIOrchestrator")
     except Exception as e:
-        errors.append(f"❌ Main module: {e}")
+        errors.append(f" Main module: {e}")
         traceback.print_exc()
 
     # Test models
@@ -32,9 +32,9 @@ def test_imports():
             Decision, Strategy, Priority, FullContext, SafetyResult,
             ActionType, PriorityLevel, MemoryType
         )
-        print("✅ Models: All data models")
+        print(" Models: All data models")
     except Exception as e:
-        errors.append(f"❌ Models: {e}")
+        errors.append(f" Models: {e}")
         traceback.print_exc()
 
     # Test decision center
@@ -42,9 +42,9 @@ def test_imports():
         from .decision_center import (
             ContextAggregator, PriorityEngine, StrategySelector, DelegationManager
         )
-        print("✅ Decision Center: All components")
+        print(" Decision Center: All components")
     except Exception as e:
-        errors.append(f"❌ Decision Center: {e}")
+        errors.append(f" Decision Center: {e}")
         traceback.print_exc()
 
     # Test memory
@@ -53,9 +53,9 @@ def test_imports():
             DistributedMemory, WorkingMemory, ShortTermMemory,
             LongTermMemory, ProceduralMemory
         )
-        print("✅ Memory: All memory layers")
+        print(" Memory: All memory layers")
     except Exception as e:
-        errors.append(f"❌ Memory: {e}")
+        errors.append(f" Memory: {e}")
         traceback.print_exc()
 
     # Test safety
@@ -64,9 +64,9 @@ def test_imports():
             SafetyMonitor, ConstitutionEnforcer, LoopDetector,
             HallucinationDetector, ControlMonitor
         )
-        print("✅ Safety: All safety components")
+        print(" Safety: All safety components")
     except Exception as e:
-        errors.append(f"❌ Safety: {e}")
+        errors.append(f" Safety: {e}")
         traceback.print_exc()
 
     # Test evolution
@@ -74,21 +74,21 @@ def test_imports():
         from .evolution import (
             EvolutionEngine, DataEvolution, ModelEvolution, CodeEvolution
         )
-        print("✅ Evolution: All evolution components")
+        print(" Evolution: All evolution components")
     except Exception as e:
-        errors.append(f"❌ Evolution: {e}")
+        errors.append(f" Evolution: {e}")
         traceback.print_exc()
 
     print("=" * 60)
 
     # Summary
     if errors:
-        print(f"\n❌ FAILED: {len(errors)} import errors")
+        print(f"\n FAILED: {len(errors)} import errors")
         for error in errors:
             print(f"  - {error}")
         return False
     else:
-        print("\n✅ SUCCESS: All imports working!")
+        print("\n SUCCESS: All imports working!")
         print(f"\nModule is ready for use.")
         print(f"Run tests with: pytest tests/ -v")
         return True

@@ -1,7 +1,7 @@
 """
 Resource Tracker Client для MIO Manager
 
-Интеграция Phase 2: Resource Tracker как ГЛАЗА (👀) для мониторинга ресурсов системы.
+Интеграция Phase 2: Resource Tracker как ГЛАЗА () для мониторинга ресурсов системы.
 
 MIO Manager = Глаза + Руки инфраструктуры
 Resource Tracker = Специализированный модуль для системных ресурсов
@@ -53,7 +53,7 @@ class ResourceTrackerClient:
     """
     Resource Tracker Client для MIO Manager
 
-    Роль: 👀 ГЛАЗА для системных ресурсов
+    Роль:  ГЛАЗА для системных ресурсов
 
     Возможности:
     - Мониторинг CPU, Memory, Disk, Network
@@ -104,7 +104,7 @@ class ResourceTrackerClient:
 
         self.running = True
         self.monitor_task = asyncio.create_task(self._monitor_loop())
-        logger.info(f"✅ Resource Tracker Client started (interval: {self.snapshot_interval}s)")
+        logger.info(f" Resource Tracker Client started (interval: {self.snapshot_interval}s)")
 
     async def stop(self):
         """Остановить мониторинг"""
@@ -115,7 +115,7 @@ class ResourceTrackerClient:
                 await self.monitor_task
             except asyncio.CancelledError:
                 pass
-        logger.info("✅ Resource Tracker Client stopped")
+        logger.info(" Resource Tracker Client stopped")
 
     async def _monitor_loop(self):
         """Основной цикл мониторинга"""
@@ -249,7 +249,7 @@ class ResourceTrackerClient:
 
     async def _handle_deficit(self, snapshot: ResourceSnapshot):
         """Обработка дефицита ресурсов"""
-        logger.warning(f"⚠️  Resource DEFICIT detected: CPU={snapshot.cpu_percent:.1f}%, Memory={snapshot.memory_percent:.1f}%")
+        logger.warning(f"️  Resource DEFICIT detected: CPU={snapshot.cpu_percent:.1f}%, Memory={snapshot.memory_percent:.1f}%")
 
         # Публикация события дефицита
         if self.eventbus:
@@ -268,7 +268,7 @@ class ResourceTrackerClient:
 
     async def _handle_surplus(self, snapshot: ResourceSnapshot):
         """Обработка избытка ресурсов"""
-        logger.info(f"✅ Resource SURPLUS: CPU={snapshot.cpu_percent:.1f}%, Memory={snapshot.memory_percent:.1f}%")
+        logger.info(f" Resource SURPLUS: CPU={snapshot.cpu_percent:.1f}%, Memory={snapshot.memory_percent:.1f}%")
 
         # Публикация события избытка
         if self.eventbus:

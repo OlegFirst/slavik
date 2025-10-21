@@ -1,5 +1,5 @@
 """
-📊 Prometheus Metrics for Expertise Center
+ Prometheus Metrics for Expertise Center
 
 Tracks:
 - Analyzer operations (10 analyzers: lifecycle, impact, performance, etc.)
@@ -553,7 +553,7 @@ def init_expertise_metrics():
     # Initialize circuit breaker states
     # This will be populated dynamically as analyzers make HTTP calls
 
-    logger.info("✅ Expertise Center Prometheus metrics initialized")
+    logger.info(" Expertise Center Prometheus metrics initialized")
 
 
 # Initialize on module import

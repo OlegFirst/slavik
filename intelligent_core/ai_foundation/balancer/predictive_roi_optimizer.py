@@ -150,7 +150,7 @@ class PredictiveROIOptimizer:
             'avoided_crises': 0
         }
 
-        logger.info(f"🔮 Predictive ROI Optimizer initialized (min ROI: {min_roi_threshold})")
+        logger.info(f" Predictive ROI Optimizer initialized (min ROI: {min_roi_threshold})")
 
     def record_health_snapshot(self, module_name: str, health: float):
         """
@@ -216,7 +216,7 @@ class PredictiveROIOptimizer:
         )
 
         logger.debug(
-            f"🔮 Trend predicted for {module_name}: "
+            f" Trend predicted for {module_name}: "
             f"velocity={trend_velocity:.2f}/min, "
             f"5min={predicted_5min:.1f}, 30min={predicted_30min:.1f}"
         )
@@ -294,7 +294,7 @@ class PredictiveROIOptimizer:
                 predictions.append(prediction)
 
                 logger.warning(
-                    f"⚠️  PREDICTED imbalance: {module_name} in {minutes_ahead:.1f}min "
+                    f"️  PREDICTED imbalance: {module_name} in {minutes_ahead:.1f}min "
                     f"(health will drop to {future_health:.1f})"
                 )
 
@@ -415,7 +415,7 @@ class PredictiveROIOptimizer:
         )
 
         logger.info(
-            f"💰 ROI projected for {module_name}: "
+            f" ROI projected for {module_name}: "
             f"ROI={projected_roi:.2f}, Risk-adjusted={risk_adjusted_roi:.2f}, "
             f"Worth doing: {worth_doing}"
         )
@@ -518,7 +518,7 @@ class PredictiveROIOptimizer:
         # Сортировать по ROI (лучшие первыми)
         interventions.sort(key=lambda x: x.projected_roi, reverse=True)
 
-        logger.info(f"✅ Optimized {len(interventions)} interventions by ROI")
+        logger.info(f" Optimized {len(interventions)} interventions by ROI")
 
         return interventions
 
@@ -646,12 +646,12 @@ class PredictiveROIOptimizer:
         """Генерировать обоснование ROI"""
         if worth_doing:
             return (
-                f"✅ HIGH ROI: Invest {cost:.1f} units → gain {benefit:.1f} units. "
+                f" HIGH ROI: Invest {cost:.1f} units → gain {benefit:.1f} units. "
                 f"ROI={roi:.2f}, Risk-adjusted={risk_adjusted_roi:.2f}. RECOMMENDED."
             )
         else:
             return (
-                f"❌ LOW ROI: Invest {cost:.1f} → gain {benefit:.1f}. "
+                f" LOW ROI: Invest {cost:.1f} → gain {benefit:.1f}. "
                 f"ROI={roi:.2f} below threshold {self.min_roi}. NOT RECOMMENDED."
             )
 

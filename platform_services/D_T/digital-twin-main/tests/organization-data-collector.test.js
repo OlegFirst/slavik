@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { OrganizationDataCollector } from '../src/organization-data-collector.js';
 import { constructor, initializeCollectionMethods, initializeValidationRules, startCollectionSession, collectData, handleInterviewCollection, handleDocumentAnalysis, handleSystemIntegration, handleSurveyCollection, handleFileUpload, generateCollectionWorkflow, getSessionStatus, completeSession, getAvailableCollectionMethods, getDataCategories, validateCollectionPlan, generateSessionId, calculateOverallQualityScore, qualityToValue, sanitizeSession, getCategoryDescription, isCategoryRequired, getStatus, estimateStepDuration, calculateStepPriority, getStepDependencies, sortWorkflowSteps, updateSessionProgress, updateNextSteps, validateSessionCompletion, generateOrganizationProfile, calculateQualityMetrics, estimateCompletionTime, getCategoryWeight } from '../src/organization-data-collector.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('organization-data-collector', () => {
@@ -566,7 +566,7 @@ describe('organization-data-collector', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in organization-data-collector');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

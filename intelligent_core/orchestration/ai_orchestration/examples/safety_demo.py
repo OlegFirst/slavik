@@ -56,7 +56,7 @@ async def demo_constitution():
     logger.info(f"Safe: {result1.safe}")
     if not result1.safe:
         for concern in result1.concerns:
-            logger.warning(f"  ⚠️  {concern.description}")
+            logger.warning(f"  ️  {concern.description}")
 
     # Test 2: High confidence (SHOULD PASS)
     logger.info("\nTest 2: High confidence")
@@ -68,7 +68,7 @@ async def demo_constitution():
     )
 
     result2 = await enforcer.validate(decision2, context)
-    logger.info(f"Safe: {result2.safe} ✅")
+    logger.info(f"Safe: {result2.safe} ")
 
 
 async def demo_loop_detection():
@@ -100,7 +100,7 @@ async def demo_loop_detection():
 
         if not result.safe:
             for concern in result.concerns:
-                logger.warning(f"  🔄 LOOP DETECTED: {concern.description}")
+                logger.warning(f"   LOOP DETECTED: {concern.description}")
             break
 
 
@@ -128,7 +128,7 @@ async def demo_full_safety_monitor():
     )
 
     result1 = await monitor.validate(decision1, context)
-    logger.info(f"Overall safe: {result1.safe} ✅")
+    logger.info(f"Overall safe: {result1.safe} ")
     logger.info(f"  Constitution: {result1.constitution_check}")
     logger.info(f"  Loop check: {result1.loop_check}")
     logger.info(f"  Hallucination check: {result1.hallucination_check}")
@@ -145,7 +145,7 @@ async def demo_full_safety_monitor():
     result2 = await monitor.validate(decision2, context)
     logger.info(f"Overall safe: {result2.safe}")
     if not result2.safe:
-        logger.warning("  ⚠️  Safety concerns detected:")
+        logger.warning("  ️  Safety concerns detected:")
         for concern in result2.get_blocking_concerns():
             logger.warning(f"    - {concern.description}")
 

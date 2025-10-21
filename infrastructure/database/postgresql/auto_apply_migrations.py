@@ -50,7 +50,7 @@ def apply_via_psycopg():
     try:
         import psycopg2
     except ImportError:
-        print("❌ psycopg2 not installed. Installing...")
+        print(" psycopg2 not installed. Installing...")
         os.system("pip3 install psycopg2-binary")
         import psycopg2
 
@@ -66,14 +66,14 @@ def apply_via_psycopg():
         "sslmode": "require"
     }
 
-    print(f"🔌 Connecting via IP {conn_params['host']}:{conn_params['port']}...")
+    print(f" Connecting via IP {conn_params['host']}:{conn_params['port']}...")
 
     try:
         conn = psycopg2.connect(**conn_params)
         conn.autocommit = True
         cur = conn.cursor()
 
-        print("✅ Connected!")
+        print(" Connected!")
 
         # Get all migrations
         migrations = sorted(MIGRATIONS_DIR.glob("*.sql"))
@@ -86,14 +86,14 @@ def apply_via_psycopg():
                 print(f"⏭️  Skip: {filename}")
                 continue
 
-            print(f"\n📄 Applying: {filename}")
+            print(f"\n Applying: {filename}")
             sql = migration_file.read_text()
 
             try:
                 cur.execute(sql)
-                print(f"✅ Success: {filename}")
+                print(f" Success: {filename}")
             except Exception as e:
-                print(f"❌ Error in {filename}: {e}")
+                print(f" Error in {filename}: {e}")
                 # Continue or stop?
                 response = input("Continue? (y/n): ")
                 if response.lower() != 'y':
@@ -101,22 +101,22 @@ def apply_via_psycopg():
 
         cur.close()
         conn.close()
-        print("\n🎉 Migration process complete!")
+        print("\n Migration process complete!")
 
     except Exception as e:
-        print(f"❌ Connection failed: {e}")
-        print("\n💡 Trying batch files instead...")
+        print(f" Connection failed: {e}")
+        print("\n Trying batch files instead...")
         return False
 
     return True
 
 def main():
-    print("🚀 Auto-applying migrations to Supabase...")
-    print(f"📁 Migrations: {MIGRATIONS_DIR}\n")
+    print(" Auto-applying migrations to Supabase...")
+    print(f" Migrations: {MIGRATIONS_DIR}\n")
 
     # Try direct connection
     if not apply_via_psycopg():
-        print("\n📦 Use batch files manually:")
+        print("\n Use batch files manually:")
         print("   1. BATCH_1_migrations_006-009.sql")
         print("   2. BATCH_2_migrations_010-013.sql")
         print("   3. BATCH_3_migrations_014-018.sql")

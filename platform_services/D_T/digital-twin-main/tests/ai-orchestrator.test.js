@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { AIOrchestrator } from '../core/ai/ai-orchestrator.js';
 import { constructor, initialize, initializeModels, processTask, analyzeWithAI, generateWithAI, predictWithAI, optimizeWithAI, callModel, localModelFallback, generateAnalysisFallback, selectModel, isModelAvailable, enrichContext, findRelevantMemory, extractKeywords, calculateSimilarity, learnFromResult, extractPattern, updateUserPreferences, getUserPreferences, shouldAdapt, adaptBehavior, rotateModelStrategy, updateMetrics, generateCacheKey, hashString, startBackgroundProcesses, cleanupCache, consolidateMemory, reportMetrics, loadLearningData, saveLearningData, buildAnalysisPrompt, buildPredictionPrompt, buildOptimizationPrompt, parseAnalysis, parsePrediction, parseOptimization, calculateConfidence, assessQuality, extractInsights, extractMetadata, calculateImprovements, identifyTradeoffs, enhancePrompt, generatePredictionFallback, generateOptimizationFallback, generateSummaryFallback, generateGenericFallback, getStatus, healthCheck, shutdown } from '../core/ai/ai-orchestrator.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('ai-orchestrator', () => {
@@ -851,7 +851,7 @@ describe('ai-orchestrator', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in ai-orchestrator');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

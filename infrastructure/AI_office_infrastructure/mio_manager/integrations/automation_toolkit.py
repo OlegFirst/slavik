@@ -63,7 +63,7 @@ class AutomationToolkitManager:
         Auto-discovery всех сервисов
         Возвращает список сервисов и coverage
         """
-        print("🔍 Running service discovery...")
+        print(" Running service discovery...")
 
         # Run AST analyzer
         results = self.ast_analyzer.analyze_project()
@@ -128,7 +128,7 @@ class AutomationToolkitManager:
                 services_list=list(services.values())
             )
         except Exception as e:
-            print(f"⚠️  Failed to save service discovery to DB: {e}")
+            print(f"️  Failed to save service discovery to DB: {e}")
 
         return result
 
@@ -137,7 +137,7 @@ class AutomationToolkitManager:
         Root cause analysis через dependency graph
         Если service_name указан - анализ только для него
         """
-        print(f"🔗 Analyzing dependencies{f' for {service_name}' if service_name else ''}...")
+        print(f" Analyzing dependencies{f' for {service_name}' if service_name else ''}...")
 
         # Run dependency mapper
         results = self.dependency_mapper.analyze_dependencies()
@@ -183,7 +183,7 @@ class AutomationToolkitManager:
                     dependency_graph=results.get('graph', {})
                 )
             except Exception as e:
-                print(f"⚠️  Failed to save dependency analysis to DB: {e}")
+                print(f"️  Failed to save dependency analysis to DB: {e}")
 
             return result_data
 
@@ -192,7 +192,7 @@ class AutomationToolkitManager:
         Security scan через Bandit
         Возвращает список уязвимостей
         """
-        print("🔒 Running security scan...")
+        print(" Running security scan...")
 
         result = subprocess.run(
             ['bandit', '-r', 'platform-services/', '-f', 'json', '-ll'],
@@ -241,20 +241,20 @@ class AutomationToolkitManager:
                 all_issues=issues['results']
             )
         except Exception as e:
-            print(f"⚠️  Failed to save security scan to DB: {e}")
+            print(f"️  Failed to save security scan to DB: {e}")
 
-        # 🚨 AUTOMATED RESPONSE: Если есть HIGH severity проблемы
+        #  AUTOMATED RESPONSE: Если есть HIGH severity проблемы
         if self.response_engine and len(high) > 0:
-            print(f"🤖 Triggering automated response for {len(high)} HIGH security issues...")
+            print(f" Triggering automated response for {len(high)} HIGH security issues...")
             try:
                 response = await self.response_engine.handle_security_incident(
                     scan_result=scan_result,
                     report_id=report_id
                 )
                 scan_result['automated_response'] = response
-                print(f"✅ Automated response: workflow_id={response.get('workflow_id')}")
+                print(f" Automated response: workflow_id={response.get('workflow_id')}")
             except Exception as e:
-                print(f"⚠️  Automated response failed: {e}")
+                print(f"️  Automated response failed: {e}")
 
         return scan_result
 
@@ -262,7 +262,7 @@ class AutomationToolkitManager:
         """
         Code complexity analysis через Radon
         """
-        print(f"📊 Analyzing code complexity for {service_name}...")
+        print(f" Analyzing code complexity for {service_name}...")
 
         service_path = f'platform-services/{service_name}-service'
 
@@ -321,7 +321,7 @@ class AutomationToolkitManager:
                 high_complexity_functions=high_complexity_funcs
             )
         except Exception as e:
-            print(f"⚠️  Failed to save complexity analysis to DB: {e}")
+            print(f"️  Failed to save complexity analysis to DB: {e}")
 
         return analysis_result
 
@@ -339,7 +339,7 @@ class AutomationToolkitManager:
                 'services_count': N
             }
         """
-        print("📊 Generating Prometheus scrape configs...")
+        print(" Generating Prometheus scrape configs...")
 
         scrape_configs = []
         services_with_metrics = [s for s in services if s.get('has_metrics')]
@@ -379,7 +379,7 @@ class AutomationToolkitManager:
         with open(config_file, 'w') as f:
             yaml.dump(prometheus_config, f, default_flow_style=False)
 
-        print(f"✅ Generated Prometheus config: {config_file}")
+        print(f" Generated Prometheus config: {config_file}")
         print(f"   - {len(scrape_configs)} scrape jobs created")
 
         actions_executed.labels(action_type='prometheus_config_generation').inc()
@@ -404,7 +404,7 @@ class AutomationToolkitManager:
                 'panels_count': N
             }
         """
-        print("📈 Generating Grafana dashboard...")
+        print(" Generating Grafana dashboard...")
 
         services_with_metrics = [s for s in services if s.get('has_metrics')]
 
@@ -528,7 +528,7 @@ class AutomationToolkitManager:
         with open(dashboard_file, 'w') as f:
             json.dump(dashboard, f, indent=2)
 
-        print(f"✅ Generated Grafana dashboard: {dashboard_file}")
+        print(f" Generated Grafana dashboard: {dashboard_file}")
         print(f"   - {len(dashboard['panels'])} panels created")
 
         actions_executed.labels(action_type='grafana_dashboard_generation').inc()
@@ -549,7 +549,7 @@ class AutomationToolkitManager:
 
         Это главная обязанность MIO Manager!
         """
-        print("🚀 Setting up complete monitoring...")
+        print(" Setting up complete monitoring...")
 
         # 1. Discover services
         discovery = await self.discover_services()
@@ -574,13 +574,13 @@ class AutomationToolkitManager:
         }
 
         print("\n" + "="*60)
-        print("✅ MONITORING SETUP COMPLETE!")
+        print(" MONITORING SETUP COMPLETE!")
         print("="*60)
-        print(f"📊 Services discovered: {result['services_discovered']}")
-        print(f"📈 Services with /metrics: {result['services_with_metrics']}")
-        print(f"📉 Coverage: {result['coverage_percentage']:.1f}%")
-        print(f"📁 Prometheus config: {prometheus_config['config_file']}")
-        print(f"📁 Grafana dashboard: {grafana_dashboard['dashboard_file']}")
+        print(f" Services discovered: {result['services_discovered']}")
+        print(f" Services with /metrics: {result['services_with_metrics']}")
+        print(f" Coverage: {result['coverage_percentage']:.1f}%")
+        print(f" Prometheus config: {prometheus_config['config_file']}")
+        print(f" Grafana dashboard: {grafana_dashboard['dashboard_file']}")
         print("="*60)
 
         actions_executed.labels(action_type='full_monitoring_setup').inc()
@@ -591,7 +591,7 @@ class AutomationToolkitManager:
         """
         Генерация Synthetic Monitoring тестов
         """
-        print(f"🧪 Generating synthetic tests{f' for {service_name}' if service_name else ''}...")
+        print(f" Generating synthetic tests{f' for {service_name}' if service_name else ''}...")
 
         # Generate tests
         self.test_generator.generate_all_tests()

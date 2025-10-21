@@ -174,7 +174,7 @@ class NotificationService:
 
         # Also send to Slack if priority is high or critical
         if priority in ['high', 'critical'] and self.slack_webhook:
-            slack_message = f"🔔 *Approval Required*\n{message}"
+            slack_message = f" *Approval Required*\n{message}"
             self._send_slack(slack_message, approval_id)
 
         return success
@@ -217,7 +217,7 @@ class NotificationService:
 
         # Send to Slack if severity is high or critical
         if severity in ['high', 'critical'] and self.slack_webhook:
-            slack_message = f"⚠️ *Escalation - {severity.upper()}*\n{message}"
+            slack_message = f"️ *Escalation - {severity.upper()}*\n{message}"
             self._send_slack(slack_message, escalation_id)
 
         # Page on-call if critical

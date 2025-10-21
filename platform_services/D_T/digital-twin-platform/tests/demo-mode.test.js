@@ -7,7 +7,7 @@ import { jest } from '@jest/globals';
 
 import { DemoMode } from '../src/mocks/demo-mode.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('demo-mode', () => {
@@ -235,7 +235,7 @@ describe('demo-mode', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in demo-mode');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

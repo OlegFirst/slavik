@@ -50,7 +50,7 @@ class DecisionEngine:
     def __init__(self):
         """Initialize decision engine"""
         self.decisions_history = []
-        logger.info("✅ Decision Engine initialized")
+        logger.info(" Decision Engine initialized")
 
     async def make_decision(
         self,
@@ -69,7 +69,7 @@ class DecisionEngine:
         Returns:
             Decision with action, reasoning, and metadata
         """
-        logger.info(f"🤔 Making decision for: {situation.get('type', 'unknown')}")
+        logger.info(f" Making decision for: {situation.get('type', 'unknown')}")
 
         try:
             # Extract situation details
@@ -110,12 +110,12 @@ class DecisionEngine:
             # Record decision
             self._record_decision(decision)
 
-            logger.info(f"✅ Decision made: {decision['action']} (source: {decision['source']})")
+            logger.info(f" Decision made: {decision['action']} (source: {decision['source']})")
 
             return decision
 
         except Exception as e:
-            logger.error(f"❌ Decision making failed: {e}")
+            logger.error(f" Decision making failed: {e}")
             return self._safe_decision(situation)
 
     def _apply_policies(

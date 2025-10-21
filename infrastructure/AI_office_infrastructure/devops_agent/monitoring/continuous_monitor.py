@@ -51,7 +51,7 @@ class EventIntelligenceMonitor:
 
     def run_scan(self) -> Dict:
         """Запускает сканирование Event Intelligence"""
-        logger.info("🔍 Running Event Intelligence scan...")
+        logger.info(" Running Event Intelligence scan...")
 
         cmd = [
             'python3',
@@ -114,7 +114,7 @@ event_intelligence_last_scan_timestamp {int(time.time())}
         with open(self.metrics_path, 'w') as f:
             f.write(metrics)
 
-        logger.info(f"✅ Metrics exported to {self.metrics_path}")
+        logger.info(f" Metrics exported to {self.metrics_path}")
 
     def _calculate_coverage(self, summary: Dict) -> float:
         """Вычисляет процент покрытия событий"""
@@ -167,7 +167,7 @@ event_intelligence_last_scan_timestamp {int(time.time())}
         Args:
             interval: Интервал между сканированиями в секундах (default: 1 час)
         """
-        logger.info(f"👁️ Starting continuous monitoring (interval: {interval}s)...")
+        logger.info(f"️ Starting continuous monitoring (interval: {interval}s)...")
 
         while True:
             try:
@@ -192,17 +192,17 @@ event_intelligence_last_scan_timestamp {int(time.time())}
                     })
                     self._save_history()
 
-                    logger.info("✅ Scan completed successfully")
+                    logger.info(" Scan completed successfully")
 
             except Exception as e:
-                logger.error(f"❌ Error during monitoring: {e}")
+                logger.error(f" Error during monitoring: {e}")
 
             # Ожидание следующего сканирования
             time.sleep(interval)
 
     def _alert_regressions(self, regressions: List[Dict]):
         """Отправляет уведомления о регрессиях"""
-        logger.warning(f"⚠️ Detected {len(regressions)} regressions:")
+        logger.warning(f"️ Detected {len(regressions)} regressions:")
 
         for regression in regressions:
             logger.warning(f"  - {regression['type']}: {regression['previous']} -> {regression['current']}")

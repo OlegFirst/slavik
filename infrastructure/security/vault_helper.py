@@ -22,7 +22,7 @@ class VaultHelper:
             secret = self.client.secrets.kv.v2.read_secret_version(path=path)
             return secret['data']['data']
         except Exception as e:
-            print(f"❌ Failed to read {path}: {e}")
+            print(f" Failed to read {path}: {e}")
             return None
 
     def get_database_config(self) -> Dict:

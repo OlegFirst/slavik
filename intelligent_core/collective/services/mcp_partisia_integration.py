@@ -1,5 +1,5 @@
 """
-🚀 MCP + Partisia Integration Service
+ MCP + Partisia Integration Service
 
 Connects:
 - Collective Agent Networks
@@ -49,7 +49,7 @@ class MCPPartisiaIntegration:
         self.contract = partisia_contract
         self.http_client = httpx.AsyncClient()
 
-        logger.info(f"🔗 MCP+Partisia Integration initialized")
+        logger.info(f" MCP+Partisia Integration initialized")
         logger.info(f"  MCP Server: {mcp_server_url}")
         logger.info(f"  Partisia Contract: {partisia_contract}")
 
@@ -86,7 +86,7 @@ class MCPPartisiaIntegration:
             }
         """
 
-        logger.info(f"🔍 Querying collective wisdom: {problem_type}")
+        logger.info(f" Querying collective wisdom: {problem_type}")
 
         # Call MCP server
         response = await self._call_mcp_tool(
@@ -104,7 +104,7 @@ class MCPPartisiaIntegration:
         wisdom = response.get('result', {})
 
         logger.info(
-            f"✅ Wisdom retrieved: {wisdom.get('privacy', {}).get('source_count', 0)} orgs"
+            f" Wisdom retrieved: {wisdom.get('privacy', {}).get('source_count', 0)} orgs"
         )
 
         return wisdom
@@ -135,7 +135,7 @@ class MCPPartisiaIntegration:
             }
         """
 
-        logger.info(f"📊 Getting benchmark: {metric}")
+        logger.info(f" Getting benchmark: {metric}")
 
         response = await self._call_mcp_tool(
             tool_name="get_anonymous_benchmark",
@@ -147,7 +147,7 @@ class MCPPartisiaIntegration:
 
         benchmark = response.get('result', {})
 
-        logger.info(f"✅ Benchmark: median={benchmark.get('median')}")
+        logger.info(f" Benchmark: median={benchmark.get('median')}")
 
         return benchmark
 
@@ -173,7 +173,7 @@ class MCPPartisiaIntegration:
             }
         """
 
-        logger.info(f"✅ Verifying computation: {query_id}")
+        logger.info(f" Verifying computation: {query_id}")
 
         response = await self._call_mcp_tool(
             tool_name="verify_collective_wisdom",
@@ -185,7 +185,7 @@ class MCPPartisiaIntegration:
 
         proof = response.get('result', {})
 
-        logger.info(f"✅ Verification: {proof.get('verified', False)}")
+        logger.info(f" Verification: {proof.get('verified', False)}")
 
         return proof
 
@@ -210,14 +210,14 @@ class MCPPartisiaIntegration:
             case_id on blockchain
         """
 
-        logger.info(f"📝 Submitting case to blockchain: {case_data.get('problem_type')}")
+        logger.info(f" Submitting case to blockchain: {case_data.get('problem_type')}")
 
         # In production: Call Partisia SDK directly
         # For now: Simulated
 
         case_id = f"case-{hash(org_id + case_data.get('problem_type', ''))}"
 
-        logger.info(f"✅ Case submitted: {case_id}")
+        logger.info(f" Case submitted: {case_id}")
 
         return case_id
 
@@ -256,7 +256,7 @@ class MCPPartisiaIntegration:
             return data.get('result', {})
 
         except Exception as e:
-            logger.error(f"❌ MCP call failed: {e}")
+            logger.error(f" MCP call failed: {e}")
             # Fallback: Return simulated data
             return self._get_simulated_response(tool_name, arguments)
 
@@ -364,7 +364,7 @@ class CollectiveAgentWithBlockchain:
         self.problem_type = problem_type
         self.mcp = mcp_integration
 
-        logger.info(f"🤖 Blockchain-backed agent created: {agent_id}")
+        logger.info(f" Blockchain-backed agent created: {agent_id}")
 
     async def get_wisdom_from_blockchain(
         self,
@@ -412,7 +412,7 @@ class CollectiveAgentWithBlockchain:
         )
 
         # Add verification to response
-        response += f"\n\n✅ Verified via zero-knowledge proof: {proof.get('proof_hash', 'N/A')}"
+        response += f"\n\n Verified via zero-knowledge proof: {proof.get('proof_hash', 'N/A')}"
 
         return response
 
@@ -459,7 +459,7 @@ class CollectiveAgentWithBlockchain:
         response += f"\n**Privacy Guarantee:**\n"
         response += f"• Source organizations: ANONYMOUS (MPC-protected)\n"
         response += f"• K-anonymity: {privacy.get('k_anonymity', 0)}\n"
-        response += f"• Computation verified: ✅\n"
+        response += f"• Computation verified: \n"
 
         return response
 
@@ -524,9 +524,9 @@ async def example_usage():
     # **Privacy Guarantee:**
     # • Source organizations: ANONYMOUS (MPC-protected)
     # • K-anonymity: 5
-    # • Computation verified: ✅
+    # • Computation verified: 
     #
-    # ✅ Verified via zero-knowledge proof: 0x9f8e7d6c5b4a3210
+    #  Verified via zero-knowledge proof: 0x9f8e7d6c5b4a3210
 
     await integration.close()
 

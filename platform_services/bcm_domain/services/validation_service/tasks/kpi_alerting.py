@@ -120,10 +120,10 @@ def send_email_alert(
             server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
             server.sendmail(EMAIL_FROM, to_emails, msg.as_string())
 
-        logger.info(f"✅ Email alert sent to {to_emails}")
+        logger.info(f" Email alert sent to {to_emails}")
 
     except Exception as e:
-        logger.error(f"❌ Failed to send email alert: {e}")
+        logger.error(f" Failed to send email alert: {e}")
 
 
 def create_alert_record(
@@ -168,10 +168,10 @@ def create_alert_record(
         db.add(alert)
         db.commit()
 
-        logger.info(f"✅ Alert created for KPI {kpi_code}: {severity}")
+        logger.info(f" Alert created for KPI {kpi_code}: {severity}")
 
     except Exception as e:
-        logger.error(f"❌ Failed to create alert: {e}")
+        logger.error(f" Failed to create alert: {e}")
         db.rollback()
 
 
@@ -284,13 +284,13 @@ Action required: Please review and take corrective action.
                     html_body=html_body
                 )
 
-            logger.info(f"🚨 Alert triggered for KPI {kpi_def.kpi_code}: {status}")
+            logger.info(f" Alert triggered for KPI {kpi_def.kpi_code}: {status}")
 
         else:
-            logger.info(f"✅ KPI {kpi_def.kpi_code} is {status}, no alert needed")
+            logger.info(f" KPI {kpi_def.kpi_code} is {status}, no alert needed")
 
     except Exception as e:
-        logger.error(f"❌ Failed to check KPI thresholds: {e}")
+        logger.error(f" Failed to check KPI thresholds: {e}")
 
 
 @shared_task(name='tasks.kpi_alerting.check_kpi_thresholds_hourly')
@@ -299,7 +299,7 @@ def check_kpi_thresholds_hourly():
     Hourly task: Check all KPI thresholds for all tenants
     Runs every hour via Celery Beat
     """
-    logger.info("🔍 Starting hourly KPI threshold check")
+    logger.info(" Starting hourly KPI threshold check")
 
     try:
         db = next(get_db())
@@ -314,10 +314,10 @@ def check_kpi_thresholds_hourly():
             check_kpi_thresholds.delay(kpi.tenant_id, kpi.id)
             checked += 1
 
-        logger.info(f"✅ Threshold checks queued for {checked} KPIs")
+        logger.info(f" Threshold checks queued for {checked} KPIs")
 
     except Exception as e:
-        logger.error(f"❌ Hourly threshold check failed: {e}")
+        logger.error(f" Hourly threshold check failed: {e}")
 
 
 @shared_task(name='tasks.kpi_alerting.send_kpi_alert')
@@ -355,10 +355,10 @@ def send_kpi_alert(alert_id: int):
         alert.notified_at = datetime.utcnow()
         db.commit()
 
-        logger.info(f"✅ Alert {alert_id} notification sent")
+        logger.info(f" Alert {alert_id} notification sent")
 
     except Exception as e:
-        logger.error(f"❌ Failed to send alert notification: {e}")
+        logger.error(f" Failed to send alert notification: {e}")
 
 
 @shared_task(name='tasks.kpi_alerting.auto_resolve_alerts')
@@ -367,7 +367,7 @@ def auto_resolve_alerts():
     Auto-resolve alerts when KPI returns to acceptable levels
     Runs daily
     """
-    logger.info("🔄 Starting auto-resolve alerts task")
+    logger.info(" Starting auto-resolve alerts task")
 
     try:
         db = next(get_db())
@@ -404,10 +404,10 @@ def auto_resolve_alerts():
                 resolved += 1
 
         db.commit()
-        logger.info(f"✅ Auto-resolved {resolved} alerts")
+        logger.info(f" Auto-resolved {resolved} alerts")
 
     except Exception as e:
-        logger.error(f"❌ Auto-resolve alerts failed: {e}")
+        logger.error(f" Auto-resolve alerts failed: {e}")
         db.rollback()
 
 
@@ -419,7 +419,7 @@ def send_daily_kpi_summary(tenant_id: str):
     Args:
         tenant_id: Tenant ID
     """
-    logger.info(f"📧 Sending daily KPI summary for tenant {tenant_id}")
+    logger.info(f" Sending daily KPI summary for tenant {tenant_id}")
 
     try:
         db = next(get_db())
@@ -483,4 +483,4 @@ KPI Details:
         logger.info(f"Daily KPI Summary:\n{body}")
 
     except Exception as e:
-        logger.error(f"❌ Failed to send daily KPI summary: {e}")
+        logger.error(f" Failed to send daily KPI summary: {e}")

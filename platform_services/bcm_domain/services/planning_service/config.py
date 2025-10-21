@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # Service
     SERVICE_NAME: str = "planning_service"
-    SERVICE_PORT: int = 8011
+    SERVICE_PORT: int = 8015
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://bcm:bcm@localhost:5432/bcm"
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     PINECONE_INDEX: str = "bcm-knowledge"
 
     # Auth - JWT Configuration
-    JWT_SECRET: str = "your-secret-key-change-in-production"  # Fallback for HS256
+    JWT_SECRET_KEY: str = "your-secret-key-change-in-production"  # Fallback for HS256
     JWT_ALGORITHM: str = "RS256"  # Default to RS256 for production
     JWT_PUBLIC_KEY: str = "PLACEHOLDER_DEV_MODE"  # RSA public key for token validation
     JWT_AUDIENCE: Optional[str] = "bcm-platform"  # Expected audience in JWT token

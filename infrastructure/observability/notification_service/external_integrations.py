@@ -98,7 +98,7 @@ class ExternalNotificationService:
             "themeColor": severity_colors.get(request.severity, "Good"),
             "summary": request.title,
             "sections": [{
-                "activityTitle": f"🚨 BCM Alert - {request.severity.upper()}",
+                "activityTitle": f" BCM Alert - {request.severity.upper()}",
                 "activitySubtitle": request.title,
                 "activityImage": "https://adaptivecards.io/content/cats/1.png",
                 "text": request.message,
@@ -143,8 +143,8 @@ class ExternalNotificationService:
 
         severity_emojis = {
             "info": "ℹ️",
-            "warning": "⚠️",
-            "critical": "🚨",
+            "warning": "️",
+            "critical": "",
             "emergency": "🆘"
         }
 
@@ -158,7 +158,7 @@ class ExternalNotificationService:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": f"{severity_emojis.get(request.severity, '📢')} BCM Alert - {request.severity.upper()}"
+                        "text": f"{severity_emojis.get(request.severity, '')} BCM Alert - {request.severity.upper()}"
                     }
                 }, {
                     "type": "section",

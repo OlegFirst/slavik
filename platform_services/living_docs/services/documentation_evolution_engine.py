@@ -1,5 +1,5 @@
 """
-📚 Documentation Evolution Engine
+ Documentation Evolution Engine
 
 Self-evolving documentation that learns from user interactions.
 
@@ -75,7 +75,7 @@ class DocumentationEvolutionEngine:
             'exit_rate': 0
         })
 
-        logger.info("📚 Documentation Evolution Engine initialized")
+        logger.info(" Documentation Evolution Engine initialized")
 
     async def track_interaction(
         self,
@@ -163,7 +163,7 @@ class DocumentationEvolutionEngine:
         # Sort by priority
         improvements.sort(key=lambda x: -x['priority'])
 
-        logger.info(f"🔍 Detected {len(improvements)} pages needing improvement")
+        logger.info(f" Detected {len(improvements)} pages needing improvement")
 
         return improvements
 
@@ -204,7 +204,7 @@ class DocumentationEvolutionEngine:
             max_tokens=2000
         )
 
-        logger.info(f"✨ Content improved for {page_id}")
+        logger.info(f" Content improved for {page_id}")
 
         return improved_content
 
@@ -235,7 +235,7 @@ class DocumentationEvolutionEngine:
                     'priority': cluster['count']  # More searches = higher priority
                 })
 
-        logger.info(f"🔍 Detected {len(gaps)} knowledge gaps")
+        logger.info(f" Detected {len(gaps)} knowledge gaps")
 
         return gaps
 
@@ -362,7 +362,7 @@ Keep structure, improve relevance.
         6. Repeat
         """
 
-        logger.info("🔄 Starting continuous improvement loop")
+        logger.info(" Starting continuous improvement loop")
 
         while True:
             try:
@@ -374,7 +374,7 @@ Keep structure, improve relevance.
                     page_id = improvement['page_id']
                     issues = improvement['issues']
 
-                    logger.info(f"🔧 Improving {page_id}: {issues}")
+                    logger.info(f" Improving {page_id}: {issues}")
 
                     # Generate improved version
                     new_content = await self.improve_content(
@@ -395,7 +395,7 @@ Keep structure, improve relevance.
 
                 # Generate missing topics
                 for gap in gaps[:3]:  # Top 3 gaps
-                    logger.info(f"📝 Generating new topic: {gap['topic']}")
+                    logger.info(f" Generating new topic: {gap['topic']}")
 
                     new_topic = await self.generate_missing_topic(
                         topic=gap['topic'],
@@ -409,7 +409,7 @@ Keep structure, improve relevance.
                 await asyncio.sleep(3600)
 
             except Exception as e:
-                logger.error(f"❌ Improvement loop error: {e}")
+                logger.error(f" Improvement loop error: {e}")
                 await asyncio.sleep(300)  # Retry in 5 minutes
 
     # ================================================
@@ -547,7 +547,7 @@ IMPROVED VERSION:
 
     async def _flag_for_improvement(self, page_id: str, reason: str):
         """Flag page for immediate review"""
-        logger.warning(f"🚩 {page_id} flagged: {reason}")
+        logger.warning(f" {page_id} flagged: {reason}")
         # Could trigger immediate improvement
 
     async def _get_failed_searches(self, days: int) -> List[Dict]:
@@ -611,10 +611,10 @@ IMPROVED VERSION:
         split: float
     ):
         """Start A/B test"""
-        logger.info(f"🔬 Starting A/B test for {page_id}")
+        logger.info(f" Starting A/B test for {page_id}")
         # Implement A/B testing logic
 
     async def _create_new_page(self, topic_data: Dict):
         """Create new documentation page"""
-        logger.info(f"📄 Creating new page: {topic_data['topic']}")
+        logger.info(f" Creating new page: {topic_data['topic']}")
         # Save to database

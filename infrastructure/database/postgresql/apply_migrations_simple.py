@@ -27,8 +27,8 @@ APPLIED = [
 ]
 
 def main():
-    print("🚀 Auto-applying migrations via Supabase REST API...")
-    print(f"📁 Directory: {MIGRATIONS_DIR}\n")
+    print(" Auto-applying migrations via Supabase REST API...")
+    print(f" Directory: {MIGRATIONS_DIR}\n")
 
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -43,7 +43,7 @@ def main():
             print(f"⏭️  Skipping (already applied): {filename}")
             continue
 
-        print(f"📄 Applying: {filename}")
+        print(f" Applying: {filename}")
 
         # Read SQL
         sql = migration_file.read_text()
@@ -55,17 +55,17 @@ def main():
             # We'll need to print the SQL and user applies manually, OR
             # Use requests to call a custom stored procedure
 
-            print(f"⚠️  Cannot auto-apply via REST API")
+            print(f"️  Cannot auto-apply via REST API")
             print(f"   Please apply manually: {filename}")
             print(f"   Or use: psql with connection pooler")
 
             # Alternative: Write to a combined file
 
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f" Error: {e}")
             sys.exit(1)
 
-    print("\n💡 Suggestion: Copy migrations 006-018 into one file and apply manually")
+    print("\n Suggestion: Copy migrations 006-018 into one file and apply manually")
     print("   Or fix DNS to use direct PostgreSQL connection")
 
 if __name__ == "__main__":

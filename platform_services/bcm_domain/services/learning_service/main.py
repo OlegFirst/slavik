@@ -79,7 +79,7 @@ async def lifespan(app: FastAPI):
     global audit_logger, iso_checker, security_middleware
 
     # Startup
-    logger.info(f"🚀 Starting {settings.SERVICE_NAME} v{settings.SERVICE_VERSION}")
+    logger.info(f" Starting {settings.SERVICE_NAME} v{settings.SERVICE_VERSION}")
 
     # Initialize database
     await init_db(
@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI):
         max_overflow=settings.DB_MAX_OVERFLOW,
         echo=settings.DB_ECHO,
     )
-    logger.info("✅ Database initialized")
+    logger.info(" Database initialized")
 
     # Initialize Workflow Intelligence
     try:
@@ -104,11 +104,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -117,7 +117,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -127,7 +127,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("✅ Workflow Intelligence initialized (Learning module)")
+        logger.info(" Workflow Intelligence initialized (Learning module)")
     except Exception as e:
         logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -137,35 +137,35 @@ async def lifespan(app: FastAPI):
         service_name=settings.SERVICE_NAME,
         timeout=settings.EVENTBUS_TIMEOUT,
     )
-    logger.info("✅ EventBus initialized")
+    logger.info(" EventBus initialized")
     
     # Setup event subscriptions
     await setup_subscriptions()
     await eventbus.register_subscriptions()
-    logger.info("✅ Event subscriptions registered")
+    logger.info(" Event subscriptions registered")
     
     # TODO: Register with orchestrator
     # await register_with_orchestrator()
     
-    logger.info(f"✅ {settings.SERVICE_NAME} ready on port {settings.SERVICE_PORT}")
+    logger.info(f" {settings.SERVICE_NAME} ready on port {settings.SERVICE_PORT}")
     
     yield
     
     # Shutdown
-    logger.info(f"🛑 Shutting down {settings.SERVICE_NAME}")
+    logger.info(f" Shutting down {settings.SERVICE_NAME}")
 
     # Close Workflow Intelligence
     if workflow_storage:
         try:
             await workflow_storage.close()
-            logger.info("✅ Workflow Intelligence connection closed")
+            logger.info(" Workflow Intelligence connection closed")
         except Exception as e:
             logger.error(f"Error closing Workflow Intelligence: {e}")
 
     await close_db()
     await eventbus.close()
     
-    logger.info(f"✅ {settings.SERVICE_NAME} stopped")
+    logger.info(f" {settings.SERVICE_NAME} stopped")
 
 
 # Create FastAPI app

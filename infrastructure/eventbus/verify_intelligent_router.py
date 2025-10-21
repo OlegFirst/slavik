@@ -26,7 +26,7 @@ async def verify_installation():
 
     try:
         # 1. Test Import
-        print("✓ Module imports successful")
+        print(" Module imports successful")
 
         # 2. Test Router Creation
         eventbus = InMemoryEventBus()
@@ -35,11 +35,11 @@ async def verify_installation():
             enable_ai_analysis=True,
             enable_semantic_matching=True
         )
-        print("✓ Router created successfully")
+        print(" Router created successfully")
 
         # 3. Test Initialization
         await router.initialize()
-        print("✓ Router initialized successfully")
+        print(" Router initialized successfully")
 
         # 4. Test Subscriber Registration
         events_received = []
@@ -59,7 +59,7 @@ async def verify_installation():
                 "semantic_tags": ["test", "verification"]
             }
         )
-        print("✓ Subscriber registered successfully")
+        print(" Subscriber registered successfully")
 
         # 5. Test Event Routing
         test_event = Event.create(
@@ -74,7 +74,7 @@ async def verify_installation():
         )
 
         decision = await router.route_event(test_event)
-        print(f"✓ Event routed successfully")
+        print(f" Event routed successfully")
         print(f"  - Selected subscribers: {decision.selected_subscribers}")
         print(f"  - Routing strategy: {decision.routing_strategy}")
         print(f"  - Confidence: {decision.confidence_score:.2f}")
@@ -84,13 +84,13 @@ async def verify_installation():
         await asyncio.sleep(0.5)
 
         if len(events_received) > 0:
-            print("✓ Event processed successfully")
+            print(" Event processed successfully")
         else:
-            print("⚠ Event not yet processed (may need more time)")
+            print(" Event not yet processed (may need more time)")
 
         # 7. Test Metrics
         metrics = router.get_metrics()
-        print("✓ Metrics retrieved successfully")
+        print(" Metrics retrieved successfully")
         print(f"  - Total events: {metrics['total_events']}")
         print(f"  - Total routed: {metrics['total_routed']}")
         print(f"  - Routing efficiency: {metrics['routing_efficiency']:.2%}")
@@ -99,11 +99,11 @@ async def verify_installation():
         # 8. Test Subscriber Metrics
         sub_metrics = router.get_subscriber_metrics("test_subscriber")
         if sub_metrics:
-            print("✓ Subscriber metrics retrieved successfully")
+            print(" Subscriber metrics retrieved successfully")
             print(f"  - Status: {sub_metrics['status']}")
             print(f"  - Current load: {sub_metrics['current_load']}")
         else:
-            print("⚠ Subscriber metrics not available")
+            print(" Subscriber metrics not available")
 
         # 9. Test Priority Event
         priority_event = Event.create(
@@ -118,16 +118,16 @@ async def verify_installation():
         )
 
         priority_decision = await router.route_event(priority_event)
-        print("✓ Priority event routed successfully")
+        print(" Priority event routed successfully")
         print(f"  - Priority used: {priority_decision.priority_used.name}")
 
         # 10. Test Shutdown
         await router.shutdown()
-        print("✓ Router shutdown successfully")
+        print(" Router shutdown successfully")
 
         print()
         print("="*70)
-        print("ALL CHECKS PASSED! ✓")
+        print("ALL CHECKS PASSED! ")
         print("="*70)
         print()
         print("Intelligent EventBus Router is working correctly!")
@@ -143,7 +143,7 @@ async def verify_installation():
     except Exception as e:
         print()
         print("="*70)
-        print("VERIFICATION FAILED! ✗")
+        print("VERIFICATION FAILED! ")
         print("="*70)
         print()
         print(f"Error: {e}")

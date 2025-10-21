@@ -1,5 +1,5 @@
 """
-📊 Prometheus Metrics for RAG Pipeline
+ Prometheus Metrics for RAG Pipeline
 
 Tracks:
 - RAG search operations (latency, results count, relevance)
@@ -440,7 +440,7 @@ def init_rag_metrics():
     for component in ['embeddings', 'qdrant', 'reranking', 'pipeline']:
         rag_health_status.labels(component=component).set(0)
 
-    logger.info("✅ RAG Prometheus metrics initialized")
+    logger.info(" RAG Prometheus metrics initialized")
 
 
 # Initialize on module import

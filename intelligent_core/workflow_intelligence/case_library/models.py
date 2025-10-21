@@ -1,5 +1,5 @@
 """
-📚 CASE LIBRARY - Data Models
+ CASE LIBRARY - Data Models
 
 Cases хранят успешные прохождения workflows для обучения AI и пользователей.
 

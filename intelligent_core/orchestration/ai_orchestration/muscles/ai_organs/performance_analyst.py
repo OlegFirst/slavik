@@ -1,5 +1,5 @@
 """
-📊 Performance Analyst
+ Performance Analyst
 
 BCM KPI intelligence and metrics analysis
 """
@@ -23,7 +23,7 @@ class PerformanceAnalyst(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Performance Analyst",
-            emoji="📊",
+            emoji="",
             llm_router=llm_router
         )
 

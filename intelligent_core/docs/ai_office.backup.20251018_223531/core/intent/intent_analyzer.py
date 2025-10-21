@@ -136,7 +136,7 @@ class IntentAnalyzer:
         # ACE provides enhanced context!
         strategies = context.get('playbook_strategies', [])
         if strategies:
-            logger.info(f"🎯 ACE enhanced intent analysis with {len(strategies)} strategies")
+            logger.info(f" ACE enhanced intent analysis with {len(strategies)} strategies")
 
         message_lower = message.lower().strip()
 

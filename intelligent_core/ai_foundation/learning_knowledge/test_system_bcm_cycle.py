@@ -77,7 +77,7 @@ async def test_full_cycle():
         logger.info(f"  Phases completed: {len(bcm_results['phases'])}")
 
         for phase_name, phase_data in bcm_results["phases"].items():
-            logger.info(f"  ✓ {phase_name}: {phase_data['status']}")
+            logger.info(f"   {phase_name}: {phase_data['status']}")
 
         # Phase 2: Learning from Practice
         logger.info("")
@@ -99,7 +99,7 @@ async def test_full_cycle():
             logger.info("")
             logger.info("Key Insights:")
             for insight in learning_results['insights_generated'][:5]:  # Top 5
-                logger.info(f"  💡 {insight['category']}: {insight['observation']}")
+                logger.info(f"   {insight['category']}: {insight['observation']}")
                 logger.info(f"     → {insight['recommendation']} (confidence: {insight['confidence']:.2f})")
 
         # Display improvements
@@ -108,7 +108,7 @@ async def test_full_cycle():
             logger.info("Identified Improvements:")
             for improvement in learning_results['improvements_identified'][:5]:  # Top 5
                 logger.info(
-                    f"  🔧 [{improvement['priority']}] {improvement['description']} "
+                    f"   [{improvement['priority']}] {improvement['description']} "
                     f"(impact: {improvement['estimated_impact']})"
                 )
 
@@ -150,7 +150,7 @@ async def test_full_cycle():
         logger.info("")
         logger.info("Effectiveness Measurements:")
         for metric in metrics:
-            status = "✅ SUCCESS" if metric.success else "⚠️  NEEDS IMPROVEMENT"
+            status = " SUCCESS" if metric.success else "️  NEEDS IMPROVEMENT"
             logger.info(
                 f"  {status} - {metric.metric_type}: "
                 f"target={metric.target_value}, actual={metric.actual_value} "
@@ -183,16 +183,16 @@ async def test_full_cycle():
         logger.info("=" * 80)
         logger.info("")
         logger.info("Summary:")
-        logger.info(f"  ✅ BIA executed for {len(bcm_results['phases']['bia']['results']['critical_processes'])} critical processes")
-        logger.info(f"  ✅ {len(bcm_results['phases']['risk_assessment']['results']['high_priority_risks'])} high-priority risks identified")
-        logger.info(f"  ✅ {len(bcm_results['phases']['recovery_setup']['results']['procedures_configured'])} recovery procedures configured")
-        logger.info(f"  ✅ {len(bcm_results['phases']['priority_application']['results']['services_prioritized'])} services prioritized")
-        logger.info(f"  ✅ {learning_results['metrics_analyzed']} phases analyzed for learning")
-        logger.info(f"  ✅ {len(learning_results['insights_generated'])} insights generated")
-        logger.info(f"  ✅ {len(metrics)} effectiveness metrics measured")
+        logger.info(f"   BIA executed for {len(bcm_results['phases']['bia']['results']['critical_processes'])} critical processes")
+        logger.info(f"   {len(bcm_results['phases']['risk_assessment']['results']['high_priority_risks'])} high-priority risks identified")
+        logger.info(f"   {len(bcm_results['phases']['recovery_setup']['results']['procedures_configured'])} recovery procedures configured")
+        logger.info(f"   {len(bcm_results['phases']['priority_application']['results']['services_prioritized'])} services prioritized")
+        logger.info(f"   {learning_results['metrics_analyzed']} phases analyzed for learning")
+        logger.info(f"   {len(learning_results['insights_generated'])} insights generated")
+        logger.info(f"   {len(metrics)} effectiveness metrics measured")
         logger.info("")
-        logger.info("🎓 The platform has learned resilience through PRACTICE!")
-        logger.info("🔄 This cycle will repeat continuously, improving with each iteration")
+        logger.info(" The platform has learned resilience through PRACTICE!")
+        logger.info(" This cycle will repeat continuously, improving with each iteration")
 
         # Save results
         output_file = "system_bcm_cycle_results.json"
@@ -212,7 +212,7 @@ async def test_full_cycle():
                 ]
             }, f, indent=2)
 
-        logger.info(f"\n📄 Full results saved to: {output_file}")
+        logger.info(f"\n Full results saved to: {output_file}")
 
         return {
             "status": "success",
@@ -222,7 +222,7 @@ async def test_full_cycle():
         }
 
     except Exception as e:
-        logger.error(f"❌ Test failed: {e}", exc_info=True)
+        logger.error(f" Test failed: {e}", exc_info=True)
         return {
             "status": "failed",
             "error": str(e)
@@ -243,36 +243,36 @@ async def test_individual_components():
     logger.info("-" * 40)
     try:
         bia_results = await bcm.execute_self_bia()
-        logger.info(f"✅ BIA: {len(bia_results['critical_processes'])} processes identified")
+        logger.info(f" BIA: {len(bia_results['critical_processes'])} processes identified")
     except Exception as e:
-        logger.error(f"❌ BIA failed: {e}")
+        logger.error(f" BIA failed: {e}")
 
     # Test 2: Risk Assessment
     logger.info("\nTest 2: Risk Assessment")
     logger.info("-" * 40)
     try:
         risk_results = await bcm.assess_own_risks()
-        logger.info(f"✅ Risks: {len(risk_results['high_priority_risks'])} high-priority")
+        logger.info(f" Risks: {len(risk_results['high_priority_risks'])} high-priority")
     except Exception as e:
-        logger.error(f"❌ Risk Assessment failed: {e}")
+        logger.error(f" Risk Assessment failed: {e}")
 
     # Test 3: Recovery Setup
     logger.info("\nTest 3: Recovery Setup")
     logger.info("-" * 40)
     try:
         recovery_results = await bcm.setup_recovery()
-        logger.info(f"✅ Recovery: {len(recovery_results['procedures_configured'])} procedures")
+        logger.info(f" Recovery: {len(recovery_results['procedures_configured'])} procedures")
     except Exception as e:
-        logger.error(f"❌ Recovery Setup failed: {e}")
+        logger.error(f" Recovery Setup failed: {e}")
 
     # Test 4: Priorities
     logger.info("\nTest 4: Resource Priorities")
     logger.info("-" * 40)
     try:
         priority_results = await bcm.apply_priorities()
-        logger.info(f"✅ Priorities: {len(priority_results['services_prioritized'])} services")
+        logger.info(f" Priorities: {len(priority_results['services_prioritized'])} services")
     except Exception as e:
-        logger.error(f"❌ Priority Application failed: {e}")
+        logger.error(f" Priority Application failed: {e}")
 
 
 if __name__ == "__main__":

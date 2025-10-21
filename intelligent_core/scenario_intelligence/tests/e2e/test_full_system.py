@@ -37,15 +37,15 @@ async def test_registry():
 
     # Register
     success = await registry.register(vault_scenario)
-    print(f"✅ Registered: {success}")
+    print(f" Registered: {success}")
 
     # Get by ID
     scenario = await registry.get_scenario_by_id('vault-store-secret-encrypted')
-    print(f"✅ Retrieved: {scenario['meta']['id']}")
+    print(f" Retrieved: {scenario['meta']['id']}")
 
     # Statistics
     stats = await registry.get_statistics()
-    print(f"✅ Statistics: {stats}")
+    print(f" Statistics: {stats}")
 
     return registry
 
@@ -72,7 +72,7 @@ async def test_scenario_engine(registry):
         }
     )
 
-    print(f"\n✅ Execution Result:")
+    print(f"\n Execution Result:")
     print(f"   Status: {result['status']}")
     print(f"   Duration: {result['duration']}s")
     print(f"   Steps: {len(result['result']['steps'])}")
@@ -98,7 +98,7 @@ async def test_learning(registry):
 
     # Get statistics
     stats = await learner.get_statistics('vault-store-secret-encrypted')
-    print(f"\n✅ Learning Statistics:")
+    print(f"\n Learning Statistics:")
     print(f"   Total executions: {stats.get('total_executions', 0)}")
     print(f"   Successful: {stats.get('successful_executions', 0)}")
     print(f"   Avg duration: {stats.get('avg_duration', 0):.2f}s")
@@ -136,21 +136,21 @@ async def test_user_workflow(registry):
         }
     )
 
-    print(f"\n✅ Workflow Execution:")
+    print(f"\n Workflow Execution:")
     print(f"   Status: {result['status']}")
     print(f"   Duration: {result['duration']}s")
     print(f"   Steps executed: {len(result['result']['steps'])}")
 
     # Check compliance
     if 'compliance' in result['result']:
-        print(f"   Compliance checked: ✅")
+        print(f"   Compliance checked: ")
 
 
 async def main():
     """Run all tests"""
 
     print("\n" + "="*70)
-    print("🎬 SCENARIO INTELLIGENCE SYSTEM - FULL TEST")
+    print(" SCENARIO INTELLIGENCE SYSTEM - FULL TEST")
     print("="*70)
 
     try:
@@ -167,7 +167,7 @@ async def main():
         await test_user_workflow(registry)
 
         print("\n" + "="*70)
-        print("✅ ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("="*70)
 
         # Final statistics
@@ -178,7 +178,7 @@ async def main():
         print(f"  By type: {stats['by_type']}")
 
     except Exception as e:
-        print(f"\n❌ TEST FAILED: {e}")
+        print(f"\n TEST FAILED: {e}")
         import traceback
         traceback.print_exc()
 

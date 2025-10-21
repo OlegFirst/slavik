@@ -54,15 +54,15 @@ async def lifespan(app: FastAPI):
 
         health = await db_manager.health_check()
         if health["postgres"]:
-            logger.info("✅ PostgreSQL connected")
+            logger.info(" PostgreSQL connected")
         else:
-            logger.error("❌ PostgreSQL connection failed")
+            logger.error(" PostgreSQL connection failed")
             raise Exception("PostgreSQL connection failed")
 
         if health["redis"]:
-            logger.info("✅ Redis connected")
+            logger.info(" Redis connected")
         else:
-            logger.warning("⚠️  Redis not available (caching disabled)")
+            logger.warning("️  Redis not available (caching disabled)")
 
         # 2. Initialize EventBus
         logger.info("Initializing EventBus...")
@@ -71,13 +71,13 @@ async def lifespan(app: FastAPI):
 
         eventbus_health = await eventbus_client.health_check()
         if eventbus_health.get("connected"):
-            logger.info("✅ EventBus connected")
+            logger.info(" EventBus connected")
         else:
-            logger.warning("⚠️  EventBus not available")
+            logger.warning("️  EventBus not available")
 
         logger.info("=" * 80)
-        logger.info("🚀 Simulation Service started successfully!")
-        logger.info(f"📚 API Documentation: http://localhost:{settings.port}/docs")
+        logger.info(" Simulation Service started successfully!")
+        logger.info(f" API Documentation: http://localhost:{settings.port}/docs")
         logger.info("=" * 80)
 
     except Exception as e:
@@ -95,13 +95,13 @@ async def lifespan(app: FastAPI):
     try:
         if eventbus_client:
             await eventbus_client.disconnect()
-            logger.info("✅ EventBus disconnected")
+            logger.info(" EventBus disconnected")
 
         if db_manager:
             await db_manager.close()
-            logger.info("✅ Database connections closed")
+            logger.info(" Database connections closed")
 
-        logger.info("👋 Simulation Service shut down gracefully")
+        logger.info(" Simulation Service shut down gracefully")
 
     except Exception as e:
         logger.error(f"Error during shutdown: {e}")

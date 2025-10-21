@@ -82,9 +82,9 @@ async def lifespan(app: FastAPI):
         logger.info("Checking database schema...")
         db_health = await check_db_health()
         if db_health.get("status") == "healthy":
-            logger.info(f"✅ Database connection healthy (latency: {db_health.get('latency_ms')}ms)")
+            logger.info(f" Database connection healthy (latency: {db_health.get('latency_ms')}ms)")
         else:
-            logger.error(f"❌ Database unhealthy: {db_health.get('error')}")
+            logger.error(f" Database unhealthy: {db_health.get('error')}")
 
         # Initialize Workflow Intelligence
         try:
@@ -100,11 +100,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -113,7 +113,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -123,7 +123,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-            logger.info("✅ Workflow Intelligence initialized (response module)")
+            logger.info(" Workflow Intelligence initialized (response module)")
         except Exception as e:
             logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -132,25 +132,25 @@ async def lifespan(app: FastAPI):
             logger.info("Initializing event publishers...")
             app.state.event_publisher = ResponseEventPublisher()
             await app.state.event_publisher.connect()
-            logger.info("✅ Event publisher initialized")
+            logger.info(" Event publisher initialized")
 
             # Initialize event subscribers
             logger.info("Initializing event subscribers...")
             app.state.event_subscriber = ResponseEventSubscriber()
             await app.state.event_subscriber.start()
-            logger.info("✅ Event subscriber initialized")
+            logger.info(" Event subscriber initialized")
         else:
             logger.info("Event bus disabled - running in standalone mode")
 
         logger.info("=" * 80)
-        logger.info(f"✅ {settings.SERVICE_NAME} service started successfully")
-        logger.info(f"📡 Listening on http://{settings.HOST}:{settings.PORT}")
-        logger.info(f"📚 API Docs: http://{settings.HOST}:{settings.PORT}/docs")
-        logger.info(f"🔍 Health Check: http://{settings.HOST}:{settings.PORT}/health")
+        logger.info(f" {settings.SERVICE_NAME} service started successfully")
+        logger.info(f" Listening on http://{settings.HOST}:{settings.PORT}")
+        logger.info(f" API Docs: http://{settings.HOST}:{settings.PORT}/docs")
+        logger.info(f" Health Check: http://{settings.HOST}:{settings.PORT}/health")
         logger.info("=" * 80)
 
     except Exception as e:
-        logger.error(f"❌ Failed to start service: {e}")
+        logger.error(f" Failed to start service: {e}")
         raise
 
     yield
@@ -185,11 +185,11 @@ async def lifespan(app: FastAPI):
         await close_db()
 
         logger.info("=" * 80)
-        logger.info(f"✅ {settings.SERVICE_NAME} service stopped successfully")
+        logger.info(f" {settings.SERVICE_NAME} service stopped successfully")
         logger.info("=" * 80)
 
     except Exception as e:
-        logger.error(f"❌ Error during shutdown: {e}")
+        logger.error(f" Error during shutdown: {e}")
 
 
 # ============================================================================
@@ -225,11 +225,11 @@ app.add_middleware(
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     """Log all requests"""
-    logger.debug(f"📨 {request.method} {request.url.path}")
+    logger.debug(f" {request.method} {request.url.path}")
 
     response = await call_next(request)
 
-    logger.debug(f"📤 {request.method} {request.url.path} - {response.status_code}")
+    logger.debug(f" {request.method} {request.url.path} - {response.status_code}")
 
     return response
 

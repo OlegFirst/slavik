@@ -64,7 +64,7 @@ async def test_bia_completion_triggers_planning_strategy(
 
     cleanup_test_data["bia_processes"].append(process_id)
 
-    print(f"✅ Created BIA process: {process_id}")
+    print(f" Created BIA process: {process_id}")
 
     # Step 2: Complete BIA Process
     complete_data = {
@@ -81,7 +81,7 @@ async def test_bia_completion_triggers_planning_strategy(
     )
 
     assert response.status_code == 200, f"BIA completion failed: {response.text}"
-    print(f"✅ Marked BIA process as completed")
+    print(f" Marked BIA process as completed")
 
     # Step 3: Wait for event propagation (EventBus processing)
     await asyncio.sleep(2)
@@ -100,7 +100,7 @@ async def test_bia_completion_triggers_planning_strategy(
     # If not implemented, this part tests the data availability
     assert response.status_code == 200
 
-    print(f"✅ Planning service queried successfully")
+    print(f" Planning service queried successfully")
 
 
 @pytest.mark.integration
@@ -170,7 +170,7 @@ async def test_rto_rpo_mapping_from_bia_to_planning(
     assert strategy["target_rto_hours"] == 2
     assert strategy["target_rpo_hours"] == 0.5
 
-    print(f"✅ RTO/RPO correctly mapped from BIA to Planning strategy")
+    print(f" RTO/RPO correctly mapped from BIA to Planning strategy")
 
 
 @pytest.mark.integration
@@ -239,7 +239,7 @@ async def test_critical_processes_require_higher_tier_strategies(
     # Verify strategy type is appropriate for criticality
     assert strategy["strategy_type"] in ["active_active", "hot_site"]
 
-    print(f"✅ Critical process correctly assigned high-tier strategy")
+    print(f" Critical process correctly assigned high-tier strategy")
 
 
 @pytest.mark.integration
@@ -312,7 +312,7 @@ async def test_multiple_bia_processes_to_consolidated_strategy(
     covered = strategy.get("covered_processes", [])
     assert len(covered) >= 3 or "covered_processes" not in strategy
 
-    print(f"✅ Single strategy successfully covers multiple BIA processes")
+    print(f" Single strategy successfully covers multiple BIA processes")
 
 
 @pytest.mark.integration
@@ -398,7 +398,7 @@ async def test_bia_dependency_analysis_influences_strategy(
     strategy = response.json()
     cleanup_test_data["strategies"].append(strategy.get("id") or strategy.get("strategy_id"))
 
-    print(f"✅ Strategy created with dependency awareness")
+    print(f" Strategy created with dependency awareness")
 
     # Verify strategy acknowledges dependencies
     # (In production, this would check that strategy includes recovery

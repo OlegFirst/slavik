@@ -42,7 +42,7 @@ class ServiceDiscovery:
 
     def discover_all(self) -> List[Dict[str, Any]]:
         """Сканирует весь проект и находит все сервисы"""
-        print("🔍 Discovering services in project...")
+        print(" Discovering services in project...")
 
         # Scan intelligent-core modules
         self._scan_directory(self.project_root / 'intelligent-core', 'core')
@@ -54,7 +54,7 @@ class ServiceDiscovery:
         if (self.project_root / 'platform-services').exists():
             self._scan_directory(self.project_root / 'platform-services', 'platform')
 
-        print(f"\n✅ Found {len(self.services)} services")
+        print(f"\n Found {len(self.services)} services")
         return self.services
 
     def _scan_directory(self, base_dir: Path, category: str):
@@ -67,7 +67,7 @@ class ServiceDiscovery:
                 service = self._analyze_service(item, category)
                 if service:
                     self.services.append(service)
-                    print(f"  ✓ {service['name']} (port {service['port']})")
+                    print(f"   {service['name']} (port {service['port']})")
 
     def _analyze_service(self, service_path: Path, category: str) -> Optional[Dict[str, Any]]:
         """Глубокий анализ одного сервиса"""
@@ -302,7 +302,7 @@ class ServiceDiscovery:
         with open(output_file, 'w') as f:
             json.dump(catalog, f, indent=2)
 
-        print(f"\n💾 Service catalog saved: {output_file}")
+        print(f"\n Service catalog saved: {output_file}")
 
     def generate_docker_compose(self, output_file: Path):
         """Генерирует docker-compose.yml"""
@@ -340,7 +340,7 @@ class ServiceDiscovery:
         with open(output_file, 'w') as f:
             yaml.dump(compose, f, default_flow_style=False, sort_keys=False)
 
-        print(f"💾 Docker Compose saved: {output_file}")
+        print(f" Docker Compose saved: {output_file}")
 
     def generate_prometheus_config(self, output_file: Path):
         """Генерирует prometheus.yml"""
@@ -369,7 +369,7 @@ class ServiceDiscovery:
         with open(output_file, 'w') as f:
             yaml.dump(config, f, default_flow_style=False)
 
-        print(f"💾 Prometheus config saved: {output_file}")
+        print(f" Prometheus config saved: {output_file}")
 
     def generate_gateway_routes(self, output_file: Path):
         """Генерирует маршруты для API Gateway"""
@@ -385,7 +385,7 @@ class ServiceDiscovery:
         with open(output_file, 'w') as f:
             json.dump(routes, f, indent=2)
 
-        print(f"💾 Gateway routes saved: {output_file}")
+        print(f" Gateway routes saved: {output_file}")
 
 
 def main():
@@ -393,7 +393,7 @@ def main():
     project_root = Path(__file__).parent.parent.parent
 
     print("=" * 60)
-    print("🔍 Automatic Service Discovery")
+    print(" Automatic Service Discovery")
     print("=" * 60)
 
     # Create discovery instance
@@ -407,7 +407,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Generate all configs
-    print("\n🏗️ Generating infrastructure configs...")
+    print("\n️ Generating infrastructure configs...")
 
     discovery.save_catalog(output_dir / 'service-catalog.json')
     discovery.generate_docker_compose(output_dir / 'docker-compose.auto.yml')
@@ -415,7 +415,7 @@ def main():
     discovery.generate_gateway_routes(output_dir / 'gateway-routes.auto.json')
 
     print("\n" + "=" * 60)
-    print("✅ Service discovery complete!")
+    print(" Service discovery complete!")
     print("=" * 60)
     print(f"\nGenerated files in: {output_dir}")
     print("  - service-catalog.json")

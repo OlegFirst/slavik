@@ -27,7 +27,7 @@ TEST_ORG = "Test Organization"
 async def test_health_check():
     """Test health check endpoint"""
     print("\n" + "="*70)
-    print("🧪 Test 1: Health Check")
+    print(" Test 1: Health Check")
     print("="*70)
 
     async with httpx.AsyncClient() as client:
@@ -40,7 +40,7 @@ async def test_health_check():
         data = response.json()
         assert data["status"] == "healthy"
         assert "services" in data
-        print("  ✅ Health check passed")
+        print("   Health check passed")
 
         return data
 
@@ -48,7 +48,7 @@ async def test_health_check():
 async def test_signup():
     """Test user signup"""
     print("\n" + "="*70)
-    print("🧪 Test 2: User Signup")
+    print(" Test 2: User Signup")
     print("="*70)
 
     payload = {
@@ -73,10 +73,10 @@ async def test_signup():
 
         data = response.json()
 
-        print(f"  ✅ User created: {data['user']['id']}")
-        print(f"  ✅ Access token: {data['access_token'][:20]}...")
-        print(f"  ✅ Refresh token: {data['refresh_token'][:20]}...")
-        print(f"  ✅ Organization: {data['organization']['name']}")
+        print(f"   User created: {data['user']['id']}")
+        print(f"   Access token: {data['access_token'][:20]}...")
+        print(f"   Refresh token: {data['refresh_token'][:20]}...")
+        print(f"   Organization: {data['organization']['name']}")
 
         assert data["token_type"] == "bearer"
         assert "access_token" in data
@@ -90,7 +90,7 @@ async def test_signup():
 async def test_login(email: str, password: str):
     """Test user login"""
     print("\n" + "="*70)
-    print("🧪 Test 3: User Login")
+    print(" Test 3: User Login")
     print("="*70)
 
     payload = {
@@ -111,9 +111,9 @@ async def test_login(email: str, password: str):
 
         data = response.json()
 
-        print(f"  ✅ Logged in as: {data['user']['full_name']}")
-        print(f"  ✅ Role: {data['user'].get('role', 'N/A')}")
-        print(f"  ✅ Access token received")
+        print(f"   Logged in as: {data['user']['full_name']}")
+        print(f"   Role: {data['user'].get('role', 'N/A')}")
+        print(f"   Access token received")
 
         assert "access_token" in data
         assert data["user"]["email"] == email
@@ -124,7 +124,7 @@ async def test_login(email: str, password: str):
 async def test_get_current_user(access_token: str):
     """Test get current user endpoint"""
     print("\n" + "="*70)
-    print("🧪 Test 4: Get Current User")
+    print(" Test 4: Get Current User")
     print("="*70)
 
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -140,10 +140,10 @@ async def test_get_current_user(access_token: str):
 
         data = response.json()
 
-        print(f"  ✅ User ID: {data['id']}")
-        print(f"  ✅ Email: {data['email']}")
-        print(f"  ✅ Name: {data['full_name']}")
-        print(f"  ✅ Active: {data['is_active']}")
+        print(f"   User ID: {data['id']}")
+        print(f"   Email: {data['email']}")
+        print(f"   Name: {data['full_name']}")
+        print(f"   Active: {data['is_active']}")
 
         assert data["email"] == TEST_EMAIL
         assert data["full_name"] == TEST_NAME
@@ -154,7 +154,7 @@ async def test_get_current_user(access_token: str):
 async def test_logout(session_id: str, access_token: str):
     """Test logout endpoint"""
     print("\n" + "="*70)
-    print("🧪 Test 5: Logout")
+    print(" Test 5: Logout")
     print("="*70)
 
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -173,7 +173,7 @@ async def test_logout(session_id: str, access_token: str):
             raise Exception(f"Logout failed: {response.text}")
 
         data = response.json()
-        print(f"  ✅ {data['message']}")
+        print(f"   {data['message']}")
 
         return data
 
@@ -181,7 +181,7 @@ async def test_logout(session_id: str, access_token: str):
 async def test_invalid_token():
     """Test with invalid token"""
     print("\n" + "="*70)
-    print("🧪 Test 6: Invalid Token")
+    print(" Test 6: Invalid Token")
     print("="*70)
 
     headers = {"Authorization": "Bearer invalid_token_here"}
@@ -193,13 +193,13 @@ async def test_invalid_token():
         print(f"  Response: {response.json()}")
 
         assert response.status_code == 401
-        print("  ✅ Invalid token correctly rejected")
+        print("   Invalid token correctly rejected")
 
 
 async def test_session_in_redis(session_id: str):
     """Verify session exists in Redis"""
     print("\n" + "="*70)
-    print("🧪 Test 7: Session in Redis")
+    print(" Test 7: Session in Redis")
     print("="*70)
 
     try:
@@ -210,22 +210,22 @@ async def test_session_in_redis(session_id: str):
         session = await session_store.get_session(session_id)
 
         if session:
-            print(f"  ✅ Session found in Redis")
+            print(f"   Session found in Redis")
             print(f"  User ID: {session['user_id']}")
             print(f"  Created: {session['created_at']}")
             print(f"  Data: {session['data']}")
 
             # Verify session data
             assert "email" in session["data"], "Session missing email"
-            print(f"  ✅ Session data validated")
+            print(f"   Session data validated")
             return session
         else:
-            print(f"  ⚠️  Session not found in Redis (session_id: {session_id[:20]}...)")
+            print(f"  ️  Session not found in Redis (session_id: {session_id[:20]}...)")
             print(f"  ℹ️  This might be due to session expiry or different Redis connection")
             # Don't fail - just warn
             return None
     except Exception as e:
-        print(f"  ⚠️  Session check failed: {e}")
+        print(f"  ️  Session check failed: {e}")
         print(f"  ℹ️  Continuing anyway - core auth functionality works")
         return None
 
@@ -233,7 +233,7 @@ async def test_session_in_redis(session_id: str):
 async def test_user_in_database(user_id: str):
     """Verify user and organization in database"""
     print("\n" + "="*70)
-    print("🧪 Test 8: User in Database")
+    print(" Test 8: User in Database")
     print("="*70)
 
     # Check user profile
@@ -245,7 +245,7 @@ async def test_user_in_database(user_id: str):
 
     if result:
         user = result[0]
-        print(f"  ✅ User profile found")
+        print(f"   User profile found")
         print(f"  ID: {user[0]}")
         print(f"  Email: {user[1]}")
         print(f"  Name: {user[2]}")
@@ -268,7 +268,7 @@ async def test_user_in_database(user_id: str):
 
     if org_result:
         org = org_result[0]
-        print(f"  ✅ Organization found")
+        print(f"   Organization found")
         print(f"  ID: {org[0]}")
         print(f"  Name: {org[1]}")
         print(f"  User role: {org[2]}")
@@ -283,7 +283,7 @@ async def test_user_in_database(user_id: str):
 async def cleanup_test_data(user_id: str):
     """Clean up test data"""
     print("\n" + "="*70)
-    print("🧹 Cleanup Test Data")
+    print(" Cleanup Test Data")
     print("="*70)
 
     try:
@@ -293,7 +293,7 @@ async def cleanup_test_data(user_id: str):
             (user_id,),
             commit=True
         )
-        print("  ✅ Deleted organization users")
+        print("   Deleted organization users")
 
         # Delete user profile
         business_db.execute(
@@ -301,7 +301,7 @@ async def cleanup_test_data(user_id: str):
             (user_id,),
             commit=True
         )
-        print("  ✅ Deleted user profile")
+        print("   Deleted user profile")
 
         # Delete organization (if no other users)
         business_db.execute(
@@ -313,26 +313,26 @@ async def cleanup_test_data(user_id: str):
             (TEST_ORG,),
             commit=True
         )
-        print("  ✅ Deleted organization")
+        print("   Deleted organization")
 
         # Note: Supabase auth user cleanup would need admin API
-        print("  ⚠️  Supabase Auth user not deleted (requires admin API)")
+        print("  ️  Supabase Auth user not deleted (requires admin API)")
 
     except Exception as e:
-        print(f"  ⚠️  Cleanup error: {e}")
+        print(f"  ️  Cleanup error: {e}")
 
 
 async def main():
     """Run all tests"""
     print("\n" + "="*70)
-    print("🚀 Auth Service Test Suite")
+    print(" Auth Service Test Suite")
     print("="*70)
 
     # Connect to dependencies
-    print("\n🔌 Connecting to services...")
+    print("\n Connecting to services...")
     business_db.connect()
     await redis_manager.connect()
-    print("✅ Connected!")
+    print(" Connected!")
 
     access_token = None
     session_id = None
@@ -355,7 +355,7 @@ async def main():
             session_id = login_data["refresh_token"]
         except Exception as e:
             # If login fails (email not confirmed), continue with signup tokens
-            print(f"  ⚠️  Login test skipped: {e}")
+            print(f"  ️  Login test skipped: {e}")
             print(f"  ℹ️  Continuing with signup tokens")
 
         user_data = await test_get_current_user(access_token)
@@ -369,12 +369,12 @@ async def main():
         await test_invalid_token()
 
         print("\n" + "="*70)
-        print("✅ ALL TESTS PASSED!")
+        print(" ALL TESTS PASSED!")
         print("="*70)
 
     except Exception as e:
         print("\n" + "="*70)
-        print(f"❌ TEST FAILED: {e}")
+        print(f" TEST FAILED: {e}")
         print("="*70)
         raise
 
@@ -384,10 +384,10 @@ async def main():
             await cleanup_test_data(user_id)
 
         # Disconnect
-        print("\n🔌 Disconnecting from services...")
+        print("\n Disconnecting from services...")
         business_db.disconnect()
         await redis_manager.disconnect()
-        print("✅ Disconnected!")
+        print(" Disconnected!")
 
 
 if __name__ == "__main__":

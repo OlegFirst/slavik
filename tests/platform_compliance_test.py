@@ -449,7 +449,7 @@ class TestPlatformCompliance:
     def test_modules_discovered(self, modules):
         """Test that modules are discovered"""
         assert len(modules) > 0, "No modules found"
-        print(f"\n✅ Found {len(modules)} modules")
+        print(f"\n Found {len(modules)} modules")
 
     def test_all_modules_have_kpi_files(self, compliance_results):
         """Test that all modules have KPI files"""
@@ -459,7 +459,7 @@ class TestPlatformCompliance:
         ]
 
         if missing:
-            print("\n❌ Modules missing KPI.yaml:")
+            print("\n Modules missing KPI.yaml:")
             for r in missing:
                 print(f"  • {r.module_name}")
 
@@ -473,7 +473,7 @@ class TestPlatformCompliance:
         ]
 
         if invalid:
-            print("\n❌ Modules with invalid KPI files:")
+            print("\n Modules with invalid KPI files:")
             for r in invalid:
                 print(f"\n  {r.module_name}:")
                 for issue in r.kpi_issues:
@@ -489,7 +489,7 @@ class TestPlatformCompliance:
         ]
 
         if missing:
-            print("\n⚠️  Modules missing /metrics endpoint:")
+            print("\n️  Modules missing /metrics endpoint:")
             for r in missing:
                 print(f"  • {r.module_name}")
                 for issue in r.metrics_issues:
@@ -507,7 +507,7 @@ class TestPlatformCompliance:
         ]
 
         if missing:
-            print("\n⚠️  Modules missing /health endpoint:")
+            print("\n️  Modules missing /health endpoint:")
             for r in missing:
                 print(f"  • {r.module_name}")
 
@@ -523,17 +523,17 @@ class TestPlatformCompliance:
         ]
 
         if failing:
-            print("\n❌ Modules below 70% compliance:")
+            print("\n Modules below 70% compliance:")
             for r in failing:
                 print(f"  • {r.module_name}: {r.compliance_score:.0f}%")
-                print(f"    KPI: {'✅' if r.has_kpi_file else '❌'} "
-                      f"Valid: {'✅' if r.kpi_valid else '❌'} "
-                      f"Metrics: {'✅' if r.has_metrics_endpoint else '❌'} "
-                      f"Health: {'✅' if r.has_health_endpoint else '❌'}")
+                print(f"    KPI: {'' if r.has_kpi_file else ''} "
+                      f"Valid: {'' if r.kpi_valid else ''} "
+                      f"Metrics: {'' if r.has_metrics_endpoint else ''} "
+                      f"Health: {'' if r.has_health_endpoint else ''}")
 
         # Calculate platform score
         avg_score = sum(r.compliance_score for r in compliance_results) / len(compliance_results)
-        print(f"\n📊 Platform Compliance Score: {avg_score:.1f}%")
+        print(f"\n Platform Compliance Score: {avg_score:.1f}%")
 
         assert avg_score >= 70, f"Platform compliance too low: {avg_score:.1f}%"
 
@@ -547,7 +547,7 @@ class TestPlatformCompliance:
         with open(report_path, 'w') as f:
             f.write(report)
 
-        print(f"\n✅ Compliance report saved: {report_path}")
+        print(f"\n Compliance report saved: {report_path}")
 
 
 # ============================================================================
@@ -576,7 +576,7 @@ def generate_compliance_report(results: List[ModuleCompliance]) -> str:
 
 ---
 
-## 📊 Summary
+##  Summary
 
 - **Total Modules**: {total}
 - **Compliant (≥70%)**: {compliant} ({compliant/total*100:.1f}%)
@@ -593,50 +593,50 @@ def generate_compliance_report(results: List[ModuleCompliance]) -> str:
 
 ---
 
-## 📋 Module Scores
+##  Module Scores
 
 | Module | Score | KPI | Valid | Metrics | Health | Status |
 |--------|-------|-----|-------|---------|--------|--------|
 """
 
     for r in results_sorted:
-        status = "✅" if r.is_compliant else "❌"
-        kpi_icon = "✅" if r.has_kpi_file else "❌"
-        valid_icon = "✅" if r.kpi_valid else "❌"
-        metrics_icon = "✅" if r.has_metrics_endpoint else "⚠️"
-        health_icon = "✅" if r.has_health_endpoint else "⚠️"
+        status = "" if r.is_compliant else ""
+        kpi_icon = "" if r.has_kpi_file else ""
+        valid_icon = "" if r.kpi_valid else ""
+        metrics_icon = "" if r.has_metrics_endpoint else "️"
+        health_icon = "" if r.has_health_endpoint else "️"
 
         report += f"| {r.module_name} | {r.compliance_score:.0f}% | {kpi_icon} | {valid_icon} | {metrics_icon} | {health_icon} | {status} |\n"
 
-    report += "\n---\n\n## 🔴 Critical Issues\n\n"
+    report += "\n---\n\n##  Critical Issues\n\n"
 
     critical = [r for r in results if not r.has_kpi_file or not r.kpi_valid]
     if critical:
         for r in critical:
             report += f"### {r.module_name}\n\n"
             if not r.has_kpi_file:
-                report += "- ❌ Missing KPI.yaml\n"
+                report += "-  Missing KPI.yaml\n"
             if r.has_kpi_file and not r.kpi_valid:
-                report += "- ❌ Invalid KPI file:\n"
+                report += "-  Invalid KPI file:\n"
                 for issue in r.kpi_issues:
                     report += f"  - {issue}\n"
             report += "\n"
     else:
-        report += "✅ No critical issues\n\n"
+        report += " No critical issues\n\n"
 
-    report += "---\n\n## ⚠️ Warnings\n\n"
+    report += "---\n\n## ️ Warnings\n\n"
 
     warnings = [r for r in results if not r.has_metrics_endpoint or not r.has_health_endpoint]
     if warnings:
         for r in warnings:
             report += f"### {r.module_name}\n\n"
             if not r.has_metrics_endpoint:
-                report += "- ⚠️ Missing /metrics endpoint\n"
+                report += "- ️ Missing /metrics endpoint\n"
             if not r.has_health_endpoint:
-                report += "- ⚠️ Missing /health endpoint\n"
+                report += "- ️ Missing /health endpoint\n"
             report += "\n"
     else:
-        report += "✅ No warnings\n\n"
+        report += " No warnings\n\n"
 
     return report
 
@@ -648,7 +648,7 @@ def generate_compliance_report(results: List[ModuleCompliance]) -> str:
 if __name__ == "__main__":
     import sys
 
-    print("🔍 Platform Compliance Test\n")
+    print(" Platform Compliance Test\n")
 
     # Discover modules
     modules = discover_modules()
@@ -662,25 +662,25 @@ if __name__ == "__main__":
         results.append(result)
 
         if result.is_compliant:
-            print(f"✅ {result.compliance_score:.0f}%")
+            print(f" {result.compliance_score:.0f}%")
         else:
-            print(f"❌ {result.compliance_score:.0f}%")
+            print(f" {result.compliance_score:.0f}%")
 
     # Generate report
-    print("\n📊 Generating report...")
+    print("\n Generating report...")
     report = generate_compliance_report(results)
 
     report_path = PROJECT_ROOT / "docs" / "COMPLIANCE_REPORT.md"
     with open(report_path, 'w') as f:
         f.write(report)
 
-    print(f"✅ Report saved: {report_path}")
+    print(f" Report saved: {report_path}")
 
     # Exit with status
     avg_score = sum(r.compliance_score for r in results) / len(results)
     if avg_score < 70:
-        print(f"\n❌ FAILED: Platform compliance {avg_score:.1f}% (< 70%)")
+        print(f"\n FAILED: Platform compliance {avg_score:.1f}% (< 70%)")
         sys.exit(1)
     else:
-        print(f"\n✅ PASSED: Platform compliance {avg_score:.1f}%")
+        print(f"\n PASSED: Platform compliance {avg_score:.1f}%")
         sys.exit(0)

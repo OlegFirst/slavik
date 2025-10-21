@@ -37,7 +37,7 @@ async def handle_plan_created(event_data: Dict[str, Any]):
         tenant_id: str
         created_by: str
     """
-    print(f"📋 Handling plan.created: {event_data.get('plan_code')}")
+    print(f" Handling plan.created: {event_data.get('plan_code')}")
 
     plan_id = event_data.get("plan_id")
     plan_code = event_data.get("plan_code")
@@ -96,14 +96,14 @@ async def handle_plan_created(event_data: Dict[str, Any]):
 
                 if response.status_code == 201:
                     doc_data = response.json()
-                    print(f"  ✅ Created: {template['title']} (ID: {doc_data['document_id']})")
+                    print(f"   Created: {template['title']} (ID: {doc_data['document_id']})")
                 else:
-                    print(f"  ⚠️  Failed to create: {template['title']}")
+                    print(f"  ️  Failed to create: {template['title']}")
 
             except Exception as e:
-                print(f"  ❌ Error creating {template['title']}: {e}")
+                print(f"   Error creating {template['title']}: {e}")
 
-    print(f"✅ Plan documents created for: {plan_code}")
+    print(f" Plan documents created for: {plan_code}")
 
 
 async def handle_plan_activated(event_data: Dict[str, Any]):
@@ -120,7 +120,7 @@ async def handle_plan_activated(event_data: Dict[str, Any]):
         activated_by: str
         activated_at: str (ISO datetime)
     """
-    print(f"🚨 Handling plan.activated: {event_data.get('plan_code')}")
+    print(f" Handling plan.activated: {event_data.get('plan_code')}")
 
     plan_id = event_data.get("plan_id")
     plan_code = event_data.get("plan_code")
@@ -148,10 +148,10 @@ async def handle_plan_activated(event_data: Dict[str, Any]):
                 # Could add activation marker to documents here
                 # For now, just log
                 for doc in documents:
-                    print(f"  📄 {doc['title']} (ID: {doc['document_id']})")
+                    print(f"   {doc['title']} (ID: {doc['document_id']})")
 
         except Exception as e:
-            print(f"  ❌ Error finding plan documents: {e}")
+            print(f"   Error finding plan documents: {e}")
 
 
 # ============================================================================
@@ -174,7 +174,7 @@ async def handle_exercise_completed(event_data: Dict[str, Any]):
         completed_at: str
         results: dict (observations, lessons_learned, action_items)
     """
-    print(f"📝 Handling exercise.completed: {event_data.get('exercise_code')}")
+    print(f" Handling exercise.completed: {event_data.get('exercise_code')}")
 
     exercise_id = event_data.get("exercise_id")
     exercise_code = event_data.get("exercise_code")
@@ -226,12 +226,12 @@ Action Items:
 
             if response.status_code == 201:
                 doc_data = response.json()
-                print(f"  ✅ Exercise report created: ID {doc_data['document_id']}")
+                print(f"   Exercise report created: ID {doc_data['document_id']}")
             else:
-                print(f"  ⚠️  Failed to create exercise report")
+                print(f"  ️  Failed to create exercise report")
 
         except Exception as e:
-            print(f"  ❌ Error creating exercise report: {e}")
+            print(f"   Error creating exercise report: {e}")
 
 
 # ============================================================================
@@ -254,7 +254,7 @@ async def handle_policy_updated(event_data: Dict[str, Any]):
         updated_by: str
         changes: dict
     """
-    print(f"📜 Handling policy.updated: {event_data.get('policy_code')}")
+    print(f" Handling policy.updated: {event_data.get('policy_code')}")
 
     policy_code = event_data.get("policy_code")
     tenant_id = event_data.get("tenant_id")
@@ -282,10 +282,10 @@ async def handle_policy_updated(event_data: Dict[str, Any]):
                 # Could flag these for review
                 # For now, just log
                 for doc in documents:
-                    print(f"  📄 May need review: {doc['title']} (ID: {doc['document_id']})")
+                    print(f"   May need review: {doc['title']} (ID: {doc['document_id']})")
 
         except Exception as e:
-            print(f"  ❌ Error finding policy documents: {e}")
+            print(f"   Error finding policy documents: {e}")
 
 
 # ============================================================================
@@ -308,7 +308,7 @@ async def handle_audit_started(event_data: Dict[str, Any]):
         tenant_id: str
         started_by: str
     """
-    print(f"🔍 Handling audit.started: {event_data.get('audit_code')}")
+    print(f" Handling audit.started: {event_data.get('audit_code')}")
 
     audit_id = event_data.get("audit_id")
     audit_code = event_data.get("audit_code")
@@ -322,7 +322,7 @@ async def handle_audit_started(event_data: Dict[str, Any]):
 
     # Could create audit evidence collection document here
     # For now, just log
-    print(f"  📋 Audit evidence preparation for: {audit_code}")
+    print(f"   Audit evidence preparation for: {audit_code}")
 
 
 # ============================================================================
@@ -344,7 +344,7 @@ async def handle_training_scheduled(event_data: Dict[str, Any]):
         tenant_id: str
         scheduled_by: str
     """
-    print(f"📚 Handling training.scheduled: {event_data.get('training_code')}")
+    print(f" Handling training.scheduled: {event_data.get('training_code')}")
 
     training_code = event_data.get("training_code")
     training_topic = event_data.get("training_topic")
@@ -371,10 +371,10 @@ async def handle_training_scheduled(event_data: Dict[str, Any]):
                 print(f"  Found {len(materials)} training materials for: {training_topic}")
 
                 for material in materials:
-                    print(f"  📖 {material['title']} (ID: {material['document_id']})")
+                    print(f"   {material['title']} (ID: {material['document_id']})")
 
         except Exception as e:
-            print(f"  ❌ Error finding training materials: {e}")
+            print(f"   Error finding training materials: {e}")
 
 
 # ============================================================================

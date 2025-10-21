@@ -325,4 +325,4 @@ if __name__ == "__main__":
     # Simulate EventBus
     record_eventbus_event_published('scenario.generated')
 
-    print("✅ Metrics test complete")
+    print(" Metrics test complete")

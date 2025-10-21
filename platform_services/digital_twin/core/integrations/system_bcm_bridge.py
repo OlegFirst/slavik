@@ -74,7 +74,7 @@ class SystemBCMBridge:
             if response.status_code == 200:
                 health_data = response.json()
                 logger.info(
-                    f"✅ Connected to System BCM Service "
+                    f" Connected to System BCM Service "
                     f"(running={health_data.get('running', False)})"
                 )
                 self.is_connected = True
@@ -137,12 +137,12 @@ class SystemBCMBridge:
             Cycle execution results
         """
         try:
-            logger.info("🔄 Triggering BCM cycle...")
+            logger.info(" Triggering BCM cycle...")
             response = await self.client.post(f"{self.base_url}/cycle/trigger")
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ BCM cycle completed: {result.get('status')}")
+            logger.info(f" BCM cycle completed: {result.get('status')}")
             return result
 
         except Exception as error:
@@ -170,7 +170,7 @@ class SystemBCMBridge:
             Recovery trigger response
         """
         try:
-            logger.info(f"🚨 Triggering recovery for {service} ({incident_type})...")
+            logger.info(f" Triggering recovery for {service} ({incident_type})...")
 
             response = await self.client.post(
                 f"{self.base_url}/recovery/trigger",
@@ -183,7 +183,7 @@ class SystemBCMBridge:
             response.raise_for_status()
             result = response.json()
 
-            logger.info(f"✅ Recovery triggered: {result.get('status')}")
+            logger.info(f" Recovery triggered: {result.get('status')}")
             return result
 
         except Exception as error:

@@ -46,7 +46,7 @@ class ServiceRegistry:
             self._event_consumers[pattern].add(service_name)
 
         logger.info(
-            f"✅ Registered service: {service_name} "
+            f" Registered service: {service_name} "
             f"with {len(subscriptions)} subscriptions"
         )
 
@@ -126,7 +126,7 @@ class EventPatternLearner:
         pattern["confidence"] = min(pattern["occurrences"] / 100.0, 1.0)
 
         logger.debug(
-            f"📊 Pattern learned: {pattern_key} "
+            f" Pattern learned: {pattern_key} "
             f"(occurrences: {pattern['occurrences']}, confidence: {pattern['confidence']:.2f})"
         )
 
@@ -184,7 +184,7 @@ class AutoDiscoveryEngine:
 
     async def start(self):
         """Start auto-discovery."""
-        logger.info("🚀 Starting Auto-Discovery Engine...")
+        logger.info(" Starting Auto-Discovery Engine...")
 
         # Subscribe to service registration events
         @subscribe_to("service.started")
@@ -196,7 +196,7 @@ class AutoDiscoveryEngine:
         async def on_any_event(event: Event):
             await self._handle_any_event(event)
 
-        logger.info("✅ Auto-Discovery Engine started")
+        logger.info(" Auto-Discovery Engine started")
 
     async def _handle_service_started(self, event: Event):
         """Handle service registration."""

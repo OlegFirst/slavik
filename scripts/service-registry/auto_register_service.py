@@ -49,7 +49,7 @@ class PortManager:
                 used_ports.extend(ports)
 
             except Exception as e:
-                print(f"⚠️  Error reading {yaml_file}: {e}")
+                print(f"️  Error reading {yaml_file}: {e}")
 
         return sorted(set(used_ports))
 
@@ -124,7 +124,7 @@ class PortManager:
     def print_port_usage_report(self):
         """Выводит отчет по использованию портов"""
         print("\n" + "=" * 70)
-        print("📊 PORT USAGE REPORT")
+        print(" PORT USAGE REPORT")
         print("=" * 70)
 
         for service_type, (start, end) in self.PORT_RANGES.items():
@@ -222,7 +222,7 @@ class ServiceRegistrar:
         """Регистрирует сервис в каталоге"""
 
         print(f"\n{'=' * 70}")
-        print(f"📝 REGISTERING SERVICE: {service_name}")
+        print(f" REGISTERING SERVICE: {service_name}")
         print(f"{'=' * 70}\n")
 
         # Create service entry
@@ -247,9 +247,9 @@ class ServiceRegistrar:
             f.write(f"# Created: {datetime.now().isoformat()}\n\n")
             yaml.dump(entry, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
-        print(f"✅ Service registered: {catalog_file}")
-        print(f"📍 Port assigned: {port}")
-        print(f"🔗 Health check: http://localhost:{port}/health")
+        print(f" Service registered: {catalog_file}")
+        print(f" Port assigned: {port}")
+        print(f" Health check: http://localhost:{port}/health")
         print(f"\n{'=' * 70}\n")
 
         return str(catalog_file)
@@ -260,7 +260,7 @@ class ServiceRegistrar:
         main_catalog_file = PLATFORM_SERVICES_CATALOG / "SERVICE_CATALOG_DETAILED.yaml"
 
         if not main_catalog_file.exists():
-            print(f"⚠️  Main catalog not found: {main_catalog_file}")
+            print(f"️  Main catalog not found: {main_catalog_file}")
             return
 
         # Load main catalog
@@ -289,7 +289,7 @@ class ServiceRegistrar:
         with open(main_catalog_file, 'w') as f:
             yaml.dump(catalog, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
-        print(f"✅ Updated main catalog: {main_catalog_file}")
+        print(f" Updated main catalog: {main_catalog_file}")
 
     def create_service_template(
         self,
@@ -379,7 +379,7 @@ async def root():
 
 
 if __name__ == "__main__":
-    logger.info(f"🚀 Starting {{service_name}} on port {{PORT}}")
+    logger.info(f" Starting {{service_name}} on port {{PORT}}")
     uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
 '''
 
@@ -423,7 +423,7 @@ python main.py
 - Status: Development
 """)
 
-        print(f"✅ Created service template: {service_dir}")
+        print(f" Created service template: {service_dir}")
         print(f"   - main.py")
         print(f"   - requirements.txt")
         print(f"   - README.md")
@@ -437,13 +437,13 @@ def interactive_registration():
     registrar = ServiceRegistrar()
 
     print("\n" + "=" * 70)
-    print("🎯 INTERACTIVE SERVICE REGISTRATION")
+    print(" INTERACTIVE SERVICE REGISTRATION")
     print("=" * 70 + "\n")
 
     # Get service details
     service_name = input("Service name (e.g., my_service): ").strip()
     if not service_name:
-        print("❌ Service name is required!")
+        print(" Service name is required!")
         return
 
     service_type = input("Service type (learning_infrastructure/ai_core/platform/integration): ").strip() or "platform"
@@ -451,7 +451,7 @@ def interactive_registration():
     component = input("Component (platform_services/intelligent_core/infrastructure): ").strip() or "platform_services"
 
     # Port selection
-    print(f"\n📍 Suggested ports for {component}:")
+    print(f"\n Suggested ports for {component}:")
     suggestions = registrar.port_manager.get_port_suggestions(component, 5)
     for i, port in enumerate(suggestions, 1):
         print(f"  {i}. Port {port}")
@@ -475,7 +475,7 @@ def interactive_registration():
     create_template = input("\nCreate service code template? (y/n): ").strip().lower() == 'y'
 
     # Register
-    print("\n🔄 Registering service...")
+    print("\n Registering service...")
 
     catalog_file = registrar.register_service(
         service_name=service_name,
@@ -492,11 +492,11 @@ def interactive_registration():
     # Create template if requested
     if create_template:
         service_dir = registrar.create_service_template(service_name, port, location)
-        print(f"\n🎉 Service template created at: {service_dir}")
+        print(f"\n Service template created at: {service_dir}")
 
-    print("\n✅ Registration complete!")
-    print(f"\n📝 Catalog entry: {catalog_file}")
-    print(f"🔗 Health check: http://localhost:{port}/health")
+    print("\n Registration complete!")
+    print(f"\n Catalog entry: {catalog_file}")
+    print(f" Health check: http://localhost:{port}/health")
     print(f"\nNext steps:")
     print(f"  1. cd {REPO_ROOT / location}")
     print(f"  2. pip install -r requirements.txt")

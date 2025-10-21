@@ -1,5 +1,5 @@
 """
-📊 Prometheus Metrics for Knowledge System
+ Prometheus Metrics for Knowledge System
 
 Tracks:
 - Standards loads (count, latency, cache hits)
@@ -647,7 +647,7 @@ def init_metrics():
     for component in ['standards_loader', 'case_collector', 'vector_indexer', 'api', 'updater']:
         health_status.labels(component=component).set(0)
 
-    logger.info("✅ Prometheus metrics initialized")
+    logger.info(" Prometheus metrics initialized")
 
 
 # Initialize on module import

@@ -391,12 +391,12 @@ class PerformanceEvaluator:
         if category_scores['performance'] < 0.8:
             if metrics.latency_p95 > 50:
                 recommendations.append(
-                    f"⚠️ Latency P95 ({metrics.latency_p95}ms) exceeds target (50ms). "
+                    f"️ Latency P95 ({metrics.latency_p95}ms) exceeds target (50ms). "
                     "Consider: caching optimization, async processing, resource scaling."
                 )
             if metrics.cache_hit_rate < 80:
                 recommendations.append(
-                    f"⚠️ Cache hit rate ({metrics.cache_hit_rate}%) below target (80%). "
+                    f"️ Cache hit rate ({metrics.cache_hit_rate}%) below target (80%). "
                     "Review cache strategy and TTL settings."
                 )
 
@@ -404,12 +404,12 @@ class PerformanceEvaluator:
         if category_scores['quality'] < 0.8:
             if metrics.accuracy < 90:
                 recommendations.append(
-                    f"⚠️ Accuracy ({metrics.accuracy}%) below target (90%). "
+                    f"️ Accuracy ({metrics.accuracy}%) below target (90%). "
                     "Retrain models with recent data, review decision logic."
                 )
             if metrics.auto_resolution_rate < 70:
                 recommendations.append(
-                    f"⚠️ Auto-resolution rate ({metrics.auto_resolution_rate}%) below target (70%). "
+                    f"️ Auto-resolution rate ({metrics.auto_resolution_rate}%) below target (70%). "
                     "Expand automation rules, improve confidence thresholds."
                 )
 
@@ -417,7 +417,7 @@ class PerformanceEvaluator:
         if category_scores['efficiency'] < 0.8:
             if metrics.escalation_rate > 15:
                 recommendations.append(
-                    f"⚠️ Escalation rate ({metrics.escalation_rate}%) above target (15%). "
+                    f"️ Escalation rate ({metrics.escalation_rate}%) above target (15%). "
                     "Review escalation criteria, enhance AI capabilities."
                 )
 
@@ -425,7 +425,7 @@ class PerformanceEvaluator:
         if category_scores['learning'] < 0.7:
             if metrics.pdca_cycles < 100:
                 recommendations.append(
-                    f"⚠️ PDCA cycles ({metrics.pdca_cycles}) below target (100/month). "
+                    f"️ PDCA cycles ({metrics.pdca_cycles}) below target (100/month). "
                     "Increase workflow completion rate, automate PDCA triggers."
                 )
 
@@ -433,12 +433,12 @@ class PerformanceEvaluator:
         if category_scores['safety'] < 0.9:
             if metrics.policy_compliance < 99:
                 recommendations.append(
-                    f"⚠️ Policy compliance ({metrics.policy_compliance}%) below target (99%). "
+                    f"️ Policy compliance ({metrics.policy_compliance}%) below target (99%). "
                     "Review policy violations, update safety rules."
                 )
 
         if not recommendations:
-            recommendations.append("✅ All metrics within targets. Continue monitoring.")
+            recommendations.append(" All metrics within targets. Continue monitoring.")
 
         return recommendations
 
@@ -457,12 +457,12 @@ class PerformanceEvaluator:
 Overall Performance Score: {ops:.3f} ({maturity})
 
 Strengths:
-  ✅ {best_category[0].title()}: {best_category[1]:.2f}
+   {best_category[0].title()}: {best_category[1]:.2f}
 
 Areas for Improvement:
-  ⚠️ {worst_category[0].title()}: {worst_category[1]:.2f}
+  ️ {worst_category[0].title()}: {worst_category[1]:.2f}
 
-Status: {'🟢 Excellent' if ops >= 0.90 else '🟡 Good' if ops >= 0.80 else '🟠 Needs Improvement' if ops >= 0.70 else '🔴 Critical'}
+Status: {' Excellent' if ops >= 0.90 else ' Good' if ops >= 0.80 else ' Needs Improvement' if ops >= 0.70 else ' Critical'}
         """.strip()
 
         return summary
@@ -521,13 +521,13 @@ def example_evaluation():
 
     print(f"\nCategory Scores:")
     for category, score in results['category_scores'].items():
-        status = "✅" if score >= 0.8 else "⚠️" if score >= 0.7 else "❌"
+        status = "" if score >= 0.8 else "️" if score >= 0.7 else ""
         print(f"  {status} {category.title()}: {score:.3f}")
 
     print(f"\nSLA Compliance:")
     for sla_type, status in results['sla_compliance'].items():
         if sla_type != 'overall':
-            met = "✅" if status['met'] else "❌"
+            met = "" if status['met'] else ""
             print(f"  {met} {sla_type.title()}: {'PASS' if status['met'] else 'FAIL'}")
 
     overall_sla = results['sla_compliance']['overall']

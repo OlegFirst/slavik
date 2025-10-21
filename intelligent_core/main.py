@@ -421,7 +421,7 @@ async def find_incident_patterns(org_id: int):
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup"""
-    print("🚀 Starting BCM Intelligent Core...")
+    print(" Starting BCM Intelligent Core...")
 
     # TODO: Initialize with real storage adapter and LLM config from env
     # For now, use demo setup
@@ -437,7 +437,7 @@ async def startup_event():
     #     }
     # )
 
-    print("✅ Intelligent Core ready!")
+    print(" Intelligent Core ready!")
 
 if __name__ == "__main__":
     import uvicorn

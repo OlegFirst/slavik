@@ -315,7 +315,7 @@ class TestCentralBrain:
 
         # 4. Report findings
         if unregistered_services:
-            logger.error("❌ CRITICAL: Found unregistered services!")
+            logger.error(" CRITICAL: Found unregistered services!")
             for svc in unregistered_services:
                 severity = "CRITICAL" if svc['critical'] else "WARNING"
                 logger.error(f"  [{severity}] {svc['name']} on port {svc['port']}")
@@ -328,7 +328,7 @@ class TestCentralBrain:
                     f"{[s['name'] for s in critical_unregistered]}"
                 )
         else:
-            logger.info("✅ All running services are properly registered")
+            logger.info(" All running services are properly registered")
 
     # ========================================================================
     # CRITICAL TEST 2: Services registered but NOT responding
@@ -392,7 +392,7 @@ class TestCentralBrain:
 
         # Report findings
         if non_responding:
-            logger.error(f"❌ Found {len(non_responding)} non-responding services!")
+            logger.error(f" Found {len(non_responding)} non-responding services!")
             for svc in non_responding:
                 severity = "CRITICAL" if svc['critical'] else "WARNING"
                 logger.error(f"  [{severity}] {svc['name']} on port {svc['port']}: {svc['reason']}")
@@ -405,7 +405,7 @@ class TestCentralBrain:
                     f"{[s['name'] for s in critical_non_responding]}"
                 )
         else:
-            logger.info("✅ All registered services are responding")
+            logger.info(" All registered services are responding")
 
     # ========================================================================
     # CRITICAL TEST 3: Services NOT connected to EventBus
@@ -463,7 +463,7 @@ class TestCentralBrain:
 
         # Report findings
         if disconnected:
-            logger.warning(f"⚠️  Found {len(disconnected)} EventBus-disconnected services!")
+            logger.warning(f"️  Found {len(disconnected)} EventBus-disconnected services!")
             for svc in disconnected:
                 severity = "CRITICAL" if svc['critical'] else "WARNING"
                 logger.warning(
@@ -477,7 +477,7 @@ class TestCentralBrain:
                 "This is only critical if services are running."
             )
         else:
-            logger.info("✅ All EventBus-dependent services are connected")
+            logger.info(" All EventBus-dependent services are connected")
 
     # ========================================================================
     # CRITICAL TEST 4: Missing dependencies
@@ -521,7 +521,7 @@ class TestCentralBrain:
 
         # Report findings
         if services_with_missing_deps:
-            logger.error(f"❌ Found {len(services_with_missing_deps)} missing dependencies!")
+            logger.error(f" Found {len(services_with_missing_deps)} missing dependencies!")
             for item in services_with_missing_deps:
                 logger.error(
                     f"  {item['service']} requires {item['missing_dependency']} "
@@ -532,7 +532,7 @@ class TestCentralBrain:
                 f"Found {len(services_with_missing_deps)} services with missing dependencies"
             )
         else:
-            logger.info("✅ All service dependencies are registered")
+            logger.info(" All service dependencies are registered")
 
     # ========================================================================
     # CRITICAL TEST 5: Port conflicts
@@ -578,13 +578,13 @@ class TestCentralBrain:
 
         # Report findings
         if conflicts:
-            logger.error(f"❌ Found {len(conflicts)} port conflicts!")
+            logger.error(f" Found {len(conflicts)} port conflicts!")
             for port, services in conflicts.items():
                 logger.error(f"  Port {port}: {', '.join(services)}")
 
             pytest.fail(f"Found {len(conflicts)} port conflicts")
         else:
-            logger.info("✅ No port conflicts detected")
+            logger.info(" No port conflicts detected")
 
     # ========================================================================
     # SUMMARY TEST: Complete system health
@@ -638,10 +638,10 @@ class TestCentralBrain:
         system_healthy = critical_running == len(critical_ports)
 
         if system_healthy:
-            logger.info("✅ SYSTEM STATUS: HEALTHY - All critical services running")
+            logger.info(" SYSTEM STATUS: HEALTHY - All critical services running")
         else:
             logger.error(
-                f"❌ SYSTEM STATUS: DEGRADED - "
+                f" SYSTEM STATUS: DEGRADED - "
                 f"{len(critical_ports) - critical_running} critical services not running"
             )
 

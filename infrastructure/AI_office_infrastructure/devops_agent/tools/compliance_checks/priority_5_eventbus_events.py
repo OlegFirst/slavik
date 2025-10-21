@@ -19,7 +19,7 @@
 подротсетность долдна определяться сразу"
 
 Created: 2025-10-09
-Status: ✅ Implemented
+Status:  Implemented
 """
 
 import sys
@@ -317,7 +317,7 @@ class EventBusEventChecker:
         else:
             status.is_running = False
             status.severity = EventBusSeverity.ERROR
-            status.message = "❌ Сервис не запущен (порт не слушает)"
+            status.message = " Сервис не запущен (порт не слушает)"
             return status
 
         # Check EventBus connection (placeholder for real implementation)
@@ -346,19 +346,19 @@ class EventBusEventChecker:
             # КРИТИЧНО: Сервис работает НО НЕ подключен к EventBus
             # Это главное требование пользователя!
             status.severity = EventBusSeverity.CRITICAL
-            status.message = "🚨 КРИТИЧНО: Сервис запущен, но НЕ подключен к EventBus!"
+            status.message = " КРИТИЧНО: Сервис запущен, но НЕ подключен к EventBus!"
         elif status.connected_to_eventbus and not status.heartbeat_healthy:
             status.severity = EventBusSeverity.ERROR
-            status.message = "❌ Heartbeat не отправляется (> 60s)"
+            status.message = " Heartbeat не отправляется (> 60s)"
         elif status.connected_to_eventbus and not status.publishes_events:
             status.severity = EventBusSeverity.WARNING
-            status.message = "⚠️ Подключен, но не публикует события"
+            status.message = "️ Подключен, но не публикует события"
         elif status.connected_to_eventbus and status.heartbeat_healthy:
             status.severity = EventBusSeverity.INFO
-            status.message = "✅ Подключен к EventBus, heartbeat в норме"
+            status.message = " Подключен к EventBus, heartbeat в норме"
         else:
             status.severity = EventBusSeverity.WARNING
-            status.message = "⚠️ Статус неизвестен"
+            status.message = "️ Статус неизвестен"
 
         return status
 
@@ -418,25 +418,25 @@ class EventBusEventChecker:
 
         # КРИТИЧНЫЕ ПРОБЛЕМЫ
         if summary['critical_count'] > 0:
-            print("🚨 КРИТИЧНЫЕ ПРОБЛЕМЫ 🚨")
+            print(" КРИТИЧНЫЕ ПРОБЛЕМЫ ")
             print(f"Найдено {summary['critical_count']} сервисов, работающих НО НЕ подключенных к EventBus:")
             for service_name in summary['critical_running_not_connected']:
-                print(f"  🚨 {service_name}")
+                print(f"   {service_name}")
             print()
 
         # Detailed results
         for service_name, status in sorted(results.items()):
-            icon = "✅" if status.severity == EventBusSeverity.INFO else \
-                   "⚠️" if status.severity == EventBusSeverity.WARNING else \
-                   "❌" if status.severity == EventBusSeverity.ERROR else "🚨"
+            icon = "" if status.severity == EventBusSeverity.INFO else \
+                   "️" if status.severity == EventBusSeverity.WARNING else \
+                   "" if status.severity == EventBusSeverity.ERROR else ""
 
             print(f"{icon} {service_name} (порт: {status.port})")
-            print(f"   Запущен: {'✅' if status.is_running else '❌'}")
-            print(f"   Подключен к EventBus: {'✅' if status.connected_to_eventbus else '❌'}")
+            print(f"   Запущен: {'' if status.is_running else ''}")
+            print(f"   Подключен к EventBus: {'' if status.connected_to_eventbus else ''}")
 
             if status.connected_to_eventbus:
-                print(f"   Публикует события: {'✅' if status.publishes_events else '❌'}")
-                print(f"   Heartbeat здоров: {'✅' if status.heartbeat_healthy else '❌'}")
+                print(f"   Публикует события: {'' if status.publishes_events else ''}")
+                print(f"   Heartbeat здоров: {'' if status.heartbeat_healthy else ''}")
                 if status.last_heartbeat:
                     print(f"   Последний heartbeat: {status.last_heartbeat.isoformat()}")
 
@@ -446,17 +446,17 @@ class EventBusEventChecker:
         # Final status
         print("="*80)
         if summary['critical_count'] > 0:
-            print("🚨 ПРИОРИТЕТ 5 CRITICAL: Сервисы работают без подключения к EventBus!")
+            print(" ПРИОРИТЕТ 5 CRITICAL: Сервисы работают без подключения к EventBus!")
             print("   Это нарушает требование немедленного обнаружения!")
             passed = False
         elif summary['connection_rate'] >= 80:
-            print("✅ ПРИОРИТЕТ 5 PASSED: EventBus интеграция в порядке")
+            print(" ПРИОРИТЕТ 5 PASSED: EventBus интеграция в порядке")
             passed = True
         elif summary['connection_rate'] >= 50:
-            print("⚠️ ПРИОРИТЕТ 5 WARNING: Неполная интеграция с EventBus")
+            print("️ ПРИОРИТЕТ 5 WARNING: Неполная интеграция с EventBus")
             passed = False
         else:
-            print("❌ ПРИОРИТЕТ 5 FAILED: Недостаточно сервисов подключено к EventBus")
+            print(" ПРИОРИТЕТ 5 FAILED: Недостаточно сервисов подключено к EventBus")
             passed = False
         print("="*80 + "\n")
 

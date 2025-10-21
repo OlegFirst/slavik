@@ -43,7 +43,7 @@ async def test_governance_integration():
     )
 
     await coordinator.start()
-    print("✅ Coordinator started with governance enabled")
+    print(" Coordinator started with governance enabled")
 
     # Wait for startup
     await asyncio.sleep(2)
@@ -66,7 +66,7 @@ async def test_governance_integration():
     )
 
     await asyncio.sleep(3)
-    print("✅ Decision Center should have approved recovery (attempt 1/1)")
+    print(" Decision Center should have approved recovery (attempt 1/1)")
     print("   Database is critical, max_attempts=1 per policy")
 
     # Test 2: Simulate API Gateway failure (attempt 1)
@@ -87,7 +87,7 @@ async def test_governance_integration():
     )
 
     await asyncio.sleep(3)
-    print("✅ Decision Center should have approved recovery (attempt 1/2)")
+    print(" Decision Center should have approved recovery (attempt 1/2)")
 
     # Test 3: Second API Gateway failure (attempt 2)
     print("\n[4/7] TEST 3: Simulate api_gateway unhealthy (attempt 2)")
@@ -107,7 +107,7 @@ async def test_governance_integration():
     )
 
     await asyncio.sleep(3)
-    print("✅ Decision Center should have approved recovery (attempt 2/2)")
+    print(" Decision Center should have approved recovery (attempt 2/2)")
     print("   Critical service approaching max attempts")
 
     # Test 4: Third API Gateway failure (should ESCALATE)
@@ -128,15 +128,15 @@ async def test_governance_integration():
     )
 
     await asyncio.sleep(3)
-    print("⚠️  Decision Center should have REJECTED (max attempts exceeded)")
-    print("✅ Escalation Manager should have created escalation")
-    print("✅ Notification Service should have sent alerts")
-    print("✅ Auto-Recovery should be BLOCKED for api_gateway")
+    print("️  Decision Center should have REJECTED (max attempts exceeded)")
+    print(" Escalation Manager should have created escalation")
+    print(" Notification Service should have sent alerts")
+    print(" Auto-Recovery should be BLOCKED for api_gateway")
 
     # Test 5: Check Decision Center statistics
     print("\n[6/7] Checking Decision Center Statistics...")
     stats = await coordinator.decision_center.get_stats()
-    print("\n📊 DECISION CENTER STATISTICS:")
+    print("\n DECISION CENTER STATISTICS:")
     print(f"  Total decisions: {stats.get('total_decisions', 0)}")
     print(f"  Approved: {stats.get('approved_decisions', 0)}")
     print(f"  Rejected: {stats.get('rejected_decisions', 0)}")
@@ -156,7 +156,7 @@ async def test_governance_integration():
     if os.path.exists(log_file):
         with open(log_file) as f:
             lines = f.readlines()
-            print(f"\n📋 AUDIT LOGS:")
+            print(f"\n AUDIT LOGS:")
             print(f"  Total audit entries today: {len(lines)}")
             print(f"  Last 5 decisions:")
             for line in lines[-5:]:
@@ -172,11 +172,11 @@ async def test_governance_integration():
                 except json.JSONDecodeError:
                     print(f"    - [Invalid JSON entry]")
     else:
-        print(f"  ⚠️  Audit log file not found: {log_file}")
+        print(f"  ️  Audit log file not found: {log_file}")
         print(f"  Note: Audit logs may be stored in memory for this test")
 
     # Get active escalations
-    print("\n🚨 ACTIVE ESCALATIONS:")
+    print("\n ACTIVE ESCALATIONS:")
     escalations = await coordinator.decision_center.get_active_escalations()
     if escalations:
         for esc in escalations:
@@ -187,7 +187,7 @@ async def test_governance_integration():
         print("  No active escalations")
 
     # Get pending approvals
-    print("\n📋 PENDING APPROVALS:")
+    print("\n PENDING APPROVALS:")
     approvals = await coordinator.decision_center.get_pending_approvals()
     if approvals:
         for app in approvals:
@@ -198,14 +198,14 @@ async def test_governance_integration():
         print("  No pending approvals")
 
     # Overall coordinator status
-    print("\n🎯 OVERALL COORDINATOR STATUS:")
+    print("\n OVERALL COORDINATOR STATUS:")
     status = await coordinator.get_status()
     print(f"  Health Monitor: {status['health_monitor']['checks_registered']} checks registered")
     print(f"  Auto-Recovery: {status['auto_recovery']['total_recoveries']} total recoveries")
     print(f"  Resource Optimizer: {status['resource_optimizer']['cycles_completed']} cycles completed")
 
     print("\n" + "=" * 70)
-    print("✅ INTEGRATION TEST COMPLETE")
+    print(" INTEGRATION TEST COMPLETE")
     print("=" * 70)
     print("\nKey Findings:")
     print(f"  • Decision Center made {stats.get('total_decisions', 0)} decisions")
@@ -214,12 +214,12 @@ async def test_governance_integration():
     print(f"  • Automation rate: {stats.get('automation_rate', 0):.1f}%")
     print("\nConclusion:")
     if stats.get('total_decisions', 0) > 0:
-        print("  ✅ Decision Center is functional and making decisions")
+        print("   Decision Center is functional and making decisions")
     else:
-        print("  ⚠️  Decision Center did not make any decisions - check integration")
+        print("  ️  Decision Center did not make any decisions - check integration")
 
     if stats.get('active_escalations', 0) > 0:
-        print("  ✅ Escalation system is working")
+        print("   Escalation system is working")
     else:
         print("  ℹ️  No escalations triggered (may be expected)")
 
@@ -277,7 +277,7 @@ async def test_policy_compliance():
     print(f"  Requires escalation: {compliance.get('requires_escalation', False)}")
     print(f"  Reason: {compliance.get('reason', 'N/A')}")
 
-    print("\n✅ POLICY COMPLIANCE TEST COMPLETE")
+    print("\n POLICY COMPLIANCE TEST COMPLETE")
     print("=" * 70)
 
     await coordinator.stop()
@@ -290,7 +290,7 @@ if __name__ == "__main__":
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
-    print("\n🚀 Starting Phase 1.1 Integration Tests...")
+    print("\n Starting Phase 1.1 Integration Tests...")
 
     # Run main integration test
     asyncio.run(test_governance_integration())
@@ -299,4 +299,4 @@ if __name__ == "__main__":
     print("\n\n")
     asyncio.run(test_policy_compliance())
 
-    print("\n\n✅ All tests completed!")
+    print("\n\n All tests completed!")

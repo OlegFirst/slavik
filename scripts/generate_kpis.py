@@ -352,7 +352,7 @@ def save_kpi_file(module_path: Path, kpi_data: Dict, dry_run: bool = False):
     with open(kpi_file, 'w') as f:
         yaml.dump(kpi_data, f, default_flow_style=False, sort_keys=False)
 
-    print(f"✅ Created: {kpi_file}")
+    print(f" Created: {kpi_file}")
 
 
 # ============================================================================
@@ -365,7 +365,7 @@ def main():
     parser.add_argument("--module", type=str, help="Generate for specific module only")
     args = parser.parse_args()
 
-    print("🎯 KPI Auto-Generator\n")
+    print(" KPI Auto-Generator\n")
 
     # Discover modules
     def discover_modules() -> List[Path]:
@@ -387,13 +387,13 @@ def main():
     if args.module:
         modules = [m for m in modules if m.name == args.module]
         if not modules:
-            print(f"❌ Module '{args.module}' not found")
+            print(f" Module '{args.module}' not found")
             return
 
     print(f"Found {len(modules)} modules")
 
     if args.dry_run:
-        print("\n⚠️  DRY RUN MODE - No files will be created\n")
+        print("\n️  DRY RUN MODE - No files will be created\n")
 
     # Generate KPIs
     generated = 0
@@ -416,11 +416,11 @@ def main():
 
     print(f"\n{'='*60}")
     if args.dry_run:
-        print(f"✅ Would generate {generated} KPI files")
+        print(f" Would generate {generated} KPI files")
         print("Run without --dry-run to create files")
     else:
-        print(f"✅ Generated {generated} KPI files")
-        print("\n🎯 Next steps:")
+        print(f" Generated {generated} KPI files")
+        print("\n Next steps:")
         print("1. Review generated KPI.yaml files")
         print("2. Adjust targets based on business requirements")
         print("3. Implement Prometheus metrics in code")

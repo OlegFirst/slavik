@@ -82,7 +82,8 @@ export function MonteCarloChart({ riskId, className }: MonteCarloChartProps) {
 
   const handleRunSimulation = () => {
     // Validation
-    if (formData.iterations < 1000 || formData.iterations > 100000) {
+    const iterations = formData.iterations || 10000;
+    if (iterations < 1000 || iterations > 100000) {
       return;
     }
     if (formData.factors.length === 0) {

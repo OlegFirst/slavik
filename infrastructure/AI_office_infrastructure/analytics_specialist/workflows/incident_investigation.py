@@ -51,7 +51,7 @@ async def investigate_incident(
         ```
     """
     logger.info("=" * 60)
-    logger.info(f"🔍 INCIDENT INVESTIGATION START: {incident_id}")
+    logger.info(f" INCIDENT INVESTIGATION START: {incident_id}")
     logger.info("=" * 60)
 
     start_time = datetime.now()
@@ -62,24 +62,24 @@ async def investigate_incident(
         await core.initialize()
 
         # Perform investigation
-        logger.info(f"📊 Investigating incident {incident_id}...")
+        logger.info(f" Investigating incident {incident_id}...")
 
         report = await core.investigate_incident(incident_id)
 
-        logger.info(f"✅ Investigation complete: {len(report.insights)} insights found")
+        logger.info(f" Investigation complete: {len(report.insights)} insights found")
 
         # Analyze root cause
         root_cause = await _analyze_root_cause(core, incident_id, incident_details)
 
-        logger.info(f"🎯 Root cause identified: {root_cause.get('cause', 'Unknown')}")
+        logger.info(f" Root cause identified: {root_cause.get('cause', 'Unknown')}")
 
         # Generate prevention plan
         prevention_plan = await _generate_prevention_plan(core, root_cause, report)
 
-        logger.info(f"📋 Prevention plan generated: {len(prevention_plan)} actions")
+        logger.info(f" Prevention plan generated: {len(prevention_plan)} actions")
 
         # Report to MIO Manager
-        logger.info("📤 Reporting investigation results to MIO Manager...")
+        logger.info(" Reporting investigation results to MIO Manager...")
 
         mio_response = await report_incident_investigation(
             mio_client=core.mio_client,
@@ -89,7 +89,7 @@ async def investigate_incident(
             severity=SeverityLevel.HIGH
         )
 
-        logger.info(f"✅ MIO Manager response: {mio_response.get('status')}")
+        logger.info(f" MIO Manager response: {mio_response.get('status')}")
 
         duration = (datetime.now() - start_time).total_seconds()
 
@@ -107,7 +107,7 @@ async def investigate_incident(
         }
 
         logger.info("=" * 60)
-        logger.info(f"✅ INCIDENT INVESTIGATION COMPLETE (duration: {duration:.1f}s)")
+        logger.info(f" INCIDENT INVESTIGATION COMPLETE (duration: {duration:.1f}s)")
         logger.info(f"   Incident ID: {incident_id}")
         logger.info(f"   Root Cause: {root_cause.get('cause', 'Unknown')}")
         logger.info(f"   Prevention Actions: {len(prevention_plan)}")
@@ -116,7 +116,7 @@ async def investigate_incident(
         return result
 
     except Exception as e:
-        logger.error(f"❌ Incident investigation failed: {e}", exc_info=True)
+        logger.error(f" Incident investigation failed: {e}", exc_info=True)
 
         return {
             "status": "error",

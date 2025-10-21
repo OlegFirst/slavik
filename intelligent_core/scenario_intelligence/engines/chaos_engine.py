@@ -43,7 +43,7 @@ class ChaosEngine:
         experiment = chaos_config.get('experiment', {})
         hypothesis = experiment.get('hypothesis', {})
 
-        logger.info(f"  💥 Starting Chaos Experiment")
+        logger.info(f"   Starting Chaos Experiment")
         logger.info(f"     Hypothesis: {hypothesis.get('expected', 'N/A')}")
 
         results = {
@@ -53,7 +53,7 @@ class ChaosEngine:
         }
 
         # 1. Измерить steady state (до chaos)
-        logger.info(f"     📊 Measuring steady state (before)...")
+        logger.info(f"      Measuring steady state (before)...")
         steady_state_before = await self._measure_steady_state(
             experiment.get('steady_state_verification', {}).get('before_chaos', [])
         )
@@ -68,7 +68,7 @@ class ChaosEngine:
             scope = phase_config.get('scope', 'unknown')
             duration = phase_config.get('duration', '5m')
 
-            logger.info(f"     🔧 Phase {phase_num}: {scope}")
+            logger.info(f"      Phase {phase_num}: {scope}")
 
             phase_result = {
                 'phase': phase_num,
@@ -81,7 +81,7 @@ class ChaosEngine:
                 await self._inject_chaos(action, phase_config)
 
             # Measure during chaos
-            logger.info(f"     📊 Measuring steady state (during chaos)...")
+            logger.info(f"      Measuring steady state (during chaos)...")
             steady_state_during = await self._measure_steady_state(
                 experiment.get('steady_state_verification', {}).get('during_chaos', [])
             )
@@ -94,7 +94,7 @@ class ChaosEngine:
             )
 
             if should_abort:
-                logger.warning(f"     ⚠️  ABORTING: Abort condition triggered!")
+                logger.warning(f"     ️  ABORTING: Abort condition triggered!")
                 phase_result['aborted'] = True
                 await self._rollback_chaos(chaos_actions)
                 results['phases'].append(phase_result)
@@ -112,7 +112,7 @@ class ChaosEngine:
             results['phases'].append(phase_result)
 
         # 3. Measure steady state (после chaos)
-        logger.info(f"     📊 Measuring steady state (after)...")
+        logger.info(f"      Measuring steady state (after)...")
         steady_state_after = await self._measure_steady_state(
             experiment.get('steady_state_verification', {}).get('after_chaos', [])
         )
@@ -126,7 +126,7 @@ class ChaosEngine:
             steady_state_after
         )
 
-        logger.info(f"     ✅ Hypothesis confirmed: {results['hypothesis_confirmed']}")
+        logger.info(f"      Hypothesis confirmed: {results['hypothesis_confirmed']}")
 
         return results
 
@@ -147,7 +147,7 @@ class ChaosEngine:
         chaos_type = action.get('type')
         target = action.get('target', {})
 
-        logger.info(f"       💥 Injecting chaos: {chaos_type} on {target}")
+        logger.info(f"        Injecting chaos: {chaos_type} on {target}")
 
         # Симуляция - в production вызовы к Chaos Toolkit, Kubernetes API, etc.
         await asyncio.sleep(0.1)
@@ -158,7 +158,7 @@ class ChaosEngine:
     ):
         """Откатить chaos"""
 
-        logger.info(f"       🔄 Rolling back chaos...")
+        logger.info(f"        Rolling back chaos...")
         await asyncio.sleep(0.1)
 
     async def _measure_steady_state(

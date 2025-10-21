@@ -121,7 +121,7 @@ async def test_case_approved_handler(mock_subscriber):
     # Verify statistics
     assert mock_subscriber.events_processed['case_approved'] == 1
 
-    print("✅ case.approved handler test passed")
+    print(" case.approved handler test passed")
 
 
 @pytest.mark.asyncio
@@ -148,7 +148,7 @@ async def test_case_rejected_handler(mock_subscriber):
     # Verify statistics
     assert mock_subscriber.events_processed['case_rejected'] == 1
 
-    print("✅ case.rejected handler test passed")
+    print(" case.rejected handler test passed")
 
 
 @pytest.mark.asyncio
@@ -173,7 +173,7 @@ async def test_review_submitted_handler(mock_subscriber):
     # Verify statistics
     assert mock_subscriber.events_processed['review_submitted'] == 1
 
-    print("✅ review.submitted handler test passed")
+    print(" review.submitted handler test passed")
 
 
 # ============================================================================
@@ -213,7 +213,7 @@ async def test_workflow_completed_handler(mock_subscriber):
     # Verify statistics
     assert mock_subscriber.events_processed['workflow_completed'] == 1
 
-    print("✅ workflow.completed handler test passed")
+    print(" workflow.completed handler test passed")
 
 
 @pytest.mark.asyncio
@@ -238,7 +238,7 @@ async def test_workflow_milestone_reached_handler(mock_subscriber):
     # Verify statistics
     assert mock_subscriber.events_processed['workflow_milestone'] == 1
 
-    print("✅ workflow.milestone_reached handler test passed")
+    print(" workflow.milestone_reached handler test passed")
 
 
 # ============================================================================
@@ -268,7 +268,7 @@ async def test_pattern_detection_workflow_batch(mock_subscriber):
     assert len(mock_subscriber.workflow_results) <= 50
     assert mock_subscriber.events_processed['workflow_completed'] == 20
 
-    print("✅ Pattern detection test passed")
+    print(" Pattern detection test passed")
 
 
 # ============================================================================
@@ -301,7 +301,7 @@ async def test_get_statistics(mock_subscriber):
     assert 'ml_training_buffer_size' in stats
     assert 'model_version' in stats
 
-    print("✅ Statistics test passed")
+    print(" Statistics test passed")
     print(f"   Stats: {stats}")
 
 
@@ -313,7 +313,7 @@ async def test_get_statistics(mock_subscriber):
 async def test_full_reactive_learning_cycle():
     """Test complete reactive learning cycle"""
 
-    print("\n🚀 Testing Full Reactive Learning Cycle\n")
+    print("\n Testing Full Reactive Learning Cycle\n")
 
     # 1. Setup
     print("1️⃣ Setting up mock subscriber...")
@@ -334,7 +334,7 @@ async def test_full_reactive_learning_cycle():
         pattern_detector=PatternDetector(),
         competency_tracker=MockCompetencyTracker()
     )
-    print("   ✅ Subscriber ready\n")
+    print("    Subscriber ready\n")
 
     # 2. User completes workflow
     print("2️⃣ User completes BIA workflow...")
@@ -346,7 +346,7 @@ async def test_full_reactive_learning_cycle():
             'team_avg_competency': 80
         }
     }, 'tenant-001')
-    print("   ✅ Workflow completion learned\n")
+    print("    Workflow completion learned\n")
 
     # 3. Case approved in community
     print("3️⃣ Case approved by community...")
@@ -359,7 +359,7 @@ async def test_full_reactive_learning_cycle():
             'competencies_demonstrated': {'business_impact_analysis': 90}
         }
     }, 'tenant-001')
-    print("   ✅ Case approval learned\n")
+    print("    Case approval learned\n")
 
     # 4. Milestone reached
     print("4️⃣ User reaches milestone...")
@@ -368,7 +368,7 @@ async def test_full_reactive_learning_cycle():
         'milestone': 'bia_assessment_complete',
         'user_id': 'user-cycle-001'
     }, 'tenant-001')
-    print("   ✅ Milestone competency updated\n")
+    print("    Milestone competency updated\n")
 
     # 5. Exercise completed
     print("5️⃣ User completes training exercise...")
@@ -380,7 +380,7 @@ async def test_full_reactive_learning_cycle():
             'strengths': ['analysis_depth']
         }
     }, 'tenant-001')
-    print("   ✅ Exercise outcome learned\n")
+    print("    Exercise outcome learned\n")
 
     # 6. Incident resolved
     print("6️⃣ Incident resolved...")
@@ -393,15 +393,15 @@ async def test_full_reactive_learning_cycle():
             'actions': ['isolate_system', 'notify_stakeholders']
         }
     }, 'tenant-001')
-    print("   ✅ Incident resolution learned\n")
+    print("    Incident resolution learned\n")
 
     # 7. Get statistics
     print("7️⃣ Checking learning statistics...")
     stats = subscriber.get_statistics()
-    print(f"   📊 Total events processed: {stats['total_events']}")
-    print(f"   🧠 ML training buffer: {stats['ml_training_buffer_size']} samples")
-    print(f"   📈 Model version: {stats['model_version']}")
-    print("   ✅ Statistics collected\n")
+    print(f"    Total events processed: {stats['total_events']}")
+    print(f"    ML training buffer: {stats['ml_training_buffer_size']} samples")
+    print(f"    Model version: {stats['model_version']}")
+    print("    Statistics collected\n")
 
     # Verify complete cycle
     assert stats['total_events'] == 5
@@ -411,13 +411,13 @@ async def test_full_reactive_learning_cycle():
     assert stats['events_processed']['exercise_completed'] == 1
     assert stats['events_processed']['incident_resolved'] == 1
 
-    print("✅ FULL REACTIVE LEARNING CYCLE COMPLETE!\n")
-    print("📊 Summary:")
+    print(" FULL REACTIVE LEARNING CYCLE COMPLETE!\n")
+    print(" Summary:")
     print(f"   • Events processed: {stats['total_events']}")
     print(f"   • ML samples: {stats['ml_training_buffer_size']}")
     print(f"   • Competency updates: {len(subscriber.competency_tracker.updates)}")
     print(f"   • Model version: {stats['model_version']}")
-    print("\n🎉 Platform learned from real_world usage and improved itself!\n")
+    print("\n Platform learned from real_world usage and improved itself!\n")
 
 
 # ============================================================================

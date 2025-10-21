@@ -216,10 +216,10 @@ class ComplianceCheckTool(BaseTool):
         recommendations = []
 
         if assessment["status"] == "compliant":
-            recommendations.append("✅ Compliance achieved. Continue monitoring and maintaining evidence.")
+            recommendations.append(" Compliance achieved. Continue monitoring and maintaining evidence.")
             recommendations.append("Consider documenting lessons learned and best practices.")
         else:
-            recommendations.append(f"🔴 Address {len(assessment['gaps'])} gap(s) to achieve compliance.")
+            recommendations.append(f" Address {len(assessment['gaps'])} gap(s) to achieve compliance.")
 
             # Specific recommendations for each gap
             for gap in assessment["gaps"][:3]:  # Top 3 gaps
@@ -615,7 +615,7 @@ class EvidenceValidatorTool(BaseTool):
         recommendations = []
 
         if status == "valid":
-            recommendations.append("✅ Evidence quality is good. Maintain documentation standards.")
+            recommendations.append(" Evidence quality is good. Maintain documentation standards.")
         else:
             # Identify common issues
             all_issues = []
@@ -623,7 +623,7 @@ class EvidenceValidatorTool(BaseTool):
                 all_issues.extend(result.get("issues_identified", []))
 
             if all_issues:
-                recommendations.append(f"🔴 Address {len(all_issues)} quality issue(s):")
+                recommendations.append(f" Address {len(all_issues)} quality issue(s):")
 
                 # Summarize most common issues
                 issue_categories = {}

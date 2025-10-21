@@ -109,7 +109,7 @@ class AIEventManagerClient:
 
             if recommendations:
                 logger.info(
-                    f"📋 Received {len(recommendations)} AI recommendations (scope: {scope})"
+                    f" Received {len(recommendations)} AI recommendations (scope: {scope})"
                 )
 
             return recommendations
@@ -156,7 +156,7 @@ class AIEventManagerClient:
             result = response.json()
 
             logger.info(
-                f"✅ Feedback recorded: {suggestion_id} -> {decision}/{outcome} "
+                f" Feedback recorded: {suggestion_id} -> {decision}/{outcome} "
                 f"(learning_updated: {result.get('learning_updated')})"
             )
 
@@ -201,7 +201,7 @@ class AIEventManagerClient:
             stats = response.json()
 
             logger.info(
-                f"📊 Learning stats: "
+                f" Learning stats: "
                 f"total={stats.get('total_suggestions', 0)}, "
                 f"success_rate={stats.get('success_rate', 0):.2f}"
             )
@@ -276,7 +276,7 @@ class AIEventManagerClient:
 
             risk_level = result.get('analysis', {}).get('risk_level', 'unknown')
             logger.info(
-                f"🔍 Event analysis: {event_name} -> risk_level={risk_level}"
+                f" Event analysis: {event_name} -> risk_level={risk_level}"
             )
 
             return result
@@ -337,7 +337,7 @@ class AIEventManagerClient:
             insights = response.json()
 
             logger.info(
-                f"🏗️  Architecture insights: "
+                f"️  Architecture insights: "
                 f"health={insights.get('overall_health', 0):.2f}, "
                 f"critical={len(insights.get('critical_insights', []))}"
             )
@@ -397,7 +397,7 @@ class AIEventManagerClient:
             predictions = result.get('predictions', [])
             if predictions:
                 logger.warning(
-                    f"⚠️  Predicted {len(predictions)} potential event issues "
+                    f"️  Predicted {len(predictions)} potential event issues "
                     f"(horizon: {horizon})"
                 )
 

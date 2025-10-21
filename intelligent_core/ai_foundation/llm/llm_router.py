@@ -45,14 +45,14 @@ class LLMRouter:
             from vault_client import get_secret
             try:
                 self.anthropic_key = get_secret("anthropic-api-key")
-                logger.info("✅ Loaded ANTHROPIC_API_KEY from Vault")
+                logger.info(" Loaded ANTHROPIC_API_KEY from Vault")
             except:
                 self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
                 if self.anthropic_key:
-                    logger.warning("⚠️  Using ANTHROPIC_API_KEY from .env (migrate to Vault)")
+                    logger.warning("️  Using ANTHROPIC_API_KEY from .env (migrate to Vault)")
         except ImportError:
             self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-            logger.warning("⚠️  VaultClient not available, using .env")
+            logger.warning("️  VaultClient not available, using .env")
 
         self.openai_key = os.getenv("OPENAI_API_KEY")
 

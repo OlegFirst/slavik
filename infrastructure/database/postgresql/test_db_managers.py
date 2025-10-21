@@ -20,7 +20,7 @@ async def test_connection_managers():
     """Test all database connection managers"""
 
     print("=" * 70)
-    print("🧪 Testing Database Connection Managers")
+    print(" Testing Database Connection Managers")
     print("=" * 70)
 
     # 1. Initialize all databases
@@ -34,7 +34,7 @@ async def test_connection_managers():
     for db_name, status in health.items():
         print(f"\n{db_name}:")
         for key, value in status.items():
-            icon = "✅" if (key == "connected" and value) or (key == "error" and not value) else "❌" if key == "error" and value else "📊"
+            icon = "" if (key == "connected" and value) or (key == "error" and not value) else "" if key == "error" and value else ""
             print(f"  {icon} {key}: {value}")
 
     # 3. Test BusinessDB queries
@@ -44,7 +44,7 @@ async def test_connection_managers():
         # Test simple query
         result = business_db.execute("SELECT COUNT(*) FROM public.organizations", commit=False)
         org_count = result[0][0] if result else 0
-        print(f"  ✅ Organizations count: {org_count}")
+        print(f"   Organizations count: {org_count}")
 
         # Test with RLS context
         with business_db.get_cursor() as cur:
@@ -56,13 +56,13 @@ async def test_connection_managers():
 
             cur.execute("SHOW app.current_user_id")
             current_user = cur.fetchone()[0]
-            print(f"  ✅ RLS context set: user_id = {current_user}")
+            print(f"   RLS context set: user_id = {current_user}")
 
             RLSManager.clear_rls_context(cur)
-            print(f"  ✅ RLS context cleared")
+            print(f"   RLS context cleared")
 
     except Exception as e:
-        print(f"  ❌ Query test failed: {e}")
+        print(f"   Query test failed: {e}")
 
     # 4. Test Migration Runner
     print("\n4️⃣  Testing Migration Runner...")
@@ -70,19 +70,19 @@ async def test_connection_managers():
     try:
         runner = MigrationRunner(business_db)
         applied = runner.get_applied_migrations()
-        print(f"  ✅ Applied migrations: {len(applied)}")
+        print(f"   Applied migrations: {len(applied)}")
         if applied:
             print(f"     Latest: {applied[-1]}")
 
     except Exception as e:
-        print(f"  ❌ Migration runner test failed: {e}")
+        print(f"   Migration runner test failed: {e}")
 
     # 5. Cleanup
     print("\n5️⃣  Shutting down connections...")
     await shutdown_all_databases()
 
     print("\n" + "=" * 70)
-    print("✅ All tests completed!")
+    print(" All tests completed!")
     print("=" * 70)
 
 

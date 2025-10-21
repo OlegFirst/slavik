@@ -32,9 +32,9 @@ async def init_database():
     try:
         # Create all tables
         async with engine.begin() as conn:
-            print("\n🔨 Creating all tables...")
+            print("\n Creating all tables...")
             await conn.run_sync(Base.metadata.create_all)
-            print("✅ All tables created successfully!\n")
+            print(" All tables created successfully!\n")
 
         # Show created tables
         async with engine.connect() as conn:
@@ -43,12 +43,12 @@ async def init_database():
             )
             tables = result.fetchall()
 
-            print("📋 Created tables:")
+            print(" Created tables:")
             for table in tables:
                 print(f"   - {table[0]}")
 
     except Exception as e:
-        print(f"❌ Error creating tables: {e}")
+        print(f" Error creating tables: {e}")
         raise
 
     finally:
@@ -63,7 +63,7 @@ async def drop_database():
         "postgresql+asyncpg://postgres:postgres@localhost:5432/digital_twin"
     )
 
-    print(f"⚠️  WARNING: Dropping all tables from: {database_url}")
+    print(f"️  WARNING: Dropping all tables from: {database_url}")
     confirm = input("Are you sure? Type 'yes' to confirm: ")
 
     if confirm.lower() != 'yes':
@@ -74,9 +74,9 @@ async def drop_database():
 
     try:
         async with engine.begin() as conn:
-            print("\n💥 Dropping all tables...")
+            print("\n Dropping all tables...")
             await conn.run_sync(Base.metadata.drop_all)
-            print("✅ All tables dropped!\n")
+            print(" All tables dropped!\n")
 
     finally:
         await engine.dispose()

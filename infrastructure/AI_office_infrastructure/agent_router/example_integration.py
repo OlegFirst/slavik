@@ -40,15 +40,15 @@ async def example_basic_usage():
         rate_limit=1000
     )
 
-    logger.info("✅ Router initialized")
+    logger.info(" Router initialized")
 
     # Check agent health
     health = await router.health_check_all_agents()
-    logger.info(f"📊 Agent health: {health}")
+    logger.info(f" Agent health: {health}")
 
     # Get analytics
     analytics = router.get_agent_analytics()
-    logger.info(f"📈 Analytics: {len(analytics['agents'])} agents registered")
+    logger.info(f" Analytics: {len(analytics['agents'])} agents registered")
 
     return router
 
@@ -73,10 +73,10 @@ async def example_routing_request(router):
             }
         )
 
-        logger.info(f"✅ Request routed successfully: {result}")
+        logger.info(f" Request routed successfully: {result}")
 
     except Exception as e:
-        logger.error(f"❌ Routing failed: {e}")
+        logger.error(f" Routing failed: {e}")
 
 
 async def example_rate_limiting(router):
@@ -87,11 +87,11 @@ async def example_rate_limiting(router):
 
     # Set rate limit for specific agent
     await router.set_agent_rate_limit("unified_ai", rate=50, per=60.0)
-    logger.info("✅ Set rate limit for unified_ai: 50 req/min")
+    logger.info(" Set rate limit for unified_ai: 50 req/min")
 
     # Get rate limiter status
     analytics = router.get_agent_analytics()
-    logger.info(f"📊 Rate limiter: {analytics['rate_limiter']}")
+    logger.info(f" Rate limiter: {analytics['rate_limiter']}")
 
 
 async def example_circuit_breaker(router):
@@ -103,13 +103,13 @@ async def example_circuit_breaker(router):
     if router.circuit_breaker_manager:
         # Get circuit breaker stats
         cb_stats = router.circuit_breaker_manager.get_all_stats()
-        logger.info(f"📊 Circuit breakers: {list(cb_stats.keys())}")
+        logger.info(f" Circuit breakers: {list(cb_stats.keys())}")
 
         # Manual reset (if needed)
         # await router.reset_circuit_breaker("ai_orchestrator")
-        logger.info("✅ Circuit breakers operational")
+        logger.info(" Circuit breakers operational")
     else:
-        logger.warning("⚠️ Circuit breaker not available")
+        logger.warning("️ Circuit breaker not available")
 
 
 async def example_dynamic_registration(router):
@@ -128,10 +128,10 @@ async def example_dynamic_registration(router):
     )
 
     if success:
-        logger.info("✅ Dynamically registered custom agent")
-        logger.info(f"📊 Total agents: {len(router.agents)}")
+        logger.info(" Dynamically registered custom agent")
+        logger.info(f" Total agents: {len(router.agents)}")
     else:
-        logger.error("❌ Failed to register agent")
+        logger.error(" Failed to register agent")
 
 
 async def example_health_daemon(router):
@@ -144,7 +144,7 @@ async def example_health_daemon(router):
     daemon = HealthCheckDaemon(router, check_interval=30)
     await daemon.start()
 
-    logger.info("✅ Health check daemon started")
+    logger.info(" Health check daemon started")
 
     # Wait for a few checks
     logger.info("⏳ Waiting for 3 health checks...")
@@ -152,11 +152,11 @@ async def example_health_daemon(router):
 
     # Get daemon stats
     stats = daemon.get_stats()
-    logger.info(f"📊 Daemon stats: {stats}")
+    logger.info(f" Daemon stats: {stats}")
 
     # Stop daemon
     await daemon.stop()
-    logger.info("✅ Health check daemon stopped")
+    logger.info(" Health check daemon stopped")
 
 
 async def example_mio_integration():
@@ -179,7 +179,7 @@ async def example_mio_integration():
         )
 
         await client.initialize()
-        logger.info("✅ MIO Manager client initialized")
+        logger.info(" MIO Manager client initialized")
 
         # Route request through client
         result = await client.route_ai_request(
@@ -188,14 +188,14 @@ async def example_mio_integration():
             context={"user_id": "mio_user"}
         )
 
-        logger.info(f"✅ Request routed via MIO Manager: {result}")
+        logger.info(f" Request routed via MIO Manager: {result}")
 
         # Get client status
         status = client.get_router_status()
-        logger.info(f"📊 Router status: {status}")
+        logger.info(f" Router status: {status}")
 
     except Exception as e:
-        logger.error(f"❌ MIO integration failed: {e}")
+        logger.error(f" MIO integration failed: {e}")
 
 
 async def example_metrics_server():
@@ -213,9 +213,9 @@ async def example_metrics_server():
 
 async def main():
     """Run all examples"""
-    logger.info("\n" + "🚀" * 30)
+    logger.info("\n" + "" * 30)
     logger.info("AI Agent Router v2.0 - Integration Examples")
-    logger.info("🚀" * 30)
+    logger.info("" * 30)
 
     try:
         # Example 1: Basic usage
@@ -242,12 +242,12 @@ async def main():
         # Example 8: Metrics server info
         await example_metrics_server()
 
-        logger.info("\n" + "✅" * 30)
+        logger.info("\n" + "" * 30)
         logger.info("All examples completed successfully!")
-        logger.info("✅" * 30)
+        logger.info("" * 30)
 
     except Exception as e:
-        logger.error(f"\n❌ Example failed: {e}", exc_info=True)
+        logger.error(f"\n Example failed: {e}", exc_info=True)
 
 
 if __name__ == "__main__":

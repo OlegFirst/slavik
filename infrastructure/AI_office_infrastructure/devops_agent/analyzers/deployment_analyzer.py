@@ -43,7 +43,7 @@ class DeploymentAnalyzer:
 
     def scan_port_configurations(self) -> Dict[int, List[str]]:
         """Scan all service configurations for port usage"""
-        logger.info("🔍 Scanning port configurations...")
+        logger.info(" Scanning port configurations...")
 
         # Scan Python services
         for main_file in self.project_root.rglob("main.py"):
@@ -61,7 +61,7 @@ class DeploymentAnalyzer:
                     self.port_registry[port] = []
                 self.port_registry[port].append(service_name)
 
-        logger.info(f"✅ Found {len(self.port_registry)} ports in use")
+        logger.info(f" Found {len(self.port_registry)} ports in use")
         return self.port_registry
 
     def detect_port_conflicts(self) -> List[PortConflict]:
@@ -80,7 +80,7 @@ class DeploymentAnalyzer:
                 ))
 
         if conflicts:
-            logger.warning(f"⚠️  Found {len(conflicts)} port conflicts!")
+            logger.warning(f"️  Found {len(conflicts)} port conflicts!")
             for c in conflicts:
                 logger.warning(f"   Port {c.port}: {c.service1} vs {c.service2}")
 
@@ -88,7 +88,7 @@ class DeploymentAnalyzer:
 
     def check_services_health(self) -> List[ServiceStatus]:
         """Check health of running services"""
-        logger.info("🏥 Checking services health...")
+        logger.info(" Checking services health...")
 
         statuses = []
 
@@ -98,7 +98,7 @@ class DeploymentAnalyzer:
                 statuses.append(status)
 
         healthy_count = len([s for s in statuses if s.healthy])
-        logger.info(f"✅ {healthy_count}/{len(statuses)} services healthy")
+        logger.info(f" {healthy_count}/{len(statuses)} services healthy")
 
         return statuses
 

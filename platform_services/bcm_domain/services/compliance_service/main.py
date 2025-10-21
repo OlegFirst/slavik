@@ -60,7 +60,7 @@ async def lifespan(app: FastAPI):
     Handles startup and shutdown events
     """
     # Startup
-    logger.info(f"🚀 Starting {settings.SERVICE_TITLE}")
+    logger.info(f" Starting {settings.SERVICE_TITLE}")
     logger.info(f"Port: {settings.SERVICE_PORT}")
     logger.info(f"Debug mode: {settings.DEBUG_MODE}")
     logger.info(f"AI enabled: {settings.AI_ENABLED}")
@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
 
     # Initialize JWT
     init_jwt(settings.JWT_SECRET)
-    logger.info("✅ JWT authentication initialized")
+    logger.info(" JWT authentication initialized")
 
     try:
         # Initialize database
@@ -78,9 +78,9 @@ async def lifespan(app: FastAPI):
             max_overflow=settings.DB_MAX_OVERFLOW,
             echo=settings.DB_ECHO
         )
-        logger.info("✅ Database initialized")
+        logger.info(" Database initialized")
     except Exception as e:
-        logger.error(f"❌ Failed to initialize database: {e}")
+        logger.error(f" Failed to initialize database: {e}")
         raise
 
     # Initialize Workflow Intelligence
@@ -99,11 +99,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -112,7 +112,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         
 
@@ -122,7 +122,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("✅ Workflow Intelligence initialized (Compliance module)")
+        logger.info(" Workflow Intelligence initialized (Compliance module)")
     except Exception as e:
         logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -132,11 +132,11 @@ async def lifespan(app: FastAPI):
         init_cache(redis_url)
         cache = get_cache()
         if await cache.ping():
-            logger.info(f"✅ Redis cache connected: {redis_url}")
+            logger.info(f" Redis cache connected: {redis_url}")
         else:
-            logger.warning("⚠️ Redis cache connection failed - caching disabled")
+            logger.warning("️ Redis cache connection failed - caching disabled")
     except Exception as e:
-        logger.warning(f"⚠️ Redis cache initialization failed: {e}")
+        logger.warning(f"️ Redis cache initialization failed: {e}")
 
     # Initialize EventBus (if enabled)
     if settings.EVENTS_ENABLED:
@@ -151,23 +151,23 @@ async def lifespan(app: FastAPI):
             eventbus = get_eventbus()
             await eventbus.register_subscriptions()
 
-            logger.info(f"✅ EventBus initialized, subscribed to {len(settings.SUBSCRIBE_TOPICS)} topics")
+            logger.info(f" EventBus initialized, subscribed to {len(settings.SUBSCRIBE_TOPICS)} topics")
         except Exception as e:
-            logger.warning(f"⚠️  EventBus not available: {e}")
+            logger.warning(f"️  EventBus not available: {e}")
 
-    logger.info("✅ Compliance service startup complete")
+    logger.info(" Compliance service startup complete")
 
     yield
 
     # Shutdown
-    logger.info(f"🛑 Shutting down {settings.SERVICE_TITLE}")
+    logger.info(f" Shutting down {settings.SERVICE_TITLE}")
 
     # Close EventBus
     if settings.EVENTS_ENABLED:
         try:
             eventbus = get_eventbus()
             await eventbus.close()
-            logger.info("✅ EventBus closed")
+            logger.info(" EventBus closed")
         except:
             pass
 
@@ -181,13 +181,13 @@ async def lifespan(app: FastAPI):
 
     # Close database
     await close_db()
-    logger.info("✅ Database connections closed")
+    logger.info(" Database connections closed")
 
     # Close Redis cache
     try:
         cache = get_cache()
         await cache.close()
-        logger.info("✅ Redis cache closed")
+        logger.info(" Redis cache closed")
     except Exception as e:
         logger.warning(f"Error closing Redis cache: {e}")
 
@@ -200,7 +200,7 @@ app = FastAPI(
 
     Comprehensive compliance management for Business Continuity aligned with ISO 22301:2019 Clauses 9.2, 10.1, and 10.2.
 
-    ## 🎯 Core Capabilities
+    ##  Core Capabilities
 
     ### Audit Management (ISO 9.2 - Internal Audit)
     - Internal audit planning and execution
@@ -228,7 +228,7 @@ app = FastAPI(
     - Remediation planning
     - Evidence management with workflow tracking
 
-    ## 📊 API Endpoints by Category
+    ##  API Endpoints by Category
 
     ### Evidence Management
     - `POST /api/evidence` - Submit compliance evidence
@@ -278,33 +278,33 @@ app = FastAPI(
     - `GET /api/compliance/library` - Compliance library
     - `GET /api/compliance/templates` - Document templates
 
-    ## 🔐 Authentication & Authorization
+    ##  Authentication & Authorization
     - **JWT Bearer Token** required for all endpoints
     - **Tenant Isolation**: Automatic row-level security by tenant_id
     - **RBAC Permissions**: COMPLIANCE_VIEW, COMPLIANCE_EDIT, AUDIT_MANAGE, NC_MANAGE
     - **Dev Mode**: Use `X-Dev-User` header with JSON user context
 
-    ## 🏗️ ISO 22301:2019 Compliance
+    ## ️ ISO 22301:2019 Compliance
 
     ### Clause 9.2 - Internal Audit
-    ✅ Audit program planning
-    ✅ Audit execution and reporting
-    ✅ Finding management
-    ✅ Follow-up and verification
+     Audit program planning
+     Audit execution and reporting
+     Finding management
+     Follow-up and verification
 
     ### Clause 10.1 - Nonconformity and Corrective Action
-    ✅ Nonconformity identification
-    ✅ Root Cause Analysis (3 methods)
-    ✅ Corrective action planning (CAPA)
-    ✅ Effectiveness verification
+     Nonconformity identification
+     Root Cause Analysis (3 methods)
+     Corrective action planning (CAPA)
+     Effectiveness verification
 
     ### Clause 10.2 - Continual Improvement
-    ✅ Improvement opportunity identification
-    ✅ Initiative tracking
-    ✅ Effectiveness measurement
-    ✅ Knowledge management
+     Improvement opportunity identification
+     Initiative tracking
+     Effectiveness measurement
+     Knowledge management
 
-    ## 📚 Root Cause Analysis (RCA) Methods
+    ##  Root Cause Analysis (RCA) Methods
 
     ### 1. 5 Whys Method
     Simple iterative questioning technique. Ask "Why?" 5 times to drill down to root cause.
@@ -373,7 +373,7 @@ app = FastAPI(
     }
     ```
 
-    ## 🔄 Nonconformity Workflow State Machine
+    ##  Nonconformity Workflow State Machine
 
     ```
     IDENTIFIED → RCA_IN_PROGRESS → CORRECTIVE_ACTION → VERIFICATION → CLOSED
@@ -389,7 +389,7 @@ app = FastAPI(
     - VERIFICATION → REOPENED (verified ineffective)
     - REOPENED → CORRECTIVE_ACTION (new actions)
 
-    ## 🔍 Error Codes
+    ##  Error Codes
     - `400` - Validation error
     - `401` - Unauthorized
     - `403` - Forbidden (tenant mismatch)
@@ -398,13 +398,13 @@ app = FastAPI(
     - `422` - Business rule violation
     - `500` - Internal server error
 
-    ## 📖 Documentation
+    ##  Documentation
     - **Swagger UI**: /docs
     - **ReDoc**: /redoc
     - **OpenAPI Spec**: /openapi.json
     - **Health Check**: /health
 
-    ## 🚀 Integration
+    ##  Integration
     - **Service Port**: 8014
     - **EventBus**: Port 8001
     - **AI Orchestration**: Port 8002
@@ -474,7 +474,7 @@ app = FastAPI(
 # Security middleware (Auth + Audit)
 if security_middleware:
     app.middleware("http")(security_middleware)
-    logger.info("✅ Security middleware enabled (Auth + Audit)")
+    logger.info(" Security middleware enabled (Auth + Audit)")
 
 
 # CORS Configuration
@@ -486,11 +486,11 @@ if settings.CORS_ALLOW_CREDENTIALS:
         allow_methods=settings.CORS_ALLOW_METHODS,
         allow_headers=settings.CORS_ALLOW_HEADERS,
     )
-    logger.info(f"✅ CORS enabled for origins: {settings.CORS_ORIGINS}")
+    logger.info(f" CORS enabled for origins: {settings.CORS_ORIGINS}")
 
 # Setup error handlers
 setup_error_handlers(app)
-logger.info("✅ Error handlers configured")
+logger.info(" Error handlers configured")
 
 # ===== INCLUDE API ROUTERS =====
 # Core compliance routers
@@ -530,7 +530,7 @@ app.include_router(workflow_ai_router)  # Workflow Intelligence AI endpoints
 metrics_app = make_asgi_app()
 app.mount("/metrics", metrics_app)
 
-logger.info("✅ All 14 compliance API routers loaded (including Workflow Intelligence)")
+logger.info(" All 14 compliance API routers loaded (including Workflow Intelligence)")
 
 
 # ===== HEALTH CHECK =====
@@ -588,6 +588,6 @@ if __name__ == "__main__":
 
     logger.info(f"Starting {settings.SERVICE_TITLE} on port {settings.SERVICE_PORT}")
     logger.info(f"ISO 22301 Clauses: {', '.join(settings.ISO_CLAUSES)}")
-    logger.info("📊 Compliance assessment, gap analysis, and continual improvement")
+    logger.info(" Compliance assessment, gap analysis, and continual improvement")
 
     uvicorn.run(app, host="0.0.0.0", port=settings.SERVICE_PORT)

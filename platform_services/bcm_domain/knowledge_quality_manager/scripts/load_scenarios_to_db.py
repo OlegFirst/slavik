@@ -15,24 +15,24 @@ db_url = f'postgresql://postgres.tpdkhddtbhpoqzzgxfni:{password}@aws-1-eu-north-
 scenarios_file = '/Users/MD/AI-Platform-ISO/platform-services/docs/business-scenarios/scenarios_parsed.json'
 
 print("=" * 60)
-print("📦 LOADING SCENARIOS TO KQM DATABASE")
+print(" LOADING SCENARIOS TO KQM DATABASE")
 print("=" * 60)
 
-print(f"\n📄 Loading scenarios from: {scenarios_file}")
+print(f"\n Loading scenarios from: {scenarios_file}")
 
 with open(scenarios_file, 'r', encoding='utf-8') as f:
     scenarios = json.load(f)
 
-print(f"✅ Loaded {len(scenarios)} scenarios")
+print(f" Loaded {len(scenarios)} scenarios")
 
 # Connect to database
-print("\n🔌 Connecting to PostgreSQL...")
+print("\n Connecting to PostgreSQL...")
 conn = psycopg2.connect(db_url)
 cur = conn.cursor()
-print("✅ Connected")
+print(" Connected")
 
 # Insert scenarios
-print("\n💾 Inserting scenarios...")
+print("\n Inserting scenarios...")
 
 inserted = 0
 skipped = 0
@@ -73,22 +73,22 @@ for scenario in scenarios:
             skipped += 1
 
     except Exception as e:
-        print(f"❌ Error inserting scenario '{scenario.get('title', 'unknown')}': {e}")
+        print(f" Error inserting scenario '{scenario.get('title', 'unknown')}': {e}")
         continue
 
 conn.commit()
 
-print(f"\n✅ Inserted: {inserted} scenarios")
+print(f"\n Inserted: {inserted} scenarios")
 print(f"⏭️  Skipped: {skipped} (already exist)")
 
 # Verify
 cur.execute("SELECT COUNT(*) FROM public.kqm_scenarios")
 total = cur.fetchone()[0]
 
-print(f"\n📊 Total scenarios in DB: {total}")
+print(f"\n Total scenarios in DB: {total}")
 
 # Calculate knowledge values
-print("\n💰 Calculating knowledge values...")
+print("\n Calculating knowledge values...")
 
 cur.execute("SELECT id FROM public.kqm_scenarios LIMIT 10")
 sample_ids = [row[0] for row in cur.fetchall()]
@@ -99,11 +99,11 @@ for scenario_id in sample_ids:
 
 conn.commit()
 
-print(f"✅ Knowledge values calculated for sample scenarios")
+print(f" Knowledge values calculated for sample scenarios")
 
 # Show statistics
 print("\n" + "=" * 60)
-print("📊 STATISTICS")
+print(" STATISTICS")
 print("=" * 60)
 
 # By service
@@ -115,7 +115,7 @@ cur.execute("""
     ORDER BY count DESC
 """)
 
-print("\n📦 By Service:")
+print("\n By Service:")
 for service, count in cur.fetchall():
     print(f"   {service}: {count}")
 
@@ -126,7 +126,7 @@ cur.execute("""
     GROUP BY type
 """)
 
-print("\n🏷️  By Type:")
+print("\n️  By Type:")
 for stype, count in cur.fetchall():
     print(f"   {stype}: {count}")
 
@@ -134,5 +134,5 @@ cur.close()
 conn.close()
 
 print("\n" + "=" * 60)
-print("✅ SCENARIOS LOADED SUCCESSFULLY!")
+print(" SCENARIOS LOADED SUCCESSFULLY!")
 print("=" * 60)

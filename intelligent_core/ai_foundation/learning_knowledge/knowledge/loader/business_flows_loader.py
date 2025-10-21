@@ -93,10 +93,10 @@ class BusinessFlowsLoader:
             file_path = self.knowledge_path / source_config["file"]
 
             if not file_path.exists():
-                logger.warning(f"⚠️ Source not found: {file_path}")
+                logger.warning(f"️ Source not found: {file_path}")
                 continue
 
-            logger.info(f"📖 Loading flows from: {source_config['file']}")
+            logger.info(f" Loading flows from: {source_config['file']}")
 
             flows = await self._parse_flow_document(
                 file_path=file_path,
@@ -105,9 +105,9 @@ class BusinessFlowsLoader:
             )
 
             all_flows.extend(flows)
-            logger.info(f"✅ Loaded {len(flows)} flows from {source_id}")
+            logger.info(f" Loaded {len(flows)} flows from {source_id}")
 
-        logger.info(f"✅ Total flows loaded: {len(all_flows)}")
+        logger.info(f" Total flows loaded: {len(all_flows)}")
         return all_flows
 
     async def _parse_flow_document(
@@ -347,7 +347,7 @@ class BusinessFlowsLoader:
         Returns:
             Number of flows indexed
         """
-        logger.info(f"🔍 Indexing {len(flows)} flows into Qdrant...")
+        logger.info(f" Indexing {len(flows)} flows into Qdrant...")
 
         indexed_count = 0
 
@@ -364,12 +364,12 @@ class BusinessFlowsLoader:
                 indexed_count += 1
 
                 if indexed_count % 10 == 0:
-                    logger.info(f"✅ Indexed {indexed_count}/{len(flows)} flows...")
+                    logger.info(f" Indexed {indexed_count}/{len(flows)} flows...")
 
             except Exception as e:
-                logger.error(f"❌ Failed to index {flow['flow_id']}: {e}")
+                logger.error(f" Failed to index {flow['flow_id']}: {e}")
 
-        logger.info(f"✅ Indexing complete: {indexed_count}/{len(flows)} flows indexed")
+        logger.info(f" Indexing complete: {indexed_count}/{len(flows)} flows indexed")
 
         return indexed_count
 
@@ -387,7 +387,7 @@ async def main():
     loader = BusinessFlowsLoader()
 
     # Load all flows
-    logger.info("📚 Loading business flows...")
+    logger.info(" Loading business flows...")
     flows = await loader.load_all_flows()
 
     # Initialize vector indexer
@@ -403,7 +403,7 @@ async def main():
     indexed_count = await loader.index_flows(flows, indexer)
 
     logger.info(f"""
-    ✅ Business Flows Loading Complete!
+     Business Flows Loading Complete!
 
     Flows Loaded: {len(flows)}
     Flows Indexed: {indexed_count}

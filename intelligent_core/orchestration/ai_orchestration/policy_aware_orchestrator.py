@@ -94,12 +94,12 @@ class PolicyAwareOrchestrator(AIOrchestrator):
         # Initialize Infrastructure Decision Center
         await self._initialize_decision_center()
 
-        logger.info("🚀 Policy-Aware Orchestrator initialized")
+        logger.info(" Policy-Aware Orchestrator initialized")
 
     async def _initialize_decision_center(self) -> None:
         """Initialize Infrastructure Decision Center and Policy Engine."""
         try:
-            logger.info("🔄 Initializing Infrastructure Decision Center...")
+            logger.info(" Initializing Infrastructure Decision Center...")
 
             # Create Policy Engine
             if self.policy_file_path:
@@ -108,7 +108,7 @@ class PolicyAwareOrchestrator(AIOrchestrator):
             else:
                 self.policy_engine = PolicyEngine()
 
-            logger.info("✅ Policy Engine initialized")
+            logger.info(" Policy Engine initialized")
 
             # Create Decision Center
             self.decision_center = InfrastructureDecisionCenter(
@@ -116,13 +116,13 @@ class PolicyAwareOrchestrator(AIOrchestrator):
                 eventbus=self.event_bus
             )
 
-            logger.info("✅ Infrastructure Decision Center initialized")
+            logger.info(" Infrastructure Decision Center initialized")
             logger.info("   - Policy validation enabled")
             logger.info("   - Compliance checking active")
             logger.info("   - Dual governance (AI + Policy)")
 
         except Exception as e:
-            logger.warning(f"⚠️ Decision Center initialization failed: {e}")
+            logger.warning(f"️ Decision Center initialization failed: {e}")
             logger.warning("   Orchestrator will continue with AI-only governance")
             self.decision_center = None
 
@@ -142,7 +142,7 @@ class PolicyAwareOrchestrator(AIOrchestrator):
 
         # If no decision center, fall back to base orchestrator
         if not self.decision_center:
-            logger.warning("⚠️ No Decision Center - executing without policy validation")
+            logger.warning("️ No Decision Center - executing without policy validation")
             return await super().execute(decision)
 
         try:
@@ -152,7 +152,7 @@ class PolicyAwareOrchestrator(AIOrchestrator):
                 policy_decision, can_proceed = await self._validate_with_policy(decision)
 
                 if not can_proceed:
-                    logger.warning(f"❌ Policy violation - escalating decision")
+                    logger.warning(f" Policy violation - escalating decision")
 
                     # Override action to escalate
                     decision.action = ActionType.ESCALATE_HUMAN
@@ -163,7 +163,7 @@ class PolicyAwareOrchestrator(AIOrchestrator):
                     # Execute escalation
                     return await super().execute(decision)
                 else:
-                    logger.info(f"✅ Policy compliance validated")
+                    logger.info(f" Policy compliance validated")
                     decision.metadata['policy_approved'] = True
                     decision.metadata['policy_reference'] = policy_decision.policy_reference
 

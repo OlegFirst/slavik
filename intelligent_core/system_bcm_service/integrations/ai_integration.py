@@ -17,7 +17,7 @@ try:
     from llm.llm_router import LLMRouter
     RAG_LLM_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"⚠️  RAG/LLM not available: {e}")
+    logging.warning(f"️  RAG/LLM not available: {e}")
     RAG_LLM_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
@@ -44,13 +44,13 @@ class AIIntegration:
                 self.rag_pipeline = RAGPipeline()
                 self.qdrant = QdrantClient()
                 self.llm_router = LLMRouter()
-                logger.info("✅ AI integration initialized (RAG + LLM available)")
+                logger.info(" AI integration initialized (RAG + LLM available)")
             except Exception as e:
-                logger.error(f"❌ Failed to initialize AI components: {e}")
+                logger.error(f" Failed to initialize AI components: {e}")
                 RAG_LLM_AVAILABLE = False
 
         if not RAG_LLM_AVAILABLE:
-            logger.warning("⚠️  Running without RAG/LLM (fallback to rules)")
+            logger.warning("️  Running without RAG/LLM (fallback to rules)")
             self.rag_pipeline = None
 
     async def find_similar_solutions(
@@ -81,7 +81,7 @@ class AIIntegration:
                 }
             })
 
-            logger.info(f"✅ Found {len(similar_cases)} similar solutions via RAG")
+            logger.info(f" Found {len(similar_cases)} similar solutions via RAG")
 
             # Обогатить контекстом
             enriched_solutions = []
@@ -98,7 +98,7 @@ class AIIntegration:
             return enriched_solutions
 
         except Exception as e:
-            logger.error(f"❌ RAG search failed: {e}")
+            logger.error(f" RAG search failed: {e}")
             return []
 
     async def analyze_with_llm(
@@ -146,7 +146,7 @@ class AIIntegration:
             # Парсинг ответа LLM
             analysis = self._parse_llm_response(response)
 
-            logger.info(f"✅ LLM analysis completed ({len(analysis.get('recommendations', []))} recommendations)")
+            logger.info(f" LLM analysis completed ({len(analysis.get('recommendations', []))} recommendations)")
 
             return {
                 "analysis": analysis,
@@ -159,7 +159,7 @@ class AIIntegration:
             }
 
         except Exception as e:
-            logger.error(f"❌ LLM analysis failed: {e}")
+            logger.error(f" LLM analysis failed: {e}")
             return self._fallback_analysis(situation)
 
     async def generate_comprehensive_insights(
@@ -245,11 +245,11 @@ class AIIntegration:
                 }
             })
 
-            logger.info(f"✅ Pattern indexed in Qdrant for RAG")
+            logger.info(f" Pattern indexed in Qdrant for RAG")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Failed to index in Qdrant: {e}")
+            logger.error(f" Failed to index in Qdrant: {e}")
             return False
 
     def _build_analysis_prompt(

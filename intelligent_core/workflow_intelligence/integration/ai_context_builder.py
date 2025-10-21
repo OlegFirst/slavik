@@ -151,7 +151,7 @@ Current Data:
 {self._format_workflow_data(workflow['data'])}
 
 VALIDATION STATUS:
-{"✓ All requirements met" if workflow['is_valid'] else "✗ Issues found:"}
+{" All requirements met" if workflow['is_valid'] else " Issues found:"}
 {self._format_errors(workflow['validation_errors'])}
 
 SIMILAR SUCCESSFUL CASES:
@@ -163,7 +163,7 @@ SIMILAR SUCCESSFUL CASES:
 Case {i}: {case['industry']} ({case['size']})
 - Completed in: {case['duration_days']} days
 - What worked well:
-{self._format_list(case['success_patterns'], prefix='  ✓')}
+{self._format_list(case['success_patterns'], prefix='  ')}
 """
         else:
             prompt += "No similar cases available yet.\n"

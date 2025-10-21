@@ -22,7 +22,7 @@ class TestGenerator {
      * Сканирует все модули в проекте
      */
     async scanModules() {
-        console.log('🔍 Сканирование модулей...');
+        console.log(' Сканирование модулей...');
         
         // Сканируем src/
         const srcFiles = await this.getJSFiles(this.srcDir);
@@ -31,7 +31,7 @@ class TestGenerator {
         const coreFiles = await this.getJSFiles(this.coreDir);
         
         this.modules = [...srcFiles, ...coreFiles];
-        console.log(`📁 Найдено ${this.modules.length} модулей`);
+        console.log(` Найдено ${this.modules.length} модулей`);
         
         return this.modules;
     }
@@ -57,7 +57,7 @@ class TestGenerator {
                 }
             }
         } catch (error) {
-            console.warn(`⚠️ Не удалось прочитать директорию ${dir}:`, error.message);
+            console.warn(`️ Не удалось прочитать директорию ${dir}:`, error.message);
         }
         
         return files;
@@ -88,7 +88,7 @@ class TestGenerator {
                 hasMockFunctions: this.hasMockFunctions(content)
             };
         } catch (error) {
-            console.warn(`⚠️ Ошибка анализа ${filePath}:`, error.message);
+            console.warn(`️ Ошибка анализа ${filePath}:`, error.message);
             return null;
         }
     }
@@ -182,7 +182,7 @@ import { jest } from '@jest/globals';
 
         // Mock предупреждение
         if (hasMockFunctions) {
-            testContent += `// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции\n`;
+            testContent += `// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции\n`;
             testContent += `// Убедитесь что они не используются в production\n\n`;
         }
 
@@ -206,7 +206,7 @@ import { jest } from '@jest/globals';
             testContent += `
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in ${moduleName}');
             // TODO: Вынести mock функции в отдельные test-only модули
         });
@@ -324,7 +324,7 @@ import { jest } from '@jest/globals';
             JSON.stringify(config, null, 2)
         );
 
-        console.log('✅ Jest конфигурация создана');
+        console.log(' Jest конфигурация создана');
     }
 
     /**
@@ -356,7 +356,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-console.log('🧪 Test environment initialized');
+console.log(' Test environment initialized');
 `;
 
         await fs.writeFile(
@@ -364,7 +364,7 @@ console.log('🧪 Test environment initialized');
             setupContent
         );
 
-        console.log('✅ Test setup создан');
+        console.log(' Test setup создан');
     }
 
     /**
@@ -395,9 +395,9 @@ console.log('🧪 Test environment initialized');
             packageData.scripts["test:ci"] = "jest --ci --coverage --watchAll=false";
 
             await fs.writeFile(packagePath, JSON.stringify(packageData, null, 2));
-            console.log('✅ package.json обновлен');
+            console.log(' package.json обновлен');
         } catch (error) {
-            console.warn('⚠️ Не удалось обновить package.json:', error.message);
+            console.warn('️ Не удалось обновить package.json:', error.message);
         }
     }
 
@@ -413,7 +413,7 @@ console.log('🧪 Test environment initialized');
 
         for (const module of mockModules) {
             report += `### ${module.relativePath}\n`;
-            report += `- ⚠️ **КРИТИЧЕСКОЕ**: Содержит mock/demo функции в production коде\n`;
+            report += `- ️ **КРИТИЧЕСКОЕ**: Содержит mock/demo функции в production коде\n`;
             report += `- **Рекомендация**: Вынести в отдельные test-only модули\n\n`;
         }
 
@@ -423,14 +423,14 @@ console.log('🧪 Test environment initialized');
         report += `3. Добавить lint правила для предотвращения mock функций в production\n`;
 
         await fs.writeFile(path.join(__dirname, 'MOCK_FUNCTIONS_REPORT.md'), report);
-        console.log('📊 Отчет о mock функциях создан');
+        console.log(' Отчет о mock функциях создан');
     }
 
     /**
      * Главная функция генерации
      */
     async generate() {
-        console.log('🚀 Запуск автоматической генерации тестов...\n');
+        console.log(' Запуск автоматической генерации тестов...\n');
 
         // Создаем папку для тестов
         await fs.mkdir(this.testsDir, { recursive: true });
@@ -438,7 +438,7 @@ console.log('🧪 Test environment initialized');
         // Сканируем модули
         await this.scanModules();
 
-        console.log('📝 Анализ модулей...');
+        console.log(' Анализ модулей...');
         const analyzedModules = [];
         
         for (const modulePath of this.modules) {
@@ -448,10 +448,10 @@ console.log('🧪 Test environment initialized');
             }
         }
 
-        console.log(`✅ Проанализировано ${analyzedModules.length} модулей\n`);
+        console.log(` Проанализировано ${analyzedModules.length} модулей\n`);
 
         // Генерируем тесты
-        console.log('🔧 Генерация тестов...');
+        console.log(' Генерация тестов...');
         let testsGenerated = 0;
 
         for (const moduleInfo of analyzedModules) {
@@ -465,7 +465,7 @@ console.log('🧪 Test environment initialized');
             }
         }
 
-        console.log(`✅ Создано ${testsGenerated} тестовых файлов\n`);
+        console.log(` Создано ${testsGenerated} тестовых файлов\n`);
 
         // Создаем Jest конфигурацию
         await this.generateJestConfig();
@@ -475,8 +475,8 @@ console.log('🧪 Test environment initialized');
         // Генерируем отчет о mock функциях
         await this.generateMockReport(analyzedModules);
 
-        console.log('🎉 Автоматическая генерация тестов завершена!');
-        console.log('\n📋 Что делать дальше:');
+        console.log(' Автоматическая генерация тестов завершена!');
+        console.log('\n Что делать дальше:');
         console.log('1. npm install - установить Jest');
         console.log('2. npm test - запустить тесты');
         console.log('3. npm run test:coverage - проверить покрытие');

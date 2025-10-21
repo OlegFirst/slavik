@@ -1,5 +1,5 @@
 """
-🧪 Integration Tests for Knowledge System
+ Integration Tests for Knowledge System
 
 Tests complete workflow:
 1. Load standards
@@ -102,7 +102,7 @@ async def test_load_iso_standard(standards_loader, data_path):
     assert "number" in data["clauses"][0]
     assert "title" in data["clauses"][0]
 
-    print(f"✅ Loaded ISO 22301: {len(data['clauses'])} clauses")
+    print(f" Loaded ISO 22301: {len(data['clauses'])} clauses")
 
 
 @pytest.mark.asyncio
@@ -126,7 +126,7 @@ async def test_standards_caching(standards_loader):
     assert data1 == data2
     assert duration2 < duration1 or duration2 < 0.1  # Cached should be much faster
 
-    print(f"✅ Cache working: first={duration1:.3f}s, second={duration2:.3f}s")
+    print(f" Cache working: first={duration1:.3f}s, second={duration2:.3f}s")
 
 
 # ============================================================================
@@ -181,7 +181,7 @@ async def test_collect_workflow_case(case_collector):
     assert saved_case["outcome"] == "success"
     assert saved_case["organization_context"]["industry"] == "healthcare"
 
-    print(f"✅ Case collected: {case_data['case_id']}")
+    print(f" Case collected: {case_data['case_id']}")
 
     # Cleanup
     case_file.unlink()
@@ -211,7 +211,7 @@ async def test_find_similar_cases(case_collector, data_path):
     assert "case_id" in similar[0]
     assert "similarity_score" in similar[0]
 
-    print(f"✅ Found {len(similar)} similar cases")
+    print(f" Found {len(similar)} similar cases")
 
 
 # ============================================================================
@@ -234,7 +234,7 @@ async def test_index_and_search_standard(vector_indexer, standards_loader, data_
     point_id = await vector_indexer.index_standard(standard_data)
     assert point_id is not None
 
-    print(f"✅ Indexed standard: {point_id[:16]}...")
+    print(f" Indexed standard: {point_id[:16]}...")
 
     # Search for standard
     results = await vector_indexer.search_standards(
@@ -246,7 +246,7 @@ async def test_index_and_search_standard(vector_indexer, standards_loader, data_
     assert len(results) > 0
     assert any(r["standard"] == "iso-22301" for r in results)
 
-    print(f"✅ Search found {len(results)} results")
+    print(f" Search found {len(results)} results")
 
 
 @pytest.mark.asyncio
@@ -281,7 +281,7 @@ async def test_index_and_search_case(vector_indexer, case_collector):
     point_id = await vector_indexer.index_case(case_data_dict)
     assert point_id == "test-case-vector-001"
 
-    print(f"✅ Indexed case: {point_id}")
+    print(f" Indexed case: {point_id}")
 
     # Search for case
     results = await vector_indexer.search_cases(
@@ -294,7 +294,7 @@ async def test_index_and_search_case(vector_indexer, case_collector):
     assert len(results) > 0
     assert any(r["case_id"] == "test-case-vector-001" for r in results)
 
-    print(f"✅ Search found {len(results)} results")
+    print(f" Search found {len(results)} results")
 
 
 # ============================================================================
@@ -318,7 +318,7 @@ async def test_standards_update_check(standards_monitor):
     assert summary["sources_checked"] > 0
     assert "iso" in summary["by_source"]
 
-    print(f"✅ Update check complete: {summary['updates_found']} updates found")
+    print(f" Update check complete: {summary['updates_found']} updates found")
     print(f"   Sources checked: {summary['sources_checked']}")
     print(f"   By source: {summary['by_source']}")
 
@@ -339,7 +339,7 @@ async def test_api_health():
     assert "components" in response.components
     assert "api" in response.components
 
-    print(f"✅ API health check passed")
+    print(f" API health check passed")
 
 
 @pytest.mark.asyncio
@@ -359,7 +359,7 @@ async def test_api_list_standards(data_path):
     assert isinstance(standards, list)
     assert len(standards) > 0
 
-    print(f"✅ API returned {len(standards)} standards")
+    print(f" API returned {len(standards)} standards")
 
 
 # ============================================================================
@@ -391,7 +391,7 @@ async def test_complete_workflow(
 
     standard = await standards_loader.load_iso_standard("iso-22301")
     assert standard is not None
-    print(f"✅ Loaded: {standard['metadata']['title']}")
+    print(f" Loaded: {standard['metadata']['title']}")
     print(f"   Clauses: {len(standard['clauses'])}")
 
     # Step 2: Collect a test case
@@ -418,7 +418,7 @@ async def test_complete_workflow(
     )
 
     assert case is not None
-    print(f"✅ Case collected: {case['case_id']}")
+    print(f" Case collected: {case['case_id']}")
     print(f"   File: {case['file_path']}")
 
     # Step 3: Find similar cases
@@ -433,7 +433,7 @@ async def test_complete_workflow(
     )
 
     assert len(similar) > 0
-    print(f"✅ Found {len(similar)} similar cases:")
+    print(f" Found {len(similar)} similar cases:")
     for i, case in enumerate(similar[:3], 1):
         print(f"   {i}. {case['case_id']} (score: {case.get('similarity_score', 'N/A')})")
 
@@ -441,7 +441,7 @@ async def test_complete_workflow(
     Path(case["file_path"]).unlink()
 
     print("\n" + "="*60)
-    print("✅ INTEGRATION TEST PASSED")
+    print(" INTEGRATION TEST PASSED")
     print("="*60 + "\n")
 
 

@@ -108,24 +108,24 @@ def create_init_file(directory: Path, reason: str, dry_run: bool = True) -> bool
 
     # Check if directory exists
     if not directory.exists():
-        print(f"  ❌ ERROR: {directory} (directory doesn't exist)")
+        print(f"   ERROR: {directory} (directory doesn't exist)")
         return False
 
     # Generate content
     content = generate_init_content(directory, reason)
 
     if dry_run:
-        print(f"  ✅ WOULD CREATE: {init_file}")
+        print(f"   WOULD CREATE: {init_file}")
         print(f"     Content preview: {len(content)} bytes")
         return True
     else:
         try:
             with open(init_file, 'w') as f:
                 f.write(content)
-            print(f"  ✅ CREATED: {init_file}")
+            print(f"   CREATED: {init_file}")
             return True
         except Exception as e:
-            print(f"  ❌ ERROR: {init_file} - {e}")
+            print(f"   ERROR: {init_file} - {e}")
             return False
 
 
@@ -181,12 +181,12 @@ def main():
     print(f"CREATE MISSING __init__.py FILES - {mode_str} MODE")
     print("=" * 80)
     print(f"\nScope: {args.scope}")
-    print(f"Mode: {'Preview only' if dry_run else '⚠️  WILL CREATE FILES'}")
+    print(f"Mode: {'Preview only' if dry_run else '️  WILL CREATE FILES'}")
     print()
 
     # Load audit report
     if not AUDIT_REPORT_PATH.exists():
-        print(f"❌ ERROR: Audit report not found at {AUDIT_REPORT_PATH}")
+        print(f" ERROR: Audit report not found at {AUDIT_REPORT_PATH}")
         print("Run python_structure_audit.py first!")
         return 1
 
@@ -252,7 +252,7 @@ def main():
 
     if dry_run:
         print("=" * 80)
-        print("⚠️  DRY-RUN MODE - No files were created")
+        print("️  DRY-RUN MODE - No files were created")
         print("=" * 80)
         print()
         print("To actually create files, run:")
@@ -260,7 +260,7 @@ def main():
         print()
     else:
         print("=" * 80)
-        print("✅ FILES CREATED")
+        print(" FILES CREATED")
         print("=" * 80)
         print()
         print("Next steps:")

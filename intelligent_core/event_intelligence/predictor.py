@@ -58,7 +58,7 @@ class EventPredictor:
         Returns:
             List predictions
         """
-        logger.info(f"🔮 Predicting gaps for next {days_ahead} days...")
+        logger.info(f" Predicting gaps for next {days_ahead} days...")
 
         predictions = []
 
@@ -119,7 +119,7 @@ class EventPredictor:
         Returns:
             List anomalies
         """
-        logger.info("🔍 Detecting anomalies...")
+        logger.info(" Detecting anomalies...")
 
         anomalies = []
 
@@ -166,7 +166,7 @@ class EventPredictor:
         Returns:
             List opportunities
         """
-        logger.info("💡 Finding optimization opportunities...")
+        logger.info(" Finding optimization opportunities...")
 
         opportunities = []
 

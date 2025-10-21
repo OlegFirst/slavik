@@ -1,5 +1,5 @@
 """
-💓 Lifecycle Monitor
+ Lifecycle Monitor
 
 BCM lifecycle health monitoring and continuous improvement
 """
@@ -24,7 +24,7 @@ class LifecycleMonitor(BaseAIOrgan):
     def __init__(self, llm_router=None):
         super().__init__(
             organ_name="Lifecycle Monitor",
-            emoji="💓",
+            emoji="",
             llm_router=llm_router
         )
 

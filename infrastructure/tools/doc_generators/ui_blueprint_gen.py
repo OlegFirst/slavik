@@ -28,10 +28,10 @@ class UIBlueprintGenerator:
     def generate_blueprints(self):
         """Генерировать UI blueprints для всех сервисов"""
         if not self.ast_data:
-            print("❌ No AST data. Run AST analyzer first!")
+            print(" No AST data. Run AST analyzer first!")
             return
 
-        print("🎨 Generating UI Blueprints...\n")
+        print(" Generating UI Blueprints...\n")
 
         # Группировать эндпоинты по сервисам
         services = self._group_by_service()
@@ -42,7 +42,7 @@ class UIBlueprintGenerator:
         # Генерировать общую навигацию
         self._generate_navigation(services)
 
-        print("\n🎉 UI Blueprints generated!")
+        print("\n UI Blueprints generated!")
 
     def _group_by_service(self) -> Dict[str, List]:
         """Группировать эндпоинты по сервисам"""
@@ -114,7 +114,7 @@ class UIBlueprintGenerator:
         with open(output_file, 'w') as f:
             f.write(html)
 
-        print(f"✅ {service_name}: {output_file}")
+        print(f" {service_name}: {output_file}")
 
         # Также генерировать JSON спецификацию
         json_spec = {
@@ -219,57 +219,57 @@ class UIBlueprintGenerator:
 
         {% if operations.list %}
         <div class="screen">
-            <h3>📋 List Screen</h3>
+            <h3> List Screen</h3>
             <p><span class="method get">{{ operations.list.method }}</span> <span class="endpoint">{{ operations.list.path }}</span></p>
             <div class="components">
-                <span class="component">📊 Data Table</span>
-                <span class="component">🔍 Search Bar</span>
-                <span class="component">🔧 Filters</span>
-                <span class="component">📄 Pagination</span>
-                <span class="component">➕ Create Button</span>
+                <span class="component"> Data Table</span>
+                <span class="component"> Search Bar</span>
+                <span class="component"> Filters</span>
+                <span class="component"> Pagination</span>
+                <span class="component"> Create Button</span>
             </div>
         </div>
         {% endif %}
 
         {% if operations.create %}
         <div class="screen">
-            <h3>➕ Create Screen</h3>
+            <h3> Create Screen</h3>
             <p><span class="method post">{{ operations.create.method }}</span> <span class="endpoint">{{ operations.create.path }}</span></p>
             <div class="components">
-                <span class="component">📝 Form</span>
-                <span class="component">💾 Submit Button</span>
-                <span class="component">❌ Cancel Button</span>
+                <span class="component"> Form</span>
+                <span class="component"> Submit Button</span>
+                <span class="component"> Cancel Button</span>
             </div>
         </div>
         {% endif %}
 
         {% if operations.detail %}
         <div class="screen">
-            <h3>👁️ Detail Screen</h3>
+            <h3>️ Detail Screen</h3>
             <p><span class="method get">{{ operations.detail.method }}</span> <span class="endpoint">{{ operations.detail.path }}</span></p>
             <div class="components">
-                <span class="component">📄 Detail View</span>
-                <span class="component">✏️ Edit Button</span>
-                <span class="component">🗑️ Delete Button</span>
+                <span class="component"> Detail View</span>
+                <span class="component">️ Edit Button</span>
+                <span class="component">️ Delete Button</span>
             </div>
         </div>
         {% endif %}
 
         {% if operations.update %}
         <div class="screen">
-            <h3>✏️ Edit Screen</h3>
+            <h3>️ Edit Screen</h3>
             <p><span class="method put">{{ operations.update.method }}</span> <span class="endpoint">{{ operations.update.path }}</span></p>
             <div class="components">
-                <span class="component">📝 Form (Pre-filled)</span>
-                <span class="component">💾 Save Button</span>
-                <span class="component">❌ Cancel Button</span>
+                <span class="component"> Form (Pre-filled)</span>
+                <span class="component"> Save Button</span>
+                <span class="component"> Cancel Button</span>
             </div>
         </div>
         {% endif %}
 
         {% if operations.custom %}
         <div class="screen">
-            <h3>⚡ Custom Actions</h3>
+            <h3> Custom Actions</h3>
             {% for custom in operations.custom %}
             <p><span class="method {{ custom.method.lower() }}">{{ custom.method }}</span> <span class="endpoint">{{ custom.path }}</span> - {{ custom.function }}</p>
             {% endfor %}
@@ -279,7 +279,7 @@ class UIBlueprintGenerator:
     {% endfor %}
 
     <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666;">
-        <p>🤖 Автоматически сгенерировано UI Blueprint Generator</p>
+        <p> Автоматически сгенерировано UI Blueprint Generator</p>
     </footer>
 </body>
 </html>
@@ -309,7 +309,7 @@ class UIBlueprintGenerator:
     </style>
 </head>
 <body>
-    <h1>🎨 AI-Platform-ISO UI Blueprints</h1>
+    <h1> AI-Platform-ISO UI Blueprints</h1>
     <p>Автоматически сгенерированные схемы интерфейсов для всех микросервисов</p>
 
     {% for service_name, endpoints in services.items() %}
@@ -328,13 +328,13 @@ class UIBlueprintGenerator:
             <div class="stat-label">POST</div>
         </div>
         <br>
-        <a class="button" href="{{ service_name.lower() }}_blueprint.html">📋 View Blueprint</a>
-        <a class="button" href="{{ service_name.lower() }}_spec.json">📄 JSON Spec</a>
+        <a class="button" href="{{ service_name.lower() }}_blueprint.html"> View Blueprint</a>
+        <a class="button" href="{{ service_name.lower() }}_spec.json"> JSON Spec</a>
     </div>
     {% endfor %}
 
     <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666;">
-        <p>🤖 Автоматически сгенерировано UI Blueprint Generator</p>
+        <p> Автоматически сгенерировано UI Blueprint Generator</p>
         <p>Используйте эти blueprints для создания фронтенд интерфейсов (React, Vue, Angular)</p>
     </footer>
 </body>
@@ -347,7 +347,7 @@ class UIBlueprintGenerator:
         with open(output_file, 'w') as f:
             f.write(html)
 
-        print(f"\n✅ Navigation: {output_file}")
+        print(f"\n Navigation: {output_file}")
         print(f"   Open in browser: file://{output_file.absolute()}")
 
 

@@ -159,10 +159,10 @@ class PlatformTopologyMapper:
 
             if is_healthy:
                 service_info.status = ServiceStatus.RUNNING
-                logger.info(f"✅ {service_name} is running")
+                logger.info(f" {service_name} is running")
             else:
                 service_info.status = ServiceStatus.STOPPED
-                logger.warning(f"❌ {service_name} is not responding")
+                logger.warning(f" {service_name} is not responding")
 
             # Add to topology
             self.topology.add_service(service_info)

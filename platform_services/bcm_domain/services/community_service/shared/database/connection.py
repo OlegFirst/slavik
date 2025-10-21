@@ -159,7 +159,7 @@ async def init_db():
         async with engine.begin() as conn:
             result = await conn.execute(text("SELECT version()"))
             version = result.scalar()
-            logger.info(f"✅ Connected to PostgreSQL: {version}")
+            logger.info(f" Connected to PostgreSQL: {version}")
 
             # Check if community schemas exist
             result = await conn.execute(
@@ -172,17 +172,17 @@ async def init_db():
             schemas = [row[0] for row in result.fetchall()]
 
             if 'portal' in schemas:
-                logger.info("✅ Portal schema found")
+                logger.info(" Portal schema found")
             else:
-                logger.warning("⚠️  Portal schema not found - run migrations")
+                logger.warning("️  Portal schema not found - run migrations")
 
             if 'marketplace' in schemas:
-                logger.info("✅ Marketplace schema found")
+                logger.info(" Marketplace schema found")
             else:
-                logger.warning("⚠️  Marketplace schema not found - run migrations")
+                logger.warning("️  Marketplace schema not found - run migrations")
 
     except Exception as e:
-        logger.error(f"❌ Database connection failed: {e}")
+        logger.error(f" Database connection failed: {e}")
         raise
 
 
@@ -193,7 +193,7 @@ async def close_db():
     """
     logger.info("Closing database connection...")
     await engine.dispose()
-    logger.info("✅ Database connection closed")
+    logger.info(" Database connection closed")
 
 
 # ============================================================================

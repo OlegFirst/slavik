@@ -8,7 +8,7 @@ import { jest } from '@jest/globals';
 import { SecurityOrchestrator } from '../core/security/security-orchestrator.js';
 import { constructor, initialize, validateRequest, authorizeAction, encryptData, decryptData, hashData, validateIntegrity, auditLog } from '../core/security/security-orchestrator.js';
 
-// ⚠️ ВНИМАНИЕ: Модуль содержит mock/demo функции
+// ️ ВНИМАНИЕ: Модуль содержит mock/demo функции
 // Убедитесь что они не используются в production
 
 describe('security-orchestrator', () => {
@@ -191,7 +191,7 @@ describe('security-orchestrator', () => {
 
     describe('Mock Functions Detection', () => {
         test('should identify mock functions in production code', () => {
-            // ⚠️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
+            // ️ КРИТИЧЕСКОЕ: Mock функции найдены в production коде
             console.warn('Mock functions detected in security-orchestrator');
             // TODO: Вынести mock функции в отдельные test-only модули
         });

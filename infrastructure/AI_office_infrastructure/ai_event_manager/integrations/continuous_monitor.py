@@ -182,7 +182,7 @@ class ContinuousMonitor:
         if critical_gaps and self.integration_manager.eventbus:
             for gap in critical_gaps:
                 await self.integration_manager.eventbus.publish_gap_detected(gap)
-                logger.warning(f"🚨 Critical gap detected: {gap.get('event_name')}")
+                logger.warning(f" Critical gap detected: {gap.get('event_name')}")
 
             self.alerts_sent += len(critical_gaps)
 

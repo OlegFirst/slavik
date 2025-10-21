@@ -54,13 +54,13 @@ async def lifespan(app: FastAPI):
     Handles startup/shutdown with database and EventBus integration.
     """
     # Startup
-    logger.info(f"🚀 Starting {settings.SERVICE_TITLE}")
-    logger.info(f"📍 Port: {settings.SERVICE_PORT}")
-    logger.info(f"📋 ISO 22301 Clause: 8.2.2 - Business Impact Analysis")
+    logger.info(f" Starting {settings.SERVICE_TITLE}")
+    logger.info(f" Port: {settings.SERVICE_PORT}")
+    logger.info(f" ISO 22301 Clause: 8.2.2 - Business Impact Analysis")
 
     # Initialize JWT
     init_jwt(settings.JWT_SECRET)
-    logger.info("✅ JWT authentication initialized")
+    logger.info(" JWT authentication initialized")
 
     # Initialize Database
     await init_db(
@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
         pool_size=settings.DB_POOL_SIZE,
         echo=settings.DB_ECHO
     )
-    logger.info(f"✅ Database initialized: {settings.DATABASE_URL.split('@')[-1] if '@' in settings.DATABASE_URL else 'SQLite'}")
+    logger.info(f" Database initialized: {settings.DATABASE_URL.split('@')[-1] if '@' in settings.DATABASE_URL else 'SQLite'}")
 
     # Initialize Workflow Intelligence
     global workflow_storage, workflow_engine, ai_advisor, case_collector
@@ -87,11 +87,11 @@ async def lifespan(app: FastAPI):
         # Initialize Audit Logger
         audit_logger = AuditLogger(storage_adapter=workflow_storage)
         await audit_logger.ensure_schema()
-        logger.info("✅ Audit logging initialized")
+        logger.info(" Audit logging initialized")
 
         # Initialize ISO Compliance Checker
         iso_checker = ISO22301Checker()
-        logger.info("✅ ISO 22301 compliance checker initialized")
+        logger.info(" ISO 22301 compliance checker initialized")
 
         # Initialize Security Middleware
         jwt_secret = getattr(settings, 'JWT_SECRET', 'dev-secret-key-change-in-production')
@@ -100,7 +100,7 @@ async def lifespan(app: FastAPI):
             iso_checker=iso_checker,
             jwt_secret=jwt_secret
         )
-        logger.info("✅ Security middleware initialized")
+        logger.info(" Security middleware initialized")
 
         # Set health metrics
         workflow_metrics.set_health("workflow_intelligence", True)
@@ -108,7 +108,7 @@ async def lifespan(app: FastAPI):
         workflow_metrics.set_health("audit_logging", True)
         workflow_metrics.set_health("iso_compliance", True)
 
-        logger.info("✅ Workflow Intelligence initialized (BIA module)")
+        logger.info(" Workflow Intelligence initialized (BIA module)")
     except Exception as e:
         logger.warning(f"Workflow Intelligence initialization failed: {e}")
 
@@ -117,15 +117,15 @@ async def lifespan(app: FastAPI):
     init_cache(redis_url)
     cache = get_cache()
     if await cache.ping():
-        logger.info(f"✅ Redis cache connected: {redis_url}")
+        logger.info(f" Redis cache connected: {redis_url}")
     else:
-        logger.warning("⚠️ Redis cache connection failed - caching disabled")
+        logger.warning("️ Redis cache connection failed - caching disabled")
 
     # Initialize EventBus
     if settings.FEATURE_EVENTBUS:
         eventbus_client = init_eventbus(settings.EVENTBUS_URL)
         await eventbus_client.connect()
-        logger.info(f"📡 EventBus connected to RabbitMQ: {settings.EVENTBUS_URL}")
+        logger.info(f" EventBus connected to RabbitMQ: {settings.EVENTBUS_URL}")
 
         # Setup event choreography subscriptions
         await setup_event_subscriptions()
@@ -134,14 +134,14 @@ async def lifespan(app: FastAPI):
         if settings.SUBSCRIBE_TOPICS:
             for topic in settings.SUBSCRIBE_TOPICS:
                 await eventbus_client.subscribe(topic, handle_event)
-            logger.info(f"📡 EventBus subscribed to: {settings.SUBSCRIBE_TOPICS}")
+            logger.info(f" EventBus subscribed to: {settings.SUBSCRIBE_TOPICS}")
 
-    logger.info("✅ BIA Service started successfully - Data will persist across restarts")
+    logger.info(" BIA Service started successfully - Data will persist across restarts")
 
     yield
 
     # Shutdown
-    logger.info(f"🛑 Shutting down {settings.SERVICE_TITLE}")
+    logger.info(f" Shutting down {settings.SERVICE_TITLE}")
 
     # Close Workflow Intelligence
     if workflow_storage:
@@ -152,13 +152,13 @@ async def lifespan(app: FastAPI):
             logger.error(f"Error closing Workflow Intelligence: {e}")
 
     await close_db()
-    logger.info("✅ Database connections closed")
+    logger.info(" Database connections closed")
 
     # Close Redis cache
     try:
         cache = get_cache()
         await cache.close()
-        logger.info("✅ Redis cache closed")
+        logger.info(" Redis cache closed")
     except Exception as e:
         logger.warning(f"Error closing Redis cache: {e}")
 
@@ -173,7 +173,7 @@ async def handle_event(event_data: dict, tenant_id: str = None):
     """
     try:
         event_type = event_data.get("event_type", "unknown")
-        logger.info(f"📨 Received event: {event_type} for tenant {tenant_id}")
+        logger.info(f" Received event: {event_type} for tenant {tenant_id}")
 
         # Handle specific event types
         if event_type == "risk.assessment.completed":
@@ -214,8 +214,8 @@ async def setup_event_subscriptions():
         # Get BIA event handlers
         handlers = get_bia_event_handlers(eventbus)
 
-        logger.info("✅ BIA event handlers initialized (publisher mode)")
-        logger.info("📤 Ready to publish: bia.assessment.completed, bia.criticality.changed, etc.")
+        logger.info(" BIA event handlers initialized (publisher mode)")
+        logger.info(" Ready to publish: bia.assessment.completed, bia.criticality.changed, etc.")
 
     except Exception as e:
         logger.error(f"Failed to setup event subscriptions: {e}", exc_info=True)
@@ -229,7 +229,7 @@ app = FastAPI(
 
     Comprehensive BIA capabilities aligned with ISO 22301:2019 Clause 8.2.2 requirements.
 
-    ## 🎯 Core Features
+    ##  Core Features
     - **RTO/RPO/MTPD Calculations**: Recovery Time Objective, Recovery Point Objective, Maximum Tolerable Period of Disruption
     - **Financial Impact Assessment**: Multi-period financial impact analysis (1 hour to 1 month)
     - **Dependency Mapping**: Upstream/downstream process, technology, and supplier dependencies
@@ -238,7 +238,7 @@ app = FastAPI(
     - **Multi-Industry Support**: Healthcare (WHO tiers), Financial Services, Manufacturing, IT, Retail, and more
     - **Supply Chain BCM**: Critical supplier management and supply chain risk assessment
 
-    ## 📊 API Endpoints (16 total)
+    ##  API Endpoints (16 total)
 
     ### Process Management
     - `POST /api/bia/processes` - Create BIA process
@@ -266,20 +266,20 @@ app = FastAPI(
     ### Supply Chain (Optional)
     - 8 additional endpoints for supply chain BCM management
 
-    ## 🔐 Authentication & Authorization
+    ##  Authentication & Authorization
     - **JWT Bearer Token** required for all endpoints
     - **Tenant Isolation**: Automatic filtering by tenant_id from JWT
     - **RBAC Permissions**: BIA_CREATE, BIA_VIEW, BIA_UPDATE, BIA_DELETE, BIA_COMPLETE, BIA_AI_SUGGEST
     - **Dev Mode**: Use `X-Dev-User` header with JSON user context
 
-    ## 🏗️ ISO 22301:2019 Compliance (Clause 8.2.2)
+    ## ️ ISO 22301:2019 Compliance (Clause 8.2.2)
 
     ### Required Analysis Components
-    ✅ **Criticality Assessment**: CriticalityLevel enum (CRITICAL, HIGH, MEDIUM, LOW)
-    ✅ **Recovery Objectives**: RTO, RPO, MTPD in hours
-    ✅ **Resource Requirements**: Personnel, facilities, technology, information, materials
-    ✅ **Dependency Identification**: Upstream/downstream processes, suppliers, technologies
-    ✅ **Impact Analysis**: Financial, operational, reputational, regulatory, patient safety
+     **Criticality Assessment**: CriticalityLevel enum (CRITICAL, HIGH, MEDIUM, LOW)
+     **Recovery Objectives**: RTO, RPO, MTPD in hours
+     **Resource Requirements**: Personnel, facilities, technology, information, materials
+     **Dependency Identification**: Upstream/downstream processes, suppliers, technologies
+     **Impact Analysis**: Financial, operational, reputational, regulatory, patient safety
 
     ### Healthcare-Specific Features (ISO 22301 + WHO Guidelines)
     - WHO Essential Services Tier Classification (Tier 1-4)
@@ -293,18 +293,18 @@ app = FastAPI(
     - **Legal/Regulatory Tracking**: Map to HIPAA, GDPR, SOX, etc.
     - **Recovery Strategies**: Document recovery approach per process
 
-    ## 📈 Data Persistence
+    ##  Data Persistence
     - **PostgreSQL Database**: Full persistence across service restarts
     - **Redis Caching**: High-performance caching with hit/miss metrics
     - **Event-Driven**: EventBus integration for cross-service workflows
 
-    ## 🚀 Integration
+    ##  Integration
     - **EventBus**: RabbitMQ on port 8001
     - **AI Orchestration**: Port 8002
     - **API Gateway**: Port 8000
     - **Service Port**: 8012
 
-    ## 📚 Response Examples
+    ##  Response Examples
 
     ### BIA Process Response
     ```json
@@ -339,7 +339,7 @@ app = FastAPI(
     }
     ```
 
-    ## 🔍 Error Codes
+    ##  Error Codes
     - `400` - Validation error (invalid input)
     - `401` - Unauthorized (missing/invalid JWT)
     - `403` - Forbidden (tenant mismatch, insufficient permissions)
@@ -347,7 +347,7 @@ app = FastAPI(
     - `422` - Business rule violation
     - `500` - Internal server error
 
-    ## 📖 Documentation
+    ##  Documentation
     - **Swagger UI**: /docs
     - **ReDoc**: /redoc
     - **OpenAPI Spec**: /openapi.json
@@ -386,7 +386,7 @@ app = FastAPI(
 # Security middleware (Auth + Audit)
 if security_middleware:
     app.middleware("http")(security_middleware)
-    logger.info("✅ Security middleware enabled (Auth + Audit)")
+    logger.info(" Security middleware enabled (Auth + Audit)")
 
 # CORS Configuration
 if settings.CORS_ENABLED:
@@ -397,15 +397,15 @@ if settings.CORS_ENABLED:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    logger.info(f"🌐 CORS enabled for: {settings.CORS_ORIGINS}")
+    logger.info(f" CORS enabled for: {settings.CORS_ORIGINS}")
 
 # Setup error handlers
 setup_error_handlers(app)
-logger.info("✅ Error handlers configured")
+logger.info(" Error handlers configured")
 
 # Include BIA router
 app.include_router(bia_router)
-logger.info("✅ BIA router included")
+logger.info(" BIA router included")
 
 # Include Workflow Intelligence router
 app.include_router(workflow_ai_router)  # Workflow Intelligence AI endpoints
@@ -419,9 +419,9 @@ if settings.SUPPLY_CHAIN_ENABLED:
     try:
         from supply_chain_api import router as supply_chain_router
         app.include_router(supply_chain_router)
-        logger.info("✅ Supply Chain BCM module loaded (8 endpoints)")
+        logger.info(" Supply Chain BCM module loaded (8 endpoints)")
     except ImportError as e:
-        logger.warning(f"⚠️ Supply Chain BCM module not available: {e}")
+        logger.warning(f"️ Supply Chain BCM module not available: {e}")
 
 
 @app.get("/health")
@@ -509,8 +509,8 @@ async def cache_metrics():
 if __name__ == "__main__":
     import uvicorn
 
-    logger.info(f"🚀 Starting BIA Service on port {settings.SERVICE_PORT}")
-    logger.info("📦 Supply Chain BCM: EY research shows 20% faster recovery with ISO 22301")
+    logger.info(f" Starting BIA Service on port {settings.SERVICE_PORT}")
+    logger.info(" Supply Chain BCM: EY research shows 20% faster recovery with ISO 22301")
 
     uvicorn.run(
         app,

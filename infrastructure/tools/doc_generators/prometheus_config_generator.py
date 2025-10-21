@@ -85,7 +85,7 @@ KNOWN_PORTS = {
 
 def load_api_map() -> Dict:
     """Load API map from reports"""
-    print(f"📂 Loading API map from {API_MAP_PATH}")
+    print(f" Loading API map from {API_MAP_PATH}")
     with open(API_MAP_PATH, 'r') as f:
         return json.load(f)
 
@@ -189,7 +189,7 @@ def generate_prometheus_config(services: Dict[str, Any]) -> Dict:
         if data['has_health'] or data['has_metrics']
     }
 
-    print(f"\n📊 Found {len(monitorable_services)} monitorable services (with /health or /metrics)")
+    print(f"\n Found {len(monitorable_services)} monitorable services (with /health or /metrics)")
 
     scrape_configs = []
 
@@ -281,7 +281,7 @@ def generate_service_discovery_config(services: Dict[str, Any]) -> List[Dict]:
 
 def main():
     """Main function"""
-    print("🚀 Prometheus Configuration Generator")
+    print(" Prometheus Configuration Generator")
     print("=" * 60)
 
     # Ensure output directories exist
@@ -291,40 +291,40 @@ def main():
     # Load API map
     api_map = load_api_map()
     total_apis = len(api_map.get('apis', {}).get('http_apis', []))
-    print(f"✅ Loaded {total_apis} HTTP APIs")
+    print(f" Loaded {total_apis} HTTP APIs")
 
     # Extract services
-    print("\n🔍 Extracting services from API map...")
+    print("\n Extracting services from API map...")
     services = extract_services_from_api_map(api_map)
-    print(f"✅ Found {len(services)} unique services")
+    print(f" Found {len(services)} unique services")
 
     # Generate Prometheus config
-    print("\n⚙️  Generating Prometheus configuration...")
+    print("\n️  Generating Prometheus configuration...")
     prom_config = generate_prometheus_config(services)
 
     # Write YAML config
     with open(OUTPUT_CONFIG_PATH, 'w') as f:
         yaml.dump(prom_config, f, default_flow_style=False, sort_keys=False, indent=2)
-    print(f"✅ Written: {OUTPUT_CONFIG_PATH}")
+    print(f" Written: {OUTPUT_CONFIG_PATH}")
 
     # Generate service discovery config
-    print("\n⚙️  Generating service discovery config...")
+    print("\n️  Generating service discovery config...")
     sd_config = generate_service_discovery_config(services)
 
     # Write service discovery JSON
     sd_output_path = SD_CONFIGS_DIR / 'services.json'
     with open(sd_output_path, 'w') as f:
         json.dump(sd_config, f, indent=2)
-    print(f"✅ Written: {sd_output_path}")
+    print(f" Written: {sd_output_path}")
 
     # Generate services inventory
     inventory_path = PROMETHEUS_CONFIG_DIR / 'services-inventory.json'
     with open(inventory_path, 'w') as f:
         json.dump(services, f, indent=2, default=str)
-    print(f"✅ Written: {inventory_path}")
+    print(f" Written: {inventory_path}")
 
     # Summary
-    print("\n📊 SUMMARY")
+    print("\n SUMMARY")
     print("=" * 60)
     print(f"Total services discovered: {len(services)}")
     print(f"Monitorable services: {len([s for s in services.values() if s['has_health'] or s['has_metrics']])}")
@@ -332,8 +332,8 @@ def main():
     print(f"Services with /metrics: {len([s for s in services.values() if s['has_metrics']])}")
     print(f"\nScrape jobs configured: {len(prom_config['scrape_configs'])}")
 
-    print("\n✅ Configuration generation complete!")
-    print(f"\n📝 Next steps:")
+    print("\n Configuration generation complete!")
+    print(f"\n Next steps:")
     print(f"1. Review: {OUTPUT_CONFIG_PATH}")
     print(f"2. Copy to prometheus.yml: cp {OUTPUT_CONFIG_PATH} {PROMETHEUS_CONFIG_DIR}/prometheus.yml")
     print(f"3. Restart Prometheus: docker-compose -f infrastructure/observability/docker-compose.monitoring.yml restart prometheus")

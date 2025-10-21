@@ -70,7 +70,7 @@ class SagaOrchestrator:
             raise ValueError(f"Invalid saga definition: {', '.join(errors)}")
 
         self.saga_definitions[definition.name] = definition
-        self.logger.info(f"✅ Registered saga: {definition.name} (v{definition.version})")
+        self.logger.info(f" Registered saga: {definition.name} (v{definition.version})")
 
     async def execute_saga(
         self,
@@ -107,7 +107,7 @@ class SagaOrchestrator:
         )
 
         self.logger.info(
-            f"🚀 Starting saga execution: {saga_name} "
+            f" Starting saga execution: {saga_name} "
             f"(saga_id={saga.saga_id}, tenant={tenant_id})"
         )
 
@@ -144,7 +144,7 @@ class SagaOrchestrator:
                 saga.completed_at = datetime.utcnow()
                 await self.state_store.save_saga(saga)
 
-                self.logger.info(f"✅ Saga {saga.saga_id} completed successfully")
+                self.logger.info(f" Saga {saga.saga_id} completed successfully")
 
                 # Execute on_complete hook
                 if definition.on_complete:
@@ -162,7 +162,7 @@ class SagaOrchestrator:
                 saga.status = SagaStatus.FAILED
                 await self.state_store.save_saga(saga)
 
-                self.logger.error(f"❌ Saga {saga.saga_id} failed")
+                self.logger.error(f" Saga {saga.saga_id} failed")
 
                 # Publish failure event
                 await self._publish_event("saga.failed", {
@@ -198,7 +198,7 @@ class SagaOrchestrator:
                     })
 
         except Exception as e:
-            self.logger.error(f"❌ Saga {saga.saga_id} error: {e}", exc_info=True)
+            self.logger.error(f" Saga {saga.saga_id} error: {e}", exc_info=True)
             saga.status = SagaStatus.FAILED
             saga.error = str(e)
             saga.completed_at = datetime.utcnow()
@@ -332,7 +332,7 @@ class SagaOrchestrator:
             self.logger.info(f"Step {step_def.name} already completed - skipping")
             return True
 
-        self.logger.info(f"▶️ Executing step: {step_def.name}")
+        self.logger.info(f"️ Executing step: {step_def.name}")
 
         # Retry loop
         while step_exec.can_retry():
@@ -367,7 +367,7 @@ class SagaOrchestrator:
 
                 await self.state_store.save_step(saga.saga_id, step_exec)
 
-                self.logger.info(f"✅ Step {step_def.name} completed successfully")
+                self.logger.info(f" Step {step_def.name} completed successfully")
 
                 # Publish step completed event
                 await self._publish_event("saga.step.completed", {
@@ -386,7 +386,7 @@ class SagaOrchestrator:
 
             except Exception as e:
                 error_msg = str(e)
-                self.logger.error(f"❌ Step {step_def.name} failed: {error_msg}")
+                self.logger.error(f" Step {step_def.name} failed: {error_msg}")
                 step_exec.error = error_msg
                 step_exec.error_details = {
                     "exception_type": type(e).__name__,
@@ -406,7 +406,7 @@ class SagaOrchestrator:
         await self.state_store.save_step(saga.saga_id, step_exec)
 
         self.logger.error(
-            f"❌ Step {step_def.name} failed after {step_exec.attempts} attempts"
+            f" Step {step_def.name} failed after {step_exec.attempts} attempts"
         )
 
         # Publish step failed event
@@ -517,7 +517,7 @@ class SagaOrchestrator:
         Returns:
             Recovered saga execution or None if not found
         """
-        self.logger.info(f"🔄 Recovering saga: {saga_id}")
+        self.logger.info(f" Recovering saga: {saga_id}")
 
         # Load saga state
         saga = await self.state_store.get_saga(saga_id)

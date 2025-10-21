@@ -66,7 +66,7 @@ class CaseContributionConfig:
 async def analyze_contributions(config: CommunityInsightsConfig) -> Dict[str, Any]:
     """Analyze community contributions for period"""
 
-    logger.info(f"📊 Analyzing community contributions: {config.period}")
+    logger.info(f" Analyzing community contributions: {config.period}")
 
     # Simulated analysis (real implementation would query database)
     result = {
@@ -83,7 +83,7 @@ async def analyze_contributions(config: CommunityInsightsConfig) -> Dict[str, An
 async def identify_top_contributors(period: str, limit: int = 10) -> List[Dict]:
     """Identify top contributors for period"""
 
-    logger.info(f"🏆 Identifying top contributors: {period}")
+    logger.info(f" Identifying top contributors: {period}")
 
     # Simulated top contributors (real implementation would query database)
     contributors = [
@@ -98,7 +98,7 @@ async def identify_top_contributors(period: str, limit: int = 10) -> List[Dict]:
 async def detect_sharing_patterns(contributions_data: Dict) -> List[Dict]:
     """Detect knowledge sharing patterns"""
 
-    logger.info("🔍 Detecting sharing patterns")
+    logger.info(" Detecting sharing patterns")
 
     # Simulated pattern detection
     patterns = [
@@ -118,7 +118,7 @@ async def generate_insights(
 ) -> List[Dict]:
     """Generate actionable insights from community data"""
 
-    logger.info("💡 Generating community insights")
+    logger.info(" Generating community insights")
 
     insights = []
 
@@ -154,7 +154,7 @@ async def generate_insights(
 async def validate_case_quality(case_id: str, org_id: str) -> Dict[str, Any]:
     """Validate quality of contributed case"""
 
-    logger.info(f"✅ Validating case quality: {case_id}")
+    logger.info(f" Validating case quality: {case_id}")
 
     # Simulated validation (real implementation would check criteria)
     result = {
@@ -172,12 +172,12 @@ async def validate_case_quality(case_id: str, org_id: str) -> Dict[str, Any]:
 async def store_contribution(case_id: str, org_id: str, quality_data: Dict) -> str:
     """Store validated contribution in database"""
 
-    logger.info(f"💾 Storing contribution: {case_id}")
+    logger.info(f" Storing contribution: {case_id}")
 
     contribution_id = f"contrib-{case_id}"
 
     # Real implementation would save to database
-    logger.info(f"✅ Contribution stored: {contribution_id}")
+    logger.info(f" Contribution stored: {contribution_id}")
 
     return contribution_id
 
@@ -258,7 +258,7 @@ class CommunityInsightsWorkflow:
             sharing_patterns=sharing_patterns
         )
 
-        logger.info(f"✅ Community insights workflow complete: {result.insights_generated} insights generated")
+        logger.info(f" Community insights workflow complete: {result.insights_generated} insights generated")
 
         return result
 
@@ -330,7 +330,7 @@ def register_workflows(worker):
     worker.register_workflow(CommunityInsightsWorkflow)
     worker.register_workflow(CaseContributionWorkflow)
 
-    logger.info("✅ Registered Community Intelligence workflows")
+    logger.info(" Registered Community Intelligence workflows")
 
 
 def register_activities(worker):
@@ -342,4 +342,4 @@ def register_activities(worker):
     worker.register_activity(validate_case_quality)
     worker.register_activity(store_contribution)
 
-    logger.info("✅ Registered Community Intelligence activities (6 activities)")
+    logger.info(" Registered Community Intelligence activities (6 activities)")

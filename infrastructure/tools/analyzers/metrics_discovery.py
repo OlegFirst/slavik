@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🔍 Automatic Metrics Discovery & Integration
+ Automatic Metrics Discovery & Integration
 ==============================================
 
 Автоматически находит все метрики в проекте и интегрирует их в Prometheus.
@@ -56,7 +56,7 @@ class MetricsDiscovery:
 
     def discover_all(self) -> List[MetricsInfo]:
         """Сканирует весь проект и находит все метрики"""
-        print("🔍 Discovering metrics in project...")
+        print(" Discovering metrics in project...")
         print("=" * 60)
 
         # Scan intelligent-core modules
@@ -69,7 +69,7 @@ class MetricsDiscovery:
         if (self.project_root / 'platform-services').exists():
             self._scan_directory(self.project_root / 'platform-services')
 
-        print(f"\n✅ Found {len(self.modules_with_metrics)} modules with metrics")
+        print(f"\n Found {len(self.modules_with_metrics)} modules with metrics")
         return self.modules_with_metrics
 
     def _scan_directory(self, base_dir: Path):
@@ -85,7 +85,7 @@ class MetricsDiscovery:
             metrics_info = self._analyze_metrics_file(metrics_file)
             if metrics_info and metrics_info.total_metrics > 0:
                 self.modules_with_metrics.append(metrics_info)
-                print(f"  ✓ {metrics_info.module_name}: {metrics_info.total_metrics} metrics")
+                print(f"   {metrics_info.module_name}: {metrics_info.total_metrics} metrics")
 
     def _should_skip(self, path: Path) -> bool:
         """Проверка - нужно ли пропустить файл"""
@@ -136,7 +136,7 @@ class MetricsDiscovery:
             )
 
         except Exception as e:
-            print(f"  ⚠️  Error analyzing {metrics_file}: {e}")
+            print(f"  ️  Error analyzing {metrics_file}: {e}")
             return None
 
     def _extract_module_name(self, metrics_file: Path) -> str:
@@ -258,7 +258,7 @@ class MetricsDiscovery:
     def generate_coverage_report(self) -> str:
         """Генерирует отчет о покрытии метриками"""
         report = []
-        report.append("# 📊 Metrics Coverage Report\n")
+        report.append("#  Metrics Coverage Report\n")
         report.append(f"**Generated:** {self._get_timestamp()}\n")
         report.append(f"**Total Modules with Metrics:** {len(self.modules_with_metrics)}\n")
         report.append("\n---\n\n")
@@ -280,7 +280,7 @@ class MetricsDiscovery:
             report.append("\n### Modules:\n\n")
 
             for m in sorted(modules, key=lambda x: x.module_name):
-                status = "✅" if m.has_endpoint else "⚠️"
+                status = "" if m.has_endpoint else "️"
                 port_info = f":{m.endpoint_port}" if m.endpoint_port > 0 else ""
                 report.append(f"{status} **{m.module_name}** - {m.total_metrics} metrics {port_info}\n")
                 report.append(f"   - Path: `{m.module_path}`\n")
@@ -300,7 +300,7 @@ class MetricsDiscovery:
             report.append(f"- **{metric_type}:** {count}\n")
 
         # Recommendations
-        report.append("\n---\n\n## 🎯 Recommendations\n\n")
+        report.append("\n---\n\n##  Recommendations\n\n")
 
         no_endpoint = [m for m in self.modules_with_metrics if not m.has_endpoint]
         if no_endpoint:
@@ -322,19 +322,19 @@ class MetricsDiscovery:
             'modules': [asdict(m) for m in self.modules_with_metrics]
         }
         output_file.write_text(json.dumps(data, indent=2))
-        print(f"\n📝 Saved metrics inventory: {output_file}")
+        print(f"\n Saved metrics inventory: {output_file}")
 
     def save_prometheus_jobs(self, output_file: Path):
         """Сохраняет Prometheus scrape jobs"""
         config = self.generate_prometheus_config()
         output_file.write_text(config)
-        print(f"📝 Saved Prometheus jobs: {output_file}")
+        print(f" Saved Prometheus jobs: {output_file}")
 
     def save_coverage_report(self, output_file: Path):
         """Сохраняет отчет о покрытии"""
         report = self.generate_coverage_report()
         output_file.write_text(report)
-        print(f"📝 Saved coverage report: {output_file}")
+        print(f" Saved coverage report: {output_file}")
 
 
 def main():
@@ -367,7 +367,7 @@ def main():
     discovery.save_prometheus_jobs(output_dir / 'prometheus-jobs-auto.yml')
     discovery.save_coverage_report(output_dir / 'metrics-coverage-report.md')
 
-    print(f"\n✅ Metrics discovery complete!")
+    print(f"\n Metrics discovery complete!")
     print(f"\nNext steps:")
     print(f"  1. Review: {output_dir / 'metrics-coverage-report.md'}")
     print(f"  2. Add missing /metrics endpoints to modules")
@@ -377,9 +377,9 @@ def main():
     if args.apply:
         prometheus_yml = project_root / 'infrastructure/observability/config/prometheus/prometheus.yml'
         if prometheus_yml.exists():
-            print(f"\n⚠️  Apply to {prometheus_yml}? (manual merge recommended)")
+            print(f"\n️  Apply to {prometheus_yml}? (manual merge recommended)")
         else:
-            print(f"\n❌ Prometheus config not found: {prometheus_yml}")
+            print(f"\n Prometheus config not found: {prometheus_yml}")
 
 
 if __name__ == '__main__':

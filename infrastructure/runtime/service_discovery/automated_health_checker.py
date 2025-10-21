@@ -155,7 +155,7 @@ class AutomatedHealthChecker:
             if service.name in self.failure_count:
                 # Service recovered!
                 if self.failure_count[service.name] >= self.config.max_failures:
-                    logger.info(f"✅ Service RECOVERED: {service.name}")
+                    logger.info(f" Service RECOVERED: {service.name}")
                     await self._handle_service_recovered(service)
 
                 self.failure_count[service.name] = 0
@@ -179,7 +179,7 @@ class AutomatedHealthChecker:
             await self.registry.update_health(service.name, new_health)
 
             logger.info(
-                f"🏥 Health status changed: {service.name} "
+                f" Health status changed: {service.name} "
                 f"{old_health} -> {new_health}"
             )
 
@@ -275,7 +275,7 @@ class AutomatedHealthChecker:
             failure_reasons: List of failure reasons
         """
         logger.error(
-            f"❌ Service UNHEALTHY: {service.name}\n"
+            f" Service UNHEALTHY: {service.name}\n"
             f"   Consecutive failures: {self.failure_count.get(service.name, 0)}\n"
             f"   Reasons: {', '.join(failure_reasons)}"
         )
@@ -306,7 +306,7 @@ class AutomatedHealthChecker:
         Args:
             service: Recovered service
         """
-        logger.info(f"✅ Service RECOVERED: {service.name}")
+        logger.info(f" Service RECOVERED: {service.name}")
 
         # Update service status
         await self.registry.update_status(service.name, 'running')

@@ -74,7 +74,7 @@ class PatternDetector:
             patterns.extend(sequence_patterns)
 
             self.detected_patterns = patterns
-            logger.info(f"✅ Detected {len(patterns)} patterns")
+            logger.info(f" Detected {len(patterns)} patterns")
 
             return patterns
 

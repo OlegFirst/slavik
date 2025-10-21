@@ -67,14 +67,14 @@ for html_file in html_files:
         if content != original_content:
             with open(html_file, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"✓ {html_file.name:35} - {file_replacements} замен")
+            print(f" {html_file.name:35} - {file_replacements} замен")
             updated_files += 1
             total_replacements += file_replacements
         else:
             print(f"  {html_file.name:35} - без изменений")
 
     except Exception as e:
-        print(f"✗ Ошибка в {html_file}: {str(e)}")
+        print(f" Ошибка в {html_file}: {str(e)}")
 
 print()
 print("="*60)
@@ -95,13 +95,13 @@ for html_file in html_files:
     # Find href="something-with-dash.html"
     matches = re.findall(r'href="([a-z]+-[a-z-]+\.html)"', content)
     if matches:
-        print(f"⚠️  {html_file.name}: {matches}")
+        print(f"️  {html_file.name}: {matches}")
         remaining_dashes += len(matches)
 
 if remaining_dashes == 0:
-    print("✅ Дефисов не найдено - все ссылки обновлены!")
+    print(" Дефисов не найдено - все ссылки обновлены!")
 else:
-    print(f"⚠️  Найдено {remaining_dashes} ссылок с дефисами")
+    print(f"️  Найдено {remaining_dashes} ссылок с дефисами")
 
 print()
 print("Готово! Откройте index.html в браузере для проверки.")
