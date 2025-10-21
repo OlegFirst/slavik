@@ -235,6 +235,11 @@ export interface RiskHeatMap {
     medium: Array<{ x: number; y: number }>;
     low: Array<{ x: number; y: number }>;
   };
+  total_risks: number;
+  critical_count: number;
+  high_count: number;
+  medium_count: number;
+  low_count: number;
 }
 
 export interface RiskTrends {

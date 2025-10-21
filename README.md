@@ -287,7 +287,71 @@ Email: demo@ai-platform-iso.org
 See docs/PLATFORM_DEMO_SCRIPT_5MIN.md
 ```
 
-### For Developers (Local Setup)
+### For Developers - Deploy to Any Platform 🆕
+
+**Choose your deployment platform:**
+
+#### Option 1: Local Development (5 minutes, $0)
+```bash
+# Setup local Kubernetes
+./infrastructure/kubernetes/scripts/local-setup.sh minikube
+
+# Deploy BCM Platform
+./infrastructure/kubernetes/scripts/local-deploy.sh
+
+# Access via port-forward
+./infrastructure/kubernetes/scripts/port-forward-local.sh
+```
+
+#### Option 2: Google Cloud (GKE) - Production (15 minutes)
+```bash
+cd infrastructure/deployment/gke
+
+# Configure
+cp terraform.tfvars.example terraform.tfvars
+# Edit: Add your GCP project ID
+
+# Deploy (~15 min)
+./gke-create-cluster.sh
+./gke-configure.sh
+./gke-install-addons.sh      # Istio + monitoring
+./gke-deploy-bcm.sh
+
+# Cost: ~$240-400/month (optimizable to $150/month)
+```
+
+#### Option 3: DigitalOcean (DOKS) - Cost-Effective (10 minutes)
+```bash
+cd infrastructure/deployment/digitalocean
+
+# Get DigitalOcean token
+# https://cloud.digitalocean.com/account/api/tokens
+
+# Deploy (~10 min)
+export DIGITALOCEAN_ACCESS_TOKEN="your-token"
+./do-create-cluster.sh
+./do-configure.sh
+./do-install-addons.sh
+./do-deploy-bcm.sh
+
+# Cost: ~$120-200/month (optimizable to $90/month)
+```
+
+#### Unified Deployment (Any Platform)
+```bash
+# One command for any platform
+./infrastructure/kubernetes/scripts/deploy-multi-platform.sh local
+./infrastructure/kubernetes/scripts/deploy-multi-platform.sh gke --project YOUR_PROJECT
+./infrastructure/kubernetes/scripts/deploy-multi-platform.sh digitalocean --token YOUR_TOKEN
+```
+
+**📚 Complete guides:**
+- **Quick Start:** [QUICK_START_DEPLOYMENT.md](QUICK_START_DEPLOYMENT.md) - Choose platform in 5 minutes
+- **Full Guide:** [infrastructure/MULTI_PLATFORM_DEPLOYMENT_GUIDE.md](infrastructure/MULTI_PLATFORM_DEPLOYMENT_GUIDE.md)
+- **GKE:** [infrastructure/deployment/gke/README.md](infrastructure/deployment/gke/README.md)
+- **DigitalOcean:** [infrastructure/deployment/digitalocean/README.md](infrastructure/deployment/digitalocean/README.md)
+
+### Legacy Setup (Phase 1 Infrastructure)
 
 ```bash
 # 1. Clone repository
@@ -308,7 +372,7 @@ python3 infrastructure_coordinator.py
 # Metrics API: http://localhost:9091
 ```
 
-**See:** [PHASE1_QUICK_START.md](PHASE1_QUICK_START.md) for complete setup instructions.
+**See:** [PHASE1_QUICK_START.md](PHASE1_QUICK_START.md) for Phase 1 infrastructure setup.
 
 ---
 
@@ -508,9 +572,9 @@ Commercial use requires separate licensing.
 
 ---
 
-**Version:** 2.0.0
-**Last Updated:** October 19, 2025
-**Status:** Investment-Ready (Conditional on 30-day remediation)
+**Version:** 3.0.0 - Multi-Platform Deployment
+**Last Updated:** October 21, 2025
+**Status:** Investment-Ready + Production Deployment Ready ✅
 
 **🤖 Built by human-AI partnership | 🏥 For global health | 🌍 Social impact project**
 

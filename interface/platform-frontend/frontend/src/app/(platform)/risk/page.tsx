@@ -31,10 +31,8 @@ export default function RisksPage() {
   const organizationId = 'org-123';
 
   const { data: risks, isLoading, error } = useRisks({
-    filters: {
-      organization_id: organizationId,
-      ...filters,
-    },
+    organization_id: organizationId,
+    ...filters,
   });
 
   // Calculate stats

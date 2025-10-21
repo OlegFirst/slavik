@@ -113,6 +113,7 @@ EXCLUDE_DIRS=(
   ".git"
   "node_modules"
   "_archive"
+  "можетпригодится"
   "dist"
   "build"
   ".next"
@@ -120,6 +121,13 @@ EXCLUDE_DIRS=(
   "__pycache__"
   ".venv"
   "venv"
+  "_BACKUP_"
+  "_OLD"
+  "_old"
+  ".backup."
+  "18:09"
+  "BACKUP_"
+  "backup-"
 )
 
 TEMP_FILES=()

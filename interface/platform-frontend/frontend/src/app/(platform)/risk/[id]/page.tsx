@@ -17,6 +17,7 @@ import {
   MonteCarloChart,
   TreatmentPlanList,
 } from '@/components/risk';
+import { getRiskSeverity } from '@/types/risk';
 import {
   ArrowLeft,
   Edit,
@@ -145,7 +146,7 @@ export default function RiskDetailPage({ params }: PageProps) {
                   <h1 className="text-3xl font-bold text-gray-900 truncate">
                     {risk.risk_title}
                   </h1>
-                  <RiskSeverityBadge severity={risk.inherent_risk_score} />
+                  <RiskSeverityBadge severity={getRiskSeverity(risk.inherent_risk_score)} />
                 </div>
                 <div className="flex items-center gap-4 flex-wrap">
                   {risk.risk_code && (

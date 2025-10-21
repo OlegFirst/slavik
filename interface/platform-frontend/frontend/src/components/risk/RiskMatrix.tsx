@@ -489,11 +489,11 @@ export function RiskMatrix({
 
       {/* Summary Stats */}
       <SummaryStats
-        critical={heatMapData.critical_count}
-        high={heatMapData.high_count}
-        medium={heatMapData.medium_count}
-        low={heatMapData.low_count}
-        total={heatMapData.total_risks}
+        critical={heatMapData.critical_count || 0}
+        high={heatMapData.high_count || 0}
+        medium={heatMapData.medium_count || 0}
+        low={heatMapData.low_count || 0}
+        total={heatMapData.total_risks || 0}
       />
     </div>
   );

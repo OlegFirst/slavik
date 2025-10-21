@@ -64,10 +64,9 @@ export default function RiskAnalyticsPage() {
   const { data: heatMap, isLoading: heatMapLoading } = useRiskHeatMap({ organizationId });
   const { data: trends, isLoading: trendsLoading } = useRiskTrends({ days: trendDays, organizationId });
   const { data: report, isLoading: reportLoading, refetch: refetchReport } = useRiskReport({ organizationId });
-  const { data: insights, isLoading: insightsLoading } = useRiskInsights({ days: 30, organizationId });
+  const { data: insights, isLoading: insightsLoading } = useRiskInsights({ days: 30 });
   const { data: recommendations, isLoading: recommendationsLoading } = useRiskRecommendations({
-    limit: 5,
-    organizationId
+    limit: 5
   });
 
   const isLoading = heatMapLoading || trendsLoading || reportLoading;
@@ -102,10 +101,10 @@ export default function RiskAnalyticsPage() {
 
   // Calculate trend direction
   const calculateTrend = () => {
-    if (!trends?.daily_data || trends.daily_data.length < 2) return null;
+    if (!trends?.data_points || trends.data_points.length < 2) return null;
 
-    const recent = trends.daily_data.slice(-7);
-    const older = trends.daily_data.slice(-14, -7);
+    const recent = trends.data_points.slice(-7);
+    const older = trends.data_points.slice(-14, -7);
 
     const recentAvg = recent.reduce((sum, d) => sum + d.critical + d.high, 0) / recent.length;
     const olderAvg = older.reduce((sum, d) => sum + d.critical + d.high, 0) / older.length;
@@ -124,10 +123,10 @@ export default function RiskAnalyticsPage() {
   const prepareRadarData = () => {
     if (!report) return [];
 
-    return Object.entries(report.category_distribution).map(([category, count]) => ({
+    return Object.entries(report.by_category).map(([category, count]) => ({
       category: category.replace(/_/g, ' ').toUpperCase(),
       count,
-      fullMark: Math.max(...Object.values(report.category_distribution)) * 1.2,
+      fullMark: Math.max(...Object.values(report.by_category)) * 1.2,
     }));
   };
 
@@ -140,14 +139,14 @@ export default function RiskAnalyticsPage() {
       organization_id: organizationId,
       summary: {
         total_risks: report.total_risks,
-        critical_count: report.critical_count,
-        high_count: report.high_count,
-        medium_count: report.medium_count,
-        low_count: report.low_count,
-        average_score: report.average_risk_score,
+        critical_count: report.by_severity.critical,
+        high_count: report.by_severity.high,
+        medium_count: report.by_severity.medium,
+        low_count: report.by_severity.low,
+        average_score: report.average_score,
       },
-      category_distribution: report.category_distribution,
-      status_distribution: report.status_distribution,
+      category_distribution: report.by_category,
+      status_distribution: report.by_status,
       trends: trends,
       insights: insights,
       recommendations: recommendations,
@@ -251,10 +250,10 @@ export default function RiskAnalyticsPage() {
                   <p className="text-sm text-red-700">Critical Risks</p>
                   <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
-                <p className="text-3xl font-bold text-red-900">{report.critical_count}</p>
+                <p className="text-3xl font-bold text-red-900">{report.by_severity.critical}</p>
                 <p className="text-sm text-red-600 mt-1">
                   {report.total_risks > 0
-                    ? `${((report.critical_count / report.total_risks) * 100).toFixed(1)}% of total`
+                    ? `${((report.by_severity.critical / report.total_risks) * 100).toFixed(1)}% of total`
                     : 'Score ≥ 20'
                   }
                 </p>
@@ -266,7 +265,7 @@ export default function RiskAnalyticsPage() {
                   <CheckCircle className="w-6 h-6 text-green-600" />
                 </div>
                 <p className="text-3xl font-bold text-green-900">
-                  {report.status_distribution.treated || 0}
+                  {report.by_status.treated || 0}
                 </p>
                 <p className="text-sm text-green-600 mt-1">With treatment plans</p>
               </div>
@@ -277,7 +276,7 @@ export default function RiskAnalyticsPage() {
                   <TrendingUp className="w-6 h-6 text-orange-600" />
                 </div>
                 <p className="text-3xl font-bold text-orange-900">
-                  {report.average_risk_score.toFixed(1)}
+                  {report.average_score.toFixed(1)}
                 </p>
                 <p className="text-sm text-orange-600 mt-1">
                   {trend && (
@@ -301,7 +300,7 @@ export default function RiskAnalyticsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">High Risks</p>
-                    <p className="text-2xl font-bold text-orange-600">{report.high_count}</p>
+                    <p className="text-2xl font-bold text-orange-600">{report.by_severity.high}</p>
                   </div>
                   <Activity className="w-8 h-8 text-orange-400" />
                 </div>
@@ -311,7 +310,7 @@ export default function RiskAnalyticsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Medium Risks</p>
-                    <p className="text-2xl font-bold text-yellow-600">{report.medium_count}</p>
+                    <p className="text-2xl font-bold text-yellow-600">{report.by_severity.medium}</p>
                   </div>
                   <Target className="w-8 h-8 text-yellow-400" />
                 </div>
@@ -321,7 +320,7 @@ export default function RiskAnalyticsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Low Risks</p>
-                    <p className="text-2xl font-bold text-green-600">{report.low_count}</p>
+                    <p className="text-2xl font-bold text-green-600">{report.by_severity.low}</p>
                   </div>
                   <Zap className="w-8 h-8 text-green-400" />
                 </div>
@@ -341,7 +340,7 @@ export default function RiskAnalyticsPage() {
             />
 
             {/* Trends Chart */}
-            {trends && trends.daily_data && trends.daily_data.length > 0 && (
+            {trends && trends.data_points && trends.data_points.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -363,7 +362,7 @@ export default function RiskAnalyticsPage() {
 
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={trends.daily_data}>
+                    <AreaChart data={trends.data_points}>
                       <defs>
                         <linearGradient id="colorCritical" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor={SEVERITY_COLORS.critical} stopOpacity={0.3}/>
@@ -456,7 +455,7 @@ export default function RiskAnalyticsPage() {
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={Object.entries(report.category_distribution).map(([category, count]) => ({
+                        data={Object.entries(report.by_category).map(([category, count]) => ({
                           name: category.replace(/_/g, ' ').toUpperCase(),
                           value: count,
                         }))}
@@ -468,7 +467,7 @@ export default function RiskAnalyticsPage() {
                         fill="#8884d8"
                         dataKey="value"
                       >
-                        {Object.keys(report.category_distribution).map((_, index) => (
+                        {Object.keys(report.by_category).map((_, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={CHART_COLORS[index % CHART_COLORS.length]}
@@ -499,7 +498,7 @@ export default function RiskAnalyticsPage() {
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
-                      data={Object.entries(report.status_distribution).map(([status, count]) => ({
+                      data={Object.entries(report.by_status).map(([status, count]) => ({
                         status: status.charAt(0).toUpperCase() + status.slice(1),
                         count,
                       }))}
@@ -522,7 +521,7 @@ export default function RiskAnalyticsPage() {
             </div>
 
             {/* Radar Chart - Category Analysis */}
-            {Object.keys(report.category_distribution).length > 0 && (
+            {Object.keys(report.by_category).length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -561,7 +560,7 @@ export default function RiskAnalyticsPage() {
             )}
 
             {/* AI Insights */}
-            {insights && insights.length > 0 && (
+            {insights && insights.insights && insights.insights.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Zap className="w-6 h-6 text-purple-600" />
@@ -571,9 +570,9 @@ export default function RiskAnalyticsPage() {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  {insights.slice(0, 5).map((insight, index) => (
+                  {insights.insights.slice(0, 5).map((insight, index) => (
                     <div
-                      key={insight.id || index}
+                      key={index}
                       className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-start gap-3">
@@ -587,13 +586,7 @@ export default function RiskAnalyticsPage() {
                               Confidence: {(insight.confidence * 100).toFixed(0)}%
                             </span>
                             <span>•</span>
-                            <span className="capitalize">{insight.insight_type}</span>
-                            {insight.created_at && (
-                              <>
-                                <span>•</span>
-                                <span>{format(new Date(insight.created_at), 'MMM d')}</span>
-                              </>
-                            )}
+                            <span className="capitalize">{insight.insight_type.replace(/_/g, ' ')}</span>
                           </div>
                         </div>
                       </div>
@@ -604,7 +597,7 @@ export default function RiskAnalyticsPage() {
             )}
 
             {/* AI Recommendations */}
-            {recommendations && recommendations.length > 0 && (
+            {recommendations && recommendations.recommendations && recommendations.recommendations.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Shield className="w-6 h-6 text-green-600" />
@@ -614,14 +607,14 @@ export default function RiskAnalyticsPage() {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  {recommendations.map((rec, index) => (
+                  {recommendations.recommendations.map((rec, index) => (
                     <div
-                      key={rec.id || index}
+                      key={rec.recommendation_id || index}
                       className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-shrink-0">
-                          {rec.priority === 'critical' || rec.priority === 'high' ? (
+                          {rec.priority === 'urgent' || rec.priority === 'high' ? (
                             <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
                           ) : (
                             <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
@@ -632,7 +625,7 @@ export default function RiskAnalyticsPage() {
                             <p className="font-medium text-green-900">{rec.title}</p>
                             <span
                               className={`px-2 py-0.5 rounded text-xs font-medium flex-shrink-0 ${
-                                rec.priority === 'critical'
+                                rec.priority === 'urgent'
                                   ? 'bg-red-100 text-red-700'
                                   : rec.priority === 'high'
                                   ? 'bg-orange-100 text-orange-700'
@@ -647,19 +640,15 @@ export default function RiskAnalyticsPage() {
                           <p className="text-sm text-green-700 mt-1">{rec.description}</p>
                           <div className="flex items-center gap-3 mt-2 text-xs text-green-600">
                             <span className="inline-flex items-center gap-1">
-                              <Target className="w-3 h-3" />
-                              Impact: {rec.estimated_impact}
+                              <span className="w-2 h-2 rounded-full bg-green-600"></span>
+                              Confidence: {(rec.confidence * 100).toFixed(0)}%
                             </span>
-                            {rec.category && (
+                            <span>•</span>
+                            <span className="capitalize">{rec.recommendation_type.replace(/_/g, ' ')}</span>
+                            {rec.estimated_risk_reduction && (
                               <>
                                 <span>•</span>
-                                <span className="capitalize">{rec.category.replace(/_/g, ' ')}</span>
-                              </>
-                            )}
-                            {rec.created_at && (
-                              <>
-                                <span>•</span>
-                                <span>{format(new Date(rec.created_at), 'MMM d')}</span>
+                                <span>Risk Reduction: {rec.estimated_risk_reduction}%</span>
                               </>
                             )}
                           </div>

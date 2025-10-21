@@ -29,7 +29,7 @@ export default function EditRiskPage({ params }: PageProps) {
   });
 
   const handleSubmit = (data: RiskUpdate) => {
-    updateRisk.mutate({ id: params.id, data });
+    updateRisk.mutate({ riskId: params.id, data });
   };
 
   // Loading State
