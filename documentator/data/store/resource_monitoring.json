@@ -7326,5 +7326,261 @@
     "_createdAt": "2025-09-17T16:11:05.550Z",
     "_updatedAt": "2025-09-17T16:11:05.550Z",
     "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:12:05.550Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6755717120,
+        "used": 10253721600,
+        "usagePercent": 60.28253941115348
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12368527360,
+        "used": 159510335488,
+        "usagePercent": 92.80392762957827
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125525550_es8qn0pjm",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:12:05.550Z",
+    "_updatedAt": "2025-09-17T16:12:05.550Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:13:05.563Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6484144128,
+        "used": 10525294592,
+        "usagePercent": 61.87914113605743
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12366811136,
+        "used": 159512051712,
+        "usagePercent": 92.80492613746432
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125585563_u4s6rmlh0",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:13:05.563Z",
+    "_updatedAt": "2025-09-17T16:13:05.563Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:14:05.587Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6476193792,
+        "used": 10533244928,
+        "usagePercent": 61.92588186707668
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12364566528,
+        "used": 159514296320,
+        "usagePercent": 92.80623206185945
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125645587_l86x9va1o",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:14:05.587Z",
+    "_updatedAt": "2025-09-17T16:14:05.587Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:15:05.598Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6443544576,
+        "used": 10565894144,
+        "usagePercent": 62.11782950589918
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12363849728,
+        "used": 159515013120,
+        "usagePercent": 92.80664909975935
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125705599_fvkl4c8xj",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:15:05.599Z",
+    "_updatedAt": "2025-09-17T16:15:05.599Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:16:05.598Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6321971200,
+        "used": 10687467520,
+        "usagePercent": 62.832570174308486
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12358496256,
+        "used": 159520366592,
+        "usagePercent": 92.8097637771032
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125765598_8ivxctbga",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:16:05.598Z",
+    "_updatedAt": "2025-09-17T16:16:05.598Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:17:05.607Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 6403072000,
+        "used": 10606366720,
+        "usagePercent": 62.355771372566494
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12358889472,
+        "used": 159519973376,
+        "usagePercent": 92.80953500202669
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125825607_f509301ld",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:17:05.607Z",
+    "_updatedAt": "2025-09-17T16:17:05.607Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:18:05.604Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 7516831744,
+        "used": 9492606976,
+        "usagePercent": 55.80787897979504
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12410789888,
+        "used": 159468072960,
+        "usagePercent": 92.77933907499994
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125885604_oowsxvlw2",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:18:05.604Z",
+    "_updatedAt": "2025-09-17T16:18:05.604Z",
+    "_version": 1
+  },
+  {
+    "timestamp": "2025-09-17T16:19:05.718Z",
+    "resources": {
+      "cpu": {
+        "usage": 0,
+        "cores": 12
+      },
+      "memory": {
+        "total": 17009438720,
+        "free": 2672803840,
+        "used": 14336634880,
+        "usagePercent": 84.2863489854179
+      },
+      "disk": {
+        "total": 171878862848,
+        "free": 12417515520,
+        "used": 159461347328,
+        "usagePercent": 92.77542606796197
+      },
+      "network": {
+        "interfaces": [
+          "Ethernet 4",
+          "Loopback Pseudo-Interface 1"
+        ]
+      }
+    },
+    "_id": "1758125945718_becoxv1ai",
+    "_collection": "resource_monitoring",
+    "_createdAt": "2025-09-17T16:19:05.718Z",
+    "_updatedAt": "2025-09-17T16:19:05.718Z",
+    "_version": 1
   }
 ]
