@@ -14,8 +14,16 @@ class GovernanceServiceSettings(SharedSettings):
     """Governance Service settings"""
 
     SERVICE_NAME: str = "governance"
-    SERVICE_PORT: int = 8013
+    SERVICE_PORT: int = 8018
     SERVICE_VERSION: str = "1.0.0"
+    SERVICE_TITLE: str = "Governance Service"
+    SERVICE_DESCRIPTION: str = "BCM Governance & Leadership - ISO 22301 Clause 5"
+
+    # Database - Development defaults (override in production)
+    DATABASE_URL: str = "sqlite+aiosqlite:///./governance_dev.db"
+
+    # JWT Secret - MUST be set in production
+    JWT_SECRET_KEY: str = "dev-secret-CHANGE-IN-PRODUCTION-governance-12345"
 
     # Governance specific
     ENABLE_DOMAIN_INTELLIGENCE: bool = True

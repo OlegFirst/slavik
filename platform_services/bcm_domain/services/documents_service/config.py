@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     # Service Information
     SERVICE_NAME: str = "documents"
-    SERVICE_PORT: int = 8024
+    SERVICE_PORT: int = 8017
     SERVICE_VERSION: str = "1.0.0"
 
     # Database

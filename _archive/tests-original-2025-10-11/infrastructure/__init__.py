@@ -1,6 +1,0 @@
-"""
-Infrastructure Module
-
-Test suite.
-"""
-

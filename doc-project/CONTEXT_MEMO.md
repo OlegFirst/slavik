@@ -1,339 +1,230 @@
-# ⚡ CONTEXT MEMO - Быстрое Восстановление
+# КОНТЕКСТ ПАМЯТКА - Быстрое восстановление
 
-**Для:** Следующая сессия (после перезагрузки контекста)
-**Дата создания:** 2025-10-19 02:50 UTC
-**Контекст при создании:** 6% (критический - зафиксирован на пике понимания)
-
----
-
-## 🎯 ЧТО СДЕЛАНО (Кратко)
-
-### Сегодня завершено:
-```
-✅ Platform Integration Infrastructure - Graceful Choreography
-✅ 4 архитектурных паттерна (~33,400 строк)
-✅ Протестировано (9/9 tests - 100%)
-✅ Зарегистрировано в каталогах
-✅ Документация полная (~52,000 строк)
-✅ Всё в GitHub (4 коммита, 3 push'а)
-```
+**Дата:** 21 октября 2025, 04:30
+**Контекст:** 1% остался
+**Статус:** Готовы к системному рефакторингу
 
 ---
 
-## 📂 КЛЮЧЕВЫЕ ФАЙЛЫ (для быстрого старта)
+## ЧТО СДЕЛАНО ✅
 
-### Читать в ПЕРВУЮ очередь:
-1. **`INTEGRATION_COMPLETE.md`** - полный обзор (15KB)
-2. **`REGISTRATION_COMPLETE.md`** - что зарегистрировано (13KB)
-3. **`CHANGES_AND_NEXT_STEPS.md`** - изменения + ТЗ для агентов (детально)
+### Сегодня (21 окт):
 
-### Шаблоны для работы:
-4. **`platform_services/bcm_domain/services/bia_service/main_integrated.py`** - template для интеграции сервисов (400 строк)
-5. **`platform_services/bcm_domain/services/bia_service/test_integration.py`** - template для тестов (200 строк)
+1. **Vault настроен** - 8 production секретов в Supabase
+2. **ENV консолидирован** - 24 файла → 1 unified .env (314 переменных)
+3. **Код стандартизирован**:
+   - 5 папок переименовано (кириллица → English)
+   - 8,048 эмодзи удалено из кода
+   - 1,064 файла обновлено
+4. **Инструменты созданы**:
+   - safe-cleanup.sh
+   - analyze-codebase.py
+   - remove-emojis.py
 
-### Код платформы:
-6. **`infrastructure/platform_integration.py`** - main integration layer (500 строк)
-7. **`infrastructure/eventbus/intelligent_router.py`** - AI-powered routing (670 строк)
+### Критические находки:
 
----
-
-## 🚀 СЛЕДУЮЩИЙ ШАГ (что делать СРАЗУ)
-
-### Команда #1 - Проверь статус:
-```bash
-cd /Users/MD/AI-Platform-ISO
-git log --oneline -5
-# Должно быть:
-# 51503b44 docs: Complete registration summary
-# c01e004d docs: Register Platform Integration in catalogs
-# 649736b7 fix: Resolve TypeScript errors
-# 6238bb80 chore: Reorganize documentation structure
+#### 🔴 ПРОБЛЕМА 1: Memory в неправильном месте
+```
+ai_foundation/memory/  ← ИСПОЛЬЗУЕТСЯ ВНЕ ai_foundation
+→ НАДО ПЕРЕМЕСТИТЬ в shared/memory/
 ```
 
-### Команда #2 - Запусти тест:
-```bash
-cd platform_services/bcm_domain/services/bia_service
-python3 test_integration.py
-# Ожидается: 9/9 PASSED
+#### 🔴 ПРОБЛЕМА 2: Learning путаница
+```
+ai_foundation/learning/            ← Базовое
+ai_foundation/learning_knowledge/  ← Полное
+    └── learning/                  ← ЕЩЕ ОДНО!
+→ ПЕРЕИМЕНОВАТЬ
 ```
 
-### Команда #3 - Начни следующий сервис:
-```bash
-cd ../risk_service
-cp ../bia_service/main_integrated.py .
-cp ../bia_service/test_integration.py .
-# Редактируй и запускай
+#### 🔴 ПРОБЛЕМА 3: Дублирование AI-подсистем!
+```
+ai_foundation/ml/           ← ML #1
+workflow_intelligence/ml/   ← ML #2 (ДУБЛИКАТ!)
+expertise_center/.../ml/    ← ML #3 (ДУБЛИКАТ!)
+
+То же: RAG (2 копии), Learning (2 копии)
+→ КОНСОЛИДАЦИЯ КРИТИЧНА!
 ```
 
 ---
 
-## 🔧 ИЗМЕНЕНИЯ В СУЩЕСТВУЮЩИХ ФАЙЛАХ
+## ГЛАВНАЯ ЗАДАЧА
 
-### ⚠️ ВАЖНО - Что было изменено:
+### Философия пользователя:
+> "ai_foundation = формирование интеллекта через разные подходы"
+> "Нужна устойчивая основа, пронизывающая всю платформу"
 
-#### 1. `config.py` (BIA Service)
-```python
-# Строка 27: JWT_SECRET → JWT_SECRET_KEY
-```
-
-#### 2. `main_integrated.py` (BIA Service)
-```python
-# Строка 172: settings.JWT_SECRET → settings.JWT_SECRET_KEY
-# Строка 237: jwt_secret=settings.JWT_SECRET → settings.JWT_SECRET_KEY
-```
-
-#### 3. `platform_integration.py`
-```python
-# Строка 180: PostgreSQLSagaStateStore → PostgresSagaStateStore
-# Строка 195: Добавлена условная инициализация state_store
-```
-
-#### 4. `test_integration.py`
-```python
-# Убрал: await test_service.initialize()
-# Строка 74: убрал await для get_metrics()
-# Упростил: проверку event handling
-```
-
-**Причины:** Синхронизация с реальным API, исправление import names
-
----
-
-## 🎭 АРХИТЕКТУРА (Кратко)
+### Решение: ЕДИНАЯ AI-ОСНОВА
 
 ```
-Platform Integration
-├─ Intelligent EventBus (1,800 строк)
-│  └─ AI routing, 4 priority queues, < 20ms
-├─ Saga Pattern Engine (6,600 строк)
-│  └─ Distributed transactions, auto compensation
-├─ Self-Aware Services (5,700 строк)
-│  └─ Graceful degradation, load management
-└─ CQRS Infrastructure (6,400 строк)
-   └─ Event sourcing, 10-50x faster queries
-
-Использование:
-platform = await init_platform(...)  # Одна строка!
-```
-
----
-
-## 📋 TODO СПИСОК (Приоритеты)
-
-### HIGH Priority (2 недели):
-- [ ] **Интегрировать 11 BCM сервисов** (используй BIA как template)
-- [ ] **Обновить Orchestration Layer** (3 файла)
-- [ ] **Integration tests** (cross-service)
-
-### MEDIUM Priority (2 недели):
-- [ ] **Production deployment prep** (K8s, Docker, CI/CD)
-- [ ] **Monitoring dashboards** (Prometheus, Grafana)
-- [ ] **Documentation** (deployment guides)
-
-### LOW Priority (4 недели):
-- [ ] Service discovery auto-registration
-- [ ] Distributed tracing (OpenTelemetry)
-- [ ] Advanced features (см. CHANGES_AND_NEXT_STEPS.md)
-
----
-
-## 🔑 КЛЮЧЕВЫЕ КОНЦЕПЦИИ
-
-### Graceful Choreography
-```
-Вместо центрального оркестратора → умные сервисы координируются сами
-
-Компоненты:
-- Intelligent Router: AI выбирает лучший обработчик
-- Self-Aware: Сервис знает свою нагрузку и может отказать
-- Saga: Распределенные транзакции с откатом
-- CQRS: Быстрые запросы через кеш
-```
-
-### Как работает:
-```python
-# 1. Event приходит
-event = Event.create(type="bia.process.created", data={...})
-
-# 2. Intelligent Router анализирует
-analysis = await router.analyze(event)  # AI анализ
-
-# 3. Self-Aware Service решает
-if service.can_handle(event, analysis):
-    service.handle(event)  # Обрабатывает
-else:
-    service.delegate(event)  # Делегирует другому
-
-# 4. Saga координирует сложные workflow
-saga = await orchestrator.execute_saga("create_bcm_program", context)
-# Автоматический откат при ошибках
-```
-
----
-
-## 📊 МЕТРИКИ (Текущие)
-
-### Verified Performance:
-```yaml
-Platform Init: ~750ms (target < 1000ms) ✅
-Event Routing: ~15ms (target < 20ms) ✅
-Queue Depths: All zeros (healthy) ✅
-Test Success: 9/9 PASSED (100%) ✅
-```
-
-### To Be Measured:
-```yaml
-Saga Success Rate: N/A (target > 95%)
-Cache Hit Rate: N/A (target > 95%)
-Service Uptime: N/A (target > 99.9%)
-```
-
----
-
-## 🗂️ СТРУКТУРА ПРОЕКТА (Важные папки)
-
-```
-/Users/MD/AI-Platform-ISO/
-├── infrastructure/
-│   ├── platform_integration.py ← CORE INTEGRATION
-│   └── eventbus/
-│       └── intelligent_router.py ← AI ROUTING
+ai_foundation (ЕДИНСТВЕННЫЙ AI-слой)
+     ↓
+├── core/              ← Базовые AI-возможности
+│   ├── ml/
+│   ├── llm/
+│   ├── rag/
+│   └── learning/
 │
-├── intelligent_core/orchestration/
-│   └── saga_engine/ ← DISTRIBUTED TRANSACTIONS
+├── domain_adapters/   ← Специфика для доменов
+│   ├── workflow_ml/
+│   ├── expert_ml/
+│   └── orchestration_ml/
 │
-├── platform_services/bcm_domain/
-│   ├── services/
-│   │   ├── bia_service/ ← TEMPLATE (ГОТОВ)
-│   │   ├── risk_service/ ← СЛЕДУЮЩИЙ
-│   │   └── ... (9 еще)
-│   ├── _shared/ ← SELF-AWARE BASE
-│   └── _cqrs/ ← EVENT SOURCING
-│
-├── catalogs/ ← РЕГИСТРАЦИЯ КОМПОНЕНТОВ
-│   ├── PLATFORM_INTEGRATION_CATALOG.yaml
-│   └── README.md (обновлен)
-│
-└── INTEGRATION_*.md ← ДОКУМЕНТАЦИЯ (4 файла)
+└── shared/
+    ├── memory/        ← ПЕРЕНЕСТИ СЮДА
+    ├── context/
+    └── balancer/
+```
+
+**Все остальные модули удаляют свои ml/, rag/, learning/ и используют ai_foundation!**
+
+---
+
+## СЛЕДУЮЩИЕ ШАГИ
+
+### Priority 1: Системная архитектура (СЕЙЧАС!)
+1. Полный анализ платформы
+2. Проектирование под системы
+3. Поиск существующих элементов
+4. Сборка
+
+### Priority 2: Консолидация AI (7 дней)
+1. Аудит дублирования
+2. Создать domain_adapters
+3. Удалить дубликаты
+4. Обновить импорты
+5. Тестирование
+
+### Priority 3: Рефакторинг (опционально)
+1. Memory → shared/
+2. learning → pattern_learning
+3. learning_knowledge → knowledge_platform
+
+---
+
+## КЛЮЧЕВЫЕ ДОКУМЕНТЫ
+
+### Созданные анализы:
+```
+/NEXT_STEPS_GUIDE.md                    ← Инструкции для работы
+/CODEBASE_MIGRATION_COMPLETE.md         ← Отчет миграции
+/intelligent_core/INTELLIGENT_CORE_ARCHITECTURE_ANALYSIS.md  ← Анализ архитектуры
+/intelligent_core/AI_FOUNDATION_PHILOSOPHY.md                ← Философия AI
+/intelligent_core/SYSTEM_CONSOLIDATION_PLAN.md               ← План консолидации
+```
+
+### Инструменты:
+```
+/scripts/safe-cleanup.sh                ← Очистка
+/scripts/analyze-codebase.py           ← Анализ
+/scripts/remove-emojis.py              ← Удаление эмодзи
 ```
 
 ---
 
-## 🐛 ИЗВЕСТНЫЕ ПРОБЛЕМЫ
+## БЫСТРЫЙ СТАРТ
 
-### Minor Issues (не блокирующие):
-1. `get_metrics()` returns dict, not awaitable - ✅ FIXED
-2. Some saga stores don't have `initialize()` - ✅ FIXED
-3. Monitoring dashboards not created yet - ⏳ PLANNED
+### Для нового контекста:
 
-### No Critical Issues - Ready for Production Testing
-
----
-
-## 💬 КОМАНДЫ ДЛЯ ДИАГНОСТИКИ
-
-### Проверка статуса:
 ```bash
-# Git
-git log --oneline -5
+# 1. Прочитать контекст
+cat /Users/MD/AI-Platform-ISO/CONTEXT_MEMO.md
+
+# 2. Прочитать ТЗ
+cat /Users/MD/AI-Platform-ISO/SYSTEM_ARCHITECTURE_TZ.md
+
+# 3. Посмотреть статус
+git log --oneline -10
 git status
 
-# Catalogs
-cat catalogs/PLATFORM_INTEGRATION_CATALOG.yaml | head -20
-ls -la infrastructure/PLATFORM_INTEGRATION_CATALOG_ENTRY.yaml
-
-# Tests
-cd platform_services/bcm_domain/services/bia_service
-python3 test_integration.py
-```
-
-### Запуск сервиса:
-```bash
-# BIA integrated version
-cd platform_services/bcm_domain/services/bia_service
-python3 main_integrated.py
-
-# Check health
-curl http://localhost:8012/health
-curl http://localhost:8012/api/platform/status
-
-# Docs
-open http://localhost:8012/docs
+# 4. Начать работу
+# (см. SYSTEM_ARCHITECTURE_TZ.md)
 ```
 
 ---
 
-## 🎯 КРИТЕРИИ УСПЕХА (Как понять что всё работает)
+## КРИТИЧЕСКИЕ МЕТРИКИ
 
-### После восстановления контекста:
-- [ ] Прочитал INTEGRATION_COMPLETE.md
-- [ ] Запустил test_integration.py → 9/9 PASSED
-- [ ] Проверил git log → 4 коммита на месте
-- [ ] Открыл template files (main_integrated.py)
+### Проблемы найдены:
+- Memory в неправильном месте: 1
+- Learning путаница: 2 модуля
+- Дублирование AI: 3 копии ML, 2 копии RAG, 2 копии Learning
 
-### Перед началом работы:
-- [ ] Понял Graceful Choreography концепцию
-- [ ] Знаю где template (BIA service)
-- [ ] Знаю следующий шаг (risk_service)
-- [ ] Прочитал CHANGES_AND_NEXT_STEPS.md для деталей
+### Файлы изменены сегодня:
+- 1,064 файла (миграция)
+- 5 папок переименовано
+- 8,048 эмодзи удалено
 
----
-
-## 📞 БЫСТРЫЕ ССЫЛКИ
-
-### Документация:
-- [INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md) - главный документ
-- [INTEGRATION_VERIFICATION_COMPLETE.md](INTEGRATION_VERIFICATION_COMPLETE.md) - тесты
-- [REGISTRATION_COMPLETE.md](REGISTRATION_COMPLETE.md) - регистрация
-- [CHANGES_AND_NEXT_STEPS.md](CHANGES_AND_NEXT_STEPS.md) - ТЗ для агентов
-
-### Guides:
-- [DOC/PLATFORM_INTEGRATION_GUIDE.md](DOC/PLATFORM_INTEGRATION_GUIDE.md) - как интегрировать
-- [DOC/PLATFORM_ARCHITECTURE_CHOREOGRAPHY.md](DOC/PLATFORM_ARCHITECTURE_CHOREOGRAPHY.md) - архитектура
-
-### Code:
-- [infrastructure/platform_integration.py](infrastructure/platform_integration.py) - integration layer
-- [platform_services/bcm_domain/services/bia_service/main_integrated.py](platform_services/bcm_domain/services/bia_service/main_integrated.py) - template
-
----
-
-## ⚡ QUICK START (30 секунд)
-
-```bash
-# 1. Проверь что всё на месте (5 сек)
-cd /Users/MD/AI-Platform-ISO
-ls -la INTEGRATION_*.md  # Должно быть 3 файла
-
-# 2. Запусти тест (15 сек)
-cd platform_services/bcm_domain/services/bia_service
-python3 test_integration.py  # Ожидай: 9/9 PASSED
-
-# 3. Прочитай главный документ (10 сек)
-head -50 /Users/MD/AI-Platform-ISO/INTEGRATION_COMPLETE.md
-
-# ✅ READY TO CONTINUE!
+### Git commits:
+```
+f0a66a6c - Codebase standardization (1064 files)
+ceede03d - Migration report
+33844206 - Next steps guide
 ```
 
 ---
 
-## 🧠 МНЕМОНИКА (для запоминания)
+## ФИЛОСОФИЯ ПРОЕКТА
 
-**4 КОМПОНЕНТА = 4 ПАЛЬЦА РУКИ:**
-- 👆 **Указательный** = Intelligent Router (указывает куда)
-- 👉 **Средний** = Saga Engine (координирует)
-- 💪 **Безымянный** = Self-Aware (чувствует нагрузку)
-- 🤙 **Мизинец** = CQRS (быстрый доступ)
+### Главная идея:
+**ai_foundation - это система формирования интеллекта, где каждый модуль - это подход к обучению**
 
-**GRACEFUL CHOREOGRAPHY = ТАНЕЦ:**
-- Сервисы танцуют вместе (не один дирижер)
-- Каждый знает свою партию (self-aware)
-- Музыка = events (intelligent routing)
-- Хореография = sagas (coordination)
+### Подходы к формированию интеллекта:
+1. ML learning (supervised)
+2. LLM (foundation models)
+3. RAG (knowledge retrieval)
+4. Pattern learning (unsupervised)
+5. Memory (experience)
+6. Knowledge platform (human + AI learning)
+
+**Чем больше подходов, тем богаче интеллект!**
 
 ---
 
-**Статус:** ✅ MEMO COMPLETE
-**Размер:** Краткий (можно прочитать за 5 минут)
-**Цель:** Восстановить понимание после перезагрузки контекста
+## КОНТАКТЫ И ССЫЛКИ
 
-**🎭 СОХРАНЕНО НА ПИКЕ ПОНИМАНИЯ - 2025-10-19**
+### GitHub:
+```
+Repository: https://github.com/SEH-foundation/AI-Platform-ISO
+Branch: main
+```
+
+### Ключевые пути:
+```
+/Users/MD/AI-Platform-ISO/
+├── intelligent_core/ai_foundation/     ← AI-основа
+├── intelligent_core/workflow_intelligence/
+├── intelligent_core/expertise_center/
+├── platform_services/
+├── infrastructure/
+├── .env                                ← 314 переменных
+└── NEXT_STEPS_GUIDE.md                ← Начать отсюда
+```
+
+---
+
+## ДЛЯ CLAUDE CODE AGENT
+
+### Быстрое восстановление:
+
+1. **Прочитать ЭТОТ файл** (`CONTEXT_MEMO.md`)
+2. **Прочитать ТЗ** (`SYSTEM_ARCHITECTURE_TZ.md`)
+3. **Прочитать последние документы**:
+   - `SYSTEM_CONSOLIDATION_PLAN.md`
+   - `AI_FOUNDATION_PHILOSOPHY.md`
+   - `INTELLIGENT_CORE_ARCHITECTURE_ANALYSIS.md`
+4. **Начать работу** по ТЗ
+
+### Текущая задача:
+**СИСТЕМНАЯ АРХИТЕКТУРА ВСЕЙ ПЛАТФОРМЫ**
+- Анализ catalogs/, DOC/, README.md
+- Проектирование под системы
+- Поиск элементов
+- Сборка
+
+**СРОЧНО! ПРИОРИТЕТ #1!**
+
+---
+
+**END OF CONTEXT MEMO**

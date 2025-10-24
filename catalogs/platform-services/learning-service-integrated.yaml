@@ -1,0 +1,85 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: learning-service
+  title: Learning Service - ISO 22301 Training & Competence
+  description: |
+    Learning and training service aligned with ISO 22301:2019 Clause 7.2 (Competence).
+    Manages training programs, certifications, knowledge base, and competency tracking.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: AI-Platform-ISO/platform-services
+  tags:
+    - bcm
+    - iso-22301
+    - learning
+    - training
+    - competence
+    - certification
+  links:
+    - url: http://localhost:8021/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8021/health
+      title: Health Check
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+
+  # Service Configuration
+  profile:
+    displayName: Learning Service
+    iso_clause: "7.2"
+    iso_title: "Competence - Training & Awareness"
+    service_port: 8021
+    service_name: learning
+    version: "1.0.0"
+
+  # Capabilities
+  providesApis:
+    - learning-api
+
+  capabilities:
+    - learning.training
+    - learning.certification
+    - learning.knowledge
+    - learning.improvement
+    - learning.analytics
+
+  # Integration Points
+  consumesApis:
+    - eventbus-api
+    - ai-orchestrator-api
+    - workflow-intelligence-api
+
+  # Dependencies
+  dependsOn:
+    - resource:database/postgresql
+    - resource:cache/redis
+    - resource:queue/rabbitmq
+
+  # Health & Monitoring
+  health:
+    endpoint: /health
+    interval: 30s
+
+  metrics:
+    endpoint: /metrics
+    prometheus: true
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: learning-api
+  description: Learning Service REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+  definition:
+    $text: http://localhost:8021/openapi.json

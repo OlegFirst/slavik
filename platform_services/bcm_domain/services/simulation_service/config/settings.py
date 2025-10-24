@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # ============================================================================
     # SERVICE CONFIGURATION
     # ============================================================================
-    port: int = Field(default=8095, env="PORT")
+    port: int = Field(default=8024, env="PORT")
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
     environment: str = Field(default="development", env="ENVIRONMENT")
     service_name: str = Field(default="simulation-service", env="SERVICE_NAME")

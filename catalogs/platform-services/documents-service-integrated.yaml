@@ -1,0 +1,84 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: documents-service
+  title: Documents Service - ISO 22301 Documented Information
+  description: |
+    Document lifecycle management service aligned with ISO 22301:2019 Clause 7.5.
+    Manages document creation, versioning, approval workflows, retention policies.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: AI-Platform-ISO/platform-services
+  tags:
+    - bcm
+    - iso-22301
+    - documents
+    - compliance
+    - workflow
+  links:
+    - url: http://localhost:8017/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8017/health
+      title: Health Check
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+
+  # Service Configuration
+  profile:
+    displayName: Documents Service
+    iso_clause: "7.5"
+    iso_title: "Documented Information"
+    service_port: 8017
+    service_name: documents
+    version: "1.0.0"
+
+  # Capabilities
+  providesApis:
+    - documents-api
+
+  capabilities:
+    - documents.management
+    - documents.versioning
+    - documents.approval
+    - documents.retention
+    - documents.search
+
+  # Integration Points
+  consumesApis:
+    - eventbus-api
+    - ai-orchestrator-api
+    - workflow-intelligence-api
+
+  # Dependencies
+  dependsOn:
+    - resource:database/postgresql
+    - resource:cache/redis
+    - resource:queue/rabbitmq
+
+  # Health & Monitoring
+  health:
+    endpoint: /health
+    interval: 30s
+
+  metrics:
+    endpoint: /metrics
+    prometheus: true
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: documents-api
+  description: Documents Service REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+  definition:
+    $text: http://localhost:8017/openapi.json

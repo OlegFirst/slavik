@@ -1,3 +1,0 @@
-"""
-Learning System API Routers
-"""

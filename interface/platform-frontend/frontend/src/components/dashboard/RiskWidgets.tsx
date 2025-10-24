@@ -41,9 +41,9 @@ import { useRisks, useRiskReport, useRiskTrends } from '@/hooks/risk';
 import {
   getRiskSeverity,
   getSeverityColor,
-  type Risk,
   type RiskSeverity,
 } from '@/types/risk';
+import type { Risk, RiskReport, RiskTrends } from '@/lib/api/risk-client';
 
 // ============================================================================
 // TYPES
@@ -243,10 +243,10 @@ function RiskHeatMapMiniWidget({
     if (!report) return null;
 
     return {
-      critical: report.critical_count,
-      high: report.high_count,
-      medium: report.medium_count,
-      low: report.low_count,
+      critical: report.by_severity.critical,
+      high: report.by_severity.high,
+      medium: report.by_severity.medium,
+      low: report.by_severity.low,
       total: report.total_risks,
     };
   }, [report]);
@@ -363,15 +363,15 @@ function RiskTrendsWidget({
   const chartData = useMemo(() => {
     if (!trends) return [];
 
-    return trends.daily_data.map((point) => ({
+    return trends.data_points.map((point) => ({
       date: new Date(point.date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
       }),
-      critical: point.critical_count,
-      high: point.high_count,
-      medium: point.medium_count,
-      low: point.low_count,
+      critical: point.critical,
+      high: point.high,
+      medium: point.medium,
+      low: point.low,
       total: point.total_risks,
     }));
   }, [trends]);
@@ -379,8 +379,12 @@ function RiskTrendsWidget({
   const trendIndicator = useMemo(() => {
     if (!trends) return null;
 
-    const direction = trends.overall_trend;
-    const change = trends.avg_score_change;
+    const change = trends.summary.average_score_change;
+
+    // Determine direction from change value
+    let direction: 'increasing' | 'decreasing' | 'stable' = 'stable';
+    if (change > 0.5) direction = 'increasing';
+    else if (change < -0.5) direction = 'decreasing';
 
     return { direction, change };
   }, [trends]);
@@ -528,7 +532,7 @@ function QuickStatsWidget({
       <div className="grid grid-cols-2 gap-3">
         <StatCard
           title="Critical"
-          value={report?.critical_count ?? 0}
+          value={report?.by_severity.critical ?? 0}
           severity="critical"
           icon={<AlertTriangle className="h-5 w-5" />}
           loading={isLoading}
@@ -536,7 +540,7 @@ function QuickStatsWidget({
         />
         <StatCard
           title="High"
-          value={report?.high_count ?? 0}
+          value={report?.by_severity.high ?? 0}
           severity="high"
           icon={<AlertTriangle className="h-5 w-5" />}
           loading={isLoading}
@@ -544,7 +548,7 @@ function QuickStatsWidget({
         />
         <StatCard
           title="Medium"
-          value={report?.medium_count ?? 0}
+          value={report?.by_severity.medium ?? 0}
           severity="medium"
           icon={<Activity className="h-5 w-5" />}
           loading={isLoading}
@@ -552,7 +556,7 @@ function QuickStatsWidget({
         />
         <StatCard
           title="Low"
-          value={report?.low_count ?? 0}
+          value={report?.by_severity.low ?? 0}
           severity="low"
           icon={<Shield className="h-5 w-5" />}
           loading={isLoading}
@@ -563,9 +567,9 @@ function QuickStatsWidget({
       {report && (
         <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Total Active Risks</span>
+            <span className="text-gray-600">Total Risks</span>
             <span className="font-bold text-gray-900 text-lg">
-              {report.active_risks}
+              {report.total_risks}
             </span>
           </div>
         </div>

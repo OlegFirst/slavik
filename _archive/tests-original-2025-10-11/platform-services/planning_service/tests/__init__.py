@@ -1,3 +1,0 @@
-"""
-Planning Service Test Suite
-"""

@@ -1,3 +1,0 @@
-"""
-Digital Twin Service Tests
-"""

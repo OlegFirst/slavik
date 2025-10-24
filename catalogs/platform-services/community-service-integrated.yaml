@@ -1,0 +1,85 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: community-service
+  title: Community Service - ISO 22301 Continual Improvement
+  description: |
+    BCM specialist community and knowledge sharing platform aligned with ISO 22301:2019 Clause 10.2.
+    Provides marketplace, collaboration portal, knowledge base, and peer support.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: AI-Platform-ISO/platform-services
+  tags:
+    - bcm
+    - iso-22301
+    - community
+    - knowledge-sharing
+    - collaboration
+    - marketplace
+  links:
+    - url: http://localhost:8022/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8022/health
+      title: Health Check
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+
+  # Service Configuration
+  profile:
+    displayName: Community Service
+    iso_clause: "10.2"
+    iso_title: "Continual Improvement & Knowledge Sharing"
+    service_port: 8022
+    service_name: community
+    version: "1.0.0"
+
+  # Capabilities
+  providesApis:
+    - community-api
+
+  capabilities:
+    - community.specialists
+    - community.marketplace
+    - community.collaboration
+    - community.knowledge_sharing
+    - community.support
+
+  # Integration Points
+  consumesApis:
+    - eventbus-api
+    - ai-orchestrator-api
+    - workflow-intelligence-api
+
+  # Dependencies
+  dependsOn:
+    - resource:database/postgresql
+    - resource:cache/redis
+    - resource:queue/rabbitmq
+
+  # Health & Monitoring
+  health:
+    endpoint: /health
+    interval: 30s
+
+  metrics:
+    endpoint: /metrics
+    prometheus: true
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: community-api
+  description: Community Service REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+  definition:
+    $text: http://localhost:8022/openapi.json

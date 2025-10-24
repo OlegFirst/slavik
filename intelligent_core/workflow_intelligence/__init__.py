@@ -50,6 +50,33 @@ from .storage import (
     PostgresStorageAdapter
 )
 
+# Infrastructure exports
+from .infrastructure.process_framework import (
+    ProcessDefinition,
+    ProcessStep,
+    ProcessInstance,
+    ProcessFramework,
+    get_process_framework
+)
+
+from .infrastructure.templates import (
+    DocumentTemplate,
+    DocumentTemplateLibrary,
+    get_document_library
+)
+
+from .infrastructure.orchestration import (
+    ProcessOrchestrator,
+    get_process_orchestrator
+)
+
+from .workflows import (
+    create_bia_process,
+    create_risk_assessment_process,
+    create_bc_plan_process,
+    register_all_bcm_processes
+)
+
 __all__ = [
     # Core
     "WorkflowEngine",
@@ -74,6 +101,28 @@ __all__ = [
     # Storage
     "StorageAdapter",
     "PostgresStorageAdapter",
+
+    # Infrastructure - Process Framework
+    "ProcessDefinition",
+    "ProcessStep",
+    "ProcessInstance",
+    "ProcessFramework",
+    "get_process_framework",
+
+    # Infrastructure - Templates
+    "DocumentTemplate",
+    "DocumentTemplateLibrary",
+    "get_document_library",
+
+    # Infrastructure - Orchestration
+    "ProcessOrchestrator",
+    "get_process_orchestrator",
+
+    # Workflows - BCM Processes
+    "create_bia_process",
+    "create_risk_assessment_process",
+    "create_bc_plan_process",
+    "register_all_bcm_processes",
 
     # Initialization
     "initialize",

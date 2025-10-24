@@ -8,6 +8,7 @@ Components:
 - Retrieval: Hybrid search (vector + keyword)
 - Reranking: Re-rank results by relevance
 - Pipeline: Orchestrate the full RAG flow
+- BaseRAGSubsystem: Reference implementation of IRAGSubsystem protocol
 """
 
 from .pipeline import RAGPipeline
@@ -15,6 +16,7 @@ from .embeddings import EmbeddingGenerator
 from .retrieval import HybridRetriever
 from .reranking import Reranker
 from .qdrant_wrapper import QdrantVectorStore
+from .base_rag_subsystem import BaseRAGSubsystem
 
 __all__ = [
     'RAGPipeline',
@@ -22,4 +24,5 @@ __all__ = [
     'HybridRetriever',
     'Reranker',
     'QdrantVectorStore',
+    'BaseRAGSubsystem',
 ]

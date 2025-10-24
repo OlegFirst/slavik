@@ -85,9 +85,10 @@ class GovernanceServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
                 service_name="governance_service",
                 capabilities=[
                     "governance.policy",
-                    "governance.roles",
-                    "governance.responsibilities",
-                    "governance.oversight"
+                    "governance.strategy",
+                    "governance.stakeholder",
+                    "governance.objectives",
+                    "governance.review"
                 ]
             )
             logger.info(" Governance Service initialized as Self-Aware")
@@ -99,9 +100,10 @@ class GovernanceServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
         if SELF_AWARE_AVAILABLE:
             # Register event handlers with priorities
             self.register_handler("governance.policy.*", self.handle_policy_event, priority=EventPriority.HIGH)
-            self.register_handler("governance.roles.*", self.handle_roles_event, priority=EventPriority.HIGH)
-            self.register_handler("governance.responsibilities.*", self.handle_responsibilities_event, priority=EventPriority.NORMAL)
-            self.register_handler("governance.oversight.*", self.handle_oversight_event, priority=EventPriority.NORMAL)
+            self.register_handler("governance.strategy.*", self.handle_strategy_event, priority=EventPriority.HIGH)
+            self.register_handler("governance.stakeholder.*", self.handle_stakeholder_event, priority=EventPriority.NORMAL)
+            self.register_handler("governance.objectives.*", self.handle_objectives_event, priority=EventPriority.NORMAL)
+            self.register_handler("governance.review.*", self.handle_review_event, priority=EventPriority.NORMAL)
 
             logger.info(" Governance Service event handlers registered")
 
@@ -110,20 +112,29 @@ class GovernanceServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else o
         logger.info(f"Handling governance.policy event: {event.type}")
         # TODO: Implement actual policy handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_roles_event(self, event):
-        """Handle governance.roles events"""
-        logger.info(f"Handling governance.roles event: {event.type}")
-        # TODO: Implement actual roles handling
+
+    async def handle_strategy_event(self, event):
+        """Handle governance.strategy events"""
+        logger.info(f"Handling governance.strategy event: {event.type}")
+        # TODO: Implement actual strategy handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_responsibilities_event(self, event):
-        """Handle governance.responsibilities events"""
-        logger.info(f"Handling governance.responsibilities event: {event.type}")
-        # TODO: Implement actual responsibilities handling
+
+    async def handle_stakeholder_event(self, event):
+        """Handle governance.stakeholder events"""
+        logger.info(f"Handling governance.stakeholder event: {event.type}")
+        # TODO: Implement actual stakeholder handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_oversight_event(self, event):
-        """Handle governance.oversight events"""
-        logger.info(f"Handling governance.oversight event: {event.type}")
-        # TODO: Implement actual oversight handling
+
+    async def handle_objectives_event(self, event):
+        """Handle governance.objectives events"""
+        logger.info(f"Handling governance.objectives event: {event.type}")
+        # TODO: Implement actual objectives handling
+        return {"status": "processed", "event_type": event.type}
+
+    async def handle_review_event(self, event):
+        """Handle governance.review events"""
+        logger.info(f"Handling governance.review event: {event.type}")
+        # TODO: Implement actual review handling
         return {"status": "processed", "event_type": event.type}
 
     async def handle_completion_event(self, event):
@@ -157,8 +168,8 @@ async def lifespan(app: FastAPI):
     logger.info("=" * 60)
     logger.info(" Starting Governance Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f" Port: 8060")
-    logger.info(f" ISO 22301 Clause: 5.1-5.3")
+    logger.info(f" Port: {settings.SERVICE_PORT}")
+    logger.info(f" ISO 22301 Clause: 5 - Leadership & Governance")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -201,7 +212,7 @@ async def lifespan(app: FastAPI):
                         "max_concurrent": 10,
                         "avg_processing_time_ms": 500,
                         "sla_ms": 3000,
-                        "semantic_tags": ["governance", "policy", "roles", "oversight"]
+                        "semantic_tags": ["governance", "policy", "strategy", "stakeholder", "objectives", "review"]
                     }
                 )
                 logger.info("    Self-Aware Service registered with Intelligent Router")
@@ -261,9 +272,9 @@ async def lifespan(app: FastAPI):
         logger.info("\n" + "=" * 60)
         logger.info(" Governance Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"    Docs: http://localhost:8060/docs")
-        logger.info(f"    Metrics: http://localhost:8060/metrics")
-        logger.info(f"   ️  Health: http://localhost:8060/health")
+        logger.info(f"    Docs: http://localhost:{settings.SERVICE_PORT}/docs")
+        logger.info(f"    Metrics: http://localhost:{settings.SERVICE_PORT}/metrics")
+        logger.info(f"   ️  Health: http://localhost:{settings.SERVICE_PORT}/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
@@ -334,7 +345,7 @@ async def health_check():
         "status": "healthy",
         "service": "governance_service",
         "version": getattr(settings, 'SERVICE_VERSION', '1.0.0'),
-        "iso_clause": "5.1-5.3"
+        "iso_clause": "5"
     }
 
     if platform:
@@ -376,7 +387,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main_integrated:app",
         host="0.0.0.0",
-        port=8060,
+        port=settings.SERVICE_PORT,
         reload=True,
         log_level="info"
     )

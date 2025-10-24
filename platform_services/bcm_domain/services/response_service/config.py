@@ -39,16 +39,19 @@ class Settings(BaseSettings):
 
     # API Configuration
     API_V1_PREFIX: str = Field(default="/api/v1/response", description="API v1 prefix")
+    SERVICE_PORT: int = Field(default=8016, description="Service port")
     HOST: str = Field(default="0.0.0.0", description="Host to bind")
-    PORT: int = Field(default=8041, description="Port to bind")
+    PORT: int = Field(default=8016, description="Port to bind")
     DEBUG: bool = Field(default=False, description="Debug mode")
+    SERVICE_TITLE: str = Field(default="Response Service", description="Service title")
+    SERVICE_DESCRIPTION: str = Field(default="BCM Incident Response - ISO 22301 Clause 8.4", description="Service description")
 
     # ========================================================================
     # Database Configuration
     # ========================================================================
 
     DATABASE_URL: str = Field(
-        default="postgresql+asyncpg://postgres.tpdkhddtbhpoqzzgxfni:K%40x3ta9V8GK5rnW@aws-1-eu-north-1.pooler.supabase.com:5432/postgres",
+        default="sqlite+aiosqlite:///./response_dev.db",
         description="Database connection URL"
     )
 
@@ -182,8 +185,8 @@ class Settings(BaseSettings):
         default=False,
         description="Enable JWT authentication (set to false for development)"
     )
-    JWT_SECRET_KEY: Optional[str] = Field(
-        default=None,
+    JWT_SECRET_KEY: str = Field(
+        default="dev-secret-CHANGE-IN-PRODUCTION-response-12345",
         description="JWT secret key for token signing/verification"
     )
     JWT_ALGORITHM: str = Field(

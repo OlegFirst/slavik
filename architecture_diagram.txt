@@ -1,0 +1,356 @@
+================================================================================
+                 AI-PLATFORM-ISO INFRASTRUCTURE ARCHITECTURE
+================================================================================
+
+LAYER MODEL:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          APPLICATION LAYER                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Platform Services (BCM Domain)    │    Intelligent Core    │  Expertise    │
+│  ├─ bia_service                    │    ├─ system_bcm       │  Center       │
+│  ├─ risk_service                   │    ├─ scenario_        │  ├─ AI       │
+│  ├─ compliance_service             │    │   intelligence    │  │  experts   │
+│  ├─ governance_service             │    ├─ workflow_        │  ├─ tools    │
+│  ├─ planning_service               │    │   intelligence    │  └─ consultation
+│  ├─ learning_service               │    └─ collective       │               │
+│  └─ validation_service             │                        │               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                      PLATFORM INTEGRATION LAYER                              │
+│                    (infrastructure/platform_integration.py)                  │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │ PlatformIntegration Singleton                                        │  │
+│  │ ├─ EventBus (+ Intelligent Router)  ← AI-powered routing            │  │
+│  │ ├─ Saga Orchestrator                ← Distributed transactions       │  │
+│  │ ├─ CQRS Handlers                    ← Event sourcing               │  │
+│  │ └─ Self-Aware Services              ← Graceful degradation         │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                       INFRASTRUCTURE LAYER (Core Components)                 │
+│                                                                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
+│  │   EVENTBUS       │  │    DATABASE      │  │    SECURITY      │         │
+│  │                  │  │                  │  │                  │         │
+│  │ ├─ Event Types   │  │ ├─ PostgreSQL    │  │ ├─ Encryption    │         │
+│  │ ├─ Subscribers   │  │ │  (Supabase)    │  │ │   Service      │         │
+│  │ ├─ Pub-Sub       │  │ ├─ Redis         │  │ ├─ Vault Client  │         │
+│  │ ├─ Replay Trail  │  │ │  (Cache/       │  │ │   (Supabase)   │         │
+│  │ ├─ DLQ           │  │ │   Sessions)    │  │ ├─ JWT Auth      │         │
+│  │ ├─ Consumer      │  │ ├─ Vector DB     │  │ ├─ CORS Config   │         │
+│  │ │   Groups       │  │ │  (Qdrant)      │  │ └─ Middleware    │         │
+│  │ ├─ Memory        │  │ ├─ RLS (Row-     │  │    Chain         │         │
+│  │ ├─ Redis         │  │ │   Level        │  │                  │         │
+│  │ ├─ RabbitMQ      │  │ │   Security)    │  │                  │         │
+│  │ └─ Intelligent   │  │ └─ Migrations    │  │                  │         │
+│  │    Router        │  │                  │  │                  │         │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
+│                                                                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
+│  │   GATEWAY        │  │  OBSERVABILITY   │  │    RUNTIME       │         │
+│  │                  │  │                  │  │                  │         │
+│  │ ├─ Request       │  │ ├─ Prometheus    │  │ ├─ Service        │         │
+│  │ │   Routing      │  │ ├─ Grafana       │  │ │   Discovery     │         │
+│  │ ├─ Rate Limiting │  │ ├─ Notifications │  │ ├─ Message Queue  │         │
+│  │ ├─ Auth          │  │ ├─ Exporters     │  │ ├─ WebSocket      │         │
+│  │ ├─ Response      │  │ ├─ Jaeger        │  │ └─ Event Bus      │         │
+│  │ │   Transform    │  │ │   (Tracing)    │  │    (Runtime)      │         │
+│  │ └─ Timeout       │  │ └─ ELK Stack     │  │                  │         │
+│  │    Handling      │  │    (Logging)     │  │                  │         │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
+│                                                                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
+│  │  POLICY ENGINE   │  │ DECISION CENTER  │  │   AI SERVICES    │         │
+│  │                  │  │                  │  │                  │         │
+│  │ ├─ Policies      │  │ ├─ Governance    │  │ ├─ ACE Service   │         │
+│  │ │   (YAML)       │  │ ├─ Decisions     │  │ ├─ Balancer      │         │
+│  │ ├─ Validation    │  │ ├─ Escalation    │  │ │   Service      │         │
+│  │ ├─ Audit         │  │ │   Manager      │  │ ├─ AI Office     │         │
+│  │ │   Logging      │  │ ├─ Risk          │  │ │   Infrastructure
+│  │ └─ Decision      │  │ │   Assessment   │  │ └─ Decision      │         │
+│  │    Models        │  │ └─ API           │  │    Center API    │         │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                   DEPLOYMENT & ORCHESTRATION LAYER                          │
+│                                                                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
+│  │   KUBERNETES     │  │   TERRAFORM      │  │  DOCKER COMPOSE  │         │
+│  │                  │  │                  │  │                  │         │
+│  │ ├─ Deployments   │  │ ├─ Cloud         │  │ ├─ Local Dev     │         │
+│  │ ├─ Services      │  │ │   Infra        │  │ ├─ Testing       │         │
+│  │ ├─ ConfigMaps    │  │ ├─ Networking    │  │ └─ CI/CD Pipeline │        │
+│  │ ├─ Secrets       │  │ ├─ Security      │  │                  │         │
+│  │ ├─ Ingress       │  │ └─ Monitoring    │  │                  │         │
+│  │ ├─ Istio         │  │                  │  │                  │         │
+│  │ │   (Service     │  │                  │  │                  │         │
+│  │ │    Mesh)       │  │                  │  │                  │         │
+│  │ ├─ ArgoCD        │  │                  │  │                  │         │
+│  │ │   (GitOps)     │  │                  │  │                  │         │
+│  │ └─ Monitoring    │  │                  │  │                  │         │
+│  │    Stack         │  │                  │  │                  │         │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                              INTEGRATION PATTERNS
+================================================================================
+
+PATTERN 1: PUBLISH-SUBSCRIBE (EventBus)
+─────────────────────────────────────────────────────────────────────────────
+
+Service A                 Intelligent EventBus               Service B
+   │                              │                            │
+   ├─ Publish Event ─────────────>│                            │
+   │                              │                            │
+   │                   Event Analysis (AI)                     │
+   │                   ├─ Semantic matching                    │
+   │                   ├─ Load-aware routing                   │
+   │                   └─ Capability matching                  │
+   │                              │                            │
+   │                   Route to subscribers                    │
+   │                              │                            │
+   │                              ├─ Forward to Service B ────>│
+   │                              │                            │
+   │                              ├─ Forward to Service C      │
+   │                              │                            │
+   │                              └─ Forward to AI Handlers    │
+
+
+PATTERN 2: REQUEST-RESPONSE (Gateway)
+─────────────────────────────────────────────────────────────────────────────
+
+Client                    API Gateway                  Service
+  │                            │                         │
+  ├─ HTTP Request ────────────>│                         │
+  │                            │                         │
+  │                   ├─ Authentication                  │
+  │                   ├─ Rate Limiting                   │
+  │                   ├─ Request Validation              │
+  │                   │                                  │
+  │                   └─ Route to Service ──────────────>│
+  │                                                      │
+  │                                      Service Response│
+  │                   <──────────────────────────────────┤
+  │                   ├─ Transform Response              │
+  │                   ├─ Set Headers                     │
+  │                   │                                  │
+  │<──────────────────┘                                  │
+
+
+PATTERN 3: DATABASE TRANSACTIONS (CQRS)
+─────────────────────────────────────────────────────────────────────────────
+
+Command Handler                    Event Store               Query Handler
+      │                                   │                        │
+      ├─ Create Command ──────────────────>│                        │
+      │                                    │                        │
+      │                    ├─ Persist Event                        │
+      │                    ├─ Publish Event                        │
+      │                    │                                       │
+      │                    └─ Update Query Model ────────────────>│
+      │                                    │                        │
+      │<────── Command Acknowledgment ─────│                        │
+      │                                    │                        │
+      │                                    Query Handler            │
+      │                                    reads from Query Model   │
+
+
+PATTERN 4: DISTRIBUTED TRANSACTIONS (Saga)
+─────────────────────────────────────────────────────────────────────────────
+
+Saga Orchestrator
+      │
+      ├─ Start Saga ─────────────────────────────────────┐
+      │                                                   │
+      ├─ Service 1 (Approve) ────────>│ Success          │
+      │                               │ Publish Event    │
+      │                               │<──────────────────┤
+      │                                                   │
+      ├─ Service 2 (Create Plan) ────>│ Success          │
+      │                               │ Publish Event    │
+      │                               │<──────────────────┤
+      │                                                   │
+      ├─ Service 3 (Assess Risk) ────>│ Success          │
+      │                               │ Publish Event    │
+      │                               │<──────────────────┤
+      │                                                   │
+      ├─ Service 4 (Check Compliance)>│ Failure          │
+      │                               │ Trigger Rollback │
+      │                               │<──────────────────┤
+      │                                                   │
+      └─ Execute Compensations (reverse order)           │
+         Service 3.rollback                               │
+         Service 2.rollback                               │
+         Service 1.rollback                               │
+
+================================================================================
+                         DATA FLOW EXAMPLE: Risk Analysis
+================================================================================
+
+1. SERVICE STARTUP
+   ├─ Risk Service initializes
+   ├─ Calls init_platform() from infrastructure
+   ├─ Platform initializes:
+   │  ├─ EventBus (+ Intelligent Router)
+   │  ├─ Saga Engine
+   │  ├─ CQRS handlers
+   │  └─ Database connection
+   └─ Risk Service subscribes to events
+
+2. USER CREATES RISK
+   ├─ REST API: POST /risks
+   ├─ Risk Service receives request
+   ├─ Validates input (using security module)
+   ├─ Creates Risk Command (CQRS)
+   ├─ Command Handler persists to database
+   │  ├─ PostgreSQL: Save risk record
+   │  ├─ Redis: Cache risk data
+   │  └─ Publish RiskCreatedEvent
+   └─ Return response to client
+
+3. INTELLIGENT ROUTING
+   ├─ RiskCreatedEvent published to EventBus
+   ├─ Intelligent Router analyzes event:
+   │  ├─ Semantic analysis: "This is a risk creation event"
+   │  ├─ Load analysis: "Risk Service load = 60%"
+   │  ├─ Capability matching: "Compliance Service can validate"
+   │  └─ AI suggestions: "Route to Expert AI for impact assessment"
+   └─ Determine target subscribers
+
+4. EVENT DISTRIBUTION
+   ├─ Route to Compliance Service
+   │  ├─ Handler: validate_risk_compliance()
+   │  ├─ Updates database with validation result
+   │  ├─ Publishes RiskValidatedEvent
+   │  └─ Updates metrics
+   ├─ Route to Learning Service
+   │  ├─ Handler: learn_from_risk()
+   │  ├─ Updates ML models
+   │  ├─ Publishes LearningUpdatedEvent
+   │  └─ Stores embeddings in Vector DB
+   └─ Route to Expertise Center
+      ├─ AI analysis: Impact assessment
+      ├─ Publishes ImpactAssessmentEvent
+      ├─ Updates knowledge base
+      └─ Triggers decision consultation
+
+5. METRICS & OBSERVABILITY
+   ├─ Prometheus collects metrics:
+   │  ├─ event_published_total{type="RiskCreated"}
+   │  ├─ event_processing_duration_seconds
+   │  ├─ eventbus_subscriber_lag
+   │  └─ database_query_duration_seconds
+   ├─ Grafana displays dashboards
+   ├─ Jaeger traces distributed requests
+   ├─ ELK Stack logs all events
+   └─ Notifications send alerts if needed
+
+6. POLICY ENFORCEMENT
+   ├─ Policy Engine checks policies:
+   │  ├─ Policy: "All risks >= HIGH must be escalated"
+   │  ├─ This risk = HIGH
+   │  ├─ Trigger escalation
+   │  └─ Notify decision center
+   └─ Decision Center creates decision record
+
+================================================================================
+                          DEPLOYMENT ARCHITECTURE
+================================================================================
+
+LOCAL DEVELOPMENT
+─────────────────────────────────────────────────────────────────────────────
+
+docker-compose up (infrastructure)
+    ├─ PostgreSQL:5432
+    ├─ Redis:6379
+    ├─ Qdrant:6333
+    ├─ Prometheus:9090
+    └─ Grafana:3000
+
+Services run locally:
+    ├─ Risk Service:8001
+    ├─ Planning Service:8002
+    ├─ Compliance Service:8003
+    └─ ... (other services)
+
+
+KUBERNETES PRODUCTION
+─────────────────────────────────────────────────────────────────────────────
+
+kubectl apply -f infrastructure/kubernetes/
+
+Namespaces:
+    ├─ default
+    │  ├─ postgresql (Stateful)
+    │  ├─ redis (Deployment)
+    │  ├─ qdrant (Stateful)
+    │  └─ observability
+    │     ├─ prometheus
+    │     ├─ grafana
+    │     ├─ jaeger
+    │     └─ elasticsearch
+    └─ bcm-platform
+       ├─ api-gateway
+       ├─ risk-service (Deployment)
+       ├─ planning-service (Deployment)
+       ├─ compliance-service (Deployment)
+       ├─ governance-service (Deployment)
+       ├─ learning-service (Deployment)
+       ├─ documents-service (Deployment)
+       ├─ response-service (Deployment)
+       ├─ validation-service (Deployment)
+       ├─ community-service (Deployment)
+       ├─ simulation-service (Deployment)
+       └─ bia-service (Deployment)
+
+Service Mesh (Istio):
+    ├─ Virtual Services (traffic management)
+    ├─ Destination Rules (load balancing)
+    ├─ Network Policies (security)
+    └─ Circuit Breakers (resilience)
+
+GitOps (ArgoCD):
+    ├─ Git repository
+    ├─ Watch for changes
+    ├─ Auto-sync applications
+    └─ Rollback on failure
+
+================================================================================
+                         COMPONENT STATISTICS
+================================================================================
+
+Total Infrastructure Components: 17 major
+├─ Database: 3 (PostgreSQL, Redis, Vector)
+├─ EventBus: 1 (with Intelligent Router)
+├─ Security: 1 (Encryption + Vault)
+├─ Gateway: 1
+├─ Observability: 1 (Prometheus, Grafana, etc.)
+├─ Runtime: 1 (Service Discovery, WebSocket, etc.)
+├─ Policy/Governance: 2
+├─ AI/Automation: 2
+├─ Kubernetes: 1
+└─ Terraform: 1
+
+Platform Services: 12 services
+├─ All use platform_integration
+├─ All use eventbus
+├─ All use database
+└─ All use security module
+
+Intelligent Core Modules: 4
+├─ system_bcm_service
+├─ scenario_intelligence
+├─ workflow_intelligence
+└─ collective
+
+Expertise Center: 1 main module
+├─ AI experts
+├─ Tools
+├─ Knowledge base
+└─ Consultation API
+
+Total Lines of Configuration: 1000s across all files
+├─ Python code: ~50k LOC
+├─ YAML/JSON config: ~5k
+├─ SQL migrations: ~10k
+└─ Docker/K8s manifests: ~3k
+
+================================================================================

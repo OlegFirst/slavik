@@ -84,10 +84,11 @@ class ResponseServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else obj
             super().__init__(
                 service_name="response_service",
                 capabilities=[
-                    "response.incident_detection",
+                    "response.incident",
                     "response.activation",
                     "response.coordination",
-                    "response.communication"
+                    "response.communication",
+                    "response.recovery"
                 ]
             )
             logger.info(" Response Service initialized as Self-Aware")
@@ -98,32 +99,42 @@ class ResponseServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else obj
         """Initialize Response Service-specific capabilities"""
         if SELF_AWARE_AVAILABLE:
             # Register event handlers with priorities
-            self.register_handler("response.incident_detection.*", self.handle_incident_detection_event, priority=EventPriority.HIGH)
+            self.register_handler("response.incident.*", self.handle_incident_event, priority=EventPriority.HIGH)
             self.register_handler("response.activation.*", self.handle_activation_event, priority=EventPriority.HIGH)
             self.register_handler("response.coordination.*", self.handle_coordination_event, priority=EventPriority.NORMAL)
             self.register_handler("response.communication.*", self.handle_communication_event, priority=EventPriority.NORMAL)
+            self.register_handler("response.recovery.*", self.handle_recovery_event, priority=EventPriority.NORMAL)
 
             logger.info(" Response Service event handlers registered")
 
-    async def handle_incident_detection_event(self, event):
-        """Handle response.incident_detection events"""
-        logger.info(f"Handling response.incident_detection event: {event.type}")
-        # TODO: Implement actual incident_detection handling
+    async def handle_incident_event(self, event):
+        """Handle response.incident events"""
+        logger.info(f"Handling response.incident event: {event.type}")
+        # TODO: Implement actual incident handling
         return {"status": "processed", "event_type": event.type}
+
     async def handle_activation_event(self, event):
         """Handle response.activation events"""
         logger.info(f"Handling response.activation event: {event.type}")
         # TODO: Implement actual activation handling
         return {"status": "processed", "event_type": event.type}
+
     async def handle_coordination_event(self, event):
         """Handle response.coordination events"""
         logger.info(f"Handling response.coordination event: {event.type}")
         # TODO: Implement actual coordination handling
         return {"status": "processed", "event_type": event.type}
+
     async def handle_communication_event(self, event):
         """Handle response.communication events"""
         logger.info(f"Handling response.communication event: {event.type}")
         # TODO: Implement actual communication handling
+        return {"status": "processed", "event_type": event.type}
+
+    async def handle_recovery_event(self, event):
+        """Handle response.recovery events"""
+        logger.info(f"Handling response.recovery event: {event.type}")
+        # TODO: Implement actual recovery handling
         return {"status": "processed", "event_type": event.type}
 
     async def handle_completion_event(self, event):
@@ -157,8 +168,8 @@ async def lifespan(app: FastAPI):
     logger.info("=" * 60)
     logger.info(" Starting Response Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f" Port: 8080")
-    logger.info(f" ISO 22301 Clause: 8.4.3")
+    logger.info(f" Port: {settings.SERVICE_PORT}")
+    logger.info(f" ISO 22301 Clause: 8.4 - Incident Response")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -201,7 +212,7 @@ async def lifespan(app: FastAPI):
                         "max_concurrent": 10,
                         "avg_processing_time_ms": 500,
                         "sla_ms": 3000,
-                        "semantic_tags": ["incident", "response", "activation", "coordination"]
+                        "semantic_tags": ["response", "incident", "activation", "coordination", "communication", "recovery"]
                     }
                 )
                 logger.info("    Self-Aware Service registered with Intelligent Router")
@@ -261,9 +272,9 @@ async def lifespan(app: FastAPI):
         logger.info("\n" + "=" * 60)
         logger.info(" Response Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"    Docs: http://localhost:8080/docs")
-        logger.info(f"    Metrics: http://localhost:8080/metrics")
-        logger.info(f"   ️  Health: http://localhost:8080/health")
+        logger.info(f"    Docs: http://localhost:{settings.SERVICE_PORT}/docs")
+        logger.info(f"    Metrics: http://localhost:{settings.SERVICE_PORT}/metrics")
+        logger.info(f"   ️  Health: http://localhost:{settings.SERVICE_PORT}/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
@@ -376,7 +387,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main_integrated:app",
         host="0.0.0.0",
-        port=8080,
+        port=settings.SERVICE_PORT,
         reload=True,
         log_level="info"
     )

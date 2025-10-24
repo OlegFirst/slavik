@@ -1,0 +1,85 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: validation-service
+  title: Validation Service - ISO 22301 Exercising & Testing
+  description: |
+    Validation service for exercises, audits, testing, and CAPA aligned with ISO 22301:2019.
+    Supports Clauses 8.5 (Exercising), 9.1 (Monitoring), 9.2 (Internal Audit), 9.3 (Management Review), 10 (Improvement).
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: AI-Platform-ISO/platform-services
+  tags:
+    - bcm
+    - iso-22301
+    - validation
+    - testing
+    - audit
+    - capa
+  links:
+    - url: http://localhost:8023/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8023/health
+      title: Health Check
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+
+  # Service Configuration
+  profile:
+    displayName: Validation Service
+    iso_clauses: ["8.5", "9.1", "9.2", "9.3", "10"]
+    iso_title: "Exercising, Audits, Reviews & CAPA"
+    service_port: 8023
+    service_name: validation
+    version: "1.0.0"
+
+  # Capabilities
+  providesApis:
+    - validation-api
+
+  capabilities:
+    - validation.testing
+    - validation.exercises
+    - validation.audit
+    - validation.compliance
+    - validation.reporting
+
+  # Integration Points
+  consumesApis:
+    - eventbus-api
+    - ai-orchestrator-api
+    - workflow-intelligence-api
+
+  # Dependencies
+  dependsOn:
+    - resource:database/postgresql
+    - resource:cache/redis
+    - resource:queue/rabbitmq
+
+  # Health & Monitoring
+  health:
+    endpoint: /health
+    interval: 30s
+
+  metrics:
+    endpoint: /metrics
+    prometheus: true
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: validation-api
+  description: Validation Service REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+  definition:
+    $text: http://localhost:8023/openapi.json

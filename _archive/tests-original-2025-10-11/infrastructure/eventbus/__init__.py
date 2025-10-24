@@ -1,6 +1,0 @@
-"""
-Eventbus Module
-
-Test suite.
-"""
-

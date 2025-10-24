@@ -1,0 +1,92 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: simulation-service
+  title: Simulation Service - ISO 22301 Digital Twin & Scenario Testing
+  description: |
+    Advanced simulation and digital twin service aligned with ISO 22301:2019 Clause 8.5.
+    Provides scenario generation, discrete event simulation, analytics, and digital twin capabilities.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: AI-Platform-ISO/platform-services
+  tags:
+    - bcm
+    - iso-22301
+    - simulation
+    - digital-twin
+    - testing
+    - scenarios
+    - analytics
+  links:
+    - url: http://localhost:8024/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8024/health
+      title: Health Check
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+
+  # Service Configuration
+  profile:
+    displayName: Simulation Service
+    iso_clause: "8.5"
+    iso_title: "Exercising and Testing - Digital Twin"
+    service_port: 8024
+    service_name: simulation
+    version: "1.0.0"
+
+  # Capabilities
+  providesApis:
+    - simulation-api
+
+  capabilities:
+    - simulation.scenarios
+    - simulation.testing
+    - simulation.analysis
+    - simulation.reporting
+    - simulation.digital_twin
+
+  # Integration Points
+  consumesApis:
+    - eventbus-api
+    - ai-orchestrator-api
+    - workflow-intelligence-api
+    - scenario-orchestrator-api
+
+  # Dependencies
+  dependsOn:
+    - resource:database/postgresql
+    - resource:cache/redis
+    - resource:queue/rabbitmq
+
+  # Simulation Engines
+  engines:
+    - jaamsim
+    - simpy
+
+  # Health & Monitoring
+  health:
+    endpoint: /health
+    interval: 30s
+
+  metrics:
+    endpoint: /metrics
+    prometheus: true
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: simulation-api
+  description: Simulation Service REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: bcm-team
+  system: bcm-platform
+  definition:
+    $text: http://localhost:8024/openapi.json

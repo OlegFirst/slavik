@@ -12,11 +12,11 @@ class Settings(BaseSettings):
 
     # Service Identity
     SERVICE_NAME: str = "validation"
-    SERVICE_PORT: int = 8022
+    SERVICE_PORT: int = 8023
     SERVICE_VERSION: str = "1.0.0"
 
     # Database
-    DATABASE_URL: str
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/bcm_platform"
     DB_POOL_SIZE: int = 5
     DB_MAX_OVERFLOW: int = 10
 

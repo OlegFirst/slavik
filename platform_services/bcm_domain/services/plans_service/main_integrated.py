@@ -84,10 +84,11 @@ class PlansServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else object
             super().__init__(
                 service_name="plans_service",
                 capabilities=[
-                    "plans.bcp_create",
-                    "plans.bcp_update",
-                    "plans.drp_create",
-                    "plans.testing"
+                    "plans.creation",
+                    "plans.templates",
+                    "plans.versioning",
+                    "plans.approval",
+                    "plans.distribution"
                 ]
             )
             logger.info(" Plans Service initialized as Self-Aware")
@@ -98,32 +99,42 @@ class PlansServiceSelfAware(SelfAwareService if SELF_AWARE_AVAILABLE else object
         """Initialize Plans Service-specific capabilities"""
         if SELF_AWARE_AVAILABLE:
             # Register event handlers with priorities
-            self.register_handler("plans.bcp_create.*", self.handle_bcp_create_event, priority=EventPriority.HIGH)
-            self.register_handler("plans.bcp_update.*", self.handle_bcp_update_event, priority=EventPriority.HIGH)
-            self.register_handler("plans.drp_create.*", self.handle_drp_create_event, priority=EventPriority.NORMAL)
-            self.register_handler("plans.testing.*", self.handle_testing_event, priority=EventPriority.NORMAL)
+            self.register_handler("plans.creation.*", self.handle_creation_event, priority=EventPriority.HIGH)
+            self.register_handler("plans.templates.*", self.handle_templates_event, priority=EventPriority.HIGH)
+            self.register_handler("plans.versioning.*", self.handle_versioning_event, priority=EventPriority.NORMAL)
+            self.register_handler("plans.approval.*", self.handle_approval_event, priority=EventPriority.NORMAL)
+            self.register_handler("plans.distribution.*", self.handle_distribution_event, priority=EventPriority.NORMAL)
 
             logger.info(" Plans Service event handlers registered")
 
-    async def handle_bcp_create_event(self, event):
-        """Handle plans.bcp_create events"""
-        logger.info(f"Handling plans.bcp_create event: {event.type}")
-        # TODO: Implement actual bcp_create handling
+    async def handle_creation_event(self, event):
+        """Handle plans.creation events"""
+        logger.info(f"Handling plans.creation event: {event.type}")
+        # TODO: Implement actual creation handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_bcp_update_event(self, event):
-        """Handle plans.bcp_update events"""
-        logger.info(f"Handling plans.bcp_update event: {event.type}")
-        # TODO: Implement actual bcp_update handling
+
+    async def handle_templates_event(self, event):
+        """Handle plans.templates events"""
+        logger.info(f"Handling plans.templates event: {event.type}")
+        # TODO: Implement actual templates handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_drp_create_event(self, event):
-        """Handle plans.drp_create events"""
-        logger.info(f"Handling plans.drp_create event: {event.type}")
-        # TODO: Implement actual drp_create handling
+
+    async def handle_versioning_event(self, event):
+        """Handle plans.versioning events"""
+        logger.info(f"Handling plans.versioning event: {event.type}")
+        # TODO: Implement actual versioning handling
         return {"status": "processed", "event_type": event.type}
-    async def handle_testing_event(self, event):
-        """Handle plans.testing events"""
-        logger.info(f"Handling plans.testing event: {event.type}")
-        # TODO: Implement actual testing handling
+
+    async def handle_approval_event(self, event):
+        """Handle plans.approval events"""
+        logger.info(f"Handling plans.approval event: {event.type}")
+        # TODO: Implement actual approval handling
+        return {"status": "processed", "event_type": event.type}
+
+    async def handle_distribution_event(self, event):
+        """Handle plans.distribution events"""
+        logger.info(f"Handling plans.distribution event: {event.type}")
+        # TODO: Implement actual distribution handling
         return {"status": "processed", "event_type": event.type}
 
     async def handle_completion_event(self, event):
@@ -157,8 +168,8 @@ async def lifespan(app: FastAPI):
     logger.info("=" * 60)
     logger.info(" Starting Plans Service (Integrated with Graceful Choreography)")
     logger.info("=" * 60)
-    logger.info(f" Port: 8070")
-    logger.info(f" ISO 22301 Clause: 8.4")
+    logger.info(f" Port: {settings.SERVICE_PORT}")
+    logger.info(f" ISO 22301 Clause: 8.4 - Plans & Procedures")
 
     try:
         # === 1. Initialize Platform Integration ===
@@ -201,7 +212,7 @@ async def lifespan(app: FastAPI):
                         "max_concurrent": 10,
                         "avg_processing_time_ms": 500,
                         "sla_ms": 3000,
-                        "semantic_tags": ["bcp", "drp", "plans", "procedures", "testing"]
+                        "semantic_tags": ["plans", "creation", "templates", "versioning", "approval", "distribution"]
                     }
                 )
                 logger.info("    Self-Aware Service registered with Intelligent Router")
@@ -261,9 +272,9 @@ async def lifespan(app: FastAPI):
         logger.info("\n" + "=" * 60)
         logger.info(" Plans Service ready (with Graceful Choreography)")
         logger.info("=" * 60)
-        logger.info(f"    Docs: http://localhost:8070/docs")
-        logger.info(f"    Metrics: http://localhost:8070/metrics")
-        logger.info(f"   ️  Health: http://localhost:8070/health")
+        logger.info(f"    Docs: http://localhost:{settings.SERVICE_PORT}/docs")
+        logger.info(f"    Metrics: http://localhost:{settings.SERVICE_PORT}/metrics")
+        logger.info(f"   ️  Health: http://localhost:{settings.SERVICE_PORT}/health")
         logger.info("=" * 60 + "\n")
 
     except Exception as e:
@@ -376,7 +387,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main_integrated:app",
         host="0.0.0.0",
-        port=8070,
+        port=settings.SERVICE_PORT,
         reload=True,
         log_level="info"
     )

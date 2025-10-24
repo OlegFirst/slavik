@@ -11,12 +11,20 @@ class Settings(BaseSettings):
     """Plans Service Settings"""
 
     # Service
-    SERVICE_NAME: str = "plans_service"
-    SERVICE_PORT: int = 8023
+    SERVICE_NAME: str = "plans"
+    SERVICE_TITLE: str = "Plans Service"
+    SERVICE_DESCRIPTION: str = "BCM Plans & Procedures - ISO 22301 Clause 8.4"
+    SERVICE_VERSION: str = "1.0.0"
+    SERVICE_PORT: int = 8020
 
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://bcm:bcm@localhost:5432/bcm"
+    # Database - Development defaults (override in production)
+    DATABASE_URL: str = "sqlite+aiosqlite:///./plans_dev.db"
     DB_POOL_SIZE: int = 20
+    DB_ECHO: bool = False
+
+    # JWT Secret - MUST be set in production
+    JWT_SECRET_KEY: str = "dev-secret-CHANGE-IN-PRODUCTION-plans-12345"
+    LOG_LEVEL: str = "INFO"
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"

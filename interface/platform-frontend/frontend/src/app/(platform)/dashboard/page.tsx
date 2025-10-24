@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Activity,
@@ -14,8 +16,18 @@ import {
   Globe
 } from 'lucide-react';
 import Link from 'next/link';
+import {
+  RiskWidgets,
+  DocumentsWidgets,
+  BIAWidgets,
+  QuickActionsPanel,
+  ActivityTimeline,
+  ExecutiveSummary
+} from '@/components/dashboard';
 
 export default function DashboardPage() {
+  // TODO: Get from auth context
+  const organizationId = 'org-123';
   return (
     <div className="space-y-8">
       {/* Page Header */}
@@ -99,6 +111,39 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Executive Summary - Organization Health */}
+      <ExecutiveSummary organizationId={organizationId} />
+
+      {/* Quick Actions Panel */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
+        <QuickActionsPanel />
+      </div>
+
+      {/* BCM Module Widgets - Risk Assessment */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Risk Assessment Overview</h2>
+        <RiskWidgets organizationId={organizationId} />
+      </div>
+
+      {/* BCM Module Widgets - Documents */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Document Management</h2>
+        <DocumentsWidgets organizationId={organizationId} />
+      </div>
+
+      {/* BCM Module Widgets - BIA */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Business Impact Analysis</h2>
+        <BIAWidgets organizationId={organizationId} />
+      </div>
+
+      {/* Recent Activity */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
+        <ActivityTimeline />
       </div>
 
       {/* Services Categories */}

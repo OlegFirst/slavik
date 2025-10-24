@@ -1,0 +1,138 @@
+# BCM Platform Database Migrations (Alembic)
+
+This directory contains Alembic migrations for the BCM Platform main database.
+
+## Directory Structure
+
+```
+alembic/
+├── env.py              # Alembic environment configuration
+├── script.py.mako      # Template for new migrations
+├── versions/           # Migration scripts
+│   └── (migration files will be here)
+└── README              # This file
+```
+
+## Usage
+
+### Create a New Migration
+
+```bash
+# Auto-generate migration from model changes
+alembic -c infrastructure/database/postgresql/alembic.ini revision --autogenerate -m "description"
+
+# Create empty migration template
+alembic -c infrastructure/database/postgresql/alembic.ini revision -m "description"
+```
+
+### Apply Migrations
+
+```bash
+# Upgrade to latest
+alembic -c infrastructure/database/postgresql/alembic.ini upgrade head
+
+# Upgrade to specific revision
+alembic -c infrastructure/database/postgresql/alembic.ini upgrade <revision>
+
+# Upgrade one step
+alembic -c infrastructure/database/postgresql/alembic.ini upgrade +1
+```
+
+### Downgrade Migrations
+
+```bash
+# Downgrade one step
+alembic -c infrastructure/database/postgresql/alembic.ini downgrade -1
+
+# Downgrade to specific revision
+alembic -c infrastructure/database/postgresql/alembic.ini downgrade <revision>
+
+# Downgrade to base (WARNING: removes all migrations)
+alembic -c infrastructure/database/postgresql/alembic.ini downgrade base
+```
+
+### Check Migration Status
+
+```bash
+# Show current revision
+alembic -c infrastructure/database/postgresql/alembic.ini current
+
+# Show migration history
+alembic -c infrastructure/database/postgresql/alembic.ini history
+
+# Show pending migrations
+alembic -c infrastructure/database/postgresql/alembic.ini show head
+```
+
+## Integration with Existing SQL Migrations
+
+This Alembic setup coexists with the existing SQL migration files in `migrations_source/`.
+
+**Existing SQL migrations (000-053)** should be:
+1. Applied manually first (if starting fresh), OR
+2. Stamped into Alembic if already applied
+
+### Stamp Existing Migrations
+
+If your database already has tables from SQL migrations, stamp Alembic:
+
+```bash
+# Mark database as up-to-date with initial state
+alembic -c infrastructure/database/postgresql/alembic.ini stamp head
+```
+
+## Environment Variables
+
+Set `DATABASE_URL` environment variable:
+
+```bash
+export DATABASE_URL="postgresql://user:password@localhost:5432/bcm_platform"
+```
+
+Or use `.env` file in project root.
+
+## Migration Naming Convention
+
+Migrations are named automatically with timestamp and description:
+`YYYYMMDD_HHMM_<revision>_<slug>.py`
+
+Example: `20251021_1430_a1b2c3d4e5f6_add_user_preferences.py`
+
+## Best Practices
+
+1. **Review auto-generated migrations** - Always check before applying
+2. **Test migrations** - Apply to dev/staging before production
+3. **Write reversible migrations** - Implement both upgrade() and downgrade()
+4. **Use transactions** - Migrations run in transactions by default
+5. **Document changes** - Add comments to complex migrations
+6. **Version control** - Commit migration files to git
+
+## Troubleshooting
+
+### "Target database is not up to date"
+```bash
+alembic current  # Check current version
+alembic history  # See all migrations
+alembic upgrade head  # Apply pending migrations
+```
+
+### "FAILED: Can't locate revision"
+```bash
+# Stamp to specific revision
+alembic stamp <revision>
+```
+
+### Database URL Issues
+```bash
+# Check DATABASE_URL is set
+echo $DATABASE_URL
+
+# Or set manually in alembic.ini
+```
+
+## See Also
+
+- [Alembic Documentation](https://alembic.sqlalchemy.org/)
+- [SQL Migration Files](../migrations_source/)
+- [Migration State Documentation](../MIGRATION_STATE.md)
+- [Database Setup Guide](../../DATABASE_SETUP_GUIDE.md)
