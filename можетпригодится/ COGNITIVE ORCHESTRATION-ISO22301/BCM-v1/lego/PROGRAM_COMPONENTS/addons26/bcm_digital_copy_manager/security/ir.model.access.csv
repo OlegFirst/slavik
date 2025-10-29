@@ -1,9 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bcm_digital_copy_user,bcm.digital.copy.user,model_bcm_digital_copy,base.group_user,1,1,1,0
-access_bcm_digital_copy_manager,bcm.digital.copy.manager,model_bcm_digital_copy,base.group_system,1,1,1,1
-access_bcm_digital_snapshot_user,bcm.digital.snapshot.user,model_bcm_digital_snapshot,base.group_user,1,0,0,0
-access_bcm_digital_snapshot_manager,bcm.digital.snapshot.manager,model_bcm_digital_snapshot,base.group_system,1,1,1,1
-access_bcm_digital_copy_tag_user,bcm.digital.copy.tag.user,model_bcm_digital_copy_tag,base.group_user,1,0,0,0
-access_bcm_digital_copy_tag_manager,bcm.digital.copy.tag.manager,model_bcm_digital_copy_tag,base.group_system,1,1,1,1
-access_bcm_digital_copy_comparison_user,bcm.digital.copy.comparison.user,model_bcm_digital_copy_comparison,base.group_user,1,0,1,0
-access_bcm_digital_copy_comparison_manager,bcm.digital.copy.comparison.manager,model_bcm_digital_copy_comparison,base.group_system,1,1,1,1

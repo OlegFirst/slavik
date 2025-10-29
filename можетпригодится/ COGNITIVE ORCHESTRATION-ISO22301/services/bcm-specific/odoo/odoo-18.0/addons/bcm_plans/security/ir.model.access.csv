@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bcm_plan,access_bcm_plan,model_bcm_plan,base.group_user,1,1,1,1
-access_bcm_plan_procedure,access_bcm_plan_procedure,model_bcm_plan_procedure,base.group_user,1,1,1,1
-access_bcm_plan_resource,access_bcm_plan_resource,model_bcm_plan_resource,base.group_user,1,1,1,1
-access_bcm_plan_execution,access_bcm_plan_execution,model_bcm_plan_execution,base.group_user,1,1,1,1

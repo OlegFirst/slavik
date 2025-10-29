@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bcm_risk_management_user,BCM Risk Management User,model_bcm_risk_management,base.group_user,1,1,1,1
-access_bcm_risk_management_portal,BCM Risk Management Portal,model_bcm_risk_management,base.group_portal,1,0,0,0

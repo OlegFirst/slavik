@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_ai_orchestrator_user,ai.orchestrator.user,model_bcm_ai_twin_orchestrator,group_ai_orchestrator_user,1,1,1,0
-access_ai_orchestrator_analyst,ai.orchestrator.analyst,model_bcm_ai_twin_orchestrator,group_ai_orchestrator_analyst,1,1,1,0
-access_ai_orchestrator_manager,ai.orchestrator.manager,model_bcm_ai_twin_orchestrator,group_ai_orchestrator_manager,1,1,1,1
-access_ai_orchestrator_admin,ai.orchestrator.admin,model_bcm_ai_twin_orchestrator,group_ai_orchestrator_admin,1,1,1,1

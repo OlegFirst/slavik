@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bcm_ai_integration_user,bcm.ai.integration.user,model_bcm_ai_integration,base.group_user,1,0,0,0
-access_bcm_ai_integration_manager,bcm.ai.integration.manager,model_bcm_ai_integration,bcm_core.group_bcm_manager,1,1,1,1
-access_bcm_governance_integration_user,bcm.governance.integration.user,model_bcm_governance_integration,base.group_user,1,0,0,0
-access_bcm_governance_integration_manager,bcm.governance.integration.manager,model_bcm_governance_integration,bcm_core.group_bcm_manager,1,1,1,1

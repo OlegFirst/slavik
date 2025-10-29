@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_iso22301_framework_user,access_iso22301_framework_user,model_bcm_iso22301_framework,base.group_user,1,0,0,0
-access_iso22301_framework_manager,access_iso22301_framework_manager,model_bcm_iso22301_framework,base.group_system,1,1,1,1
-access_bcm_module_mapping_user,access_bcm_module_mapping_user,model_bcm_module_mapping,base.group_user,1,0,0,0
-access_bcm_module_mapping_manager,access_bcm_module_mapping_manager,model_bcm_module_mapping,base.group_system,1,1,1,1
-access_compliance_dashboard_user,access_compliance_dashboard_user,model_bcm_compliance_dashboard,base.group_user,1,0,0,0
-access_compliance_dashboard_manager,access_compliance_dashboard_manager,model_bcm_compliance_dashboard,base.group_system,1,1,1,1

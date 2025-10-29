@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data>
-        <!-- Empty file for manifest compatibility -->
-        <!-- User reputation is handled via forum models -->
-    </data>
-</odoo>
