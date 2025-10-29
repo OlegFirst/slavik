@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_base_user,bcm.base.user,model_bcm_base,base.group_user,1,0,0,0
+access_bcm_base_manager,bcm.base.manager,model_bcm_base,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_tag_user,bcm.tag.user,model_bcm_tag,base.group_user,1,0,0,0
+access_bcm_tag_manager,bcm.tag.manager,model_bcm_tag,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_ai_lifecycle_user,bcm.ai.lifecycle.user,model_bcm_ai_lifecycle,base.group_user,1,0,0,0
+access_bcm_ai_lifecycle_manager,bcm.ai.lifecycle.manager,model_bcm_ai_lifecycle,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_plan_user,bcm.plan.user,model_bcm_plan,base.group_user,1,0,1,0
+access_bcm_plan_manager,bcm.plan.manager,model_bcm_plan,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_incident_user,bcm.incident.user,model_bcm_incident,base.group_user,1,1,1,0
+access_bcm_incident_manager,bcm.incident.manager,model_bcm_incident,bcm_core.group_bcm_manager,1,1,1,1
+access_bcm_business_process_user,bcm.business.process.user,model_bcm_business_process,base.group_user,1,0,0,0
+access_bcm_business_process_manager,bcm.business.process.manager,model_bcm_business_process,bcm_core.group_bcm_manager,1,1,1,1

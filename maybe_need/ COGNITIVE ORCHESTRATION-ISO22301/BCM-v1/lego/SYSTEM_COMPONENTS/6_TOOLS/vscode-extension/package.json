@@ -1,0 +1,47 @@
+{
+  "name": "bcm-ai-devops",
+  "displayName": "BCM AI DevOps Assistant", 
+  "description": "🧠 AI помощник для DevOps с памятью в Supabase",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "workspaceContains:docker-compose.yml"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bcm.analyzeConfig",
+        "title": "🧠 Анализ конфигурации",
+        "category": "BCM AI"
+      },
+      {
+        "command": "bcm.chatAI",
+        "title": "💬 Чат с AI DevOps",
+        "category": "BCM AI"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceFilename == docker-compose.yml",
+          "command": "bcm.analyzeConfig",
+          "group": "bcm"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "BCM AI",
+      "properties": {
+        "bcm.aiOrchestrator": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "AI Orchestrator URL"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# Exercise Simulators Bridge Service Dockerfile
+FROM python:3.11-slim
+
+LABEL maintainer="BCM Platform Team"
+LABEL description="Exercise simulators bridge service for BCM Platform"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    default-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.simulators.txt .
+RUN pip install --no-cache-dir -r requirements.simulators.txt
+
+# Copy application code
+COPY jaamsim_client.py .
+COPY nics_client.py .
+COPY bridge_service.py .
+
+# Create directories
+RUN mkdir -p /app/{exercises,logs,results}
+
+# Non-root user for security
+RUN adduser --disabled-password --gecos '' --uid 1000 simulator
+RUN chown -R simulator:simulator /app
+USER simulator
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8094/health || exit 1
+
+# Expose port
+EXPOSE 8094
+
+# Run the bridge service
+CMD ["python", "bridge_service.py"]

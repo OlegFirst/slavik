@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bcm_admin_website,BCM Admin Website Access,base.model_res_users,bcm_admin_website.group_bcm_admin,1,1,1,1
+access_bcm_manager_website,BCM Manager Website Access,base.model_res_users,bcm_admin_website.group_bcm_manager,1,0,0,0

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- EventBus Integration Configuration -->
+        <record id="eventbus_config" model="ir.config_parameter">
+            <field name="key">bcm.eventbus.url</field>
+            <field name="value">http://eventbus:8001</field>
+        </record>
+
+        <record id="eventbus_enabled" model="ir.config_parameter">
+            <field name="key">bcm.eventbus.enabled</field>
+            <field name="value">True</field>
+        </record>
+
+        <!-- Cross-Module Workflow Configuration -->
+        <record id="workflow_risk_to_bia" model="ir.config_parameter">
+            <field name="key">bcm.workflow.risk_to_bia</field>
+            <field name="value">enabled</field>
+        </record>
+
+        <record id="workflow_bia_to_plans" model="ir.config_parameter">
+            <field name="key">bcm.workflow.bia_to_plans</field>
+            <field name="value">enabled</field>
+        </record>
+
+        <record id="workflow_incident_to_scenario" model="ir.config_parameter">
+            <field name="key">bcm.workflow.incident_to_scenario</field>
+            <field name="value">enabled</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Defs_Audit_Sub"
+             targetNamespace="http://example.org/bcm-bpmn-sub">
+  <process id="Audit_Subprocess" name="Audit — Subprocess" isExecutable="false">
+    <startEvent id="Start_Audit" name="Audit Start"/>
+    <task id="Task_Checklist" name="ISO 22301 Checklist"/>
+    <task id="Task_Evidence" name="Collect Evidence"/>
+    <task id="Task_Summary" name="AI Summary"/>
+    <endEvent id="End_Audit" name="Audit Done"/>
+    <sequenceFlow id="F1" sourceRef="Start_Audit" targetRef="Task_Checklist"/>
+    <sequenceFlow id="F2" sourceRef="Task_Checklist" targetRef="Task_Evidence"/>
+    <sequenceFlow id="F3" sourceRef="Task_Evidence" targetRef="Task_Summary"/>
+    <sequenceFlow id="F4" sourceRef="Task_Summary" targetRef="End_Audit"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Dia_Audit">
+    <bpmndi:BPMNPlane id="Plane_Audit" bpmnElement="Audit_Subprocess">
+      <bpmndi:BPMNShape id="SH_ASStart" bpmnElement="Start_Audit"><dc:Bounds x="120" y="80" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ASCheck" bpmnElement="Task_Checklist"><dc:Bounds x="190" y="70" width="220" height="56"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ASEv" bpmnElement="Task_Evidence"><dc:Bounds x="430" y="70" width="200" height="56"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ASSum" bpmnElement="Task_Summary"><dc:Bounds x="650" y="70" width="200" height="56"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SH_ASEnd" bpmnElement="End_Audit"><dc:Bounds x="870" y="80" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ED_ASF1" bpmnElement="F1"><di:waypoint x="156" y="98"/><di:waypoint x="190" y="98"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ED_ASF2" bpmnElement="F2"><di:waypoint x="410" y="98"/><di:waypoint x="430" y="98"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ED_ASF3" bpmnElement="F3"><di:waypoint x="630" y="98"/><di:waypoint x="650" y="98"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ED_ASF4" bpmnElement="F4"><di:waypoint x="850" y="98"/><di:waypoint x="870" y="98"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

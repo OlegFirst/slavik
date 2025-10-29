@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Expert Badges for BCM Community -->
+
+        <record id="badge_bcm_beginner" model="bcm.expert.badge">
+            <field name="name">BCM Beginner</field>
+            <field name="code">bcm_beginner</field>
+            <field name="description">New to BCM community</field>
+            <field name="icon">fas fa-star</field>
+            <field name="color">#6c757d</field>
+            <field name="points_required">0</field>
+        </record>
+
+        <record id="badge_bcm_contributor" model="bcm.expert.badge">
+            <field name="name">BCM Contributor</field>
+            <field name="code">bcm_contributor</field>
+            <field name="description">Active community contributor</field>
+            <field name="icon">fas fa-medal</field>
+            <field name="color">#28a745</field>
+            <field name="points_required">100</field>
+        </record>
+
+        <record id="badge_bcm_expert" model="bcm.expert.badge">
+            <field name="name">BCM Expert</field>
+            <field name="code">bcm_expert</field>
+            <field name="description">Recognized BCM expert</field>
+            <field name="icon">fas fa-trophy</field>
+            <field name="color">#ffc107</field>
+            <field name="points_required">500</field>
+        </record>
+    </data>
+</odoo>

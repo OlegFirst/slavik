@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Package Creation Wizard -->
+    <record id="view_twin_package_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.twin.package.wizard.form</field>
+        <field name="model">bcm.twin.package.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Data Package">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Create Digital Twin Data Package</h1>
+                        <p class="text-muted">
+                            Package digital twin data for transport across microservices
+                        </p>
+                    </div>
+
+                    <group>
+                        <group name="source_config" string="Source Configuration">
+                            <field name="twin_id" options="{'no_create': True}"/>
+                            <field name="content_type"/>
+                        </group>
+                        <group name="package_config" string="Package Configuration">
+                            <field name="compression_type"/>
+                            <field name="compression_level"
+                                   attrs="{'invisible': [('compression_type', '=', 'none')]}"/>
+                            <field name="network_priority"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Content Options" name="content_options">
+                            <group>
+                                <group name="data_inclusion" string="Data Inclusion">
+                                    <field name="include_simulations"
+                                           attrs="{'invisible': [('content_type', 'not in', ['full_twin', 'simulation_data'])]}"/>
+                                    <field name="include_ai_insights"
+                                           attrs="{'invisible': [('content_type', 'not in', ['full_twin', 'ai_insights'])]}"/>
+                                    <field name="include_configuration"
+                                           attrs="{'invisible': [('content_type', 'not in', ['full_twin', 'configuration'])]}"/>
+                                    <field name="include_metadata"/>
+                                </group>
+                                <group name="processing_options" string="Processing Options">
+                                    <field name="auto_validate"/>
+                                    <field name="auto_optimize"/>
+                                </group>
+                            </group>
+
+                            <group string="Custom Data"
+                                   attrs="{'invisible': [('content_type', '!=', 'custom')]}">
+                                <field name="custom_data_json" widget="ace" options="{'mode': 'json'}"
+                                       placeholder="Enter custom JSON data to package"/>
+                            </group>
+                        </page>
+
+                        <page string="Twin Information" name="twin_info"
+                              attrs="{'invisible': [('twin_id', '=', False)]}">
+                            <field name="twin_info" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+
+                        <page string="Size Estimation" name="size_estimation"
+                              attrs="{'invisible': [('twin_id', '=', False)]}">
+                            <field name="estimated_size" widget="text" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_preview_data" string="Preview Data"
+                            type="object" class="btn-secondary"
+                            attrs="{'invisible': [('twin_id', '=', False)]}"/>
+                    <button name="action_create_package" string="Create Package"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Package Preview Wizard -->
+    <record id="view_twin_package_preview_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.twin.package.preview.wizard.form</field>
+        <field name="model">bcm.twin.package.preview.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Package Preview">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Package Preview</h1>
+                        <h3>
+                            <field name="twin_name" readonly="1"/>
+                            <span class="mx-2">•</span>
+                            <field name="content_type" readonly="1"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <field name="preview_data" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_close" string="Close" type="object" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Package Extraction Wizard -->
+    <record id="view_twin_package_extract_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.twin.package.extract.wizard.form</field>
+        <field name="model">bcm.twin.package.extract.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Extract Package">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Extract Data Package</h1>
+                        <p class="text-muted">
+                            Extract package data to a digital twin
+                        </p>
+                    </div>
+
+                    <group>
+                        <group name="extraction_config" string="Extraction Configuration">
+                            <field name="package_id" options="{'no_create': True}"/>
+                            <field name="target_twin_id" options="{'no_create': True}"/>
+                            <field name="merge_strategy"/>
+                        </group>
+                        <group name="extraction_options" string="Extraction Options">
+                            <field name="validate_before_extract"/>
+                            <field name="backup_target"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Package Information" name="package_info"
+                              attrs="{'invisible': [('package_id', '=', False)]}">
+                            <field name="package_info" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+
+                        <page string="Target Twin Information" name="target_info"
+                              attrs="{'invisible': [('target_twin_id', '=', False)]}">
+                            <field name="target_info" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_extract_package" string="Extract Package"
+                            type="object" class="btn-primary"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_twin_package_wizard" model="ir.actions.act_window">
+        <field name="name">Create Data Package</field>
+        <field name="res_model">bcm.twin.package.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_twin_id': active_id}</field>
+    </record>
+
+    <record id="action_twin_package_extract_wizard" model="ir.actions.act_window">
+        <field name="name">Extract Package</field>
+        <field name="res_model">bcm.twin.package.extract.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_package_id': active_id}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Personal Twin Workspace Wizard -->
+    <record id="personal_twin_workspace_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.personal.twin.workspace.wizard.form</field>
+        <field name="model">bcm.personal.twin.workspace.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Workspace Configuration">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Workspace Configuration</h1>
+                        <p>Customize your personal workspace settings</p>
+                    </div>
+
+                    <notebook>
+                        <page string="Appearance" name="appearance">
+                            <group>
+                                <group string="Display">
+                                    <field name="theme"/>
+                                    <field name="language"/>
+                                    <field name="timezone"/>
+                                    <field name="dashboard_layout"/>
+                                </group>
+                                <group string="View Options">
+                                    <field name="compact_view"/>
+                                    <field name="show_hints"/>
+                                    <field name="auto_save"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Notifications" name="notifications">
+                            <group>
+                                <group string="Notification Channels">
+                                    <field name="email_notifications"/>
+                                    <field name="browser_notifications"/>
+                                    <field name="mobile_notifications"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Widgets" name="widgets">
+                            <group>
+                                <group string="Dashboard Widgets">
+                                    <field name="activity_feed_widget"/>
+                                    <field name="kpi_overview_widget"/>
+                                    <field name="quick_actions_widget"/>
+                                    <field name="recent_documents_widget"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_save_configuration" string="Save" type="object" class="btn-primary"/>
+                    <button name="action_reset_to_default" string="Reset to Default" type="object" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Personal Twin Privacy Wizard -->
+    <record id="personal_twin_privacy_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.personal.twin.privacy.wizard.form</field>
+        <field name="model">bcm.personal.twin.privacy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Privacy Settings">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Privacy Settings</h1>
+                        <p>Control how your personal data is used and shared</p>
+                    </div>
+
+                    <notebook>
+                        <page string="Profile &amp; Tracking" name="profile">
+                            <group>
+                                <group string="Profile Visibility">
+                                    <field name="profile_visibility" widget="radio"/>
+                                </group>
+                                <group string="Data Collection">
+                                    <field name="activity_tracking"/>
+                                    <field name="analytics_consent"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Data Sharing" name="sharing">
+                            <group>
+                                <group string="Share Data With">
+                                    <field name="data_share_organization"/>
+                                    <field name="data_share_platform"/>
+                                    <field name="data_share_third_party"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Data Retention" name="retention">
+                            <group>
+                                <group string="Retention Periods">
+                                    <field name="activity_logs_retention"/>
+                                    <field name="metrics_history_retention"/>
+                                    <field name="patterns_analysis_retention"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Advanced" name="advanced">
+                            <group>
+                                <group string="Security">
+                                    <field name="pseudonymization"/>
+                                    <field name="encrypt_sensitive_data"/>
+                                    <field name="audit_access"/>
+                                </group>
+                                <group string="Notifications">
+                                    <field name="privacy_notifications"/>
+                                    <field name="data_breach_notifications"/>
+                                </group>
+                            </group>
+
+                            <separator string="Data Rights"/>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button name="action_export_personal_data" string="Export My Data" type="object" class="btn-secondary"/>
+                                </div>
+                                <div class="col-6">
+                                    <button name="action_delete_personal_data" string="Delete My Data" type="object" class="btn-danger" confirm="This will permanently delete your personal data. Are you sure?"/>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_save_privacy_settings" string="Save" type="object" class="btn-primary"/>
+                    <button name="action_reset_to_strict" string="Reset to Strict" type="object" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Personal Twin Insights Wizard -->
+    <record id="personal_twin_insights_wizard_form" model="ir.ui.view">
+        <field name="name">bcm.personal.twin.insights.wizard.form</field>
+        <field name="model">bcm.personal.twin.insights.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Personal Insights">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Personal Digital Twin Insights</h1>
+                        <p>Analysis of your activity patterns and behavior</p>
+                    </div>
+
+                    <notebook>
+                        <page string="Activity Summary" name="activity">
+                            <group>
+                                <group string="Activity Metrics">
+                                    <field name="activity_level"/>
+                                    <field name="engagement_trend"/>
+                                    <field name="peak_usage_hours" widget="text"/>
+                                    <field name="preferred_modules" widget="text"/>
+                                </group>
+                                <group string="Predictions">
+                                    <field name="churn_risk"/>
+                                    <field name="feature_adoption_probability" widget="percentage"/>
+                                    <field name="engagement_forecast"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Insights &amp; Recommendations" name="insights">
+                            <group>
+                                <field name="behavioral_insights" widget="text" nolabel="1" placeholder="Behavioral insights will appear here..."/>
+                            </group>
+                            <separator string="Recommendations"/>
+                            <group>
+                                <field name="recommendations" widget="text" nolabel="1" placeholder="Personalized recommendations will appear here..."/>
+                            </group>
+
+                            <div class="mt16">
+                                <button name="action_apply_recommendations" string="Apply Recommendations" type="object" class="btn-primary"/>
+                                <button name="action_set_goals" string="Set Goals" type="object" class="btn-secondary"/>
+                            </div>
+                        </page>
+
+                        <page string="Risk Indicators" name="risks">
+                            <group>
+                                <field name="risk_indicators" widget="text" nolabel="1" placeholder="Risk indicators will appear here..."/>
+                            </group>
+                        </page>
+
+                        <page string="Raw Data" name="raw_data">
+                            <group>
+                                <field name="analysis_timestamp"/>
+                            </group>
+                            <separator string="Pattern Analysis Data"/>
+                            <field name="patterns_data" widget="ace" options="{'mode': 'json'}" nolabel="1"/>
+
+                            <separator string="Insights Data"/>
+                            <field name="insights_data" widget="ace" options="{'mode': 'json'}" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_export_insights" string="Export Report" type="object" class="btn-primary"/>
+                    <button name="action_compare_with_peers" string="Compare with Peers" type="object" class="btn-secondary"/>
+                    <button name="action_schedule_analysis" string="Schedule Analysis" type="object" class="btn-secondary"/>
+                    <button name="action_view_detailed_metrics" string="View Detailed Metrics" type="object" class="btn-secondary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

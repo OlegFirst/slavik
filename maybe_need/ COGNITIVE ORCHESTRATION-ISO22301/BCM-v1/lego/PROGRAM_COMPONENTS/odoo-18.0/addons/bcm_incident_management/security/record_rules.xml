@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BCM Incident Management Multi-tenant Rules -->
+        
+        <!-- Incident Rules -->
+        <record id="bcm_incident_company_rule" model="ir.rule">
+            <field name="name">BCM Incident: Company Rule</field>
+            <field name="model_id" ref="bcm_incident.model_bcm_incident"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Incident Response Rules -->
+        <record id="bcm_incident_response_company_rule" model="ir.rule">
+            <field name="name">BCM Incident Response: Company Rule</field>
+            <field name="model_id" ref="bcm_incident.model_bcm_incident"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Crisis Team Rules -->
+        <record id="bcm_crisis_team_company_rule" model="ir.rule">
+            <field name="name">BCM Crisis Team: Company Rule</field>
+            <field name="model_id" ref="bcm_incident.model_bcm_incident"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Communication Log Rules -->
+        <record id="bcm_communication_log_company_rule" model="ir.rule">
+            <field name="name">BCM Communication Log: Company Rule</field>
+            <field name="model_id" ref="bcm_incident.model_bcm_incident"/>
+            <field name="domain_force">[
+                '|',
+                ('company_id', '=', False),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Portal Access Rules -->
+        <record id="bcm_incident_portal_rule" model="ir.rule">
+            <field name="name">BCM Incident: Portal Access</field>
+            <field name="model_id" ref="bcm_incident.model_bcm_incident"/>
+            <field name="domain_force">[
+                ('company_id', 'in', user.partner_id.parent_id.company_id.ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+    </data>
+</odoo>

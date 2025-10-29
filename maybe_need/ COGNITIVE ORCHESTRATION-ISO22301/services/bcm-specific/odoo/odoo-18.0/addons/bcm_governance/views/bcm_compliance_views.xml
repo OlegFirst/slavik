@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Compliance Views -->
+
+        <!-- Compliance Menu -->
+        <record id="bcm_compliance_menu" model="ir.ui.menu">
+            <field name="name">Compliance Management</field>
+            <field name="parent_id" ref="bcm_core.menu_bcm_root"/>
+            <field name="sequence">30</field>
+        </record>
+
+    </data>
+</odoo>

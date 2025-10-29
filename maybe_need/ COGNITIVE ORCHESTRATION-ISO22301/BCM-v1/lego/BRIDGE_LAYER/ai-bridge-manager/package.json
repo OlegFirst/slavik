@@ -1,0 +1,17 @@
+{
+  "name": "@bridge/ai-manager",
+  "version": "1.0.0",
+  "description": "Intelligent bridge manager for seamless system-module integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "openai": "^4.0.0",
+    "@langchain/core": "^0.1.0",
+    "zod": "^3.22.0",
+    "uuid": "^9.0.0"
+  }
+}

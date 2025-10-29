@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Incident Security Groups -->
+        <record id="group_incident_user" model="res.groups">
+            <field name="name">Incident User</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="comment">Can view and create incidents, limited editing rights</field>
+        </record>
+        
+        <record id="group_incident_manager" model="res.groups">
+            <field name="name">Incident Manager</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="implied_ids" eval="[(4, ref('group_incident_user'))]"/>
+            <field name="comment">Can manage all incidents, assign teams, and configure workflows</field>
+        </record>
+        
+        <record id="group_incident_commander" model="res.groups">
+            <field name="name">Incident Commander</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="implied_ids" eval="[(4, ref('group_incident_manager'))]"/>
+            <field name="comment">Can lead incident response, make critical decisions, and access all AI tools</field>
+        </record>
+        
+        <record id="group_crisis_coordinator" model="res.groups">
+            <field name="name">Crisis Coordinator</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="implied_ids" eval="[(4, ref('group_incident_commander'))]"/>
+            <field name="comment">Executive-level access for crisis management and strategic decisions</field>
+        </record>
+        
+        <!-- Response Team Groups -->
+        <record id="group_response_team_member" model="res.groups">
+            <field name="name">Response Team Member</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="comment">Members of incident response teams with field access</field>
+        </record>
+        
+        <record id="group_response_team_leader" model="res.groups">
+            <field name="name">Response Team Leader</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="implied_ids" eval="[(4, ref('group_response_team_member'))]"/>
+            <field name="comment">Can lead response teams and coordinate field operations</field>
+        </record>
+        
+        <!-- AI and Analytics Groups -->
+        <record id="group_ai_analyst" model="res.groups">
+            <field name="name">AI Analyst</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="comment">Can access AI tools, analytics, and pattern recognition features</field>
+        </record>
+        
+        <!-- External Integration Groups -->
+        <record id="group_api_integration" model="res.groups">
+            <field name="name">API Integration</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="comment">Can configure external system integrations and API connections</field>
+        </record>
+        
+        <!-- Mobile App Groups -->
+        <record id="group_mobile_reporter" model="res.groups">
+            <field name="name">Mobile Reporter</field>
+            <field name="category_id" ref="base.module_category_business_continuity"/>
+            <field name="comment">Can report incidents via mobile app with GPS tracking</field>
+        </record>
+        
+    </data>
+</odoo>

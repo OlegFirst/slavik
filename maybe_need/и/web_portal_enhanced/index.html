@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>BCM Platform v2 - Business Continuity Management</title>
+    <meta name="title" content="BCM Platform v2 - Business Continuity Management" />
+    <meta name="description" content="Comprehensive Business Continuity Management platform with risk assessment, business impact analysis, crisis management, and AI-powered insights." />
+    <meta name="keywords" content="BCM, Business Continuity, Risk Management, Crisis Management, ISO 22301, Disaster Recovery" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="author" content="BCM Platform Team" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bcm.example.com/" />
+    <meta property="og:title" content="BCM Platform v2 - Business Continuity Management" />
+    <meta property="og:description" content="Comprehensive Business Continuity Management platform with risk assessment, business impact analysis, crisis management, and AI-powered insights." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:site_name" content="BCM Platform" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://bcm.example.com/" />
+    <meta property="twitter:title" content="BCM Platform v2 - Business Continuity Management" />
+    <meta property="twitter:description" content="Comprehensive Business Continuity Management platform with risk assessment, business impact analysis, crisis management, and AI-powered insights." />
+    <meta property="twitter:image" content="/twitter-image.png" />
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https: data:; img-src 'self' data: https:; font-src 'self' https: data:; connect-src 'self' https:; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self';" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Apple PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BCM Platform v2" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Critical CSS inlined for faster loading -->
+    <style>
+      /* Critical CSS for initial page load */
+      html {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #ffffff;
+        color: #1f2937;
+      }
+
+      #app {
+        min-height: 100vh;
+      }
+
+      /* Loading spinner */
+      .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+
+      .loading-content {
+        text-align: center;
+        color: #1f2937;
+      }
+
+      .loading-logo {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 24px;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s ease-in-out infinite alternate;
+      }
+
+      .loading-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+
+      .loading-subtitle {
+        font-size: 16px;
+        color: #6b7280;
+        margin: 0 0 32px;
+      }
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e5e7eb;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      .loading-progress {
+        margin-top: 16px;
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+      }
+
+      /* Dark mode support */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #111827;
+          color: #f9fafb;
+        }
+
+        .loading-container {
+          background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+        }
+
+        .loading-content {
+          color: #f9fafb;
+        }
+
+        .loading-subtitle {
+          color: #9ca3af;
+        }
+
+        .loading-progress {
+          color: #9ca3af;
+        }
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .loading-logo {
+          animation: none;
+        }
+
+        .loading-spinner {
+          animation: none;
+          border-top-color: transparent;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Application root -->
+    <div id="app">
+      <!-- Loading screen displayed while app initializes -->
+      <div class="loading-container" id="loading-screen">
+        <div class="loading-content">
+          <div class="loading-logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1 class="loading-title">BCM Platform v2</h1>
+          <p class="loading-subtitle">Business Continuity Management</p>
+          <div class="loading-spinner"></div>
+          <div class="loading-progress" id="loading-progress">Initializing application...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application scripts -->
+    <script type="module" src="/src/main.ts"></script>
+
+    <!-- Loading screen management -->
+    <script>
+      // Update loading progress
+      const progressMessages = [
+        'Loading application...',
+        'Connecting to services...',
+        'Preparing interface...',
+        'Almost ready...'
+      ];
+
+      let progressIndex = 0;
+      const progressElement = document.getElementById('loading-progress');
+
+      const updateProgress = () => {
+        if (progressElement && progressIndex < progressMessages.length) {
+          progressElement.textContent = progressMessages[progressIndex];
+          progressIndex++;
+          setTimeout(updateProgress, 800);
+        }
+      };
+
+      // Start progress updates
+      setTimeout(updateProgress, 500);
+
+      // Hide loading screen when app is ready
+      window.addEventListener('load', () => {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+          setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+            }, 300);
+          }, 1000);
+        }
+      });
+
+      // Service worker registration
+      if ('serviceWorker' in navigator && import.meta.env.PROD) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+
+    <!-- Analytics (replace with your analytics code) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    -->
+  </body>
+</html>

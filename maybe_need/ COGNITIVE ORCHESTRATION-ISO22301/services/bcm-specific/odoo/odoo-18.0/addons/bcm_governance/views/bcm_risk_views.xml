@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Risk Management Views -->
+
+        <!-- Simple menu for now -->
+        <record id="bcm_risk_menu" model="ir.ui.menu">
+            <field name="name">Risk Management</field>
+            <field name="parent_id" ref="bcm_core.menu_bcm_root"/>
+            <field name="sequence">20</field>
+        </record>
+
+    </data>
+</odoo>

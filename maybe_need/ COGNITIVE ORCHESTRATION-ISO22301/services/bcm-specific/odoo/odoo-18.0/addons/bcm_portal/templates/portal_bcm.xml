@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main BCM Portal Page -->
+    <template id="bcm_portal_main" name="BCM Portal Main">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-set="title">BCM Portal</t>
+            
+            <div class="container mt-4">
+                <h1 class="mb-4">Business Continuity Management Portal</h1>
+                
+                <div class="row">
+                    <!-- Upload Evidence Card -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">
+                                    <i class="fa fa-upload"/> Upload Evidence
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    Upload supporting documents and evidence for audit findings or business continuity plans.
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-check text-success"/> Attach to findings</li>
+                                    <li><i class="fa fa-check text-success"/> Link to BC plans</li>
+                                    <li><i class="fa fa-check text-success"/> Track compliance</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary btn-block" 
+                                        data-toggle="modal" data-target="#uploadEvidenceModal">
+                                    <i class="fa fa-upload"/> Upload Evidence
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Request Audit/Exercise Card -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h4 class="mb-0">
+                                    <i class="fa fa-calendar-check"/> Request Audit/Exercise
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    Submit a request for business continuity audit or emergency response exercise.
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-check text-success"/> Schedule audits</li>
+                                    <li><i class="fa fa-check text-success"/> Plan exercises</li>
+                                    <li><i class="fa fa-check text-success"/> Track progress</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-info btn-block" 
+                                        data-toggle="modal" data-target="#requestAuditModal">
+                                    <i class="fa fa-calendar-plus"/> Request Audit/Exercise
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BCM Metrics Dashboard -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h3>BCM Performance Metrics</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h2 class="text-primary" t-esc="bia_coverage or '0'"/>%
+                                        <p class="mb-0">BIA Coverage</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h2 class="text-success" t-esc="plans_uptodate or '0'"/>%
+                                        <p class="mb-0">Plans Up-to-date</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h2 class="text-info" t-esc="capa_ontime or '0'"/>%
+                                        <p class="mb-0">CAPA On-time</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h2 class="text-warning" t-esc="open_findings or '0'"/>
+                                        <p class="mb-0">Open Findings</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upload Evidence Modal -->
+            <div class="modal fade" id="uploadEvidenceModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <form action="/portal/bcm/upload-evidence" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title">Upload Evidence</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="evidence_type">Evidence Type</label>
+                                    <select class="form-control" name="evidence_type" id="evidence_type">
+                                        <option value="finding">Audit Finding</option>
+                                        <option value="plan">BC Plan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="finding_group">
+                                    <label for="finding_id">Related Finding</label>
+                                    <select class="form-control" name="finding_id" id="finding_id">
+                                        <option value="">-- Select Finding --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="plan_group" style="display:none;">
+                                    <label for="plan_id">Related Plan</label>
+                                    <select class="form-control" name="plan_id" id="plan_id">
+                                        <option value="">-- Select Plan --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="files">Files</label>
+                                    <input type="file" class="form-control-file" name="files" id="files" multiple="multiple" required="required"/>
+                                    <small class="form-text text-muted">You can select multiple files</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Request Audit Modal -->
+            <div class="modal fade" id="requestAuditModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <form action="/portal/bcm/request-audit" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="modal-header">
+                                <h5 class="modal-title">Request Audit/Exercise</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="request_type">Request Type</label>
+                                    <select class="form-control" name="request_type" id="request_type" required="required">
+                                        <option value="audit">Business Continuity Audit</option>
+                                        <option value="exercise">Emergency Response Exercise</option>
+                                        <option value="assessment">Risk Assessment</option>
+                                        <option value="review">Plan Review</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="audit_type">Audit/Exercise Type</label>
+                                    <select class="form-control" name="audit_type" id="audit_type">
+                                        <option value="internal">Internal</option>
+                                        <option value="external">External</option>
+                                        <option value="certification">Certification</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="scope">Scope</label>
+                                    <textarea class="form-control" name="scope" id="scope" rows="3" required="required" 
+                                              placeholder="Describe the scope and objectives..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="preferred_date">Preferred Date</label>
+                                    <input type="date" class="form-control" name="preferred_date" id="preferred_date"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Additional Information</label>
+                                    <textarea class="form-control" name="description" id="description" rows="3" 
+                                              placeholder="Any additional requirements or constraints..."></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JavaScript for modal interactions -->
+            <script>
+                $(document).ready(function() {
+                    // Toggle finding/plan selection based on evidence type
+                    $('#evidence_type').change(function() {
+                        if ($(this).val() === 'finding') {
+                            $('#finding_group').show();
+                            $('#plan_group').hide();
+                        } else {
+                            $('#finding_group').hide();
+                            $('#plan_group').show();
+                        }
+                    });
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

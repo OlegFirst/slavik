@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tabletop Exercise BPMN Template -->
+        <record id="template_tabletop_exercise" model="bcm.template">
+            <field name="name">Tabletop Exercise Workflow</field>
+            <field name="category">workflow</field>
+            <field name="template_type">tabletop_exercise</field>
+            <field name="description">Standard BPMN workflow for tabletop exercises with discussion phases</field>
+            <field name="iso_clause">8.1</field>
+            <field name="sequence">10</field>
+            <field name="bpmn_xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             targetNamespace="http://bcm.platform/bpmn"
+             id="TabletopExerciseDefinition">
+
+  <process id="tabletop_exercise" name="Tabletop Exercise Workflow" isExecutable="true">
+
+    <!-- Start Event -->
+    <startEvent id="exercise_start" name="Exercise Started">
+      <outgoing>flow_to_briefing</outgoing>
+    </startEvent>
+
+    <!-- Participant Briefing -->
+    <userTask id="participant_briefing" name="Participant Briefing">
+      <documentation>Brief participants on exercise scenario and objectives</documentation>
+      <incoming>flow_to_briefing</incoming>
+      <outgoing>flow_to_scenario</outgoing>
+    </userTask>
+
+    <!-- Scenario Presentation -->
+    <userTask id="scenario_presentation" name="Present Scenario">
+      <documentation>Present the exercise scenario to participants</documentation>
+      <incoming>flow_to_scenario</incoming>
+      <outgoing>flow_to_discussion</outgoing>
+    </userTask>
+
+    <!-- Discussion Phase -->
+    <userTask id="discussion_phase" name="Discussion Phase">
+      <documentation>Facilitate discussion of response strategies</documentation>
+      <incoming>flow_to_discussion</incoming>
+      <outgoing>flow_to_decisions</outgoing>
+    </userTask>
+
+    <!-- Decision Making -->
+    <userTask id="decision_making" name="Decision Making">
+      <documentation>Make key decisions and document rationale</documentation>
+      <incoming>flow_to_decisions</incoming>
+      <outgoing>flow_to_evaluation</outgoing>
+    </userTask>
+
+    <!-- Exercise Evaluation -->
+    <userTask id="exercise_evaluation" name="Exercise Evaluation">
+      <documentation>Evaluate exercise performance and capture lessons learned</documentation>
+      <incoming>flow_to_evaluation</incoming>
+      <outgoing>flow_to_report</outgoing>
+    </userTask>
+
+    <!-- Generate Report -->
+    <serviceTask id="generate_report" name="Generate Exercise Report">
+      <documentation>Automatically generate exercise report</documentation>
+      <incoming>flow_to_report</incoming>
+      <outgoing>flow_to_end</outgoing>
+    </serviceTask>
+
+    <!-- End Event -->
+    <endEvent id="exercise_complete" name="Exercise Completed">
+      <incoming>flow_to_end</incoming>
+    </endEvent>
+
+    <!-- Sequence Flows -->
+    <sequenceFlow id="flow_to_briefing" sourceRef="exercise_start" targetRef="participant_briefing"/>
+    <sequenceFlow id="flow_to_scenario" sourceRef="participant_briefing" targetRef="scenario_presentation"/>
+    <sequenceFlow id="flow_to_discussion" sourceRef="scenario_presentation" targetRef="discussion_phase"/>
+    <sequenceFlow id="flow_to_decisions" sourceRef="discussion_phase" targetRef="decision_making"/>
+    <sequenceFlow id="flow_to_evaluation" sourceRef="decision_making" targetRef="exercise_evaluation"/>
+    <sequenceFlow id="flow_to_report" sourceRef="exercise_evaluation" targetRef="generate_report"/>
+    <sequenceFlow id="flow_to_end" sourceRef="generate_report" targetRef="exercise_complete"/>
+
+  </process>
+</definitions>]]></field>
+        </record>
+
+        <!-- Full-Scale Exercise BPMN Template -->
+        <record id="template_fullscale_exercise" model="bcm.template">
+            <field name="name">Full-Scale Exercise Workflow</field>
+            <field name="category">workflow</field>
+            <field name="template_type">full_scale_exercise</field>
+            <field name="description">Complex BPMN workflow for full-scale exercises with simulation integration</field>
+            <field name="iso_clause">8.1</field>
+            <field name="sequence">20</field>
+            <field name="bpmn_xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="http://bcm.platform/bpmn"
+             id="FullScaleExerciseDefinition">
+
+  <process id="fullscale_exercise" name="Full-Scale Exercise Workflow" isExecutable="true">
+
+    <startEvent id="exercise_start" name="Exercise Started"/>
+
+    <!-- Initialize Simulation -->
+    <serviceTask id="initialize_simulation" name="Initialize JaamSim">
+      <documentation>Initialize JaamSim simulation engine</documentation>
+    </serviceTask>
+
+    <!-- Participant Setup -->
+    <parallelGateway id="setup_parallel" name="Parallel Setup"/>
+
+    <!-- Parallel Briefings -->
+    <userTask id="ic_briefing" name="Incident Commander Briefing"/>
+    <userTask id="ops_briefing" name="Operations Chief Briefing"/>
+    <userTask id="tech_briefing" name="Technical Team Briefing"/>
+
+    <parallelGateway id="setup_complete" name="Setup Complete"/>
+
+    <!-- Exercise Execution -->
+    <userTask id="scenario_inject_1" name="Initial Scenario Inject">
+      <documentation>Deliver first scenario inject to participants</documentation>
+    </userTask>
+
+    <!-- Decision Point -->
+    <exclusiveGateway id="escalation_check" name="Escalation Required?"/>
+
+    <!-- Normal Response Path -->
+    <userTask id="standard_response" name="Standard Response Procedures"/>
+
+    <!-- Escalated Response Path -->
+    <userTask id="escalated_response" name="Escalated Response Procedures"/>
+    <serviceTask id="external_notifications" name="Send External Notifications"/>
+
+    <!-- Convergence -->
+    <exclusiveGateway id="response_convergence" name="Response Complete"/>
+
+    <!-- Simulation Monitoring -->
+    <serviceTask id="collect_metrics" name="Collect Simulation Metrics">
+      <documentation>Collect real-time metrics from JaamSim</documentation>
+    </serviceTask>
+
+    <!-- Hot Wash -->
+    <userTask id="hot_wash" name="Hot Wash Discussion">
+      <documentation>Immediate post-exercise discussion</documentation>
+    </userTask>
+
+    <!-- Report Generation -->
+    <serviceTask id="generate_detailed_report" name="Generate Detailed Report"/>
+
+    <endEvent id="exercise_complete" name="Exercise Completed"/>
+
+    <!-- Flows -->
+    <sequenceFlow sourceRef="exercise_start" targetRef="initialize_simulation"/>
+    <sequenceFlow sourceRef="initialize_simulation" targetRef="setup_parallel"/>
+
+    <sequenceFlow sourceRef="setup_parallel" targetRef="ic_briefing"/>
+    <sequenceFlow sourceRef="setup_parallel" targetRef="ops_briefing"/>
+    <sequenceFlow sourceRef="setup_parallel" targetRef="tech_briefing"/>
+
+    <sequenceFlow sourceRef="ic_briefing" targetRef="setup_complete"/>
+    <sequenceFlow sourceRef="ops_briefing" targetRef="setup_complete"/>
+    <sequenceFlow sourceRef="tech_briefing" targetRef="setup_complete"/>
+
+    <sequenceFlow sourceRef="setup_complete" targetRef="scenario_inject_1"/>
+    <sequenceFlow sourceRef="scenario_inject_1" targetRef="escalation_check"/>
+
+    <!-- Conditional flows -->
+    <sequenceFlow sourceRef="escalation_check" targetRef="standard_response">
+      <conditionExpression>#{severity &lt;= 3}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow sourceRef="escalation_check" targetRef="escalated_response">
+      <conditionExpression>#{severity &gt; 3}</conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow sourceRef="standard_response" targetRef="response_convergence"/>
+    <sequenceFlow sourceRef="escalated_response" targetRef="external_notifications"/>
+    <sequenceFlow sourceRef="external_notifications" targetRef="response_convergence"/>
+
+    <sequenceFlow sourceRef="response_convergence" targetRef="collect_metrics"/>
+    <sequenceFlow sourceRef="collect_metrics" targetRef="hot_wash"/>
+    <sequenceFlow sourceRef="hot_wash" targetRef="generate_detailed_report"/>
+    <sequenceFlow sourceRef="generate_detailed_report" targetRef="exercise_complete"/>
+
+  </process>
+</definitions>]]></field>
+        </record>
+
+        <!-- Incident Response BPMN Template -->
+        <record id="template_incident_response" model="bcm.template">
+            <field name="name">Incident Response Workflow</field>
+            <field name="category">workflow</field>
+            <field name="template_type">incident_response</field>
+            <field name="description">Real incident response BPMN workflow with escalation</field>
+            <field name="iso_clause">8.1</field>
+            <field name="sequence">30</field>
+            <field name="bpmn_xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="http://bcm.platform/bpmn"
+             id="IncidentResponseDefinition">
+
+  <process id="incident_response" name="Incident Response Workflow" isExecutable="true">
+
+    <startEvent id="incident_detected" name="Incident Detected"/>
+
+    <!-- Initial Assessment -->
+    <userTask id="initial_assessment" name="Initial Impact Assessment">
+      <documentation>Assess incident severity and potential impact</documentation>
+    </userTask>
+
+    <!-- Severity Gateway -->
+    <exclusiveGateway id="severity_gateway" name="Incident Severity?"/>
+
+    <!-- Low Severity Path -->
+    <userTask id="standard_response" name="Standard Response"/>
+    <userTask id="monitor_situation" name="Monitor Situation"/>
+
+    <!-- High Severity Path -->
+    <userTask id="activate_bcm_team" name="Activate BCM Team"/>
+    <userTask id="crisis_communication" name="Crisis Communication"/>
+
+    <!-- Parallel Response Activities -->
+    <parallelGateway id="parallel_response" name="Parallel Response"/>
+    <userTask id="technical_response" name="Technical Response"/>
+    <userTask id="business_continuity" name="Business Continuity Activation"/>
+    <userTask id="stakeholder_communication" name="Stakeholder Communication"/>
+    <parallelGateway id="response_convergence" name="Response Convergence"/>
+
+    <!-- External Notifications -->
+    <serviceTask id="notify_authorities" name="Notify Authorities"/>
+    <serviceTask id="notify_media" name="Media Communication"/>
+
+    <!-- Resolution -->
+    <userTask id="incident_resolution" name="Incident Resolution"/>
+    <userTask id="post_incident_review" name="Post-Incident Review"/>
+
+    <endEvent id="incident_resolved" name="Incident Resolved"/>
+
+    <!-- Sequence Flows -->
+    <sequenceFlow sourceRef="incident_detected" targetRef="initial_assessment"/>
+    <sequenceFlow sourceRef="initial_assessment" targetRef="severity_gateway"/>
+
+    <!-- Conditional flows based on severity -->
+    <sequenceFlow sourceRef="severity_gateway" targetRef="standard_response">
+      <conditionExpression>#{severity &lt;= 2}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow sourceRef="severity_gateway" targetRef="activate_bcm_team">
+      <conditionExpression>#{severity &gt; 2}</conditionExpression>
+    </sequenceFlow>
+
+    <!-- Low severity path -->
+    <sequenceFlow sourceRef="standard_response" targetRef="monitor_situation"/>
+    <sequenceFlow sourceRef="monitor_situation" targetRef="incident_resolution"/>
+
+    <!-- High severity path -->
+    <sequenceFlow sourceRef="activate_bcm_team" targetRef="crisis_communication"/>
+    <sequenceFlow sourceRef="crisis_communication" targetRef="parallel_response"/>
+
+    <sequenceFlow sourceRef="parallel_response" targetRef="technical_response"/>
+    <sequenceFlow sourceRef="parallel_response" targetRef="business_continuity"/>
+    <sequenceFlow sourceRef="parallel_response" targetRef="stakeholder_communication"/>
+
+    <sequenceFlow sourceRef="technical_response" targetRef="response_convergence"/>
+    <sequenceFlow sourceRef="business_continuity" targetRef="response_convergence"/>
+    <sequenceFlow sourceRef="stakeholder_communication" targetRef="response_convergence"/>
+
+    <sequenceFlow sourceRef="response_convergence" targetRef="notify_authorities"/>
+    <sequenceFlow sourceRef="notify_authorities" targetRef="incident_resolution"/>
+
+    <sequenceFlow sourceRef="incident_resolution" targetRef="post_incident_review"/>
+    <sequenceFlow sourceRef="post_incident_review" targetRef="incident_resolved"/>
+
+  </process>
+</definitions>]]></field>
+        </record>
+
+        <!-- Compliance Audit Workflow Template -->
+        <record id="template_compliance_audit" model="bcm.template">
+            <field name="name">Compliance Audit Workflow</field>
+            <field name="category">workflow</field>
+            <field name="template_type">compliance_audit</field>
+            <field name="description">ISO 22301 compliance audit workflow with automated checks</field>
+            <field name="iso_clause">9.1</field>
+            <field name="sequence">40</field>
+            <field name="bpmn_xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="http://bcm.platform/bpmn"
+             id="ComplianceAuditDefinition">
+
+  <process id="compliance_audit" name="Compliance Audit Workflow" isExecutable="true">
+
+    <startEvent id="audit_initiated" name="Audit Initiated"/>
+
+    <!-- Audit Planning -->
+    <userTask id="audit_planning" name="Audit Planning">
+      <documentation>Plan audit scope, criteria, and timeline</documentation>
+    </userTask>
+
+    <!-- Automated Compliance Check -->
+    <serviceTask id="automated_compliance_check" name="Automated Compliance Check">
+      <documentation>Run automated ISO 22301 compliance checks</documentation>
+    </serviceTask>
+
+    <!-- Document Review -->
+    <userTask id="document_review" name="Document Review">
+      <documentation>Review BCM policies, procedures, and plans</documentation>
+    </userTask>
+
+    <!-- Parallel Evidence Collection -->
+    <parallelGateway id="evidence_collection_start"/>
+    <userTask id="interview_stakeholders" name="Interview Stakeholders"/>
+    <userTask id="review_records" name="Review Records"/>
+    <userTask id="observe_processes" name="Observe Processes"/>
+    <parallelGateway id="evidence_collection_end"/>
+
+    <!-- Gap Analysis -->
+    <serviceTask id="gap_analysis" name="Automated Gap Analysis">
+      <documentation>AI-powered gap analysis against ISO 22301</documentation>
+    </serviceTask>
+
+    <!-- Findings Documentation -->
+    <userTask id="document_findings" name="Document Findings">
+      <documentation>Document audit findings and observations</documentation>
+    </userTask>
+
+    <!-- Report Generation -->
+    <serviceTask id="generate_audit_report" name="Generate Audit Report">
+      <documentation>Auto-generate comprehensive audit report</documentation>
+    </serviceTask>
+
+    <!-- Corrective Actions -->
+    <userTask id="plan_corrective_actions" name="Plan Corrective Actions">
+      <documentation>Plan corrective actions for identified gaps</documentation>
+    </userTask>
+
+    <endEvent id="audit_complete" name="Audit Complete"/>
+
+    <!-- Sequence Flows -->
+    <sequenceFlow sourceRef="audit_initiated" targetRef="audit_planning"/>
+    <sequenceFlow sourceRef="audit_planning" targetRef="automated_compliance_check"/>
+    <sequenceFlow sourceRef="automated_compliance_check" targetRef="document_review"/>
+    <sequenceFlow sourceRef="document_review" targetRef="evidence_collection_start"/>
+
+    <sequenceFlow sourceRef="evidence_collection_start" targetRef="interview_stakeholders"/>
+    <sequenceFlow sourceRef="evidence_collection_start" targetRef="review_records"/>
+    <sequenceFlow sourceRef="evidence_collection_start" targetRef="observe_processes"/>
+
+    <sequenceFlow sourceRef="interview_stakeholders" targetRef="evidence_collection_end"/>
+    <sequenceFlow sourceRef="review_records" targetRef="evidence_collection_end"/>
+    <sequenceFlow sourceRef="observe_processes" targetRef="evidence_collection_end"/>
+
+    <sequenceFlow sourceRef="evidence_collection_end" targetRef="gap_analysis"/>
+    <sequenceFlow sourceRef="gap_analysis" targetRef="document_findings"/>
+    <sequenceFlow sourceRef="document_findings" targetRef="generate_audit_report"/>
+    <sequenceFlow sourceRef="generate_audit_report" targetRef="plan_corrective_actions"/>
+    <sequenceFlow sourceRef="plan_corrective_actions" targetRef="audit_complete"/>
+
+  </process>
+</definitions>]]></field>
+        </record>
+
+        <!-- BIA Assessment Workflow Template -->
+        <record id="template_bia_assessment" model="bcm.template">
+            <field name="name">Business Impact Analysis Workflow</field>
+            <field name="category">workflow</field>
+            <field name="template_type">risk_assessment</field>
+            <field name="description">Comprehensive BIA workflow with AI-powered analysis</field>
+            <field name="iso_clause">6.1</field>
+            <field name="sequence">50</field>
+            <field name="is_ai_enhanced">True</field>
+            <field name="ai_prompt">Generate comprehensive Business Impact Analysis workflow for the given business context, including process identification, impact assessment, and recovery objectives calculation.</field>
+            <field name="bpmn_xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="http://bcm.platform/bpmn"
+             id="BIAWorkflowDefinition">
+
+  <process id="bia_workflow" name="Business Impact Analysis Workflow" isExecutable="true">
+
+    <startEvent id="bia_initiated" name="BIA Initiated"/>
+
+    <!-- Business Process Identification -->
+    <userTask id="identify_processes" name="Identify Business Processes">
+      <documentation>Identify and catalog critical business processes</documentation>
+    </userTask>
+
+    <!-- AI-Powered Impact Analysis -->
+    <serviceTask id="ai_impact_analysis" name="AI Impact Analysis">
+      <documentation>Use AI to analyze potential business impacts</documentation>
+    </serviceTask>
+
+    <!-- Stakeholder Impact Assessment -->
+    <userTask id="stakeholder_impact" name="Assess Stakeholder Impact">
+      <documentation>Evaluate impact on stakeholders and dependencies</documentation>
+    </userTask>
+
+    <!-- RTO/RPO Calculation -->
+    <serviceTask id="calculate_objectives" name="Calculate RTO/RPO">
+      <documentation>Calculate Recovery Time and Point Objectives</documentation>
+    </serviceTask>
+
+    <!-- Validation Gateway -->
+    <exclusiveGateway id="validation_required" name="Validation Required?"/>
+
+    <!-- Management Review -->
+    <userTask id="management_review" name="Management Review">
+      <documentation>Senior management review of BIA results</documentation>
+    </userTask>
+
+    <!-- BIA Report Generation -->
+    <serviceTask id="generate_bia_report" name="Generate BIA Report">
+      <documentation>Auto-generate comprehensive BIA report</documentation>
+    </serviceTask>
+
+    <endEvent id="bia_complete" name="BIA Complete"/>
+
+    <!-- Sequence Flows -->
+    <sequenceFlow sourceRef="bia_initiated" targetRef="identify_processes"/>
+    <sequenceFlow sourceRef="identify_processes" targetRef="ai_impact_analysis"/>
+    <sequenceFlow sourceRef="ai_impact_analysis" targetRef="stakeholder_impact"/>
+    <sequenceFlow sourceRef="stakeholder_impact" targetRef="calculate_objectives"/>
+    <sequenceFlow sourceRef="calculate_objectives" targetRef="validation_required"/>
+
+    <sequenceFlow sourceRef="validation_required" targetRef="management_review">
+      <conditionExpression>#{high_impact == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow sourceRef="validation_required" targetRef="generate_bia_report">
+      <conditionExpression>#{high_impact == false}</conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow sourceRef="management_review" targetRef="generate_bia_report"/>
+    <sequenceFlow sourceRef="generate_bia_report" targetRef="bia_complete"/>
+
+  </process>
+</definitions>]]></field>
+        </record>
+    </data>
+</odoo>

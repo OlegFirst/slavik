@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  thehive-adapter:
+    build: .
+    ports:
+      - "8004:8004"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - EVENTBUS_URL=http://eventbus:8001
+      - THEHIVE_URL=http://thehive:9000
+      - THEHIVE_API_KEY=${THEHIVE_API_KEY}
+      - THEHIVE_ORG=bcm-platform
+      - AUTO_CREATE_CASES=true
+      - AUTO_CLOSE_CASES=true
+      - SYNC_CASE_UPDATES=true
+      - CREATE_INITIAL_TASKS=true
+      - DEFAULT_SEVERITY=2
+      - DEFAULT_TLP=2
+      - DEFAULT_PAP=2
+      - MAX_RETRIES=3
+      - RETRY_DELAY=5
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - eventbus
+      - thehive
+    networks:
+      - bcm_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # TheHive instance
+  thehive:
+    image: strangebee/thehive:5.2
+    ports:
+      - "9000:9000"
+    environment:
+      - TH_SECRET_KEY=${TH_SECRET_KEY:-thehive-secret-key}
+      - TH_DB_URL=jdbc:postgresql://postgres:5432/thehive
+      - TH_DB_USER=thehive
+      - TH_DB_PASSWORD=thehive_password
+      - TH_INDEXENGINE_PROVIDER=elasticsearch
+      - TH_INDEXENGINE_URL=http://elasticsearch:9200
+    volumes:
+      - thehive_data:/opt/thp/thehive/data
+      - thehive_index:/opt/thp/thehive/index
+    depends_on:
+      - postgres
+      - elasticsearch
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # Elasticsearch for TheHive
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # PostgreSQL for TheHive
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=thehive
+      - POSTGRES_USER=thehive
+      - POSTGRES_PASSWORD=thehive_password
+    volumes:
+      - postgres_thehive_data:/var/lib/postgresql/data
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # Redis for EventBus integration
+  redis:
+    image: redis:7-alpine
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # EventBus service
+  eventbus:
+    image: bcm/eventbus:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_URL=postgresql://eventbus:eventbus@postgres_eventbus:5432/bcm_events
+    depends_on:
+      - redis
+      - postgres_eventbus
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+  # PostgreSQL for EventBus
+  postgres_eventbus:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=bcm_events
+      - POSTGRES_USER=eventbus
+      - POSTGRES_PASSWORD=eventbus
+    volumes:
+      - postgres_eventbus_data:/var/lib/postgresql/data
+    networks:
+      - bcm_network
+    restart: unless-stopped
+
+volumes:
+  thehive_data:
+    driver: local
+  thehive_index:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  postgres_thehive_data:
+    driver: local
+  postgres_eventbus_data:
+    driver: local
+
+networks:
+  bcm_network:
+    driver: bridge
+    external: true

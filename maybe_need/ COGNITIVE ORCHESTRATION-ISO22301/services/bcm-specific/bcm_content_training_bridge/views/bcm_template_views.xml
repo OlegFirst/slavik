@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Template Views -->
+
+        <!-- Template List View -->
+        <record id="view_bcm_templates_list" model="ir.ui.view">
+            <field name="name">bcm_templates.record.list</field>
+            <field name="model">bcm_templates.record</field>
+            <field name="arch" type="xml">
+                <list string="BCM Templates">
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Template Form View -->
+        <record id="view_bcm_templates_form" model="ir.ui.view">
+            <field name="name">bcm_templates.record.form</field>
+            <field name="model">bcm_templates.record</field>
+            <field name="arch" type="xml">
+                <form string="BCM Template">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                            <field name="notes"/>
+                            <field name="company_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Template Actions -->
+        <record id="action_bcm_templates" model="ir.actions.act_window">
+            <field name="name">BCM Templates</field>
+            <field name="res_model">bcm_templates.record</field>
+            <field name="view_mode">list,form</field>
+            <field name="help">Manage BCM document templates and forms</field>
+        </record>
+
+        <!-- Template Menu -->
+        <record id="menu_bcm_templates" model="ir.ui.menu">
+            <field name="name">Templates</field>
+            <field name="parent_id" ref="bcm_core.menu_bcm_root"/>
+            <field name="action" ref="action_bcm_templates"/>
+            <field name="sequence">40</field>
+        </record>
+
+    </data>
+</odoo>

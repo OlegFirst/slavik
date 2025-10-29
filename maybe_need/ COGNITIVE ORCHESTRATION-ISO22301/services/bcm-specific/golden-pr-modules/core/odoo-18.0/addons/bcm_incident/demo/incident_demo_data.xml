@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Incidents for Testing -->
+        
+        <record id="demo_incident_cyber_breach" model="bcm.incident">
+            <field name="incident_number">INC-000001-2024</field>
+            <field name="title">Suspected Data Breach - Customer Database</field>
+            <field name="description">
+Suspicious database activity detected in customer records system. 
+Multiple failed login attempts followed by successful unauthorized access.
+Approximately 1,500 customer records potentially compromised.
+System automatically isolated at 14:30 GMT.
+            </field>
+            <field name="incident_type">cyber</field>
+            <field name="severity">critical</field>
+            <field name="status">responding</field>
+            <field name="priority">4</field>
+            <field name="crisis_level">3</field>
+            <field name="business_impact_level">high</field>
+            <field name="estimated_impact">major</field>
+            <field name="financial_impact">25000.00</field>
+            <field name="detected_at" eval="(datetime.now() - timedelta(hours=2))"/>
+            <field name="reported_at" eval="(datetime.now() - timedelta(hours=1.5))"/>
+            <field name="target_rto">4.0</field>
+            <field name="target_rpo">1.0</field>
+            <field name="reported_by" ref="base.user_admin"/>
+            <field name="assigned_to" ref="base.user_admin"/>
+            <field name="response_team_activated">True</field>
+            <field name="escalation_level">1</field>
+            <field name="auto_escalate">True</field>
+            <field name="ai_risk_score">85.0</field>
+            <field name="ai_classification_confidence">92.0</field>
+            <field name="ai_escalation_prediction">True</field>
+            <field name="ai_recommendations">
+• IMMEDIATE: Isolate affected database servers
+• Contact cyber security incident response team  
+• Preserve system logs and evidence
+• Notify data protection officer
+• Prepare customer communication plan
+• Check backup system integrity
+• Review access logs for past 48 hours
+            </field>
+            <field name="affected_systems">Customer Database Server, Web Application, Authentication Service</field>
+            <field name="affected_locations">Primary Data Center - London</field>
+            <field name="mobile_reporting_enabled">True</field>
+            <field name="gps_tracking_enabled">True</field>
+            <field name="media_attention">False</field>
+            <field name="public_statement_required">True</field>
+        </record>
+        
+        <record id="demo_incident_operational_outage" model="bcm.incident">
+            <field name="incident_number">INC-000002-2024</field>
+            <field name="title">Production Service Outage - E-commerce Platform</field>
+            <field name="description">
+Complete outage of main e-commerce platform affecting all customer transactions.
+Initial symptoms: slow response times starting 09:15
+Full outage confirmed at 09:45 - all services unreachable
+Estimated 10,000+ customers affected during peak shopping hours
+            </field>
+            <field name="incident_type">operational</field>
+            <field name="severity">high</field>
+            <field name="status">recovering</field>
+            <field name="priority">3</field>
+            <field name="crisis_level">2</field>
+            <field name="business_impact_level">critical</field>
+            <field name="estimated_impact">major</field>
+            <field name="financial_impact">50000.00</field>
+            <field name="detected_at" eval="(datetime.now() - timedelta(hours=6))"/>
+            <field name="reported_at" eval="(datetime.now() - timedelta(hours=5.5))"/>
+            <field name="target_rto">2.0</field>
+            <field name="target_rpo">0.5</field>
+            <field name="reported_by" ref="base.user_admin"/>
+            <field name="assigned_to" ref="base.user_admin"/>
+            <field name="response_team_activated">True</field>
+            <field name="escalation_level">0</field>
+            <field name="auto_escalate">True</field>
+            <field name="ai_risk_score">78.0</field>
+            <field name="ai_classification_confidence">88.0</field>
+            <field name="ai_escalation_prediction">False</field>
+            <field name="ai_recommendations">
+• Check database server performance and connections
+• Verify load balancer configuration
+• Review recent deployments and changes
+• Activate backup payment processing system
+• Communicate service status to customers
+• Monitor recovery progress continuously
+• Prepare detailed incident timeline
+            </field>
+            <field name="affected_systems">E-commerce Platform, Payment Gateway, Order Management</field>
+            <field name="affected_locations">All Customer-Facing Services</field>
+            <field name="mobile_reporting_enabled">True</field>
+            <field name="gps_tracking_enabled">False</field>
+            <field name="media_attention">True</field>
+            <field name="public_statement_required">True</field>
+        </record>
+        
+        <record id="demo_incident_natural_fire" model="bcm.incident">
+            <field name="incident_number">INC-000003-2024</field>
+            <field name="title">Office Building Fire Alarm - Evacuation Required</field>
+            <field name="description">
+Fire alarm activated in Building A, 3rd floor.
+Automatic sprinkler system engaged.
+All personnel evacuated safely by 11:20.
+Fire department on site - investigating source.
+No visible flames, suspected electrical issue in server room.
+            </field>
+            <field name="incident_type">natural</field>
+            <field name="severity">high</field>
+            <field name="status">assessing</field>
+            <field name="priority">4</field>
+            <field name="crisis_level">2</field>
+            <field name="business_impact_level">medium</field>
+            <field name="estimated_impact">moderate</field>
+            <field name="financial_impact">15000.00</field>
+            <field name="detected_at" eval="(datetime.now() - timedelta(hours=3))"/>
+            <field name="reported_at" eval="(datetime.now() - timedelta(hours=2.8))"/>
+            <field name="target_rto">8.0</field>
+            <field name="target_rpo">2.0</field>
+            <field name="reported_by" ref="base.user_admin"/>
+            <field name="assigned_to" ref="base.user_admin"/>
+            <field name="response_team_activated">True</field>
+            <field name="escalation_level">0</field>
+            <field name="auto_escalate">True</field>
+            <field name="ai_risk_score">65.0</field>
+            <field name="ai_classification_confidence">95.0</field>
+            <field name="ai_escalation_prediction">False</field>
+            <field name="ai_recommendations">
+• Ensure all personnel safety and accountability
+• Coordinate with fire department and building management
+• Assess damage to IT infrastructure and server room
+• Activate alternate work location if needed
+• Check data backup systems and offsite storage
+• Document all damage for insurance claims
+• Plan phased return to building when cleared
+            </field>
+            <field name="affected_systems">Server Room Infrastructure, Building Access Systems</field>
+            <field name="affected_locations">Building A - 3rd Floor, Server Room</field>
+            <field name="mobile_reporting_enabled">True</field>
+            <field name="gps_tracking_enabled">True</field>
+            <field name="media_attention">False</field>
+            <field name="public_statement_required">False</field>
+        </record>
+        
+        <record id="demo_incident_supply_chain" model="bcm.incident">
+            <field name="incident_number">INC-000004-2024</field>
+            <field name="title">Critical Supplier Disruption - Manufacturing Components</field>
+            <field name="description">
+Major supplier (Component Solutions Ltd) has declared force majeure due to factory flood.
+Affects 40% of our critical manufacturing components.
+Current inventory sufficient for 5 days production only.
+Alternative suppliers identified but require 2-3 weeks lead time.
+Production line shutdown imminent without immediate action.
+            </field>
+            <field name="incident_type">supply_chain</field>
+            <field name="severity">medium</field>
+            <field name="status">detected</field>
+            <field name="priority">2</field>
+            <field name="crisis_level">1</field>
+            <field name="business_impact_level">high</field>
+            <field name="estimated_impact">major</field>
+            <field name="financial_impact">100000.00</field>
+            <field name="detected_at" eval="(datetime.now() - timedelta(hours=1))"/>
+            <field name="reported_at" eval="(datetime.now() - timedelta(hours=0.5))"/>
+            <field name="target_rto">72.0</field>
+            <field name="target_rpo">24.0</field>
+            <field name="reported_by" ref="base.user_admin"/>
+            <field name="assigned_to" ref="base.user_admin"/>
+            <field name="response_team_activated">False</field>
+            <field name="escalation_level">0</field>
+            <field name="auto_escalate">True</field>
+            <field name="ai_risk_score">72.0</field>
+            <field name="ai_classification_confidence">85.0</field>
+            <field name="ai_escalation_prediction">True</field>
+            <field name="ai_recommendations">
+• Contact all alternative suppliers immediately
+• Review emergency procurement procedures
+• Calculate exact inventory remaining and burn rate
+• Activate supply chain crisis team
+• Consider temporary production adjustments
+• Explore expedited shipping options for critical components
+• Communicate with sales team about potential delivery delays
+            </field>
+            <field name="affected_systems">Manufacturing Line 1, Manufacturing Line 2, Inventory Management</field>
+            <field name="affected_locations">Main Production Facility</field>
+            <field name="mobile_reporting_enabled">False</field>
+            <field name="gps_tracking_enabled">False</field>
+            <field name="media_attention">False</field>
+            <field name="public_statement_required">False</field>
+        </record>
+        
+        <record id="demo_incident_resolved" model="bcm.incident">
+            <field name="incident_number">INC-000005-2024</field>
+            <field name="title">Email System Outage - Resolved</field>
+            <field name="description">
+Complete email system outage affecting all users.
+Root cause: Failed storage array in email server cluster.
+Restored from backup systems within RTO target.
+All services fully operational as of 16:45.
+Post-incident review scheduled for next week.
+            </field>
+            <field name="incident_type">operational</field>
+            <field name="severity">medium</field>
+            <field name="status">resolved</field>
+            <field name="priority">2</field>
+            <field name="crisis_level">1</field>
+            <field name="business_impact_level">medium</field>
+            <field name="estimated_impact">moderate</field>
+            <field name="financial_impact">5000.00</field>
+            <field name="detected_at" eval="(datetime.now() - timedelta(days=1, hours=8))"/>
+            <field name="reported_at" eval="(datetime.now() - timedelta(days=1, hours=7.5))"/>
+            <field name="resolved_at" eval="(datetime.now() - timedelta(days=1, hours=4))"/>
+            <field name="target_rto">4.0</field>
+            <field name="target_rpo">1.0</field>
+            <field name="reported_by" ref="base.user_admin"/>
+            <field name="assigned_to" ref="base.user_admin"/>
+            <field name="response_team_activated">False</field>
+            <field name="escalation_level">0</field>
+            <field name="auto_escalate">False</field>
+            <field name="ai_risk_score">45.0</field>
+            <field name="ai_classification_confidence">90.0</field>
+            <field name="ai_escalation_prediction">False</field>
+            <field name="lessons_learned">
+Storage array monitoring needs improvement.
+Backup email system performed well.
+Communication to users could be faster.
+Consider redundant storage configuration.
+            </field>
+            <field name="root_cause_analysis">
+Primary cause: Hardware failure of RAID controller in storage array.
+Contributing factors: End-of-life hardware not scheduled for replacement.
+No early warning due to insufficient monitoring of storage health.
+            </field>
+            <field name="preventive_measures">
+Implement enhanced storage monitoring.
+Schedule hardware refresh cycle.
+Test backup systems monthly.
+Improve incident communication procedures.
+            </field>
+            <field name="post_incident_review_required">True</field>
+            <field name="post_incident_review_completed">False</field>
+            <field name="affected_systems">Email Server Cluster, Exchange Online, Outlook Clients</field>
+            <field name="affected_locations">All Office Locations</field>
+        </record>
+        
+    </data>
+</odoo>

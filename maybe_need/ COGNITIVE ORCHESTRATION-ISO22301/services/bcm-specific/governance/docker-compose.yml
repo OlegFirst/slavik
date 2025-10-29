@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  governance_service:
+    build: .
+    ports:
+      - "8009:8009"
+    environment:
+      # Database Configuration
+      - DB_HOST=postgres_governance
+      - DB_PORT=5432
+      - DB_NAME=bcm_governance
+      - DB_USER=bcm_user
+      - DB_PASSWORD=secure_password_123
+      
+      # Redis Configuration  
+      - REDIS_HOST=redis_governance
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis_password_123
+      
+      # Odoo Integration
+      - ODOO_URL=http://host.docker.internal:8069
+      - ODOO_DB=bcm_platform
+      - ODOO_USER=admin
+      - ODOO_PASSWORD=admin
+      
+      # EventBus Integration
+      - EVENTBUS_URL=http://host.docker.internal:8001
+      
+      # Storage Paths
+      - STORAGE_PATH=/data/bcm
+      - BACKUP_PATH=/backups/bcm
+      
+      # Authentication
+      - ADMIN_API_KEY=bcm-governance-admin-key-2024
+      - JWT_SECRET=super-secret-jwt-key-for-governance-service
+      
+    volumes:
+      - governance_data:/data/bcm
+      - governance_backups:/backups/bcm
+    depends_on:
+      - postgres_governance
+      - redis_governance
+    networks:
+      - bcm_network
+
+  postgres_governance:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=bcm_governance
+      - POSTGRES_USER=bcm_user
+      - POSTGRES_PASSWORD=secure_password_123
+    volumes:
+      - postgres_governance_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    networks:
+      - bcm_network
+
+  redis_governance:
+    image: redis:7-alpine
+    command: redis-server --requirepass redis_password_123
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    volumes:
+      - redis_governance_data:/data
+    networks:
+      - bcm_network
+
+volumes:
+  governance_data:
+  governance_backups:
+  postgres_governance_data:
+  redis_governance_data:
+
+networks:
+  bcm_network:
+    external: true

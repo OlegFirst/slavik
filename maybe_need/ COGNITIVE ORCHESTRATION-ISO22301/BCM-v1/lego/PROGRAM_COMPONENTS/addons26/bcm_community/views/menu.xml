@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_bcm_community_root"
+                  name="Community"
+                  parent="bcm_core.menu_bcm_root"
+                  sequence="25"
+                  web_icon="bcm_community,static/description/icon.png"
+                  groups="bcm_core.group_bcm_user"/>
+
+        <!-- Forum Integration -->
+        <menuitem id="menu_bcm_community_integration"
+                  name="Forum Integration"
+                  parent="menu_bcm_community_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_bcm_forum_integration_config"
+                  name="🔧 Forum Configuration"
+                  parent="menu_bcm_community_integration"
+                  action="action_bcm_forum_integration"
+                  sequence="10"
+                  groups="bcm_core.group_bcm_admin"/>
+
+        <!-- Forum Topics -->
+        <menuitem id="menu_bcm_community_topics"
+                  name="Forum Topics"
+                  parent="menu_bcm_community_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_bcm_forum_topics"
+                  name="📝 All Topics"
+                  parent="menu_bcm_community_topics"
+                  action="action_bcm_forum_topic"
+                  sequence="10"/>
+
+        <menuitem id="menu_bcm_forum_scenario_topics"
+                  name="🎯 Scenario Discussions"
+                  parent="menu_bcm_community_topics"
+                  action="action_bcm_forum_topic_scenarios"
+                  sequence="20"/>
+
+        <!-- Actions -->
+        <record id="action_bcm_forum_integration" model="ir.actions.act_window">
+            <field name="name">Forum Integration Configuration</field>
+            <field name="res_model">bcm.forum.integration</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Configure Forum Service Integration
+                </p>
+                <p>
+                    Set up connection to Community Forum Service for seamless integration.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bcm_forum_topic" model="ir.actions.act_window">
+            <field name="name">Forum Topics</field>
+            <field name="res_model">bcm.forum.topic</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No forum topics found.
+                </p>
+                <p>
+                    Forum topics are automatically created when scenarios are published.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bcm_forum_topic_scenarios" model="ir.actions.act_window">
+            <field name="name">Scenario Discussions</field>
+            <field name="res_model">bcm.forum.topic</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('category', '=', 'scenario_discussion')]</field>
+            <field name="context">{'default_category': 'scenario_discussion'}</field>
+        </record>
+    </data>
+</odoo>

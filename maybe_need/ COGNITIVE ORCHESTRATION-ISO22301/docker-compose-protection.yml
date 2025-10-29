@@ -1,0 +1,212 @@
+version: '3.8'
+
+# 🛡️ PROTECTION LAYER - Защитный слой для ядра системы
+# "Череп" для мозга - защита, мониторинг, контроль доступа
+
+services:
+  # ==================================
+  # API GATEWAY - Главные ворота
+  # ==================================
+  api-gateway:
+    container_name: protection-gateway
+    build:
+      context: ./platform-framework/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Единая точка входа
+    environment:
+      # Связь с ядром
+      ORCHESTRATOR_URL: http://nucleus-orchestrator:8000
+      EVENTBUS_URL: http://nucleus-eventbus:8001
+      REGISTRY_URL: http://nucleus-registry:8002
+      # Безопасность
+      AUTH_SERVICE_URL: http://auth-service:8003
+      # Конфигурация
+      CONFIG_SERVICE_URL: http://config-service:8004
+      # Мониторинг
+      METRICS_ENABLED: "true"
+      TRACING_ENABLED: "true"
+    depends_on:
+      - auth-service
+      - config-service
+    networks:
+      - bcm-nucleus-network  # Подключаемся к сети ядра
+      - protection-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================================
+  # AUTH SERVICE - Страж у ворот
+  # ==================================
+  auth-service:
+    container_name: protection-auth
+    build:
+      context: ./platform-framework/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      POSTGRES_URL: postgresql://bcm_user:bcm_secure_pass@nucleus-postgres:5432/auth
+      REDIS_URL: redis://nucleus-redis:6379/3
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      TOKEN_EXPIRY: 3600
+    networks:
+      - bcm-nucleus-network
+      - protection-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================================
+  # CONFIG SERVICE - Хранитель настроек
+  # ==================================
+  config-service:
+    container_name: protection-config
+    build:
+      context: ./platform-framework/config-service
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      REDIS_URL: redis://nucleus-redis:6379/4
+      CONFIG_PATH: /config
+    volumes:
+      - ./config:/config:ro
+      - config-data:/data
+    networks:
+      - bcm-nucleus-network
+      - protection-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================================
+  # MONITORING - Наблюдатель
+  # ==================================
+
+  # Prometheus - сбор метрик
+  prometheus:
+    container_name: protection-prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./platform-framework/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - bcm-nucleus-network
+      - protection-network
+
+  # Grafana - визуализация
+  grafana:
+    container_name: protection-grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: redis-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./platform-framework/monitoring/grafana:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - protection-network
+
+  # Loki - логи
+  loki:
+    container_name: protection-loki
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./platform-framework/monitoring/loki-config.yaml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - protection-network
+
+  # Promtail - сбор логов
+  promtail:
+    container_name: protection-promtail
+    image: grafana/promtail:latest
+    volumes:
+      - ./platform-framework/monitoring/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - protection-network
+
+  # ==================================
+  # NOTIFICATION SERVICE - Коммуникатор
+  # ==================================
+  notification-service:
+    container_name: protection-notifications
+    build:
+      context: ./platform-framework/notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      EVENTBUS_URL: http://nucleus-eventbus:8001
+      REDIS_URL: redis://nucleus-redis:6379/5
+      SMTP_HOST: ${SMTP_HOST:-localhost}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
+    networks:
+      - bcm-nucleus-network
+      - protection-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================================
+  # RATE LIMITER / DDoS Protection
+  # ==================================
+  rate-limiter:
+    container_name: protection-ratelimit
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - ratelimit-data:/data
+    networks:
+      - protection-network
+
+# ==================================
+# VOLUMES
+# ==================================
+volumes:
+  config-data:
+  prometheus-data:
+  grafana-data:
+  loki-data:
+  ratelimit-data:
+
+# ==================================
+# NETWORKS
+# ==================================
+networks:
+  bcm-nucleus-network:
+    external: true  # Используем сеть ядра
+  protection-network:
+    driver: bridge
+    name: bcm-protection-network

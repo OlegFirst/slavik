@@ -1,0 +1,307 @@
+{
+  "analysis": {
+    "project_name": "",
+    "structure": {
+      "directories": [
+        "test_cli_full",
+        "msp_server",
+        "test_output",
+        ".pytest_cache",
+        "tests",
+        "ai_integration",
+        "cli_tool",
+        "generator",
+        "in_project_service",
+        "test_results",
+        "sample_upload",
+        "analyzer",
+        "visualizer",
+        ".pytest_cache/v",
+        ".pytest_cache/v/cache"
+      ],
+      "files": [
+        "main_uop.py",
+        "FINAL_REPORT.md",
+        "orchestrators.py",
+        "UNIVERSAL_ORCHESTRATION_PLATFORM_SPEC.md",
+        "models.py",
+        "requirements.txt",
+        "test_project.zip",
+        "test_universal_platform.py",
+        "PHASE_1_COMPLETION_REPORT.md",
+        "requirements_uop.txt",
+        "Dockerfile",
+        "MULTI_CHANNEL_INTEGRATION_COMPLETE.md",
+        "UNIFIED_SOLUTION_ARCHITECTURE.md",
+        "PROJECT_KICKOFF.md",
+        "PHASE_1_EXECUTION_PLAN.md",
+        "PHASE_1_FINAL_HANDOFF.md",
+        "README.md",
+        "CONTEXT_RESTORATION_CHECKLIST.md",
+        "test_hybrid_system.py",
+        "simple_test.py",
+        "CONTEXT_RESTORATION_MEMO.md",
+        "docker-compose.yml",
+        "TESTING_REPORT_COMPREHENSIVE.md",
+        "main.py",
+        "integrations.py",
+        "PHASE_2A_COMPLETE_SUCCESS.md",
+        "PHASE_2_TECHNICAL_SPECIFICATION.md",
+        "test_cli_full/analysis_result.json",
+        "msp_server/msp_inspector.py",
+        "msp_server/requirements.txt",
+        "msp_server/msp_main.py",
+        "msp_server/README.md",
+        "msp_server/anthropic_service.py",
+        "msp_server/msp_server.log",
+        "test_output/ARCHITECTURE_EXPLANATION.md",
+        "test_output/requirements.txt",
+        "test_output/Dockerfile",
+        "test_output/generation_summary.json",
+        "test_output/analysis_result.json",
+        "test_output/main.py",
+        ".pytest_cache/CACHEDIR.TAG",
+        ".pytest_cache/README.md",
+        ".pytest_cache/.gitignore",
+        ".pytest_cache/v/cache/nodeids",
+        ".pytest_cache/v/cache/lastfailed",
+        "tests/test_ai_integration.py",
+        "tests/test_code_generator.py",
+        "tests/__init__.py",
+        "tests/test_project_analyzer.py",
+        "tests/test_ai_compatibility.py",
+        "tests/test_performance.py",
+        "tests/test_architecture_classifier.py",
+        "tests/test_integration.py",
+        "ai_integration/claude_generator.py",
+        "ai_integration/__init__.py",
+        "ai_integration/workflow_optimizer_client.py",
+        "cli_tool/__init__.py",
+        "cli_tool/uop_cli.py",
+        "cli_tool/uop",
+        "generator/__init__.py",
+        "generator/code_generator.py",
+        "in_project_service/__init__.py",
+        "in_project_service/README.md",
+        "in_project_service/setup.py",
+        "in_project_service/orchestrator.py",
+        "test_results/generated_gateway_main.py",
+        "test_results/analysis_result.json",
+        "test_results/architecture_diagram.html",
+        "test_results/architecture.json",
+        "sample_upload/package.json",
+        "sample_upload/main.py",
+        "analyzer/project_analyzer.py",
+        "analyzer/__init__.py",
+        "analyzer/architecture_classifier.py",
+        "visualizer/__init__.py",
+        "visualizer/diagram_generator.py"
+      ],
+      "depth": 3,
+      "total_files": 76,
+      "file_types": {
+        ".py": 37,
+        ".md": 18,
+        ".txt": 4,
+        ".zip": 1,
+        "": 6,
+        ".yml": 1,
+        ".json": 6,
+        ".log": 1,
+        ".tag": 1,
+        ".html": 1
+      }
+    },
+    "languages": {
+      "python": 37
+    },
+    "frameworks": [
+      "FastAPI",
+      "Docker",
+      "Docker Compose"
+    ],
+    "dependencies": {
+      "external": [
+        "ai_integration.claude_generator",
+        "enum",
+        "anthropic",
+        "ast",
+        "analyzer.project_analyzer",
+        "time",
+        "integrations",
+        "anthropic_service",
+        "fastapi.middleware.cors",
+        "orchestrator",
+        "statistics",
+        "ai_integration.workflow_optimizer_client",
+        "asyncpg",
+        "analyzer.architecture_classifier",
+        "aioredis",
+        "asyncio",
+        "fastapi.testclient",
+        "typing",
+        "shutil",
+        "argparse",
+        "fastapi.staticfiles",
+        "jinja2",
+        "visualizer.diagram_generator",
+        "datetime",
+        "orchestrators",
+        "logging",
+        "pytest",
+        "main",
+        "docker",
+        "setuptools",
+        "claude_generator",
+        "workflow_optimizer_client",
+        "tempfile",
+        "unittest.mock",
+        "dataclasses",
+        "fastapi.responses",
+        "httpx",
+        "uop_cli",
+        "contextlib",
+        "fastapi",
+        "pydantic",
+        "sys",
+        "zipfile",
+        "models",
+        "pathlib",
+        "uuid",
+        "fastapi.security",
+        "os",
+        "uvicorn",
+        "traceback",
+        "psutil",
+        "generator.code_generator",
+        "json",
+        "main_uop",
+        "subprocess"
+      ],
+      "internal": [],
+      "count": 55,
+      "complexity": "high"
+    },
+    "metrics": {
+      "lines_of_code": 9499,
+      "files_count": 76,
+      "directories_count": 15,
+      "test_files": 12,
+      "config_files": 7,
+      "documentation_files": 22
+    },
+    "patterns": [
+      "microservices"
+    ],
+    "complexity_score": "very_high",
+    "recommendations": []
+  },
+  "classification": {
+    "primary_pattern": "monolith",
+    "confidence": 0.7,
+    "reasons": [
+      "Small codebase suitable for monolith",
+      "Single language project",
+      "Small file count"
+    ],
+    "alternative_patterns": [
+      {
+        "pattern": "monolith",
+        "description": "Single deployable unit with all functionality",
+        "pros": [
+          "Simple deployment",
+          "Easy development",
+          "Good for small teams"
+        ],
+        "cons": [
+          "Scaling limitations",
+          "Technology lock-in",
+          "Large blast radius"
+        ]
+      },
+      {
+        "pattern": "microservices",
+        "description": "Distributed services with single responsibilities",
+        "pros": [
+          "Independent scaling",
+          "Technology diversity",
+          "Team autonomy"
+        ],
+        "cons": [
+          "Complexity overhead",
+          "Network latency",
+          "Data consistency"
+        ]
+      },
+      {
+        "pattern": "serverless",
+        "description": "Function-as-a-Service event-driven architecture",
+        "pros": [
+          "Auto-scaling",
+          "Pay-per-use",
+          "No server management"
+        ],
+        "cons": [
+          "Vendor lock-in",
+          "Cold starts",
+          "Debugging complexity"
+        ]
+      },
+      {
+        "pattern": "hybrid",
+        "description": "Mix of different architectural patterns",
+        "pros": [
+          "Flexibility",
+          "Gradual migration",
+          "Best of both worlds"
+        ],
+        "cons": [
+          "Complexity",
+          "Multiple deployment strategies",
+          "Team coordination"
+        ]
+      }
+    ],
+    "recommended_components": [
+      "Web Application",
+      "Database",
+      "Static Assets",
+      "REST API"
+    ],
+    "deployment_strategy": "Single container deployment",
+    "implementation_steps": [
+      "Set up single application structure",
+      "Implement core business logic",
+      "Add database layer",
+      "Create API endpoints",
+      "Add testing framework",
+      "Set up CI/CD pipeline"
+    ],
+    "estimated_complexity": "high",
+    "technology_stack": {
+      "backend": [
+        "FastAPI",
+        "Python 3.11+"
+      ],
+      "frontend": [],
+      "database": [],
+      "infrastructure": [
+        "Docker",
+        "Load Balancer"
+      ],
+      "monitoring": [
+        "Prometheus",
+        "Grafana",
+        "ELK Stack"
+      ]
+    }
+  },
+  "summary": {
+    "files_analyzed": 0,
+    "languages_detected": {
+      "python": 37
+    },
+    "architecture_pattern": "unknown",
+    "complexity": "unknown"
+  }
+}

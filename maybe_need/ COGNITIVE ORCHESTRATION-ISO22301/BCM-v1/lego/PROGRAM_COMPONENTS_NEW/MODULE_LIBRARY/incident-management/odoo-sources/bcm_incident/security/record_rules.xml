@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Multi-tenant rules - Users can only access incidents from their company -->
+        <record id="incident_company_rule" model="ir.rule">
+            <field name="name">Incident Multi-Company Rule</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Incident Manager can see all incidents in their company -->
+        <record id="incident_manager_rule" model="ir.rule">
+            <field name="name">Incident Manager Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_incident_manager'))]"/>
+        </record>
+        
+        <!-- Users can see incidents they are involved in -->
+        <record id="incident_user_rule" model="ir.rule">
+            <field name="name">Incident User Personal Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">['|', '|', '|', 
+                ('reported_by', '=', user.id),
+                ('assigned_to', '=', user.id),
+                ('stakeholders', 'in', [user.id]),
+                ('response_team_members.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_incident_user'))]"/>
+        </record>
+        
+        <!-- Response team members can see incidents they are assigned to -->
+        <record id="incident_response_team_rule" model="ir.rule">
+            <field name="name">Response Team Member Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('response_team_members.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_response_team_member'))]"/>
+        </record>
+        
+        <!-- Incident commanders can see high priority incidents -->
+        <record id="incident_commander_rule" model="ir.rule">
+            <field name="name">Incident Commander Critical Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">['|', 
+                ('priority', 'in', ['3', '4']),
+                ('severity', 'in', ['high', 'critical'])]</field>
+            <field name="groups" eval="[(4, ref('group_incident_commander'))]"/>
+        </record>
+        
+        <!-- Crisis coordinators can see all critical incidents -->
+        <record id="incident_crisis_coordinator_rule" model="ir.rule">
+            <field name="name">Crisis Coordinator Emergency Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('crisis_level', 'in', ['3', '4', '5'])]</field>
+            <field name="groups" eval="[(4, ref('group_crisis_coordinator'))]"/>
+        </record>
+        
+        <!-- Field Update Rules -->
+        <record id="field_update_company_rule" model="ir.rule">
+            <field name="name">Field Update Multi-Company Rule</field>
+            <field name="model_id" ref="model_bcm_incident_field_update"/>
+            <field name="domain_force">[('incident_id.company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- Users can only edit their own field updates -->
+        <record id="field_update_user_rule" model="ir.rule">
+            <field name="name">Field Update User Access</field>
+            <field name="model_id" ref="model_bcm_incident_field_update"/>
+            <field name="domain_force">[('reporter_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_response_team_member'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <!-- Category Rules -->
+        <record id="incident_category_company_rule" model="ir.rule">
+            <field name="name">Incident Category Multi-Company Rule</field>
+            <field name="model_id" ref="model_bcm_incident_category"/>
+            <field name="domain_force">['|', ('company_ids', '=', False), ('company_ids', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <!-- AI Analytics Access Rules -->
+        <record id="incident_ai_analyst_rule" model="ir.rule">
+            <field name="name">AI Analyst Data Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('status', 'in', ['resolved', 'closed'])]</field>
+            <field name="groups" eval="[(4, ref('group_ai_analyst'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <!-- External System Integration Rules -->
+        <record id="incident_api_integration_rule" model="ir.rule">
+            <field name="name">API Integration Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_api_integration'))]"/>
+        </record>
+        
+        <!-- Public Portal Rules (for stakeholder notifications) -->
+        <record id="incident_portal_rule" model="ir.rule">
+            <field name="name">Portal User Incident Access</field>
+            <field name="model_id" ref="model_bcm_incident"/>
+            <field name="domain_force">[('stakeholders', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+    </data>
+</odoo>

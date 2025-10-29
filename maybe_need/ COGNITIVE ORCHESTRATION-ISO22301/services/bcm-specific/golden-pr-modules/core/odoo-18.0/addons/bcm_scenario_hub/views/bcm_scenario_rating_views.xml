@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Scenario Rating Tree View -->
+        <record id="view_bcm_scenario_stars_tree" model="ir.ui.view">
+            <field name="name">bcm.scenario.rating.tree</field>
+            <field name="model">bcm.scenario.rating</field>
+            <field name="arch" type="xml">
+                <list string="Ratings">
+                    <field name="scenario_id"/>
+                    <field name="user_id"/>
+                    <field name="stars" widget="priority"/>
+                    <field name="comment"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Scenario Rating Form View -->
+        <record id="view_bcm_scenario_stars_form" model="ir.ui.view">
+            <field name="name">bcm.scenario.rating.form</field>
+            <field name="model">bcm.scenario.rating</field>
+            <field name="arch" type="xml">
+                <form string="Scenario Rating">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <span>Rating for: </span>
+                                <field name="scenario_id" readonly="1" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="user_id" readonly="1"/>
+                                <field name="stars" widget="priority"/>
+                            </group>
+                            <group>
+                                <field name="create_date" readonly="1"/>
+                                <field name="write_date" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Comments"/>
+                        <field name="comment" widget="html" placeholder="Share your experience with this scenario..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Rating Search View -->
+        <record id="view_bcm_scenario_stars_search" model="ir.ui.view">
+            <field name="name">bcm.scenario.rating.search</field>
+            <field name="model">bcm.scenario.rating</field>
+            <field name="arch" type="xml">
+                <search string="Search Ratings">
+                    <field name="scenario_id" string="Scenario"/>
+                    <field name="user_id" string="User"/>
+                    <field name="comment" string="Comments"/>
+                    
+                    <filter string="My Ratings" name="my_starss" domain="[('user_id', '=', uid)]"/>
+                    <filter string="5 Stars" name="five_stars" domain="[('stars', '=', 5)]"/>
+                    <filter string="4+ Stars" name="four_plus_stars" domain="[('stars', '>=', 4)]"/>
+                    <filter string="3- Stars" name="three_minus_stars" domain="[('stars', '&lt;=', 3)]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Rating" name="group_stars" context="{'group_by': 'stars'}"/>
+                        <filter string="Scenario" name="group_scenario" context="{'group_by': 'scenario_id'}"/>
+                        <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Date" name="group_date" context="{'group_by': 'create_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

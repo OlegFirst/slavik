@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ISO 22301 Framework Views -->
+    <record id="view_iso22301_framework_tree" model="ir.ui.view">
+        <field name="name">ISO 22301 Framework Tree</field>
+        <field name="model">bcm.iso22301.framework</field>
+        <field name="arch" type="xml">
+            <tree string="ISO 22301 Requirements" decoration-danger="compliance_status=='non_compliant'" 
+                  decoration-warning="compliance_status=='in_progress'" decoration-success="compliance_status=='verified'">
+                <field name="clause_number"/>
+                <field name="clause_title"/>
+                <field name="clause_category"/>
+                <field name="compliance_status"/>
+                <field name="compliance_percentage" widget="percentage"/>
+                <field name="risk_level"/>
+                <field name="responsible_user_id"/>
+                <field name="target_completion_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_iso22301_framework_form" model="ir.ui.view">
+        <field name="name">ISO 22301 Framework Form</field>
+        <field name="model">bcm.iso22301.framework</field>
+        <field name="arch" type="xml">
+            <form string="ISO 22301 Requirement">
+                <header>
+                    <button name="action_ai_compliance_assessment" string="AI Assessment" 
+                            type="object" class="btn-primary" 
+                            attrs="{'invisible': [('compliance_status', '=', 'verified')]}"/>
+                    <field name="compliance_status" widget="statusbar" 
+                           statusbar_visible="not_started,in_progress,implemented,verified"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="clause_number" class="o_text_overflow" placeholder="Clause Number"/>
+                            <field name="clause_title" class="o_text_overflow" placeholder="Clause Title"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="clause_category"/>
+                            <field name="risk_level"/>
+                            <field name="compliance_percentage" widget="percentage"/>
+                            <field name="ai_compliance_score" widget="percentage"/>
+                        </group>
+                        <group>
+                            <field name="responsible_user_id"/>
+                            <field name="target_completion_date"/>
+                            <field name="actual_completion_date"/>
+                            <field name="gap_priority"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <field name="clause_description" widget="html"/>
+                        </page>
+                        <page string="Implementation">
+                            <group>
+                                <field name="implementation_plan" widget="html"/>
+                            </group>
+                        </page>
+                        <page string="AI Assessment" attrs="{'invisible': [('ai_assessment_notes', '=', False)]}">
+                            <group>
+                                <field name="ai_last_assessment"/>
+                                <field name="ai_assessment_notes" widget="html" readonly="1"/>
+                                <field name="ai_recommendations" widget="html" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Gap Analysis">
+                            <group>
+                                <field name="identified_gaps" widget="html"/>
+                                <field name="gap_action_plan" widget="html"/>
+                            </group>
+                        </page>
+                        <page string="Evidence">
+                            <group>
+                                <field name="evidence_documents" widget="many2many_tags"/>
+                                <field name="evidence_notes"/>
+                            </group>
+                        </page>
+                        <page string="BCM Modules">
+                            <field name="related_bcm_modules"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- BCM Module Mapping Views -->
+    <record id="view_bcm_module_mapping_tree" model="ir.ui.view">
+        <field name="name">BCM Module Mapping Tree</field>
+        <field name="model">bcm.module.mapping</field>
+        <field name="arch" type="xml">
+            <tree string="BCM Modules" decoration-success="health_status=='healthy'" 
+                  decoration-warning="health_status=='warning'" decoration-danger="health_status=='critical'">
+                <field name="name"/>
+                <field name="technical_name"/>
+                <field name="development_status"/>
+                <field name="health_status"/>
+                <field name="compliance_contribution" widget="percentage"/>
+                <field name="last_health_check"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bcm_module_mapping_form" model="ir.ui.view">
+        <field name="name">BCM Module Mapping Form</field>
+        <field name="model">bcm.module.mapping</field>
+        <field name="arch" type="xml">
+            <form string="BCM Module">
+                <header>
+                    <field name="health_status" widget="statusbar" 
+                           statusbar_visible="healthy,warning,critical,offline"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Module Name"/>
+                        </h1>
+                        <h2>
+                            <field name="technical_name" placeholder="Technical Name"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="development_status"/>
+                            <field name="compliance_contribution" widget="percentage"/>
+                        </group>
+                        <group>
+                            <field name="last_health_check"/>
+                            <field name="health_metrics"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <field name="module_description"/>
+                        </page>
+                        <page string="ISO Clauses">
+                            <field name="iso_clauses">
+                                <tree>
+                                    <field name="clause_number"/>
+                                    <field name="clause_title"/>
+                                    <field name="compliance_status"/>
+                                    <field name="compliance_percentage" widget="percentage"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Compliance Dashboard Views -->
+    <record id="view_compliance_dashboard" model="ir.ui.view">
+        <field name="name">Compliance Dashboard</field>
+        <field name="model">bcm.compliance.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="ISO 22301 Compliance Dashboard" create="false" edit="false" delete="false">
+                <header>
+                    <button name="trigger_full_ai_assessment" string="Full AI Assessment" 
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="o_form_sheet_bg">
+                        <div class="alert alert-info" role="alert">
+                            <strong>ISO 22301:2019 Compliance Dashboard</strong>
+                            <p>Comprehensive business continuity management system compliance monitoring.</p>
+                        </div>
+                        
+                        <!-- This is a placeholder - actual dashboard rendered by frontend -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-success">
+                                    <h4>Frontend Integration Ready</h4>
+                                    <p>This compliance data is now available via API endpoints:</p>
+                                    <ul>
+                                        <li><code>/web/dataset/call_kw/bcm.compliance.dashboard/get_compliance_overview</code></li>
+                                        <li><code>/web/dataset/call_kw/bcm.compliance.dashboard/get_module_compliance_matrix</code></li>
+                                        <li><code>/web/dataset/call_kw/bcm.compliance.dashboard/get_compliance_roadmap</code></li>
+                                    </ul>
+                                    <p>Access the full dashboard at: <a href="http://localhost:5173" target="_blank">Admin Panel</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <record id="menu_iso22301_compliance" model="ir.ui.menu">
+        <field name="name">ISO 22301 Compliance</field>
+        <field name="parent_id" ref="bcm_governance.menu_bcm_governance_root"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="menu_iso22301_framework" model="ir.ui.menu">
+        <field name="name">ISO Framework</field>
+        <field name="parent_id" ref="menu_iso22301_compliance"/>
+        <field name="action" ref="action_iso22301_framework"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="menu_bcm_modules" model="ir.ui.menu">
+        <field name="name">BCM Modules</field>
+        <field name="parent_id" ref="menu_iso22301_compliance"/>
+        <field name="action" ref="action_bcm_module_mapping"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="menu_compliance_dashboard" model="ir.ui.menu">
+        <field name="name">Compliance Dashboard</field>
+        <field name="parent_id" ref="menu_iso22301_compliance"/>
+        <field name="action" ref="action_compliance_dashboard"/>
+        <field name="sequence">5</field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_iso22301_framework" model="ir.actions.act_window">
+        <field name="name">ISO 22301 Framework</field>
+        <field name="res_model">bcm.iso22301.framework</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Setup your ISO 22301:2019 compliance framework
+            </p>
+            <p>
+                Define and track compliance with ISO 22301:2019 requirements.
+                Use AI-powered assessments to identify gaps and improvement opportunities.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_bcm_module_mapping" model="ir.actions.act_window">
+        <field name="name">BCM Module Mapping</field>
+        <field name="res_model">bcm.module.mapping</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Map BCM modules to ISO requirements
+            </p>
+            <p>
+                Define how your BCM modules contribute to ISO 22301 compliance.
+                Monitor module health and development status.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_compliance_dashboard" model="ir.actions.act_window">
+        <field name="name">Compliance Dashboard</field>
+        <field name="res_model">bcm.compliance.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ISO 22301 Compliance Dashboard
+            </p>
+            <p>
+                Comprehensive overview of your ISO 22301:2019 compliance status.
+                Access the full interactive dashboard via the Admin Panel.
+            </p>
+        </field>
+    </record>
+</odoo>

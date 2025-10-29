@@ -1,0 +1,168 @@
+FROM odoo:18.0
+
+USER root
+
+# Install additional dependencies and PostgreSQL client
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    postgresql-client-15 \
+    netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy BCM modules to extra-addons
+COPY ./addons/bcm_* /mnt/extra-addons/
+
+# Create initialization script for module pre-installation
+RUN cat > /usr/local/bin/install-bcm-modules.sh << 'EOF'
+#!/bin/bash
+set -e
+
+echo "[BCM] Pre-installing BCM modules in Docker image..."
+
+# Start temporary PostgreSQL for module installation
+service postgresql start
+su - postgres -c "psql -c \"CREATE USER odoo WITH SUPERUSER PASSWORD 'postgres123';\""
+su - postgres -c "createdb -O odoo bcm_platform"
+
+# Initialize Odoo database with all modules
+export DB_HOST=localhost
+export DB_PORT=5432
+export DB_USER=odoo
+export DB_PASSWORD=postgres123
+export DB_NAME=bcm_platform
+
+cd /usr/lib/python3/dist-packages
+
+# Phase 1: Initialize base Odoo
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    --init=base --stop-after-init --no-http --without-demo=all
+
+# Phase 2: Install core web modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i web,mail,bus,http_routing,web_editor,portal --stop-after-init --no-http --without-demo=all
+
+# Phase 3: Install BCM foundation modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i bcm_base,bcm_intelligent_base,bcm_core --stop-after-init --no-http --without-demo=all
+
+# Phase 4: Install BCM infrastructure modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i bcm_context,bcm_config,bcm_governance,bcm_community,bcm_audit \
+    --stop-after-init --no-http --without-demo=all
+
+# Phase 5: Install BCM business modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i bcm_bia,bcm_risk_management,bcm_incident,bcm_plans,bcm_exercise \
+    --stop-after-init --no-http --without-demo=all
+
+# Phase 6: Install BCM advanced modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i bcm_kpi,bcm_training,bcm_templates,bcm_portal,bcm_reporting \
+    --stop-after-init --no-http --without-demo=all
+
+# Phase 7: Install remaining BCM modules
+odoo -d bcm_platform --db_host=localhost --db_port=5432 --db_user=odoo --db_password=postgres123 \
+    -i bcm_clients,bcm_ai_control,bcm_digital_twin_core,bcm_scenario_hub,bcm_admin_website,bcm_incident_management \
+    --stop-after-init --no-http --without-demo=all
+
+# Export the database as a template
+su - postgres -c "pg_dump -U odoo -d bcm_platform" > /opt/bcm_platform_template.sql
+
+# Stop PostgreSQL
+service postgresql stop
+
+echo "[BCM] ✅ All 28 BCM modules pre-installed successfully!"
+EOF
+
+RUN chmod +x /usr/local/bin/install-bcm-modules.sh
+
+# Install PostgreSQL temporarily for build-time module installation
+RUN apt-get update && apt-get install -y postgresql-15 && \
+    /usr/local/bin/install-bcm-modules.sh && \
+    apt-get remove -y postgresql-15 && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create runtime entrypoint that restores pre-installed modules
+RUN cat > /docker-entrypoint-bcm-preinstalled.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Function to wait for PostgreSQL
+wait_for_postgres() {
+    echo "[BCM] Waiting for PostgreSQL..."
+    while ! pg_isready -h ${DB_HOST:-postgres} -p ${DB_PORT:-5432} -U ${DB_USER:-odoo}; do
+        sleep 1
+    done
+    echo "[BCM] PostgreSQL is ready!"
+}
+
+# Set database credentials
+export DB_HOST=${DB_HOST:-postgres}
+export DB_PORT=${DB_PORT:-5432}
+export DB_USER=${DB_USER:-odoo}
+export DB_PASSWORD=${DB_PASSWORD:-postgres123}
+export DB_NAME=${DB_NAME:-bcm_platform}
+export PGPASSWORD=$DB_PASSWORD
+
+# Wait for PostgreSQL
+wait_for_postgres
+
+# Check if database exists
+DB_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -lqt 2>/dev/null | cut -d \| -f 1 | grep -w $DB_NAME | wc -l)
+
+if [ "$DB_EXISTS" -eq "0" ]; then
+    echo "[BCM] Creating database from pre-installed template..."
+
+    # Create database
+    createdb -h $DB_HOST -p $DB_PORT -U $DB_USER $DB_NAME
+
+    # Restore pre-installed modules
+    psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME < /opt/bcm_platform_template.sql
+
+    echo "[BCM] ✅ Database created with all 28 BCM modules pre-installed and active!"
+else
+    echo "[BCM] Database already exists, checking modules..."
+
+    # Quick check if BCM modules are installed
+    MODULE_COUNT=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -t -c \
+        "SELECT COUNT(*) FROM ir_module_module WHERE name LIKE 'bcm_%' AND state='installed'" 2>/dev/null || echo "0")
+
+    if [ "$MODULE_COUNT" -lt "28" ]; then
+        echo "[BCM] Only $MODULE_COUNT BCM modules installed, restoring from template..."
+
+        # Drop and recreate with template
+        dropdb -h $DB_HOST -p $DB_PORT -U $DB_USER --if-exists $DB_NAME
+        createdb -h $DB_HOST -p $DB_PORT -U $DB_USER $DB_NAME
+        psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME < /opt/bcm_platform_template.sql
+
+        echo "[BCM] ✅ Restored all 28 BCM modules!"
+    else
+        echo "[BCM] ✅ All $MODULE_COUNT BCM modules are already active!"
+    fi
+fi
+
+# Start Odoo
+echo "[BCM] Starting Odoo with pre-installed BCM modules..."
+exec odoo \
+    --database=$DB_NAME \
+    --db_host=$DB_HOST \
+    --db_port=$DB_PORT \
+    --db_user=$DB_USER \
+    --db_password=$DB_PASSWORD \
+    --addons-path=/mnt/extra-addons \
+    --without-demo=all \
+    --log-level=info
+EOF
+
+RUN chmod +x /docker-entrypoint-bcm-preinstalled.sh
+
+# Set proper permissions
+RUN chown -R odoo:odoo /mnt/extra-addons /opt/bcm_platform_template.sql
+
+USER odoo
+
+ENTRYPOINT ["/docker-entrypoint-bcm-preinstalled.sh"]
+CMD ["odoo"]

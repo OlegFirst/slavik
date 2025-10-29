@@ -1,0 +1,336 @@
+openapi: 3.0.3
+info:
+  title: SEH Simulation & Impact API
+  version: 1.0.0
+  description: Endpoints for running simulations and Theory-of-Change optimization.
+servers:
+- url: https://api.seh.example
+  description: Production
+- url: https://staging.api.seh.example
+  description: Staging
+- url: http://localhost:8080
+  description: Local Dev
+tags:
+- name: Simulation
+  description: AnyLogic experiment runs
+- name: Impact
+  description: Theory-of-Change policy optimization
+paths:
+  /api/v1/sim/run:
+    post:
+      tags:
+      - Simulation
+      summary: Run simulation experiment
+      operationId: runSimulation
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimRunRequest'
+            examples:
+              capacity_sweep:
+                summary: Capacity sweep example
+                value:
+                  experiment: capacity_sweep
+                  params:
+                    arrival_rate: 12
+                    service_time:
+                      dist: lognormal
+                      mu: 10m
+                      sigma: 0.5
+                    capacity_agents:
+                    - 6
+                    - 8
+                    - 10
+                    shift_calendar:
+                      Mon-Fri: 09:00-17:00
+                    targets:
+                      sla_target: 0.95
+                    constraints:
+                      budget_max: 20000
+                  monte_carlo_runs: 200
+      responses:
+        '200':
+          description: Simulation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimRunResponse'
+              examples:
+                ok:
+                  value:
+                    run_id: sim_2025_08_16_001
+                    experiment: capacity_sweep
+                    best:
+                      capacity: 8
+                      sla: 0.953
+                      wait_p50_min: 12.4
+                      cost: 18750
+                    frontier:
+                    - capacity: 6
+                      sla: 0.89
+                    - capacity: 8
+                      sla: 0.95
+                    explain: Боттлнек — регистрация; 1 флоат-ставка в часы пик.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/impact/optimize:
+    post:
+      tags:
+      - Impact
+      summary: Optimize ToC policy under budget and constraints
+      operationId: optimizePolicy
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptimizeRequest'
+            examples:
+              policy_search:
+                summary: ToC policy search example
+                value:
+                  objective: maximize_outcome_cov_per_cost
+                  budget_cap: 50000
+                  decision_variables:
+                  - id: outreach_sms_intensity
+                    min: 0
+                    max: 3
+                    step: 0.1
+                  - id: transport_vouchers_intensity
+                    min: 0
+                    max: 2
+                    step: 0.1
+                  - id: counseling_intensity
+                    min: 0
+                    max: 2
+                    step: 0.1
+                  monte_carlo_runs: 1000
+      responses:
+        '200':
+          description: Optimization result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptimizeResponse'
+              examples:
+                ok:
+                  value:
+                    policy:
+                      outreach_sms: 1.6
+                      transport_vouchers: 0.8
+                      counseling: 1.1
+                    coverage_forecast:
+                      mean: 0.71
+                      p10: 0.66
+                      p90: 0.75
+                    cost: 49800
+                    nmb: 0.42
+                    assumptions:
+                    - эластичности как в приорах
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Duration:
+      oneOf:
+      - type: string
+        example: 10m
+      - type: number
+        description: seconds
+    ServiceTime:
+      type: object
+      properties:
+        dist:
+          type: string
+          enum:
+          - lognormal
+          - triangular
+          - normal
+          - empirical
+        mu:
+          $ref: '#/components/schemas/Duration'
+        sigma:
+          type: number
+        min:
+          $ref: '#/components/schemas/Duration'
+        mode:
+          $ref: '#/components/schemas/Duration'
+        max:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - dist
+    CapacitySweepParams:
+      type: object
+      properties:
+        arrival_rate:
+          type: number
+          example: 12
+        service_time:
+          $ref: '#/components/schemas/ServiceTime'
+        capacity_agents:
+          type: array
+          items:
+            type: integer
+        shift_calendar:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            Mon-Fri: 09:00-17:00
+        targets:
+          type: object
+          additionalProperties: true
+          example:
+            sla_target: 0.95
+        constraints:
+          type: object
+          additionalProperties: true
+          example:
+            budget_max: 20000
+      required:
+      - arrival_rate
+      - service_time
+      - capacity_agents
+    SimRunRequest:
+      type: object
+      properties:
+        experiment:
+          type: string
+          example: capacity_sweep
+        params:
+          oneOf:
+          - $ref: '#/components/schemas/CapacitySweepParams'
+          - type: object
+        monte_carlo_runs:
+          type: integer
+          minimum: 1
+          default: 200
+      required:
+      - experiment
+      - params
+    SimRunResponse:
+      type: object
+      properties:
+        run_id:
+          type: string
+        experiment:
+          type: string
+        best:
+          type: object
+          additionalProperties: true
+        frontier:
+          type: array
+          items:
+            type: object
+        explain:
+          type: string
+      required:
+      - run_id
+      - experiment
+      - best
+    OptimizeRequest:
+      type: object
+      properties:
+        objective:
+          type: string
+          enum:
+          - maximize_outcome_cov_per_cost
+          - minimize_morbidity
+          - maximize_NMB
+        budget_cap:
+          type: number
+        decision_variables:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              min:
+                type: number
+              max:
+                type: number
+              step:
+                type: number
+            required:
+            - id
+            - min
+            - max
+            - step
+        monte_carlo_runs:
+          type: integer
+          minimum: 1
+          default: 1000
+      required:
+      - objective
+      - budget_cap
+      - decision_variables
+    OptimizeResponse:
+      type: object
+      properties:
+        policy:
+          type: object
+          additionalProperties:
+            type: number
+        coverage_forecast:
+          type: object
+          properties:
+            mean:
+              type: number
+            p10:
+              type: number
+            p90:
+              type: number
+        cost:
+          type: number
+        nmb:
+          type: number
+        assumptions:
+          type: array
+          items:
+            type: string
+      required:
+      - policy
+      - cost
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Default AI Organ Status Records -->
+        <record id="ai_organ_governance_brain" model="bcm.ai.organ.status">
+            <field name="name">Governance Brain</field>
+            <field name="organ_type">governance_brain</field>
+            <field name="status">active</field>
+            <field name="health_score">0.95</field>
+            <field name="ai_provider">anthropic</field>
+            <field name="personality">wise_ruler</field>
+        </record>
+
+        <record id="ai_organ_emergency_response" model="bcm.ai.organ.status">
+            <field name="name">Emergency Response</field>
+            <field name="organ_type">emergency_response</field>
+            <field name="status">active</field>
+            <field name="health_score">0.89</field>
+            <field name="ai_provider">local</field>
+            <field name="personality">emergency_responder</field>
+        </record>
+
+        <record id="ai_organ_impact_oracle" model="bcm.ai.organ.status">
+            <field name="name">Impact Oracle</field>
+            <field name="organ_type">impact_oracle</field>
+            <field name="status">active</field>
+            <field name="health_score">0.92</field>
+            <field name="ai_provider">local</field>
+            <field name="personality">analytical_oracle</field>
+        </record>
+
+        <!-- Default Dashboard -->
+        <record id="default_ai_control_dashboard" model="bcm.ai.control.dashboard">
+            <field name="name">Digital BCM Organism Control</field>
+            <field name="organism_status">active</field>
+            <field name="overall_health">0.89</field>
+            <field name="consciousness_level">0.85</field>
+            <field name="total_ai_organs">10</field>
+        </record>
+    </data>
+</odoo>

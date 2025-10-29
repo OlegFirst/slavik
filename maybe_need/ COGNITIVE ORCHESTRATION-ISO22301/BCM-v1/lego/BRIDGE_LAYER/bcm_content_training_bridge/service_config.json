@@ -1,0 +1,86 @@
+{
+  "service_name": "bcm_content_training_bridge",
+  "service_type": "odoo_bridge_module",
+  "version": "18.0.4.0.0",
+  "description": "Bridge module connecting BCM content with Odoo native gamification, e-learning, and calendar systems",
+
+  "dependencies": {
+    "odoo_modules": [
+      "bcm_core",
+      "bcm_clients",
+      "bcm_templates",
+      "bcm_scenario_hub",
+      "bcm_training",
+      "gamification",
+      "calendar",
+      "website_slides",
+      "survey"
+    ],
+    "external_services": [
+      {
+        "name": "scenario_orchestrator",
+        "url": "http://scenario_orchestrator:8085",
+        "endpoints": ["/scenarios/generate"],
+        "purpose": "AI scenario generation"
+      },
+      {
+        "name": "exercise_simulators",
+        "url": "http://exercise_simulators:8094",
+        "endpoints": ["/api/simulations/initialize"],
+        "purpose": "Exercise simulations"
+      },
+      {
+        "name": "digital_twin_service",
+        "url": "http://localhost:3000",
+        "endpoints": ["/webhooks/odoo/scenario-published"],
+        "purpose": "Digital twin integration and webhooks"
+      }
+    ]
+  },
+
+  "data_storage": {
+    "primary": "PostgreSQL via Odoo ORM",
+    "models": [
+      "bcm.scenario.creator",
+      "bcm.scenario",
+      "bcm.scenario.rating",
+      "bcm.scenario.review",
+      "bcm.content.gamification.bridge",
+      "bcm.user.achievement",
+      "bcm.content.learning.bridge",
+      "bcm.content.calendar.bridge"
+    ],
+    "external_data": {
+      "scenario_experience_db": "In-memory storage in scenario_orchestrator service",
+      "generated_scenarios": "/app/generated_scenarios/ (JSON files)"
+    }
+  },
+
+  "integrations": {
+    "gamification": {
+      "features": ["points_system", "badges", "leaderboards", "achievements"],
+      "bridge_model": "bcm.content.gamification.bridge"
+    },
+    "elearning": {
+      "features": ["auto_conversion", "learning_paths", "assessments", "certifications"],
+      "bridge_model": "bcm.content.learning.bridge"
+    },
+    "calendar": {
+      "features": ["automated_scheduling", "review_cycles", "exercise_planning"],
+      "bridge_model": "bcm.content.calendar.bridge"
+    }
+  },
+
+  "deployment": {
+    "location": "/Users/MD/ISO-22301/services/bcm_content_training_bridge",
+    "install_path": "Should be installed as Odoo addon in addons directory",
+    "docker_integration": "Requires Odoo container with BCM modules",
+    "port_requirements": "Uses Odoo's port (8069), no separate service port needed"
+  },
+
+  "security": {
+    "access_control": "Odoo security groups and ACL",
+    "files": ["security/content_library_security.xml", "security/ir.model.access.csv"],
+    "external_calls": "HTTPS recommended for production external service calls"
+  }
+}

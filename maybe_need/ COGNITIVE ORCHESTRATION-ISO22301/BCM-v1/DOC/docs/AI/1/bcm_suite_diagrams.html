@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BCM Suite — Этажность, процессы, потоки и сценарии</title>
+  <script type="module">
+    // Load Mermaid from CDN
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+  </script>
+  <style>
+    :root {
+      --bg:#f7f7f7; --ink:#111; --card:#fff; --muted:#555; --border:#ddd;
+    }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font:14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    header { background:var(--card); border-bottom:1px solid var(--border); padding:14px 16px; position:sticky; top:0; z-index:10; }
+    header h1 { margin:0; font-size:18px; }
+    .wrap { max-width:1100px; margin:0 auto; padding:18px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin:14px 0; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+    h2 { margin:6px 0 8px 0; font-size:16px; }
+    .floors .floor { background:#fff; border:2px solid #333; border-radius:8px; padding:14px; margin:10px 0; text-align:center; }
+    .floors .floor h3 { margin:0 0 6px 0; font-size:15px; }
+    .muted { color: var(--muted); font-size:12.5px; }
+    .mermaid { margin-top:8px; }
+    .note { font-size:12px; color:#444; margin-top:6px;}
+    .two-col { display:grid; grid-template-columns:1fr; gap:14px; }
+    @media (min-width: 980px) { .two-col { grid-template-columns:1fr 1fr; } }
+    a.dl { display:inline-block; padding:8px 12px; border:1px solid var(--border); border-radius:8px; background:#fff; text-decoration:none; color:#0a66c2; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BCM Suite — этажность, процессы, потоки и сценарии (ISO 22301)</h1>
+  </header>
+
+  <div class="wrap">
+
+    <!-- Floors (visual blocks) -->
+    <div class="card floors">
+      <h2>Этажность платформы (сверху вниз)</h2>
+      <div class="floor">
+        <h3>Этаж 6. Комьюнити и экосистема</h3>
+        <div class="muted">Форум, дашборды, hardening, DR</div>
+      </div>
+      <div class="floor">
+        <h3>Этаж 5. Управление и интеллект</h3>
+        <div class="muted">Governance, AI Orchestrator</div>
+      </div>
+      <div class="floor">
+        <h3>Этаж 4. Аудит и документация</h3>
+        <div class="muted">Audit, GAP, Templates, OSCAL/OpenGRC</div>
+      </div>
+      <div class="floor">
+        <h3>Этаж 3. Инциденты и симуляции</h3>
+        <div class="muted">Incidents (TheHive), Exercises (JaamSim/NICS)</div>
+      </div>
+      <div class="floor">
+        <h3>Этаж 2. Аналитика и обучение</h3>
+        <div class="muted">BIA Engine (Ciw), LMS (Moodle/Open edX)</div>
+      </div>
+      <div class="floor">
+        <h3>Этаж 1. Ядро процессов</h3>
+        <div class="muted">Odoo CE, Context, Plans, KPI, Postgres, Keycloak</div>
+      </div>
+      <div class="note">Этажность = порядок подключения модулей и сервисов. Основание — Этаж 1.</div>
+    </div>
+
+    <div class="two-col">
+
+      <!-- Mermaid: Architecture & Data Flows -->
+      <div class="card">
+        <h2>Потоки данных и интеграции</h2>
+        <div class="mermaid">
+        graph LR
+          subgraph External["Внешние системы"]
+            EMR[HIS/EMR/ERP]
+            LMS[(Moodle / Open edX)]
+            SIM[JaamSim / NICS / AnyLogic]
+            IR[TheHive / Cortex]
+            GRC[OpenGRC / OSCAL]
+            MON[Prometheus / Grafana]
+          end
+
+          subgraph Core["Ядро процессов — Odoo CE + bcm_*"]
+            Odoo[(Odoo CE)]
+            C1[bcm_context]
+            C2[bcm_bia]
+            C3[bcm_plans]
+            C4[bcm_incident]
+            C5[bcm_audit]
+            C6[bcm_training]
+            C7[bcm_kpi]
+            C8[bcm_governance]
+            C9[bcm_templates]
+            C10[bcm_exercise]
+          end
+
+          subgraph Services["Сервисы"]
+            AI[AI Orchestrator<br/>Rule Engine + LLM + Retrieval]
+            BIA[BIA Engine (Ciw)]
+            ETL[n8n / ETL]
+            SSO[Keycloak SSO]
+            DB[(PostgreSQL / Supabase)]
+          end
+
+          %% Flows
+          EMR --> ETL --> DB --> Odoo
+          Odoo -->|events/webhooks| AI --> Odoo
+          C2 -->|/compute| BIA --> C2
+          C4 --> IR
+          C10 --> SIM
+          C6 --> LMS
+          C5 --> GRC
+          C7 --> MON
+          SSO --> Odoo
+          Odoo <--> DB
+        </div>
+        <div class="note">Всё скрепляется событиями: Odoo генерирует webhooks, оркестратор создаёт черновики и рекомендации.</div>
+      </div>
+
+      <!-- Mermaid: BCM Process Pipeline -->
+      <div class="card">
+        <h2>Процессы BCM (конвейер)</h2>
+        <div class="mermaid">
+        graph TD
+          A[Контекст и активы] --> B[BIA (MTPD/RTO/RPO)]
+          B --> C[Планы BCP/DRP (версии, согласования)]
+          C --> D[Обучение и готовность персонала]
+          D --> E[Инциденты / Реагирование]
+          E --> F[Учения / Симуляции]
+          F --> G[Аудит, GAP, CAPA]
+          G --> H[KPI / Дашборды]
+          H --> I[Management Review / Governance]
+          I --> A
+        </div>
+        <div class="note">Цикл замкнут (PDCA): после MR улучшения возвращаются в контекст.</div>
+      </div>
+
+    </div>
+
+    <!-- Mermaid: Use case sequences -->
+    <div class="card">
+      <h2>Сценарии использования (последовательности)</h2>
+      <div class="two-col">
+        <div class="mermaid">
+        sequenceDiagram
+          autonumber
+          participant Manager as BCM Manager (Odoo)
+          participant Orchestrator as AI Orchestrator
+          participant BIA as BIA Engine (Ciw)
+          participant Odoo as Odoo/bcm_bia
+
+          Manager->>Odoo: Заполняет анкету BIA
+          Odoo->>BIA: POST /compute (процессы)
+          BIA-->>Odoo: RTO/RPO/MTPD
+          Odoo->>Orchestrator: event: bcm.bia.completed
+          Orchestrator-->>Manager: Черновик: обновить BCP/назначить учение
+          Manager->>Odoo: Approve → План обновлён
+        </div>
+
+        <div class="mermaid">
+        sequenceDiagram
+          autonumber
+          participant IR as TheHive/Cortex
+          participant Odoo as Odoo/bcm_incident
+          participant Orchestrator as AI Orchestrator
+          participant EX as Симулятор (JaamSim)
+
+          IR-->>Odoo: case_id, статус инцидента
+          Odoo->>Orchestrator: event: bcm.incident.opened
+          Orchestrator-->>Odoo: Черновик коммуникаций/шагов реагирования
+          Orchestrator->>EX: Запуск tabletop/симуляции
+          EX-->>Odoo: Метрики реакции, lessons learned
+          Odoo-->>Orchestrator: event: bcm.exercise.resulted
+          Orchestrator-->>Odoo: CAPA и обновления планов в draft
+        </div>
+      </div>
+      <div class="note">Все действия ИИ проходят как draft → утверждение ответственным.</div>
+    </div>
+
+    <div class="card">
+      <h2>Скачать этот документ (HTML)</h2>
+      <a class="dl" href="#" onclick="downloadCurrent()">Скачать файл</a>
+      <div class="note">Файл включает этажность, потоки данных, процессный конвейер и 2 сценария использования.</div>
+    </div>
+
+  </div>
+
+  <script>
+    // enable 'download this page' as a standalone HTML
+    function downloadCurrent() {
+      const blob = new Blob([document.documentElement.outerHTML], {type: "text/html;charset=utf-8"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "bcm_suite_diagrams.html";
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }
+  </script>
+</body>
+</html>

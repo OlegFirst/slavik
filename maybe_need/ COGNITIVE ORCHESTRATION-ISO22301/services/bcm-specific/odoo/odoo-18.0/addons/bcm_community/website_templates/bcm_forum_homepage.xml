@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BCM Community Homepage Template -->
+        <template id="community_homepage" name="BCM Community Homepage">
+            <t t-call="website.layout">
+                <div id="wrap" class="js_bcm_community">
+                    <!-- Hero Section -->
+                    <section class="s_cover s_color_alpha" data-name="Cover" style="background-image: url('/bcm_community/static/img/community-hero.jpg')">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 offset-lg-2 text-center">
+                                    <h1 class="display-4 font-weight-bold text-white">
+                                        <i class="fas fa-users mr-3"></i>
+                                        BCM Community Hub
+                                    </h1>
+                                    <p class="lead text-white-50 mb-4">
+                                        Connect, share, and learn with BCM professionals worldwide
+                                    </p>
+                                    <div class="btn-group" role="group">
+                                        <a href="/bcm/community/scenarios" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-file-text mr-2"></i>Browse Scenarios
+                                        </a>
+                                        <a href="/bcm/community/discussions" class="btn btn-outline-light btn-lg">
+                                            <i class="fas fa-comments mr-2"></i>Join Discussions
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Community Stats -->
+                    <section class="py-5 bg-light">
+                        <div class="container">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <i class="fas fa-file-text fa-2x text-primary mb-3"></i>
+                                            <h3 class="card-title">
+                                                <t t-esc="community_stats.get('total_scenarios', 0)"/>
+                                            </h3>
+                                            <p class="card-text text-muted">BCM Scenarios</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <i class="fas fa-robot fa-2x text-success mb-3"></i>
+                                            <h3 class="card-title">
+                                                <t t-esc="community_stats.get('ai_scenarios', 0)"/>
+                                            </h3>
+                                            <p class="card-text text-muted">AI Generated</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <i class="fas fa-comments fa-2x text-info mb-3"></i>
+                                            <h3 class="card-title">
+                                                <t t-esc="community_stats.get('total_topics', 0)"/>
+                                            </h3>
+                                            <p class="card-text text-muted">Discussions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <i class="fas fa-users fa-2x text-warning mb-3"></i>
+                                            <h3 class="card-title">
+                                                <t t-esc="community_stats.get('active_users', 0)"/>
+                                            </h3>
+                                            <p class="card-text text-muted">Active Members</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured Scenarios -->
+                    <section class="py-5">
+                        <div class="container">
+                            <h2 class="text-center mb-5">
+                                <i class="fas fa-star text-warning mr-2"></i>
+                                Featured AI Scenarios
+                            </h2>
+                            <div class="row">
+                                <t t-foreach="recent_scenarios" t-as="scenario">
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm scenario-card">
+                                            <div class="card-header d-flex justify-content-between">
+                                                <span class="badge badge-primary">
+                                                    <t t-esc="scenario.category"/>
+                                                </span>
+                                                <span t-if="scenario.meta_ai_generated" class="badge badge-success">
+                                                    <i class="fas fa-robot mr-1"></i>AI Generated
+                                                </span>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <t t-esc="scenario.title"/>
+                                                </h5>
+                                                <p class="card-text text-muted">
+                                                    <t t-esc="scenario.meta_description[:100]"/>...
+                                                </p>
+                                                <div class="scenario-meta">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-clock mr-1"></i>
+                                                        <t t-esc="scenario.meta_duration"/>h
+                                                        <span class="mx-2">•</span>
+                                                        <i class="fas fa-users mr-1"></i>
+                                                        <t t-esc="scenario.meta_participants"/> participants
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="btn-group w-100" role="group">
+                                                    <a t-attf-href="/bcm/community/scenario/#{scenario.id}/discuss"
+                                                       class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-comments mr-1"></i>Discuss
+                                                    </a>
+                                                    <a t-attf-href="/web#id=#{scenario.id}&amp;model=bcm.scenario"
+                                                       class="btn btn-outline-success btn-sm">
+                                                        <i class="fas fa-eye mr-1"></i>View
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Forum Categories -->
+                    <section class="py-5 bg-light">
+                        <div class="container">
+                            <h2 class="text-center mb-5">
+                                <i class="fas fa-comments text-primary mr-2"></i>
+                                Discussion Categories
+                            </h2>
+                            <div class="row">
+                                <t t-foreach="forums" t-as="forum">
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card border-0 shadow-sm forum-card">
+                                            <div class="card-body text-center">
+                                                <i t-attf-class="#{forum.icon or 'fas fa-comments'} fa-3x text-primary mb-3"></i>
+                                                <h5 class="card-title">
+                                                    <t t-esc="forum.name"/>
+                                                </h5>
+                                                <p class="card-text text-muted">
+                                                    <t t-esc="forum.description"/>
+                                                </p>
+                                                <div class="forum-stats">
+                                                    <small class="text-muted">
+                                                        <t t-esc="forum.count_posts"/> posts in
+                                                        <t t-esc="forum.count_topics"/> topics
+                                                    </small>
+                                                </div>
+                                                <a t-attf-href="/forum/#{forum.id}" class="btn btn-primary btn-sm mt-3">
+                                                    <i class="fas fa-arrow-right mr-1"></i>Enter Forum
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <!-- Scenario Discussion Template -->
+        <template id="scenario_discussion" name="Scenario Discussion Page">
+            <t t-call="website.layout">
+                <div id="wrap" class="js_scenario_discussion">
+                    <div class="container mt-4">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Scenario Info -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h3>
+                                            <i class="fas fa-file-text text-primary mr-2"></i>
+                                            <t t-esc="scenario.title"/>
+                                        </h3>
+                                        <div class="scenario-badges">
+                                            <span class="badge badge-primary mr-2">
+                                                <t t-esc="scenario.category"/>
+                                            </span>
+                                            <span class="badge badge-info mr-2">
+                                                <t t-esc="scenario.level"/>
+                                            </span>
+                                            <span t-if="scenario.meta_ai_generated" class="badge badge-success">
+                                                <i class="fas fa-robot mr-1"></i>AI Generated
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <t t-esc="scenario.meta_description"/>
+                                        </p>
+                                        <div class="scenario-meta">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <strong>Duration:</strong>
+                                                    <t t-esc="scenario.meta_duration"/> hours
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <strong>Participants:</strong>
+                                                    <t t-esc="scenario.meta_participants"/> people
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <strong>Rating:</strong>
+                                                    <t t-esc="scenario.avg_rating or 'Not rated'"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="btn-group" role="group">
+                                            <a t-attf-href="/web#id=#{scenario.id}&amp;model=bcm.scenario"
+                                               class="btn btn-primary">
+                                                <i class="fas fa-eye mr-1"></i>View Full Scenario
+                                            </a>
+                                            <button class="btn btn-success" onclick="applyScenario()">
+                                                <i class="fas fa-play mr-1"></i>Apply to Organization
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Forum Discussion -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>
+                                            <i class="fas fa-comments text-primary mr-2"></i>
+                                            Community Discussion
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Embed Odoo forum discussion here -->
+                                        <div t-if="forum_topic" class="forum-discussion">
+                                            <p class="text-muted">
+                                                Discussion started by <strong><t t-esc="forum_topic.user_id.name"/></strong>
+                                                on <t t-esc="forum_topic.create_date"/>
+                                            </p>
+
+                                            <!-- Discussion content would be loaded via AJAX/WebSocket -->
+                                            <div id="discussion-content">
+                                                <!-- Real-time discussion content -->
+                                            </div>
+
+                                            <!-- Quick comment form -->
+                                            <div class="quick-comment-form mt-4">
+                                                <textarea class="form-control mb-2" placeholder="Share your thoughts about this scenario..."></textarea>
+                                                <button class="btn btn-primary">
+                                                    <i class="fas fa-reply mr-1"></i>Post Comment
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div t-if="not forum_topic" class="no-discussion">
+                                            <p class="text-center text-muted">
+                                                No discussion yet for this scenario.
+                                            </p>
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" onclick="createDiscussion()">
+                                                    <i class="fas fa-plus mr-1"></i>Start Discussion
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sidebar -->
+                            <div class="col-lg-4">
+                                <!-- Related Scenarios -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5>Related Scenarios</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- AI-powered related scenarios -->
+                                        <p class="text-muted">Related scenarios will appear here</p>
+                                    </div>
+                                </div>
+
+                                <!-- Community Activity -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Recent Activity</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Recent community activity -->
+                                        <p class="text-muted">Recent community activity will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript for real-time features -->
+                <script type="text/javascript">
+                    // Real-time discussion updates
+                    function createDiscussion() {
+                        // AJAX call to create forum discussion
+                        fetch('/bcm/community/api/scenarios/<t t-esc="scenario.id"/>/create-discussion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.reload(); // Reload to show new discussion
+                            } else {
+                                alert('Failed to create discussion: ' + data.error);
+                            }
+                        });
+                    }
+
+                    function applyScenario() {
+                        // Navigate to scenario application wizard
+                        window.open('/web#model=bcm.scenario&amp;id=<t t-esc="scenario.id"/>&amp;action=apply_scenario', '_blank');
+                    }
+                </script>
+            </t>
+        </template>
+    </data>
+</odoo>

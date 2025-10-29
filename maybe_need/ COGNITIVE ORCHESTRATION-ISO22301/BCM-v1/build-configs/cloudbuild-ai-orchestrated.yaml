@@ -1,0 +1,179 @@
+# 🤖 AI-Orchestrated Cloud Build
+# Интеллектуальное развертывание с самообучением и автоматическими улучшениями
+
+steps:
+  # Этап 1: Запуск базовой инфраструктуры + AI Orchestrator
+  - name: 'docker/compose:latest'
+    id: 'infrastructure'
+    args: [
+      '-f', 'docker-compose.yml',
+      'up', '-d',
+      'postgres', 'redis', 'rabbitmq', 'ai_orchestrator'
+    ]
+    env:
+      - 'DB_HOST=postgres'
+      - 'DB_USER=odoo' 
+      - 'DB_NAME=bcm_platform'
+      - 'BCM_MODE=production'
+    secretEnv:
+      - 'DB_PASSWORD'
+      - 'RABBITMQ_PASSWORD'
+
+  # Этап 2: Ожидание готовности AI Orchestrator
+  - name: 'curlimages/curl:latest'
+    id: 'wait-ai'
+    args:
+      - 'sh'
+      - '-c'
+      - |
+        echo "🤖 Waiting for AI Orchestrator to be ready..."
+        until curl -f http://ai_orchestrator:8000/health; do
+          echo "AI Orchestrator not ready yet..."
+          sleep 10
+        done
+        echo "✅ AI Orchestrator is ready!"
+    waitFor: ['infrastructure']
+
+  # Этап 3: AI-управляемое развертывание остальных сервисов
+  - name: 'curlimages/curl:latest'
+    id: 'ai-deployment'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "🚀 Starting AI-orchestrated deployment..."
+        
+        # Отправка команды AI Orchestrator
+        curl -X POST http://ai_orchestrator:8000/deployment/orchestrate \
+          -H "Content-Type: application/json" \
+          -d '{
+            "environment": "production",
+            "services": [
+              "keycloak", "traefik", "mailhog",
+              "bia_engine", "document_processor", "compliance_checker",
+              "eventbus", "odoo",
+              "bpmn_service", "lms_adapter", "thehive_adapter", "grafana_adapter",
+              "web_portal", "admin_panel"
+            ],
+            "strategy": "staged",
+            "intelligence_level": "autonomous",
+            "learning_enabled": true
+          }' \
+          -w "HTTP_STATUS: %{http_code}\n" \
+          -o deployment_result.json
+        
+        # Проверка результата
+        if [ -f deployment_result.json ]; then
+          echo "📊 Deployment Result:"
+          cat deployment_result.json
+          
+          # Проверка статуса
+          status=$(cat deployment_result.json | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
+          if [ "$status" = "success" ] || [ "$status" = "partial_success" ]; then
+            echo "✅ AI deployment completed successfully!"
+          else
+            echo "❌ AI deployment failed"
+            exit 1
+          fi
+        else
+          echo "❌ No deployment result received"
+          exit 1
+        fi
+    waitFor: ['wait-ai']
+
+  # Этап 4: Получение истории и обученных паттернов
+  - name: 'curlimages/curl:latest'
+    id: 'ai-analytics'
+    args:
+      - 'sh'
+      - '-c'
+      - |
+        echo "📈 Getting AI deployment analytics..."
+        curl -s http://ai_orchestrator:8000/deployment/history | \
+        grep -E '"total_deployments"|"learned_patterns"' || echo "No analytics available yet"
+        
+        echo "🧠 AI is learning and will improve future deployments!"
+    waitFor: ['ai-deployment']
+
+  # Этап 5: Финальная проверка всех сервисов
+  - name: 'curlimages/curl:latest'
+    id: 'final-healthcheck'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "🏥 Final health check of all services..."
+        
+        services="postgres:5432 redis:6379 rabbitmq:15672 ai_orchestrator:8000 odoo:8069"
+        failed_services=""
+        
+        for service in $services; do
+          host=$(echo $service | cut -d':' -f1)
+          port=$(echo $service | cut -d':' -f2)
+          
+          if nc -z $host $port 2>/dev/null; then
+            echo "✅ $host:$port is healthy"
+          else
+            echo "❌ $host:$port is not responding"
+            failed_services="$failed_services $service"
+          fi
+        done
+        
+        if [ -n "$failed_services" ]; then
+          echo "❌ Some services failed:$failed_services"
+          echo "🤖 AI will learn from this and improve next deployment"
+          
+          # Отправка обратной связи AI для обучения
+          curl -X POST http://ai_orchestrator:8000/deployment/learn \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"plan\": {\"environment\": \"production\"},
+              \"failures\": [{\"services\": \"$failed_services\", \"error\": \"Health check failed\"}],
+              \"lessons\": [\"Need better health checks\", \"Some services need more time to start\"]
+            }"
+        else
+          echo "🎉 All services are healthy!"
+        fi
+    waitFor: ['ai-deployment']
+
+# Secret Manager конфигурация
+availableSecrets:
+  secretManager:
+    - versionName: projects/sehiso22301/secrets/db-password/versions/latest
+      env: 'DB_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/rabbitmq-password/versions/latest
+      env: 'RABBITMQ_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/keycloak-db-password/versions/latest
+      env: 'KEYCLOAK_DB_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/keycloak-admin-password/versions/latest
+      env: 'KEYCLOAK_ADMIN_PASSWORD'
+    # GitHub App секреты
+    - versionName: projects/sehiso22301/secrets/github-app-id/versions/latest
+      env: 'GITHUB_APP_ID'
+    - versionName: projects/sehiso22301/secrets/github-client-id/versions/latest
+      env: 'GITHUB_CLIENT_ID'
+    - versionName: projects/sehiso22301/secrets/github-client-secret/versions/latest
+      env: 'GITHUB_CLIENT_SECRET'
+    - versionName: projects/sehiso22301/secrets/github-webhook-secret/versions/latest
+      env: 'GITHUB_WEBHOOK_SECRET'
+    - versionName: projects/sehiso22301/secrets/github-private-key/versions/latest
+      env: 'GITHUB_PRIVATE_KEY'
+    # Supabase секреты
+    - versionName: projects/sehiso22301/secrets/supabase-url/versions/latest
+      env: 'SUPABASE_URL'
+    - versionName: projects/sehiso22301/secrets/supabase-key/versions/latest
+      env: 'SUPABASE_KEY'
+
+# Опции сборки для AI workload
+options:
+  machineType: 'E2_HIGHCPU_8'  # Больше CPU для AI обработки
+  logging: CLOUD_LOGGING_ONLY
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+    - 'AI_ORCHESTRATION_ENABLED=true'
+
+# Увеличенный таймаут для AI анализа
+timeout: '2400s'
+
+# Теги для мониторинга AI deployments  
+tags: ['ai-orchestrated', 'bcm-platform', 'intelligent-deployment']

@@ -1,0 +1,53 @@
+# Cloud Build конфигурация для BCM Platform
+steps:
+  # Запуск полной BCM платформы через docker-compose
+  - name: 'docker/compose:latest'
+    args: ['-f', 'docker-compose.yml', 'up', '-d']
+    env:
+      # Только публичные (не-секретные) переменные
+      - 'DB_HOST=35.241.141.16'
+      - 'DB_USER=odoo'
+      - 'DB_NAME=bcm_platform'
+      - 'BCM_MODE=production'
+      - 'BCM_MULTITENANCY=true'
+      - 'BCM_AI_ENABLED=true'
+    secretEnv:
+      - 'DB_PASSWORD'
+      - 'REDIS_URL'
+      - 'MONGODB_URL'
+      - 'MONGODB_DATABASE'
+      - 'RABBITMQ_PASSWORD'
+      - 'KEYCLOAK_DB_PASSWORD'
+      - 'KEYCLOAK_CLIENT_SECRET'
+      - 'KEYCLOAK_ADMIN_PASSWORD'
+      - 'FRONTEND_URL'
+
+# Secret Manager конфигурация
+availableSecrets:
+  secretManager:
+    - versionName: projects/sehiso22301/secrets/db-password/versions/latest
+      env: 'DB_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/redis-url/versions/latest
+      env: 'REDIS_URL'
+    - versionName: projects/sehiso22301/secrets/mongodb-url/versions/latest
+      env: 'MONGODB_URL'
+    - versionName: projects/sehiso22301/secrets/mongodb-database/versions/latest
+      env: 'MONGODB_DATABASE'
+    - versionName: projects/sehiso22301/secrets/rabbitmq-password/versions/latest
+      env: 'RABBITMQ_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/keycloak-db-password/versions/latest
+      env: 'KEYCLOAK_DB_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/keycloak-client-secret/versions/latest
+      env: 'KEYCLOAK_CLIENT_SECRET'
+    - versionName: projects/sehiso22301/secrets/keycloak-admin-password/versions/latest
+      env: 'KEYCLOAK_ADMIN_PASSWORD'
+    - versionName: projects/sehiso22301/secrets/frontend-url/versions/latest
+      env: 'FRONTEND_URL'
+
+# Опции сборки
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  
+# Таймаут
+timeout: '1800s'

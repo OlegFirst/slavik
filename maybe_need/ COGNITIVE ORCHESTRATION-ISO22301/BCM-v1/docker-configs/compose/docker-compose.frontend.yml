@@ -1,0 +1,44 @@
+version: '3.8'
+
+# FRONTEND СЕРВИСЫ
+# Запуск: docker-compose -f compose/docker-compose.frontend.yml up -d
+
+services:
+  # Web Portal Frontend
+  web_portal:
+    build:
+      context: ./frontend/web_portal
+      dockerfile: Dockerfile
+    depends_on:
+      - odoo
+      - eventbus
+    environment:
+      - VUE_APP_API_URL=http://localhost:8069/api/v1
+      - VUE_APP_BPMN_URL=http://localhost:8005/api
+      - VUE_APP_LMS_URL=http://localhost:8006/api
+      - VUE_APP_THEHIVE_URL=http://localhost:8007/api
+      - VUE_APP_GRAFANA_URL=http://localhost:8008/api
+      - VUE_APP_EVENTBUS_URL=http://localhost:8001/api
+    ports:
+      - "3002:80"
+    volumes:
+      - ./frontend/web_portal:/app
+
+  # Admin Panel
+  admin_panel:
+    build:
+      context: ./frontend/admin_panel
+      dockerfile: Dockerfile
+    depends_on:
+      - odoo
+    environment:
+      - REACT_APP_API_URL=http://localhost:8069/api/v1
+    ports:
+      - "3001:80"
+    volumes:
+      - ./frontend/admin_panel:/app
+
+networks:
+  default:
+    external: true
+    name: iso-22301_default

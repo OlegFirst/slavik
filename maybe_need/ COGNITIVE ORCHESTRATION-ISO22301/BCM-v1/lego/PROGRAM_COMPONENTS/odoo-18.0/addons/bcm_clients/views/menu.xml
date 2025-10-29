@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Client Management Menu -->
+        <menuitem id="menu_bcm_clients" 
+                  name="Client Management" 
+                  parent="bcm_core.menu_bcm_root" 
+                  sequence="10"/>
+
+        <!-- BCM Clients -->
+        <menuitem id="menu_bcm_client_main" 
+                  name="Clients" 
+                  parent="menu_bcm_clients"
+                  action="bcm_client_action" 
+                  sequence="10"/>
+
+        <!-- Client Contacts -->
+        <menuitem id="menu_bcm_client_contacts" 
+                  name="Client Contacts" 
+                  parent="menu_bcm_clients"
+                  action="bcm_client_contact_action" 
+                  sequence="20"/>
+
+        <!-- Client Context Vault -->
+        <menuitem id="menu_bcm_client_vault" 
+                  name="Context Vault" 
+                  parent="menu_bcm_clients"
+                  action="bcm_client_vault_action" 
+                  sequence="30"/>
+
+        <!-- Configuration Menu -->
+        <menuitem id="menu_bcm_config" 
+                  name="Configuration" 
+                  parent="bcm_core.menu_bcm_root" 
+                  sequence="90" 
+                  groups="bcm_clients.group_bcm_manager"/>
+
+        <!-- API Management -->
+        <menuitem id="menu_bcm_api_management" 
+                  name="API Management" 
+                  parent="menu_bcm_config" 
+                  sequence="10"/>
+
+        <!-- API Keys -->
+        <menuitem id="menu_bcm_client_appkeys" 
+                  name="Client API Keys" 
+                  parent="menu_bcm_api_management"
+                  action="bcm_client_appkey_action" 
+                  sequence="10"/>
+
+        <!-- API Scopes -->
+        <menuitem id="menu_bcm_scopes" 
+                  name="API Scopes" 
+                  parent="menu_bcm_api_management"
+                  action="bcm_scope_action" 
+                  sequence="20"/>
+
+    </data>
+</odoo>

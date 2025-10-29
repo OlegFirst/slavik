@@ -1,0 +1,537 @@
+
+version: "3.3"
+
+services:
+  # Основная база данных
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: bcm_platform
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: postgres123
+      # Дополнительные базы данных
+      POSTGRES_MULTIPLE_DATABASES: keycloak
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./core/database/seeds:/docker-entrypoint-initdb.d/
+      - ./core/database/init-keycloak-db.sh:/docker-entrypoint-initdb.d/01-init-keycloak-db.sh
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis для кэширования и очередей
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # RabbitMQ для сообщений между сервисами
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: bcm
+      RABBITMQ_DEFAULT_PASS: bcm123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Keycloak для SSO и управления ролями BCM
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.0
+    command: start-dev
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    depends_on:
+      - postgres
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Odoo 18.0 CE с полным набором BCM модулей
+  odoo:
+    image: maxde4/seh-foundation-iso-22301:latest
+    # build:
+    #   context: ./core/odoo-18.0
+    #   dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8069:8069"
+    environment:
+      # PostgreSQL connection - use local postgres container
+      - HOST=postgres
+      - USER=odoo
+      - PASSWORD=postgres123
+      - DB_NAME=bcm_platform
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=odoo
+      - DB_PASSWORD=postgres123
+      
+      # Redis connection
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      
+      # MongoDB connection (настраивается через переменные окружения)
+      - MONGODB_URL=${MONGODB_URL}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      
+      # Keycloak SSO integration
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=bcm-platform
+      - KEYCLOAK_CLIENT_ID=odoo-bcm
+      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
+      
+      # AI Services URLs
+      - AI_ORCHESTRATOR_URL=http://ai_orchestrator:8000
+      - BIA_ENGINE_URL=http://bia_engine:8082
+      - DOCUMENT_PROCESSOR_URL=http://document_processor:8083
+      - COMPLIANCE_CHECKER_URL=http://compliance_checker:8084
+      
+      # BCM Platform configuration
+      - BCM_MODE=production
+      - BCM_MULTITENANCY=true
+      - BCM_AI_ENABLED=true
+      - BCM_VERSION=18.0.1.0.0
+      
+      # Vercel frontend integration
+      - FRONTEND_URL=https://iso-22301-theta.vercel.app
+      - CORS_ORIGINS=https://iso-22301-theta.vercel.app,https://94a0f440b3da.ngrok-free.app
+      
+      # Odoo Base URL (ngrok tunnel for development)
+      - ODOO_BASE_URL=https://94a0f440b3da.ngrok-free.app
+      - WEB_BASE_URL=https://94a0f440b3da.ngrok-free.app
+      
+      # Ngrok auth token
+      - NGROK_AUTHTOKEN=2wbM1vt2feyHnzoluwngV6yw9cN_7zujqcuBJMHWVhuzDGYPS
+      
+      
+      # Email settings
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - EMAIL_FROM=bcm-platform@localhost
+      
+      # File upload settings
+      - MAX_UPLOAD_SIZE=104857600
+      
+      # Security settings
+      - SESSION_TIMEOUT=86400
+      - PROXY_MODE=true
+      
+    volumes:
+      - ./core/odoo-18.0/addons:/mnt/extra-addons:rw
+      - odoo_data:/var/lib/odoo
+      - odoo_logs:/var/log/odoo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.odoo.rule=Host(`bcm-platform.local`)"
+      - "traefik.http.routers.odoo.tls=true"
+      - "traefik.http.services.odoo.loadbalancer.server.port=8069"
+
+  # AI Orchestrator микросервис
+  ai_orchestrator:
+    # image: ghcr.io/seh-foundation/iso-22301/bcm-ai_orchestrator:latest
+    build:
+      context: ./services/ai_orchestrator
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - RABBITMQ_URL=amqp://bcm:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      - ODOO_URL=http://odoo:8069
+      # GitHub Copilot Extension переменные
+      - GITHUB_APP_ID=${GITHUB_APP_ID:-}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID:-}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET:-}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET:-}
+      - GITHUB_PRIVATE_KEY=${GITHUB_PRIVATE_KEY:-}
+      # Supabase AI Memory
+      - SUPABASE_URL=${SUPABASE_URL:-}
+      - SUPABASE_KEY=${SUPABASE_KEY:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/ai_orchestrator:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Deployment Service - простой и надежный деплойер
+  deployer:
+    build:
+      context: ./services/deployer
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    ports:
+      - "8009:8002"
+    volumes:
+      - ./services/deployer:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket для управления
+    working_dir: /app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # GitHub App сервис для webhooks и Copilot Extension
+  github_app:
+    # image: ghcr.io/seh-foundation/iso-22301/bcm-github_app:latest
+    build:
+      context: ./services/github_app
+      dockerfile: Dockerfile
+    depends_on:
+      - ai_orchestrator
+    environment:
+      - GITHUB_APP_ID=${GITHUB_APP_ID}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - GITHUB_PRIVATE_KEY=${GITHUB_PRIVATE_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - AI_ORCHESTRATOR_URL=http://ai_orchestrator:8000
+    ports:
+      - "8011:8001"
+    volumes:
+      - ./services/github_app:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # BIA Engine v2.0 - ML Business Impact Analysis
+  bia_engine:
+    # image: ghcr.io/seh-foundation/iso-22301/bcm-bia_engine:latest
+    build:
+      context: ./services/bia_engine
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://odoo:${DB_PASSWORD}@postgres:5432/bcm_platform
+      - REDIS_URL=redis://redis:6379/1
+      - RABBITMQ_URL=amqp://bcm:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      - PORT=8082
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./services/bia_engine:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Notification Service
+  notification_service:
+    build:
+      context: ./services/notification_service
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379/2
+      - RABBITMQ_URL=amqp://bcm:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./services/notification_service:/app
+
+  # Document Processor - AI Document Intelligence  
+  document_processor:
+    build:
+      context: ./services/document_processor
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379/3
+      - RABBITMQ_URL=amqp://bcm:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      - PORT=8083
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./services/document_processor:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Compliance Checker - ISO 22301 Automation
+  compliance_checker:
+    build:
+      context: ./services/compliance_checker
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379/4
+      - RABBITMQ_URL=amqp://bcm:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      - PORT=8084
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./services/compliance_checker:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # BPMN Workflow Service
+  bpmn_service:
+    build:
+      context: ./backend/bpmn_service
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - eventbus
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+      - POSTGRES_URL=postgresql://odoo:${DB_PASSWORD}@postgres:5432/bcm_platform
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./backend/bpmn_service:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # LMS Adapter Service
+  lms_adapter:
+    build:
+      context: ./backend/lms_adapter
+      dockerfile: Dockerfile
+    depends_on:
+      - eventbus
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8006:8006"
+    volumes:
+      - ./backend/lms_adapter:/app
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8006/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TheHive Adapter Service
+  thehive_adapter:
+    build:
+      context: ./backend/thehive_adapter
+      dockerfile: Dockerfile
+    depends_on:
+      - eventbus
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8007:8007"
+    volumes:
+      - ./backend/thehive_adapter:/app
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8007/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana Adapter Service
+  grafana_adapter:
+    build:
+      context: ./backend/grafana_adapter
+      dockerfile: Dockerfile
+    depends_on:
+      - eventbus
+    environment:
+      - EVENTBUS_URL=http://eventbus:8001
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./backend/grafana_adapter:/app
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8008/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # EventBus Service (renamed for clarity)
+  eventbus:
+    build:
+      context: ./backend/eventbus
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - POSTGRES_URL=postgresql://odoo:${DB_PASSWORD}@postgres:5432/bcm_platform
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./backend/eventbus:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Web Portal Frontend
+  web_portal:
+    # image: ghcr.io/seh-foundation/iso-22301/bcm-web_portal:latest
+    build:
+      context: ./frontend/web_portal
+      dockerfile: Dockerfile
+    depends_on:
+      - odoo
+      - bpmn_service
+      - lms_adapter
+      - thehive_adapter
+      - grafana_adapter
+      - eventbus
+    environment:
+      - VUE_APP_API_URL=http://localhost:8069/api/v1
+      - VUE_APP_BPMN_URL=http://localhost:8005/api
+      - VUE_APP_LMS_URL=http://localhost:8006/api
+      - VUE_APP_THEHIVE_URL=http://localhost:8007/api
+      - VUE_APP_GRAFANA_URL=http://localhost:8008/api
+      - VUE_APP_EVENTBUS_URL=http://localhost:8001/api
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/web_portal:/app
+
+  # Admin Panel
+  admin_panel:
+    build:
+      context: ./frontend/admin_panel
+      dockerfile: Dockerfile
+    depends_on:
+      - odoo
+    environment:
+      - REACT_APP_API_URL=http://localhost:8069/api/v1
+    ports:
+      - "3001:80"
+    volumes:
+      - ./frontend/admin_panel:/app
+
+  # MailHog для тестирования email
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mail.bcm-platform.local`)"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+
+  # Traefik reverse proxy
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8888:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=true"
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  keycloak_data:
+  odoo_data:
+  odoo_logs:
+  odoo_pip_cache:
+  odoo_python_packages:
+
+  # PDCA AI Assistant Service
+  pdca_assistant:
+    build:
+      context: ./ai_services
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - ai_orchestrator
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - AI_ORCHESTRATOR_URL=http://ai_orchestrator:8000
+    ports:
+      - "8010:8010"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8010/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+networks:
+  default:
+    driver: bridge

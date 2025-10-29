@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ISO 22301 Compliance Data -->
+    <data noupdate="1">
+        
+        <!-- BCM Module Mappings - Real 28 modules -->
+        <record id="bcm_module_base" model="bcm.module.mapping">
+            <field name="name">BCM Base</field>
+            <field name="technical_name">bcm_base</field>
+            <field name="development_status">active</field>
+            <field name="compliance_contribution">85</field>
+            <field name="module_description">Core BCM platform foundation</field>
+        </record>
+
+        <record id="bcm_module_governance" model="bcm.module.mapping">
+            <field name="name">BCM Governance</field>
+            <field name="technical_name">bcm_governance</field>
+            <field name="development_status">active</field>
+            <field name="compliance_contribution">90</field>
+            <field name="module_description">AI Governance Brain with ISO 22301 engine</field>
+        </record>
+
+        <record id="bcm_module_risk" model="bcm.module.mapping">
+            <field name="name">BCM Risk Management</field>
+            <field name="technical_name">bcm_risk_management</field>
+            <field name="development_status">active</field>
+            <field name="compliance_contribution">90</field>
+            <field name="module_description">FAIR methodology risk assessment</field>
+        </record>
+
+        <record id="bcm_module_bia" model="bcm.module.mapping">
+            <field name="name">BCM BIA</field>
+            <field name="technical_name">bcm_bia</field>
+            <field name="development_status">active</field>
+            <field name="compliance_contribution">85</field>
+            <field name="module_description">Business Impact Analysis with ML</field>
+        </record>
+
+        <record id="bcm_module_ai_control" model="bcm.module.mapping">
+            <field name="name">BCM AI Control</field>
+            <field name="technical_name">bcm_ai_control</field>
+            <field name="development_status">active</field>
+            <field name="compliance_contribution">80</field>
+            <field name="module_description">AI orchestration center</field>
+        </record>
+
+        <!-- Sample ISO 22301 Requirements -->
+        <record id="iso_clause_5_1" model="bcm.iso22301.framework">
+            <field name="clause_number">5.1</field>
+            <field name="clause_title">Leadership and commitment</field>
+            <field name="clause_category">leadership</field>
+            <field name="clause_description">Top management leadership and commitment to BCMS</field>
+            <field name="risk_level">critical</field>
+            <field name="compliance_status">not_started</field>
+        </record>
+
+        <record id="iso_clause_6_1" model="bcm.iso22301.framework">
+            <field name="clause_number">6.1</field>
+            <field name="clause_title">Risk and opportunity management</field>
+            <field name="clause_category">planning</field>
+            <field name="clause_description">Actions to address risks and opportunities</field>
+            <field name="risk_level">high</field>
+            <field name="compliance_status">in_progress</field>
+        </record>
+
+    </data>
+</odoo>

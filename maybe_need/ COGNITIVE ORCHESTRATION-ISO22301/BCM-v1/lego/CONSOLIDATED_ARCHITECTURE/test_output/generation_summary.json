@@ -1,0 +1,10 @@
+{
+  "generation_method": "AI-powered",
+  "generation_type": "enhancement",
+  "files_generated": 3,
+  "saved_files": [
+    "test_output/main.py",
+    "test_output/Dockerfile",
+    "test_output/requirements.txt"
+  ]
+}

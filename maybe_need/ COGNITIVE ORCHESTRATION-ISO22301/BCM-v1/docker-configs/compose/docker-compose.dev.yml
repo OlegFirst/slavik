@@ -1,0 +1,194 @@
+# Минимальная конфигурация для разработки и тестирования
+# Включает основные сервисы + новые workflow сервисы
+
+services:
+  # Основная база данных
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: bcm_platform
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Redis для кэширования
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # RabbitMQ для очередей
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: bcm
+      RABBITMQ_DEFAULT_PASS: bcm123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Odoo (опционально, можно закомментировать если не нужен)
+  odoo:
+    image: odoo:18.0
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=postgres
+      - USER=odoo
+      - PASSWORD=postgres123
+      - DB_NAME=bcm_platform
+    volumes:
+      - ./core/odoo-18.0/addons:/mnt/extra-addons:rw
+      - odoo_data:/var/lib/odoo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # AI Workflow Optimizer Service
+  ai_workflow_optimizer:
+    build:
+      context: ./services/ai_workflow_optimizer
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - RABBITMQ_URL=amqp://bcm:bcm123@rabbitmq:5672/
+      - PORT=8091
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    ports:
+      - "8091:8091"
+    volumes:
+      - ./services/ai_workflow_optimizer:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Process Mining Service
+  process_mining_service:
+    build:
+      context: ./services/process_mining_service
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - REDIS_URL=redis://redis:6379/1
+      - DATABASE_URL=postgresql://odoo:postgres123@postgres:5432/bcm_platform
+      - PORT=8092
+    ports:
+      - "8092:8092"
+    volumes:
+      - ./services/process_mining_service:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8092/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Template Library Service
+  template_library:
+    build:
+      context: ./services/template_library
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/2
+      - PORT=8093
+    ports:
+      - "8093:8093"
+    volumes:
+      - ./services/template_library:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8093/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Workflow Gateway
+  workflow_gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.workflow_gateway
+    depends_on:
+      - redis
+      - ai_workflow_optimizer
+      - process_mining_service
+      - template_library
+    environment:
+      - REDIS_URL=redis://redis:6379/3
+      - AI_OPTIMIZER_URL=http://ai_workflow_optimizer:8091
+      - PROCESS_MINING_URL=http://process_mining_service:8092
+      - TEMPLATE_LIBRARY_URL=http://template_library:8093
+      - PORT=8095
+    ports:
+      - "8095:8095"
+    volumes:
+      - ./backend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8095/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (Next.js)
+  unified-bcm-platform:
+    build:
+      context: ./frontend/unified-bcm-platform
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8095
+      - NEXT_PUBLIC_ODOO_URL=http://localhost:8069
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8095
+    volumes:
+      - ./frontend/unified-bcm-platform:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - workflow_gateway
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  odoo_data:
+
+networks:
+  default:
+    driver: bridge

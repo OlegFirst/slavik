@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default Forum Categories -->
+        <record id="category_general" model="bcm.forum.category">
+            <field name="name">General Discussion</field>
+            <field name="code">general</field>
+            <field name="description">General BCM discussions and community topics</field>
+            <field name="icon">fas fa-comments</field>
+            <field name="color">#6c757d</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="category_bcm_policy" model="bcm.forum.category">
+            <field name="name">BCM Policy &amp;amp; Standards</field>
+            <field name="code">bcm_policy</field>
+            <field name="description">Discussions about BCM policies, standards, and best practices</field>
+            <field name="icon">fas fa-file-alt</field>
+            <field name="color">#007bff</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="category_risk_management" model="bcm.forum.category">
+            <field name="name">Risk Management</field>
+            <field name="code">risk_management</field>
+            <field name="description">Risk assessment, analysis, and treatment discussions</field>
+            <field name="icon">fas fa-exclamation-triangle</field>
+            <field name="color">#dc3545</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="category_incident_response" model="bcm.forum.category">
+            <field name="name">Incident Response</field>
+            <field name="code">incident_response</field>
+            <field name="description">Incident management and emergency response discussions</field>
+            <field name="icon">fas fa-fire</field>
+            <field name="color">#fd7e14</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="category_exercises" model="bcm.forum.category">
+            <field name="name">Exercises &amp; Testing</field>
+            <field name="code">exercises</field>
+            <field name="description">BCM exercise planning, execution, and lessons learned</field>
+            <field name="icon">fas fa-dumbbell</field>
+            <field name="color">#28a745</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="category_scenario_discussion" model="bcm.forum.category">
+            <field name="name">Scenario Discussion</field>
+            <field name="code">scenario_discussion</field>
+            <field name="description">Discussions about specific BCM scenarios</field>
+            <field name="icon">fas fa-comments</field>
+            <field name="color">#6f42c1</field>
+            <field name="sequence">60</field>
+            <field name="is_scenario_category">True</field>
+            <field name="auto_create_for_scenarios">True</field>
+        </record>
+
+        <record id="category_knowledge_base" model="bcm.forum.category">
+            <field name="name">Knowledge Base</field>
+            <field name="code">knowledge_base</field>
+            <field name="description">Curated knowledge articles and best practices</field>
+            <field name="icon">fas fa-book</field>
+            <field name="color">#17a2b8</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <record id="category_technology" model="bcm.forum.category">
+            <field name="name">Technology &amp; Tools</field>
+            <field name="code">technology</field>
+            <field name="description">BCM technology solutions and tool discussions</field>
+            <field name="icon">fas fa-cogs</field>
+            <field name="color">#20c997</field>
+            <field name="sequence">80</field>
+        </record>
+    </data>
+</odoo>

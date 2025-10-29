@@ -1,0 +1,205 @@
+# Prometheus Configuration for BCM Platform Monitoring
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'bcm-platform'
+    environment: 'production'
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+
+  # BCM Platform Core (Odoo)
+  - job_name: 'bcm-platform-core'
+    static_configs:
+      - targets: ['host.docker.internal:8069']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    scheme: http
+
+  # BCM Platform Database
+  - job_name: 'bcm-postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 30s
+
+  # BCM Platform Redis Cache
+  - job_name: 'bcm-redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 30s
+
+  # Node Exporter (System Metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 15s
+
+  # cAdvisor (Container Metrics)
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    scrape_interval: 15s
+
+  # TheHive Integration Bridge
+  - job_name: 'thehive-bridge'
+    static_configs:
+      - targets: ['host.docker.internal:8090']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # TheHive Webhook Receiver
+  - job_name: 'thehive-webhook'
+    static_configs:
+      - targets: ['host.docker.internal:8091']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Moodle Bridge Service
+  - job_name: 'moodle-bridge'
+    static_configs:
+      - targets: ['host.docker.internal:8092']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Moodle Webhook Receiver
+  - job_name: 'moodle-webhook'
+    static_configs:
+      - targets: ['host.docker.internal:8093']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # TheHive Core Application
+  - job_name: 'thehive-core'
+    static_configs:
+      - targets: ['host.docker.internal:9000']
+    metrics_path: '/metrics'
+    scrape_interval: 60s
+    scrape_timeout: 30s
+
+  # Moodle LMS
+  - job_name: 'moodle-lms'
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+    metrics_path: '/admin/tool/prometheus/metrics.php'
+    scrape_interval: 60s
+    scrape_timeout: 30s
+
+  # Grafana Self-monitoring
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # AlertManager
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Blackbox Exporter for endpoint monitoring
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          # BCM Platform endpoints
+          - http://host.docker.internal:8069/web/health
+          - http://host.docker.internal:8069/api/v1/health
+          # TheHive endpoints
+          - http://host.docker.internal:9000/api/v1/status
+          - http://host.docker.internal:8090/health
+          - http://host.docker.internal:8091/health
+          # Moodle endpoints
+          - http://host.docker.internal:8080/login/index.php
+          - http://host.docker.internal:8092/health
+          - http://host.docker.internal:8093/health
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # SSL Certificate monitoring
+  - job_name: 'ssl-certificates'
+    metrics_path: /probe
+    params:
+      module: [ssl_expire]
+    static_configs:
+      - targets:
+          - https://bcm-platform.your-domain.com:443
+          - https://thehive.your-domain.com:443
+          - https://moodle.your-domain.com:443
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # BCM Platform API endpoints monitoring
+  - job_name: 'bcm-api-endpoints'
+    metrics_path: /probe
+    params:
+      module: [http_post_2xx]
+    static_configs:
+      - targets:
+          - http://host.docker.internal:8069/xmlrpc/2/common
+          - http://host.docker.internal:8069/xmlrpc/2/object
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # Loki for logs
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Custom BCM Platform metrics (if implemented)
+  - job_name: 'bcm-custom-metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8069']
+    metrics_path: '/api/v1/metrics'
+    scrape_interval: 60s
+    honor_labels: true
+    params:
+      format: ['prometheus']
+
+  # AI Services Monitoring (if available)
+  - job_name: 'bcm-ai-services'
+    static_configs:
+      - targets: 
+          - 'host.docker.internal:8001'  # AI Orchestrator
+          - 'host.docker.internal:8002'  # Document Processor
+          - 'host.docker.internal:8003'  # BIA Engine
+          - 'host.docker.internal:8004'  # Risk Analyzer
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- BCM Context Model Rules -->
+    <record id="bcm_context_portal_rule" model="ir.rule">
+        <field name="name">BCM Context: Portal Users Own Company</field>
+        <field name="model_id" ref="model_bcm_context"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="bcm_context_internal_rule" model="ir.rule">
+        <field name="name">BCM Context: Internal Users All Companies</field>
+        <field name="model_id" ref="model_bcm_context"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="bcm_context_user_rule" model="ir.rule">
+        <field name="name">BCM Context: Regular Users Own Company</field>
+        <field name="model_id" ref="model_bcm_context"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- BCM Stakeholder Model Rules -->
+    <record id="bcm_stakeholder_portal_rule" model="ir.rule">
+        <field name="name">BCM Stakeholder: Portal Users Own Company</field>
+        <field name="model_id" ref="model_bcm_stakeholder"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="bcm_stakeholder_internal_rule" model="ir.rule">
+        <field name="name">BCM Stakeholder: Internal Users All Companies</field>
+        <field name="model_id" ref="model_bcm_stakeholder"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- BCM Scope Model Rules -->
+    <record id="bcm_scope_portal_rule" model="ir.rule">
+        <field name="name">BCM Scope: Portal Users Own Company</field>
+        <field name="model_id" ref="model_bcm_scope"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="bcm_scope_internal_rule" model="ir.rule">
+        <field name="name">BCM Scope: Internal Users All Companies</field>
+        <field name="model_id" ref="model_bcm_scope"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- BCM Policy Model Rules -->
+    <record id="bcm_policy_portal_rule" model="ir.rule">
+        <field name="name">BCM Policy: Portal Users Own Company</field>
+        <field name="model_id" ref="model_bcm_policy"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="bcm_policy_internal_rule" model="ir.rule">
+        <field name="name">BCM Policy: Internal Users All Companies</field>
+        <field name="model_id" ref="model_bcm_policy"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('bcm_core.group_bcm_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+</odoo>

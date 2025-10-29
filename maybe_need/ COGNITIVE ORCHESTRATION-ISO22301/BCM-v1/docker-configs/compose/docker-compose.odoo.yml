@@ -1,0 +1,65 @@
+version: '3.8'
+
+# ODOO BCM PLATFORM
+# Запуск: docker-compose -f compose/docker-compose.odoo.yml up -d
+
+services:
+  # Odoo 18.0 CE с полным набором BCM модулей
+  odoo:
+    image: maxde4/seh-foundation-iso-22301:latest
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8069:8069"
+    environment:
+      # PostgreSQL connection
+      - HOST=postgres
+      - USER=odoo
+      - PASSWORD=${DB_PASSWORD:-postgres123}
+      - DB_NAME=bcm_platform
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=odoo
+      - DB_PASSWORD=${DB_PASSWORD:-postgres123}
+
+      # Redis connection
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+      # Keycloak SSO integration
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=bcm-platform
+      - KEYCLOAK_CLIENT_ID=odoo-bcm
+      - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-bcm-secret-123}
+
+      # AI Services URLs
+      - AI_ORCHESTRATOR_URL=http://ai_orchestrator:8000
+      - BIA_ENGINE_URL=http://bia_engine:8082
+      - DOCUMENT_PROCESSOR_URL=http://document_processor:8083
+      - COMPLIANCE_CHECKER_URL=http://compliance_checker:8084
+
+      # BCM Platform configuration
+      - BCM_MODE=production
+      - BCM_MULTITENANCY=true
+      - BCM_AI_ENABLED=true
+      - BCM_VERSION=18.0.1.0.0
+    volumes:
+      - ./core/odoo-18.0/addons:/mnt/extra-addons:rw
+      - odoo_data:/var/lib/odoo
+      - odoo_logs:/var/log/odoo
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8069/web/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  odoo_data:
+  odoo_logs:
+
+networks:
+  default:
+    external: true
+    name: iso-22301_default

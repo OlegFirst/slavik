@@ -1,0 +1,64 @@
+# Grafana Datasource Configuration for BCM Platform
+apiVersion: 1
+
+datasources:
+  # Prometheus datasource for metrics
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      timeInterval: 15s
+      queryTimeout: 60s
+      httpMethod: GET
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 2.47.0
+      cacheLevel: High
+      incrementalQuerying: true
+      incrementalQueryOverlapWindow: 10m
+    secureJsonData: {}
+    
+  # Loki datasource for logs
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: true
+    jsonData:
+      derivedFields:
+        - datasourceUid: prometheus
+          matcherRegex: "trace_id=(\\w+)"
+          name: TraceID
+          url: "$${__value.raw}"
+      maxLines: 1000
+      timeout: 60s
+    secureJsonData: {}
+    
+  # AlertManager datasource for alerts
+  - name: AlertManager
+    type: alertmanager
+    access: proxy
+    url: http://alertmanager:9093
+    editable: true
+    jsonData:
+      implementation: prometheus
+      handleGrafanaManagedAlerts: false
+    secureJsonData: {}
+    
+  # Postgres datasource for BCM Platform database (optional)
+  - name: BCM-Database
+    type: postgres
+    access: proxy
+    url: bcm-postgres:5432
+    database: bcm_platform
+    user: ${BCM_DB_USER:-odoo}
+    editable: true
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1500
+      timescaledb: false
+    secureJsonData:
+      password: ${BCM_DB_PASSWORD:-odoo}

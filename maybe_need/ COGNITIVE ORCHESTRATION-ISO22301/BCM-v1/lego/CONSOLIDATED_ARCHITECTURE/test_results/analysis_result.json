@@ -1,0 +1,69 @@
+{
+  "project_name": "sample_project",
+  "structure": {
+    "directories": [
+      "tests",
+      "services"
+    ],
+    "files": [
+      "models.py",
+      "requirements.txt",
+      "Dockerfile",
+      "package.json",
+      "docker-compose.yml",
+      "main.py",
+      "tests/test_main.py",
+      "services/__init__.py",
+      "services/user_service.py"
+    ],
+    "depth": 1,
+    "total_files": 9,
+    "file_types": {
+      ".py": 5,
+      ".txt": 1,
+      "": 1,
+      ".json": 1,
+      ".yml": 1
+    }
+  },
+  "languages": {
+    "python": 5
+  },
+  "frameworks": [
+    "React",
+    "Express.js",
+    "FastAPI",
+    "Docker",
+    "Docker Compose"
+  ],
+  "dependencies": {
+    "external": [
+      "pytest",
+      "pydantic",
+      "uvicorn",
+      "fastapi",
+      "asyncio",
+      "main",
+      "datetime",
+      "fastapi.testclient",
+      "sqlalchemy.ext.declarative",
+      "sqlalchemy"
+    ],
+    "internal": [],
+    "count": 10,
+    "complexity": "low"
+  },
+  "metrics": {
+    "lines_of_code": 80,
+    "files_count": 9,
+    "directories_count": 2,
+    "test_files": 1,
+    "config_files": 2,
+    "documentation_files": 1
+  },
+  "patterns": [
+    "microservices"
+  ],
+  "complexity_score": "low",
+  "recommendations": []
+}

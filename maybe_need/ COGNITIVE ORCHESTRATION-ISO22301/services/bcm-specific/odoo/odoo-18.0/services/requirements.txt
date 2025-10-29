@@ -1,0 +1,94 @@
+# BCM Platform - Intelligent Services Requirements
+# Зависимости для всех интеллектуальных микросервисов
+
+# Core FastAPI framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# Data processing and ML
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+
+# Database and caching
+sqlalchemy==2.0.23
+redis==5.0.1
+psycopg2-binary==2.9.7
+
+# Messaging and async
+celery==5.3.4
+pika==1.3.2
+
+# HTTP clients and networking
+httpx==0.25.2
+requests==2.31.0
+
+# File processing
+python-multipart==0.0.6
+python-docx==0.8.11
+PyPDF2==3.0.1
+openpyxl==3.1.2
+
+# Environment and configuration
+python-dotenv==1.0.0
+pydantic-settings==2.1.0
+
+# Logging and monitoring
+structlog==23.2.0
+prometheus-client==0.19.0
+
+# Security
+cryptography==41.0.7
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-mock==3.12.0
+httpx==0.25.2  # for testing FastAPI
+
+# Development tools
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+
+# Documentation processing (for Document Processor)
+beautifulsoup4==4.12.2
+lxml==4.9.3
+markdown==3.5.1
+
+# Natural Language Processing
+nltk==3.8.1
+# spacy==3.7.2  # Uncomment if advanced NLP needed
+
+# Time and date utilities
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Validation and serialization
+marshmallow==3.20.1
+cerberus==1.3.5
+
+# Background task processing
+dramatiq[rabbitmq]==1.15.0
+# alternative to celery if needed
+
+# File format support
+xlrd==2.0.1
+xlwt==1.3.0
+reportlab==4.0.7  # PDF generation
+
+# Additional utilities
+click==8.1.7
+tqdm==4.66.1
+colorama==0.4.6
+
+# Health checks and monitoring
+watchdog==3.0.0
+psutil==5.9.6
+
+# Configuration management
+dynaconf==3.2.4

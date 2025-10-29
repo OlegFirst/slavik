@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "BCM Platform Status - WORKING",
+    "tags": ["bcm", "working"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Services Status",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 0},
+        "targets": [
+          {
+            "datasource": {"uid": "cey7ubi5z78xsf"},
+            "expr": "up",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {"text": "DOWN", "color": "red"},
+                  "1": {"text": "UP", "color": "green"}
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Prometheus Metrics Count",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 6},
+        "targets": [
+          {
+            "datasource": {"uid": "cey7ubi5z78xsf"},
+            "expr": "count(up)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "System Overview",
+        "type": "text",
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 6},
+        "options": {
+          "content": "# BCM Platform\\n\\n✅ **Frontend**: Vue.js Working\\n✅ **Backend**: Odoo Integration\\n✅ **Monitoring**: Prometheus + Grafana\\n\\nConnection issues resolved!"
+        }
+      }
+    ],
+    "time": {"from": "now-5m", "to": "now"},
+    "refresh": "5s"
+  }
+}

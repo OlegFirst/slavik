@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BCM Suite — Диаграммы v2 (Mermaid 10)</title>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+  </script>
+  <style>
+    body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#f7f7f7;color:#111;margin:0}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 16px}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+    h1{margin:0;font-size:18px}
+    h2{margin:4px 0 8px 0;font-size:16px}
+    .note{font-size:12.5px;color:#444;margin-top:6px}
+    .mermaid{margin-top:6px}
+    a.dl{display:inline-block;padding:8px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;text-decoration:none;color:#0a66c2}
+  </style>
+</head>
+<body>
+  <header><h1>BCM Suite — потоки, процессы и сценарии (Mermaid v2)</h1></header>
+  <div class="wrap">
+
+    <div class="card">
+      <h2>Потоки данных и интеграции (исправлено)</h2>
+      <div class="mermaid">
+      flowchart LR
+        subgraph External["Внешние системы"]
+          EMR[HIS / EMR / ERP]
+          LMS[(Moodle или Open edX)]
+          SIM[JaamSim / NICS / AnyLogic]
+          IR[TheHive / Cortex]
+          GRC[OpenGRC или OSCAL]
+          MON[Prometheus / Grafana]
+        end
+
+        subgraph Core["Ядро: Odoo CE + bcm_*"]
+          Odoo[(Odoo CE)]
+          C1[bcm_context]
+          C2[bcm_bia]
+          C3[bcm_plans]
+          C4[bcm_incident]
+          C5[bcm_audit]
+          C6[bcm_training]
+          C7[bcm_kpi]
+          C8[bcm_governance]
+          C9[bcm_templates]
+          C10[bcm_exercise]
+        end
+
+        subgraph Services["Сервисы"]
+          AI["AI Orchestrator: Rules + LLM + Retrieval"]
+          BIA["BIA Engine (Ciw)"]
+          ETL[n8n / ETL]
+          SSO[Keycloak SSO]
+          DB[(PostgreSQL / Supabase)]
+        end
+
+        EMR --> ETL --> DB --> Odoo
+        Odoo -- events/webhooks --> AI
+        AI --> Odoo
+        C2 -- /compute --> BIA
+        BIA --> C2
+        C4 --> IR
+        C10 --> SIM
+        C6 --> LMS
+        C5 --> GRC
+        C7 --> MON
+        SSO --> Odoo
+        Odoo <--> DB
+      </div>
+      <div class="note">События из Odoo ловит AI-оркестратор и создаёт черновики в Odoo. Внешние сервисы подключены адаптерами.</div>
+    </div>
+
+    <div class="card">
+      <h2>Процессы BCM (конвейер, исправлено)</h2>
+      <div class="mermaid">
+      flowchart TD
+        A[Контекст и активы] --> B[BIA: MTPD / RTO / RPO]
+        B --> C[Планы: BCP и DRP]
+        C --> D[Обучение персонала]
+        D --> E[Инциденты и реагирование]
+        E --> F[Учения и симуляции]
+        F --> G[Аудит, GAP и CAPA]
+        G --> H[KPI и дашборды]
+        H --> I[Management Review / Governance]
+        I --> A
+      </div>
+      <div class="note">Полный цикл PDCA: улучшения после Management Review возвращаются в Контекст.</div>
+    </div>
+
+    <div class="card">
+      <h2>Сценарий 1: BIA → План → Учение</h2>
+      <div class="mermaid">
+      sequenceDiagram
+        autonumber
+        participant M as BCM Manager
+        participant O as Odoo (bcm_bia)
+        participant E as BIA Engine
+        participant R as Orchestrator
+
+        M->>O: Заполняет анкету BIA
+        O->>E: POST /compute (процессы)
+        E-->>O: Возврат RTO/RPO/MTPD
+        O->>R: event bcm.bia.completed
+        R-->>M: Черновик обновления BCP / предложения учения
+        M->>O: Approve (утверждение черновика)
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Сценарий 2: Инцидент → Реакция → CAPA</h2>
+      <div class="mermaid">
+      sequenceDiagram
+        autonumber
+        participant H as TheHive
+        participant I as Odoo (bcm_incident)
+        participant R as Orchestrator
+        participant S as Симулятор
+
+        H-->>I: case_id и статус инцидента
+        I->>R: event bcm.incident.opened
+        R-->>I: Черновик шагов реагирования / коммуникаций
+        R->>S: Запуск tabletop/симуляции
+        S-->>I: Метрики и lessons learned
+        I->>R: event bcm.exercise.resulted
+        R-->>I: CAPA и предложения к обновлению планов (draft)
+      </div>
+      <div class="note">Во всех сценариях действует правило draft → approve.</div>
+    </div>
+
+    <div class="card">
+      <a class="dl" href="#" onclick="downloadCurrent()">Скачать эту страницу (HTML)</a>
+    </div>
+
+  </div>
+  <script>
+    function downloadCurrent(){
+      const blob=new Blob([document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="bcm_suite_diagrams_v2.html";
+      document.body.appendChild(a); a.click();
+      URL.revokeObjectURL(a.href); a.remove();
+    }
+  </script>
+</body>
+</html>
